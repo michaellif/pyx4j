@@ -7,12 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 25, 2012
+ * Created on Feb 1, 2012
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.domain.financial.billing;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -24,21 +25,21 @@ import com.pyx4j.entity.annotations.JoinTableOrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.lease.BillableItem;
-
-/**
- * 
- * @see {@link com.propertyvista.domain.financial.offering.Feature.Type.adjustment}
- */
-public interface BillAgreementAdjustment extends IEntity {
-
-    BillableItem billableItem();
+@AbstractEntity
+public interface BillEntry extends IEntity {
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<Double> price();
+
+    IList<BillChargeTax> taxes();
+
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<Double> taxTotal();
 
     interface OrderId extends ColumnId {
 

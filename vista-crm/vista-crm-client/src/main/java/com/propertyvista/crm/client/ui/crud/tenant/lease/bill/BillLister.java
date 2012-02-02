@@ -27,8 +27,8 @@ public class BillLister extends ListerBase<Bill> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().billStatus()).build(),
-            new MemberColumnDescriptor.Builder(proto().totalRecurringCharges()).build(),
-            new MemberColumnDescriptor.Builder(proto().totalOneTimeCharges()).build(),
+            new MemberColumnDescriptor.Builder(proto().totalRecurringFeatureCharges()).build(),
+            new MemberColumnDescriptor.Builder(proto().totalOneTimeFeatureCharges()).build(),
             new MemberColumnDescriptor.Builder(proto().totalAdjustments()).build(),
             new MemberColumnDescriptor.Builder(proto().previousBalanceAmount()).build(),
             new MemberColumnDescriptor.Builder(proto().paymentReceivedAmount()).build(),

@@ -39,6 +39,7 @@ public interface ProductCatalog extends IEntity {
     @Owner
     @Detached
     @ReadOnly
+    //TODO Why not to name 'building'?
     Building belongsTo();
 
     /**

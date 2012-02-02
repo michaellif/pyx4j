@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceItemTypes {
+public class ProductItemTypesGDO {
 
     public final List<ProductItemType> serviceItemTypes = new ArrayList<ProductItemType>();
 

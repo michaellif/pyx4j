@@ -7,26 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 29, 2012
+ * Created on Feb 1, 2012
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.domain.tenant.lease;
 
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public interface LeaseFinancial extends IEntity {
+public interface LeaseAdjustment extends IEntity {
 
-    ServiceAgreement serviceAgreement();
+    @NotNull
+    @ToString(index = 0)
+    @MemberColumn(name = "itemType")
+    ProductItemType type();
 
-    @Owned
-    BillingAccount billingAccount();
-
-    @Owned
-    IList<LeaseAdjustment> adjustmantItems();
+    @ToString(index = 1)
+    @Format("#0.00")
+    IPrimitive<Double> amount();
 
 }

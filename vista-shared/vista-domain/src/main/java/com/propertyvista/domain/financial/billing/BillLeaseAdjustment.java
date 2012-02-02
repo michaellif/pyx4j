@@ -7,26 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 29, 2012
+ * Created on Jan 25, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.tenant.lease;
+package com.propertyvista.domain.financial.billing;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 
-import com.propertyvista.domain.financial.BillingAccount;
+/**
+ * 
+ * @see {@link com.propertyvista.domain.financial.offering.Feature.Type.adjustment}
+ */
+public interface BillLeaseAdjustment extends BillEntry {
 
-public interface LeaseFinancial extends IEntity {
-
-    ServiceAgreement serviceAgreement();
-
-    @Owned
-    BillingAccount billingAccount();
-
-    @Owned
-    IList<LeaseAdjustment> adjustmantItems();
+    BillableItem billableItem();
 
 }

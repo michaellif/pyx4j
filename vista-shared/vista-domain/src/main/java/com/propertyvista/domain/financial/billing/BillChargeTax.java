@@ -7,43 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 25, 2012
+ * Created on Feb 1, 2012
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.domain.financial.billing;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.JoinTable;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.tax.Tax;
 
-/**
- * 
- * Actual payment record. {@link com.propertyvista.domain.financial.billing.BillPayment} captures payment portion for particular charge (in future version)
- * Deposit is considered as payment and presented by this class.
- * 
- */
-public interface Payment extends IEntity {
+public interface BillChargeTax extends IEntity {
 
-    IPrimitive<Integer> paymentSequenceNumber();
-
-    IPrimitive<LogicalDate> depositDate();
-
-    @ReadOnly
-    BillingAccount billingAccount();
+    Tax tax();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<Double> amount();
-
-    @JoinTable(value = BillPayment.class, cascade = false)
-    BillPayment billPayment();
+    IPrimitive<Double> ammount();
 
 }

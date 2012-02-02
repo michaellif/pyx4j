@@ -20,18 +20,32 @@
  */
 package com.propertyvista.server.billing;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillCharge;
+import com.propertyvista.domain.financial.billing.BillLeaseAdjustment;
+import com.propertyvista.domain.financial.billing.BillPayment;
+import com.propertyvista.domain.financial.billing.BillProductAdjustment;
 import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Product;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 class Billing {
 
@@ -61,9 +75,24 @@ class Billing {
     }
 
     private void run() {
+        Persistence.service().retrieve(bill.billingAccount().leaseFinancial());
+
+        //Set accumulating fields to 0 value
+        bill.paymentReceivedAmount().setValue(0d);
+        bill.totalRecurringFeatureCharges().setValue(0d);
+        bill.totalOneTimeFeatureCharges().setValue(0d);
+        bill.totalRecurringFeatureCharges();
+        bill.totalOneTimeFeatureCharges();
+        bill.totalAdjustments();
+        bill.totalImmidiateAdjustments();
+        bill.latePaimantCharges();
+        bill.totalTaxes();
+
         getPreviousTotals();
-        getPayments();
+        createPayments();
         createCharges();
+        createLeaseAdjustments();
+        createProductAdjustments();
     }
 
     private void getPreviousTotals() {
@@ -73,32 +102,90 @@ class Billing {
         }
     }
 
-    private void getPayments() {
-        // TODO Auto-generated method stub
-        bill.paymentReceivedAmount().setValue(25.0);
+    private void createPayments() {
+        EntityQueryCriteria<Payment> criteria = EntityQueryCriteria.create(Payment.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billPayment(), (Serializable) null));
+        List<Payment> payments = Persistence.service().query(criteria);
+        for (Payment item : payments) {
+            createPayment(item);
+        }
+    }
+
+    private BillPayment createPayment(Payment payment) {
+        BillPayment billPayment = EntityFactory.create(BillPayment.class);
+        billPayment.payment().set(payment);
+        billPayment.bill().set(bill);
+        bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue() + billPayment.payment().amount().getValue());
+        return billPayment;
     }
 
     private void createCharges() {
-
-        Persistence.service().retrieve(bill.billingAccount().leaseFinancial());
-
-        double totalRecurringCharges = 0;
-
-        totalRecurringCharges += createCharge(bill.billingAccount().leaseFinancial().serviceAgreement().serviceItem()).price().getValue();
-
+        createCharge(bill.billingAccount().leaseFinancial().serviceAgreement().serviceItem());
         for (BillableItem item : bill.billingAccount().leaseFinancial().serviceAgreement().featureItems()) {
-            totalRecurringCharges += createCharge(item).price().getValue();
+            createCharge(item);
         }
-
-        bill.totalRecurringCharges().setValue(totalRecurringCharges);
     }
 
     private BillCharge createCharge(BillableItem serviceItem) {
-        return null;
+        BillCharge charge = EntityFactory.create(BillCharge.class);
+        charge.bill().set(bill);
+        addCharge(charge);
+        return charge;
     }
 
     private void addCharge(BillCharge charge) {
+        if (isService(charge.billableItem().item().product())) { //Service
+            bill.serviceCharge().setValue(bill.serviceCharge().getValue() + charge.price().getValue());
+        } else if (isRecurringFeature(charge.billableItem().item().product())) { //Recurring Feature
+            bill.totalRecurringFeatureCharges().setValue(bill.totalRecurringFeatureCharges().getValue() + charge.price().getValue());
+        } else {
+            bill.totalOneTimeFeatureCharges().setValue(bill.totalOneTimeFeatureCharges().getValue() + charge.price().getValue());
+        }
+    }
 
+    private void createLeaseAdjustments() {
+        for (LeaseAdjustment item : bill.billingAccount().leaseFinancial().adjustmantItems()) {
+            createeLeaseAdjustment(item);
+        }
+    }
+
+    private BillLeaseAdjustment createeLeaseAdjustment(LeaseAdjustment item) {
+        BillLeaseAdjustment adjustment = EntityFactory.create(BillLeaseAdjustment.class);
+        adjustment.bill().set(bill);
+        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue() + adjustment.price().getValue());
+        return adjustment;
+    }
+
+    private void createProductAdjustments() {
+        createCharge(bill.billingAccount().leaseFinancial().serviceAgreement().serviceItem());
+        for (BillableItem item : bill.billingAccount().leaseFinancial().serviceAgreement().featureItems()) {
+            createProductAdjustments(item);
+        }
+    }
+
+    private void createProductAdjustments(BillableItem item) {
+        for (BillableItemAdjustment adjustment : item.adjustments()) {
+            createProductAdjustment(adjustment);
+        }
+    }
+
+    private BillProductAdjustment createProductAdjustment(BillableItemAdjustment itemAdjustment) {
+        BillProductAdjustment adjustment = EntityFactory.create(BillProductAdjustment.class);
+        adjustment.bill().set(bill);
+        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue() + adjustment.price().getValue());
+        return adjustment;
+    }
+
+    private boolean isService(Product product) {
+        return product instanceof Service;
+    }
+
+    private boolean isFeature(Product product) {
+        return product instanceof Feature;
+    }
+
+    private boolean isRecurringFeature(Product product) {
+        return isFeature(product) && ((Feature) product).isRecurring().getValue();
     }
 
 }

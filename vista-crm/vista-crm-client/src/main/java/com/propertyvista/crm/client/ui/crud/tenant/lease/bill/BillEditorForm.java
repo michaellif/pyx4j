@@ -40,8 +40,8 @@ public class BillEditorForm extends CrmEntityForm<Bill> {
 
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalRecurringCharges()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalOneTimeCharges()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalRecurringFeatureCharges()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalOneTimeFeatureCharges()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalAdjustments()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalTaxes()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount()), 10).build());

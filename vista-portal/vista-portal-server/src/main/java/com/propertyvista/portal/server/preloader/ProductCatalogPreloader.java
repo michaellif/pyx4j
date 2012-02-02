@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.propertvista.generator.ServiceTypesGenerator;
+import com.propertvista.generator.ProductItemTypesGenerator;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -43,7 +43,7 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
 
-        ServiceTypesGenerator generator = new ServiceTypesGenerator();
+        ProductItemTypesGenerator generator = new ProductItemTypesGenerator();
         Persistence.service().persist(generator.getServiceItemTypes());
         Persistence.service().persist(generator.getFeatureItemTypes());
 

@@ -24,7 +24,7 @@ import com.propertvista.generator.MediaGenerator;
 import com.propertvista.generator.PreloadData;
 import com.propertvista.generator.ProductCatalogGenerator;
 import com.propertvista.generator.gdo.AptUnitGDO;
-import com.propertvista.generator.gdo.ServiceItemTypes;
+import com.propertvista.generator.gdo.ProductItemTypesGDO;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -92,19 +92,19 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
     private String generate() {
         BuildingsGenerator generator = new BuildingsGenerator(config().buildingsGenerationSeed);
 
-        ServiceItemTypes serviceItemTypes = new ServiceItemTypes();
+        ProductItemTypesGDO productItemTypes = new ProductItemTypesGDO();
         {
             EntityQueryCriteria<ProductItemType> criteria = EntityQueryCriteria.create(ProductItemType.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), ProductItemType.Type.service));
-            serviceItemTypes.serviceItemTypes.addAll(Persistence.service().query(criteria));
+            productItemTypes.serviceItemTypes.addAll(Persistence.service().query(criteria));
         }
         {
             EntityQueryCriteria<ProductItemType> criteria = EntityQueryCriteria.create(ProductItemType.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), ProductItemType.Type.feature));
-            serviceItemTypes.featureItemTypes.addAll(Persistence.service().query(criteria));
+            productItemTypes.featureItemTypes.addAll(Persistence.service().query(criteria));
         }
 
-        ProductCatalogGenerator serviceCatalogGenerator = new ProductCatalogGenerator(serviceItemTypes);
+        ProductCatalogGenerator productCatalogGenerator = new ProductCatalogGenerator(productItemTypes);
 
         LeaseTerms leaseTerms = generator.createLeaseTerms();
         Persistence.service().persist(leaseTerms);
@@ -180,7 +180,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             catalog.belongsTo().set(building);
             Persistence.service().persist(catalog);
 
-            serviceCatalogGenerator.createProductCatalog(catalog);
+            productCatalogGenerator.createProductCatalog(catalog);
 
             Persistence.service().persist(catalog.features());
             Persistence.service().persist(catalog.concessions());
@@ -276,7 +276,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             unitCount += units.size();
             for (AptUnitGDO unitData : units) {
 
-                List<ProductItem> serviceItems = serviceCatalogGenerator.createAptUnitServices(catalog, unitData.unit());
+                List<ProductItem> serviceItems = productCatalogGenerator.createAptUnitServices(catalog, unitData.unit());
 
                 // persist plain internal lists:
 

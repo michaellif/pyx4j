@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.propertvista.generator.gdo.ServiceItemTypes;
+import com.propertvista.generator.gdo.ProductItemTypesGDO;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -39,9 +39,9 @@ public class ProductCatalogGenerator {
 
     private static final I18n i18n = I18n.get(ProductCatalogGenerator.class);
 
-    private final ServiceItemTypes serviceItemTypes;
+    private final ProductItemTypesGDO serviceItemTypes;
 
-    public ProductCatalogGenerator(ServiceItemTypes serviceItemTypes) {
+    public ProductCatalogGenerator(ProductItemTypesGDO serviceItemTypes) {
         this.serviceItemTypes = serviceItemTypes;
     }
 
@@ -53,6 +53,7 @@ public class ProductCatalogGenerator {
         return this.serviceItemTypes.featureItemTypes;
     }
 
+    //TODO rename create to something
     public void createProductCatalog(ProductCatalog catalog) {
         DataGenerator.setRandomSeed(RandomUtil.randomInt(1024));
 

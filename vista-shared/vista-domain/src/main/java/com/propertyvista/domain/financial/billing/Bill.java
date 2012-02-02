@@ -78,9 +78,11 @@ public interface Bill extends IEntity {
      */
     IPrimitive<Double> pastDueAmount();
 
-    IPrimitive<Double> totalRecurringCharges();
+    IPrimitive<Double> serviceCharge();
 
-    IPrimitive<Double> totalOneTimeCharges();
+    IPrimitive<Double> totalRecurringFeatureCharges();
+
+    IPrimitive<Double> totalOneTimeFeatureCharges();
 
     /**
      * 
@@ -96,7 +98,8 @@ public interface Bill extends IEntity {
     IPrimitive<Double> latePaimantCharges();
 
     /**
-     * totalDueAmount = pastDueAmount + totalRecurringCharges + totalOneTimeCharges + totalAdjustments -depositPaidAmount + latePaimantCharges
+     * totalDueAmount = pastDueAmount + serviceCharge + totalRecurringFeatureCharges + totalOneTimeFeatureCharges + totalAdjustments - depositPaidAmount +
+     * latePaimantCharges
      */
     IPrimitive<Double> totalCurrentAmount();
 
