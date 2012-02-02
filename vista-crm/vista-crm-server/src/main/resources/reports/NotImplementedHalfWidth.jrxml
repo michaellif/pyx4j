@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport 
+		xmlns="http://jasperreports.sourceforge.net/jasperreports"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
+		name="NotImplemented"
+		pageWidth="555"
+		pageHeight="120"
+		columnWidth="555"
+		leftMargin="0"
+		rightMargin="0"
+		topMargin="10"
+		bottomMargin="10"
+		whenNoDataType="AllSectionsNoDetail">
+	
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="GADGET_NAME" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>	
+	<title>
+		<band height="100" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="277" height="99" />
+				<box border="1Point"/>					
+				<textField>		
+					<reportElement x="0" y="0" width="276" height="80"/>				
+					<textElement textAlignment="Center" verticalAlignment="Middle">					
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression>
+						<![CDATA["The report for gadget \"" + $P{GADGET_NAME} + "\" has not been imlemented yet!"]]>
+					</textFieldExpression>
+				</textField>			
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="0" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="0" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="0" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="0" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="0" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="0" splitType="Stretch"/>
+	</summary>
+</jasperReport>

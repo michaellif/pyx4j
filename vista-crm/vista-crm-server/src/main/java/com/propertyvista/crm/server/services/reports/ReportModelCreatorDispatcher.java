@@ -48,14 +48,15 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
         if (creator != null) {
             creator.createReportModel(callback, gadgetMetadata);
         } else {
-            callback.onSuccess(createReportNotImplementedModel(gadgetMetadata.getInstanceValueClass().getSimpleName()));
+            callback.onSuccess(createReportNotImplementedModel(gadgetMetadata.getInstanceValueClass().getSimpleName(), gadgetMetadata.docking().column()
+                    .getValue() == -1));
         }
     }
 
-    public static JasperReportModel createReportNotImplementedModel(String gadgetName) {
+    public static JasperReportModel createReportNotImplementedModel(String gadgetName, boolean isFullWidth) {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("GADGET_NAME", gadgetName);
-        return new JasperReportModel("reports.NotImplemented", null, parameters);
+        return new JasperReportModel("reports.NotImplemented" + (isFullWidth ? "FullWidth" : "HalfWidth"), null, parameters);
     }
 
     public static ReportModelCreatorDispatcher instance() {
