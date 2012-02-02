@@ -28,6 +28,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
@@ -91,6 +93,17 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
         panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().name()))).build());
         if (isEditable()) {
             panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().website()))).build());
+            get(proto().website()).addValueValidator(new EditableValueValidator<String>() {
+
+                @Override
+                public ValidationFailure isValid(CComponent<String, ?> component, String url) {
+                    if (url != null && ValidationUtils.isSimpleUrl(url)) {
+                        return null;
+                    } else {
+                        return new ValidationFailure(i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
+                    }
+                }
+            });
         } else {
             panel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().website(), new CHyperlink(new Command() {
                 @Override
@@ -99,6 +112,10 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
                     if (!ValidationUtils.urlHasProtocol(url)) {
                         url = "http://" + url;
                     }
+                    if (!ValidationUtils.isCorrectUrl(url)) {
+                        throw new Error(i18n.tr("The URL is not in proper format"));
+                    }
+
                     Window.open(url, proto().website().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
                 }
             })), 50).build());

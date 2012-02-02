@@ -30,8 +30,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
@@ -205,6 +208,17 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().website()), 50).build());
+            get(proto().contacts().website()).addValueValidator(new EditableValueValidator<String>() {
+
+                @Override
+                public ValidationFailure isValid(CComponent<String, ?> component, String url) {
+                    if (url != null && ValidationUtils.isSimpleUrl(url)) {
+                        return null;
+                    } else {
+                        return new ValidationFailure(i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
+                    }
+                }
+            });
         } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().website(), new CHyperlink(new Command() {
                 @Override
@@ -213,8 +227,13 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                     if (!ValidationUtils.urlHasProtocol(url)) {
                         url = "http://" + url;
                     }
+                    if (!ValidationUtils.isCorrectUrl(url)) {
+                        throw new Error(i18n.tr("The URL is not in proper format"));
+                    }
+
                     Window.open(url, proto().contacts().website().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
                 }
+
             })), 50).build());
         }
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
