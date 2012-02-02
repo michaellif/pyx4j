@@ -28,7 +28,15 @@ public class VistaPortalJettyLaunch extends JettyLaunch {
 
     @Override
     public int getServerSslPort() {
-        return 443;
+        if (OSValidator.isWindows()) {
+            return 443;
+        } else if (OSValidator.isMac()) {
+            return 0;
+        } else if (OSValidator.isUnix()) {
+            return 0;
+        } else {
+            return 0;
+        }
     }
 
     @Override
