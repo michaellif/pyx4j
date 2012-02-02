@@ -51,6 +51,11 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
 
+        /**
+         * Should be called after populate, return value is security feature
+         */
+        boolean canAddNew();
+
         void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID);
 
         void delete(Key itemID);

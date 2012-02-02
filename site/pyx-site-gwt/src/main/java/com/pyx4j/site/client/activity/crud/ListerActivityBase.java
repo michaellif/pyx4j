@@ -154,6 +154,14 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formEditorPlace(itemID));
     }
 
+    /**
+     * Empty methods, implementations don't need to call it.
+     */
+    @Override
+    public boolean canAddNew() {
+        return true;
+    }
+
     @Override
     public void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID) {
         AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID != null ? parentID : this.parentID));
