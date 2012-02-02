@@ -271,4 +271,9 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         pp.add(ParamNameTarget, RequestCycle.get().getRequest().getUrl().toString());
         throw new RestartResponseException(getSignInPageClass(), pp);
     }
+
+    public String getApplicationBaseURL(boolean secure) {
+        //TODO VladS use Pmc configuration
+        return ServerSideConfiguration.instance().getMainApplicationURL();
+    }
 }
