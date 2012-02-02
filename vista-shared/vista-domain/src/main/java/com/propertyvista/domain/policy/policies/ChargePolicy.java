@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.policy.framework.Policy;
@@ -23,6 +24,7 @@ import com.propertyvista.domain.policy.framework.Policy;
  * @author michaellif
  * 
  */
+@DiscriminatorValue("ChargePolicy")
 public interface ChargePolicy extends Policy {
 
     IList<ChargePolicyItem> chargePolicyItems();
