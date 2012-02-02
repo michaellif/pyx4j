@@ -179,8 +179,12 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
             @Override
             public void onSuccess(EntitySearchResult<E> result) {
                 dataTablePanel.populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
+                onObtainSuccess();
             }
         });
+    }
+
+    protected void onObtainSuccess() {
     }
 
     protected void onItemSelect(E item) {
