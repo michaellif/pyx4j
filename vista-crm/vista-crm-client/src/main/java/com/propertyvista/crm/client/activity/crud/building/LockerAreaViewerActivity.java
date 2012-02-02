@@ -31,7 +31,7 @@ import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaViewerActivity extends ViewerActivityBase<LockerAreaDTO> implements LockerAreaViewerView.Presenter {
 
-    private final IListerView.Presenter lockerLister;
+    private final IListerView.Presenter<?> lockerLister;
 
     @SuppressWarnings("unchecked")
     public LockerAreaViewerActivity(Place place) {
@@ -43,7 +43,7 @@ public class LockerAreaViewerActivity extends ViewerActivityBase<LockerAreaDTO> 
     }
 
     @Override
-    public IListerView.Presenter getLockerPresenter() {
+    public IListerView.Presenter<?> getLockerPresenter() {
         return lockerLister;
     }
 

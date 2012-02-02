@@ -18,6 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -30,13 +31,14 @@ import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implements UnitViewerView.Presenter {
 
-    private final IListerView.Presenter unitItemsLister;
+    private final IListerView.Presenter<?> unitItemsLister;
 
-    private final IListerView.Presenter OccupanciesLister;
+    private final IListerView.Presenter<?> OccupanciesLister;
 
     @SuppressWarnings("unchecked")
     public UnitViewerActivity(Place place) {
@@ -51,12 +53,12 @@ public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implement
     }
 
     @Override
-    public Presenter getUnitItemsPresenter() {
+    public Presenter<?> getUnitItemsPresenter() {
         return unitItemsLister;
     }
 
     @Override
-    public Presenter getOccupanciesPresenter() {
+    public Presenter<?> getOccupanciesPresenter() {
         return OccupanciesLister;
     }
 
@@ -69,6 +71,11 @@ public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implement
 
         OccupanciesLister.setParent(result.getPrimaryKey());
         OccupanciesLister.populate();
+    }
+
+    @Override
+    public boolean canEdit() {
+        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
     }
 
     @Override

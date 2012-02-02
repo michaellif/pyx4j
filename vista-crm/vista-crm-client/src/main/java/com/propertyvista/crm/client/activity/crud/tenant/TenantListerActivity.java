@@ -17,11 +17,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.TenantListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.tenant.TenantCrudService;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantListerActivity extends ListerActivityBase<TenantDTO> {
@@ -31,4 +33,8 @@ public class TenantListerActivity extends ListerActivityBase<TenantDTO> {
         super(place, TenantViewFactory.instance(TenantListerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class), TenantDTO.class);
     }
 
+    @Override
+    public boolean canAddNew() {
+        return SecurityController.checkBehavior(VistaCrmBehavior.Tenants);
+    }
 }

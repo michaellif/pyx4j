@@ -24,6 +24,7 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
+import com.propertyvista.crm.client.activity.ListerActivityFactory;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
@@ -56,25 +57,25 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
 
     private final DashboardView.Presenter dashboard;
 
-    private final IListerView.Presenter floorplanLister;
+    private final IListerView.Presenter<?> floorplanLister;
 
-    private final IListerView.Presenter unitLister;
+    private final IListerView.Presenter<?> unitLister;
 
-    private final IListerView.Presenter elevatorLister;
+    private final IListerView.Presenter<?> elevatorLister;
 
-    private final IListerView.Presenter boilerLister;
+    private final IListerView.Presenter<?> boilerLister;
 
-    private final IListerView.Presenter roofLister;
+    private final IListerView.Presenter<?> roofLister;
 
-    private final IListerView.Presenter parkingLister;
+    private final IListerView.Presenter<?> parkingLister;
 
-    private final IListerView.Presenter lockerAreaLister;
+    private final IListerView.Presenter<?> lockerAreaLister;
 
-    private final IListerView.Presenter serviceLister;
+    private final IListerView.Presenter<?> serviceLister;
 
-    private final IListerView.Presenter featureLister;
+    private final IListerView.Presenter<?> featureLister;
 
-    private final IListerView.Presenter concessionLister;
+    private final IListerView.Presenter<?> concessionLister;
 
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(Place place) {
@@ -82,20 +83,20 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
 
         dashboard = new DashboardViewActivity(((BuildingViewerView) view).getDashboardView());
 
-        floorplanLister = new ListerActivityBase<FloorplanDTO>(place, ((BuildingViewerView) view).getFloorplanListerView(),
-                (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class), FloorplanDTO.class);
+        floorplanLister = ListerActivityFactory.create(place, ((BuildingViewerView) view).getFloorplanListerView(),
+                (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class), FloorplanDTO.class, VistaCrmBehavior.PropertyManagement);
 
-        unitLister = new ListerActivityBase<AptUnitDTO>(place, ((BuildingViewerView) view).getUnitListerView(),
-                (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class), AptUnitDTO.class);
+        unitLister = ListerActivityFactory.create(place, ((BuildingViewerView) view).getUnitListerView(),
+                (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class), AptUnitDTO.class, VistaCrmBehavior.PropertyManagement);
 
-        elevatorLister = new ListerActivityBase<ElevatorDTO>(place, ((BuildingViewerView) view).getElevatorListerView(),
-                (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class), ElevatorDTO.class);
+        elevatorLister = ListerActivityFactory.create(place, ((BuildingViewerView) view).getElevatorListerView(),
+                (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class), ElevatorDTO.class, VistaCrmBehavior.Mechanicals);
 
-        boilerLister = new ListerActivityBase<BoilerDTO>(place, ((BuildingViewerView) view).getBoilerListerView(),
-                (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class), BoilerDTO.class);
+        boilerLister = ListerActivityFactory.create(place, ((BuildingViewerView) view).getBoilerListerView(),
+                (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class), BoilerDTO.class, VistaCrmBehavior.Mechanicals);
 
-        roofLister = new ListerActivityBase<RoofDTO>(place, ((BuildingViewerView) view).getRoofListerView(),
-                (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class), RoofDTO.class);
+        roofLister = ListerActivityFactory.create(place, ((BuildingViewerView) view).getRoofListerView(),
+                (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class), RoofDTO.class, VistaCrmBehavior.Mechanicals);
 
         parkingLister = new ListerActivityBase<ParkingDTO>(place, ((BuildingViewerView) view).getParkingListerView(),
                 (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class), ParkingDTO.class);
@@ -103,12 +104,12 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
         lockerAreaLister = new ListerActivityBase<LockerAreaDTO>(place, ((BuildingViewerView) view).getLockerAreaListerView(),
                 (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class), LockerAreaDTO.class);
 
-        serviceLister = new ListerActivityBase<Service>(place, ((BuildingViewerView) view).getServiceListerView(),
-                (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class), Service.class);
-        featureLister = new ListerActivityBase<Feature>(place, ((BuildingViewerView) view).getFeatureListerView(),
-                (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class);
-        concessionLister = new ListerActivityBase<Concession>(place, ((BuildingViewerView) view).getConcessionListerView(),
-                (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);
+        serviceLister = ListerActivityFactory.create(place, ((BuildingViewerView) view).getServiceListerView(),
+                (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class), Service.class, VistaCrmBehavior.ProductCatalog);
+        featureLister = ListerActivityFactory.create(place, ((BuildingViewerView) view).getFeatureListerView(),
+                (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class, VistaCrmBehavior.ProductCatalog);
+        concessionLister = ListerActivityFactory.create(place, ((BuildingViewerView) view).getConcessionListerView(),
+                (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class, VistaCrmBehavior.ProductCatalog);
 
     }
 
@@ -123,52 +124,52 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
     }
 
     @Override
-    public Presenter getFloorplanPresenter() {
+    public Presenter<?> getFloorplanPresenter() {
         return floorplanLister;
     }
 
     @Override
-    public Presenter getUnitPresenter() {
+    public Presenter<?> getUnitPresenter() {
         return unitLister;
     }
 
     @Override
-    public Presenter getElevatorPresenter() {
+    public Presenter<?> getElevatorPresenter() {
         return elevatorLister;
     }
 
     @Override
-    public Presenter getBoilerPresenter() {
+    public Presenter<?> getBoilerPresenter() {
         return boilerLister;
     }
 
     @Override
-    public Presenter getRoofPresenter() {
+    public Presenter<?> getRoofPresenter() {
         return roofLister;
     }
 
     @Override
-    public Presenter getParkingPresenter() {
+    public Presenter<?> getParkingPresenter() {
         return parkingLister;
     }
 
     @Override
-    public Presenter getLockerAreaPresenter() {
+    public Presenter<?> getLockerAreaPresenter() {
         return lockerAreaLister;
     }
 
     @Override
-    public Presenter getServicePresenter() {
+    public Presenter<?> getServicePresenter() {
         return serviceLister;
     }
 
     @Override
-    public Presenter getFeaturePresenter() {
+    public Presenter<?> getFeaturePresenter() {
         return featureLister;
     }
 
     @Override
-    public Presenter getConcessionPresenter() {
+    public Presenter<?> getConcessionPresenter() {
         return concessionLister;
     }
 
