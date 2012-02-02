@@ -14,11 +14,15 @@
 package com.propertyvista.server.common.mail;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -30,8 +34,11 @@ import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.server.common.mail.templates.EmailTemplateManager;
+import com.propertyvista.server.common.mail.templates.converter.BuildingTConvertor;
 import com.propertyvista.server.common.policy.PolicyManager;
 
 public class MessageTemplates {
@@ -79,6 +86,26 @@ public class MessageTemplates {
         default:
             throw new Error("Something weird has just happened!!!");
         }
+    }
+
+    // TODO This is prototype!
+    public static String createApplicationApprovedEmial(Tenant tenant) {
+        Building building = null; // TODO  find tenant 
+        EmailTemplate emailTemplate = getEmailTEmplate(EmailTemplateType.ApplicationApproved, building);
+
+        Collection<IEntity> data = new Vector<IEntity>();
+        data.add(new BuildingTConvertor().createDTO(building));
+        //data.add(new TenantTConvertor().createDTO(tenant));
+
+        // Ideal 
+        {
+            List<IEntity> tObjects = EmailTemplateManager.getRootObjectTemplates(EmailTemplateType.ApplicationApproved);
+            for (IEntity ent : tObjects) {
+                // data.add(UniversalConvertor().createDTO(findDBOObject(ent.getValueClass(), tenant)));      
+            }
+        }
+
+        return EmailTemplateManager.parsTemplate(emailTemplate.content().getValue(), data);
     }
 
     public static String wrapHtml(String text) {
