@@ -7,23 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 30, 2012
+ * Created on Feb 2, 2012
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.domain.policy.policies;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.domain.financial.offering.ChargeCode;
 import com.propertyvista.domain.financial.offering.ProductItemType;
-import com.propertyvista.domain.financial.tax.TaxRule;
-import com.propertyvista.domain.policy.framework.Policy;
 
-@DiscriminatorValue("TaxationPolicy")
-public interface TaxationPolicy extends Policy {
-
-    TaxRule taxRule();
+public interface ChargePolicyItem extends IEntity {
 
     ProductItemType productItemType();
+
+    ChargeCode chargeCode();
 
 }

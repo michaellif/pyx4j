@@ -14,12 +14,12 @@
 package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.GlCode;
-import com.propertyvista.domain.financial.tax.TaxRule;
+import com.propertyvista.domain.financial.tax.Tax;
 
 public interface ChargeCode extends IEntity {
 
@@ -28,7 +28,6 @@ public interface ChargeCode extends IEntity {
 
     GlCode glCode();
 
-    @Transient
-    TaxRule taxRule();
+    IList<Tax> taxes();
 
 }

@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -49,6 +50,7 @@ public interface ProductItemType extends IEntity {
     IPrimitive<Feature.Type> featureType();
 
     //TODO get from Charge Policy
+    @Transient
     ChargeCode chargeCode();
 
 }

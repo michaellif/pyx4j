@@ -14,12 +14,12 @@
 package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.GlCode;
-import com.propertyvista.domain.financial.tax.TaxRule;
+import com.propertyvista.domain.financial.tax.Tax;
 
 /**
  * 
@@ -33,8 +33,6 @@ public interface LeaseAdjustmentReason extends IEntity {
 
     GlCode glCode();
 
-    //TODO should be taken from Taxation policy
-    @Transient
-    TaxRule taxRule();
+    IList<Tax> taxes();
 
 }

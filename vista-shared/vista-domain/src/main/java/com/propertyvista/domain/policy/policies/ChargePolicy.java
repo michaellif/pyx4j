@@ -13,12 +13,18 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.domain.policy.framework.Policy;
+
 /**
  * Type of service/feature, applicable taxes, revenue code, GL, accountability for late payment
  * 
  * @author michaellif
  * 
  */
-public class ChargePolicy {
+public interface ChargePolicy extends Policy {
+
+    IList<ChargePolicyItem> chargePolicyItems();
 
 }

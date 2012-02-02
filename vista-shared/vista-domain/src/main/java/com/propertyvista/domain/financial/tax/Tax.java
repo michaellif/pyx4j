@@ -23,6 +23,7 @@ public interface Tax extends IEntity {
 
     IPrimitive<String> name();
 
+    //TODO rate for particular period
     IPrimitive<Double> rate();
 
     IPrimitive<Boolean> compound();

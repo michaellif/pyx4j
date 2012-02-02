@@ -13,12 +13,21 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import com.pyx4j.entity.shared.IEntity;
+
+import com.propertyvista.domain.financial.offering.ChargeCode;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+
 /**
  * Reason code
  * 
  * @author michaellif
  * 
  */
-public interface AdjustmentPolicy {
+public interface LeaseAdjustmentPolicy extends IEntity {
+
+    LeaseAdjustmentReason leaseAdjustmentReason();
+
+    ChargeCode chargeCode();
 
 }
