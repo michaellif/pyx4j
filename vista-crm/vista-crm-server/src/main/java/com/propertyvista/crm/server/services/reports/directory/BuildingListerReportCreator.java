@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.server.services.building.BuildingCrudServiceImpl;
@@ -71,7 +72,11 @@ public class BuildingListerReportCreator extends AbstractGadgetReportModelCreato
     }
 
     private EntityListCriteria<BuildingDTO> convertToCriteria(BuildingLister metadata) {
-        // TODO convert metadata to search criteria
-        return new EntityListCriteria<BuildingDTO>(BuildingDTO.class);
+        EntityListCriteria<BuildingDTO> criteria = new EntityListCriteria<BuildingDTO>(BuildingDTO.class);
+        String sortCoulmn = metadata.primarySortColumn().propertyPath().getValue();
+        if (sortCoulmn != null) {
+            criteria.sort(new Sort(sortCoulmn, !metadata.sortAscending().isBooleanTrue()));
+        }
+        return criteria;
     }
 }
