@@ -30,6 +30,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -152,7 +153,10 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
     @Override
     public void update(AsyncCallback<Boolean> callback) {
         if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveCoApplicant)) {
-            ApplicationProgressMgr.createTenantDataSteps(PtAppContext.getCurrentUserApplication(), PtAppContext.getCurrentUserTenant());
+            Application application = PtAppContext.getCurrentUserApplication();
+            Tenant tenant = PtAppContext.getCurrentUserTenant();
+            DigitalSignatureMgr.reset(tenant);
+            ApplicationProgressMgr.createTenantDataSteps(application, tenant);
         } else if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
             ApplicationProgressMgr.createGurantorDataSteps(PtAppContext.getCurrentUserApplication(), PtAppContext.getCurrentUserGuarantor());
         } else {

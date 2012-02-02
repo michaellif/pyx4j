@@ -57,6 +57,7 @@ public class DigitalSignatureMgr {
                         break;
                     }
                 }
+
                 if (!alreadyPresent) { // create signature if absent: 
                     createDigitalSignature(application, tenant.tenant());
                     ApplicationProgressMgr.invalidateSummaryStep(application);

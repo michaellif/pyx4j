@@ -42,6 +42,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.policy.PolicyManager;
@@ -85,18 +86,21 @@ public class ApartmentServiceImpl implements ApartmentService {
         lease.serviceAgreement().featureItems().addAll(entity.agreedStorage());
         lease.serviceAgreement().featureItems().addAll(entity.agreedOther());
 
-        // save changes:
+        // save items data:
         for (BillableItem item : lease.serviceAgreement().featureItems()) {
             if (!item.extraData().isNull()) {
                 Persistence.service().merge(item.extraData());
             }
         }
 
+        // TODO:
         // actually, just feature list should be saved:
 //      Persistence.service().merge(lease.serviceAgreement().featureItems());
-        //but it's not implemented yet - so save all Lease:
+        // but it's not implemented yet - so save all Lease:
         Persistence.service().merge(lease);
 
+        // wizard state correction:
+        ApplicationProgressMgr.invalidateChargesStep(PtAppContext.getCurrentUserApplication());
         DigitalSignatureMgr.resetAll();
 
         // we do not use return value, so return the same as input one:        
