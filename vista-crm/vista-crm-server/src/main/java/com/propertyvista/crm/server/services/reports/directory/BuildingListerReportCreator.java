@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.server.services.building.BuildingCrudServiceImpl;
 import com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator;
+import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.dto.BuildingDTO;
@@ -36,6 +37,7 @@ public class BuildingListerReportCreator extends AbstractGadgetReportModelCreato
     @Override
     protected void convert(final AsyncCallback<ConvertedGadgetMetadata> callback, GadgetMetadata gadgetMetadata) {
         if (canHandle(gadgetMetadata.getInstanceValueClass())) {
+            final BuildingLister lister = (BuildingLister) gadgetMetadata;
 
             BuildingCrudService service = new BuildingCrudServiceImpl();
 
@@ -43,7 +45,18 @@ public class BuildingListerReportCreator extends AbstractGadgetReportModelCreato
 
                 @Override
                 public void onSuccess(EntitySearchResult<BuildingDTO> result) {
-                    callback.onSuccess(new ConvertedGadgetMetadata(result.getData(), new HashMap<String, Object>()));
+
+                    // Create map of column properties to names
+                    // for columns that appear in the report
+                    HashMap<String, String> columns = new HashMap<String, String>();
+                    for (ColumnDescriptorEntity column : lister.columnDescriptors()) {
+                        if (column.visiblily().getValue())
+                            columns.put(column.propertyPath().getValue(), column.title().getValue());
+                    }
+
+                    HashMap<String, Object> parameters = new HashMap<String, Object>();
+                    parameters.put("COLUMNS", columns);
+                    callback.onSuccess(new ConvertedGadgetMetadata(result.getData(), parameters));
                 }
 
                 @Override
