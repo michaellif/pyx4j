@@ -17,6 +17,10 @@ public interface TestData {
 
     public static String TEST_TERMID = "BIRCHWTT";
 
+    public static String TEST_TERMID1 = "BIRCHWT1";
+
+    public static String TEST_TERMID2 = "BIRCHWT2";
+
     public static String TEST_TERMID_ERROR = "BIRCHWXYZ";
 
     //Test Credit Card Account Numbers
