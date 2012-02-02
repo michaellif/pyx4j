@@ -35,6 +35,7 @@ import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -42,6 +43,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 public class ReportsDeferredProcess implements IDeferredProcess {
 
     private static final Logger log = LoggerFactory.getLogger(ReportsDeferredProcess.class);
+
+    private final static I18n i18n = I18n.get(ReportsDeferredProcess.class);
 
     private static final long serialVersionUID = -9137768646648453119L;
 
@@ -51,7 +54,9 @@ public class ReportsDeferredProcess implements IDeferredProcess {
 
     private volatile boolean isFailed = false;
 
-    private volatile Throwable failureReason = null;
+    private volatile int progress = 0;
+
+    private volatile Throwable failureReasonForClient = null;
 
     private volatile String fileName = null;
 
@@ -66,6 +71,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
 
     @Override
     public void execute() {
+        // TODO somehow make report generation process "abortable" and monitorable (progress) 
         ByteArrayOutputStream bos = null;
         try {
             DashboardMetadata dashboard = (DashboardMetadata) Persistence.service().retrieve(queryCriteria);
@@ -87,8 +93,9 @@ public class ReportsDeferredProcess implements IDeferredProcess {
             }
 
         } catch (Throwable error) {
+            failureReasonForClient = error;
             isFailed = true;
-            failureReason = error;
+            log.error("Report generation failed", failureReasonForClient);
         } finally {
             IOUtils.closeQuietly(bos);
             isDone = true;
@@ -111,61 +118,62 @@ public class ReportsDeferredProcess implements IDeferredProcess {
                 response.setDownloadLink(System.currentTimeMillis() + "/" + fileName);
             } else {
                 response.setError();
-                response.setErrorStatusMessage(failureReason.getMessage());
-                failureReason.printStackTrace();
+                response.setErrorStatusMessage(failureReasonForClient.getMessage());
             }
         } else {
-            response.setProgress(0);
+            response.setMessage(i18n.tr("Creating Report..."));
+            response.setProgress(progress);
         }
         return response;
     }
 
-    public static String metadata2fileName(DashboardMetadata metadata, JasperFileFormat format) {
-        return metadata.name().getValue().replaceAll(" ", "-") + "." + format.toString().toLowerCase();
-    }
-
-    public static JasperReportModel createReportModel(GadgetMetadata gadgetMetadata) {
-        final Boolean[] isReady = new Boolean[] { false };
+    public static JasperReportModel createReportModel(GadgetMetadata gadgetMetadata) throws Exception {
+        final Boolean[] isFinished = new Boolean[] { false };
         final JasperReportModel[] result = new JasperReportModel[] { null };
+        final Throwable[] error = new Throwable[] { null };
 
         if (gadgetMetadata == null) {
             return null;
         } else {
             ReportModelCreatorDispatcher.instance().createReportModel(new AsyncCallback<JasperReportModel>() {
                 @Override
-                public void onFailure(Throwable arg0) {
-                    synchronized (isReady) {
-                        // TODO set throwable
-                        result[0] = null;
-                        isReady[0] = true;
-                        isReady.notify();
+                public void onFailure(Throwable caught) {
+                    error[0] = caught;
+                    synchronized (isFinished) {
+                        isFinished[0] = true;
+                        isFinished.notify();
                     }
                 }
 
                 @Override
                 public void onSuccess(JasperReportModel model) {
-                    synchronized (isReady) {
-                        result[0] = model;
-                        isReady[0] = true;
-                        isReady.notify();
+                    result[0] = model;
+                    synchronized (isFinished) {
+                        isFinished[0] = true;
+                        isFinished.notify();
                     }
                 }
             }, gadgetMetadata);
-            synchronized (isReady) {
-                while (!isReady[0]) {
+
+            boolean isInterrupted = false;
+            synchronized (isFinished) {
+                while (!isFinished[0] & !isInterrupted) {
                     try {
-                        isReady.wait();
+                        isFinished.wait();
                     } catch (InterruptedException e) {
-                        log.error("Error", e);
-                        break;
+                        isInterrupted = true;
                     }
                 }
             }
-            return result[0]; // TODO check if result is null and handler an error;
+            if (result[0] != null) {
+                return result[0];
+            } else {
+                throw new Exception("the creation of report model has failed", error[0]);
+            }
         }
     }
 
-    public static List<MasterReportEntry> prepareSubreports(List<GadgetMetadata> gadgetMetadatas) {
+    public static List<MasterReportEntry> prepareSubreports(List<GadgetMetadata> gadgetMetadatas) throws Exception {
         List<MasterReportEntry> subreports = new LinkedList<MasterReportEntry>();
 
         GadgetMetadata leftGadgetMetadata = null;
@@ -194,13 +202,16 @@ public class ReportsDeferredProcess implements IDeferredProcess {
         return subreports;
     }
 
-    // TODO finish jasper format to mime type conversion
-    private String asMimeType(JasperFileFormat format) {
+    private static String metadata2fileName(DashboardMetadata metadata, JasperFileFormat format) {
+        return metadata.name().getValue().replaceAll(" ", "-") + "." + format.toString().toLowerCase();
+    }
+
+    private static String asMimeType(JasperFileFormat format) throws Exception {
         switch (format) {
         case PDF:
             return MIME_PDF_TYPE;
         default:
-            return "text/xml";
+            throw new Exception("unsupported jasper file format (currently can hanle only " + JasperFileFormat.PDF + ")");
         }
     }
 

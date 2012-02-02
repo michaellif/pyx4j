@@ -37,7 +37,6 @@ public class BuildingListerReportCreator extends AbstractGadgetReportModelCreato
 
     @Override
     protected void convert(final AsyncCallback<ConvertedGadgetMetadata> callback, GadgetMetadata gadgetMetadata) {
-        if (canHandle(gadgetMetadata.getInstanceValueClass())) {
             final BuildingLister lister = (BuildingLister) gadgetMetadata;
 
             BuildingCrudService service = new BuildingCrudServiceImpl();
@@ -65,10 +64,6 @@ public class BuildingListerReportCreator extends AbstractGadgetReportModelCreato
                     callback.onFailure(arg0);
                 }
             }, convertToCriteria(gadgetMetadata.duplicate(BuildingLister.class)));
-        } else {
-            callback.onFailure(new Error(BuildingListerReportCreator.class.getSimpleName() + " can't handle a gadget metadata class "
-                    + gadgetMetadata.getInstanceValueClass().getSimpleName()));
-        }
     }
 
     private EntityListCriteria<BuildingDTO> convertToCriteria(BuildingLister metadata) {

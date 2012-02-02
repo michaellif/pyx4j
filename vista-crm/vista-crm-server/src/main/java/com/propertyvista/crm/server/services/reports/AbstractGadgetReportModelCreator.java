@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.crm.server.services.reports.directory.BuildingListerReportCreator;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public abstract class AbstractGadgetReportModelCreator<G extends GadgetMetadata> implements GadgetReportModelCreator {
@@ -33,22 +34,31 @@ public abstract class AbstractGadgetReportModelCreator<G extends GadgetMetadata>
         this.gadgetMetadataClass = gadgetMetadataClass;
     }
 
+    /**
+     * @param callback
+     *            not <code>null</code>
+     * @param gadgetMetadata
+     *            not <code>null</code>
+     */
     @Override
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata) {
+        if (canHandle(gadgetMetadata.getInstanceValueClass())) {
+            convert(new AsyncCallback<AbstractGadgetReportModelCreator.ConvertedGadgetMetadata>() {
 
-        convert(new AsyncCallback<AbstractGadgetReportModelCreator.ConvertedGadgetMetadata>() {
+                @Override
+                public void onFailure(Throwable arg0) {
 
-            @Override
-            public void onFailure(Throwable arg0) {
-                // TODO Auto-generated method stub
+                }
 
-            }
-
-            @Override
-            public void onSuccess(ConvertedGadgetMetadata reportData) {
-                callback.onSuccess(new JasperReportModel(designName(gadgetMetadataClass), reportData.data, reportData.parameters));
-            }
-        }, gadgetMetadata);
+                @Override
+                public void onSuccess(ConvertedGadgetMetadata reportData) {
+                    callback.onSuccess(new JasperReportModel(designName(gadgetMetadataClass), reportData.data, reportData.parameters));
+                }
+            }, gadgetMetadata);
+        } else {
+            callback.onFailure(new Error(BuildingListerReportCreator.class.getSimpleName() + " can't handle a gadget metadata class "
+                    + gadgetMetadata.getInstanceValueClass().getSimpleName()));
+        }
     }
 
     protected String designName(Class<? extends GadgetMetadata> gadgetMetadataClass) {
