@@ -32,6 +32,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     protected final String defaultCaption;
 
+    private final Button btnEdit;
+
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         this(placeClass, false);
     }
@@ -43,7 +45,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         ((CrmTitleBar) getHeader()).setCaption(defaultCaption);
 
         if (!viewOnly) {
-            Button btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
+            btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     presenter.edit();
@@ -52,6 +54,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             btnEdit.addStyleName(btnEdit.getStylePrimaryName() + CrmTheme.StyleSuffixEx.EditButton);
 
             addToolbarItem(btnEdit);
+        } else {
+            btnEdit = null;
         }
     }
 
@@ -69,6 +73,9 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     public void populate(E value) {
         super.populate(value);
         ((CrmTitleBar) getHeader()).setCaption(defaultCaption + " " + value.getStringView());
+        if (btnEdit != null) {
+            btnEdit.setEnabled(super.getPresenter().canEdit());
+        }
     }
 
 }
