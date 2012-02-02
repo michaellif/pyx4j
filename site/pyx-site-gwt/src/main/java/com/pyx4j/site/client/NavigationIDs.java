@@ -16,6 +16,7 @@ package com.pyx4j.site.client;
 import com.pyx4j.commons.IDebugId;
 
 public enum NavigationIDs implements IDebugId {
+
     Navigation_Folder, Navigation_Item, Navigation_Button;
 
     @Override

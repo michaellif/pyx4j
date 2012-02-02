@@ -23,6 +23,8 @@ package com.pyx4j.tester.selenium.ui;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.selenium.D;
+import com.pyx4j.site.client.NavigationIDs;
+import com.pyx4j.tester.client.TesterSiteMap;
 import com.pyx4j.tester.client.domain.CComponentProperties;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.domain.test.EntityI;
@@ -33,19 +35,8 @@ public class FormBasicTest extends TesterSeleniumTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
-        // Naviage to Test Form
-
-        // TODO Use Debug Id
-        //selenium.click("id=gwt-uid-2");
-        // TODO Use Debug Id
-        //selenium.click("gwt-debug-Navigation_Item-form_tester");
-        // HAck to make it work for demo
-        selenium.navigate().to(selenium.getCurrentUrl() + "#form_tester?formtype=FormBasic");
-        //AppPlace place = new TesterSiteMap.FormTester();
-        //selenium.click(new CompositeDebugId(com.pyx4j.site.client..Navigation_Item, place.getPlaceId()).toString());
-        selenium.waitWhileWorking();
-
+        // Navigate to Test Form
+        selenium.click(D.id(NavigationIDs.Navigation_Item, TesterSiteMap.FormTester.class));
     }
 
     public void testTextBox() {

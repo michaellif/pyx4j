@@ -54,12 +54,13 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
         place = new TesterSiteMap.FormTester();
         place.arg(FormTesterActivity.FORM_TYPE, FormTesterView.TestFormType.FolderLayout.name());
         folderRoot.addItem(new TreeItem(new NavigItemAnchor(place, FormTesterView.TestFormType.FolderLayout.name())));
-
+        folderRoot.setState(true);
         tree.addItem(folderRoot);
 
         TreeItem nativeWidgetRoot = new TreeItem("Native Widgets");
         nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.NativeWidgetBasic(), "Native Widgets")));
         nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.RichTextEditor(), "Rich Text Editor")));
+        nativeWidgetRoot.setState(true);
         tree.addItem(nativeWidgetRoot);
 
         setWidget(tree);
