@@ -43,9 +43,9 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-public class CollectionsTableModel {
+public class TableModelCollections {
 
-    private static final Logger log = LoggerFactory.getLogger(CollectionsTableModel.class);
+    private static final Logger log = LoggerFactory.getLogger(TableModelCollections.class);
 
     public static void validate(IEntity entity, MemberOperationsMeta member) {
         int maxLength = member.getMemberMeta().getLength();

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.io.Serializable;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -219,14 +220,21 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
         }
     }
 
-    //TODO P1
-    public void TODO_testOneToOneRead() {
+    public void testOneToOneRead() {
         String testId = uniqueString();
 
         OneToOneReadOwner o = EntityFactory.create(OneToOneReadOwner.class);
         o.name().setValue(uniqueString());
         o.testId().setValue(testId);
         srv.persist(o);
+
+        //TODO fix table init
+        if (false) {
+            OneToOneReadOwner o1r = srv.retrieve(OneToOneReadOwner.class, o.getPrimaryKey());
+            Assert.assertNull("Got child object", o1r.child().getPrimaryKey());
+            // There are no data e.g. Value is null, consider it Attached
+            Assert.assertEquals("Got child object Attached", AttachLevel.Attached, o1r.child().getAttachLevel());
+        }
 
         OneToOneReadChild c = EntityFactory.create(OneToOneReadChild.class);
         c.name().setValue(uniqueString());
@@ -235,13 +243,14 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
         srv.persist(c);
 
         {
-
+            OneToOneReadOwner o1r = srv.retrieve(OneToOneReadOwner.class, o.getPrimaryKey());
+            Assert.assertEquals("Got child object", c.getPrimaryKey(), o1r.child().getPrimaryKey());
+            Assert.assertEquals("Got child object Detached", AttachLevel.IdOnly, o1r.child().getAttachLevel());
         }
 
     }
 
-    //TODO P1
-    public void TODO_testOneToOneQuery() {
+    public void testOneToOneQuery() {
         String testId = uniqueString();
 
         OneToOneReadOwner o = EntityFactory.create(OneToOneReadOwner.class);
@@ -249,10 +258,30 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
         o.testId().setValue(testId);
         srv.persist(o);
 
+        // TODO implement not exists
+        if (false) {
+            EntityQueryCriteria<OneToOneReadOwner> criteria = EntityQueryCriteria.create(OneToOneReadOwner.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().child(), (Serializable) null));
+
+            List<OneToOneReadOwner> data = srv.query(criteria);
+            Assert.assertEquals("Found using JoinTable", 1, data.size());
+            Assert.assertEquals("Got right object", o.getPrimaryKey(), data.get(0).getPrimaryKey());
+        }
+
         OneToOneReadChild c = EntityFactory.create(OneToOneReadChild.class);
         c.name().setValue(uniqueString());
         c.testId().setValue(testId);
         c.o2oOwner().set(o);
         srv.persist(c);
+
+        {
+            EntityQueryCriteria<OneToOneReadOwner> criteria = EntityQueryCriteria.create(OneToOneReadOwner.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().child().name(), c.name()));
+
+            List<OneToOneReadOwner> data = srv.query(criteria);
+            Assert.assertEquals("Found using JoinTable", 1, data.size());
+            Assert.assertEquals("Got right object", o.getPrimaryKey(), data.get(0).getPrimaryKey());
+            Assert.assertEquals("Data retrieved using JoinTable", c.getPrimaryKey(), data.get(0).child().getPrimaryKey());
+        }
     }
 }

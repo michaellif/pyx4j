@@ -22,39 +22,18 @@ package com.pyx4j.entity.rdb.mapping;
 
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class MemberCollectionOperationsMeta extends MemberOperationsMeta {
-
-    private final String sqlOwnerName;
-
-    private final String sqlValueName;
+public class MemberCollectionOperationsMeta extends MemberExternalOperationsMeta {
 
     private final String sqlOrderColumnName;
 
-    private final ValueAdapter ownerValueAdapter;
-
     public MemberCollectionOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath,
             String sqlOwnerName, ValueAdapter ownerValueAdapter, String sqlValueName, String sqlOrderColumnName) {
-        super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath);
-        this.sqlOwnerName = sqlOwnerName;
-        this.ownerValueAdapter = ownerValueAdapter;
-        this.sqlValueName = sqlValueName;
+        super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, sqlOwnerName, ownerValueAdapter, sqlValueName);
         this.sqlOrderColumnName = sqlOrderColumnName;
-    }
-
-    public String sqlOwnerName() {
-        return sqlOwnerName;
-    }
-
-    public String sqlValueName() {
-        return sqlValueName;
     }
 
     public String sqlOrderColumnName() {
         return sqlOrderColumnName;
-    }
-
-    public ValueAdapter getOwnerValueAdapter() {
-        return ownerValueAdapter;
     }
 
 }

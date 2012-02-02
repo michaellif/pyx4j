@@ -50,7 +50,7 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
-import com.pyx4j.entity.rdb.mapping.CollectionsTableModel;
+import com.pyx4j.entity.rdb.mapping.TableModelCollections;
 import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.MemberCollectionOperationsMeta;
 import com.pyx4j.entity.rdb.mapping.MemberOperationsMeta;
@@ -241,7 +241,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     // Never update
                     continue;
                 }
-                CollectionsTableModel.validate(entity, member);
+                TableModelCollections.validate(entity, member);
                 if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
                     MemberMeta memberMeta = member.getMemberMeta();
                     @SuppressWarnings("unchecked")
@@ -270,7 +270,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         }
                     }
                 }
-                CollectionsTableModel.insert(connection, connectionProvider.getDialect(), entity, member);
+                TableModelCollections.insert(connection, connectionProvider.getDialect(), entity, member);
             }
         } finally {
             if (trace) {
@@ -289,7 +289,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     // Never update
                     continue;
                 }
-                CollectionsTableModel.validate(entity, member);
+                TableModelCollections.validate(entity, member);
                 if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
                     MemberMeta memberMeta = member.getMemberMeta();
                     @SuppressWarnings("unchecked")
@@ -317,7 +317,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             List<IEntity> cascadeRemove = new Vector<IEntity>();
             if (updated) {
                 for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                    CollectionsTableModel.update(connection, connectionProvider.getDialect(), entity, member, cascadeRemove);
+                    TableModelCollections.update(connection, connectionProvider.getDialect(), entity, member, cascadeRemove);
                 }
             }
             for (IEntity ce : cascadeRemove) {
@@ -1068,7 +1068,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
 
                 // remove join table data
-                CollectionsTableModel.delete(connection, connectionProvider.getDialect(), primaryKey, member);
+                TableModelCollections.delete(connection, connectionProvider.getDialect(), primaryKey, member);
             }
 
             if (!tm.delete(connection, primaryKey)) {
@@ -1123,7 +1123,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                             }
                         }
 
-                        CollectionsTableModel.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
+                        TableModelCollections.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
                     }
 
                     count = tm.delete(connection, primaryKeys);
@@ -1150,7 +1150,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             TableModel tm = tableModel(connection, entityMeta);
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 if (member.getMemberMeta().getAttachLevel() != AttachLevel.Detached) {
-                    CollectionsTableModel.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
+                    TableModelCollections.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
                 }
             }
             tm.delete(connection, primaryKeys);
@@ -1168,7 +1168,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             TableModel tm = tableModel(connection, entityMeta);
             for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 if (member.getMemberMeta().getAttachLevel() != AttachLevel.Detached) {
-                    CollectionsTableModel.truncate(connection, member);
+                    TableModelCollections.truncate(connection, member);
                 }
             }
             tm.truncate(connection);

@@ -80,7 +80,7 @@ public class TableModel {
         this.dialect = dialect;
         this.entityMeta = entityMeta;
         if (entityMeta.getEntityClass().getAnnotation(AbstractEntity.class) != null) {
-            throw new Error("Persistence of @AbstractEntity " + entityMeta.getEntityClass().getName() + " is not permited");
+            throw new Error("Persistence of @AbstractEntity " + entityMeta.getEntityClass().getName() + " is not permitted");
         }
 
         Table tableAnnotation = entityMeta.getEntityClass().getAnnotation(Table.class);
@@ -420,6 +420,15 @@ public class TableModel {
         }
     }
 
+    private void retrieveExternal(Connection connection, Dialect dialect, IEntity entity) {
+        for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
+            TableModelCollections.retrieve(connection, dialect, entity, member);
+        }
+        for (MemberExternalOperationsMeta member : entityOperationsMeta.getExternalMembers()) {
+            TableModleExternal.retrieve(connection, dialect, entity, member);
+        }
+    }
+
     public boolean retrieve(Connection connection, Key primaryKey, IEntity entity) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -451,10 +460,7 @@ public class TableModel {
                 }
                 entity.setPrimaryKey(key);
                 retrieveValues(rs, entity);
-
-                for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
-                    CollectionsTableModel.retrieve(connection, dialect, entity, member);
-                }
+                retrieveExternal(connection, dialect, entity);
                 return true;
             }
         } catch (SQLException e) {
@@ -519,10 +525,7 @@ public class TableModel {
                     throw new RuntimeException("namespace access error");
                 }
                 retrieveValues(rs, entity);
-
-                for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
-                    CollectionsTableModel.retrieve(connection, dialect, entity, member);
-                }
+                retrieveExternal(connection, dialect, entity);
 
                 rc.add(entity);
             }
@@ -593,9 +596,7 @@ public class TableModel {
                     log.error("{} SQL select error", tableName, e);
                     throw new RuntimeException(e);
                 }
-                for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
-                    CollectionsTableModel.retrieve(connection, dialect, entity, member);
-                }
+                retrieveExternal(connection, dialect, entity);
                 return entity;
             }
         };

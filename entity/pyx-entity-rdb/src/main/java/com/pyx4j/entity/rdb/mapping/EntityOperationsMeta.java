@@ -79,6 +79,8 @@ public class EntityOperationsMeta {
 
     private final List<MemberCollectionOperationsMeta> collectionMembers = new Vector<MemberCollectionOperationsMeta>();
 
+    private final List<MemberExternalOperationsMeta> externalMembers = new Vector<MemberExternalOperationsMeta>();
+
     private final List<MemberOperationsMeta> indexMembers = new Vector<MemberOperationsMeta>();
 
     private final Mappings mappings;
@@ -111,7 +113,7 @@ public class EntityOperationsMeta {
         return mappings.getTableModel(connection, entityClass).operationsMeta();
     }
 
-    private String memberPersistenceName(MemberMeta memberMeta) {
+    private static String memberPersistenceName(MemberMeta memberMeta) {
         MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
         if ((memberColumn != null) && (CommonsStringUtils.isStringSet(memberColumn.name()))) {
             return memberColumn.name();
@@ -162,37 +164,15 @@ public class EntityOperationsMeta {
 
                     ValueAdapter valueAdapter = createEntityValueAdapter(dialect, memberMeta);
 
-                    JoinTable joinTable = memberMeta.getAnnotation(JoinTable.class);
                     MemberCollectionOperationsMeta member;
+                    JoinTable joinTable = memberMeta.getAnnotation(JoinTable.class);
                     if (joinTable != null) {
-                        @SuppressWarnings("unchecked")
-                        Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getValueClass();
-                        Class<? extends IEntity> joinEntityClass = joinTable.value();
-                        EntityMeta joinEntityMeta = EntityFactory.getEntityMeta(joinEntityClass);
-                        String sqlName = TableModel.getTableName(dialect, joinEntityMeta);
 
-                        String sqlValueName = null;
-                        if (joinEntityClass == entityClass) {
-                            sqlValueName = IEntity.PRIMARY_KEY;
-                        } else {
-                            sqlValueName = namingConvention.sqlFieldName(memberPersistenceName(findValueMember(entityMeta, memberName, joinTable,
-                                    joinEntityMeta, entityClass)));
-                        }
-                        MemberMeta ownerMemberMeta = findOwnerMember(entityMeta, memberName, joinTable, joinEntityMeta, rootEntityMeta);
-                        String sqlOwnerName = namingConvention.sqlFieldName(memberPersistenceName(ownerMemberMeta));
-                        ValueAdapter ownerValueAdapter = createEntityValueAdapter(dialect, ownerMemberMeta);
+                        JoinTableInformation joinInfo = new JoinTableInformation(dialect, namingConvention, rootEntityMeta, entityMeta, memberMeta, joinTable);
 
-                        MemberMeta orderMemberMeta = findOrderMember(entityMeta, memberName, joinTable, joinEntityMeta);
-                        String sqlOrderColumnName = null;
-                        if (orderMemberMeta == null && memberMeta.getObjectClassType() == ObjectClassType.EntityList) {
-                            throw new Error("Unmapped orderColumn member in join table '" + joinEntityMeta.getCaption() + "' for " + memberName + " in "
-                                    + entityMeta.getEntityClass().getName());
-                        } else if (orderMemberMeta != null) {
-                            sqlOrderColumnName = namingConvention.sqlFieldName(memberPersistenceName(orderMemberMeta));
-                        }
-
-                        member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
-                                + Path.PATH_SEPARATOR, sqlOwnerName, ownerValueAdapter, sqlValueName, sqlOrderColumnName);
+                        member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, joinInfo.sqlName, memberMeta, path + Path.PATH_SEPARATOR
+                                + memberName + Path.PATH_SEPARATOR, joinInfo.sqlOwnerName, joinInfo.ownerValueAdapter, joinInfo.sqlValueName,
+                                joinInfo.sqlOrderColumnName);
                     } else {
                         String sqlName;
                         if (namesPath != null) {
@@ -216,17 +196,27 @@ public class EntityOperationsMeta {
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    String sqlName;
-                    if (namesPath != null) {
-                        sqlName = namingConvention.sqlEmbededFieldName(namesPath, memberPersistenceName);
-                    } else {
-                        sqlName = namingConvention.sqlFieldName(memberPersistenceName);
-                    }
                     ValueAdapter valueAdapter = createEntityValueAdapter(dialect, memberMeta);
-                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR
-                            + memberName + Path.PATH_SEPARATOR, memberName.equals(ownerMemberName));
+                    MemberOperationsMeta member;
+                    JoinTable joinTable = memberMeta.getAnnotation(JoinTable.class);
+                    if (joinTable == null) {
+                        String sqlName;
+                        if (namesPath != null) {
+                            sqlName = namingConvention.sqlEmbededFieldName(namesPath, memberPersistenceName);
+                        } else {
+                            sqlName = namingConvention.sqlFieldName(memberPersistenceName);
+                        }
+                        member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
+                                + Path.PATH_SEPARATOR, memberName.equals(ownerMemberName));
 
-                    columnMembers.add(member);
+                        columnMembers.add(member);
+                    } else {
+                        JoinTableInformation joinInfo = new JoinTableInformation(dialect, namingConvention, rootEntityMeta, entityMeta, memberMeta, joinTable);
+                        member = new MemberExternalOperationsMeta(memberAccess, valueAdapter, joinInfo.sqlName, memberMeta, path + Path.PATH_SEPARATOR
+                                + memberName + Path.PATH_SEPARATOR, joinInfo.sqlOwnerName, joinInfo.ownerValueAdapter, joinInfo.sqlValueName);
+                        externalMembers.add((MemberExternalOperationsMeta) member);
+                    }
+
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
                     if (memberMeta.isOwnedRelationships()) {
@@ -235,8 +225,13 @@ public class EntityOperationsMeta {
                     } else if (memberMeta.getAnnotation(Reference.class) != null) {
                         cascadePersistMembers.add(member);
                     }
-                    if (!memberMeta.isDetached()) {
+                    switch (memberMeta.getAttachLevel()) {
+                    case Attached:
                         cascadeRetrieveMembers.add(member);
+                        break;
+                    case Detached:
+                        detachedMembers.add(member);
+                        break;
                     }
                 } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     String sqlName;
@@ -295,93 +290,137 @@ public class EntityOperationsMeta {
         }
     }
 
-    private MemberMeta findOwnerMember(EntityMeta entityMeta, String memberName, JoinTable joinTable, EntityMeta joinEntityMeta, EntityMeta rootEntityMeta) {
-        MemberMeta ownerMemberMeta = null;
+    private static class JoinTableInformation {
 
-        Class<? extends IEntity> rootEntityClass = rootEntityMeta.getEntityClass();
-        Table tableAnnotation = rootEntityMeta.getAnnotation(Table.class);
-        if ((tableAnnotation != null) && (tableAnnotation.expands() != null)) {
-            rootEntityClass = tableAnnotation.expands();
+        String sqlName;
+
+        String sqlValueName = null;
+
+        String sqlOwnerName = null;
+
+        String sqlOrderColumnName = null;
+
+        ValueAdapter ownerValueAdapter;
+
+        JoinTableInformation(Dialect dialect, NamingConvention namingConvention, EntityMeta rootEntityMeta, EntityMeta entityMeta, MemberMeta memberMeta,
+                JoinTable joinTable) {
+            @SuppressWarnings("unchecked")
+            Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getValueClass();
+            Class<? extends IEntity> joinEntityClass = joinTable.value();
+            EntityMeta joinEntityMeta = EntityFactory.getEntityMeta(joinEntityClass);
+            sqlName = TableModel.getTableName(dialect, joinEntityMeta);
+
+            if (joinEntityClass == entityClass) {
+                sqlValueName = IEntity.PRIMARY_KEY;
+            } else {
+                sqlValueName = namingConvention.sqlFieldName(memberPersistenceName(findValueMember(entityMeta, memberMeta, joinTable, joinEntityMeta,
+                        entityClass)));
+            }
+            MemberMeta ownerMemberMeta = findOwnerMember(entityMeta, memberMeta, joinTable, joinEntityMeta, rootEntityMeta);
+            sqlOwnerName = namingConvention.sqlFieldName(memberPersistenceName(ownerMemberMeta));
+            ownerValueAdapter = createEntityValueAdapter(dialect, ownerMemberMeta);
+
+            MemberMeta orderMemberMeta = findOrderMember(entityMeta, memberMeta, joinTable, joinEntityMeta);
+
+            if (orderMemberMeta == null && memberMeta.getObjectClassType() == ObjectClassType.EntityList) {
+                throw new Error("Unmapped orderColumn member in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName() + " in "
+                        + entityMeta.getEntityClass().getName());
+            } else if (orderMemberMeta != null) {
+                sqlOrderColumnName = namingConvention.sqlFieldName(memberPersistenceName(orderMemberMeta));
+            }
         }
 
-        for (String jmemberName : joinEntityMeta.getMemberNames()) {
-            MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
-            if (!jmemberMeta.isTransient()) {
-                if ((joinTable.mappedby() == ColumnId.class)
-                        && ((jmemberMeta.getObjectClass().equals(rootEntityMeta.getEntityClass())) || (jmemberMeta.getObjectClass().equals(rootEntityClass)))) {
-                    ownerMemberMeta = jmemberMeta;
-                } else {
-                    JoinColumn joinColumn = jmemberMeta.getAnnotation(JoinColumn.class);
-                    if (joinColumn != null) {
-                        if (joinTable.mappedby() != ColumnId.class) {
-                            if (joinColumn.value() == joinTable.mappedby()) {
-                                ownerMemberMeta = jmemberMeta;
-                                break;
-                            }
-                        } else {
-                            if (joinColumn.value() == ColumnId.class) {
-                                if ((jmemberMeta.getObjectClass().isAssignableFrom(rootEntityMeta.getEntityClass()))
-                                        || (jmemberMeta.getObjectClass().isAssignableFrom(rootEntityClass))) {
+        private MemberMeta findOwnerMember(EntityMeta entityMeta, MemberMeta memberMeta, JoinTable joinTable, EntityMeta joinEntityMeta,
+                EntityMeta rootEntityMeta) {
+            MemberMeta ownerMemberMeta = null;
+
+            Class<? extends IEntity> rootEntityClass = rootEntityMeta.getEntityClass();
+            Table tableAnnotation = rootEntityMeta.getAnnotation(Table.class);
+            if ((tableAnnotation != null) && (tableAnnotation.expands() != null)) {
+                rootEntityClass = tableAnnotation.expands();
+            }
+
+            for (String jmemberName : joinEntityMeta.getMemberNames()) {
+                MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
+                if (!jmemberMeta.isTransient()) {
+                    if ((joinTable.mappedby() == ColumnId.class)
+                            && ((jmemberMeta.getObjectClass().equals(rootEntityMeta.getEntityClass())) || (jmemberMeta.getObjectClass().equals(rootEntityClass)))) {
+                        ownerMemberMeta = jmemberMeta;
+                    } else {
+                        JoinColumn joinColumn = jmemberMeta.getAnnotation(JoinColumn.class);
+                        if (joinColumn != null) {
+                            if (joinTable.mappedby() != ColumnId.class) {
+                                if (joinColumn.value() == joinTable.mappedby()) {
                                     ownerMemberMeta = jmemberMeta;
                                     break;
+                                }
+                            } else {
+                                if (joinColumn.value() == ColumnId.class) {
+                                    if ((jmemberMeta.getObjectClass().isAssignableFrom(rootEntityMeta.getEntityClass()))
+                                            || (jmemberMeta.getObjectClass().isAssignableFrom(rootEntityClass))) {
+                                        ownerMemberMeta = jmemberMeta;
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        }
-        if (ownerMemberMeta == null) {
-            throw new Error("Unmapped owner member in join table '" + joinEntityMeta.getCaption() + "' for " + memberName + " in "
-                    + entityMeta.getEntityClass().getName());
-        } else {
-            return ownerMemberMeta;
-        }
-    }
-
-    private MemberMeta findValueMember(EntityMeta entityMeta, String memberName, JoinTable joinTable, EntityMeta joinEntityMeta,
-            Class<? extends IEntity> entityClass) {
-        MemberMeta valueMemberMeta = null;
-
-        for (String jmemberName : joinEntityMeta.getMemberNames()) {
-            MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
-            if (!jmemberMeta.isTransient()) {
-                if (jmemberMeta.getObjectClass().equals(entityClass)) {
-                    valueMemberMeta = jmemberMeta;
-                }
+            if (ownerMemberMeta == null) {
+                throw new Error("Unmapped owner member in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName() + " in "
+                        + entityMeta.getEntityClass().getName());
+            } else {
+                return ownerMemberMeta;
             }
         }
-        if (valueMemberMeta == null) {
-            throw new Error("Unmapped value member '" + entityClass.getName() + "' in join table '" + joinEntityMeta.getCaption() + "' for " + memberName
-                    + " in " + entityMeta.getEntityClass().getName());
-        } else {
-            return valueMemberMeta;
-        }
-    }
 
-    private MemberMeta findOrderMember(EntityMeta entityMeta, String memberName, JoinTable joinTable, EntityMeta joinEntityMeta) {
-        MemberMeta orderMemberMeta = null;
-        for (String jmemberName : joinEntityMeta.getMemberNames()) {
-            MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
-            if (!jmemberMeta.isTransient()) {
-                JoinTableOrderColumn joinTableOrderColumn = jmemberMeta.getAnnotation(JoinTableOrderColumn.class);
-                if ((joinTableOrderColumn != null) && (joinTable.orderColumn() != ColumnId.class) && (joinTable.orderColumn() == joinTableOrderColumn.value())) {
-                    if (orderMemberMeta != null) {
-                        throw new Error("Duplicate orderColumn member in join table '" + joinEntityMeta.getCaption() + "' for " + memberName + " in "
-                                + entityMeta.getEntityClass().getName());
+        private MemberMeta findValueMember(EntityMeta entityMeta, MemberMeta memberMeta, JoinTable joinTable, EntityMeta joinEntityMeta,
+                Class<? extends IEntity> entityClass) {
+            MemberMeta valueMemberMeta = null;
+
+            for (String jmemberName : joinEntityMeta.getMemberNames()) {
+                MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
+                if (!jmemberMeta.isTransient()) {
+                    if (jmemberMeta.getObjectClass().equals(entityClass)) {
+                        valueMemberMeta = jmemberMeta;
                     }
-                    if (jmemberMeta.getObjectClass().equals(Integer.class)) {
-                        throw new Error("Expected Integer orderColumn in join table '" + joinEntityMeta.getCaption() + "' for " + memberName + " in "
-                                + entityMeta.getEntityClass().getName());
-                    }
-                    orderMemberMeta = jmemberMeta;
                 }
             }
+            if (valueMemberMeta == null) {
+                throw new Error("Unmapped value member '" + entityClass.getName() + "' in join table '" + joinEntityMeta.getCaption() + "' for "
+                        + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
+            } else {
+                return valueMemberMeta;
+            }
         }
-        return orderMemberMeta;
+
+        private MemberMeta findOrderMember(EntityMeta entityMeta, MemberMeta memberMeta, JoinTable joinTable, EntityMeta joinEntityMeta) {
+            MemberMeta orderMemberMeta = null;
+            for (String jmemberName : joinEntityMeta.getMemberNames()) {
+                MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
+                if (!jmemberMeta.isTransient()) {
+                    JoinTableOrderColumn joinTableOrderColumn = jmemberMeta.getAnnotation(JoinTableOrderColumn.class);
+                    if ((joinTableOrderColumn != null) && (joinTable.orderColumn() != ColumnId.class)
+                            && (joinTable.orderColumn() == joinTableOrderColumn.value())) {
+                        if (orderMemberMeta != null) {
+                            throw new Error("Duplicate orderColumn member in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName()
+                                    + " in " + entityMeta.getEntityClass().getName());
+                        }
+                        if (jmemberMeta.getObjectClass().equals(Integer.class)) {
+                            throw new Error("Expected Integer orderColumn in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName()
+                                    + " in " + entityMeta.getEntityClass().getName());
+                        }
+                        orderMemberMeta = jmemberMeta;
+                    }
+                }
+            }
+            return orderMemberMeta;
+        }
+
     }
 
-    private ValueAdapter createEntityValueAdapter(Dialect dialect, MemberMeta memberMeta) {
+    private static ValueAdapter createEntityValueAdapter(Dialect dialect, MemberMeta memberMeta) {
         @SuppressWarnings("unchecked")
         Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getValueClass();
         if (entityClass.getAnnotation(Inheritance.class) != null) {
@@ -499,6 +538,10 @@ public class EntityOperationsMeta {
                 });
             }
         };
+    }
+
+    public List<MemberExternalOperationsMeta> getExternalMembers() {
+        return externalMembers;
     }
 
     public Iterable<MemberCollectionOperationsMeta> getJoinTablesCollectionMembers() {

@@ -174,7 +174,6 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     private void appendPropertyCriterion(EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
-        ObjectClassType objectClassType = ObjectClassType.Primitive;
         MemberWithAlias memeberWithAlias = null;
         BindHolder bindHolder = new BindHolder();
         bindHolder.bindValue = propertyCriterion.getValue();
@@ -188,20 +187,15 @@ public class QueryBuilder<T extends IEntity> {
             if (memeberWithAlias == null) {
                 throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyPath() + " in " + entityMeta.getEntityClass().getName());
             }
-            objectClassType = memeberWithAlias.memberOper.getMemberMeta().getObjectClassType();
             bindHolder.adapter = memeberWithAlias.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(),
                     bindHolder.bindValue);
 
             String memberSqlNameBase;
 
-            switch (objectClassType) {
-            case EntityList:
-            case EntitySet:
-            case PrimitiveSet:
+            if (memeberWithAlias.memberOper instanceof MemberExternalOperationsMeta) {
                 String memberJoinAlias = getJoin(memeberWithAlias.memberOper, memeberWithAlias.alias, false);
-                memberSqlNameBase = memberJoinAlias + "." + ((MemberCollectionOperationsMeta) (memeberWithAlias.memberOper)).sqlValueName();
-                break;
-            default:
+                memberSqlNameBase = memberJoinAlias + "." + ((MemberExternalOperationsMeta) (memeberWithAlias.memberOper)).sqlValueName();
+            } else {
                 memberSqlNameBase = memeberWithAlias.alias + "." + memeberWithAlias.memberOper.sqlName();
             }
 
@@ -330,14 +324,14 @@ public class QueryBuilder<T extends IEntity> {
 
             StringBuilder condition = new StringBuilder();
 
-            if (memberOper.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
+            if (memberOper instanceof MemberExternalOperationsMeta) {
+                // Collection or join
+                condition.append(fromAlias).append(".id = ");
+                condition.append(memberJoin.alias).append(".").append(((MemberExternalOperationsMeta) (memberOper)).sqlOwnerName()).append(' ');
+            } else {
                 condition.append(fromAlias).append(".").append(memberOper.sqlName());
                 condition.append(" = ");
                 condition.append(memberJoin.alias).append(".id ");
-            } else {
-                // Collection
-                condition.append(fromAlias).append(".id = ");
-                condition.append(memberJoin.alias).append(".").append(((MemberCollectionOperationsMeta) (memberOper)).sqlOwnerName()).append(' ');
             }
 
             memberJoin.condition = condition.toString();
