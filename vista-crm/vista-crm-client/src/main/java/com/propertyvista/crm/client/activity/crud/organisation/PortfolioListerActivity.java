@@ -35,7 +35,7 @@ public class PortfolioListerActivity extends ListerActivityBase<Portfolio> {
     }
 
     @Override
-    public boolean canAddNew() {
+    public boolean canEditNew() {
         return SecurityController.checkBehavior(VistaCrmBehavior.Organization);
     }
 }

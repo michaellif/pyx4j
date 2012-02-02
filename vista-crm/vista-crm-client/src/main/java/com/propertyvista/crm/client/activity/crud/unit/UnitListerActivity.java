@@ -34,7 +34,7 @@ public class UnitListerActivity extends ListerActivityBase<AptUnitDTO> {
     }
 
     @Override
-    public boolean canAddNew() {
+    public boolean canEditNew() {
         return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
     }
 }

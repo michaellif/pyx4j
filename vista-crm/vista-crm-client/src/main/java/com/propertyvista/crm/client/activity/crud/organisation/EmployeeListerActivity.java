@@ -35,7 +35,7 @@ public class EmployeeListerActivity extends ListerActivityBase<EmployeeDTO> {
     }
 
     @Override
-    public boolean canAddNew() {
+    public boolean canEditNew() {
         return SecurityController.checkBehavior(VistaCrmBehavior.Organization);
     }
 }

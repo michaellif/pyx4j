@@ -34,7 +34,7 @@ public class TenantListerActivity extends ListerActivityBase<TenantDTO> {
     }
 
     @Override
-    public boolean canAddNew() {
+    public boolean canEditNew() {
         return SecurityController.checkBehavior(VistaCrmBehavior.Tenants);
     }
 }

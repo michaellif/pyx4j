@@ -35,7 +35,7 @@ public class BuildingListerActivity extends ListerActivityBase<BuildingDTO> {
     }
 
     @Override
-    public boolean canAddNew() {
+    public boolean canEditNew() {
         return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
     }
 }

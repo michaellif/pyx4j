@@ -36,7 +36,7 @@ public class ComplexListerActivity extends ListerActivityBase<ComplexDTO> {
     }
 
     @Override
-    public boolean canAddNew() {
+    public boolean canEditNew() {
         return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
     }
 }
