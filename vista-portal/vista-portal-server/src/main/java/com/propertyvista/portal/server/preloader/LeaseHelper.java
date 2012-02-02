@@ -59,7 +59,7 @@ class LeaseHelper {
                 Persistence.service().retrieve(service.items());
                 for (ProductItem item : service.items()) {
                     if (lease.unit().equals(item.element())) {
-                        lease.leaseFinancial().serviceAgreement().serviceItem().set(createChargeItem(item));
+                        lease.serviceAgreement().serviceItem().set(createChargeItem(item));
                         selectedService = service;
                         lease.type().set(selectedService.type());
                         break;
@@ -68,7 +68,7 @@ class LeaseHelper {
             }
         }
 
-        if (!lease.leaseFinancial().serviceAgreement().serviceItem().isEmpty()) {
+        if (!lease.serviceAgreement().serviceItem().isEmpty()) {
             Persistence.service().retrieve(building.serviceCatalog());
             // pre-populate utilities for the new service: 
             Persistence.service().retrieve(selectedService.features());
@@ -78,7 +78,7 @@ class LeaseHelper {
                     for (ProductItem item : feature.items()) {
                         if (!building.serviceCatalog().includedUtilities().contains(item.type())
                                 && !building.serviceCatalog().externalUtilities().contains(item.type())) {
-                            lease.leaseFinancial().serviceAgreement().featureItems().add(createChargeItem(item));
+                            lease.serviceAgreement().featureItems().add(createChargeItem(item));
                         }
                     }
                 }
@@ -88,7 +88,7 @@ class LeaseHelper {
             // pre-populate concessions for the new service: 
             Persistence.service().retrieve(selectedService.concessions());
             if (!selectedService.concessions().isEmpty()) {
-                lease.leaseFinancial().serviceAgreement().concessions().add(RandomUtil.random(selectedService.concessions()));
+                lease.serviceAgreement().concessions().add(RandomUtil.random(selectedService.concessions()));
             }
         }
     }

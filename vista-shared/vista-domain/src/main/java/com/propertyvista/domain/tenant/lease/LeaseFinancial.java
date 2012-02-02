@@ -13,7 +13,10 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
@@ -21,7 +24,10 @@ import com.propertyvista.domain.financial.BillingAccount;
 
 public interface LeaseFinancial extends IEntity {
 
-    ServiceAgreement serviceAgreement();
+    @Owner
+    @Detached
+    @ReadOnly
+    Lease lease();
 
     @Owned
     BillingAccount billingAccount();

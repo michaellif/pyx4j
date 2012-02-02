@@ -64,7 +64,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     public void save(AsyncCallback<ApartmentInfoDTO> callback, ApartmentInfoDTO entity) {
         // update agreed items:
         Lease lease = PtAppContext.getCurrentUserLease();
-        for (Iterator<BillableItem> iter = lease.leaseFinancial().serviceAgreement().featureItems().iterator(); iter.hasNext();) {
+        for (Iterator<BillableItem> iter = lease.serviceAgreement().featureItems().iterator(); iter.hasNext();) {
             BillableItem item = iter.next();
             if (item.item().type().type().getValue().equals(ProductItemType.Type.feature)) {
                 switch (item.item().type().featureType().getValue()) {
@@ -80,13 +80,13 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         // add user-selected ones:
-        lease.leaseFinancial().serviceAgreement().featureItems().addAll(entity.agreedPets());
-        lease.leaseFinancial().serviceAgreement().featureItems().addAll(entity.agreedParking());
-        lease.leaseFinancial().serviceAgreement().featureItems().addAll(entity.agreedStorage());
-        lease.leaseFinancial().serviceAgreement().featureItems().addAll(entity.agreedOther());
+        lease.serviceAgreement().featureItems().addAll(entity.agreedPets());
+        lease.serviceAgreement().featureItems().addAll(entity.agreedParking());
+        lease.serviceAgreement().featureItems().addAll(entity.agreedStorage());
+        lease.serviceAgreement().featureItems().addAll(entity.agreedOther());
 
         // save changes:
-        for (BillableItem item : lease.leaseFinancial().serviceAgreement().featureItems()) {
+        for (BillableItem item : lease.serviceAgreement().featureItems()) {
             if (!item.extraData().isNull()) {
                 Persistence.service().merge(item.extraData());
             }
@@ -163,7 +163,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         // Lease data:
         aptInfo.leaseFrom().setValue(lease.leaseFrom().getValue());
         aptInfo.leaseTo().setValue(lease.leaseTo().getValue());
-        aptInfo.unitRent().setValue(lease.leaseFinancial().serviceAgreement().serviceItem().item().price().getValue());
+        aptInfo.unitRent().setValue(lease.serviceAgreement().serviceItem().item().price().getValue());
 
         // policy limits:
         MiscPolicy miscPolicy = (MiscPolicy) PolicyManager.effectivePolicy(lease.unit(), MiscPolicy.class);
@@ -241,7 +241,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         entity.externalUtilities().addAll(building.serviceCatalog().externalUtilities());
 
         // fill agreed items:
-        for (BillableItem item : lease.leaseFinancial().serviceAgreement().featureItems()) {
+        for (BillableItem item : lease.serviceAgreement().featureItems()) {
             if (item.item().type().type().getValue().equals(ProductItemType.Type.feature)) {
                 PriceCalculationHelpers.calculateChargeItemAdjustments(item);
                 switch (item.item().type().featureType().getValue()) {
@@ -292,6 +292,6 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         // fill concessions:
-        entity.concessions().addAll(lease.leaseFinancial().serviceAgreement().concessions());
+        entity.concessions().addAll(lease.serviceAgreement().concessions());
     }
 }

@@ -39,7 +39,7 @@ class AgreedItemFolder extends VistaBoxFolder<BillableItem> {
 
     @Override
     protected void addItem() {
-        if (parent.getValue().leaseFinancial().serviceAgreement().serviceItem().isNull()) {
+        if (parent.getValue().serviceAgreement().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
             new SelectDialog<ProductItem>(i18n.tr("Select Features"), true, parent.getValue().selectedFeatureItems()) {

@@ -76,6 +76,7 @@ class Billing {
 
     private void run() {
         Persistence.service().retrieve(bill.billingAccount().leaseFinancial());
+        Persistence.service().retrieve(bill.billingAccount().leaseFinancial().lease());
 
         //Set accumulating fields to 0 value
         bill.paymentReceivedAmount().setValue(0d);
@@ -120,8 +121,8 @@ class Billing {
     }
 
     private void createCharges() {
-        createCharge(bill.billingAccount().leaseFinancial().serviceAgreement().serviceItem());
-        for (BillableItem item : bill.billingAccount().leaseFinancial().serviceAgreement().featureItems()) {
+        createCharge(bill.billingAccount().leaseFinancial().lease().serviceAgreement().serviceItem());
+        for (BillableItem item : bill.billingAccount().leaseFinancial().lease().serviceAgreement().featureItems()) {
             createCharge(item);
         }
     }
@@ -157,8 +158,8 @@ class Billing {
     }
 
     private void createProductAdjustments() {
-        createCharge(bill.billingAccount().leaseFinancial().serviceAgreement().serviceItem());
-        for (BillableItem item : bill.billingAccount().leaseFinancial().serviceAgreement().featureItems()) {
+        createCharge(bill.billingAccount().leaseFinancial().lease().serviceAgreement().serviceItem());
+        for (BillableItem item : bill.billingAccount().leaseFinancial().lease().serviceAgreement().featureItems()) {
             createProductAdjustments(item);
         }
     }

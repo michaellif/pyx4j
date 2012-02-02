@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -117,6 +118,9 @@ public interface Lease extends IEntity {
     IPrimitive<LogicalDate> signDate();
 
     LeaseFinancial leaseFinancial();
+
+    @EmbeddedEntity
+    ServiceAgreement serviceAgreement();
 
     @Detached
     // should be loaded in service when necessary!..
