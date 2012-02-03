@@ -50,12 +50,12 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
-import com.pyx4j.entity.rdb.mapping.TableModelCollections;
 import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.MemberCollectionOperationsMeta;
 import com.pyx4j.entity.rdb.mapping.MemberOperationsMeta;
 import com.pyx4j.entity.rdb.mapping.ResultSetIterator;
 import com.pyx4j.entity.rdb.mapping.TableModel;
+import com.pyx4j.entity.rdb.mapping.TableModelCollections;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
@@ -192,10 +192,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    // Initialize ownership relationship if any, e.g. call  SharedEntityHandler.ensureValue();
+    private void ensureEntityValue(IEntity entity) {
+        entity.setPrimaryKey(entity.getPrimaryKey());
+    }
+
     private void persist(Connection connection, TableModel tm, IEntity entity, Date now) {
         if (entity.isValueDetached()) {
             throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
         }
+        ensureEntityValue(entity);
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
             IEntity childEntity = (IEntity) member.getMember(entity);
@@ -630,7 +636,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
         boolean isNewEntity = ((entity.getPrimaryKey() == null) || ((tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) && (!tm.exists(
                 connection, entity.getPrimaryKey()))));
-
+        ensureEntityValue(entity);
         boolean updated;
         if (!isNewEntity) {
             updated = retrieveAndApplyModifications(connection, tm, baseEntity, entity);

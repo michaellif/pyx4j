@@ -34,6 +34,7 @@ import com.pyx4j.entity.test.shared.domain.join.AccPrincipal;
 import com.pyx4j.entity.test.shared.domain.join.AccPrincipalEdit;
 import com.pyx4j.entity.test.shared.domain.join.AccSubject;
 import com.pyx4j.entity.test.shared.domain.join.AccSubjectPrincipal;
+import com.pyx4j.entity.test.shared.domain.join.AggregatorDTO;
 import com.pyx4j.entity.test.shared.domain.join.BRefCascadeChild;
 import com.pyx4j.entity.test.shared.domain.join.BRefCascadeOwner;
 import com.pyx4j.entity.test.shared.domain.join.BRefPolyReadChild;
@@ -218,6 +219,39 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
         {
 
         }
+    }
+
+    public void testOneToOneOwnedWriteNoCascade() {
+        String testId = uniqueString();
+
+        OneToOneReadOwner o = EntityFactory.create(OneToOneReadOwner.class);
+        o.name().setValue(uniqueString());
+        o.testId().setValue(testId);
+        srv.persist(o);
+
+        //o.child().name().setValue(uniqueString());
+        srv.persist(o.child());
+
+        {
+            OneToOneReadChild c1r = srv.retrieve(OneToOneReadChild.class, o.child().getPrimaryKey());
+            Assert.assertEquals("Got child object was assigned to parent", o.getPrimaryKey(), c1r.o2oOwner().getPrimaryKey());
+        }
+
+        // The same test with data in DTO
+
+        AggregatorDTO dto = EntityFactory.create(AggregatorDTO.class);
+        dto.o2oReadOwner().name().setValue(uniqueString());
+        dto.o2oReadOwner().testId().setValue(testId + "-2");
+        srv.persist(dto.o2oReadOwner());
+
+        dto.o2oReadOwner().child().name().setValue(uniqueString());
+        srv.persist(dto.o2oReadOwner().child());
+
+        {
+            OneToOneReadChild c2r = srv.retrieve(OneToOneReadChild.class, dto.o2oReadOwner().child().getPrimaryKey());
+            Assert.assertEquals("Got child object was assigned to parent", dto.o2oReadOwner().getPrimaryKey(), c2r.o2oOwner().getPrimaryKey());
+        }
+
     }
 
     public void testOneToOneRead() {

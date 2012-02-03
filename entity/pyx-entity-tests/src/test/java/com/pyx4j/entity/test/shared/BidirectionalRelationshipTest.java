@@ -63,6 +63,13 @@ public class BidirectionalRelationshipTest extends InitializerTestBase {
         assertEquals("Value updated", c2Name, m.child().name().getValue());
     }
 
+    public void testOwnerValueInitialization() {
+        Master m = EntityFactory.create(Master.class);
+        m.name().setValue("m1");
+        m.child().name().setValue("c1");
+        assertEquals("Owner value is assigned automatically", m.name().getValue(), m.child().master().name().getValue());
+    }
+
     public void testOwnedEntityNonNull() {
         Master m = EntityFactory.create(Master.class);
         Child c = EntityFactory.create(Child.class);

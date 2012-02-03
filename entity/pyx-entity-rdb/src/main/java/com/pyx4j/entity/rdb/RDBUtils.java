@@ -33,6 +33,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
@@ -142,7 +143,7 @@ public class RDBUtils implements Closeable {
             }
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
+            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null || entityClass.getAnnotation(EmbeddedEntity.class) != null) {
                 continue;
             }
             srv.count(EntityQueryCriteria.create(entityClass));

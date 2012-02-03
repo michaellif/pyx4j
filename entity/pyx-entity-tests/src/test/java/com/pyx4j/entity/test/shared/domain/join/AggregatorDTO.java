@@ -14,29 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 1, 2012
+ * Created on Feb 2, 2012
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.join;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.JoinTable;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
-@Table(prefix = "test")
-public interface OneToOneIntermediateReadOwner extends IEntity {
+@Transient
+public interface AggregatorDTO extends IEntity {
 
-    IPrimitive<String> testId();
-
-    IPrimitive<String> name();
-
-    @Owned
-    @JoinTable(value = OneToOneIntermediateReadJoin.class, cascade = false)
-    @Detached
-    OneToOneIntermediateReadChild child();
+    OneToOneReadOwner o2oReadOwner();
 
 }

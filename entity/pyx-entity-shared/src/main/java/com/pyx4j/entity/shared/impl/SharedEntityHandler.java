@@ -210,16 +210,16 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     private Map<String, Object> getValue(boolean assertDetached) {
         assert !isTemplateEntity : "Template Entity '" + getObjectClass().getName() + "' data manipulations disabled";
         if (delegateValue) {
-            Map<String, Object> v = getOwner().getValue();
-            if (v == null) {
+            Map<String, Object> ownerValue = getOwner().getValue();
+            if (ownerValue == null) {
                 return null;
             } else {
-                v = (Map<String, Object>) v.get(getFieldName());
-                if (assertDetached && (v != null) && v.containsKey(DETACHED_ATTR)) {
+                Map<String, Object> value = (Map<String, Object>) ownerValue.get(getFieldName());
+                if (assertDetached && (value != null) && value.containsKey(DETACHED_ATTR)) {
                     //log.error("Access to detached entity {}", exceptionInfo(v), new Throwable());
-                    throw new RuntimeException("Access to detached entity " + exceptionInfo(v));
+                    throw new RuntimeException("Access to detached entity " + exceptionInfo(value));
                 }
-                return v;
+                return value;
             }
         } else {
             if (assertDetached && (data != null) && data.containsKey(DETACHED_ATTR)) {

@@ -34,6 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.Trace;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.ConnectionProvider;
@@ -82,6 +84,12 @@ public class Mappings {
         }
         if (entityMeta.isTransient()) {
             throw new Error("Can't operate on Transient Entity " + entityMeta.getEntityClass().getName());
+        }
+        if (entityMeta.getAnnotation(EmbeddedEntity.class) != null) {
+            throw new Error("Can't operate on Embedded Entity " + entityMeta.getEntityClass().getName());
+        }
+        if (entityMeta.getAnnotation(AbstractEntity.class) != null) {
+            throw new Error("Can't operate on Abstract Entity " + entityMeta.getEntityClass().getName());
         }
 
         // Avoid lock on EntityClass
