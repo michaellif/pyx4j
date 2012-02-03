@@ -43,7 +43,7 @@
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Dataset">
 						<parametersMapExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></parametersMapExpression>
-						<dataSourceExpression><![CDATA[$P{REPORT_DATA_SOURCE}]]></dataSourceExpression>
+						<dataSourceExpression><![CDATA[((com.pyx4j.entity.report.JRIEntityCollectionDataSource)$P{REPORT_DATA_SOURCE}).cloneDataSource()]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="45">
 						<printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("BuildingDTO/complex/")]]></printWhenExpression>
