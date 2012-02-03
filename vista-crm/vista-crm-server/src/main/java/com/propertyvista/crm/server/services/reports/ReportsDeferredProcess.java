@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
@@ -196,6 +197,14 @@ public class ReportsDeferredProcess implements IDeferredProcess {
                 subreports.add(new MasterReportEntry(createReportModel(leftGadgetMetadata), createReportModel(gadgetMetadata)));
                 leftGadgetMetadata = null;
                 break;
+            default:
+                throw new Exception(SimpleMessageFormat.format("invalid docking column value {0} for gadget {1} (id() =  {2})",
+
+                gadgetMetadata.docking().column().getValue(),
+
+                gadgetMetadata.getEntityMeta().getCaption(),
+
+                gadgetMetadata.id().getValue()));
             }
         }
         if (leftGadgetMetadata != null) {
