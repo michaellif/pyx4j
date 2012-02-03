@@ -187,6 +187,9 @@ public class ReportsDeferredProcess implements IDeferredProcess {
                 leftGadgetMetadata = null;
                 break;
             case 0:
+                if (leftGadgetMetadata != null) {
+                    subreports.add(new MasterReportEntry(createReportModel(gadgetMetadata)));
+                }
                 leftGadgetMetadata = gadgetMetadata;
                 break;
             case 1:
