@@ -36,6 +36,9 @@ public class BuildingDatasetAccessBuilder {
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
         Employee employee = Persistence.service().retrieve(criteria);
+        if (employee == null) {
+            throw new Error("Employee not found for CrmUser " + user.getPrimaryKey());
+        }
         Persistence.service().retrieve(employee.portfolios());
 
         //TODO move this code to more generic update function

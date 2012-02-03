@@ -73,6 +73,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             user.email().setValue(PasswordEncryptor.normalizeEmailAddress(dbo.email().getStringView()));
             Persistence.service().persist(user);
             if (isNew) {
+                dbo.user().set(user);
                 Persistence.service().persist(dbo);
             }
 
@@ -82,6 +83,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             } else {
                 credential = EntityFactory.create(CrmUserCredential.class);
                 credential.setPrimaryKey(user.getPrimaryKey());
+                credential.user().set(user);
                 credential.credential().setValue(PasswordEncryptor.encryptPassword(in.password().getValue()));
             }
             credential.enabled().set(in.enabled());
