@@ -31,7 +31,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.company.Employee;
@@ -65,7 +64,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Charges.class, ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class,
-                    EmergencyContact.class, Summary.class, PriorAddress.class, ApplicationDocumentBlob.class, Guarantor.class, PersonScreening.class);
+                    EmergencyContact.class, Summary.class, ApplicationDocumentBlob.class, Guarantor.class, PersonScreening.class);
         } else {
             return "This is production";
         }
@@ -113,9 +112,8 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
         LeaseHelper.updateLease(summary.lease());
 
-        Persistence.service().persist(summary.lease().serviceAgreement());
-        Persistence.service().persist(summary.lease().leaseFinancial());
         Persistence.service().persist(summary.lease());
+        Persistence.service().persist(summary.lease().leaseFinancial());
 
         Double overalPercentageApproval = 0.0, maxPercentageApproval = 0.0;
 
@@ -167,7 +165,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
         }
 
         // Create working appl. only for first half 
-        if (cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {
+        if (false && cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {
             MasterApplication ma = ApplicationManager.createMasterApplication(summary.lease());
             if (PTGenerator.equifaxDemo) {
                 ma.equifaxApproval().percenrtageApproved().setValue(overalPercentageApproval);

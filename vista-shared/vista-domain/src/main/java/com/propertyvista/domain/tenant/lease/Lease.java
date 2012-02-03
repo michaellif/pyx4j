@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
@@ -117,6 +118,8 @@ public interface Lease extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> signDate();
 
+    @Owned
+    @JoinTable(value = LeaseFinancial.class, cascade = false)
     LeaseFinancial leaseFinancial();
 
     @EmbeddedEntity
