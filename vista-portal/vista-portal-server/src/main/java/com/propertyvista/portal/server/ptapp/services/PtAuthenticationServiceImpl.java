@@ -53,14 +53,16 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
 
     @Override
     public String beginSession(AbstractUser user, TenantUserCredential userCredential) {
-        String res = super.beginSession(user, userCredential);
-
-        // set application in context here:
         EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtAppContext.getCurrentUser()));
-        PtAppContext.setCurrentUserApplication(Persistence.service().retrieve(criteria));
-
-        return res;
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), userCredential.user()));
+        Application application = Persistence.service().retrieve(criteria);
+        if (application == null) {
+            throw new Error("Application not found for user" + userCredential.user().getDebugExceptionInfoString());
+        }
+        String sessionToken = super.beginSession(user, userCredential);
+        // set application in context here:
+        PtAppContext.setCurrentUserApplication(application);
+        return sessionToken;
     }
 
 }

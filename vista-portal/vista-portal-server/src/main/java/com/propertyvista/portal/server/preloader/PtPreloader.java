@@ -165,7 +165,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
         }
 
         // Create working appl. only for first half 
-        if (false && cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {
+        if (cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {
             MasterApplication ma = ApplicationManager.createMasterApplication(summary.lease());
             if (PTGenerator.equifaxDemo) {
                 ma.equifaxApproval().percenrtageApproved().setValue(overalPercentageApproval);
