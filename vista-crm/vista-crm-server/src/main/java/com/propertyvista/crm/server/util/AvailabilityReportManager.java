@@ -34,8 +34,8 @@ import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment.OffMarketType;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AvailabilityReportManager {

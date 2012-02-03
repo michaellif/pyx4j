@@ -19,7 +19,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implements UnitViewerView {

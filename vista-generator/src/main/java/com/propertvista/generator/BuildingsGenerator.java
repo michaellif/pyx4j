@@ -52,7 +52,7 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 

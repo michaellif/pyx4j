@@ -79,7 +79,7 @@ import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;

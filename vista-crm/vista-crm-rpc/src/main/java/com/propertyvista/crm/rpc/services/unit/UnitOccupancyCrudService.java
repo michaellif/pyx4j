@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services.unit;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
 public interface UnitOccupancyCrudService extends AbstractCrudService<AptUnitOccupancySegment> {
 

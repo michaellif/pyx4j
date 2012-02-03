@@ -17,7 +17,7 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
 public class UnitOccupancyLister extends ListerBase<AptUnitOccupancySegment> {
 

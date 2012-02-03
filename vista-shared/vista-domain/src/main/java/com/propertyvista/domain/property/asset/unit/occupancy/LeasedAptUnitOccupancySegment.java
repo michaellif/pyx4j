@@ -7,16 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
- * @author Vlad
+ * Created on Feb 3, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.unit;
+package com.propertyvista.domain.property.asset.unit.occupancy;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.ReadOnly;
 
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface UnitOccupancyEditorView extends IEditorView<AptUnitOccupancySegment> {
+@DiscriminatorValue("LeasedAptUnitOccupancySegment")
+public interface LeasedAptUnitOccupancySegment extends AbstractAptUnitOccupancySegment {
 
+    @ReadOnly
+    Lease lease();
 }

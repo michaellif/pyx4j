@@ -21,8 +21,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment.Status;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 
 public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancySegment> {
 

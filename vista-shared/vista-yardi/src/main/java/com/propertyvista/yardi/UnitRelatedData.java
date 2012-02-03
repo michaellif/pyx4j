@@ -20,7 +20,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)

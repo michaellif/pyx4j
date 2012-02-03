@@ -7,28 +7,32 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 16, 2012
+ * Created on Feb 3, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util;
+package com.propertyvista.domain.property.asset.unit.occupancy;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public interface MockupOccupancyStatus extends IEntity {
+public interface AptUnitOccupancy extends IEntity {
 
-    IPrimitive<LogicalDate> statusDate();
+    @Owner
+    @ReadOnly
+    @Detached
+    AptUnit unit();
 
-    IPrimitive<Status> status();
+    @Owned
+    IList<AptUnitOccupancySegment> timeline();
 
-    IPrimitive<OffMarketType> offMarket();
-
-    IPrimitive<LogicalDate> dateFrom();
-
-    IPrimitive<LogicalDate> dateTo();
+    IPrimitive<LogicalDate> updatedOn();
 }

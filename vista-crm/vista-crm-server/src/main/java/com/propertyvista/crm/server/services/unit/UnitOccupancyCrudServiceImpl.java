@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.services.unit;
 
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
 public class UnitOccupancyCrudServiceImpl extends GenericCrudServiceImpl<AptUnitOccupancySegment> implements UnitOccupancyCrudService {
 

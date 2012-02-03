@@ -34,8 +34,8 @@ import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment.Status;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AvailablilityReportManagerTest {

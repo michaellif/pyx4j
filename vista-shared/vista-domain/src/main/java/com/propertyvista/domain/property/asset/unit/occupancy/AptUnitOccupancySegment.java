@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset.unit;
+package com.propertyvista.domain.property.asset.unit.occupancy;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 // TODO rename to AptUnitOccupancySegment

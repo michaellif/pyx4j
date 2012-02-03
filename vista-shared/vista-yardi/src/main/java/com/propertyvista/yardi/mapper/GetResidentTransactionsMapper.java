@@ -25,7 +25,7 @@ import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.yardi.Model;
 import com.propertyvista.yardi.bean.mits.Customer;
