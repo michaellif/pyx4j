@@ -38,4 +38,8 @@ public class ValidationUtils {
     public static boolean urlHasProtocol(String url) {
         return url.matches("^\\b(https?|ftp|file)://{1}.*");
     }
+
+    public static boolean isSimpleUrl(String url) {
+        return url.matches("[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    }
 }
