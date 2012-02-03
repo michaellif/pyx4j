@@ -58,7 +58,6 @@ public class AbstractLoginWithTokenActivity extends AbstractActivity {
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 ClientContext.authenticated(result);
-                AppSite.getPlaceController().goTo(passwordResetPlace);
             }
 
             @Override
