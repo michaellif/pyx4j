@@ -156,6 +156,9 @@ public class Mappings {
             for (MemberCollectionOperationsMeta member : model.operationsMeta().getJoinTablesCollectionMembers()) {
                 this.getTableModel(connection, member.getMemberMeta().getAnnotation(JoinTable.class).value());
             }
+            for (MemberExternalOperationsMeta member : model.operationsMeta().getExternalMembers()) {
+                this.getTableModel(connection, member.getMemberMeta().getAnnotation(JoinTable.class).value());
+            }
         }
 
         return model;

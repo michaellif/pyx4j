@@ -262,8 +262,8 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
         o.testId().setValue(testId);
         srv.persist(o);
 
-        //TODO fix table init
-        if (false) {
+        //Test table initialization
+        {
             OneToOneReadOwner o1r = srv.retrieve(OneToOneReadOwner.class, o.getPrimaryKey());
             Assert.assertNull("Got child object", o1r.child().getPrimaryKey());
             // There are no data e.g. Value is null, consider it Attached
