@@ -40,6 +40,8 @@ import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.join.AccPrincipal;
 import com.pyx4j.entity.test.shared.domain.join.AccSubject;
 import com.pyx4j.entity.test.shared.domain.join.AccSubjectPrincipal;
+import com.pyx4j.entity.test.shared.domain.join.OneToOneReadChild;
+import com.pyx4j.entity.test.shared.domain.join.OneToOneReadOwner;
 
 public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
 
@@ -273,5 +275,37 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("Data retrieved using JoinTable", 1, principal1r2.subjects().size());
             Assert.assertTrue("Inserted value present", principal1r2.subjects().contains(subject1));
         }
+    }
+
+    //TODO OR implementation for joins
+    public void TODO_testOneToOneQueryNotExists() {
+        String testId = uniqueString();
+
+        OneToOneReadOwner o1 = EntityFactory.create(OneToOneReadOwner.class);
+        o1.name().setValue(uniqueString());
+        o1.testId().setValue(testId);
+        srv.persist(o1);
+
+        OneToOneReadChild c1 = EntityFactory.create(OneToOneReadChild.class);
+        c1.name().setValue(uniqueString());
+        c1.testId().setValue(testId);
+        c1.o2oOwner().set(o1);
+        srv.persist(c1);
+
+        OneToOneReadOwner o2 = EntityFactory.create(OneToOneReadOwner.class);
+        o2.name().setValue(uniqueString());
+        o2.testId().setValue(testId);
+        srv.persist(o2);
+
+        // Test implementation of NOT EXISTS, creation of second join
+        {
+            EntityQueryCriteria<OneToOneReadOwner> criteria = EntityQueryCriteria.create(OneToOneReadOwner.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.or(PropertyCriterion.eq(criteria.proto().child().name(), c1.name()), PropertyCriterion.isNull(criteria.proto().child()));
+
+            List<OneToOneReadOwner> data = srv.query(criteria);
+            Assert.assertEquals("Found using JoinTable", 2, data.size());
+        }
+
     }
 }
