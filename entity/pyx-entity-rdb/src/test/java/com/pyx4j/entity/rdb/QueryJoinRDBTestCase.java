@@ -184,8 +184,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         }
     }
 
-    //TODO P2 
-    public void TODO_testOneToManyQueryCriteria() {
+    public void testOneToManyQueryCriteria() {
         String setId = uniqueString();
         String searchBy = uniqueString();
 
@@ -195,7 +194,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
 
         Task task = EntityFactory.create(Task.class);
         task.description().setValue(searchBy);
-        emp.tasksSorted().add(task);
+        emp.tasks().add(task);
 
         srv.persist(emp);
         {

@@ -564,4 +564,8 @@ public class EntityOperationsMeta {
         return indexMembers;
     }
 
+    @Override
+    public String toString() {
+        return mainEntityMeta.getEntityClass().getName();
+    }
 }

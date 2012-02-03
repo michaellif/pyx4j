@@ -73,7 +73,7 @@ public class QueryBuilder<T extends IEntity> {
 
         String condition;
 
-        MemberOperationsMeta memberOper;
+        String sqlTableName;
 
     }
 
@@ -312,10 +312,17 @@ public class QueryBuilder<T extends IEntity> {
             String thisAlias = getJoin(memberOper, fromAlias, leftJoin);
             @SuppressWarnings("unchecked")
             EntityOperationsMeta otherEntityOperMeta = operationsMeta.getMappedOperationsMeta(connection, (Class<? extends IEntity>) memberOper.getMemberMeta()
-                    .getObjectClass());
+                    .getValueClass());
+            if (memberOper instanceof MemberCollectionOperationsMeta) {
+                thisAlias = getJoinCollectionMemeber((MemberCollectionOperationsMeta) memberOper, otherEntityOperMeta, thisAlias, leftJoin);
+            }
             String pathFragmet = propertyPath.substring(memberOper.getMemberPath().length());
-            String shorterPath = GWTJava5Helper.getSimpleName(memberOper.getMemberMeta().getObjectClass()) + Path.PATH_SEPARATOR + pathFragmet;
+            if (pathFragmet.startsWith(Path.COLLECTION_SEPARATOR)) {
+                pathFragmet = pathFragmet.substring(Path.COLLECTION_SEPARATOR.length() + 1);
+            }
+            String shorterPath = GWTJava5Helper.getSimpleName(memberOper.getMemberMeta().getValueClass()) + Path.PATH_SEPARATOR + pathFragmet;
             return getMemberOperationsMetaByPath(otherEntityOperMeta, thisAlias, shorterPath, leftJoin);
+
         }
     }
 
@@ -325,7 +332,15 @@ public class QueryBuilder<T extends IEntity> {
             memberJoin = new JoinDef();
             memberJoin.alias = "j" + String.valueOf(memberJoinAliases.size() + 1);
             memberJoin.leftJoin = leftJoin;
-            memberJoin.memberOper = memberOper;
+
+            if (memberOper.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
+                memberJoin.sqlTableName = TableModel.getTableName(dialect,
+                        EntityFactory.getEntityMeta((Class<? extends IEntity>) memberOper.getMemberMeta().getObjectClass()));
+            } else {
+                // Collections
+                memberJoin.sqlTableName = memberOper.sqlName();
+            }
+
             memberJoinAliases.put(memberOper.getMemberPath(), memberJoin);
 
             StringBuilder condition = new StringBuilder();
@@ -339,6 +354,28 @@ public class QueryBuilder<T extends IEntity> {
                 condition.append(" = ");
                 condition.append(memberJoin.alias).append(".id ");
             }
+
+            memberJoin.condition = condition.toString();
+        }
+        return memberJoin.alias;
+    }
+
+    private String getJoinCollectionMemeber(MemberCollectionOperationsMeta memberOper, EntityOperationsMeta memeberEntityMeta, String fromAlias,
+            boolean leftJoin) {
+        String path = memberOper.getMemberPath() + Path.COLLECTION_SEPARATOR;
+        JoinDef memberJoin = memberJoinAliases.get(path);
+        if (memberJoin == null) {
+            memberJoin = new JoinDef();
+            memberJoin.alias = "j" + String.valueOf(memberJoinAliases.size() + 1);
+            memberJoin.leftJoin = leftJoin;
+            memberJoin.sqlTableName = TableModel.getTableName(dialect, EntityFactory.getEntityMeta(memeberEntityMeta.entityMeta().getEntityClass()));
+
+            memberJoinAliases.put(path, memberJoin);
+
+            StringBuilder condition = new StringBuilder();
+
+            condition.append(fromAlias).append(".").append(((MemberExternalOperationsMeta) (memberOper)).sqlValueName()).append(" = ");
+            condition.append(memberJoin.alias).append(".").append("id").append(' ');
 
             memberJoin.condition = condition.toString();
         }
@@ -362,14 +399,7 @@ public class QueryBuilder<T extends IEntity> {
                 sqlFrom.append(" INNER JOIN ");
             }
 
-            MemberOperationsMeta memberOper = memberJoin.memberOper;
-            if (memberOper.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
-                sqlFrom.append(TableModel.getTableName(dialect,
-                        EntityFactory.getEntityMeta((Class<? extends IEntity>) memberOper.getMemberMeta().getObjectClass())));
-            } else {
-                // Collections
-                sqlFrom.append(memberOper.sqlName());
-            }
+            sqlFrom.append(memberJoin.sqlTableName);
 
             sqlFrom.append(" ");
             // AS

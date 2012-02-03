@@ -58,6 +58,7 @@ public class ServerEntityFactory implements IEntityFactory {
         if (IEntity.class.equals(clazz)) {
             throw new Error("Should not use abstract IEntity class");
         }
+        assert IEntity.class.isAssignableFrom(clazz) : "IEntity interface expected instead of " + clazz.getName();
         Class<?> handlerClass = null;
         handlerClass = impClasses.get(clazz);
         if (handlerClass == null) {
@@ -129,6 +130,8 @@ public class ServerEntityFactory implements IEntityFactory {
 
     @Override
     public EntityMeta createEntityMeta(Class<? extends IEntity> entityClass) {
+        assert (!IEntity.class.equals(entityClass)) : "Should not use abstract IEntity class";
+        assert IEntity.class.isAssignableFrom(entityClass) : "IEntity interface expected instead of " + entityClass.getName();
         return new EntityMetaImpl(entityClass);
     }
 
