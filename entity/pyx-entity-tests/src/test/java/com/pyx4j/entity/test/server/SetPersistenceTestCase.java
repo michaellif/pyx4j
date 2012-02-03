@@ -148,6 +148,7 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
         testOwnedSetUpdate(TestCaseMethod.Merge);
     }
 
+    // TODO Persist arrays
     public void TODO_testOwnedSetUpdateIterable() {
         testOwnedSetUpdate(TestCaseMethod.PersistCollection);
     }
@@ -237,6 +238,7 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
         testOwnedListUpdate(TestCaseMethod.Merge);
     }
 
+    // TODO Persist arrays
     public void TODO_testOwnedListUpdateIterable() {
         testOwnedListUpdate(TestCaseMethod.PersistCollection);
     }
