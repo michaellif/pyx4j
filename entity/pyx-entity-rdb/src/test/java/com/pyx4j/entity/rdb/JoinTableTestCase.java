@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.rdb;
 
-import java.io.Serializable;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -292,10 +291,11 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
         o.testId().setValue(testId);
         srv.persist(o);
 
-        // TODO implement not exists
-        if (false) {
+        // Test implementation of NOT EXISTS
+        {
             EntityQueryCriteria<OneToOneReadOwner> criteria = EntityQueryCriteria.create(OneToOneReadOwner.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().child(), (Serializable) null));
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.isNull(criteria.proto().child()));
 
             List<OneToOneReadOwner> data = srv.query(criteria);
             Assert.assertEquals("Found using JoinTable", 1, data.size());
@@ -317,5 +317,21 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
             Assert.assertEquals("Got right object", o.getPrimaryKey(), data.get(0).getPrimaryKey());
             Assert.assertEquals("Data retrieved using JoinTable", c.getPrimaryKey(), data.get(0).child().getPrimaryKey());
         }
+
+        // Test join search
+        c.name().setValue(null);
+        srv.persist(c);
+
+        {
+            EntityQueryCriteria<OneToOneReadOwner> criteria = EntityQueryCriteria.create(OneToOneReadOwner.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.isNull(criteria.proto().child().name()));
+
+            List<OneToOneReadOwner> data = srv.query(criteria);
+            Assert.assertEquals("Found using JoinTable", 1, data.size());
+            Assert.assertEquals("Got right object", o.getPrimaryKey(), data.get(0).getPrimaryKey());
+            Assert.assertEquals("Data retrieved using JoinTable", c.getPrimaryKey(), data.get(0).child().getPrimaryKey());
+        }
+
     }
 }

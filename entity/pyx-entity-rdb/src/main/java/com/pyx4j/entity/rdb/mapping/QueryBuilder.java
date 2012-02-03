@@ -47,6 +47,7 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -193,7 +194,12 @@ public class QueryBuilder<T extends IEntity> {
             String memberSqlNameBase;
 
             if (memeberWithAlias.memberOper instanceof MemberExternalOperationsMeta) {
-                String memberJoinAlias = getJoin(memeberWithAlias.memberOper, memeberWithAlias.alias, false);
+                boolean leftJoin = false;
+                // "LEFT JOIN / IS NULL" works as "NOT EXISTS", make the LEFT join
+                if ((bindHolder.bindValue == null) && (propertyCriterion.getRestriction() == Restriction.EQUAL)) {
+                    leftJoin = true;
+                }
+                String memberJoinAlias = getJoin(memeberWithAlias.memberOper, memeberWithAlias.alias, leftJoin);
                 memberSqlNameBase = memberJoinAlias + "." + ((MemberExternalOperationsMeta) (memeberWithAlias.memberOper)).sqlValueName();
             } else {
                 memberSqlNameBase = memeberWithAlias.alias + "." + memeberWithAlias.memberOper.sqlName();

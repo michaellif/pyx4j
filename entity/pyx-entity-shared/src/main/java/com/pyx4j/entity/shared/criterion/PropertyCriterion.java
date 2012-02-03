@@ -88,6 +88,13 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
     }
 
+    /**
+     * In join operations for id value (@JoinTable) this maps to NOT EXISTS
+     */
+    public static PropertyCriterion isNull(IObject<?> member) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, (Serializable) null);
+    }
+
     public static PropertyCriterion like(IObject<?> member, String value) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.RDB_LIKE, value);
     }
