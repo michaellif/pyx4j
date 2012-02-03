@@ -36,8 +36,7 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
     private static final I18n i18n = I18n.get(CrmRoleFolder.class);
 
     public CrmRoleFolder(boolean isModifiable) {
-        super(CrmRole.class);
-        setModifiable(isModifiable());
+        super(CrmRole.class, isModifiable);
         setViewable(true);
     }
 
