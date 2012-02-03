@@ -44,7 +44,7 @@ public class CrmSiteMap implements SiteMap {
     }
 
     @PlaceProperties(caption = "Reset Password")
-    public static class PasswordReset extends AppPlace implements PublicPlace {
+    public static class PasswordReset extends AppPlace {
     }
 
     @PlaceProperties(caption = "Change Password")
