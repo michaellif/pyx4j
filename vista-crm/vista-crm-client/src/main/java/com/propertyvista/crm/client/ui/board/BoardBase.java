@@ -167,9 +167,11 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
     @Override
     public void stop() {
-        IGadgetIterator i = board.getGadgetIterator();
-        while (i.hasNext()) {
-            i.next().stop();
+        if (board != null) {
+            IGadgetIterator i = board.getGadgetIterator();
+            while (i.hasNext()) {
+                i.next().stop();
+            }
         }
     }
 
