@@ -53,7 +53,7 @@ public class PriceCalculationHelpers {
                     case discount:
                         adjustedPrice -= adjustment.value().getValue();
                         break;
-                    case priceRaise:
+                    case priceCorrection:
                         adjustedPrice += adjustment.value().getValue();
                         break;
                     }
@@ -64,7 +64,7 @@ public class PriceCalculationHelpers {
                     case discount:
                         adjustedPrice *= 1 - adjustment.value().getValue() / 100;
                         break;
-                    case priceRaise:
+                    case priceCorrection:
                         adjustedPrice *= 1 + adjustment.value().getValue() / 100;
                         break;
                     }

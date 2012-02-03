@@ -15,7 +15,7 @@ package com.propertyvista.domain.financial.billing;
 
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 
-public interface BillProductAdjustment extends BillEntry {
+public interface BillChargeAdjustment extends BillEntry {
 
     BillableItemAdjustment billableItemAdjustment();
 

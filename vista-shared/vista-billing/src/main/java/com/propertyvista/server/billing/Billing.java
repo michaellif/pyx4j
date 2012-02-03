@@ -37,7 +37,7 @@ import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillCharge;
 import com.propertyvista.domain.financial.billing.BillLeaseAdjustment;
 import com.propertyvista.domain.financial.billing.BillPayment;
-import com.propertyvista.domain.financial.billing.BillProductAdjustment;
+import com.propertyvista.domain.financial.billing.BillChargeAdjustment;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -85,8 +85,8 @@ class Billing {
         bill.totalRecurringFeatureCharges();
         bill.totalOneTimeFeatureCharges();
         bill.totalAdjustments();
-        bill.totalImmidiateAdjustments();
-        bill.latePaimantCharges();
+        bill.totalImmediateAdjustments();
+        bill.latePaymentCharges();
         bill.totalTaxes();
 
         getPreviousTotals();
@@ -170,8 +170,8 @@ class Billing {
         }
     }
 
-    private BillProductAdjustment createProductAdjustment(BillableItemAdjustment itemAdjustment) {
-        BillProductAdjustment adjustment = EntityFactory.create(BillProductAdjustment.class);
+    private BillChargeAdjustment createProductAdjustment(BillableItemAdjustment itemAdjustment) {
+        BillChargeAdjustment adjustment = EntityFactory.create(BillChargeAdjustment.class);
         adjustment.bill().set(bill);
         bill.totalAdjustments().setValue(bill.totalAdjustments().getValue() + adjustment.price().getValue());
         return adjustment;

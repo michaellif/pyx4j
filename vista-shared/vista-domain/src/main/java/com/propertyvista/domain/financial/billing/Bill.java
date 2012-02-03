@@ -60,8 +60,10 @@ public interface Bill extends IEntity {
     IList<BillCharge> charges();
 
     @Detached
-    @JoinTable(value = BillProductAdjustment.class, orderColumn = BillProductAdjustment.OrderId.class, cascade = false)
-    IList<BillProductAdjustment> adjustments();
+    @JoinTable(value = BillChargeAdjustment.class, orderColumn = BillChargeAdjustment.OrderId.class, cascade = false)
+    IList<BillChargeAdjustment> adjustments();
+
+    //TODO BillLeaseAdjustment
 
     /**
      * The total amount due from the previous bill.
@@ -72,6 +74,8 @@ public interface Bill extends IEntity {
      * The total amount of payments received since the previous bill, up to the current Bill day.
      */
     IPrimitive<Double> paymentReceivedAmount();
+
+    IPrimitive<Double> totalImmediateAdjustments();
 
     /**
      * pastDueAmount = previousBalanceAmount - paymentReceivedAmount - totalImmidiateAdjustments
@@ -91,11 +95,9 @@ public interface Bill extends IEntity {
      */
     IPrimitive<Double> totalAdjustments();
 
-    IPrimitive<Double> totalImmidiateAdjustments();
-
     IPrimitive<Double> depositPaidAmount();
 
-    IPrimitive<Double> latePaimantCharges();
+    IPrimitive<Double> latePaymentCharges();
 
     /**
      * totalDueAmount = pastDueAmount + serviceCharge + totalRecurringFeatureCharges + totalOneTimeFeatureCharges + totalAdjustments - depositPaidAmount +

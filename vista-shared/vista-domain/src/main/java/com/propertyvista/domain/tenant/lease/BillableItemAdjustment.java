@@ -45,7 +45,7 @@ public interface BillableItemAdjustment extends IEntity {
     @I18n
     @XmlType(name = "ChargeType")
     enum ChargeType {
-        negotiation, discount, priceRaise;
+        negotiation, discount, priceCorrection;
 
         @Override
         public String toString() {
@@ -73,6 +73,8 @@ public interface BillableItemAdjustment extends IEntity {
 
     @NotNull
     IPrimitive<TermType> termType();
+
+    IPrimitive<String> description();
 
     /*
      * for percentage - percentage

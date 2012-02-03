@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
@@ -38,5 +39,7 @@ public interface BillingAccount extends IEntity {
      * Set to null when last period bill has been approved or rejected.
      */
     BillingRun currentBillingRun();
+
+    IPrimitive<Double> total();
 
 }
