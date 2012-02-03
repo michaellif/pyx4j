@@ -35,7 +35,7 @@ class ComponentAccessAdapter implements IAccessAdapter {
     }
 
     @Override
-    public boolean isEnabled(CComponent<?, ?> component) {
+    public Boolean isEnabled(CComponent<?, ?> component) {
         return enabled;
     }
 
@@ -44,7 +44,7 @@ class ComponentAccessAdapter implements IAccessAdapter {
     }
 
     @Override
-    public boolean isEditable(CComponent<?, ?> component) {
+    public Boolean isEditable(CComponent<?, ?> component) {
         return editable;
     }
 
@@ -53,7 +53,7 @@ class ComponentAccessAdapter implements IAccessAdapter {
     }
 
     @Override
-    public boolean isVisible(CComponent<?, ?> component) {
+    public Boolean isVisible(CComponent<?, ?> component) {
         return visible;
     }
 
@@ -62,7 +62,7 @@ class ComponentAccessAdapter implements IAccessAdapter {
     }
 
     @Override
-    public boolean isViewable(CComponent<?, ?> component) {
+    public Boolean isViewable(CComponent<?, ?> component) {
         return viewable;
     }
 

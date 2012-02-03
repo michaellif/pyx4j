@@ -22,30 +22,73 @@ package com.pyx4j.forms.client.ui;
 
 public class ContainerAccessAdapter implements IAccessAdapter {
 
-    private final CContainer<?, ?> container;
+    private CContainer<?, ?> container;
 
-    public ContainerAccessAdapter(CContainer<?, ?> container) {
+    private boolean inheritEnabled = true;
+
+    private boolean inheritEditable = true;
+
+    private boolean inheritVisible = true;
+
+    private boolean inheritViewable = true;
+
+    public ContainerAccessAdapter() {
+    }
+
+    public void setContainer(CContainer<?, ?> container) {
         this.container = container;
     }
 
     @Override
-    public boolean isEnabled(CComponent<?, ?> component) {
-        return container.isEnabled();
+    public Boolean isEnabled(CComponent<?, ?> component) {
+        if (!inheritEnabled || container == null) {
+            return null;
+        } else {
+            return container.isEnabled();
+        }
     }
 
     @Override
-    public boolean isEditable(CComponent<?, ?> component) {
-        return container.isEditable();
+    public Boolean isEditable(CComponent<?, ?> component) {
+        if (!inheritEditable || container == null) {
+            return null;
+        } else {
+            return container.isEditable();
+        }
     }
 
     @Override
-    public boolean isVisible(CComponent<?, ?> component) {
-        return container.isVisible();
+    public Boolean isVisible(CComponent<?, ?> component) {
+        if (!inheritVisible || container == null) {
+            return null;
+        } else {
+            return container.isVisible();
+        }
     }
 
     @Override
-    public boolean isViewable(CComponent<?, ?> component) {
-        return container.isViewable();
+    public Boolean isViewable(CComponent<?, ?> component) {
+        if (!inheritViewable || container == null) {
+            return null;
+        } else {
+            return container.isViewable();
+        }
+    }
+
+    public void inheritEnabled(boolean flag) {
+        inheritEnabled = flag;
+    }
+
+    public void inheritEditable(boolean flag) {
+        inheritEditable = flag;
+    }
+
+    public void inheritVisible(boolean flag) {
+        inheritVisible = flag;
+    }
+
+    public void inheritViewable(boolean flag) {
+        inheritViewable = flag;
     }
 
 }

@@ -44,8 +44,6 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     private static final I18n i18n = I18n.get(CContainer.class);
 
-    private final IAccessAdapter aggregatingAccessAdapter;
-
     private final HashMap<CComponent<?, ?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?, ?>, HandlerRegistration>();
 
     private final HashMap<CComponent<?, ?>, HandlerRegistration> valueChangeHandlerRegistrations = new HashMap<CComponent<?, ?>, HandlerRegistration>();
@@ -56,7 +54,6 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     public CContainer(String title) {
         super(title);
-        aggregatingAccessAdapter = new ContainerAccessAdapter(this);
     }
 
     public abstract Collection<? extends CComponent<?, ?>> getComponents();
@@ -163,10 +160,6 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
             }
         }
         return validationResults;
-    }
-
-    public IAccessAdapter getContainerAccessAdapter() {
-        return aggregatingAccessAdapter;
     }
 
     @Override

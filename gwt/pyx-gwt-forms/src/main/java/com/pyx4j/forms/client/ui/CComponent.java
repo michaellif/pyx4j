@@ -69,11 +69,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private CLayoutConstraints constraints;
 
-    private boolean inheritContainerAccessRules = true;
-
     private final Collection<IAccessAdapter> accessAdapters = new ArrayList<IAccessAdapter>();
 
-    ComponentAccessAdapter defaultAccessAdapter;
+    private ComponentAccessAdapter componentAccessAdapter;
+
+    private ContainerAccessAdapter containerAccessAdapter;
 
     private WIDGET_TYPE widget;
 
@@ -104,8 +104,10 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public CComponent(String title) {
         this.title = title;
-        defaultAccessAdapter = new ComponentAccessAdapter();
-        addAccessAdapter(defaultAccessAdapter);
+        componentAccessAdapter = new ComponentAccessAdapter();
+        containerAccessAdapter = new ContainerAccessAdapter();
+        addAccessAdapter(componentAccessAdapter);
+        addAccessAdapter(containerAccessAdapter);
     }
 
     /**
@@ -160,7 +162,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     public void onAdopt(CContainer<?, ?> parent) {
         assert (this.parent == null) : "Component " + this.getClass().getName() + " is already bound to " + this.parent;
         this.parent = parent;
-        setContainerAccessRules(inheritContainerAccessRules);
+        setContainerAccessRules(true);
     }
 
     public void onAbandon() {
@@ -183,26 +185,21 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return ensureHandlers().addHandler(type, handler);
     }
 
-    public void inheritContainerAccessRules(boolean inherit) {
-        inheritContainerAccessRules = inherit;
-        setContainerAccessRules(inherit);
-    }
-
     private void setContainerAccessRules(boolean inherit) {
         if (parent != null) {
             if (inherit) {
-                if (!containsAccessAdapter(parent.getContainerAccessAdapter())) {
-                    addAccessAdapter(parent.getContainerAccessAdapter());
-                }
+                containerAccessAdapter.setContainer(parent);
             } else {
-                removeAccessAdapter(parent.getContainerAccessAdapter());
+                containerAccessAdapter.setContainer(null);
             }
+            applyAccessibilityRules();
         }
     }
 
     public boolean isEnabled() {
         for (IAccessAdapter adapter : accessAdapters) {
-            if (!adapter.isEnabled(this)) {
+            Boolean enabled = adapter.isEnabled(this);
+            if (enabled != null && !enabled) {
                 return false;
             }
         }
@@ -211,7 +208,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void setEnabled(boolean enabled) {
         if (enabled != isEnabled()) {
-            defaultAccessAdapter.setEnabled(enabled);
+            componentAccessAdapter.setEnabled(enabled);
             applyEnablingRules();
             revalidate();
             if (!enabled) {
@@ -220,9 +217,15 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
+    public void inheritEnabled(boolean flag) {
+        containerAccessAdapter.inheritEnabled(flag);
+        applyEnablingRules();
+    }
+
     public boolean isVisible() {
         for (IAccessAdapter adapter : accessAdapters) {
-            if (!adapter.isVisible(this)) {
+            Boolean visible = adapter.isVisible(this);
+            if (visible != null && !visible) {
                 return false;
             }
         }
@@ -231,7 +234,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void setVisible(boolean visible) {
         if (visible != isVisible()) {
-            defaultAccessAdapter.setVisible(visible);
+            componentAccessAdapter.setVisible(visible);
             applyVisibilityRules();
             revalidate();
             if (!visible) {
@@ -240,9 +243,15 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
+    public void inheritVisible(boolean flag) {
+        containerAccessAdapter.inheritVisible(flag);
+        applyVisibilityRules();
+    }
+
     public boolean isEditable() {
-        for (IAccessAdapter adapter : getAccessAdapters()) {
-            if (!adapter.isEditable(this)) {
+        for (IAccessAdapter adapter : accessAdapters) {
+            Boolean editable = adapter.isEditable(this);
+            if (editable != null && !editable) {
                 return false;
             }
         }
@@ -251,7 +260,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void setEditable(boolean editable) {
         if (editable != isEditable()) {
-            defaultAccessAdapter.setEditable(editable);
+            componentAccessAdapter.setEditable(editable);
             applyEditabilityRules();
             revalidate();
             if (!editable) {
@@ -260,9 +269,15 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
+    public void inheritEditable(boolean flag) {
+        containerAccessAdapter.inheritEditable(flag);
+        applyEditabilityRules();
+    }
+
     public boolean isViewable() {
         for (IAccessAdapter adapter : accessAdapters) {
-            if (adapter.isViewable(this)) {
+            Boolean viewable = adapter.isViewable(this);
+            if (viewable != null && adapter.isViewable(this)) {
                 return true;
             }
         }
@@ -271,13 +286,18 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void setViewable(boolean viewable) {
         if (viewable != isViewable()) {
-            defaultAccessAdapter.setViewable(viewable);
+            componentAccessAdapter.setViewable(viewable);
             applyViewabilityRules();
             revalidate();
             if (!viewable) {
                 setVisited(false);
             }
         }
+    }
+
+    public void inheritViewable(boolean flag) {
+        containerAccessAdapter.inheritViewable(flag);
+        applyViewabilityRules();
     }
 
     public boolean isMandatory() {
@@ -430,10 +450,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         applyEnablingRules();
         applyViewabilityRules();
         applyEditabilityRules();
-    }
-
-    protected Collection<IAccessAdapter> getAccessAdapters() {
-        return accessAdapters;
     }
 
     public CLayoutConstraints getConstraints() {
@@ -590,7 +606,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     @Override
     public String toString() {
         StringBuilder adaptersReport = new StringBuilder();
-        for (IAccessAdapter adapter : getAccessAdapters()) {
+        for (IAccessAdapter adapter : accessAdapters) {
             adaptersReport.append(adapter.getClass().getName()).append(" ");
             adaptersReport.append("isEnabled ").append(adapter.isEnabled(this)).append(" ");
             adaptersReport.append("isEditable ").append(adapter.isEditable(this)).append(" ");
