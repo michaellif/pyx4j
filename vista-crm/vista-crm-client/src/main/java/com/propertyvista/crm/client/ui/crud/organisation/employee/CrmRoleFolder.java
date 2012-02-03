@@ -41,6 +41,12 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
     }
 
     @Override
+    public void setViewable(boolean viewable) {
+        System.out.println("++++++++++++++" + viewable);
+        super.setViewable(viewable);
+    }
+
+    @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
                 new EntityFolderColumnDescriptor(proto().name(), "30em")

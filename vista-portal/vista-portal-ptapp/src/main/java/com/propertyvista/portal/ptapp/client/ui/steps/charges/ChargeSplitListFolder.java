@@ -100,7 +100,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().percentage() && editable) {
                 CComponent<?, ?> prc = inject(column.getObject());
-                prc.inheritContainerAccessRules(false);
+                prc.inheritEditable(false);
                 return prc;
             }
             return super.createCell(column);

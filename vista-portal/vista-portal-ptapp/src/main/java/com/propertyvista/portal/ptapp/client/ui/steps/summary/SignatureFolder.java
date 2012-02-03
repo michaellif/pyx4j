@@ -71,7 +71,7 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
 
         public DigitalSignatureEditor() {
             super(DigitalSignature.class);
-            inheritContainerAccessRules(false);
+            inheritEditable(false);
         }
 
         @Override

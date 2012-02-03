@@ -92,8 +92,7 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             CComponent<?, ?> comp = super.createCell(column);
             if (isEditable() && proto().relationship() == column.getObject()) {
-                comp.inheritContainerAccessRules(false);
-                comp.setEditable(true);
+                comp.inheritEditable(false);
             }
             return comp;
         }

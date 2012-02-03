@@ -67,7 +67,7 @@ public class FeatureExFolder extends VistaBoxFolder<BillableItem> {
         if (member instanceof BillableItem) {
             CComponent<?, ?> comp = new FeatureExEditor();
             if (isModifiable()) {
-                comp.inheritContainerAccessRules(false); // allow editing behavior (default) if folder modifiable...
+                comp.inheritEditable(false); // allow editing behavior (default) if folder modifiable...
             }
             return comp;
 

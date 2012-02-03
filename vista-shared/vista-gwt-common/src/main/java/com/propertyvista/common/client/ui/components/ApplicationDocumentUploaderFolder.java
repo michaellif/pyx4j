@@ -111,7 +111,6 @@ public class ApplicationDocumentUploaderFolder extends VistaTableFolder<Applicat
                 return inject(column.getObject(), link);
             } else if (column.getObject() == proto().fileSize()) {
                 CComponent<?, ?> comp = inject(column.getObject());
-                comp.inheritContainerAccessRules(false);
                 comp.setViewable(true);
                 return comp;
             } else {

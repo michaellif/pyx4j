@@ -73,7 +73,7 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
 
         public AgreeEditor() {
             super(IAgree.class, columns());
-            inheritContainerAccessRules(false);
+            inheritEditable(false);
         }
 
         @Override

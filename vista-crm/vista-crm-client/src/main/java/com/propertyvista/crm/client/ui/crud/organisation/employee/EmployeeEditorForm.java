@@ -71,8 +71,8 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().requireChangePasswordOnNextLogIn()).setVisible(isManager);
 
         get(proto().accessAllBuildings()).setViewable(!isManager);
-        get(proto().roles()).setViewable(!isManager);
-        get(proto().roles()).setEditable(isManager);
+//        get(proto().roles()).setViewable(!isManager);
+//        get(proto().roles()).setEditable(isManager);
 
         get(proto().portfolios()).setViewable(!isManager);
         get(proto().portfolios()).setEditable(isManager);
