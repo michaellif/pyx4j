@@ -117,7 +117,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             CComponent<?, ?> comp = super.createCell(column);
             if (proto().role() == column.getObject() || proto().relationship() == column.getObject()) {
                 if (parent.isEditable()) { // allow editing of these fields...
-                    comp.inheritEditable(false);
+                    comp.inheritViewable(false);
                 }
             }
             return comp;
