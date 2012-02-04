@@ -40,6 +40,8 @@ import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.join.AccPrincipal;
 import com.pyx4j.entity.test.shared.domain.join.AccSubject;
 import com.pyx4j.entity.test.shared.domain.join.AccSubjectPrincipal;
+import com.pyx4j.entity.test.shared.domain.join.BRefReadChild;
+import com.pyx4j.entity.test.shared.domain.join.BRefReadOwner;
 import com.pyx4j.entity.test.shared.domain.join.OneToOneReadChild;
 import com.pyx4j.entity.test.shared.domain.join.OneToOneReadOwner;
 
@@ -209,6 +211,68 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         }
     }
 
+    public void testOneToManyQueryNotExists() {
+        String testId = uniqueString();
+        String searchBy = uniqueString();
+
+        Employee emp1 = EntityFactory.create(Employee.class);
+        emp1.workAddress().streetName().setValue(testId);
+        emp1.firstName().setValue("T1" + uniqueString());
+
+        Task task = EntityFactory.create(Task.class);
+        task.description().setValue(searchBy);
+        emp1.tasks().add(task);
+        srv.persist(emp1);
+
+        Employee emp2 = EntityFactory.create(Employee.class);
+        emp2.workAddress().streetName().setValue(testId);
+        emp2.firstName().setValue("T0" + uniqueString());
+        srv.persist(emp2);
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), testId));
+            criteria.or(PropertyCriterion.isNull(criteria.proto().tasks()), PropertyCriterion.eq(criteria.proto().tasks().$().description(), searchBy));
+
+            List<Employee> emps = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, emps.size());
+        }
+    }
+
+    public void testOneToManyQueryJoinTableNotExists() {
+        // Setup data
+        String testId = uniqueString();
+        String searchBy = uniqueString();
+
+        BRefReadOwner owner1 = EntityFactory.create(BRefReadOwner.class);
+        owner1.name().setValue("C1" + uniqueString());
+        owner1.testId().setValue(testId);
+        srv.persist(owner1);
+
+        BRefReadChild c1 = EntityFactory.create(BRefReadChild.class);
+        c1.name().setValue(searchBy);
+        c1.testId().setValue(testId);
+        c1.sortColumn().setValue(2);
+        c1.bRefOwner().set(owner1);
+        srv.persist(c1);
+
+        BRefReadOwner owner2 = EntityFactory.create(BRefReadOwner.class);
+        owner2.name().setValue("C0" + uniqueString());
+        owner2.testId().setValue(testId);
+        srv.persist(owner2);
+
+        {
+            EntityQueryCriteria<BRefReadOwner> criteria = EntityQueryCriteria.create(BRefReadOwner.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.or(PropertyCriterion.isNull(criteria.proto().children()), PropertyCriterion.eq(criteria.proto().children().$().name(), searchBy));
+
+            List<BRefReadOwner> emps = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, emps.size());
+
+        }
+
+    }
+
     public void testJoinTable() {
         String testId = uniqueString();
 
@@ -277,12 +341,11 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         }
     }
 
-    //TODO OR implementation for joins
-    public void TODO_testOneToOneQueryNotExists() {
+    public void testOneToOneQueryNotExists() {
         String testId = uniqueString();
 
         OneToOneReadOwner o1 = EntityFactory.create(OneToOneReadOwner.class);
-        o1.name().setValue(uniqueString());
+        o1.name().setValue("C1;" + uniqueString());
         o1.testId().setValue(testId);
         srv.persist(o1);
 
@@ -293,7 +356,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         srv.persist(c1);
 
         OneToOneReadOwner o2 = EntityFactory.create(OneToOneReadOwner.class);
-        o2.name().setValue(uniqueString());
+        o2.name().setValue("C0;" + uniqueString());
         o2.testId().setValue(testId);
         srv.persist(o2);
 
@@ -301,11 +364,14 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         {
             EntityQueryCriteria<OneToOneReadOwner> criteria = EntityQueryCriteria.create(OneToOneReadOwner.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.or(PropertyCriterion.eq(criteria.proto().child().name(), c1.name()), PropertyCriterion.isNull(criteria.proto().child()));
+            //TODO OR implementation for joins
+            //criteria.or(PropertyCriterion.eq(criteria.proto().child().name(), c1.name()), PropertyCriterion.isNull(criteria.proto().child()));
+            criteria.or(PropertyCriterion.isNull(criteria.proto().child()), PropertyCriterion.eq(criteria.proto().child().name(), c1.name()));
 
             List<OneToOneReadOwner> data = srv.query(criteria);
             Assert.assertEquals("Found using JoinTable", 2, data.size());
         }
 
     }
+
 }

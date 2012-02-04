@@ -479,6 +479,7 @@ public class TableModel {
         try {
             QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
             sql = "SELECT m1.* FROM " + qb.getSQL(tableName);
+            //log.info("query {}", sql);
             int offset = 0;
             boolean addLimit = false;
             if (criteria instanceof EntityListCriteria) {
@@ -547,6 +548,7 @@ public class TableModel {
         ResultSet rs = null;
         try {
             sql = "SELECT m1.* FROM " + qb.getSQL(tableName);
+            //log.info("query {}", sql);
             int limit = -1;
             int offset = 0;
             if (criteria instanceof EntityListCriteria) {
