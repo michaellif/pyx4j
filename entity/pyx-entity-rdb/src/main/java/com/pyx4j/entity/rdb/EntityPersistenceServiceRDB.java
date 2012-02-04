@@ -259,8 +259,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     for (IEntity childEntity : iCollectionMember) {
                         if (memberMeta.isOwnedRelationships()) {
                             if (childEntity.getPrimaryKey() != null) {
-                                log.error("attempt to attach {} to different entity graphs of {}", childEntity.getDebugExceptionInfoString(),
-                                        entity.getDebugExceptionInfoString());
+                                log.error("attempt to attach {} to different entity graphs of {}\n" + Trace.getCallOrigin(EntityPersistenceServiceRDB.class)
+                                        + "\n", childEntity.getDebugExceptionInfoString(), entity.getDebugExceptionInfoString());
                                 if (ApplicationMode.isDevelopment()) {
                                     throw new SecurityViolationException(ApplicationMode.DEV + "attempt to attach to different entity graphs "
                                             + childEntity.getDebugExceptionInfoString());

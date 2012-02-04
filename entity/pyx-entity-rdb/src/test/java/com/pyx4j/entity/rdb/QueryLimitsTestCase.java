@@ -22,6 +22,9 @@ package com.pyx4j.entity.rdb;
 
 import junit.framework.Assert;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -30,6 +33,8 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
 public abstract class QueryLimitsTestCase extends DatastoreTestBase {
+
+    private static final Logger log = LoggerFactory.getLogger(QueryLimitsTestCase.class);
 
     public void testPages() {
         Employee mgr = EntityFactory.create(Employee.class);
@@ -68,7 +73,7 @@ public abstract class QueryLimitsTestCase extends DatastoreTestBase {
             int cnt = 0;
             while (cnt < 5) {
                 Employee emp = emps2.next();
-                System.out.println("item:" + cnt + "" + emp.firstName());
+                log.debug("item: {} {}", cnt, emp.firstName().getValue());
                 cnt++;
             }
             Assert.assertFalse("has no More", emps0.hasNext());

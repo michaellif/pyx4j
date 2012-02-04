@@ -129,7 +129,7 @@ public class TableModelCollections {
                 if ((type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
                     IEntity childEntity = (IEntity) value;
                     if ((childEntity.getPrimaryKey() == null) && !childEntity.isNull()) {
-                        log.error("Saving non persisted reference {}", childEntity);
+                        log.error("Saving non persisted reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
                         throw new Error("Saving non persisted reference " + childEntity.getDebugExceptionInfoString());
                     }
                 }

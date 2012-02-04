@@ -287,7 +287,7 @@ public class TableModel {
             if (member.getMemberMeta().isEntity()) {
                 IEntity childEntity = (IEntity) member.getMember(entity);
                 if ((childEntity.getPrimaryKey() == null) && !childEntity.isNull()) {
-                    log.error("Saving non persisted reference {}", childEntity);
+                    log.error("Saving non persisted reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
                     throw new Error("Saving non persisted reference " + childEntity.getDebugExceptionInfoString());
                 }
                 parameterIndex += member.getValueAdapter().bindValue(stmt, parameterIndex, childEntity);
