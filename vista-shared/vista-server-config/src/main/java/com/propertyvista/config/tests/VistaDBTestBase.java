@@ -17,10 +17,21 @@ import junit.framework.TestCase;
 
 public abstract class VistaDBTestBase extends TestCase {
 
+    private static long initializationTime = System.currentTimeMillis();
+
+    private static int uniqueCount = 0;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         VistaTestDBSetup.init();
     }
 
+    public synchronized String uniqueString() {
+        return Integer.toHexString(++uniqueCount) + "_" + Long.toHexString(System.currentTimeMillis()) + " " + this.getName();
+    }
+
+    public synchronized long uniqueLong() {
+        return initializationTime + (++uniqueCount);
+    }
 }

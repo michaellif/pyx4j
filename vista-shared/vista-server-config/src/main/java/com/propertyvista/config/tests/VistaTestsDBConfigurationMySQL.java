@@ -13,6 +13,7 @@
  */
 package com.propertyvista.config.tests;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionModern;
 
@@ -21,11 +22,6 @@ public class VistaTestsDBConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Con
     @Override
     public String dbHost() {
         return "localhost";
-    }
-
-    @Override
-    public boolean showSql() {
-        return false;
     }
 
     @Override
@@ -46,6 +42,15 @@ public class VistaTestsDBConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Con
     @Override
     public boolean isMultitenant() {
         return true;
+    }
+
+    @Override
+    public boolean showSql() {
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

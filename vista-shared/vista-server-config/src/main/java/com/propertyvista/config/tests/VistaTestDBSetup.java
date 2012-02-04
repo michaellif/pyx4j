@@ -22,7 +22,8 @@ public class VistaTestDBSetup {
 
     public static synchronized void init() {
         if (initOnce == null) {
-            initOnce = new VistaTestsServerSideConfiguration(false);
+            boolean testOnMySQL = false;
+            initOnce = new VistaTestsServerSideConfiguration(testOnMySQL);
             ServerSideConfiguration.setInstance(initOnce);
         }
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
