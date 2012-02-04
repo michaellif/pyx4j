@@ -63,7 +63,7 @@ public class RDBUtils implements Closeable {
     public static Configuration getRDBConfiguration() {
         IPersistenceConfiguration cfg = ServerSideConfiguration.instance().getPersistenceConfiguration();
         if (cfg == null) {
-            throw new RuntimeException("Persistence Configuration is not defined (is null)");
+            throw new RuntimeException("Persistence Configuration is not defined (is null) in class " + ServerSideConfiguration.instance().getClass().getName());
         }
         if (!(cfg instanceof Configuration)) {
             throw new RuntimeException("Invalid RDB configuration class " + cfg);
