@@ -24,8 +24,12 @@ public class TenantDatasetAccessRule implements DatasetAccessRule<Tenant> {
 
     @Override
     public void applyRule(EntityQueryCriteria<Tenant> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto()._tenantInLease().$().lease().unit().belongsTo().userAccess(), Context.getVisit().getUserVisit()
-                .getPrincipalPrimaryKey()));
-    }
 
+        criteria.or()
+
+                .right(PropertyCriterion.eq(criteria.proto()._tenantInLease().$().lease().unit().belongsTo().userAccess(), Context.getVisit().getUserVisit()
+                        .getPrincipalPrimaryKey()))
+
+                .left(PropertyCriterion.isNull(criteria.proto()._tenantInLease()));
+    }
 }
