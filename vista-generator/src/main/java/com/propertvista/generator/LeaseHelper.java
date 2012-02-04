@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader;
+package com.propertvista.generator;
 
 import java.util.List;
 
@@ -29,9 +29,9 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-class LeaseHelper {
+public class LeaseHelper {
 
-    static void updateLease(Lease lease) {
+    public static void updateLease(Lease lease) {
         Building building = lease.unit().belongsTo();
         Persistence.service().retrieve(building);
 

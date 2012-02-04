@@ -20,10 +20,16 @@
  */
 package com.propertyvista.server.billing;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
+import com.propertyvista.domain.tenant.lease.Lease;
+
 public class FirstBillingRunTest extends BillingTestBase {
 
-    public void testPreload() {
-
+    public void testBilling() {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        Lease lease = Persistence.service().query(criteria).get(0);
+        BillingLifecycle.runBilling(lease);
     }
-
 }

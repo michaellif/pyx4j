@@ -23,18 +23,25 @@ package com.propertyvista.server.billing;
 import java.util.List;
 
 import com.propertvista.generator.BuildingsGenerator;
+import com.propertvista.generator.LeaseHelper;
 import com.propertvista.generator.ProductCatalogGenerator;
 import com.propertvista.generator.ProductItemTypesGenerator;
+import com.propertvista.generator.TenantsGenerator;
+import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.ProductItemTypesGDO;
+import com.propertvista.generator.gdo.TenantSummaryGDO;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.server.common.generator.LocationsGenerator;
 
 public class BillingTestBase extends VistaDBTestBase {
@@ -46,6 +53,8 @@ public class BillingTestBase extends VistaDBTestBase {
         ProductItemTypesGDO productItemTypesGDO;
 
         Building building;
+
+        AptUnit unit;
 
         {
 
@@ -69,6 +78,15 @@ public class BillingTestBase extends VistaDBTestBase {
             building = generator.createBuilding(1);
             Persistence.service().persist(building);
 
+            Floorplan floorplan = EntityFactory.create(Floorplan.class);
+            floorplan.building().set(building);
+            Persistence.service().persist(floorplan);
+
+            unit = EntityFactory.create(AptUnit.class);
+            unit.belongsTo().set(building);
+            unit.floorplan().set(floorplan);
+            Persistence.service().persist(unit);
+
         }
 
         {
@@ -89,6 +107,21 @@ public class BillingTestBase extends VistaDBTestBase {
             building.serviceCatalog().set(catalog);
         }
 
-    }
+        {
+            TenantsGenerator generator = new TenantsGenerator(1);
+            Tenant tenant = generator.createTenant();
+            Persistence.service().persist(tenant);
 
+            ApplicationSummaryGDO lease = generator.createLease(tenant, unit);
+
+            LeaseHelper.updateLease(lease.lease());
+            Persistence.service().persist(lease.lease());
+            Persistence.service().persist(lease.lease().leaseFinancial());
+            for (TenantSummaryGDO tenantSummary : lease.tenants()) {
+                Persistence.service().persist(tenantSummary.tenantInLease());
+            }
+
+        }
+
+    }
 }

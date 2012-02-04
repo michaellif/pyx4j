@@ -44,6 +44,11 @@
         </dependency>
         
         <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-data</artifactId>
+        </dependency>
+        
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <scope>test</scope>

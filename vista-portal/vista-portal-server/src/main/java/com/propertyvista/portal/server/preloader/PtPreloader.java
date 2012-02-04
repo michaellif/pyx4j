@@ -18,6 +18,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertvista.generator.LeaseHelper;
 import com.propertvista.generator.PTGenerator;
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
