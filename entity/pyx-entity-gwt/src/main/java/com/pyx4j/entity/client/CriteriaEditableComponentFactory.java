@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.EnumSet;
 
@@ -30,6 +31,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CBigDecimalField;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -58,6 +60,8 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
             comp = new CDatePicker();
         } else if (mm.getValueClass().equals(Integer.class)) {
             comp = new CIntegerField();
+        } else if (mm.getValueClass().equals(BigDecimal.class)) {
+            comp = new CBigDecimalField();
         } else if (mm.getValueClass().equals(Long.class)) {
             comp = new CLongField();
         } else if (mm.getValueClass().equals(Double.class)) {

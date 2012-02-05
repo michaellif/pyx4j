@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.ui;
 
+import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
 import java.util.EnumSet;
@@ -28,6 +29,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CBigDecimalField;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -165,6 +167,8 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
             return new CCheckBox();
         } else if (mm.getValueClass().equals(Integer.class)) {
             return new CIntegerField();
+        } else if (mm.getValueClass().equals(BigDecimal.class)) {
+            return new CBigDecimalField();
         } else if (mm.getValueClass().equals(Long.class)) {
             return new CLongField();
         } else if (mm.getValueClass().equals(Double.class)) {
