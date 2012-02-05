@@ -39,9 +39,9 @@ public class BillingRunTest extends BillingTestBase {
 
         runBilling(1, true);
         runBilling(2, true);
-        runBilling(3, false);
-        runBilling(4, true);
-        runBilling(5, true);
+//        runBilling(3, false);
+//        runBilling(4, true);
+//        runBilling(5, true);
 
     }
 
@@ -55,7 +55,7 @@ public class BillingRunTest extends BillingTestBase {
         } else {
             BillingUtils.rejectBill(bill);
         }
-        System.out.println("++++++" + bill);
+        //System.out.println("++++++" + bill);
         assertEquals("Bill Sequence Number", (int) bill.billSequenceNumber().getValue(), billNumber);
         assertEquals("Bill Confirmation Status", bill.billStatus().getValue(), confirm ? BillStatus.Confirmed : BillStatus.Rejected);
     }
