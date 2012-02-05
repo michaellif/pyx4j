@@ -131,10 +131,10 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         main.setBR(++row, 0, 1);
 
         main.setH1(++row, 0, 1, i18n.tr("Lease Terms"));
-        main.setWidget(++row, 0, inject(proto().leaseTerms(), new LeaseTemsFolder()));
+        main.setWidget(++row, 0, inject(proto().leaseTerms(), new LeaseTemsFolder(!viewMode)));
 
         main.setH1(++row, 0, 1, i18n.tr("Digital Signature(s)"));
-        main.setWidget(++row, 0, inject(proto().application().signatures(), new SignatureFolder(true)));
+        main.setWidget(++row, 0, inject(proto().application().signatures(), new SignatureFolder(!viewMode)));
 
         return main;
     }

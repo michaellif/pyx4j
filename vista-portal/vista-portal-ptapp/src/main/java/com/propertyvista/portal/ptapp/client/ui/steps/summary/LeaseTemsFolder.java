@@ -44,8 +44,11 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
         selected, disabled, hover
     }
 
-    public LeaseTemsFolder() {
+    private final boolean editable;
+
+    public LeaseTemsFolder(boolean modifiable) {
         super(LegalTermsDescriptorDTO.class, false);
+        this.editable = modifiable;
     }
 
     @Override
@@ -79,7 +82,7 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
             ScrollPanel scroll = new ScrollPanel(inject(proto().content().content(), content).asWidget());
             main.setWidget(++row, 0, scroll);
             main.setBR(++row, 0, 1);
-            main.setWidget(++row, 0, inject(proto().agrees(), new AgreeFolder(true)));
+            main.setWidget(++row, 0, inject(proto().agrees(), new AgreeFolder(editable)));
 
             // styling:
             get(proto().content().content()).asWidget().setWidth("auto");
