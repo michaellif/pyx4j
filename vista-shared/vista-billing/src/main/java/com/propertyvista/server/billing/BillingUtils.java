@@ -141,7 +141,7 @@ public class BillingUtils {
             bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
             Persistence.service().persist(bill.billingAccount());
         } else {
-            throw new Error("Bill should be in 'Finished' state in order to verify it.");
+            throw new Error("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
         }
     }
 }

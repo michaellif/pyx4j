@@ -135,7 +135,9 @@ class Billing {
         BillCharge charge = EntityFactory.create(BillCharge.class);
         charge.bill().set(bill);
         charge.price().setValue(serviceItem.item().price().getValue());
-        charge.taxes().addAll(TaxUtils.calculateTaxes(charge.price().getValue(), serviceItem.item().type().chargeCode().taxes()));
+        if (!charge.price().isNull()) {
+            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.price().getValue(), serviceItem.item().type().chargeCode().taxes()));
+        }
         charge.taxTotal().setValue(0d);
         for (BillChargeTax chargeTax : charge.taxes()) {
             charge.taxTotal().setValue(charge.taxTotal().getValue() + chargeTax.amount().getValue());
@@ -151,7 +153,7 @@ class Billing {
         } else if (isRecurringFeature(charge.billableItem().item().product())) { //Recurring Feature
             bill.totalRecurringFeatureCharges().setValue(bill.totalRecurringFeatureCharges().getValue() + charge.price().getValue());
         } else {
-            bill.totalOneTimeFeatureCharges().setValue(bill.totalOneTimeFeatureCharges().getValue() + charge.price().getValue());
+//            bill.totalOneTimeFeatureCharges().setValue(bill.totalOneTimeFeatureCharges().getValue() + charge.price().getValue());
         }
     }
 
