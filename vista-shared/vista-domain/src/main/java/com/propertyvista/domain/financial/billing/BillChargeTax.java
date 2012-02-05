@@ -27,6 +27,6 @@ public interface BillChargeTax extends IEntity {
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<Double> ammount();
+    IPrimitive<Double> amount();
 
 }

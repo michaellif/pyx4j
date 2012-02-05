@@ -31,7 +31,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.BillingRun.BillingRunStatus;
@@ -45,19 +44,14 @@ public class BillingLifecycle {
     public static void runBilling(Lease lease) {
         BillingAccount billingAccount = BillingUtils.ensureBillingAccount(lease);
         if (!billingAccount.currentBillingRun().isNull()) {
-            throw new UserRuntimeException("Can't run billing on Account with un-approved bills");
+            throw new UserRuntimeException("Can't run billing on Account with non-confirmed bills");
         }
         BillingRun billingRun = EntityFactory.create(BillingRun.class);
         billingRun.status().setValue(BillingRunStatus.Scheduled);
         billingRun.billingCycle().set(billingAccount.billingCycle());
         billingRun.building().set(lease.unit().belongsTo());
 
-        Bill bill = BillingUtils.getLatestBill(billingAccount);
-        if (bill != null) {
-            billingRun.billingPeriodStartDate().setValue(BillingUtils.getNextBillingPeriodStartDate(billingAccount, bill));
-        } else {
-            billingRun.billingPeriodStartDate().setValue(lease.leaseFrom().getValue());
-        }
+        billingRun.billingPeriodStartDate().setValue(BillingUtils.getNextBillingPeriodStartDate(billingAccount));
 
         Persistence.service().persist(billingRun);
 

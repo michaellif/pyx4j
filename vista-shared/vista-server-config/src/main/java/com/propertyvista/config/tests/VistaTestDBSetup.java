@@ -22,7 +22,7 @@ public class VistaTestDBSetup {
 
     public static synchronized void init() {
         if (initOnce == null) {
-            boolean testOnMySQL = false;
+            boolean testOnMySQL = true;
             initOnce = new VistaTestsServerSideConfiguration(testOnMySQL);
             ServerSideConfiguration.setInstance(initOnce);
         }

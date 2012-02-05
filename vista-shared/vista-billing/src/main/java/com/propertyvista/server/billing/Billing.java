@@ -35,9 +35,10 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillCharge;
+import com.propertyvista.domain.financial.billing.BillChargeAdjustment;
+import com.propertyvista.domain.financial.billing.BillChargeTax;
 import com.propertyvista.domain.financial.billing.BillLeaseAdjustment;
 import com.propertyvista.domain.financial.billing.BillPayment;
-import com.propertyvista.domain.financial.billing.BillChargeAdjustment;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -61,39 +62,42 @@ class Billing {
         Bill bill = EntityFactory.create(Bill.class);
         bill.billStatus().setValue(BillStatus.Running);
         bill.billingAccount().set(billingAccount);
+        bill.billSequenceNumber().setValue(bill.billingAccount().billCounter().getValue());
+
         bill.billingRun().set(billingRun);
         Persistence.service().persist(bill);
         try {
             new Billing(bill).run();
             bill.billStatus().setValue(BillStatus.Finished);
-            Persistence.service().persist(bill);
         } catch (Throwable e) {
             log.error("Bill run error", e);
             bill.billStatus().setValue(BillStatus.Erred);
-            Persistence.service().persist(bill);
         }
+        Persistence.service().persist(bill);
     }
 
     private void run() {
         Persistence.service().retrieve(bill.billingAccount().leaseFinancial());
         Persistence.service().retrieve(bill.billingAccount().leaseFinancial().lease());
+        Persistence.service().retrieve(bill.billingAccount().leaseFinancial().lease().serviceAgreement());
 
         //Set accumulating fields to 0 value
         bill.paymentReceivedAmount().setValue(0d);
         bill.totalRecurringFeatureCharges().setValue(0d);
         bill.totalOneTimeFeatureCharges().setValue(0d);
-        bill.totalRecurringFeatureCharges();
-        bill.totalOneTimeFeatureCharges();
-        bill.totalAdjustments();
-        bill.totalImmediateAdjustments();
-        bill.latePaymentCharges();
-        bill.totalTaxes();
+        bill.totalRecurringFeatureCharges().setValue(0d);
+        bill.totalOneTimeFeatureCharges().setValue(0d);
+        bill.totalAdjustments().setValue(0d);
+        bill.totalImmediateAdjustments().setValue(0d);
+        bill.latePaymentCharges().setValue(0d);
+        bill.totalTaxes().setValue(0d);
 
         getPreviousTotals();
         createPayments();
         createCharges();
         createLeaseAdjustments();
         createProductAdjustments();
+
     }
 
     private void getPreviousTotals() {
@@ -130,6 +134,13 @@ class Billing {
     private BillCharge createCharge(BillableItem serviceItem) {
         BillCharge charge = EntityFactory.create(BillCharge.class);
         charge.bill().set(bill);
+        charge.price().setValue(serviceItem.item().price().getValue());
+        charge.taxes().addAll(TaxUtils.calculateTaxes(charge.price().getValue(), serviceItem.item().type().chargeCode().taxes()));
+        charge.taxTotal().setValue(0d);
+        for (BillChargeTax chargeTax : charge.taxes()) {
+            charge.taxTotal().setValue(charge.taxTotal().getValue() + chargeTax.amount().getValue());
+        }
+
         addCharge(charge);
         return charge;
     }

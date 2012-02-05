@@ -39,29 +39,51 @@ import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class BillingUtils {
 
-    static LogicalDate getNextBillingPeriodStartDate(BillingAccount billingAccount, Bill bill) {
-        Calendar c = new GregorianCalendar();
-        c.setTime(bill.billingRun().billingPeriodStartDate().getValue());
-        switch (billingAccount.billingCycle().billingPeriod().getValue()) {
-        case monthly:
-            // TODO use proper bill day
-            c.add(Calendar.MONTH, 1);
-            break;
-        case weekly:
-        case biWeekly:
-        case semiMonthly:
-        case annyally:
-            throw new Error("Not implemented");
+    static LogicalDate getNextBillingPeriodStartDate(BillingAccount billingAccount) {
+        Bill bill = BillingUtils.getLatestConfirmedBill(billingAccount);
+        if (bill != null) {
+            Calendar c = new GregorianCalendar();
+            c.setTime(bill.billingRun().billingPeriodStartDate().getValue());
+            switch (billingAccount.billingCycle().billingPeriod().getValue()) {
+            case monthly:
+                // TODO use proper bill day
+                c.add(Calendar.MONTH, 1);
+                break;
+            case weekly:
+            case biWeekly:
+            case semiMonthly:
+            case annyally:
+                throw new Error("Not implemented");
+            }
+            return new LogicalDate(c.getTime());
+        } else {
+            return billingAccount.leaseFinancial().lease().leaseFrom().getValue();
         }
-        return new LogicalDate(c.getTime());
+
     }
 
-    static Bill getLatestBill(BillingAccount billingAccount) {
+    static Bill getLatestBill(BillingAccount billingAccount, Bill.BillStatus status) {
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), BillStatus.Confirmed));
-        criteria.asc(criteria.proto().billingRun().billingPeriodStartDate());
+        if (status != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), status));
+        }
+        criteria.desc(criteria.proto().billingRun().billingPeriodStartDate());
         return Persistence.service().retrieve(criteria);
+    }
+
+    /**
+     * Returns last bill in any status
+     */
+    static Bill getLatestBill(BillingAccount billingAccount) {
+        return getLatestBill(billingAccount, null);
+    }
+
+    /**
+     * Returns last bill in status 'Confirmed'
+     */
+    static Bill getLatestConfirmedBill(BillingAccount billingAccount) {
+        return getLatestBill(billingAccount, BillStatus.Confirmed);
     }
 
     /*
@@ -94,7 +116,7 @@ public class BillingUtils {
         }
         leaseFinancial.billingAccount().billingCycle().set(billingCycle);
         leaseFinancial.billingAccount().leaseFinancial().set(leaseFinancial);
-
+        leaseFinancial.billingAccount().billCounter().setValue(1);
         Persistence.service().persist(leaseFinancial.billingAccount());
         Persistence.service().persist(leaseFinancial);
 
@@ -102,4 +124,24 @@ public class BillingUtils {
 
     }
 
+    public static void confirmBill(Bill bill) {
+        verifyBill(bill, BillStatus.Confirmed);
+    }
+
+    public static void rejectBill(Bill bill) {
+        verifyBill(bill, BillStatus.Rejected);
+    }
+
+    private static void verifyBill(Bill bill, BillStatus billStatus) {
+        if (BillStatus.Finished.equals(bill.billStatus().getValue())) {
+            bill.billStatus().setValue(billStatus);
+            Persistence.service().persist(bill);
+
+            bill.billingAccount().currentBillingRun().setValue(null);
+            bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
+            Persistence.service().persist(bill.billingAccount());
+        } else {
+            throw new Error("Bill should be in 'Finished' state in order to verify it.");
+        }
+    }
 }

@@ -40,6 +40,8 @@ public interface BillingAccount extends IEntity {
      */
     BillingRun currentBillingRun();
 
+    IPrimitive<Integer> billCounter();
+
     IPrimitive<Double> total();
 
 }
