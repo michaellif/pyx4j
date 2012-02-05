@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.server;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -145,6 +146,7 @@ public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Value", s.endsOn().getValue(), srv.retrieve(Schedule.class, s.getPrimaryKey()).endsOn().getValue());
     }
 
+    //TODO Make it work on GAE
     public void testSqlTime() {
         Schedule s = EntityFactory.create(Schedule.class);
         Assert.assertNull("Initial value", s.time().getValue());
@@ -233,15 +235,28 @@ public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
 
     public void testDouble() {
         Employee emp = EntityFactory.create(Employee.class);
-        Assert.assertNull("Initial value", emp.salary().getValue());
-        Assert.assertEquals("Class of Value", Double.class, emp.salary().getValueClass());
-        emp.salary().setValue(77.8);
+        Assert.assertNull("Initial value", emp.flagDouble().getValue());
+        Assert.assertEquals("Class of Value", Double.class, emp.flagDouble().getValueClass());
+        emp.flagDouble().setValue(77.8);
 
         srv.persist(emp);
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertNotNull("retrieve by PK " + emp.getPrimaryKey(), emp2);
-        Assert.assertEquals("Class of Value", Double.class, emp2.salary().getValue().getClass());
-        Assert.assertEquals("Value", 77.8, emp2.salary().getValue());
+        Assert.assertEquals("Class of Value", Double.class, emp2.flagDouble().getValue().getClass());
+        Assert.assertEquals("Value", 77.8, emp2.flagDouble().getValue());
+    }
+
+    public void testBigDecimal() {
+        Employee emp = EntityFactory.create(Employee.class);
+        Assert.assertNull("Initial value", emp.salary().getValue());
+        Assert.assertEquals("Class of Value", BigDecimal.class, emp.salary().getValueClass());
+        emp.salary().setValue(new BigDecimal("23.51"));
+
+        srv.persist(emp);
+        Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertNotNull("retrieve by PK " + emp.getPrimaryKey(), emp2);
+        Assert.assertEquals("Class of Value", BigDecimal.class, emp2.salary().getValue().getClass());
+        assertValueEquals("Value", new BigDecimal("23.51"), emp2.salary().getValue());
     }
 
     public void testEnumExternal() {

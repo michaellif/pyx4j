@@ -39,7 +39,7 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
         Employee employee = EntityFactory.create(Employee.class);
         String empName = "emp" + uniqueString();
         double origSalary = 50000.0;
-        employee.salary().setValue(origSalary);
+        employee.flagDouble().setValue(origSalary);
         employee.firstName().setValue(empName);
         department.employees().add(employee);
 
@@ -56,11 +56,11 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
 
         // See if it is not updated with cascade
         srv.persist(employee);
-        employee.salary().setValue(100000.0);
+        employee.flagDouble().setValue(100000.0);
         srv.persist(department);
 
         Employee employee2 = srv.retrieve(Employee.class, employee.getPrimaryKey());
-        Assert.assertEquals("salary no update", origSalary, employee2.salary().getValue());
+        Assert.assertEquals("salary no update", origSalary, employee2.flagDouble().getValue());
     }
 
     public void testUnownedSetMemebrInCascadeIsNotSaved() {
@@ -74,7 +74,7 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
         Employee employee1 = EntityFactory.create(Employee.class);
         String empName = "emp1." + uniqueString();
         double origSalary = 50000.0;
-        employee1.salary().setValue(origSalary);
+        employee1.flagDouble().setValue(origSalary);
         employee1.firstName().setValue(empName);
         srv.persist(employee1);
 
@@ -86,7 +86,7 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
 
         Employee employee2 = EntityFactory.create(Employee.class);
         String empName2 = "emp2." + uniqueString();
-        employee2.salary().setValue(60000.0);
+        employee2.flagDouble().setValue(60000.0);
         employee2.firstName().setValue(empName2);
         department.employees().add(employee2);
 
@@ -101,14 +101,14 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
             fail("Should not save UnownedSetMember department.employees");
         }
         department.employees().remove(employee2);
-        employee1.salary().setValue(120000.0);
+        employee1.flagDouble().setValue(120000.0);
         srv.persist(org);
 
         Organization org2 = srv.retrieve(Organization.class, org.getPrimaryKey());
         assertEquals("set size", 1, org2.departments().size());
 
         Employee employee1r = srv.retrieve(Employee.class, employee1.getPrimaryKey());
-        Assert.assertEquals("salary no update", origSalary, employee1r.salary().getValue());
+        Assert.assertEquals("salary no update", origSalary, employee1r.flagDouble().getValue());
     }
 
     public void testOwnedSetUpdate(TestCaseMethod testCaseMethod) {

@@ -21,6 +21,7 @@
 package com.pyx4j.entity.test.server;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -90,14 +91,15 @@ public abstract class QueryTestCase extends DatastoreTestBase {
         Assert.assertNotNull("retrieve by " + member.getFieldName() + " " + member.getValueClass(), emp1);
         Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
         Assert.assertEquals("Search Value Class", member.getValueClass(), emp1.getMemberValue(member.getFieldName()).getClass());
-        Assert.assertEquals("Search Value", value, emp1.getMemberValue(member.getFieldName()));
+        assertValueEquals("Search Value", value, emp1.getMemberValue(member.getFieldName()));
+
         Assert.assertEquals("Verify Value", empName, emp1.firstName().getValue());
 
         List<Employee> emps = srv.query(criteria1);
         Assert.assertEquals("result set size", 1, emps.size());
         emp1 = emps.get(0);
         Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
-        Assert.assertEquals("Search Value", value, emp1.getMemberValue(member.getFieldName()));
+        assertValueEquals("Search Value", value, emp1.getMemberValue(member.getFieldName()));
         Assert.assertEquals("Verify Value", empName, emp1.firstName().getValue());
     }
 
@@ -116,13 +118,21 @@ public abstract class QueryTestCase extends DatastoreTestBase {
 
     public void testQueryByDouble() {
         Double d = (double) new Date().getTime();
+        execTestQuery(metaEmp.flagDouble(), d);
+    }
+
+    //TODO Make it work on GAE
+    public void testQueryByBigDecimal() {
+        BigDecimal d = new BigDecimal(new Date().getTime());
         execTestQuery(metaEmp.salary(), d);
     }
 
+    //TODO Make it work on GAE
     public void testQueryByEnum() {
         execTestQuery(metaEmp.accessStatus(), Status.DEACTIVATED, true);
     }
 
+    //TODO Make it work on GAE
     public void testQueryByBoolean() {
         execTestQuery(metaEmp.reliable(), Boolean.FALSE, true);
     }

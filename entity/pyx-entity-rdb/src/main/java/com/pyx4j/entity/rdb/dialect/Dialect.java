@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.dialect;
 
+import java.math.BigDecimal;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
@@ -159,6 +160,8 @@ public abstract class Dialect {
             return Types.VARCHAR;
         } else if (valueClass.equals(Boolean.class)) {
             return Types.BOOLEAN;
+        } else if (valueClass.equals(BigDecimal.class)) {
+            return Types.NUMERIC;
         } else if (valueClass.equals(Short.class)) {
             return Types.SMALLINT;
         } else if (valueClass.equals(Byte.class)) {

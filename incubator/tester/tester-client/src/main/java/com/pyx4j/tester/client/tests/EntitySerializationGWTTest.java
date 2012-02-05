@@ -21,6 +21,7 @@
 package com.pyx4j.tester.client.tests;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import junit.framework.Assert;
@@ -58,7 +59,8 @@ public class EntitySerializationGWTTest extends TestCase {
         emp.reliable().setValue(Boolean.TRUE);
         emp.holidays().setValue(7L);
         emp.rating().setValue(5);
-        emp.salary().setValue(77.8);
+        emp.flagDouble().setValue(77.8);
+        emp.salary().setValue(new BigDecimal("150000.00"));
         emp.accessStatus().setValue(Status.SUSPENDED);
         emp.employmentStatus().setValue(EmploymentStatus.FULL_TIME);
 
@@ -89,8 +91,11 @@ public class EntitySerializationGWTTest extends TestCase {
                 Assert.assertEquals("Integer Class of Value", Integer.class, emp2.rating().getValue().getClass());
                 Assert.assertEquals("Integer Value", Integer.valueOf(5), emp2.rating().getValue());
 
-                Assert.assertEquals("Double Class of Value", Double.class, emp2.salary().getValue().getClass());
-                Assert.assertEquals("Double Value", 77.8, emp2.salary().getValue());
+                Assert.assertEquals("Double Class of Value", Double.class, emp2.flagDouble().getValue().getClass());
+                Assert.assertEquals("Double Value", 77.8, emp2.flagDouble().getValue());
+
+                Assert.assertEquals("BigDecimal Class of Value", BigDecimal.class, emp2.salary().getValue().getClass());
+                Assert.assertTrue("BigDecimal Value", new BigDecimal("150000.00").compareTo(emp2.salary().getValue()) == 0);
 
                 // This field is RpcTransient
                 Assert.assertEquals("Enum Ext Class of Value", Status.class, emp2.accessStatus().getValueClass());

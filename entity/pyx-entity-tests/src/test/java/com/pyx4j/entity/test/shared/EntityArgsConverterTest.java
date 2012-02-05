@@ -57,7 +57,7 @@ public class EntityArgsConverterTest extends TestCase {
         employee.reliable().setValue(true);
         employee.holidays().setValue(22L);
         employee.rating().setValue(5);
-        employee.salary().setValue(22.5);
+        employee.flagDouble().setValue(22.5);
 
         employee.employmentStatus().setValue(EmploymentStatus.PART_TIME);
         employee.accessStatus().setValue(Status.SUSPENDED);
@@ -74,7 +74,7 @@ public class EntityArgsConverterTest extends TestCase {
         assertEquals(employee.reliable().getValue().toString(), args.get(employee.reliable().getFieldName()).get(0));
         assertEquals(employee.holidays().getValue().toString(), args.get(employee.holidays().getFieldName()).get(0));
         assertEquals(employee.rating().getValue().toString(), args.get(employee.rating().getFieldName()).get(0));
-        assertEquals(employee.salary().getValue().toString(), args.get(employee.salary().getFieldName()).get(0));
+        assertEquals(employee.flagDouble().getValue().toString(), args.get(employee.flagDouble().getFieldName()).get(0));
 
         assertEquals(employee.employmentStatus().getValue().name(), args.get(employee.employmentStatus().getFieldName()).get(0));
         assertEquals(employee.accessStatus().getValue().name(), args.get(employee.accessStatus().getFieldName()).get(0));
@@ -95,7 +95,7 @@ public class EntityArgsConverterTest extends TestCase {
         args.put(proto.reliable().getFieldName(), Arrays.asList(new String[] { "true" }));
         args.put(proto.holidays().getFieldName(), Arrays.asList(new String[] { "22" }));
         args.put(proto.rating().getFieldName(), Arrays.asList(new String[] { "5" }));
-        args.put(proto.salary().getFieldName(), Arrays.asList(new String[] { "22.5" }));
+        args.put(proto.flagDouble().getFieldName(), Arrays.asList(new String[] { "22.5" }));
 
         args.put(proto.employmentStatus().getFieldName(), Arrays.asList(new String[] { EmploymentStatus.PART_TIME.name() }));
         args.put(proto.accessStatus().getFieldName(), Arrays.asList(new String[] { Status.SUSPENDED.name() }));
@@ -111,7 +111,7 @@ public class EntityArgsConverterTest extends TestCase {
         assertEquals((boolean) employee.reliable().getValue(), true);
         assertEquals((long) employee.holidays().getValue(), 22L);
         assertEquals((int) employee.rating().getValue(), 5);
-        assertEquals((double) employee.salary().getValue(), 22.5);
+        assertEquals((double) employee.flagDouble().getValue(), 22.5);
 
         assertEquals(employee.employmentStatus().getValue(), EmploymentStatus.PART_TIME);
         assertEquals(employee.accessStatus().getValue(), Status.SUSPENDED);

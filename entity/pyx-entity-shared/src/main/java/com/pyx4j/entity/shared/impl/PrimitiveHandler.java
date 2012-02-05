@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -101,6 +102,8 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
             converted = (TYPE) Boolean.valueOf(value);
         } else if (valueClass.equals(Short.class)) {
             converted = (TYPE) Short.valueOf(value);
+        } else if (valueClass.equals(BigDecimal.class)) {
+            converted = (TYPE) new BigDecimal(value);
         } else if (valueClass.equals(Byte.class)) {
             converted = (TYPE) Byte.valueOf(value);
         } else {
@@ -134,6 +137,8 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
             return (value instanceof Enum);
         } else if (valueClass.equals(Boolean.class)) {
             return (value instanceof Boolean);
+        } else if (valueClass.equals(BigDecimal.class)) {
+            return (value instanceof BigDecimal);
         } else if (valueClass.equals(Short.class)) {
             return (value instanceof Short);
         } else if (valueClass.equals(Byte.class)) {

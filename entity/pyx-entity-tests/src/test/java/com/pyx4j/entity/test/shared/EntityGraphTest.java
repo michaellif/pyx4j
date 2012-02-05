@@ -256,7 +256,7 @@ public class EntityGraphTest extends InitializerTestBase {
         Employee original = EntityFactory.create(Employee.class);
         original.id().setValue(new Key(9000l));
         original.firstName().setValue("George");
-        original.salary().setValue(1000.0);
+        original.flagDouble().setValue(1000.0);
         {
             Task task = EntityFactory.create(Task.class);
             task.id().setValue(new Key(1l));

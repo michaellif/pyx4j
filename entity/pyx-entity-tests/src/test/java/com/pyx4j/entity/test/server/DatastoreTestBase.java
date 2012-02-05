@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.server;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -85,6 +86,19 @@ public abstract class DatastoreTestBase extends TestCase {
         if (persistenceEnvironment != null) {
             persistenceEnvironment.teardownDatastore(srv);
         }
+    }
+
+    static public void assertValueEquals(String message, Object expected, Object actual) {
+        if (expected == null && actual == null) {
+            return;
+        }
+        if (expected != null && expected.equals(actual)) {
+            return;
+        }
+        if ((expected instanceof BigDecimal) && (((BigDecimal) expected).compareTo((BigDecimal) actual) == 0)) {
+            return;
+        }
+        failNotEquals(message, expected, actual);
     }
 
     protected void assertFullyEqual(String message, IEntity ent1, IEntity ent2) {

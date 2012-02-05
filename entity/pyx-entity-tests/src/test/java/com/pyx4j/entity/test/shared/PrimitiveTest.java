@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.Pair;
@@ -75,10 +76,18 @@ public class PrimitiveTest extends InitializerTestBase {
 
     public void testDouble() {
         Employee emp = EntityFactory.create(Employee.class);
+        assertNull("Initial value", emp.flagDouble().getValue());
+        assertEquals("Class of Value", Double.class, emp.flagDouble().getValueClass());
+        emp.flagDouble().setValue(77.8);
+        assertEquals("Value", 77.8, emp.flagDouble().getValue());
+    }
+
+    public void testBigDecimal() {
+        Employee emp = EntityFactory.create(Employee.class);
         assertNull("Initial value", emp.salary().getValue());
-        assertEquals("Class of Value", Double.class, emp.salary().getValueClass());
-        emp.salary().setValue(77.8);
-        assertEquals("Value", 77.8, emp.salary().getValue());
+        assertEquals("Class of Value", BigDecimal.class, emp.salary().getValueClass());
+        emp.salary().setValue(new BigDecimal("2.5"));
+        assertEquals("Value", new BigDecimal("2.5"), emp.salary().getValue());
     }
 
     public void testEnumExternal() {

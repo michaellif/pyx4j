@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.dialect;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 
 public class MySQLDialect extends Dialect {
@@ -32,6 +34,8 @@ public class MySQLDialect extends Dialect {
         addTypeMeta(Long.class, "bigint");
         addTypeMeta(Double.class, "double");
         addTypeMeta(Boolean.class, "bit");
+
+        addTypeMeta(BigDecimal.class, "decimal", 18, 5);
 
         TypeMeta blobTypeMeta = new TypeMeta(byte[].class, (int) Math.pow(2, 8), "tinyblob");
         blobTypeMeta.addSqlType((int) Math.pow(2, 16), "blob");

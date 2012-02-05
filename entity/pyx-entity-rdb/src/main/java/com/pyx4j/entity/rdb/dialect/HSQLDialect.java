@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.dialect;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 
 public class HSQLDialect extends Dialect {
@@ -33,6 +35,8 @@ public class HSQLDialect extends Dialect {
         addTypeMeta(Boolean.class, "boolean");
         addTypeMeta(byte[].class, "longvarbinary", "varbinary");
         addTypeMeta(java.util.Date.class, "timestamp");
+
+        addTypeMeta(BigDecimal.class, "decimal", 18, 5);
     }
 
     @Override

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
@@ -41,10 +42,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @Table(prefix = "test")
 public interface Employee extends IEntity {
 
-    public static int DECLARED_MEMBERS = 17;
+    public static int DECLARED_MEMBERS = 18;
 
-    public static String[] MEMBERS_ORDER = new String[] { "firstName", "from", "reliable", "holidays", "rating", "flagByte", "flagShort", "salary",
-            "employmentStatus", "accessStatus", "tasks", "tasksSorted", "department", "manager", "homeAddress", "workAddress", "image" };
+    public static String[] MEMBERS_ORDER = new String[] { "firstName", "from", "reliable", "holidays", "rating", "flagByte", "flagShort", "flagDouble",
+            "salary", "employmentStatus", "accessStatus", "tasks", "tasksSorted", "department", "manager", "homeAddress", "workAddress", "image" };
 
     @I18n
     public static enum EmploymentStatus {
@@ -78,7 +79,10 @@ public interface Employee extends IEntity {
     IPrimitive<Short> flagShort();
 
     @Indexed
-    IPrimitive<Double> salary();
+    IPrimitive<Double> flagDouble();
+
+    @Indexed
+    IPrimitive<BigDecimal> salary();
 
     IPrimitive<EmploymentStatus> employmentStatus();
 

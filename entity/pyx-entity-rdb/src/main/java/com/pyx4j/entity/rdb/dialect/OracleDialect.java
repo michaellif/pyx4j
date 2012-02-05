@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.dialect;
 
+import java.math.BigDecimal;
 import java.sql.Types;
 
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
@@ -36,6 +37,8 @@ public class OracleDialect extends Dialect {
         addTypeMeta(Float.class, "float", "double precision");
         addTypeMeta(Boolean.class, "number", 1, 0);
         addTypeMeta(String.class, "varchar2");
+
+        addTypeMeta(BigDecimal.class, "number", 18, 5);
 
         addTypeMeta(byte[].class, "blob");
 

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -458,6 +459,8 @@ public class EntityOperationsMeta {
             return new ValueAdapterEnum(dialect, enumValueClass);
         } else if (valueClass.equals(Boolean.class)) {
             return new ValueAdapterBoolean(dialect);
+        } else if (valueClass.equals(BigDecimal.class)) {
+            return new ValueAdapterBigDecimal(dialect);
         } else if (valueClass.equals(Short.class)) {
             return new ValueAdapterShort(dialect);
         } else if (valueClass.equals(Byte.class)) {
