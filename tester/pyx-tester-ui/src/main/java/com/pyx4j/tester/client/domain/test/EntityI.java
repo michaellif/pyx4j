@@ -20,6 +20,7 @@
  */
 package com.pyx4j.tester.client.domain.test;
 
+import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
 
@@ -84,8 +85,8 @@ public interface EntityI extends IEntity {
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> money();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> money();
 
     IPrimitive<Double> mandatoryMoney();
 

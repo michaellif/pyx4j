@@ -20,6 +20,7 @@
  */
 package com.pyx4j.tester.client.domain.test;
 
+import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
 
@@ -55,7 +56,7 @@ public class DomainFactory {
 
     private static String emailvalues[] = { "dobrik@yahoo.ca", "murzik@hotmail.com", "byaka@gmail.com", "bublik@mail.ru" };
 
-    private static Double moneyvalues[] = { 20.33, 0.00, 77.00, 8.00 };
+    private static BigDecimal moneyvalues[] = { new BigDecimal("20.33"), new BigDecimal("0.00"), new BigDecimal("77.00"), new BigDecimal("8.00") };
 
     private static Boolean boolradiovalues[] = { true, false, true, false };
 
