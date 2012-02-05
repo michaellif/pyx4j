@@ -22,7 +22,6 @@ import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
@@ -48,8 +47,11 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
         selected, disabled, hover
     }
 
-    public SignatureFolder() {
+    private final boolean editable;
+
+    public SignatureFolder(boolean modifiable) {
         super(DigitalSignature.class, false);
+        this.editable = modifiable;
     }
 
     @Override
@@ -71,7 +73,7 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
 
         public DigitalSignatureEditor() {
             super(DigitalSignature.class);
-            inheritEditable(false);
+            setViewable(true);
         }
 
         @Override
@@ -80,7 +82,11 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
 
             int row = -1;
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().person().name(), new CEntityLabel<Name>()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullName(), new CTextField()), 25).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullName()), 25).build());
+            if (editable) {
+                get(proto().fullName()).inheritViewable(false); // always not viewable!
+                get(proto().fullName()).inheritEditable(false); // control state later in populate...
+            }
 
             row = -1;
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().ipAddress()), 20).build());
@@ -93,7 +99,10 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
         @Override
         protected void onPopulate() {
             super.onPopulate();
-            setEditable(!DigitalSignatureValidation.isSignatureValid(getValue().person().person(), getValue().fullName().getValue()));
+            if (editable) {
+                get(proto().fullName()).setEditable(
+                        !DigitalSignatureValidation.isSignatureValid(getValue().person().person(), getValue().fullName().getValue()));
+            }
         }
 
         @Override

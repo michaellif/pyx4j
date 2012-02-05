@@ -48,8 +48,11 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
         selected, disabled, hover
     }
 
-    public AgreeFolder() {
+    private final boolean editable;
+
+    public AgreeFolder(boolean modifiable) {
         super(IAgree.class, false);
+        this.editable = modifiable;
     }
 
     @Override
@@ -73,7 +76,7 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
 
         public AgreeEditor() {
             super(IAgree.class, columns());
-            inheritEditable(false);
+            setViewable(true);
         }
 
         @Override
@@ -89,8 +92,11 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (proto().person().name() == column.getObject()) {
                 return inject(proto().person().name(), new CEntityLabel<Name>());
-            } else if (proto().agree() == column.getObject()) {
-                return inject(proto().agree(), new CCheckBox());
+            } else if (proto().agree() == column.getObject() && editable) {
+                CComponent<?, ?> comp = inject(proto().agree(), new CCheckBox());
+                comp.inheritViewable(false); // always not viewable!
+                comp.inheritEditable(false); // control state later in populate...
+                return comp;
             }
             return super.createCell(column);
         }
@@ -98,7 +104,9 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
         @Override
         protected void onPopulate() {
             super.onPopulate();
-            setEditable(!getValue().agree().isBooleanTrue());
+            if (editable) {
+                get(proto().agree()).setEditable(!getValue().agree().isBooleanTrue());
+            }
         }
 
         @Override
