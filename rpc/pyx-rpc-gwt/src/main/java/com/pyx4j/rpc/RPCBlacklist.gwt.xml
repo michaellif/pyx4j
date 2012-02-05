@@ -13,7 +13,10 @@
     <extend-configuration-property name="rpc.blacklist" value="java.lang.AssertionError" />
     <extend-configuration-property name="rpc.blacklist" value="java.util.*Exception" />
     
-    <extend-configuration-property name="rpc.blacklist" value="java.math.*" />
+    <extend-configuration-property name="rpc.blacklist" value="java.math.BigInteger" />
+    <extend-configuration-property name="rpc.blacklist" value="java.math.MathContext" />
+    <extend-configuration-property name="rpc.blacklist" value="java.math.RoundingMode" />
+    
     <extend-configuration-property name="rpc.blacklist" value="java.util.Collections.*" />
     
     <extend-configuration-property name="rpc.blacklist" value="java.util.Array.*" />
