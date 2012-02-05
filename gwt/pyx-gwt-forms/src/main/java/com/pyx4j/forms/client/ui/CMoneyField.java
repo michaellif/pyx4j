@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 
 import com.google.gwt.i18n.client.NumberFormat;
@@ -28,23 +29,23 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CMoneyField extends CTextFieldBase<Double, NTextBox<Double>> {
+public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>> {
 
     private static final I18n i18n = I18n.get(CMoneyField.class);
 
     public CMoneyField() {
         super();
         setFormat(new MoneyFormat());
-        addValueValidator(new TextBoxParserValidator<Double>());
+        addValueValidator(new TextBoxParserValidator<BigDecimal>());
     }
 
     @Override
-    protected NTextBox<Double> createWidget() {
-        return new NTextBox<Double>(this);
+    protected NTextBox<BigDecimal> createWidget() {
+        return new NTextBox<BigDecimal>(this);
 
     }
 
-    class MoneyFormat implements IFormat<Double> {
+    class MoneyFormat implements IFormat<BigDecimal> {
 
         private final NumberFormat nf;
 
@@ -53,7 +54,7 @@ public class CMoneyField extends CTextFieldBase<Double, NTextBox<Double>> {
         }
 
         @Override
-        public String format(Double value) {
+        public String format(BigDecimal value) {
             if (value == null) {
                 return "";
             } else {
@@ -62,7 +63,7 @@ public class CMoneyField extends CTextFieldBase<Double, NTextBox<Double>> {
         }
 
         @Override
-        public Double parse(String string) throws ParseException {
+        public BigDecimal parse(String string) throws ParseException {
             if (CommonsStringUtils.isEmpty(string)) {
                 return null; // empty value case
             }
@@ -70,7 +71,7 @@ public class CMoneyField extends CTextFieldBase<Double, NTextBox<Double>> {
                 string = string.replaceAll("[,$]+", "");
                 // f and d are parsed by Double but we want to show error (VISTA-996)
                 string = string.replaceAll("[fd]+", "a");
-                return Double.valueOf(string);
+                return new BigDecimal(string);
             } catch (NumberFormatException e) {
                 throw new ParseException(i18n.tr("Invalid money format. Enter valid number"), 0);
             }
