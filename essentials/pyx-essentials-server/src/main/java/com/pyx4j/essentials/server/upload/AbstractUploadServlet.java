@@ -183,17 +183,15 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 return;
             } catch (Throwable e) {
                 log.error("File Upload error", e);
-                if (process != null) {
-                    process.status().setError();
-                }
                 if (e.getCause() instanceof FileUploadBase.FileSizeLimitExceededException) {
                     out.println(i18n.tr("File upload size exceeds maximum of {0} megabytes", (maxSize / (1024 * 1024))));
+                } else if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                    out.println("Error " + e.getMessage());
                 } else {
-                    if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-                        out.println("Error " + e.getMessage());
-                    } else {
-                        out.println(i18n.tr("File upload error"));
-                    }
+                    out.println(i18n.tr("File upload error"));
+                }
+                if (process != null) {
+                    process.status().setError();
                 }
                 return;
             }
@@ -218,15 +216,22 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 out.println(UploadService.ResponseProcessWillContinue);
                 break;
             }
+        } catch (UserRuntimeException e) {
+            log.error("upload error", e);
+            if (process != null) {
+                process.status().setErrorStatusMessage(e.getMessage());
+            }
+            out.println(e.getMessage());
+            return;
         } catch (Throwable t) {
             log.error("upload error", t);
-            if (process != null) {
-                process.status().setError();
-            }
             if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                 out.println("Error " + t.getMessage());
             } else {
                 out.println(i18n.tr("File upload error"));
+            }
+            if (process != null) {
+                process.status().setError();
             }
         } finally {
             out.flush();

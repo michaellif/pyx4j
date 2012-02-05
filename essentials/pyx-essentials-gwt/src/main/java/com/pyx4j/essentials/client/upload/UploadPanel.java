@@ -184,6 +184,9 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
             break;
         case ServerMessage:
             message = args;
+            if (CommonsStringUtils.isEmpty(message)) {
+                message = i18n.tr("Unexpected system error in upload");
+            }
             break;
         }
         MessageDialog.error(i18n.tr("Upload Error"), message);
