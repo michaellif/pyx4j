@@ -23,6 +23,11 @@ public class VistaTestsDBConfigurationHSQLMemory extends ConfigurationHSQL {
     }
 
     @Override
+    public boolean isMultitenant() {
+        return true;
+    }
+
+    @Override
     public int minPoolSize() {
         return 1;
     }
