@@ -36,7 +36,8 @@ public class HSQLDialect extends Dialect {
         addTypeMeta(byte[].class, "longvarbinary", "varbinary");
         addTypeMeta(java.util.Date.class, "timestamp");
 
-        addTypeMeta(BigDecimal.class, "decimal", 18, 5);
+        // TODO use annotation for scale
+        addTypeMeta(BigDecimal.class, "decimal", 18, 2);
     }
 
     @Override

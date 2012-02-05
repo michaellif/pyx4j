@@ -35,7 +35,8 @@ public class MySQLDialect extends Dialect {
         addTypeMeta(Double.class, "double");
         addTypeMeta(Boolean.class, "bit");
 
-        addTypeMeta(BigDecimal.class, "decimal", 18, 5);
+        // TODO use annotation for scale
+        addTypeMeta(BigDecimal.class, "decimal", 18, 2);
 
         TypeMeta blobTypeMeta = new TypeMeta(byte[].class, (int) Math.pow(2, 8), "tinyblob");
         blobTypeMeta.addSqlType((int) Math.pow(2, 16), "blob");
