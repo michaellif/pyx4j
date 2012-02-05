@@ -87,7 +87,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
     private final boolean viewMode;
 
     public SummaryViewForm() {
-        this(true);
+        this(false);
     }
 
     public SummaryViewForm(boolean viewMode) {

@@ -78,22 +78,20 @@ public class DigitalSignatureMgr {
     }
 
     static public void reset(PersonScreeningHolder person) {
-        Application application = PtAppContext.getCurrentUserApplication();
+        reset(PtAppContext.getCurrentUserApplication(), person);
+    }
 
-        boolean found = false;
+    static public void reset(Application application, PersonScreeningHolder person) {
         for (Iterator<DigitalSignature> it = application.signatures().iterator(); it.hasNext();) {
             DigitalSignature sig = it.next();
             if (sig.person().equals(person)) {
-                found = true;
                 it.remove();
                 break;
             }
         }
 
-        if (found) {
-            createDigitalSignature(application, person);
-            ApplicationProgressMgr.invalidateSummaryStep(application);
-        }
+        createDigitalSignature(application, person);
+        ApplicationProgressMgr.invalidateSummaryStep(application);
 
         Persistence.service().merge(application);
     }

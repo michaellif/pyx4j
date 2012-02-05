@@ -30,6 +30,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -152,16 +153,22 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
     @Override
     public void update(AsyncCallback<Boolean> callback) {
+        Application application = PtAppContext.getCurrentUserApplication();
+
         if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveCoApplicant)) {
-            Application application = PtAppContext.getCurrentUserApplication();
-            Tenant tenant = PtAppContext.getCurrentUserTenant();
-            DigitalSignatureMgr.reset(tenant);
-            ApplicationProgressMgr.createTenantDataSteps(application, tenant);
+            Tenant person = PtAppContext.getCurrentUserTenant();
+
+            DigitalSignatureMgr.reset(application, person);
+            ApplicationProgressMgr.createTenantDataSteps(application, person);
         } else if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
-            ApplicationProgressMgr.createGurantorDataSteps(PtAppContext.getCurrentUserApplication(), PtAppContext.getCurrentUserGuarantor());
+            Guarantor person = PtAppContext.getCurrentUserGuarantor();
+
+            DigitalSignatureMgr.reset(application, person);
+            ApplicationProgressMgr.createGurantorDataSteps(application, person);
         } else {
             callback.onSuccess(false);
         }
+
         callback.onSuccess(true);
     }
 }
