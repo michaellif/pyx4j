@@ -38,7 +38,7 @@ public class OracleDialect extends Dialect {
         addTypeMeta(Boolean.class, "number", 1, 0);
         addTypeMeta(String.class, "varchar2");
 
-        // TODO use annotation
+        // TODO use annotation for scale
         addTypeMeta(BigDecimal.class, "number", 18, 2);
 
         addTypeMeta(byte[].class, "blob");
