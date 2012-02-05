@@ -356,8 +356,13 @@ public class TableModel {
 
     public boolean update(Connection connection, IEntity entity) {
         PreparedStatement stmt = null;
+        String sql = null;
         try {
-            stmt = connection.prepareStatement(sqlUpdate());
+            sql = sqlUpdate();
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
+            }
+            stmt = connection.prepareStatement(sql);
             // Just in case, used for pooled connections 
             stmt.setMaxRows(1);
             int parameterIndex = bindPersistParameters(dialect, stmt, entity);
@@ -368,7 +373,7 @@ public class TableModel {
             }
             return (stmt.executeUpdate() == 1);
         } catch (SQLException e) {
-            log.error("{} SQL {}", tableName, sqlUpdate());
+            log.error("{} SQL {}", tableName, sql);
             log.error("{} SQL update error", tableName, e);
             throw new RuntimeException(e);
         } finally {
@@ -437,6 +442,9 @@ public class TableModel {
             sql.append("SELECT * FROM ").append(tableName).append(" WHERE id = ?");
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
+            }
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
             }
             stmt = connection.prepareStatement(sql.toString());
             // Just in case, used for pooled connections 
@@ -559,6 +567,9 @@ public class TableModel {
                     sql = dialect.applyLimitCriteria(sql);
                 }
             }
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
+            }
             stmt = connection.prepareStatement(sql);
             if (limit > 0) {
                 stmt.setMaxRows(limit);
@@ -614,6 +625,9 @@ public class TableModel {
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
             }
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
+            }
             stmt = connection.prepareStatement(sql.toString());
             // Just in case, used for pooled connections 
             stmt.setMaxRows(1);
@@ -648,7 +662,11 @@ public class TableModel {
         String sql = null;
         try {
             QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
-            stmt = connection.prepareStatement(sql = "SELECT m1.id FROM " + qb.getSQL(tableName));
+            sql = "SELECT m1.id FROM " + qb.getSQL(tableName);
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
+            }
+            stmt = connection.prepareStatement(sql);
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             } else {
@@ -690,6 +708,9 @@ public class TableModel {
                     limit = c.getPageSize() + 1;
                     sql = dialect.applyLimitCriteria(sql);
                 }
+            }
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
             }
             stmt = connection.prepareStatement(sql);
             if (limit > 0) {
@@ -996,6 +1017,9 @@ public class TableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
+            }
             stmt = connection.prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections 
             stmt.setMaxRows(0);

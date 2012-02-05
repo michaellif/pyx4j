@@ -73,6 +73,9 @@ public class TableModleExternal {
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
             }
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
+            }
             stmt = connection.prepareStatement(sql.toString());
             // Just in case, used for pooled connections 
             stmt.setMaxRows(1);

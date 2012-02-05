@@ -122,7 +122,9 @@ public class TableModelCollections {
             }
 
             sql.append(")");
-
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
+            }
             stmt = connection.prepareStatement(sql.toString());
             int seq = 0;
             for (Object value : dataSet) {
@@ -209,7 +211,9 @@ public class TableModelCollections {
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
             }
-
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
+            }
             stmt = connection.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.setLong(1, entity.getPrimaryKey().asLong());
             if (dialect.isMultitenant()) {
@@ -293,6 +297,9 @@ public class TableModelCollections {
             if (isList) {
                 sql.append(" ORDER BY ").append(member.sqlOrderColumnName());
             }
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
+            }
             stmt = connection.prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections 
             stmt.setMaxRows(0);
@@ -354,6 +361,9 @@ public class TableModelCollections {
             if (isList) {
                 sql.append(", ").append(member.sqlOrderColumnName());
             }
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
+            }
             stmt = connection.prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections 
             stmt.setMaxRows(0);
@@ -394,6 +404,9 @@ public class TableModelCollections {
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
             }
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
+            }
             stmt = connection.prepareStatement(sql.toString());
             stmt.setLong(1, primaryKey.asLong());
             if (dialect.isMultitenant()) {
@@ -416,6 +429,9 @@ public class TableModelCollections {
             sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
+            }
+            if (EntityPersistenceServiceRDB.traceSql) {
+                log.debug(Trace.id() + " {} ", sql);
             }
             stmt = connection.prepareStatement(sql.toString());
             int pkSize = 0;
