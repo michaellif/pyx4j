@@ -32,10 +32,12 @@ import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
@@ -52,6 +54,7 @@ import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceIm
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.services.util.LegalStuffUtils;
 import com.propertyvista.portal.server.report.SummaryReport;
+import com.propertyvista.server.common.util.PersonGuarantorRetriever;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -113,10 +116,21 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
 
             summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
+
             if (ApplicationProgressMgr.shouldEnterInformation(tenantInLease)) {
                 summary.tenantsWithInfo().add(tis.retrieveData(tr));
                 summary.tenantFinancials().add(tfs.retrieveData(tr));
             }
+        }
+
+        // fill guarantor data if relevant:
+        if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+            GuarantorInfoServiceImpl gis = new GuarantorInfoServiceImpl();
+            GuarantorFinancialServiceImpl gfs = new GuarantorFinancialServiceImpl();
+            PersonGuarantorRetriever gr = new PersonGuarantorRetriever(PtAppContext.getCurrentUserGuarantor());
+
+            summary.tenantsWithInfo().add(gis.retrieveData(gr));
+            summary.tenantFinancials().add(gfs.retrieveData(gr));
         }
 
         // Legal stuff:

@@ -15,6 +15,8 @@ package com.propertyvista.server.common.util;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.tenant.Guarantor;
@@ -37,6 +39,18 @@ public class PersonGuarantorRetriever extends TenantRetriever {
     public PersonGuarantorRetriever(Key personGuarantorId, boolean financial) {
         super(Guarantor.class, financial);
         retrieve(personGuarantorId);
+    }
+
+    public PersonGuarantorRetriever(Guarantor guarantor) {
+        super(Guarantor.class, true);
+        // retrieve data opposite way:
+        super.retrieve(guarantor.getPrimaryKey());
+        EntityQueryCriteria<PersonGuarantor> criteria = EntityQueryCriteria.create(PersonGuarantor.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().guarantor(), guarantor));
+        personGuarantor = Persistence.service().retrieve(criteria);
+        if ((personGuarantor == null) /* || (!tenantInLease.lease().getPrimaryKey().equals(PtAppContext.getCurrentUserLeasePrimaryKey())) */) {
+            throw new SecurityViolationException("Invalid data access");
+        }
     }
 
     // Manipulation:
