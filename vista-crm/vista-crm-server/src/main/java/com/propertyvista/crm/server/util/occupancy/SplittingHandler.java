@@ -7,15 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 3, 2012
+ * Created on Feb 6, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset.unit.occupancy;
+package com.propertyvista.crm.server.util.occupancy;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
-@DiscriminatorValue("AvaialbleAptUnitOccupancySegment")
-public interface AvaialbleAptUnitOccupancySegment extends AbstractAptUnitOccupancySegment {
+public interface SplittingHandler {
+
+    void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException;
+
+    void updateAfterSplitPointSegment(AptUnitOccupancySegment segment);
 
 }

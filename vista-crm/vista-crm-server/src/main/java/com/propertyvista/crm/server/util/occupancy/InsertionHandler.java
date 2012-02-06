@@ -7,15 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 3, 2012
+ * Created on Feb 6, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset.unit.occupancy;
+package com.propertyvista.crm.server.util.occupancy;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
-@DiscriminatorValue("VacantAptUnitOccupancySegment")
-public interface VacantAptUnitOccupancySegment extends AbstractAptUnitOccupancySegment {
+public interface InsertionHandler {
 
+    void initAddedStatus(AptUnitOccupancySegment addedSegment);
+
+    void initRemainderOfTheSplitStatus(AptUnitOccupancySegment splitStatus);
 }

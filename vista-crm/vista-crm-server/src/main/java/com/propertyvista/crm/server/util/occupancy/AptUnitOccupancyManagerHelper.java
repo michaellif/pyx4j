@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util;
+package com.propertyvista.crm.server.util.occupancy;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +23,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
-public class AptUnitOccupancyManager {
+/**
+ * This class contains utility methods for unit occupancy manager.
+ */
+public class AptUnitOccupancyManagerHelper {
 
     public static final LogicalDate MIN_DATE = new LogicalDate(0, 0, 1); // 1900-1-1
 
@@ -32,20 +35,18 @@ public class AptUnitOccupancyManager {
     private static final long MILLIS_IN_DAY = 1000l * 60l * 60l * 24l;
 
     /**
-     * @param occupancyTimeline
+     * @param occupancy
      * @param from
      * @param to
      * @param initializer
      *            not <code>null</code>
      * @return index stuch that occupancy.timeline().get(0) == new segment;
      */
-    public static int insertSegment(AptUnitOccupancy occupancy, LogicalDate from, LogicalDate to, SegmentInitializer initializer) {
+    public static int insertSegment(AptUnitOccupancy occupancy, LogicalDate from, LogicalDate to, InsertionHandler initializer) {
 
         AptUnitOccupancySegment newSegment = EntityFactory.create(AptUnitOccupancySegment.class);
         newSegment.dateFrom().setValue(from);
         newSegment.dateTo().setValue(to);
-
-        // TODO IList does not return list iterator
 
         List<AptUnitOccupancySegment> occupancyTimeline = new LinkedList<AptUnitOccupancySegment>(occupancy.timeline());
         ListIterator<AptUnitOccupancySegment> i = occupancyTimeline.listIterator();
@@ -98,18 +99,53 @@ public class AptUnitOccupancyManager {
         return insertedAtMemo;
     }
 
+    /**
+     * @param occupancy
+     * @param splitDay
+     * @param handler
+     * @return
+     * @throws IllegalStateException
+     *             Might be thrown by the {@code handler} methods when the handler is requested to update the wrong occupancy state.
+     */
+    public static int splitSegment(AptUnitOccupancy occupancy, LogicalDate splitDay, SplittingHandler handler) throws IllegalStateException {
+
+        List<AptUnitOccupancySegment> occupancyTimeline = new LinkedList<AptUnitOccupancySegment>(occupancy.timeline());
+        ListIterator<AptUnitOccupancySegment> i = occupancyTimeline.listIterator();
+        AptUnitOccupancySegment segment = null;
+
+        while (!splitDay.after((segment = i.next()).dateTo().getValue())) {
+            // iterate until split candidate segment is found
+        }
+
+        int indexOfTheNewSegment = -1;
+        if (splitDay.equals(segment.dateTo().getValue())) {
+            indexOfTheNewSegment = i.previousIndex();
+        } else {
+            AptUnitOccupancySegment newSegment = EntityFactory.create(AptUnitOccupancySegment.class);
+            newSegment.dateFrom().setValue(splitDay);
+            newSegment.dateTo().setValue(segment.dateTo().getValue());
+            handler.updateAfterSplitPointSegment(newSegment);
+            if (splitDay.equals(segment.dateFrom().getValue())) {
+                i.remove();
+            } else {
+                segment.dateTo().setValue(substractDay(splitDay));
+                handler.updateBeforeSplitPointSegment(segment);
+            }
+            i.add(newSegment);
+            indexOfTheNewSegment = i.previousIndex();
+        }
+
+        occupancy.timeline().clear();
+        occupancy.timeline().addAll(occupancyTimeline);
+
+        return indexOfTheNewSegment;
+    }
+
     public static LogicalDate substractDay(LogicalDate date) {
         return new LogicalDate(date.getTime() - MILLIS_IN_DAY);
     }
 
     public static LogicalDate addDay(LogicalDate date) {
         return new LogicalDate(date.getTime() + MILLIS_IN_DAY);
-    }
-
-    public static interface SegmentInitializer {
-
-        void initAddedStatus(AptUnitOccupancySegment addedSegment);
-
-        void initRemainderOfTheSplitStatus(AptUnitOccupancySegment splitStatus);
     }
 }

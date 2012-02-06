@@ -11,11 +11,10 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util;
+package com.propertyvista.crm.server.util.occupancy;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -29,6 +28,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 
@@ -36,7 +36,7 @@ public class AptUnitOccupancyManagerTest {
 
     private static final boolean TEST_ON_MYSQL = false;
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-DD");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @Before
     public void setUp() {
@@ -50,32 +50,29 @@ public class AptUnitOccupancyManagerTest {
 
     @Test
     public void testInsertSegment() throws ParseException {
-        // weird stuff:
-        Date date = DATE_FORMAT.parse("2012-12-31");
-        LogicalDate logicalDate = new LogicalDate(date);
 
-//        AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
-//
-//        AptUnitOccupancySegment available = EntityFactory.create(AptUnitOccupancySegment.class);
-//        available.status().setValue(Status.available);
-//        available.dateFrom().setValue(AptUnitOccupancyManager.MIN_DATE);
-//        available.dateTo().setValue(AptUnitOccupancyManager.MAX_DATE);
-//
-//        occupancy.timeline().add(available);
-//
-//        int i = AptUnitOccupancyManager.insertSegment(occupancy, asDate("2012-1-1"), AptUnitOccupancyManager.MAX_DATE, new SegmentInitializer() {
-//            @Override
-//            public void initRemainderOfTheSplitStatus(AptUnitOccupancySegment splitStatus) {
-//            }
-//
-//            @Override
-//            public void initAddedStatus(AptUnitOccupancySegment addedSegment) {
-//                addedSegment.status().setValue(Status.leased);
-//            }
-//        });
-//        assertValidOccupancyTimeline(occupancy.timeline());
-//        assertOccupancyTimeline("available,MIN_DATE,2011-12-31;leased,2012-01-1,MAX_DATE", occupancy.timeline());
+        AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
 
+        AptUnitOccupancySegment available = EntityFactory.create(AptUnitOccupancySegment.class);
+        available.status().setValue(Status.available);
+        available.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
+        available.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+
+        occupancy.timeline().add(available);
+
+        int i = AptUnitOccupancyManagerHelper.insertSegment(occupancy, asDate("2012-1-1"), AptUnitOccupancyManagerHelper.MAX_DATE, new InsertionHandler() {
+            @Override
+            public void initRemainderOfTheSplitStatus(AptUnitOccupancySegment splitStatus) {
+            }
+
+            @Override
+            public void initAddedStatus(AptUnitOccupancySegment addedSegment) {
+                addedSegment.status().setValue(Status.leased);
+            }
+        });
+        Assert.assertEquals(SimpleMessageFormat.format("insertSegment returned wrong index of the new segment"), 1, i);
+        assertValidOccupancyTimeline(occupancy.timeline());
+        assertOccupancyTimeline("available,MIN_DATE,2011-12-31;leased,2012-01-1,MAX_DATE", occupancy.timeline());
     }
 
     /**
@@ -123,14 +120,14 @@ public class AptUnitOccupancyManagerTest {
     }
 
     public static void assertValidOccupancyTimeline(List<AptUnitOccupancySegment> occupancyTimeline) {
-
+        // TODO implement assertValidOccupancyTimeline();
     }
 
     private static LogicalDate asDate(String dateRepr) throws ParseException {
         if ("MAX_DATE".equals(dateRepr)) {
-            return new LogicalDate(AptUnitOccupancyManager.MAX_DATE);
+            return new LogicalDate(AptUnitOccupancyManagerHelper.MAX_DATE);
         } else if ("MIN_DATE".equals(dateRepr)) {
-            return new LogicalDate(AptUnitOccupancyManager.MIN_DATE);
+            return new LogicalDate(AptUnitOccupancyManagerHelper.MIN_DATE);
         } else {
             return new LogicalDate(DATE_FORMAT.parse(dateRepr));
         }
