@@ -13,14 +13,12 @@
  */
 package com.propertyvista.crm.server.util.occupancy;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
 /**
@@ -35,81 +33,16 @@ public class AptUnitOccupancyManagerHelper {
     private static final long MILLIS_IN_DAY = 1000l * 60l * 60l * 24l;
 
     /**
-     * @param occupancy
-     * @param from
-     * @param to
-     * @param initializer
-     *            not <code>null</code>
-     * @return index stuch that occupancy.timeline().get(0) == new segment;
-     */
-    public static int insertSegment(AptUnitOccupancy occupancy, LogicalDate from, LogicalDate to, InsertionHandler initializer) {
-
-        AptUnitOccupancySegment newSegment = EntityFactory.create(AptUnitOccupancySegment.class);
-        newSegment.dateFrom().setValue(from);
-        newSegment.dateTo().setValue(to);
-
-        List<AptUnitOccupancySegment> occupancyTimeline = new LinkedList<AptUnitOccupancySegment>(occupancy.timeline());
-        ListIterator<AptUnitOccupancySegment> i = occupancyTimeline.listIterator();
-        AptUnitOccupancySegment currentSegment = null;
-
-        // TODO: optimization: maybe use binary search.
-        while ((newSegment.dateFrom().getValue().before((currentSegment = i.next()).dateFrom().getValue()))) {
-            // just iteration matters   
-        }
-        AptUnitOccupancySegment firstCollision = currentSegment;
-        AptUnitOccupancySegment remainderOfFirstCollision = null;
-        // insert the element, and handle the only two possible have two cases:
-        //    1. inserting in the middle of current segment: need to split the segment
-        //    2. inserting and overlapping the end of the segment:
-        //       need to remove all the existing segments that the new one overlaps completely,  
-        //       then if we still have segment, adjust the start date of the last segment.
-        i.add(newSegment);
-        final int insertedAtMemo = i.previousIndex();
-
-        if (firstCollision.dateTo().getValue().after(to)) {
-            remainderOfFirstCollision = currentSegment.duplicate();
-            remainderOfFirstCollision.setPrimaryKey(null);
-            remainderOfFirstCollision.dateFrom().setValue(addDay(newSegment.dateTo().getValue()));
-            i.add(remainderOfFirstCollision);
-        } else {
-            LogicalDate newDateTo = newSegment.dateTo().getValue();
-            currentSegment = null;
-            if (i.hasNext()) {
-                while (i.hasNext() && newDateTo.after((currentSegment = i.next()).dateTo().getValue())) {
-                    i.remove();
-                }
-                if (currentSegment != null && (newDateTo.before(currentSegment.dateTo().getValue()))) {
-                    currentSegment.dateFrom().setValue(addDay(newSegment.dateTo().getValue()));
-                } else {
-                    // if current is not before and is not after, then they are equal and we must perform:
-                    i.remove();
-                }
-            }
-        }
-
-        // adjust statuses and dates
-        firstCollision.dateTo().setValue(substractDay(newSegment.dateFrom().getValue()));
-        initializer.initAddedStatus(newSegment);
-        if (remainderOfFirstCollision != null) {
-            initializer.initAddedStatus(remainderOfFirstCollision);
-        }
-
-        occupancy.timeline().clear();
-        occupancy.timeline().addAll(occupancyTimeline);
-        return insertedAtMemo;
-    }
-
-    /**
-     * @param occupancy
+     * @param occupancyTimeline
      * @param splitDay
      * @param handler
      * @return
      * @throws IllegalStateException
      *             Might be thrown by the {@code handler} methods when the handler is requested to update the wrong occupancy state.
      */
-    public static int splitSegment(AptUnitOccupancy occupancy, LogicalDate splitDay, SplittingHandler handler) throws IllegalStateException {
+    public static int splitSegment(List<AptUnitOccupancySegment> occupancyTimeline, LogicalDate splitDay, SplittingHandler handler)
+            throws IllegalStateException {
 
-        List<AptUnitOccupancySegment> occupancyTimeline = new LinkedList<AptUnitOccupancySegment>(occupancy.timeline());
         ListIterator<AptUnitOccupancySegment> i = occupancyTimeline.listIterator();
         AptUnitOccupancySegment segment = null;
 
@@ -134,9 +67,6 @@ public class AptUnitOccupancyManagerHelper {
             i.add(newSegment);
             indexOfTheNewSegment = i.previousIndex();
         }
-
-        occupancy.timeline().clear();
-        occupancy.timeline().addAll(occupancyTimeline);
 
         return indexOfTheNewSegment;
     }
