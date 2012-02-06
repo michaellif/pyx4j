@@ -121,6 +121,7 @@ public class RDBUtils implements Closeable {
     public static void dropAllEntityTables() {
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
+        int countTotal = 0;
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
@@ -130,8 +131,10 @@ public class RDBUtils implements Closeable {
             if (srv.isTableExists(meta.getEntityClass())) {
                 log.info("drop table {}", meta.getEntityClass().getName());
                 srv.dropTable(meta.getEntityClass());
+                countTotal++;
             }
         }
+        log.info("Total of {} tables dropped", countTotal);
     }
 
     public static void initAllEntityTables() {
