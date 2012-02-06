@@ -21,9 +21,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
@@ -31,6 +35,8 @@ import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
+import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 
 public class ApplicationServiceImpl extends ApplicationEntityServiceImpl implements ApplicationService {
@@ -88,6 +94,19 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
                 application.belongsTo().status().setValue(MasterApplication.Status.Incomplete);
                 Persistence.service().persist(application.belongsTo());
             }
+        }
+
+        // update application state: 
+        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveCoApplicant)) {
+            Tenant person = PtAppContext.getCurrentUserTenant();
+
+            DigitalSignatureMgr.update(application, person);
+            ApplicationProgressMgr.createTenantDataSteps(application, person);
+        } else if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+            Guarantor person = PtAppContext.getCurrentUserGuarantor();
+
+            DigitalSignatureMgr.update(application, person);
+            ApplicationProgressMgr.createGurantorDataSteps(application, person);
         }
 
         log.debug("Application {}", application);

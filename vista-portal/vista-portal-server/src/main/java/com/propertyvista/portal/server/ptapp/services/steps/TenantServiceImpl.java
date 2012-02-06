@@ -25,13 +25,9 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.policy.policies.MiscPolicy;
-import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -149,26 +145,5 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         tenants.tenantsMaximum().setValue((int) (lease.unit().info()._bedrooms().getValue() * miscPolicy.occupantsPerBedRoom().getValue()));
 
         return tenants;
-    }
-
-    @Override
-    public void update(AsyncCallback<Boolean> callback) {
-        Application application = PtAppContext.getCurrentUserApplication();
-
-        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveCoApplicant)) {
-            Tenant person = PtAppContext.getCurrentUserTenant();
-
-            DigitalSignatureMgr.reset(application, person);
-            ApplicationProgressMgr.createTenantDataSteps(application, person);
-        } else if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
-            Guarantor person = PtAppContext.getCurrentUserGuarantor();
-
-            DigitalSignatureMgr.reset(application, person);
-            ApplicationProgressMgr.createGurantorDataSteps(application, person);
-        } else {
-            callback.onSuccess(false);
-        }
-
-        callback.onSuccess(true);
     }
 }

@@ -13,11 +13,7 @@
  */
 package com.propertyvista.portal.rpc.ptapp.services.steps;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 
 public interface TenantService extends AbstractWizardService<TenantInApplicationListDTO> {
-
-    public void update(AsyncCallback<Boolean> callback);
 }

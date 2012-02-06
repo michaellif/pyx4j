@@ -93,6 +93,9 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
     public SummaryViewForm(boolean viewMode) {
         super(SummaryDTO.class, new VistaEditorsComponentFactory());
         setViewable(true);
+        if (viewMode) {
+            setEditable(false);
+        }
 
         this.viewMode = viewMode;
     }
@@ -290,7 +293,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 if (member instanceof TenantInfoDTO) {
-                    return new InfoViewForm();
+                    return new InfoViewForm(true);
                 }
                 return super.create(member);
             }
@@ -314,7 +317,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 if (member instanceof TenantFinancialDTO) {
-                    return new FinancialViewForm();
+                    return new FinancialViewForm(true);
                 }
                 return super.create(member);
             }

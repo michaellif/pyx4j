@@ -42,8 +42,19 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
 
     static I18n i18n = I18n.get(FinancialViewForm.class);
 
+    private boolean ptAppMode = false;
+
     public FinancialViewForm() {
         super(TenantFinancialDTO.class, new VistaEditorsComponentFactory());
+    }
+
+    public FinancialViewForm(boolean ptAppMode) {
+        this();
+        this.ptAppMode = ptAppMode;
+    }
+
+    public boolean isShowEditable() {
+        return (super.isEditable() && !ptAppMode);
     }
 
     @Override
@@ -53,13 +64,13 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
         Image info = new Image(VistaImages.INSTANCE.formTooltipHoverInfo().getSafeUri());
 
         int row = -1;
-        if (!isEditable()) {
+        if (!isShowEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Person")).build());
             get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
 
         main.setH1(++row, 0, 1, proto().incomes().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
+        main.setWidget(++row, 0, inject(proto().incomes(), new PersonalIncomeFolder(isShowEditable())));
         main.setWidget(++row, 0, new HTML());
 
         info.setTitle("A Guarantor Is An Individual That Will Guarantee The Term Of The Lease. The Guarantor Cannot Be An Occupant Of the Suite And Is There To Assist The Applicant In The Approval Process. The Guarantor(s) Will Receive A Seperate Email With Instructions To Complete The Applications. Reminder: Only Completed Applications Will Be Processed.");
@@ -68,12 +79,12 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
         adjust.setCellHeight(info, "26");
 
         main.setH1(++row, 0, 1, proto().assets().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().assets(), new PersonalAssetFolder(isEditable())));
+        main.setWidget(++row, 0, inject(proto().assets(), new PersonalAssetFolder(isShowEditable())));
         main.setWidget(++row, 0, new HTML());
 
         if (!SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
             main.setH1(++row, 0, 1, proto().guarantors().getMeta().getCaption(), adjust);
-            main.setWidget(++row, 0, inject(proto().guarantors(), new PersonGuarantorFolder(isEditable())));
+            main.setWidget(++row, 0, inject(proto().guarantors(), new PersonGuarantorFolder(isShowEditable())));
             main.setWidget(++row, 0, new HTML());
         }
 

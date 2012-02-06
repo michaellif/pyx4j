@@ -47,25 +47,42 @@ public class DigitalSignatureMgr {
         // check/create signature for every tenant which needs it: 
         for (TenantInLease tenant : tenants) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenant)) {
-                boolean alreadyPresent = false;
+                boolean isExist = false;
                 for (Iterator<DigitalSignature> it = existingSignatures.iterator(); it.hasNext();) {
                     DigitalSignature sig = it.next();
                     if (sig.person().equals(tenant.tenant())) {
-                        alreadyPresent = true;
+                        isExist = true;
                         application.signatures().add(sig);
                         it.remove();
                         break;
                     }
                 }
 
-                if (!alreadyPresent) { // create signature if absent: 
+                if (!isExist) { // create signature if absent: 
                     createDigitalSignature(application, tenant.tenant());
                     ApplicationProgressMgr.invalidateSummaryStep(application);
                 }
             }
         }
 
-        Persistence.service().persist(application);
+        Persistence.service().merge(application);
+    }
+
+    static public void update(Application application, PersonScreeningHolder person) {
+        boolean isExist = false;
+        for (Iterator<DigitalSignature> it = application.signatures().iterator(); it.hasNext();) {
+            DigitalSignature sig = it.next();
+            if (sig.person().equals(person)) {
+                isExist = true;
+                break;
+            }
+        }
+
+        if (!isExist) { // create signature if absent: 
+            createDigitalSignature(application, person);
+            ApplicationProgressMgr.invalidateSummaryStep(application);
+            Persistence.service().merge(application);
+        }
     }
 
     static public void resetAll() {

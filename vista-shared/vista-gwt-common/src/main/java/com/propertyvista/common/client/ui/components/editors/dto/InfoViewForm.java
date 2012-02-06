@@ -60,6 +60,8 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
     private ApplicationDocumentUploaderFolder fileUpload;
 
+    private boolean ptAppMode = false;
+
     public InfoViewForm() {
         super(TenantInfoDTO.class, new VistaEditorsComponentFactory());
 
@@ -72,13 +74,22 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         };
     }
 
+    public InfoViewForm(boolean ptAppMode) {
+        this();
+        this.ptAppMode = ptAppMode;
+    }
+
+    public boolean isShowEditable() {
+        return (super.isEditable() && !ptAppMode);
+    }
+
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Contact Details"));
-        if (isEditable()) {
+        if (isShowEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 10).build());
@@ -157,7 +168,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         if (!SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
             main.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-            main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
+            main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isShowEditable(), true)));
         }
 
         addValidations();
