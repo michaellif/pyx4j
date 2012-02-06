@@ -325,7 +325,7 @@ public class QueryBuilder<T extends IEntity> {
             @SuppressWarnings("unchecked")
             EntityOperationsMeta otherEntityOperMeta = operationsMeta.getMappedOperationsMeta(connection, (Class<? extends IEntity>) memberOper.getMemberMeta()
                     .getValueClass());
-            if (memberOper instanceof MemberCollectionOperationsMeta) {
+            if ((memberOper instanceof MemberCollectionOperationsMeta) && (!((MemberExternalOperationsMeta) memberOper).isJoinTableSameAsTarget())) {
                 thisJoin = getJoinCollectionMemeber((MemberCollectionOperationsMeta) memberOper, otherEntityOperMeta, thisJoin.alias, leftJoin);
                 // This will fix OR criterias
                 if (thisJoin.leftJoin) {

@@ -24,6 +24,8 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class MemberExternalOperationsMeta extends MemberOperationsMeta {
 
+    private final boolean joinTableSameAsTarget;
+
     private final String sqlOwnerName;
 
     private final String sqlValueName;
@@ -31,11 +33,16 @@ public class MemberExternalOperationsMeta extends MemberOperationsMeta {
     private final ValueAdapter ownerValueAdapter;
 
     public MemberExternalOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath,
-            String sqlOwnerName, ValueAdapter ownerValueAdapter, String sqlValueName) {
+            boolean joinTableSameAsTarget, String sqlOwnerName, ValueAdapter ownerValueAdapter, String sqlValueName) {
         super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath);
+        this.joinTableSameAsTarget = joinTableSameAsTarget;
         this.sqlOwnerName = sqlOwnerName;
         this.ownerValueAdapter = ownerValueAdapter;
         this.sqlValueName = sqlValueName;
+    }
+
+    public boolean isJoinTableSameAsTarget() {
+        return joinTableSameAsTarget;
     }
 
     public String sqlOwnerName() {

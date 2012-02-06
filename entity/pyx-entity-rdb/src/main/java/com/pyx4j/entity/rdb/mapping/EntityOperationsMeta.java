@@ -172,8 +172,8 @@ public class EntityOperationsMeta {
                         JoinTableInformation joinInfo = new JoinTableInformation(dialect, namingConvention, rootEntityMeta, entityMeta, memberMeta, joinTable);
 
                         member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, joinInfo.sqlName, memberMeta, path + Path.PATH_SEPARATOR
-                                + memberName + Path.PATH_SEPARATOR, joinInfo.sqlOwnerName, joinInfo.ownerValueAdapter, joinInfo.sqlValueName,
-                                joinInfo.sqlOrderColumnName);
+                                + memberName + Path.PATH_SEPARATOR, joinInfo.joinTableSameAsTarget, joinInfo.sqlOwnerName, joinInfo.ownerValueAdapter,
+                                joinInfo.sqlValueName, joinInfo.sqlOrderColumnName);
                     } else {
                         String sqlName;
                         if (namesPath != null) {
@@ -183,7 +183,7 @@ public class EntityOperationsMeta {
                         }
                         ValueAdapter ownerValueAdapter = new ValueAdapterEntity(dialect, rootEntityMeta.getEntityClass());
                         member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
-                                + Path.PATH_SEPARATOR, "owner", ownerValueAdapter, "value", "seq");
+                                + Path.PATH_SEPARATOR, false, "owner", ownerValueAdapter, "value", "seq");
                     }
                     collectionMembers.add(member);
                     switch (memberMeta.getAttachLevel()) {
@@ -214,7 +214,8 @@ public class EntityOperationsMeta {
                     } else {
                         JoinTableInformation joinInfo = new JoinTableInformation(dialect, namingConvention, rootEntityMeta, entityMeta, memberMeta, joinTable);
                         member = new MemberExternalOperationsMeta(memberAccess, valueAdapter, joinInfo.sqlName, memberMeta, path + Path.PATH_SEPARATOR
-                                + memberName + Path.PATH_SEPARATOR, joinInfo.sqlOwnerName, joinInfo.ownerValueAdapter, joinInfo.sqlValueName);
+                                + memberName + Path.PATH_SEPARATOR, joinInfo.joinTableSameAsTarget, joinInfo.sqlOwnerName, joinInfo.ownerValueAdapter,
+                                joinInfo.sqlValueName);
                         externalMembers.add((MemberExternalOperationsMeta) member);
                     }
 
@@ -248,7 +249,7 @@ public class EntityOperationsMeta {
                     }
                     ValueAdapter ownerValueAdapter = new ValueAdapterEntity(dialect, rootEntityMeta.getEntityClass());
                     MemberCollectionOperationsMeta member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path
-                            + Path.PATH_SEPARATOR + memberName + Path.PATH_SEPARATOR, "owner", ownerValueAdapter, "value", null);
+                            + Path.PATH_SEPARATOR + memberName + Path.PATH_SEPARATOR, false, "owner", ownerValueAdapter, "value", null);
                     collectionMembers.add(member);
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
@@ -293,6 +294,8 @@ public class EntityOperationsMeta {
 
     private static class JoinTableInformation {
 
+        boolean joinTableSameAsTarget;
+
         String sqlName;
 
         String sqlValueName = null;
@@ -313,9 +316,11 @@ public class EntityOperationsMeta {
 
             if (joinEntityClass == entityClass) {
                 sqlValueName = IEntity.PRIMARY_KEY;
+                joinTableSameAsTarget = true;
             } else {
                 sqlValueName = namingConvention.sqlFieldName(memberPersistenceName(findValueMember(entityMeta, memberMeta, joinTable, joinEntityMeta,
                         entityClass)));
+                joinTableSameAsTarget = false;
             }
             MemberMeta ownerMemberMeta = findOwnerMember(entityMeta, memberMeta, joinTable, joinEntityMeta, rootEntityMeta);
             sqlOwnerName = namingConvention.sqlFieldName(memberPersistenceName(ownerMemberMeta));

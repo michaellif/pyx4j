@@ -27,8 +27,8 @@ public class MemberCollectionOperationsMeta extends MemberExternalOperationsMeta
     private final String sqlOrderColumnName;
 
     public MemberCollectionOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath,
-            String sqlOwnerName, ValueAdapter ownerValueAdapter, String sqlValueName, String sqlOrderColumnName) {
-        super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, sqlOwnerName, ownerValueAdapter, sqlValueName);
+            boolean joinTableSameAsTarget, String sqlOwnerName, ValueAdapter ownerValueAdapter, String sqlValueName, String sqlOrderColumnName) {
+        super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, joinTableSameAsTarget, sqlOwnerName, ownerValueAdapter, sqlValueName);
         this.sqlOrderColumnName = sqlOrderColumnName;
     }
 
