@@ -23,11 +23,9 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -45,6 +43,9 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
+import com.propertyvista.common.client.ui.validators.FutureDateValidation;
+import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.person.Name;
@@ -180,6 +181,13 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
     public void addValidations() {
         @SuppressWarnings("unchecked")
         CEntityEditor<PriorAddress> currentAddressForm = ((CEntityEditor<PriorAddress>) get(proto().currentAddress()));
+        @SuppressWarnings("unchecked")
+        final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) get(proto().previousAddress()));
+        CComponent<LogicalDate, ?> c1 = currentAddressForm.get(currentAddressForm.proto().moveInDate());
+        CComponent<LogicalDate, ?> c2 = currentAddressForm.get(currentAddressForm.proto().moveOutDate());
+        CComponent<LogicalDate, ?> p1 = previousAddressForm.get(previousAddressForm.proto().moveInDate());
+        CComponent<LogicalDate, ?> p2 = previousAddressForm.get(previousAddressForm.proto().moveOutDate());
+
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
 
             @Override
@@ -188,54 +196,13 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
             }
         });
 
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(TimeUtils.today()) ? null : new ValidationFailure(i18n
-                        .tr("The Date Chosen Cannot Be Today's Date Or A Date In The Future"));
-            }
-
-        });
-
-        currentAddressForm.get(currentAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                return (value != null) && value.after(TimeUtils.today()) ? null : new ValidationFailure(i18n
-                        .tr("The Date Chosen Cannot Be Today's Date Or A Date In The Past"));
-            }
-
-        });
-
-        // ------------------------------------------------------------------------------------------------
-
-        @SuppressWarnings("unchecked")
-        final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) get(proto().previousAddress()));
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(TimeUtils.today()) ? null : new ValidationFailure(i18n
-                        .tr("The Date Chosen Cannot Be Today's Date Or A Date In The Future"));
-            }
-
-        });
-
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                if (getValue() == null || getValue().isEmpty()) {
-                    return null;
-                }
-
-                IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
-                return (date.isNull() || value.before(date.getValue())) ? null : new ValidationFailure(i18n
-                        .tr("Move Out Date should be greater than Move In Date"));
-            }
-
-        });
+        new PastDateValidation(c1);
+        new PastDateValidation(p1);
+        new FutureDateValidation(c2);
+        new StartEndDateValidation(c1, c2);
+        new StartEndDateValidation(p1, p2);
+        StartEndDateWithinMonth(c1, p2, i18n.tr("Current Move In Date Should Be Within 30 Days Of Previous Move Out Date"));
+        StartEndDateWithinMonth(p2, c1, i18n.tr("Current Move In Date Should Be Within 30 Days Of Previous Move Out Date"));
 
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
@@ -252,99 +219,10 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
 
-        // ------------------------------------------------------------------------------------------------
-
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(TimeUtils.today()) ? null : new ValidationFailure(i18n
-                        .tr("The Date Chosen Cannot Be Today's Date Or A Date In The Future"));
-            }
-
-        });
-
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                if (getValue() == null || getValue().isEmpty()) {
-                    return null;
-                }
-
-                IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
-                return (date.isNull() || value.after(date.getValue())) ? null : new ValidationFailure(i18n
-                        .tr("Move Out Date should be greater than Move In Date"));
-            }
-
-        });
-
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                if (getValue() == null || getValue().isEmpty()) {
-                    return null;
-                }
-
-                IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
-                return (date.isNull() || value.after(date.getValue()) || TimeUtils.isOlderThan(value, 3)) ? null : new ValidationFailure(i18n
-                        .tr("Current Move In date should be greater than Previous Move In date"));
-            }
-
-        });
-
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                if (getValue() == null || getValue().isEmpty()) {
-                    return null;
-                }
-
-                IPrimitive<LogicalDate> date = getValue().currentAddress().moveInDate();
-                return (date.isNull() || value.before(date.getValue())) ? null : new ValidationFailure(i18n
-                        .tr("Current Move In date should be greater than Previous Move In date"));
-            }
-
-        });
-
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                if (getValue() == null || getValue().isEmpty()) {
-                    return null;
-                }
-
-                IPrimitive<LogicalDate> date = getValue().currentAddress().moveInDate();
-                long limit1 = date.getValue().getTime() + 2678400000L; //limits current Move In date to be within a month of previous Move Out date
-                long limit2 = date.getValue().getTime() - 2678400000L;
-                return (date.isNull() || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationFailure(i18n
-                        .tr("Move In date has to be within 30 days of previous Move Out date"));
-            }
-
-        });
-
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                if (getValue() == null || getValue().isEmpty()) {
-                    return null;
-                }
-
-                IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
-                long limit1 = date.getValue().getTime() + 2678400000L; //limits current Move In date to be within a month of previous Move Out date
-                long limit2 = date.getValue().getTime() - 2678400000L;
-                return (date.isNull() || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationFailure(i18n
-                        .tr("Move Out date has to be within 30 days of current Move In date"));
-            }
-
-        });
-
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
+
+        // ------------------------------------------------------------------------------------------------
 
         //TODO notify landlord if the previous move in date is still too close to current (person changes addresses too often).
         //Possibly should be dealt with on a case by case basis
@@ -384,5 +262,23 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         if (getValue() != null) {
             fileUpload.setTenantID(((IEntity) getValue()).getPrimaryKey());
         }
+    }
+
+    private void StartEndDateWithinMonth(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2, final String message) {
+        value1.addValueValidator(new EditableValueValidator<Date>() {
+
+            @Override
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (getValue() == null || getValue().isEmpty()) {
+                    return null;
+                }
+
+                Date date = value2.getValue();
+                long limit1 = date.getTime() + 2678400000L; //limits date1 to be within a month of date2
+                long limit2 = date.getTime() - 2678400000L;
+                return (date == null || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationFailure(message);
+            }
+
+        });
     }
 }
