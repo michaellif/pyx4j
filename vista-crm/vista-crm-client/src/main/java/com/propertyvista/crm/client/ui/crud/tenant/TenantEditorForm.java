@@ -33,6 +33,7 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.components.folders.PhoneFolder;
+import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -136,6 +137,9 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             }
 
         });
+
+        new PastDateValidation(get(proto().person().birthDate()));
+
     }
 
     private void setVisibility() {

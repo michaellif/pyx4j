@@ -30,7 +30,7 @@ public class FutureDateValidation {
         value.addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                return (value != null) && value.after(TimeUtils.today()) ? null : new ValidationFailure(i18n.tr("The Date Must Be Later Than Today's Date"));
+                return (value != null) && !value.before(TimeUtils.today()) ? null : new ValidationFailure(i18n.tr("The Date Must Be Later Than Today's Date"));
             }
 
         });

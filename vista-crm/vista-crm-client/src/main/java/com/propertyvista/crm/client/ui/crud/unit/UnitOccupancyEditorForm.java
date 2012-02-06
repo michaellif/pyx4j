@@ -18,13 +18,17 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 
 public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancySegment> {
+
+    private static final I18n i18n = I18n.get(UnitOccupancyEditorForm.class);
 
     public UnitOccupancyEditorForm() {
         this(false);
@@ -57,6 +61,8 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancySegme
         get(proto().offMarket()).setVisible(false);
         get(proto().lease()).setVisible(false);
 
+        validateOccupancyDates();
+
         return new CrmScrollPanel(main);
     }
 
@@ -70,5 +76,9 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancySegme
             get(proto().offMarket()).setVisible(Status.offMarket.equals(getValue().status().getValue()));
             get(proto().lease()).setVisible(Status.leased.equals(getValue().status().getValue()));
         }
+    }
+
+    private void validateOccupancyDates() {
+        new StartEndDateValidation(get(proto().dateFrom()), get(proto().dateTo()));
     }
 }

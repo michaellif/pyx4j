@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,6 +19,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.validators.FutureDateValidation;
+import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.domain.property.vendor.Maintenance;
 
 public class MaintenanceEditor extends CEntityDecoratableEditor<Maintenance> {
@@ -46,6 +48,12 @@ public class MaintenanceEditor extends CEntityDecoratableEditor<Maintenance> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
+        validateMaintenanceDates();
         return main;
+    }
+
+    private void validateMaintenanceDates() {
+        new PastDateValidation(get(proto().lastService()));
+        new FutureDateValidation(get(proto().nextService()));
     }
 }

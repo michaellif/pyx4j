@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -63,6 +64,13 @@ public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
+        validateInstallDates();
         return new CrmScrollPanel(main);
+    }
+
+    private void validateInstallDates() {
+        new PastDateValidation(get(proto().flooringInstallDate()));
+        new PastDateValidation(get(proto().counterTopInstallDate()));
+        new PastDateValidation(get(proto().cabinetsInstallDate()));
     }
 }

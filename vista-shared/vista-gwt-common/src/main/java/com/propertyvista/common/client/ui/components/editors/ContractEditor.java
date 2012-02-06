@@ -13,20 +13,15 @@
  */
 package com.propertyvista.common.client.ui.components.editors;
 
-import java.util.Date;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.property.vendor.Contract;
 
 public class ContractEditor extends CEntityDecoratableEditor<Contract> {
@@ -56,49 +51,15 @@ public class ContractEditor extends CEntityDecoratableEditor<Contract> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        getValidations();
+        validateContractDates();
 
         return main;
     }
 
-    private void getValidations() {
-
+    private void validateContractDates() {
+        new StartEndDateValidation(get(proto().start()), get(proto().end()));
         get(proto().start()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().end()))); //connects validation of both fields
         get(proto().end()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().start())));
-
-        get(proto().start()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                if (getValue() == null || getValue().isEmpty()) {
-                    return null;
-                }
-                IPrimitive<LogicalDate> end = getValue().end();
-                if (end.isNull()) {
-                    return null;
-                }
-                return (value != null) && value.before(end.getValue()) ? null : new ValidationFailure(i18n
-                        .tr("Contract Expiry Date should be after its Start Date"));
-            }
-
-        });
-
-        get(proto().end()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                if (getValue() == null || getValue().isEmpty()) {
-                    return null;
-                }
-                IPrimitive<LogicalDate> start = getValue().start();
-                if (start.isNull()) {
-                    return null;
-                }
-                return (value != null) && value.after(start.getValue()) ? null : new ValidationFailure(i18n
-                        .tr("Contract Expiry Date should be after its Start Date"));
-            }
-
-        });
 
     }
 }
