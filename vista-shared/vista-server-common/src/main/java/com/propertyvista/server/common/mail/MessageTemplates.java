@@ -38,7 +38,6 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.common.mail.templates.EmailTemplateManager;
-import com.propertyvista.server.common.mail.templates.converter.BuildingTConvertor;
 import com.propertyvista.server.common.policy.PolicyManager;
 
 public class MessageTemplates {
@@ -94,18 +93,18 @@ public class MessageTemplates {
         EmailTemplate emailTemplate = getEmailTEmplate(EmailTemplateType.ApplicationApproved, building);
 
         Collection<IEntity> data = new Vector<IEntity>();
-        data.add(new BuildingTConvertor().createDTO(building));
+        data.add(building);
         //data.add(new TenantTConvertor().createDTO(tenant));
 
         // Ideal 
         {
-            List<IEntity> tObjects = EmailTemplateManager.getRootObjectTemplates(EmailTemplateType.ApplicationApproved);
+            List<IEntity> tObjects = EmailTemplateManager.getTemplateDataObjects(EmailTemplateType.ApplicationApproved);
             for (IEntity ent : tObjects) {
                 // data.add(UniversalConvertor().createDTO(findDBOObject(ent.getValueClass(), tenant)));      
             }
         }
 
-        return EmailTemplateManager.parsTemplate(emailTemplate.content().getValue(), data);
+        return EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data);
     }
 
     public static String wrapHtml(String text) {
