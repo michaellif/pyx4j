@@ -20,6 +20,7 @@
  */
 package com.pyx4j.rpc.shared;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
 
 /**
@@ -43,5 +44,9 @@ public class DevInfoUnRecoverableRuntimeException extends UnRecoverableRuntimeEx
 
     public DevInfoUnRecoverableRuntimeException(String message, Throwable cause) {
         super(ApplicationMode.DEV + message + " " + ((cause.getMessage() != null) ? cause.getMessage() : "") + ", Throwable " + cause.getClass().toString());
+    }
+
+    public DevInfoUnRecoverableRuntimeException(String messageFormat, Object... arguments) {
+        super(SimpleMessageFormat.format(messageFormat, arguments));
     }
 }

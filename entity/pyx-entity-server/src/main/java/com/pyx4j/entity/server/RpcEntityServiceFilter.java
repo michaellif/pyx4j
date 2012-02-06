@@ -39,6 +39,7 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.Service;
 
@@ -145,13 +146,15 @@ public class RpcEntityServiceFilter implements IServiceFilter {
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 if ((me.getValue() != null) && (!(memberMeta.getValueClass().isAssignableFrom(me.getValue().getClass())))) {
                     log.error("Got Value " + memberName + " {} instead of {}", me.getValue().getClass(), memberMeta.getValueClass());
-                    throw new Error("Data type corruption");
+                    throw new DevInfoUnRecoverableRuntimeException("Data type corruption; Got ''{0}'' Value {1} instead of {2} in {3}", memberName, me
+                            .getValue().getClass(), memberMeta.getValueClass(), entity.getDebugExceptionInfoString());
                 }
             } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 for (Object value : (IPrimitiveSet<?>) entity.getMember(memberName)) {
                     if ((value != null) && (!(memberMeta.getValueClass().isAssignableFrom(value.getClass())))) {
                         log.error("Got Value " + memberName + " {} instead of {}", value.getClass(), memberMeta.getValueClass());
-                        throw new Error("Data type corruption");
+                        throw new DevInfoUnRecoverableRuntimeException("Data type corruption; Got ''{0}'' Value {1} instead of {2} in {3}", memberName,
+                                value.getClass(), memberMeta.getValueClass(), entity.getDebugExceptionInfoString());
                     }
                 }
             } else {
