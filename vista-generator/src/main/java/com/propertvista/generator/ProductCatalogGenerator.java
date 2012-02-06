@@ -325,8 +325,8 @@ public class ProductCatalogGenerator {
 
     private static BigDecimal createUnitMarketRent(AptUnit unit) {
         BigDecimal base = new BigDecimal(900);
-        base = base.add(new BigDecimal(unit.info()._bedrooms().getValue() * 150.0));
-        base = base.add(new BigDecimal(unit.info()._bathrooms().getValue() * 50.0));
+        base = base.add(new BigDecimal(unit.info()._bedrooms().getValue() * 150));
+        base = base.add(new BigDecimal(unit.info()._bathrooms().getValue() * 50));
         return base.add(new BigDecimal(RandomUtil.randomInt(200)));
     }
 
