@@ -61,68 +61,53 @@ public class RentRollAdaptor implements ImportAdapter {
 
     @Override
     public ImportIO parse(byte[] data, DownloadFormat format) {
-        switch (format) { //TODO remove redundant functions (one of the parse ones)
-        case XML:
-            throw new Error("Please use Vista adapter type for XML files");
-        case CSV:
-            try {
-                return parse(data, "csv");
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                throw new Error(e);
-            }
-        case XLS:
+        try {
+            switch (format) {
 
-            try {
-                return parse(data, "xls");
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                throw new Error(e);
+            case XML:
+                throw new Error("Please use Vista adapter type for XML files");
+            case CSV:
+                readTenantRoster(data, format);
+                break;
+            case XLS:
+                readTenantRoster(data, format);
+                break;
+            case XLSX:
+                readTenantRoster(data, format);
+                break;
+            default:
+                throw new Error("Unsupported file format");
             }
-        case XLSX:
-            try {
-                return parse(data, "xlsx");
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                throw new Error(e);
+
+            int unitCount = 0;
+            ImportIO importIO = EntityFactory.create(ImportIO.class);
+            for (BuildingIO building : buildings) {
+                if (!building.units().isNull()) {
+                    importIO.buildings().add(building);
+                    unitCount += building.units().size();
+                }
             }
-            // TODO
-        default:
-            throw new Error("Unsupported file format");
+
+            System.out.println("Exported " + importIO.buildings().size() + " buildings");
+            System.out.println("Exported " + unitCount + " units");
+            return importIO;
+        } catch (IOException e) {
+            throw new Error(e);
         }
-    }
-
-    public ImportIO parse(byte[] inFile, String type) throws IOException {
-
-        readTenantRoster(inFile, type); // populate buildings
-
-        int unitCount = 0;
-        ImportIO importIO = EntityFactory.create(ImportIO.class);
-        for (BuildingIO building : buildings) {
-            if (!building.units().isNull()) {
-                importIO.buildings().add(building);
-                unitCount += building.units().size();
-            }
-        }
-
-        System.out.println("Exported " + importIO.buildings().size() + " buildings");
-        System.out.println("Exported " + unitCount + " units");
-        return importIO;
-
     }
 
     /**
      * @param args
      * @throws IOException
      */
-    private void readTenantRoster(byte[] fileName, String type) throws IOException {
+    private void readTenantRoster(byte[] fileName, DownloadFormat type) throws IOException {
 
         EntityCSVReciver<RentRollCSV> csv = EntityCSVReciver.create(RentRollCSV.class);
         csv.setHeaderLinesCount(2);
         csv.setHeadersMatchMinimum(EntityFactory.getEntityMeta(RentRollCSV.class).getMemberNames().size());
         InputStream is = new ByteArrayInputStream(fileName);
 
-        if (type.equals("csv")) {
+        if (type.name().equals("CSV")) {
             try {
                 CSVParser parser = new CSVParser();
                 parser.setAllowComments(false);
