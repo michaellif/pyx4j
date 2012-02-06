@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -41,7 +43,7 @@ public interface Payment extends IEntity {
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<Double> amount();
+    IPrimitive<BigDecimal> amount();
 
     @JoinTable(value = BillPayment.class, cascade = false)
     BillPayment billPayment();

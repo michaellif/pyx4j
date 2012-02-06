@@ -13,15 +13,16 @@
  */
 package com.propertyvista.portal.rpc.ptapp;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.charges.Charge_OLD;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.charges.ChargeLineList;
+import com.propertyvista.domain.charges.Charge_OLD;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
@@ -53,7 +54,7 @@ public class ChargesSharedCalculation {
     }
 
     private static ChargeLine calculateProrateCharge(Date rentStart, ChargeLine charge) {
-        double monthly = charge.amount().getValue();
+        BigDecimal monthly = charge.amount().getValue();
 
         // month end
         int currentDay = rentStart.getDate();
@@ -68,7 +69,7 @@ public class ChargesSharedCalculation {
         sb.append(TimeUtils.MONTH_NAMES_SHORT[rentStart.getMonth()]);
         sb.append(" ").append(monthDays).append(")");
 
-        double proratedTotal = DomainUtil.roundMoney((monthly * numDays) / monthDays);
+        BigDecimal proratedTotal = DomainUtil.roundMoney(monthly.multiply(new BigDecimal(numDays).divide(new BigDecimal(monthDays))));
 
         ChargeLine proratedCharge = EntityFactory.create(ChargeLine.class);
         proratedCharge.type().setValue(ChargeType.prorated);
@@ -110,7 +111,7 @@ public class ChargesSharedCalculation {
         }
 
         totalSplitPrc = 0; // perform actual calculation:
-        double totalSplitVal = 0d; // sum value, paid by co-applicants
+        BigDecimal totalSplitVal = new BigDecimal(0); // sum value, paid by co-applicants
         TenantCharge mainApplicantCharge = null;
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
             // !N.B. charge.tenant().status()  is not available here.  charge.tenant() never loaded to GWT!
@@ -118,15 +119,16 @@ public class ChargesSharedCalculation {
             if (mainApplicantCharge == null) {
                 mainApplicantCharge = charge;
             } else {
-                charge.amount().setValue(DomainUtil.roundMoney(charges.monthlyCharges().total().getValue() * charge.percentage().getValue() / 100d));
+                charge.amount().setValue(
+                        DomainUtil.roundMoney(charges.monthlyCharges().total().getValue().multiply(new BigDecimal(charge.percentage().getValue() / 100d))));
 
                 totalSplitPrc += charge.percentage().getValue();
-                totalSplitVal += charge.amount().getValue();
+                totalSplitVal = totalSplitVal.add(charge.amount().getValue());
             }
         }
 
         if (mainApplicantCharge != null) {
-            mainApplicantCharge.amount().setValue(charges.monthlyCharges().total().getValue() - totalSplitVal);
+            mainApplicantCharge.amount().setValue(charges.monthlyCharges().total().getValue().subtract(totalSplitVal));
             mainApplicantCharge.percentage().setValue(100 - totalSplitPrc);
         }
 
@@ -135,17 +137,17 @@ public class ChargesSharedCalculation {
     }
 
     public static void calculateTotal(ChargeLineList charges) {
-        double total = 0d;
+        BigDecimal total = new BigDecimal(0);
         for (Charge_OLD charge : charges.charges()) {
-            total += charge.amount().getValue();
+            total = total.add(charge.amount().getValue());
         }
         charges.total().setValue(total);
     }
 
     public static void calculateTotal(TenantChargeList charges) {
-        double total = 0d;
+        BigDecimal total = new BigDecimal(0);
         for (Charge_OLD charge : charges.charges()) {
-            total += charge.amount().getValue();
+            total = total.add(charge.amount().getValue());
         }
         charges.total().setValue(total);
     }

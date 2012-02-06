@@ -13,6 +13,7 @@
  */
 package com.propertvista.generator;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -157,7 +158,7 @@ public class ProductCatalogGenerator {
                 item.type().name().setValue(selectedItem.getStringView());
                 item.type().serviceType().setValue(selectedItem.serviceType().getValue());
 
-                item.price().setValue(500d + RandomUtil.randomInt(500));
+                item.price().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
                 item.description().setValue(type.toString() + " description");
 
                 items.add(item);
@@ -206,22 +207,22 @@ public class ProductCatalogGenerator {
 
                 switch (type) {
                 case parking:
-                    item.price().setValue(50d + RandomUtil.randomInt(50));
+                    item.price().setValue(new BigDecimal(5 + RandomUtil.randomInt(50)));
                     break;
                 case locker:
-                    item.price().setValue(5d + RandomUtil.randomInt(10));
+                    item.price().setValue(new BigDecimal(5 + RandomUtil.randomInt(10)));
                     break;
                 case pet:
-                    item.price().setValue(20d + RandomUtil.randomInt(20));
+                    item.price().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
                     break;
                 case booking:
-                    item.price().setValue(5d + RandomUtil.randomInt(5));
+                    item.price().setValue(new BigDecimal(5 + RandomUtil.randomInt(5)));
                     break;
                 case addOn:
-                    item.price().setValue(30d + RandomUtil.randomInt(50));
+                    item.price().setValue(new BigDecimal(30 + RandomUtil.randomInt(50)));
                     break;
                 case utility:
-                    item.price().setValue(80d + RandomUtil.randomInt(50));
+                    item.price().setValue(new BigDecimal(80 + RandomUtil.randomInt(50)));
                     break;
                 }
 
@@ -322,11 +323,11 @@ public class ProductCatalogGenerator {
         return allowedItemTypes;
     }
 
-    public static double createUnitMarketRent(AptUnit unit) {
-        double base = 900.;
-        base += unit.info()._bedrooms().getValue() * 150.0;
-        base += unit.info()._bathrooms().getValue() * 50.0;
-        return base + RandomUtil.randomInt(200);
+    private static BigDecimal createUnitMarketRent(AptUnit unit) {
+        BigDecimal base = new BigDecimal(900);
+        base = base.add(new BigDecimal(unit.info()._bedrooms().getValue() * 150.0));
+        base = base.add(new BigDecimal(unit.info()._bathrooms().getValue() * 50.0));
+        return base.add(new BigDecimal(RandomUtil.randomInt(200)));
     }
 
     public List<ProductItem> createAptUnitServices(ProductCatalog catalog, AptUnit unit) {
@@ -352,7 +353,7 @@ public class ProductCatalogGenerator {
         item.type().serviceType().setValue(selectedItem.serviceType().getValue());
 
         // This value may not be used in all cases and overridden later in generator
-        item.price().setValue(500d + RandomUtil.randomInt(500));
+        item.price().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
         item.description().setValue(type.toString() + " description");
         item.element().set(buildingElement);
 

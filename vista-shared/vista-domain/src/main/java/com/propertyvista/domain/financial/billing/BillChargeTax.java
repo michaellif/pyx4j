@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -27,6 +29,6 @@ public interface BillChargeTax extends IEntity {
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<Double> amount();
+    IPrimitive<BigDecimal> amount();
 
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
@@ -69,22 +71,22 @@ public class BuildingInfoPanel extends Panel {
         }
         add(new Label("address", addrFmt));
         // get price range
-        Double minPrice = null, maxPrice = null;
+        BigDecimal minPrice = null, maxPrice = null;
         final Map<Floorplan, List<AptUnit>> fpUnits = PropertyFinder.getBuildingFloorplans(bld);
         for (Floorplan fp : fpUnits.keySet()) {
             for (AptUnit u : fpUnits.get(fp)) {
-                Double _prc = u.financial()._marketRent().getValue();
-                if (minPrice == null || minPrice > _prc) {
+                BigDecimal _prc = u.financial()._marketRent().getValue();
+                if (minPrice == null || minPrice.compareTo(_prc) > 0) {
                     minPrice = _prc;
                 }
-                if (maxPrice == null || maxPrice < _prc) {
+                if (maxPrice == null || maxPrice.compareTo(_prc) < 0) {
                     maxPrice = _prc;
                 }
             }
         }
         String priceFmt = "Not available";
         if (minPrice != null && maxPrice != null) {
-            priceFmt = "$" + String.valueOf(Math.round(minPrice)) + " - $" + String.valueOf(Math.round(maxPrice));
+            priceFmt = "$" + DomainUtil.roundMoney(minPrice) + " - $" + DomainUtil.roundMoney(maxPrice);
         }
         add(new Label("priceRange", priceFmt));
         // phone

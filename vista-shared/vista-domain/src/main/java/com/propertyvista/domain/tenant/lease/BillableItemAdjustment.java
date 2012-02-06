@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import java.math.BigDecimal;
+
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
@@ -84,7 +86,7 @@ public interface BillableItemAdjustment extends IEntity {
     @Format("#0.00")
     @ToString(index = 1)
     @MemberColumn(name = "adjustmentValue")
-    IPrimitive<Double> value();
+    IPrimitive<BigDecimal> value();
 
     Employee createdBy();
 

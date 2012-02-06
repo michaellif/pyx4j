@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.payment;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -158,7 +160,7 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
 
     }
 
-    private Widget createTotal(IPrimitive<Double> member) {
+    private Widget createTotal(IPrimitive<BigDecimal> member) {
         FlowPanel totalRow = new FlowPanel();
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);

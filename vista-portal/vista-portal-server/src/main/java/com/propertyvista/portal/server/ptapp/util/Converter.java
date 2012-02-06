@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.ptapp.util;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +103,7 @@ public class Converter {
 
         to.location().setValue(from.info().address().location().getValue());
 
-        Double minPrice = null, maxPrice = null;
+        BigDecimal minPrice = null, maxPrice = null;
         // List of Floorplans
         for (Floorplan fp : floorplans) {
             FloorplanPropertyDTO fpto = EntityFactory.create(FloorplanPropertyDTO.class);
@@ -117,17 +118,19 @@ public class Converter {
             criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp.building().getPrimaryKey().asLong()));
             criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
             for (AptUnit unit : Persistence.service().query(criteria)) {
-                Double _prc = unit.financial()._marketRent().getValue();
-                if (minPrice == null || minPrice > _prc) {
+                BigDecimal _prc = unit.financial()._marketRent().getValue();
+                if (minPrice == null || minPrice.compareTo(_prc) > 0) {
                     minPrice = _prc;
                 }
-                if (maxPrice == null || maxPrice < _prc) {
+                if (maxPrice == null || maxPrice.compareTo(_prc) < 0) {
                     maxPrice = _prc;
                 }
             }
         }
-        to.price().min().setValue(minPrice);
-        to.price().max().setValue(maxPrice);
+
+        //TODO should be converted to BigDecimal
+        to.price().min().setValue(minPrice.doubleValue());
+        to.price().max().setValue(maxPrice.doubleValue());
 
         if (!from.media().isEmpty()) {
             for (Media media : from.media()) {

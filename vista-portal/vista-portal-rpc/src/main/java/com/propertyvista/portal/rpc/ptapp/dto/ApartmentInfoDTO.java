@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -93,8 +95,8 @@ public interface ApartmentInfoDTO extends IEntity {
     IPrimitive<LogicalDate> leaseTo();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> unitRent();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> unitRent();
 
     // limits:
     IPrimitive<Integer> maxParkingSpots();

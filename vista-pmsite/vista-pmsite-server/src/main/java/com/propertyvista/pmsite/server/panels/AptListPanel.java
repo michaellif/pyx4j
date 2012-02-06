@@ -13,6 +13,7 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -110,10 +111,10 @@ public class AptListPanel extends Panel {
                         }
                         item.add(new Label("typeName", name));
 
-                        Double minPrice = null;
+                        BigDecimal minPrice = null;
                         for (AptUnit u : fpUnits.get(fp)) {
-                            Double _prc = u.financial()._marketRent().getValue();
-                            if (minPrice == null || minPrice > _prc) {
+                            BigDecimal _prc = u.financial()._marketRent().getValue();
+                            if (minPrice == null || minPrice.compareTo(_prc) > 0) {
                                 minPrice = _prc;
                             }
                         }

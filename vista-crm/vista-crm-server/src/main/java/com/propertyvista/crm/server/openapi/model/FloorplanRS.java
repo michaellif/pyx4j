@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.openapi.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +47,9 @@ public class FloorplanRS {
 
     public Integer halfBath;
 
-    public Double rentFrom;
+    public BigDecimal rentFrom;
 
-    public Double rentTo;
+    public BigDecimal rentTo;
 
     public Integer sqftFrom;
 

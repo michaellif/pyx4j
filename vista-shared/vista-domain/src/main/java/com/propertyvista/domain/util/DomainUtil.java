@@ -13,6 +13,9 @@
  */
 package com.propertyvista.domain.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -31,8 +34,8 @@ public class DomainUtil {
         return currency;
     }
 
-    public static double roundMoney(double value) {
-        return Math.round(value * 100d) / 100d;
+    public static BigDecimal roundMoney(BigDecimal value) {
+        return value.setScale(2, RoundingMode.HALF_UP);
     }
 
     public static Money createMoney(double value) {
@@ -49,14 +52,14 @@ public class DomainUtil {
         return money;
     }
 
-    public static ChargeLine createChargeLine(String label, double money) {
+    public static ChargeLine createChargeLine(String label, BigDecimal money) {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
         cl.amount().setValue(money);
         cl.label().setValue(label);
         return cl;
     }
 
-    public static ChargeLine createChargeLine(ChargeType type, double money) {
+    public static ChargeLine createChargeLine(ChargeType type, BigDecimal money) {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
         cl.amount().setValue(money);
         cl.type().setValue(type);
@@ -64,7 +67,7 @@ public class DomainUtil {
         return cl;
     }
 
-    public static ChargeLine createChargeLine(String label, ChargeType type, double money) {
+    public static ChargeLine createChargeLine(String label, ChargeType type, BigDecimal money) {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
         cl.amount().setValue(money);
         cl.type().setValue(type);
@@ -132,6 +135,26 @@ public class DomainUtil {
             return a;
         } else {
             return Math.max(a, b);
+        }
+    }
+
+    public static BigDecimal min(BigDecimal a, BigDecimal b) {
+        if (a == null) {
+            return b;
+        } else if (b == null) {
+            return a;
+        } else {
+            return a.min(b);
+        }
+    }
+
+    public static BigDecimal max(BigDecimal a, BigDecimal b) {
+        if (a == null) {
+            return b;
+        } else if (b == null) {
+            return a;
+        } else {
+            return a.max(b);
         }
     }
 

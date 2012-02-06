@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.tenant.application;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -177,7 +178,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, BillableItem item) {
+    public void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item) {
         callback.onSuccess(PriceCalculationHelpers.calculateChargeItemAdjustments(item));
     }
 

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -70,48 +72,48 @@ public interface Bill extends IEntity {
     /**
      * The total amount due from the previous bill.
      */
-    IPrimitive<Double> previousBalanceAmount();
+    IPrimitive<BigDecimal> previousBalanceAmount();
 
     /**
      * The total amount of payments received since the previous bill, up to the current Bill day.
      */
-    IPrimitive<Double> paymentReceivedAmount();
+    IPrimitive<BigDecimal> paymentReceivedAmount();
 
-    IPrimitive<Double> totalImmediateAdjustments();
+    IPrimitive<BigDecimal> totalImmediateAdjustments();
 
     /**
      * pastDueAmount = previousBalanceAmount - paymentReceivedAmount - totalImmidiateAdjustments
      */
-    IPrimitive<Double> pastDueAmount();
+    IPrimitive<BigDecimal> pastDueAmount();
 
-    IPrimitive<Double> serviceCharge();
+    IPrimitive<BigDecimal> serviceCharge();
 
-    IPrimitive<Double> totalRecurringFeatureCharges();
+    IPrimitive<BigDecimal> totalRecurringFeatureCharges();
 
-    IPrimitive<Double> totalOneTimeFeatureCharges();
+    IPrimitive<BigDecimal> totalOneTimeFeatureCharges();
 
     /**
      * 
      * It includes all feature/service adjustments as well as Product Item adjustments
      * 
      */
-    IPrimitive<Double> totalAdjustments();
+    IPrimitive<BigDecimal> totalAdjustments();
 
-    IPrimitive<Double> depositPaidAmount();
+    IPrimitive<BigDecimal> depositPaidAmount();
 
-    IPrimitive<Double> latePaymentCharges();
+    IPrimitive<BigDecimal> latePaymentCharges();
 
     /**
      * totalDueAmount = pastDueAmount + serviceCharge + totalRecurringFeatureCharges + totalOneTimeFeatureCharges + totalAdjustments - depositPaidAmount +
      * latePaimantCharges
      */
-    IPrimitive<Double> totalCurrentAmount();
+    IPrimitive<BigDecimal> totalCurrentAmount();
 
-    IPrimitive<Double> totalTaxes();
+    IPrimitive<BigDecimal> totalTaxes();
 
     /**
      * totalDueAmount = totalCurrentAmount + totalTaxes
      */
-    IPrimitive<Double> totalDueAmount();
+    IPrimitive<BigDecimal> totalDueAmount();
 
 }

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.interfaces.importer.model;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -35,12 +37,12 @@ public interface AptUnitIO extends IEntity {
     IPrimitive<AreaMeasurementUnit> areaUnits();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> unitRent();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> unitRent();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> marketRent();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> marketRent();
 
     IPrimitive<LogicalDate> availableForRent();
 

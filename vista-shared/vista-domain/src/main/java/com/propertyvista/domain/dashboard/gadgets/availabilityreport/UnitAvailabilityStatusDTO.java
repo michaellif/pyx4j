@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.availabilityreport;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -34,6 +36,6 @@ public interface UnitAvailabilityStatusDTO extends UnitAvailabilityStatus {
     @Caption(name = "Revenue Lost ($)")
     @Format("#0.00")
     @CustomComparator(clazz = ComparableComparator.class)
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> revenueLost();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> revenueLost();
 }

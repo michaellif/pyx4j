@@ -21,6 +21,7 @@
 package com.propertyvista.server.billing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -82,15 +83,15 @@ class Billing {
         Persistence.service().retrieve(bill.billingAccount().leaseFinancial().lease().serviceAgreement());
 
         //Set accumulating fields to 0 value
-        bill.paymentReceivedAmount().setValue(0d);
-        bill.totalRecurringFeatureCharges().setValue(0d);
-        bill.totalOneTimeFeatureCharges().setValue(0d);
-        bill.totalRecurringFeatureCharges().setValue(0d);
-        bill.totalOneTimeFeatureCharges().setValue(0d);
-        bill.totalAdjustments().setValue(0d);
-        bill.totalImmediateAdjustments().setValue(0d);
-        bill.latePaymentCharges().setValue(0d);
-        bill.totalTaxes().setValue(0d);
+        bill.paymentReceivedAmount().setValue(new BigDecimal(0));
+        bill.totalRecurringFeatureCharges().setValue(new BigDecimal(0));
+        bill.totalOneTimeFeatureCharges().setValue(new BigDecimal(0));
+        bill.totalRecurringFeatureCharges().setValue(new BigDecimal(0));
+        bill.totalOneTimeFeatureCharges().setValue(new BigDecimal(0));
+        bill.totalAdjustments().setValue(new BigDecimal(0));
+        bill.totalImmediateAdjustments().setValue(new BigDecimal(0));
+        bill.latePaymentCharges().setValue(new BigDecimal(0));
+        bill.totalTaxes().setValue(new BigDecimal(0));
 
         getPreviousTotals();
         createPayments();
@@ -120,7 +121,7 @@ class Billing {
         BillPayment billPayment = EntityFactory.create(BillPayment.class);
         billPayment.payment().set(payment);
         billPayment.bill().set(bill);
-        bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue() + billPayment.payment().amount().getValue());
+        bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue().add(billPayment.payment().amount().getValue()));
         return billPayment;
     }
 
@@ -138,9 +139,9 @@ class Billing {
         if (!charge.price().isNull()) {
             charge.taxes().addAll(TaxUtils.calculateTaxes(charge.price().getValue(), serviceItem.item().type().chargeCode().taxes()));
         }
-        charge.taxTotal().setValue(0d);
+        charge.taxTotal().setValue(new BigDecimal(0));
         for (BillChargeTax chargeTax : charge.taxes()) {
-            charge.taxTotal().setValue(charge.taxTotal().getValue() + chargeTax.amount().getValue());
+            charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
         }
 
         addCharge(charge);
@@ -149,9 +150,9 @@ class Billing {
 
     private void addCharge(BillCharge charge) {
         if (isService(charge.billableItem().item().product())) { //Service
-            bill.serviceCharge().setValue(bill.serviceCharge().getValue() + charge.price().getValue());
+            bill.serviceCharge().setValue(bill.serviceCharge().getValue().add(charge.price().getValue()));
         } else if (isRecurringFeature(charge.billableItem().item().product())) { //Recurring Feature
-            bill.totalRecurringFeatureCharges().setValue(bill.totalRecurringFeatureCharges().getValue() + charge.price().getValue());
+            bill.totalRecurringFeatureCharges().setValue(bill.totalRecurringFeatureCharges().getValue().add(charge.price().getValue()));
         } else {
 //            bill.totalOneTimeFeatureCharges().setValue(bill.totalOneTimeFeatureCharges().getValue() + charge.price().getValue());
         }
@@ -166,7 +167,7 @@ class Billing {
     private BillLeaseAdjustment createeLeaseAdjustment(LeaseAdjustment item) {
         BillLeaseAdjustment adjustment = EntityFactory.create(BillLeaseAdjustment.class);
         adjustment.bill().set(bill);
-        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue() + adjustment.price().getValue());
+        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.price().getValue()));
         return adjustment;
     }
 
@@ -186,7 +187,7 @@ class Billing {
     private BillChargeAdjustment createProductAdjustment(BillableItemAdjustment itemAdjustment) {
         BillChargeAdjustment adjustment = EntityFactory.create(BillChargeAdjustment.class);
         adjustment.bill().set(bill);
-        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue() + adjustment.price().getValue());
+        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.price().getValue()));
         return adjustment;
     }
 

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.ptapp.services.steps;
 
+import java.math.BigDecimal;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,11 +99,11 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
                 charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem.agreedPrice().getValue()));
             } else {
                 charges.applicationCharges().charges()
-                        .add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, 2 * serviceItem.agreedPrice().getValue()));
+                        .add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem.agreedPrice().getValue().multiply(new BigDecimal(2))));
             }
 
             // TODO: find where get/put this info (application/equifax check fee)!
-            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.oneTimePayment, 24.99)); // get value from policy ! 
+            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.oneTimePayment, new BigDecimal("24.99"))); // get value from policy ! 
 
             // fill agreed items:
             for (BillableItem item : lease.serviceAgreement().featureItems()) {

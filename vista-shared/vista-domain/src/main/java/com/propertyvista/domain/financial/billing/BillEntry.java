@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
@@ -33,13 +35,13 @@ public interface BillEntry extends IEntity {
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<Double> price();
+    IPrimitive<BigDecimal> price();
 
     IList<BillChargeTax> taxes();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<Double> taxTotal();
+    IPrimitive<BigDecimal> taxTotal();
 
     interface OrderId extends ColumnId {
 

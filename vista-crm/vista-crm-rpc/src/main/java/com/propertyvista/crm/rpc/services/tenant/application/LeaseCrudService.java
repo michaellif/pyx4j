@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.tenant.application;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -29,7 +31,7 @@ public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
 
     void removeTenat(AsyncCallback<Boolean> callback, Key entityId);
 
-    void calculateChargeItemAdjustments(AsyncCallback<Double> callback, BillableItem item);
+    void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 
     void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 

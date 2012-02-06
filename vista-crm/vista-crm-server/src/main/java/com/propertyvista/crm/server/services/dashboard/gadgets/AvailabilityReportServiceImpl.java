@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -382,8 +383,8 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         int daysVacant = (int) (millisecondsVacant / (1000 * 60 * 60 * 24)); // some really heavy math :)            
         unit.daysVacant().setValue(daysVacant);
 
-        double marketRent = unit.marketRent().getValue();
-        double revenueLost = daysVacant * marketRent / 30.0;
+        BigDecimal marketRent = unit.marketRent().getValue();
+        BigDecimal revenueLost = marketRent.multiply(new BigDecimal(daysVacant).divide(new BigDecimal(30)));
         unit.revenueLost().setValue(revenueLost);
     }
 

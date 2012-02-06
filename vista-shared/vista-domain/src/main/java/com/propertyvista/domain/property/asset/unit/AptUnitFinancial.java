@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -26,12 +28,12 @@ public interface AptUnitFinancial extends IEntity {
      */
     @Format("#0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<Double> _unitRent();
+    IPrimitive<BigDecimal> _unitRent();
 
     /**
      * TODO Should be updated when ServiceItem for this Unit is saved.
      */
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> _marketRent();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> _marketRent();
 }

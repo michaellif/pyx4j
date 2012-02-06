@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.ptapp.util;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,7 +132,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             if (status == TenantInLease.Role.Applicant) {
                 percentage = 100;
             }
-            TenantCharge tenantCharge = com.propertyvista.portal.domain.util.DomainUtil.createTenantCharge(percentage, 0);
+            TenantCharge tenantCharge = com.propertyvista.portal.domain.util.DomainUtil.createTenantCharge(percentage, new BigDecimal(0));
             tenantCharge.tenant().set(tenant);
             //            Persistence.service().persist(tenant);
             charges.paymentSplitCharges().charges().add(tenantCharge);

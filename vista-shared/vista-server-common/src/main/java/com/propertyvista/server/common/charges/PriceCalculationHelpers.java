@@ -13,59 +13,58 @@
  */
 package com.propertyvista.server.common.charges;
 
+import java.math.BigDecimal;
+
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 
 public class PriceCalculationHelpers {
 
-    public static Double calculateChargeItemAdjustments(BillableItem item) {
-        Double adjustedPrice = item.originalPrice().getValue();
-
+    public static BigDecimal calculateChargeItemAdjustments(BillableItem item) {
+        BigDecimal adjustedPrice = item.originalPrice().getValue();
         for (BillableItemAdjustment adjustment : item.adjustments()) {
-            Double calculated = calculateChargeItemAdjustments(adjustedPrice, adjustment);
-            if (!calculated.isNaN()) {
-                adjustedPrice = calculated;
-            }
+            adjustedPrice = calculateChargeItemAdjustments(adjustedPrice, adjustment);
         }
-
         return adjustedPrice;
     }
 
-    public static Double calculateChargeItemAdjustments(Double startPrice, BillableItemAdjustment adjustment) {
+    public static BigDecimal calculateChargeItemAdjustments(BigDecimal startPrice, BillableItemAdjustment adjustment) {
         // preconditions:
         if (adjustment.isNull() || adjustment.adjustmentType().isNull() || adjustment.termType().isNull()) {
-            return Double.NaN; // not fully filled adjustment!.. 
+            return startPrice; // not fully filled adjustment!.. 
         }
 
         // Calculate adjustments:
-        Double adjustedPrice = startPrice;
+        BigDecimal adjustedPrice = startPrice;
         if (adjustment.termType().getValue().equals(BillableItemAdjustment.TermType.term)) {
             if (adjustment.adjustmentType().getValue().equals(BillableItemAdjustment.AdjustmentType.free)) {
-                adjustedPrice = 0.0;
+                adjustedPrice = new BigDecimal(0);
             } else {
                 if (adjustment.value().isNull()) {
-                    return Double.NaN; // value is necessary on this stage!..
+                    return startPrice; // value is necessary on this stage!..
                 }
 
                 switch (adjustment.adjustmentType().getValue()) {
                 case monetary:
                     switch (adjustment.chargeType().getValue()) {
                     case discount:
-                        adjustedPrice -= adjustment.value().getValue();
+                        adjustedPrice = adjustedPrice.subtract(adjustment.value().getValue());
                         break;
                     case priceCorrection:
-                        adjustedPrice += adjustment.value().getValue();
+                        adjustedPrice = adjustedPrice.add(adjustment.value().getValue());
                         break;
                     }
                     break;
 
                 case percentage:
                     switch (adjustment.chargeType().getValue()) {
+                    //TODO we need sign with the amount - ChargeType is pure description
+                    case negotiation:
                     case discount:
-                        adjustedPrice *= 1 - adjustment.value().getValue() / 100;
+                        adjustedPrice = adjustedPrice.multiply(new BigDecimal(1).subtract(adjustment.value().getValue()).divide(new BigDecimal(100)));
                         break;
                     case priceCorrection:
-                        adjustedPrice *= 1 + adjustment.value().getValue() / 100;
+                        adjustedPrice = adjustedPrice.multiply(new BigDecimal(1).add(adjustment.value().getValue()).divide(new BigDecimal(100)));
                         break;
                     }
                     break;

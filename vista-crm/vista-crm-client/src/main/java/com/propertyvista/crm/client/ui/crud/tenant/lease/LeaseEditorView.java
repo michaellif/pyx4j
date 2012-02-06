@@ -13,12 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -34,7 +36,7 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
 
         void removeTenat(TenantInLease tenant);
 
-        void calculateChargeItemAdjustments(AsyncCallback<Double> callback, BillableItem item);
+        void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
     }
 
     void showSelectTypePopUp(AsyncCallback<Service.Type> callback);

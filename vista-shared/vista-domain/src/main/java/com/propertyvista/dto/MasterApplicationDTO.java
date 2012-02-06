@@ -13,6 +13,8 @@
  */
 package com.propertyvista.dto;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -37,20 +39,20 @@ public interface MasterApplicationDTO extends MasterApplication {
     IPrimitive<Integer> numberOfGuarantors();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> rentPrice();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> rentPrice();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> parkingPrice();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> parkingPrice();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> otherPrice();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> otherPrice();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> deposit();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> deposit();
 
     @Caption(name = "Promotions/Discounts")
     IPrimitive<Boolean> discounts();

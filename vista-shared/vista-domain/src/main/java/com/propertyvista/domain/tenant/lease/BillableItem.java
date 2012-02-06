@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
@@ -37,7 +39,7 @@ public interface BillableItem extends IEntity {
     @Format("#0.00")
     //TODO Take from ProductItem
     @Deprecated
-    IPrimitive<Double> originalPrice();
+    IPrimitive<BigDecimal> originalPrice();
 
     /*
      * agreed price: contractual price value, override the Service Item�s price
@@ -47,7 +49,7 @@ public interface BillableItem extends IEntity {
     @Caption(name = "Price")
     //TODO originalPrice + adjustment
     @Deprecated
-    IPrimitive<Double> agreedPrice();
+    IPrimitive<BigDecimal> agreedPrice();
 
     @Owned
     IList<BillableItemAdjustment> adjustments();

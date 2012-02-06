@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.test.rpc.pt;
 
+import java.math.BigDecimal;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
@@ -27,12 +29,12 @@ public class ChargesSharedCalculationTest extends TestCase {
     public void testSplitChargesRunding() {
         Charges charges = EntityFactory.create(Charges.class);
 
-        charges.monthlyCharges().total().setValue(10.6d);
+        charges.monthlyCharges().total().setValue(new BigDecimal("10.6"));
 
-        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(0, 0));
+        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(0, new BigDecimal(0)));
         int splitPrc = 31;
-        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(splitPrc, 0));
-        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(splitPrc, 0));
+        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(splitPrc, new BigDecimal(0)));
+        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(splitPrc, new BigDecimal(0)));
 
         ChargesSharedCalculation.calculatePaymentSplitCharges(charges);
 

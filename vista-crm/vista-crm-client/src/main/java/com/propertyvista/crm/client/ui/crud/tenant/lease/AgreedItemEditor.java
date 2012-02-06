@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,12 +136,12 @@ class AgreedItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
     @Override
     public void addValidations() {
-        get(proto().agreedPrice()).addValueValidator(new EditableValueValidator<Double>() {
+        get(proto().agreedPrice()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
-            public ValidationFailure isValid(CComponent<Double, ?> component, Double value) {
+            public ValidationFailure isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
                 if (value != null && getValue() != null && !getValue().isEmpty()) {
-                    Double originalPrice = getValue().originalPrice().getValue();
-                    return ((value > originalPrice * 0.5 && originalPrice < value * 1.5) ? null : new ValidationFailure(i18n
+                    Double originalPrice = getValue().originalPrice().getValue().doubleValue();
+                    return ((value.doubleValue() > originalPrice * 0.5 && originalPrice < value.doubleValue() * 1.5) ? null : new ValidationFailure(i18n
                             .tr("The price should not be differ +-50% of original price")));
                 }
                 return null;

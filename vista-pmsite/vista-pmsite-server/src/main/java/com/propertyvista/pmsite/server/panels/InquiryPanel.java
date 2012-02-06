@@ -13,6 +13,7 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import org.apache.wicket.AttributeModifier;
@@ -132,10 +133,10 @@ public class InquiryPanel extends Panel {
         }
         SimpleRadioGroup<Long> radioGroup = new SimpleRadioGroup<Long>("floorPlanList", new Model<Long>(curFp));
         for (Floorplan p : PropertyFinder.getBuildingFloorplans(bld).keySet()) {
-            Double minPrice = null;
+            BigDecimal minPrice = null;
             for (AptUnit u : PropertyFinder.getBuildingAptUnits(p.building(), p)) {
-                Double _prc = u.financial()._marketRent().getValue();
-                if (minPrice == null || minPrice > _prc) {
+                BigDecimal _prc = u.financial()._marketRent().getValue();
+                if ((minPrice == null) || (minPrice.compareTo(_prc) > 0)) {
                     minPrice = _prc;
                 }
             }

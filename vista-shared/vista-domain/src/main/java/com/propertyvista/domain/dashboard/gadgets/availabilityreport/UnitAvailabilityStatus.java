@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.availabilityreport;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -126,25 +128,25 @@ public interface UnitAvailabilityStatus extends IEntity {
     IPrimitive<RentReadinessStatus> rentReadinessStatus();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> unitRent();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> unitRent();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> marketRent();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> marketRent();
 
     /** <code>{@link #unitRent()} - {@link #unitMarketRent()} </code> */
     @Caption(name = "Delta, in $")
     @Format("#0.00")
     @CustomComparator(clazz = ComparableComparator.class)
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> rentDeltaAbsolute();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> rentDeltaAbsolute();
 
     /** <code>({@link #unitRent()} - {@link #unitMarketRent()})/{@link #unitMarketRent()}</code> */
     @Caption(name = "Delta, in %")
     @Format("#0.00")
     @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<Double> rentDeltaRelative();
+    IPrimitive<BigDecimal> rentDeltaRelative();
 
     /** {@link AptUnit#availableForRent()} - 1 */
     @Format("MM/dd/yyyy")

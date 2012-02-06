@@ -13,13 +13,15 @@
  */
 package com.propertyvista.portal.domain.util;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class DomainUtil {
 
-    public static TenantCharge createTenantCharge(int percentage, double money) {
+    public static TenantCharge createTenantCharge(int percentage, BigDecimal money) {
         TenantCharge tc = EntityFactory.create(TenantCharge.class);
 
         tc.amount().setValue(money);

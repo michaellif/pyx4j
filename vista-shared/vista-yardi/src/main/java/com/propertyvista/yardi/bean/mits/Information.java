@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.bean.mits;
 
+import java.math.BigDecimal;
+
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -47,9 +49,9 @@ public class Information {
 
     private Integer maxSquareFeet; // unit.info.area
 
-    private Double unitRent; // unit.financial.unitRent
+    private BigDecimal unitRent; // unit.financial.unitRent
 
-    private Double marketRent; // unit.financial.marketRent
+    private BigDecimal marketRent; // unit.financial.marketRent
 
     private String unitEconomicStatus; // unit.info.economicStatus
 
@@ -158,20 +160,20 @@ public class Information {
     }
 
     @XmlElement(name = "UnitRent")
-    public Double getUnitRent() {
+    public BigDecimal getUnitRent() {
         return unitRent;
     }
 
-    public void setUnitRent(Double unitRent) {
+    public void setUnitRent(BigDecimal unitRent) {
         this.unitRent = unitRent;
     }
 
     @XmlElement(name = "MarketRent")
-    public Double getMarketRent() {
+    public BigDecimal getMarketRent() {
         return marketRent;
     }
 
-    public void setMarketRent(Double marketRent) {
+    public void setMarketRent(BigDecimal marketRent) {
         this.marketRent = marketRent;
     }
 

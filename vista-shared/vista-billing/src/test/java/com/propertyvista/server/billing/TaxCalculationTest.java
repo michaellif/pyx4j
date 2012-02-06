@@ -43,10 +43,10 @@ public class TaxCalculationTest extends TestCase {
         tax.compound().setValue(false);
         taxes.add(tax);
 
-        List<BillChargeTax> chargeTaxes = TaxUtils.calculateTaxes(100, taxes);
+        List<BillChargeTax> chargeTaxes = TaxUtils.calculateTaxes(new BigDecimal("100.00"), taxes);
 
-        assertEquals(7d, chargeTaxes.get(0).amount().getValue());
-        assertEquals(5d, chargeTaxes.get(1).amount().getValue());
+        assertEquals(new BigDecimal("7.00"), chargeTaxes.get(0).amount().getValue());
+        assertEquals(new BigDecimal("5.00"), chargeTaxes.get(1).amount().getValue());
     }
 
     public void testCompaundTaxCalculation() {
@@ -69,18 +69,18 @@ public class TaxCalculationTest extends TestCase {
         taxes2.add(pst);
         taxes2.add(gst);
 
-        List<BillChargeTax> chargeTaxes = TaxUtils.calculateTaxes(100.04, taxes1);
+        List<BillChargeTax> chargeTaxes = TaxUtils.calculateTaxes(new BigDecimal("100.04"), taxes1);
 
-        assertEquals(10d, chargeTaxes.get(0).amount().getValue());
+        assertEquals(new BigDecimal("10.00"), chargeTaxes.get(0).amount().getValue());
         assertEquals("GST", chargeTaxes.get(0).tax().name().getValue());
-        assertEquals(5.5, chargeTaxes.get(1).amount().getValue());
+        assertEquals(new BigDecimal("5.50"), chargeTaxes.get(1).amount().getValue());
         assertEquals("PST", chargeTaxes.get(1).tax().name().getValue());
 
-        chargeTaxes = TaxUtils.calculateTaxes(100, taxes2);
+        chargeTaxes = TaxUtils.calculateTaxes(new BigDecimal("100.04"), taxes2);
 
-        assertEquals(10d, chargeTaxes.get(0).amount().getValue());
+        assertEquals(new BigDecimal("10.00"), chargeTaxes.get(0).amount().getValue());
         assertEquals("GST", chargeTaxes.get(0).tax().name().getValue());
-        assertEquals(5.5, chargeTaxes.get(1).amount().getValue());
+        assertEquals(new BigDecimal("5.50"), chargeTaxes.get(1).amount().getValue());
         assertEquals("PST", chargeTaxes.get(1).tax().name().getValue());
 
     }

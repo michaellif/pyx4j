@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.util;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -86,7 +87,8 @@ public class AvailabilityReportManager {
 
     /**
      * @param occupancy
-     *            sorted (in the ascending order by {@link AptUnitOccupancySegment#dateFrom()}) non empty list of occupancy intervals covering the whole possible
+     *            sorted (in the ascending order by {@link AptUnitOccupancySegment#dateFrom()}) non empty list of occupancy intervals covering the whole
+     *            possible
      *            time
      * @return
      */
@@ -314,9 +316,9 @@ public class AvailabilityReportManager {
         }
     }
 
-    private static Double getUnitRent(Lease lease) {
+    private static BigDecimal getUnitRent(Lease lease) {
         // TODO get unit rent from lease
-        return 0d;
+        return new BigDecimal(0);
     }
 
     public static interface ReferencedValuesInitializer {
@@ -344,7 +346,7 @@ public class AvailabilityReportManager {
 
         public final Complex complex;
 
-        public final Double marketRent;
+        public final BigDecimal marketRent;
 
         public PersistenceReferencedValuesInitializer(AptUnit unit) {
             this.unit = unit;
@@ -353,7 +355,7 @@ public class AvailabilityReportManager {
             this.complex = building.complex().isNull() ? null : Persistence.service().retrieve(Complex.class, building.complex().getPrimaryKey());
 
             // FIXME market rent should be fetched from SeriveCatalog
-            this.marketRent = 100.0;
+            this.marketRent = new BigDecimal(100);
         }
 
         @Override

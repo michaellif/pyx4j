@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud.tenant.lease;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,7 +132,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     @Override
-    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, BillableItem item) {
+    public void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item) {
         ((LeaseCrudService) service).calculateChargeItemAdjustments(callback, item);
     }
 

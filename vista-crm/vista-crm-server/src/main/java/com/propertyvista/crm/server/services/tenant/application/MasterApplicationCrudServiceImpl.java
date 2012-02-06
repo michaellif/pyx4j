@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.tenant.application;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertvista.generator.util.RandomUtil;
 
@@ -80,7 +82,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         calculatePrices(in, dto);
 
         // TODO: currently - just some mockup stuff:
-        dto.deposit().setValue(100 + RandomUtil.randomDouble(1000));
+        dto.deposit().setValue(new BigDecimal(100 + RandomUtil.randomDouble(1000)));
     }
 
     // internal helpers:
@@ -101,20 +103,20 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().serviceAgreement().serviceItem());
 
         dto.rentPrice().setValue(dto.lease().serviceAgreement().serviceItem().agreedPrice().getValue());
-        dto.parkingPrice().setValue(0.);
-        dto.otherPrice().setValue(0.);
-        dto.deposit().setValue(0.);
+        dto.parkingPrice().setValue(new BigDecimal(0));
+        dto.otherPrice().setValue(new BigDecimal(0));
+        dto.deposit().setValue(new BigDecimal(0));
 
         for (BillableItem item : dto.lease().serviceAgreement().featureItems()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(item); // calculate price adjustments
             if (item.item().product() instanceof Feature) {
                 switch (((Feature) item.item().product()).type().getValue()) {
                 case parking:
-                    dto.parkingPrice().setValue(dto.parkingPrice().getValue() + item.agreedPrice().getValue());
+                    dto.parkingPrice().setValue(dto.parkingPrice().getValue().add(item.agreedPrice().getValue()));
                     break;
 
                 default:
-                    dto.otherPrice().setValue(dto.otherPrice().getValue() + item.agreedPrice().getValue());
+                    dto.otherPrice().setValue(dto.otherPrice().getValue().add(item.agreedPrice().getValue()));
                 }
             }
         }

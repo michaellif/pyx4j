@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.charges;
 
+import java.math.BigDecimal;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,7 +97,7 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         splitCharges.setVisible(getValue().paymentSplitCharges().charges().size() > 1);
     }
 
-    private static Widget createTotal(CEntityEditor<?> form, IPrimitive<Double> member) {
+    private static Widget createTotal(CEntityEditor<?> form, IPrimitive<BigDecimal> member) {
         FlowPanel totalRow = new FlowPanel();
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);

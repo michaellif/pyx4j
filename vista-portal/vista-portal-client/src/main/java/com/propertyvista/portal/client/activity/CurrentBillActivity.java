@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.activity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.google.gwt.event.shared.EventBus;
@@ -62,22 +63,22 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
         ChargeLine cLine = EntityFactory.create(ChargeLine.class);
         cLine.type().setValue(ChargeType.monthlyRent);
         cLine.label().setValue(ChargeType.monthlyRent.toString());
-        cLine.amount().setValue(1200d);
+        cLine.amount().setValue(new BigDecimal(1200));
         bill.charges().add(cLine);
 
         ChargeLine cLine2 = EntityFactory.create(ChargeLine.class);
         cLine2.label().setValue("Parking");
-        cLine2.amount().setValue(100d);
+        cLine2.amount().setValue(new BigDecimal(100));
         bill.charges().add(cLine2);
 
         ChargeLine cLine3 = EntityFactory.create(ChargeLine.class);
         cLine3.label().setValue("Locker");
-        cLine3.amount().setValue(100d);
+        cLine3.amount().setValue(new BigDecimal(100));
         bill.charges().add(cLine3);
 
         ChargeLine cLine4 = EntityFactory.create(ChargeLine.class);
         cLine4.label().setValue("Cable TV");
-        cLine4.amount().setValue(90d);
+        cLine4.amount().setValue(new BigDecimal(90));
         bill.charges().add(cLine4);
 
         bill.dueDate().setValue(new LogicalDate(new Date()));

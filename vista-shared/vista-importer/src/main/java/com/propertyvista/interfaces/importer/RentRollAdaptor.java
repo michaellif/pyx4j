@@ -23,6 +23,7 @@ package com.propertyvista.interfaces.importer;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -150,7 +151,7 @@ public class RentRollAdaptor implements ImportAdapter {
             if (unitNumber != null && !strings.contains(unitNumber.toLowerCase().trim()) && !line.resident().getStringView().equals("Total")) {
 
                 unit.number().setValue(unitNumber);
-                double marketRent;
+                BigDecimal marketRent;
                 LogicalDate availableForRent = new LogicalDate();
 
                 marketRent = parseMoney(line.marketRent().getStringView());
@@ -175,10 +176,10 @@ public class RentRollAdaptor implements ImportAdapter {
         }
     }
 
-    private double parseMoney(String money) {
+    private BigDecimal parseMoney(String money) {
         NumberFormat nf = new DecimalFormat("#,###.##");
         try {
-            return nf.parse(money).doubleValue();
+            return new BigDecimal(nf.parse(money).doubleValue());
         } catch (ParseException e) {
             throw new Error(e);
         }

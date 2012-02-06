@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.charges;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -25,6 +27,6 @@ public interface Charge_OLD extends IEntity {
 
     @ToString(index = 0)
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> amount();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> amount();
 }

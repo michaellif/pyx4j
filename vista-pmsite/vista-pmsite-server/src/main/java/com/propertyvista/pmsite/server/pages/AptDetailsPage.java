@@ -13,6 +13,7 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -98,18 +99,21 @@ public class AptDetailsPage extends BasePage {
                 item.add(new Label("beds", String.valueOf(floorPlan.bedrooms().getValue())));
                 item.add(new Label("bath", String.valueOf(floorPlan.bathrooms().getValue())));
                 // get price and area range
-                Double minPrice = null, maxPrice = null;
+                BigDecimal minPrice = null, maxPrice = null;
                 Integer minArea = null, maxArea = null;
                 AreaMeasurementUnit areaUnits = AreaMeasurementUnit.sqFeet;
                 for (AptUnit u : fpUnits.get(floorPlan)) {
                     //price
-                    Double _prc = u.financial()._marketRent().getValue();
-                    if (minPrice == null || minPrice > _prc) {
+                    BigDecimal _prc = u.financial()._marketRent().getValue();
+                    if (minPrice == null || minPrice.compareTo(_prc) > 0) {
                         minPrice = _prc;
                     }
-                    if (maxPrice == null || maxPrice < _prc) {
+                    if (maxPrice == null || minPrice.compareTo(_prc) < 0) {
                         maxPrice = _prc;
                     }
+
+                    // (minPrice == null) || (minPrice.compareTo(_prc) > 0)
+
                     //area
                     minArea = DomainUtil.min(minArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
                     maxArea = DomainUtil.max(maxArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
@@ -117,7 +121,7 @@ public class AptDetailsPage extends BasePage {
                 // price
                 String price = NAString;
                 if (minPrice != null && maxPrice != null) {
-                    price = "$" + String.valueOf(Math.round(minPrice)) + " - $" + String.valueOf(Math.round(maxPrice));
+                    price = "$" + DomainUtil.roundMoney(minPrice) + " - $" + DomainUtil.roundMoney(maxPrice);
                 }
                 item.add(new Label("price", price));
                 // area

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -122,7 +123,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                     unit.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem().agreedPrice().getValue());
                 }
 
-                double marketRent = unit.financial()._marketRent().isNull() ? 0d : unit.financial()._marketRent().getValue();
+                BigDecimal marketRent = unit.financial()._marketRent().isNull() ? new BigDecimal(0) : unit.financial()._marketRent().getValue();
                 status.marketRent().setValue(marketRent);
                 // TODO get unit rent from the correct place and remove the random generation in moveIn()
                 Persistence.service().retrieve(unit.floorplan());
@@ -292,9 +293,9 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         }
 
         status.unitRent().setValue(randomUnitRent(status));
-        double marketRent = status.marketRent().isNull() ? 0d : status.marketRent().getValue();
-        double rentDeltaAbsoute = marketRent - status.unitRent().getValue();
-        double rentDeltaRelative = marketRent == 0d ? 0d : rentDeltaAbsoute / marketRent * 100;
+        BigDecimal marketRent = status.marketRent().isNull() ? new BigDecimal(0) : status.marketRent().getValue();
+        BigDecimal rentDeltaAbsoute = marketRent.subtract(status.unitRent().getValue());
+        BigDecimal rentDeltaRelative = marketRent.doubleValue() == 0d ? new BigDecimal(0) : rentDeltaAbsoute.divide(marketRent).multiply(new BigDecimal(100));
         status.rentDeltaAbsolute().setValue(rentDeltaAbsoute);
         status.rentDeltaRelative().setValue(rentDeltaRelative);
     }
@@ -311,9 +312,9 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         status.vacancyStatus().setValue(VacancyStatus.Vacant);
     }
 
-    private static Double randomUnitRent(UnitAvailabilityStatus status) {
+    private static BigDecimal randomUnitRent(UnitAvailabilityStatus status) {
         final double MAX_DIFF_PCT = 0.1;
-        return status.marketRent().getValue() * ((1 + MAX_DIFF_PCT) - (2 * RND.nextDouble() * MAX_DIFF_PCT));
+        return status.marketRent().getValue().multiply(new BigDecimal((1 + MAX_DIFF_PCT) - (2 * RND.nextDouble() * MAX_DIFF_PCT)));
     }
 
     /** return x such that x >= min and x < max */

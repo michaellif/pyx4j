@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.openapi.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,9 +42,9 @@ public class BuildingRS {
     @XmlElements(@XmlElement(name = "amenity", type = AmenityRS.class))
     public List<AmenityRS> amenities = new ArrayList<AmenityRS>();
 
-    public Double rentFrom;
+    public BigDecimal rentFrom;
 
-    public Double rentTo;
+    public BigDecimal rentTo;
 
     public Integer sqftFrom;
 

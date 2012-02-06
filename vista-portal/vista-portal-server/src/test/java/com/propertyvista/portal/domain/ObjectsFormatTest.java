@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.domain;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
@@ -26,7 +28,7 @@ public class ObjectsFormatTest extends VistaDBTestBase {
 
     public void testChargeLineFormat() {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
-        cl.amount().setValue(10.00);
+        cl.amount().setValue(new BigDecimal(10));
         cl.label().setValue("Monthly");
         assertEquals("10", "$10.00 Monthly", cl.getStringView());
     }
