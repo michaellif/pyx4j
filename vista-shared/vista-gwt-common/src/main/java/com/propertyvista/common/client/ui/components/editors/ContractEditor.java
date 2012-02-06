@@ -18,15 +18,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.property.vendor.Contract;
 
 public class ContractEditor extends CEntityDecoratableEditor<Contract> {
-
-    private static final I18n i18n = I18n.get(ContractEditor.class);
 
     public ContractEditor() {
         super(Contract.class);
@@ -51,12 +48,12 @@ public class ContractEditor extends CEntityDecoratableEditor<Contract> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        validateContractDates();
+        addLocalValidations();
 
         return main;
     }
 
-    private void validateContractDates() {
+    private void addLocalValidations() {
         new StartEndDateValidation(get(proto().start()), get(proto().end()));
         get(proto().start()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().end()))); //connects validation of both fields
         get(proto().end()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().start())));

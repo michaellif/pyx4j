@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,6 +29,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
@@ -155,19 +156,8 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().passwordConfirm()), 10).build());
-        get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
-            @Override
-            public ValidationFailure isValid(CComponent<String, ?> component, String value) {
-                if (value.equals(get(proto().password()).getValue())) {
-                    return null;
-                } else {
-                    return new ValidationFailure(i18n.tr("The passwords don't match. Please retype the passwords."));
-                }
-            }
-        });
 
         main.setBR(++row, 0, 1);
-
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 5).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn()), 5).build());
 
@@ -186,7 +176,23 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
             }
         })));
 
+        addLocalValidations();
         return new CrmScrollPanel(main);
+    }
+
+    private void addLocalValidations() {
+        get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
+            @Override
+            public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+                if (value.equals(get(proto().password()).getValue())) {
+                    return null;
+                } else {
+                    return new ValidationFailure(i18n.tr("The passwords don't match. Please retype the passwords."));
+                }
+            }
+        });
+
+        new PastDateValidation(get(proto().birthDate()));
     }
 
 }

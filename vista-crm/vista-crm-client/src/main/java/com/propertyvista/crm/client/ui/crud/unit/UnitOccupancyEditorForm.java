@@ -61,7 +61,7 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancySegme
         get(proto().offMarket()).setVisible(false);
         get(proto().lease()).setVisible(false);
 
-        validateOccupancyDates();
+        addLocalValidations();
 
         return new CrmScrollPanel(main);
     }
@@ -78,7 +78,7 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancySegme
         }
     }
 
-    private void validateOccupancyDates() {
+    private void addLocalValidations() {
         new StartEndDateValidation(get(proto().dateFrom()), get(proto().dateTo()));
     }
 }

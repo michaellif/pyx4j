@@ -138,6 +138,7 @@ class AgreedItemEditor extends CEntityDecoratableEditor<BillableItem> {
     public void addValidations() {
         get(proto().agreedPrice()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
+            //TODO validate and look over again
             public ValidationFailure isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
                 if (value != null && getValue() != null && !getValue().isEmpty()) {
                     Double originalPrice = getValue().originalPrice().getValue().doubleValue();
