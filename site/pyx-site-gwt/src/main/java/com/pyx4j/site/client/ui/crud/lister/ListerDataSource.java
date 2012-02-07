@@ -80,10 +80,6 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
         parentFiltering = null;
     }
 
-    public List<DataTableFilterData> getPreDefinedFilters() {
-        return preDefinedFilters;
-    }
-
     public void setPreDefinedFilters(List<DataTableFilterData> preDefinedFilters) {
         this.preDefinedFilters = preDefinedFilters;
     }
@@ -94,6 +90,10 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     public void addPreDefinedFilter(DataTableFilterData preDefinedFilter) {
         preDefinedFilters.add(preDefinedFilter);
+    }
+
+    public void clearPreDefinedFilters() {
+        this.preDefinedFilters.clear();
     }
 
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {

@@ -39,11 +39,13 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         void setParent(Key parentID, Class<? extends IEntity> parentClass);
 
-        List<DataTableFilterData> getPreDefinedFilters();
-
         void setFilterByParent(boolean flag);
 
         void setPreDefinedFilters(List<DataTableFilterData> filters);
+
+        void addPreDefinedFilters(List<DataTableFilterData> filters);
+
+        void clearPreDefinedFilters();
 
         void retrieveData(int pageNumber);
 

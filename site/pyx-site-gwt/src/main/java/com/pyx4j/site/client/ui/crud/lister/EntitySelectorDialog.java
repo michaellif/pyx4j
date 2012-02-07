@@ -73,7 +73,7 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
             });
         }
         dataSource = new ListerDataSource<E>(entityClass, getSelectService());
-        dataSource.setPreDefinedFilters(createRestrictionFilterForAlreadySelected());
+        setFilters(createRestrictionFilterForAlreadySelected());
         lister.setDataSource(dataSource);
 
         setBody(createBody());

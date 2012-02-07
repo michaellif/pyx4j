@@ -107,13 +107,18 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public List<DataTableFilterData> getPreDefinedFilters() {
-        return dataSource.getPreDefinedFilters();
+    public void setPreDefinedFilters(List<DataTableFilterData> filters) {
+        dataSource.setPreDefinedFilters(filters);
     }
 
     @Override
-    public void setPreDefinedFilters(List<DataTableFilterData> preDefinedFilters) {
-        dataSource.setPreDefinedFilters(preDefinedFilters);
+    public void addPreDefinedFilters(List<DataTableFilterData> filters) {
+        dataSource.addPreDefinedFilters(filters);
+    }
+
+    @Override
+    public void clearPreDefinedFilters() {
+        dataSource.clearPreDefinedFilters();
     }
 
     @Override
