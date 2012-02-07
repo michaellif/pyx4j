@@ -27,6 +27,7 @@ import com.propertyvista.domain.security.CrmRole;
 @Transient
 public interface EmployeeDTO extends Employee {
 
+    @Caption(name = "Active Employee")
     IPrimitive<Boolean> enabled();
 
     IPrimitive<Boolean> accessAllBuildings();
