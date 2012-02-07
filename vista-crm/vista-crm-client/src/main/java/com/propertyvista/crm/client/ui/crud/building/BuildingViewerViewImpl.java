@@ -79,20 +79,20 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     public BuildingViewerViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
 
-        floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister(/* readOnly */));
+        floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister());
 
-        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new UnitLister(/* readOnly */));
+        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new UnitLister(true));
 
-        elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister(/* readOnly */));
-        boilerLister = new ListerInternalViewImplBase<BoilerDTO>(new BoilerLister(/* readOnly */));
-        roofLister = new ListerInternalViewImplBase<RoofDTO>(new RoofLister(/* readOnly */));
+        elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister());
+        boilerLister = new ListerInternalViewImplBase<BoilerDTO>(new BoilerLister());
+        roofLister = new ListerInternalViewImplBase<RoofDTO>(new RoofLister());
 
-        parkingLister = new ListerInternalViewImplBase<ParkingDTO>(new ParkingLister(/* readOnly */));
-        lockerAreaLister = new ListerInternalViewImplBase<LockerAreaDTO>(new LockerAreaLister(/* readOnly */));
+        parkingLister = new ListerInternalViewImplBase<ParkingDTO>(new ParkingLister());
+        lockerAreaLister = new ListerInternalViewImplBase<LockerAreaDTO>(new LockerAreaLister());
 
-        serviceLister = new ListerInternalViewImplBase<Service>(new ServiceLister(/* readOnly */));
-        featureLister = new ListerInternalViewImplBase<Feature>(new FeatureLister(/* readOnly */));
-        concessionLister = new ListerInternalViewImplBase<Concession>(new ConcessionLister(/* readOnly */));
+        serviceLister = new ListerInternalViewImplBase<Service>(new ServiceLister());
+        featureLister = new ListerInternalViewImplBase<Feature>(new FeatureLister());
+        concessionLister = new ListerInternalViewImplBase<Concession>(new ConcessionLister());
 
         // set main form here:
         setForm(new BuildingEditorForm(true));

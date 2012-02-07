@@ -25,8 +25,11 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
     private static final I18n i18n = I18n.get(UnitLister.class);
 
     public UnitLister() {
-        super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, false, true);
-        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
+        this(false);
+    }
+
+    public UnitLister(boolean allowAddNew) {
+        super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, false, allowAddNew);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),
