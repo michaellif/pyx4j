@@ -48,7 +48,7 @@ public class CrmSiteAppPlaceDispatcher extends AppPlaceDispatcher {
                 callback.onSuccess(newPlace);
             }
             targetPlace = AppPlace.NOWHERE;
-        } else if (SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequired)) {
+        } else if (SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequired) && (!(newPlace instanceof CrmSiteMap.SigningOut))) {
             callback.onSuccess(new CrmSiteMap.PasswordReset());
         } else {
             targetPlace = newPlace;
