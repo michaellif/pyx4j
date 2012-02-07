@@ -23,7 +23,6 @@ package com.pyx4j.site.client.ui.crud.lister;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -56,6 +55,7 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
         this.entityClass = entityClass;
         this.isMultiselect = isMultiselect;
         this.alreadySelected = new ArrayList<E>(alreadySelected);
+
         lister = new SelectEntityLister(this.entityClass);
         if (this.isMultiselect) {
             lister.getDataTablePanel().getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
@@ -73,17 +73,17 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
             });
         }
         dataSource = new ListerDataSource<E>(entityClass, getSelectService());
-        setPreDefinedFilters(new LinkedList<DataTableFilterData>());
+        dataSource.setPreDefinedFilters(createRestrictionFilterForAlreadySelected());
         lister.setDataSource(dataSource);
-        lister.obtain(0);
 
         setBody(createBody());
-        setSize(width(), height());
     }
 
-    protected abstract String width();
-
-    protected abstract String height();
+    @Override
+    public void show() {
+        lister.obtain(0); // populate lister... 
+        super.show();
+    }
 
     protected abstract List<ColumnDescriptor> defineColumnDescriptors();
 
@@ -123,10 +123,16 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
         return restrictAlreadySelected;
     }
 
-    protected void setPreDefinedFilters(List<DataTableFilterData> preDefinedFilters) {
-        preDefinedFilters = new LinkedList<DataTableFilterData>(preDefinedFilters);
-        preDefinedFilters.addAll(createRestrictionFilterForAlreadySelected());
-        dataSource.setPreDefinedFilters(preDefinedFilters);
+    protected void addFilter(DataTableFilterData filter) {
+        dataSource.addPreDefinedFilter(filter);
+    }
+
+    protected void addFilters(List<DataTableFilterData> filters) {
+        dataSource.addPreDefinedFilters(filters);
+    }
+
+    protected void setFilters(List<DataTableFilterData> filters) {
+        dataSource.setPreDefinedFilters(filters);
     }
 
     private class SelectEntityLister extends BasicLister<E> {

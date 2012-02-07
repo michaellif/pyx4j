@@ -14,7 +14,7 @@
 package com.pyx4j.site.client.ui.crud.lister;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -40,7 +40,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     private DataTableFilterData parentFiltering;
 
-    private List<DataTableFilterData> preDefinedFilters;
+    private List<DataTableFilterData> preDefinedFilters = new LinkedList<DataTableFilterData>();;
 
     public ListerDataSource(Class<E> entityClass, AbstractListService<E> service) {
         this.entityClass = entityClass;
@@ -88,14 +88,22 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
         this.preDefinedFilters = preDefinedFilters;
     }
 
+    public void addPreDefinedFilters(List<DataTableFilterData> preDefinedFilters) {
+        preDefinedFilters.addAll(preDefinedFilters);
+    }
+
+    public void addPreDefinedFilter(DataTableFilterData preDefinedFilter) {
+        preDefinedFilters.add(preDefinedFilter);
+    }
+
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
-        List<DataTableFilterData> currentFilters = new ArrayList<DataTableFilterData>();
+        List<DataTableFilterData> currentFilters = new LinkedList<DataTableFilterData>();
 
         // combine filters:
         if (parentFiltering != null) {
             currentFilters.add(parentFiltering);
         }
-        if (preDefinedFilters != null) {
+        if (!preDefinedFilters.isEmpty()) {
             currentFilters.addAll(preDefinedFilters);
         }
 
