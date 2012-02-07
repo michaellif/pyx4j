@@ -38,6 +38,7 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
     public CrmRoleFolder(boolean isModifiable) {
         super(CrmRole.class, isModifiable);
         setViewable(true);
+        setOrderable(false);
     }
 
     @Override
