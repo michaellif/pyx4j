@@ -23,6 +23,11 @@ public class VistaTestDBSetup {
     public static synchronized void init() {
         if (initOnce == null) {
             boolean testOnMySQL = false;
+
+            // Fail safe if somebody committed the file by mistake 
+            if (System.getProperty("bamboo.buildNumber") == null) {
+                testOnMySQL = false;
+            }
             initOnce = new VistaTestsServerSideConfiguration(testOnMySQL);
             ServerSideConfiguration.setInstance(initOnce);
         }
