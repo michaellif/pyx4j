@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.server.util.occupancy;
 
-import java.text.ParseException;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 
 public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase {
 
@@ -48,9 +48,9 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     // real imp.
 
     @Test
-    public void testInitialization() throws ParseException {
-//        setup("2011-01-01", "MAX_DATE", Status.vacant);
-//        expect("2011-01-01", "MAX_DATE", Status.vacant); // for now just sanity check
+    public void testInitialization() {
+        setup("2011-01-01", "MAX_DATE", Status.vacant);
+        expect("2011-01-01", "MAX_DATE", Status.vacant); // for now just sanity check
     }
 
     @Override

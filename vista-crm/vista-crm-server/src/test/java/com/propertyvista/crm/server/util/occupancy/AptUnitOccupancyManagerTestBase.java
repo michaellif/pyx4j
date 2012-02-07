@@ -63,15 +63,15 @@ public class AptUnitOccupancyManagerTestBase {
         Persistence.service().persist(unit);
     }
 
-    public void setup(String dateFrom, String dateTo, Status status) throws ClassCastException, ParseException {
+    public void setup(String dateFrom, String dateTo, Status status) {
         setup(dateFrom, dateTo, status, null);
     }
 
-    public void setupOffMarket(String dateFrom, String dateTo, OffMarketType offMarketType) throws ClassCastException, ParseException {
+    public void setupOffMarket(String dateFrom, String dateTo, OffMarketType offMarketType) {
         setup(dateFrom, dateTo, Status.offMarket, offMarketType);
     }
 
-    private void setup(String dateFrom, String dateTo, Status status, OffMarketType offMarketType) throws ClassCastException, ParseException {
+    private void setup(String dateFrom, String dateTo, Status status, OffMarketType offMarketType) {
         AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
         segment.dateFrom().setValue(asDate(dateFrom));
         segment.dateTo().setValue(asDate(dateTo));
@@ -82,7 +82,7 @@ public class AptUnitOccupancyManagerTestBase {
         Persistence.service().merge(segment);
     }
 
-    public void now(String nowDate) throws ParseException {
+    public void now(String nowDate) {
         manager = null;
         now = asDate(nowDate);
     }
@@ -109,15 +109,15 @@ public class AptUnitOccupancyManagerTestBase {
         }
     }
 
-    public void expect(String from, String to, Status status) throws ParseException {
+    public void expect(String from, String to, Status status) {
         expect(from, to, status, null);
     }
 
-    public void expectOffMarket(String from, String to, OffMarketType offMarketType) throws ParseException {
+    public void expectOffMarket(String from, String to, OffMarketType offMarketType) {
         expect(from, to, Status.offMarket, offMarketType);
     }
 
-    private void expect(String from, String to, Status status, OffMarketType offMarketType) throws ParseException {
+    private void expect(String from, String to, Status status, OffMarketType offMarketType) {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
 
         criteria.add(PropertyCriterion.eq(criteria.proto().dateFrom(), asDate(from)));
@@ -205,13 +205,17 @@ public class AptUnitOccupancyManagerTestBase {
         return parsed;
     }
 
-    public static LogicalDate asDate(String dateRepr) throws ParseException {
+    public static LogicalDate asDate(String dateRepr) {
         if ("MAX_DATE".equals(dateRepr)) {
             return new LogicalDate(AptUnitOccupancyManagerHelper.MAX_DATE);
         } else if ("MIN_DATE".equals(dateRepr)) {
             return new LogicalDate(AptUnitOccupancyManagerHelper.MIN_DATE);
         } else {
-            return new LogicalDate(DATE_FORMAT.parse(dateRepr));
+            try {
+                return new LogicalDate(DATE_FORMAT.parse(dateRepr));
+            } catch (ParseException e) {
+                throw new Error("Invalid date format " + dateRepr);
+            }
         }
     }
 }

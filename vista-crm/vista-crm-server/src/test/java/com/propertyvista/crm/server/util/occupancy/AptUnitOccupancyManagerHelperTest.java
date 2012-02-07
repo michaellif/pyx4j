@@ -18,23 +18,13 @@ import java.text.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
-
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 
 public class AptUnitOccupancyManagerHelperTest {
 
-    private static final boolean TEST_ON_MYSQL = false;
-
     @Before
     public void setUp() {
-        if (TEST_ON_MYSQL) {
-            ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
-        } else {
-            VistaTestDBSetup.init();
-        }
-
+        VistaTestDBSetup.init();
     }
 
     @Test
