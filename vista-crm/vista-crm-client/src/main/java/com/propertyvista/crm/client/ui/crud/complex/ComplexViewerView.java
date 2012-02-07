@@ -14,10 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.complex;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardView;
-import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ComplexDTO;
 
 public interface ComplexViewerView extends IViewerView<ComplexDTO> {
@@ -26,6 +24,4 @@ public interface ComplexViewerView extends IViewerView<ComplexDTO> {
     }
 
     BuildingDashboardView getDashboardView();
-
-    IListerView<BuildingDTO> getBuildingListerView();
 }

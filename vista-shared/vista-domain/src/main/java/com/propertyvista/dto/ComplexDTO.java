@@ -13,13 +13,9 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.property.asset.Complex;
-import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 public interface ComplexDTO extends Complex {
@@ -29,11 +25,6 @@ public interface ComplexDTO extends Complex {
 //
 //    /** Address of complex's primary building */
 //    AddressStructured address();
-
-    ISet<Building> buildings();
-
-    @Editor(type = EditorType.combo)
-    Building primaryBuilding();
 
     // TODO additional properties:
     // * propertyManager/anyOtherKindOfManager - fetch from primary building

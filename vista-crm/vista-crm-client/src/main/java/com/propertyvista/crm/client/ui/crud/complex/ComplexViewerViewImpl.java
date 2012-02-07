@@ -14,29 +14,21 @@
 package com.propertyvista.crm.client.ui.crud.complex;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.building.BuildingLister;
 import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardView;
 import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardViewImpl;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> implements ComplexViewerView {
 
     private final BuildingDashboardView dashboardView = new BuildingDashboardViewImpl();
 
-    private final IListerView<BuildingDTO> buildingLister;
-
     public ComplexViewerViewImpl() {
         super(CrmSiteMap.Properties.Complex.class);
-
-        buildingLister = new ListerInternalViewImplBase<BuildingDTO>(new BuildingLister());
 
         // set main form here:
         setForm(new ComplexEditorForm(true));
@@ -53,11 +45,6 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
     @Override
     public BuildingDashboardView getDashboardView() {
         return dashboardView;
-    }
-
-    @Override
-    public IListerView<BuildingDTO> getBuildingListerView() {
-        return buildingLister;
     }
 
     // Internals:

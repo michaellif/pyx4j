@@ -38,7 +38,7 @@ public class ComplexCrudServiceImpl extends GenericCrudServiceDtoImpl<Complex, C
         Persistence.service().retrieve(dto.dashboard());
 
         if (dto.dashboard().isEmpty()) {
-            // load first building  dashoard by default:
+            // load first building  dashboard by default:
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
             List<DashboardMetadata> dashboards = Persistence.service().query(criteria);
@@ -48,34 +48,18 @@ public class ComplexCrudServiceImpl extends GenericCrudServiceDtoImpl<Complex, C
         }
 
         if (!fromList) {
+            // fill transient data:
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().complex(), in));
-            List<Building> buildings = Persistence.service().query(criteria);
-            for (Building building : buildings) {
-                if (building.complexPrimary().isBooleanTrue()) {
-                    Persistence.service().retrieve(building.contacts().contacts());
-                    Persistence.service().retrieve(building.contacts().phones());
-                    dto.primaryBuilding().set(building);
-                    break;
-                }
-            }
-
-            dto.buildings().addAll(buildings);
+            dto.buildings().addAll(Persistence.service().query(criteria));
         }
     }
 
     @Override
     protected void persistDBO(Complex dbo, ComplexDTO in) {
         super.persistDBO(dbo, in);
-        Building primary = in.primaryBuilding();
 
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().complex(), dbo));
-        List<Building> buildings = Persistence.service().query(criteria);
-        for (Building building : buildings) {
-            building.complexPrimary().setValue(building.getPrimaryKey().equals(primary.getPrimaryKey()));
-        }
-
-        Persistence.service().merge(buildings);
+        // update possible primary building change: 
+        Persistence.service().merge(in.buildings());
     }
 }

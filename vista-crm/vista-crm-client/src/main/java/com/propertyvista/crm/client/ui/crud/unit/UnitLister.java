@@ -25,7 +25,7 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
     private static final I18n i18n = I18n.get(UnitLister.class);
 
     public UnitLister() {
-        this(false);
+        this(true);
     }
 
     public UnitLister(boolean allowAddNew) {

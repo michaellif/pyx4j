@@ -17,11 +17,14 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("Disc Complex")
 public interface Complex extends PolicyNode {
@@ -29,15 +32,16 @@ public interface Complex extends PolicyNode {
     /**
      * Legal name of the property (max 120 char)
      */
+    @NotNull
     @ToString
     @Caption(name = "Legal Name")
-    @NotNull
     IPrimitive<String> name();
 
     IPrimitive<String> website();
 
     @Detached
     DashboardMetadata dashboard();
-// Let's leave just one-directional reference in Building?! 
-//    ISet<Building> buildings();
+
+    @Transient
+    IList<Building> buildings();
 }

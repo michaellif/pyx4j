@@ -19,17 +19,13 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.complex.ComplexViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ComplexDTO;
 
 // TODO possible optimization: when fetching buildings for the lister, propagate these results to the dashboard filter
@@ -38,17 +34,11 @@ public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implem
 
     private final DashboardViewActivity dashboardViewActivity;
 
-    private final IListerView.Presenter<?> buildingListerActivity;
-
     @SuppressWarnings("unchecked")
     public ComplexViewerActivity(Place place) {
         super(place, BuildingViewFactory.instance(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
 
         dashboardViewActivity = new DashboardViewActivity(getView().getDashboardView());
-
-        buildingListerActivity = new ListerActivityBase<BuildingDTO>(place, getView().getBuildingListerView(),
-                (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class), BuildingDTO.class);
-
     }
 
     private ComplexViewerView getView() {
@@ -57,7 +47,6 @@ public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implem
 
     @Override
     public void onStop() {
-        ((AbstractActivity) buildingListerActivity).onStop();
         ((AbstractActivity) dashboardViewActivity).onStop();
         super.onStop();
     }
@@ -70,9 +59,6 @@ public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implem
         dashboardViewActivity.populate(result.dashboard());
 
         super.onPopulateSuccess(result);
-
-        buildingListerActivity.setParent(result.id().getValue());
-        buildingListerActivity.populate();
     }
 
     @Override
