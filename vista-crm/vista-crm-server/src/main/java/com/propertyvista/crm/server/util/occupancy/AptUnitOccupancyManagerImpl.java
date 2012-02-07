@@ -15,10 +15,24 @@ package com.propertyvista.crm.server.util.occupancy;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
+
+    public AptUnitOccupancyManagerImpl(AptUnit unit) {
+        this(unit, new NowSource() {
+            @Override
+            public LogicalDate getNow() {
+                return new LogicalDate();
+            }
+        });
+    }
+
+    public AptUnitOccupancyManagerImpl(AptUnit unit, NowSource source) {
+        // TODO Auto-generated constructor stub
+    }
 
     @Override
     public void scopeOffMarket(OffMarketType type, LogicalDate startDate) {
@@ -68,4 +82,9 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     }
 
+    public interface NowSource {
+
+        LogicalDate getNow();
+
+    }
 }
