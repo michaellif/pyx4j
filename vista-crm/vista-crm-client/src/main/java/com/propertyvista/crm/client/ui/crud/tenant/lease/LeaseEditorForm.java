@@ -120,13 +120,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 public void onClick(ClickEvent event) {
                     new UnitSelectorDialog(true) {
                         @Override
-                        protected void setFilters(List<DataTableFilterData> preDefinedFilters) {
-                            if (!getValue().leaseFrom().isNull() & getValue().leaseTo().isNull() & preDefinedFilters != null) {
-                                preDefinedFilters.add(new DataTableFilterData(proto().availableForRent().getPath(), Operators.greaterThan, getValue()
-                                        .leaseFrom().getValue()));
-                                preDefinedFilters.add(new DataTableFilterData(proto().availableForRent().getPath(), Operators.lessThan, getValue().leaseTo()
+                        protected void setFilters(List<DataTableFilterData> filters) {
+                            if (!getValue().leaseFrom().isNull() && !getValue().leaseTo().isNull() && filters != null) {
+                                filters.add(new DataTableFilterData(proto().availableForRent().getPath(), Operators.greaterThan, getValue().leaseFrom()
                                         .getValue()));
+                                filters.add(new DataTableFilterData(proto().availableForRent().getPath(), Operators.lessThan, getValue().leaseTo().getValue()));
                             }
+                            super.setFilters(filters);
                         };
 
                         @Override
