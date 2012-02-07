@@ -66,8 +66,6 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
     public void enforceBehaviour() {
         boolean isManager = SecurityController.checkBehavior(VistaCrmBehavior.Organization);
 
-        get(proto().title()).setViewable(isSelfEditor());
-
         get(proto().enabled()).setVisible(isManager);
         get(proto().requireChangePasswordOnNextLogIn()).setVisible(isManager);
 
