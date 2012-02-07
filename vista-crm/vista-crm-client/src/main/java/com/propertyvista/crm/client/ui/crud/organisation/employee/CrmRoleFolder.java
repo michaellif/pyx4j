@@ -43,7 +43,9 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().name(), "30em")
+                new EntityFolderColumnDescriptor(proto().name(), "30em"),
+                new EntityFolderColumnDescriptor(proto().description(), "30em"),
+                new EntityFolderColumnDescriptor(proto().behaviors(), "30em")
         );//@formatter:on
     }
 
