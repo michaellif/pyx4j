@@ -25,13 +25,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -40,17 +38,11 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AvailablilityReportManagerTest {
 
-    private static final boolean TEST_ON_MYSQL = false;
-
     private static AptUnit unit;
 
     @Before
     public void setUp() {
-        if (TEST_ON_MYSQL) {
-            ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
-        } else {
-            VistaTestDBSetup.init();
-        }
+        VistaTestDBSetup.init();
 
         unit = EntityFactory.create(AptUnit.class);
     }
