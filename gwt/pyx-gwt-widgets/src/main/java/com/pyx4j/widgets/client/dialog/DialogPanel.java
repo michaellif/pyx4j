@@ -24,7 +24,6 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
@@ -183,15 +182,20 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
         // DialogBox content) to keep text from being selected when it
         // is dragged.
         NativeEvent nativeEvent = event.getNativeEvent();
-        if (!event.isCanceled() && ((event.getTypeInt() == Event.ONMOUSEDOWN) || (event.getTypeInt() == Event.ONMOUSEMOVE))) {
-            nativeEvent.preventDefault();
+        if (!event.isCanceled() && (event.getTypeInt() == Event.ONMOUSEDOWN)) {
+            int x = event.getNativeEvent().getClientX() - this.getAbsoluteLeft();
+            int y = event.getNativeEvent().getClientY() - this.getAbsoluteTop();
+            if (!DragZoneType.NONE.equals(getDragZoneType(x, y))) {
+                nativeEvent.preventDefault();
+                return;
+            }
         }
         super.onPreviewNativeEvent(event);
     }
 
     protected void beginDragging(MouseDownEvent event) {
         dragging = true;
-        dragZoneType = getDragZoneType(event);
+        dragZoneType = getDragZoneType(event.getX(), event.getY());
         DOM.setCapture(getElement());
         dragStartX = event.getX() + getAbsoluteLeft();
         dragStartY = event.getY() + getAbsoluteTop();
@@ -281,13 +285,13 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
         if (dragging) {
             continueDragging(event);
         } else {
-            setCursor(getDragZoneType(event));
+            setCursor(getDragZoneType(event.getX(), event.getY()));
         }
     }
 
     @Override
     public void onMouseDown(MouseDownEvent event) {
-        if (!DragZoneType.NONE.equals(getDragZoneType(event))) {
+        if (!DragZoneType.NONE.equals(getDragZoneType(event.getX(), event.getY()))) {
             beginDragging(event);
         }
     }
@@ -307,21 +311,16 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
         }
     }
 
-    private DragZoneType getDragZoneType(MouseEvent<?> mouseEvent) {
+    private DragZoneType getDragZoneType(int x, int y) {
         if (BrowserType.isIE8()) {
             return DragZoneType.NONE;
         }
 
-        int eventY = mouseEvent.getY() + getAbsoluteTop();
         int boxY = this.getAbsoluteTop();
         int height = this.getOffsetHeight();
 
-        int eventX = mouseEvent.getX() + getAbsoluteLeft();
         int boxX = this.getAbsoluteLeft();
         int width = this.getOffsetWidth();
-
-        int y = eventY - boxY;
-        int x = eventX - boxX;
 
         if ((x > captionPanel.getAbsoluteLeft() - boxX) && (x < captionPanel.getAbsoluteLeft() + captionPanel.getOffsetWidth() - boxX)
                 && (y > captionPanel.getAbsoluteTop() - boxY) && (y < captionPanel.getAbsoluteTop() + captionPanel.getOffsetHeight() - boxY)) {
