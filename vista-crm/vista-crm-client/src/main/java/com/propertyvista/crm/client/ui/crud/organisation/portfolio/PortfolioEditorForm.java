@@ -121,6 +121,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
 
         public BuildingSelectorDialog(List<Building> alreadySelected) {
             super(Building.class, true, alreadySelected, i18n.tr("Select Buildings"));
+            setSize("700px", "400px");
         }
 
         @Override
@@ -142,16 +143,5 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
         protected AbstractListService<Building> getSelectService() {
             return GWT.<AbstractListService<Building>> create(SelectBuildingCrudService.class);
         }
-
-        @Override
-        protected String width() {
-            return "700px";
-        }
-
-        @Override
-        protected String height() {
-            return "400px";
-        }
-
     }
 }

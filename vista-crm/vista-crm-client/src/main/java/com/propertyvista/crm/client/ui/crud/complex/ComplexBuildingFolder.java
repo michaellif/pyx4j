@@ -14,19 +14,28 @@
 package com.propertyvista.crm.client.ui.crud.complex;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.rpc.services.selections.SelectBuildingCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 
@@ -54,6 +63,11 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
             return new ComplexBuildingEditor();
         }
         return super.create(member);
+    }
+
+    @Override
+    protected void addItem() {
+        new BuildingSelectorDialog().show();
     }
 
     private class ComplexBuildingEditor extends CEntityFolderRowEditor<Building> {
@@ -100,5 +114,75 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
                 }
             });
         }
+    }
+
+    private class BuildingSelectorDialog extends EntitySelectorDialog<Building> {
+
+        public BuildingSelectorDialog() {
+            super(Building.class, true, getValue(), i18n.tr("Select Building"));
+            addFilter(new DataTableFilterData(ComplexBuildingFolder.this.proto().complex().getPath(), Operators.is, null));
+            setSize("700px", "400px");
+        }
+
+        @Override
+        public boolean onClickOk() {
+            if (getSelectedItems().isEmpty()) {
+                return false;
+            } else {
+                for (Building item : getSelectedItems()) {
+                    item.complexPrimary().setValue(false);
+                    addItem(item);
+                }
+                return true;
+            }
+        }
+
+        @Override
+        protected List<ColumnDescriptor> defineColumnDescriptors() {
+            return Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().complex(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().externalId(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().propertyManager(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().name(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().type(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().shape(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().streetNumber(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().streetNumberSuffix(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().streetName(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().streetType(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().streetDirection(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().city(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().province(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().country(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().marketing().visibility(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().totalStoreys(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().residentialStoreys(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().structureType(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().structureBuildYear(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().constructionType(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().foundationType(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().floorType(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().landArea(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().waterSupply(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().centralAir(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().centralHeat(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().contacts().website(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().contacts().email(), false).title(proto().contacts().email()).build(),
+                    new MemberColumnDescriptor.Builder(proto().financial().dateAcquired(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().financial().purchasePrice(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().financial().marketPrice(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().financial().lastAppraisalDate(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().financial().lastAppraisalValue(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().financial().currency().name(), false).title(proto().financial().currency()).build(),
+                    new MemberColumnDescriptor.Builder(proto().marketing().name(), false).title(i18n.tr("Marketing Name")).build()
+            );//@formatter:on
+        }
+
+        @Override
+        protected AbstractListService<Building> getSelectService() {
+            return GWT.<AbstractListService<Building>> create(SelectBuildingCrudService.class);
+        }
+
     }
 }

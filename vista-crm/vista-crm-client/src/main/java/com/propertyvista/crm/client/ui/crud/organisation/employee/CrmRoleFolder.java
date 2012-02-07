@@ -68,6 +68,7 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
 
         public CrmRoleSelectorDialog() {
             super(CrmRole.class, true, getValue(), i18n.tr("Select roles"));
+            setSize("500px", "400px");
         }
 
         @Override
@@ -80,16 +81,6 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
                 }
                 return true;
             }
-        }
-
-        @Override
-        protected String width() {
-            return "500px";
-        }
-
-        @Override
-        protected String height() {
-            return "400px";
         }
 
         @Override

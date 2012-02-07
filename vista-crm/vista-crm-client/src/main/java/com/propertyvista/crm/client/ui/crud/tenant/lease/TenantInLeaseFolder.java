@@ -163,6 +163,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
         public TenantSelectorDialog() {
             super(Tenant.class, true, extractTenantFromTenantInLeaseList(getValue()), i18n.tr("Select Tenant"));
+            setSize("700px", "400px");
         }
 
         @Override
@@ -184,16 +185,6 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
                 return true;
             }
-        }
-
-        @Override
-        protected String width() {
-            return "700px";
-        }
-
-        @Override
-        protected String height() {
-            return "400px";
         }
 
         @Override

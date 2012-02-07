@@ -106,6 +106,7 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
         public PortfolioSelectorDialog(List<Portfolio> alreadySelected) {
             super(Portfolio.class, true, alreadySelected, i18n.tr("Select Portfolio"));
+            setSize("700px", "400px");
         }
 
         @Override
@@ -119,16 +120,6 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
         @Override
         protected AbstractListService<Portfolio> getSelectService() {
             return GWT.<AbstractListService<Portfolio>> create(SelectPortfolioListService.class);
-        }
-
-        @Override
-        protected String width() {
-            return "700px";
-        }
-
-        @Override
-        protected String height() {
-            return "400px";
         }
 
         @Override

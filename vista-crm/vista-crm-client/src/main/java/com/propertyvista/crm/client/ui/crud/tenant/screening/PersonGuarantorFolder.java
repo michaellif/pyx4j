@@ -112,6 +112,7 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
 
         public TenantSelectorDialog() {
             super(Guarantor.class, true, alreadySelectedGuarantor(), i18n.tr("Select Guarantor"));
+            setSize("700px", "400px");
         }
 
         @Override
@@ -127,16 +128,6 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
 
                 return true;
             }
-        }
-
-        @Override
-        protected String width() {
-            return "700px";
-        }
-
-        @Override
-        protected String height() {
-            return "400px";
         }
 
         @Override

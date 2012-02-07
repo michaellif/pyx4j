@@ -117,6 +117,11 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
 
         public EmployeeSelectorDialog() {
             super(Employee.class, true, getValue(), i18n.tr("Select Employee"));
+            setSize("700px", "400px");
+
+            // add restriction for papa/mama employee, so that he/she won't be able manage himself :)
+            // FIXME: somehow we need to forbid circular references. maybe only server side (if someone wants to be a smart ass)
+            addFilter(new DataTableFilterData(proto().id().getPath(), Operators.isNot, parentEmployeeGetter.getParentId()));
         }
 
         @Override
@@ -126,14 +131,6 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
             }
             return true;
         }
-
-        @Override
-        protected void setPreDefinedFilters(java.util.List<DataTableFilterData> preDefinedFilters) {
-            // add restriction for papa/mama employee, so that he/she won't be able manage himself :)
-            // FIXME: somehow we need to forbid circular references. maybe only server side (if someone wants to be a smart ass)
-            preDefinedFilters.add(new DataTableFilterData(proto().id().getPath(), Operators.isNot, parentEmployeeGetter.getParentId()));
-            super.setPreDefinedFilters(preDefinedFilters);
-        };
 
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
@@ -149,16 +146,6 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
         @Override
         protected AbstractListService<Employee> getSelectService() {
             return GWT.<AbstractListService<Employee>> create(SelectEmployeeListService.class);
-        }
-
-        @Override
-        protected String width() {
-            return "700px";
-        }
-
-        @Override
-        protected String height() {
-            return "400px";
         }
     }
 
