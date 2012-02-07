@@ -25,7 +25,7 @@ public class VistaTestDBSetup {
             boolean testOnMySQL = false;
 
             // Fail safe if somebody committed the file by mistake 
-            if (System.getProperty("bamboo.buildNumber") == null) {
+            if (System.getProperty("bamboo.buildNumber") != null) {
                 testOnMySQL = false;
             }
             initOnce = new VistaTestsServerSideConfiguration(testOnMySQL);
