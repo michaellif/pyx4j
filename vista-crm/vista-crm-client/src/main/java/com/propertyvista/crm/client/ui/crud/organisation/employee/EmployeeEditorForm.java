@@ -130,6 +130,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 25).build());
+        get(proto().email()).setMandatory(true);
 
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
