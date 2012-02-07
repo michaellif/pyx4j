@@ -21,12 +21,14 @@
 package com.pyx4j.entity.test.shared.domain.version;
 
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 
 public interface ItemA extends IEntity {
 
     @Owned
+    @MemberColumn(name = "cur")
     ItemAVersion current();
 
     @Owned
