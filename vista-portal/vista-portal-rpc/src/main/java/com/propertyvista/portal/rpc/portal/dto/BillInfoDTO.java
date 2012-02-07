@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.rpc.portal.dto;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -39,11 +41,11 @@ public interface BillInfoDTO extends IEntity {
 
     @Caption(name = "Current Balance")
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> ammount();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> ammount();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> lastPayment();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> lastPayment();
 
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.services;
 
+import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -94,8 +95,8 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
         dashboard.currentBill().message().setValue("You have unpaid October Rent");
         dashboard.currentBill().paid().setValue(Boolean.FALSE);
         dashboard.currentBill().dueDate().setValue(new LogicalDate(new GregorianCalendar(2011, 9, 28).getTime()));
-        dashboard.currentBill().ammount().setValue(1240.);
-        dashboard.currentBill().lastPayment().setValue(1231.);
+        dashboard.currentBill().ammount().setValue(BigDecimal.valueOf(1240));
+        dashboard.currentBill().lastPayment().setValue(BigDecimal.valueOf(1231));
         dashboard.currentBill().receivedOn().setValue(new LogicalDate(new GregorianCalendar(2011, 8, 29).getTime()));
 
         {

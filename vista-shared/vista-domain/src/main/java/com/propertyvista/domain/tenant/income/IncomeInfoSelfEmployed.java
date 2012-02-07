@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.income;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
@@ -47,15 +49,15 @@ public interface IncomeInfoSelfEmployed extends IEmploymentInfo {
 
     @Caption(name = "Monthly Revenue")
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> monthlyRevenue();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> monthlyRevenue();
 
     @Override
     @Caption(name = "Monthly Salary/Dividend")
     @NotNull
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> monthlyAmount();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> monthlyAmount();
 
     @Caption(name = "Number Of Employees")
     IPrimitive<Integer> numberOfEmployees();

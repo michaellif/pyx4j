@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.income;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
@@ -38,8 +40,8 @@ public interface IIncomeInfo extends IEntity {
 
     @NotNull
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> monthlyAmount();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> monthlyAmount();
 
     /**
      * Start of income period. For employment that would be employment start date.

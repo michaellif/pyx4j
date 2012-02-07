@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -53,8 +55,8 @@ public interface PriorAddress extends AddressStructured {
 
     @Caption(name = "Monthly Payment")
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> payment();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> payment();
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();

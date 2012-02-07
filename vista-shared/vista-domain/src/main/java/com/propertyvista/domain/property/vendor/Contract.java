@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.vendor;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -36,8 +38,8 @@ public interface Contract extends IEntity {
 
     @MemberColumn(name = "vendorCost")
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> cost();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> cost();
 
     @Caption(name = "Start Date")
     @MemberColumn(name = "contractStart")

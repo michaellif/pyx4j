@@ -27,7 +27,7 @@ public interface AptUnitFinancial extends IEntity {
      * TODO Should be updated when Lease for this Unit is saved.
      */
     @Format("#0.00")
-    @Editor(type = EditorType.money)
+    @Editor(type = EditorType.money_new)
     IPrimitive<BigDecimal> _unitRent();
 
     /**

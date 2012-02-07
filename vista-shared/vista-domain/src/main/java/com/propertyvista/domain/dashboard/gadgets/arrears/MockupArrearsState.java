@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.arrears;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -100,8 +102,8 @@ public interface MockupArrearsState extends IEntity {
 
     @Caption(name = "LMR/Unit Rent, in $")
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> lmrUnitRentDifference();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> lmrUnitRentDifference();
 
     // FIXME all the following fields should be just references, but we keep them here for the performance improvements, but this is not RIGHT!
     // IDENTIFICATION INFO

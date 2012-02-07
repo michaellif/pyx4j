@@ -14,6 +14,7 @@
 package com.propertvista.generator;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -122,10 +123,10 @@ public class BuildingsGenerator {
         building.info().centralHeat().setValue(RandomUtil.randomBoolean());
 
         building.financial().dateAcquired().setValue(RandomUtil.randomLogicalDate(1950, 2011));
-        building.financial().purchasePrice().setValue(100d + RandomUtil.randomDouble(2000000));
-        building.financial().marketPrice().setValue(100d + RandomUtil.randomDouble(2000000));
+        building.financial().purchasePrice().setValue(BigDecimal.valueOf(100d + RandomUtil.randomDouble(2000000))); //imprecize BigDecimals for fake data
+        building.financial().marketPrice().setValue(BigDecimal.valueOf(100d + RandomUtil.randomDouble(2000000))); //imprecize BigDecimals for fake data
         building.financial().lastAppraisalDate().setValue(RandomUtil.randomLogicalDate(2000, 2011));
-        building.financial().lastAppraisalValue().setValue(100d + RandomUtil.randomDouble(2000000));
+        building.financial().lastAppraisalValue().setValue(BigDecimal.valueOf(100d + RandomUtil.randomDouble(2000000))); //imprecize BigDecimals for fake data
         building.financial().currency().name().setValue("CAD");
 
         building.marketing().visibility().setValue(PublicVisibilityType.global);
@@ -530,15 +531,15 @@ public class BuildingsGenerator {
 
         item.flooringType().setValue(RandomUtil.random(AptUnitItem.FlooringType.values()));
         item.flooringInstallDate().setValue(RandomUtil.randomLogicalDate());
-        item.flooringValue().setValue(1800. + RandomUtil.randomInt(200));
+        item.flooringValue().setValue(BigDecimal.valueOf(1800 + RandomUtil.randomInt(200)));
 
         item.counterTopType().setValue(RandomUtil.random(AptUnitItem.CounterTopType.values()));
         item.counterTopInstallDate().setValue(RandomUtil.randomLogicalDate());
-        item.counterTopValue().setValue(800. + RandomUtil.randomInt(200));
+        item.counterTopValue().setValue(BigDecimal.valueOf(800 + RandomUtil.randomInt(200)));
 
         item.cabinetsType().setValue(RandomUtil.random(AptUnitItem.CabinetsType.values()));
         item.cabinetsInstallDate().setValue(RandomUtil.randomLogicalDate());
-        item.cabinetsValue().setValue(1000. + RandomUtil.randomInt(200));
+        item.cabinetsValue().setValue(BigDecimal.valueOf(1000 + RandomUtil.randomInt(200)));
 
         return item;
     }

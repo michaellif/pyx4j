@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.domain.dto;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -57,8 +59,8 @@ public interface BillDTO extends IEntity {
     IPrimitive<LogicalDate> prevPaymentDate();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> prevTotal();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> prevTotal();
 
     PaymentMethodDTO paymentMethod();
 
@@ -67,6 +69,6 @@ public interface BillDTO extends IEntity {
     IPrimitive<String> transactionID();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> total();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> total();
 }

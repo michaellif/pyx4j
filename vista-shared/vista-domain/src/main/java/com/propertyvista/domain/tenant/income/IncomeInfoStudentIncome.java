@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.income;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
@@ -60,8 +62,8 @@ public interface IncomeInfoStudentIncome extends IIncomeInfo {
     @Caption(name = "Gross Monthly Amount")
     @NotNull
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> monthlyAmount();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> monthlyAmount();
 
     @Override
     @Caption(name = "Program Start")

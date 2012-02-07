@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.domain.dto;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
@@ -64,13 +66,13 @@ public interface AptUnitDTO extends IEntity {
 
     @Owned
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> unitRent();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> unitRent();
 
     @Caption(name = "Deposit")
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> requiredDeposit();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> requiredDeposit();
 
     @Format("MM/dd/yyyy")
     @Caption(name = "Available")

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.income;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -72,6 +74,6 @@ public interface PersonalAsset extends IEntity {
     @NotNull
     @Format("#0.00")
     @Caption(name = "Current Value")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> assetValue();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> assetValue();
 }

@@ -13,6 +13,8 @@
  */
 package com.propertvista.generator.util;
 
+import java.math.BigDecimal;
+
 import com.propertvista.generator.PreloadData;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -106,7 +108,7 @@ public class CompanyVendor {
         item.contractor().set(createCompany().duplicate(Vendor.class));
         item.contractor().type().setValue(RandomUtil.randomEnum(Vendor.Type.class));
 
-        item.cost().setValue(RandomUtil.randomDouble(8000));
+        item.cost().setValue(BigDecimal.valueOf(RandomUtil.randomDouble(8000)));
 
         item.start().setValue(RandomUtil.randomLogicalDate());
         item.end().setValue(RandomUtil.randomLogicalDate());

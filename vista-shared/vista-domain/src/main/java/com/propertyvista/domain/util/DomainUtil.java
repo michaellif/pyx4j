@@ -38,14 +38,14 @@ public class DomainUtil {
         return value.setScale(2, RoundingMode.HALF_UP);
     }
 
-    public static Money createMoney(double value) {
+    public static Money createMoney(BigDecimal value) {
         Money money = EntityFactory.create(Money.class);
         money.amount().setValue(value);
         money.currency().set(createCurrency());
         return money;
     }
 
-    public static Money createMoney(double value, String currency) {
+    public static Money createMoney(BigDecimal value, String currency) {
         Money money = EntityFactory.create(Money.class);
         money.amount().setValue(value);
         money.currency().name().setValue(currency);

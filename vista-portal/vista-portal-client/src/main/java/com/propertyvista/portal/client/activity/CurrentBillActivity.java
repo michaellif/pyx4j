@@ -82,7 +82,7 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
         bill.charges().add(cLine4);
 
         bill.dueDate().setValue(new LogicalDate(new Date()));
-        bill.total().setValue(1490d);
+        bill.total().setValue(new BigDecimal(1490));
         view.populate(bill);
 
         panel.setWidget(view);

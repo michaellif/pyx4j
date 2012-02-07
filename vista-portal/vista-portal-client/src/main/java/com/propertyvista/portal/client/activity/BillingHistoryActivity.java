@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.activity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.google.gwt.event.shared.EventBus;
@@ -48,21 +49,21 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
         bill.type().setValue(BillType.Bill);
         bill.paidOn().setValue(new LogicalDate(new Date()));
         bill.transactionID().setValue("645436654");
-        bill.total().setValue(1490d);
+        bill.total().setValue(new BigDecimal(1490));
         billHistory.bills().add(bill);
 
         bill = EntityFactory.create(BillDTO.class);
         bill.type().setValue(BillType.Bill);
         bill.paidOn().setValue(new LogicalDate(new Date()));
         bill.transactionID().setValue("10096654");
-        bill.total().setValue(1010d);
+        bill.total().setValue(new BigDecimal(1010));
         billHistory.bills().add(bill);
 
         bill = EntityFactory.create(BillDTO.class);
         bill.type().setValue(BillType.Bill);
         bill.paidOn().setValue(new LogicalDate(new Date()));
         bill.transactionID().setValue("90056789");
-        bill.total().setValue(890d);
+        bill.total().setValue(new BigDecimal(890));
         billHistory.bills().add(bill);
 
         view.populate(billHistory);

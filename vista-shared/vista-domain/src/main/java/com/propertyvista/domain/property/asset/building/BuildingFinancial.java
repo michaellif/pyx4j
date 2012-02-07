@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -28,19 +30,19 @@ public interface BuildingFinancial extends IEntity {
     IPrimitive<LogicalDate> dateAcquired();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> purchasePrice();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> purchasePrice();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> marketPrice();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> marketPrice();
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> lastAppraisalDate();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> lastAppraisalValue();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> lastAppraisalValue();
 
     /*
      * Type of currency used for this particular building

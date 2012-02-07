@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -162,8 +164,8 @@ public interface AptUnitItem extends IEntity {
     IPrimitive<LogicalDate> flooringInstallDate();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> flooringValue();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> flooringValue();
 
     IPrimitive<CounterTopType> counterTopType();
 
@@ -171,8 +173,8 @@ public interface AptUnitItem extends IEntity {
     IPrimitive<LogicalDate> counterTopInstallDate();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> counterTopValue();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> counterTopValue();
 
     IPrimitive<CabinetsType> cabinetsType();
 
@@ -180,6 +182,6 @@ public interface AptUnitItem extends IEntity {
     IPrimitive<LogicalDate> cabinetsInstallDate();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> cabinetsValue();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> cabinetsValue();
 }

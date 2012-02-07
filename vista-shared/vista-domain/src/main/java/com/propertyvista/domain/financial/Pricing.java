@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -28,7 +30,7 @@ public interface Pricing extends IEntity {
     IPrimitive<PaymentTerm> paymentTerm();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> amount();
+    @Editor(type = EditorType.money_new)
+    IPrimitive<BigDecimal> amount();
 
 }
