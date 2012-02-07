@@ -50,7 +50,13 @@ public interface AptUnitOccupancySegment extends IEntity {
          */
         vacant,
 
-        offMarket;
+        offMarket,
+
+        /**
+         * A special case of {@link #offMarket}. This must have a 'finite' {@link AptUnitOccupancySegment#dateFrom()} and
+         * {@link AptUnitOccupancySegment#dateTo()}.
+         */
+        renovation;
 
         @Override
         public String toString() {
@@ -59,7 +65,7 @@ public interface AptUnitOccupancySegment extends IEntity {
     }
 
     /**
-     * Based on MITS spec?
+     * Based on MITS schemas.
      */
     @I18n
     public enum OffMarketType {
@@ -102,12 +108,14 @@ public interface AptUnitOccupancySegment extends IEntity {
 
     IPrimitive<OffMarketType> offMarket();
 
+    Lease lease();
+
     /**
-     * Would be good to have an example of a description for occupancy in Java
-     * Doc
+     * Would be good to have an example of a description for occupancy in Java Doc
+     * 
+     * @deprecated not clear what is this field is supposed to represent
      */
+    @Deprecated
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
-
-    Lease lease();
 }
