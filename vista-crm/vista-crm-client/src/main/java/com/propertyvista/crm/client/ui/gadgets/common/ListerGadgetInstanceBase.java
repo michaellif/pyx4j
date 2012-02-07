@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets;
+package com.propertyvista.crm.client.ui.gadgets.common;
 
 import java.util.ArrayList;
 import java.util.Iterator;

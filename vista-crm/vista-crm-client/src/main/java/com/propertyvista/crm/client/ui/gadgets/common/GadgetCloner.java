@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets;
+package com.propertyvista.crm.client.ui.gadgets.common;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class GadgetCloner implements IGadgetFactory {
     }
 
     @Override
-    public IGadgetInstanceBase createGadget(GadgetMetadata metadata) throws Error {
+    public IGadgetInstance createGadget(GadgetMetadata metadata) throws Error {
         return other.createGadget(metadata);
     }
 

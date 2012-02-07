@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 
-import com.propertyvista.crm.client.ui.gadgets.IGadgetInstancePresenter;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstancePresenter;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public interface BoardView extends IsWidget {

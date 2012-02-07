@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets;
+package com.propertyvista.crm.client.ui.gadgets.common;
 
 import com.google.gwt.core.client.GWT;
 
@@ -38,7 +38,7 @@ public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> impleme
     }
 
     @Override
-    public IGadgetInstanceBase createGadget(GadgetMetadata gadgetMetadata) throws Error {
+    public IGadgetInstance createGadget(GadgetMetadata gadgetMetadata) throws Error {
         if ((gadgetMetadata != null) & !GWT.isProdMode()) {
             String provided = gadgetMetadata.cast().getObjectClass().getName();
             assert getType().equals(provided) : "Gadget Metadata has wrong class, expected '" + getType() + "' , but got '" + provided + "'";

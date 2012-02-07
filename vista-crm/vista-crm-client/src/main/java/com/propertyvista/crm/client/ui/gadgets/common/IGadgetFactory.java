@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets;
+package com.propertyvista.crm.client.ui.gadgets.common;
 
 import java.util.List;
 
@@ -19,7 +19,8 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public interface IGadgetFactory {
-    IGadgetInstanceBase createGadget(GadgetMetadata metadata) throws Error;
+
+    IGadgetInstance createGadget(GadgetMetadata metadata) throws Error;
 
     /** @return Return type of the gadget (is used for persistence system purposes and identification */
     String getType();
@@ -31,6 +32,7 @@ public interface IGadgetFactory {
     /** @return Return short explanation of gadget's abilities. */
     String getDescription();
 
+    @Deprecated
     boolean isBuildingGadget();
 
     boolean isAcceptedBy(DashboardType dashboardType);

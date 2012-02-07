@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets;
+package com.propertyvista.crm.client.ui.gadgets.common;
 
 import java.util.Arrays;
 import java.util.List;
@@ -64,7 +64,7 @@ public class Directory {
     );
     //@formatter:on
 
-    public static IGadgetInstanceBase createGadget(GadgetMetadata gadgetMetadata) {
+    public static IGadgetInstance createGadget(GadgetMetadata gadgetMetadata) {
         if (gadgetMetadata == null) {
             return null;
         }

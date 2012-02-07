@@ -28,7 +28,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 
 public class SelectedGadgetCell extends CompositeCell<IGadgetFactory> {
     private final static I18n i18n = I18n.get(SelectedGadgetCell.class);

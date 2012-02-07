@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.building;
+package com.propertyvista.crm.client.ui.gadgets.common;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,10 +19,24 @@ import java.util.List;
 
 import com.pyx4j.commons.Key;
 
-public interface IBuildingGadget {
+/**
+ * Gadget instance that is supported by building gadget.
+ */
+// TODO add marker interface for gadget metadata, and thing how to bind between metadata building interface and this interface as painless as possible
+public interface IBuildingBoardGadgetInstance extends IGadgetInstance {
 
+    void setBuildingsSource(BuildingsSource source);
+
+    interface BuildingsSource {
+
+        List<Key> getBuildings();
+
+    }
+
+    @Deprecated
     void setFiltering(FilterData filterData);
 
+    @Deprecated
     class FilterData {
         /**
          * Process all buildings if list is empty.

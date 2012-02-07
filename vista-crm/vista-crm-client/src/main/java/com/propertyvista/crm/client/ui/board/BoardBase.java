@@ -36,8 +36,8 @@ import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.themes.CrmTheme;
-import com.propertyvista.crm.client.ui.gadgets.Directory;
-import com.propertyvista.crm.client.ui.gadgets.IGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -137,7 +137,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             setLayout(dashboardMetadata.layoutType().getValue());
             // fill the dashboard with gadgets:
             for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
-                IGadgetInstanceBase gadget = Directory.createGadget(gmd);
+                IGadgetInstance gadget = Directory.createGadget(gmd);
                 if (gadget != null) {
                     addGadget(gadget, gmd.docking().column().getValue());
                 }
@@ -155,12 +155,12 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         }
     }
 
-    public void addGadget(IGadgetInstanceBase gadget) {
+    public void addGadget(IGadgetInstance gadget) {
         gadget.setPresenter(presenter);
         board.addGadget(gadget);
     }
 
-    public void addGadget(IGadgetInstanceBase gadget, int column) {
+    public void addGadget(IGadgetInstance gadget, int column) {
         gadget.setPresenter(presenter);
         board.addGadget(gadget, column);
     }
@@ -188,8 +188,8 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             IGadgetIterator it = board.getGadgetIterator();
             while (it.hasNext()) {
                 IGadget gadget = it.next();
-                if (gadget instanceof IGadgetInstanceBase) {
-                    GadgetMetadata gmd = ((IGadgetInstanceBase) gadget).getMetadata(); // gadget meta should be up to date!.. 
+                if (gadget instanceof IGadgetInstance) {
+                    GadgetMetadata gmd = ((IGadgetInstance) gadget).getMetadata(); // gadget meta should be up to date!.. 
                     gmd.docking().column().setValue(it.getColumn()); // update current gadget column...
                     dashboardMetadata.gadgets().add(gmd);
                 }
@@ -274,7 +274,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             if (it.hasNext()) {
                 IGadget gadget = it.next(); // get corresponding gadget from dashboard...
                 // FIXME REALLY evil casting... need to do something about the IGagdget interface: add an ID and compare them or something like that...
-                if (!((IGadgetInstanceBase) gadget).getMetadata().equals(gmd) | it.getColumn() != gmd.docking().column().getValue()) {
+                if (!((IGadgetInstance) gadget).getMetadata().equals(gmd) | it.getColumn() != gmd.docking().column().getValue()) {
                     return true; // not the same gadget!?.
                 }
             } else {

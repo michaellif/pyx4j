@@ -40,9 +40,9 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 import com.propertyvista.crm.client.ui.board.BoardBase;
-import com.propertyvista.crm.client.ui.gadgets.Directory;
-import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
-import com.propertyvista.crm.client.ui.gadgets.IGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.util.Collections2;
 import com.propertyvista.crm.client.ui.gadgets.util.Predicate;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -214,7 +214,7 @@ public class GadgetDirectoryDialog extends Dialog implements OkOptionText, OkCan
             List<IGadgetFactory> gadgets = new ArrayList<IGadgetFactory>(selectedGadgetsListProvider.getList());
             Collections.reverse(gadgets);
             for (IGadgetFactory gadget : gadgets) {
-                IGadgetInstanceBase instance = gadget.createGadget(null);
+                IGadgetInstance instance = gadget.createGadget(null);
                 board.addGadget(instance);
                 instance.start();
             }

@@ -22,8 +22,8 @@ import com.google.gwt.view.client.TreeViewModel;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.Directory;
-import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.util.Collections2;
 import com.propertyvista.crm.client.ui.gadgets.util.Predicate;
 

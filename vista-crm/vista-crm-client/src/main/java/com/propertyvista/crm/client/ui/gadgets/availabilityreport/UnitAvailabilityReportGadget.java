@@ -39,11 +39,11 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.Directory;
-import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.ListerGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
+import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -51,10 +51,11 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
 
 public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailability> {
+
     private static final I18n i18n = I18n.get(UnitAvailabilityReportGadget.class);
 
     public static class UnitAvailabilityReportGadgetImpl extends ListerGadgetInstanceBase<UnitAvailabilityStatusDTO, UnitAvailability> implements
-            IBuildingGadget {
+            IBuildingBoardGadgetInstance {
         //@formatter:off        
         private FilterData filter;
     
@@ -75,6 +76,8 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         private final AvailabilityReportService service;    
         //@formatter:on
 
+        private BuildingsSource buildingsSource;
+
         public UnitAvailabilityReportGadgetImpl(GadgetMetadata gmd) {
             super(gmd, UnitAvailabilityStatusDTO.class, UnitAvailability.class);
             service = GWT.create(AvailabilityReportService.class);
@@ -91,6 +94,11 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         public void setFiltering(FilterData filterData) {
             this.filter = filterData;
             populatePage(0);
+        }
+
+        @Override
+        public void setBuildingsSource(BuildingsSource source) {
+            this.buildingsSource = source;
         }
 
         @Override

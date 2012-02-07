@@ -37,11 +37,11 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.Directory;
-import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.ListerGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
+import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.arrears.Arrears;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
@@ -49,9 +49,12 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatus;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
+
     private static final I18n i18n = I18n.get(ArrearsStatusGadget.class);
 
-    private static class ArrearsStatusGadgetInstance extends ListerGadgetInstanceBase<MockupArrearsState, ArrearsStatus> implements IBuildingGadget {
+    private static class ArrearsStatusGadgetInstance extends ListerGadgetInstanceBase<MockupArrearsState, ArrearsStatus> implements
+            IBuildingBoardGadgetInstance {
+
         private static final I18n i18n = I18n.get(ArrearsStatusGadgetInstance.class);
 
         private final ArrearsReportService service;
@@ -59,6 +62,8 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
         private FilterData filterData;
 
         private FormFlexPanel panel;
+
+        private BuildingsSource buildingsSource;
 
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
             super(gmd, MockupArrearsState.class, ArrearsStatus.class);
@@ -147,6 +152,11 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
         public void setFiltering(FilterData filterData) {
             this.filterData = filterData;
             populatePage(0);
+        }
+
+        @Override
+        public void setBuildingsSource(BuildingsSource source) {
+            this.buildingsSource = source;
         }
 
         @Override

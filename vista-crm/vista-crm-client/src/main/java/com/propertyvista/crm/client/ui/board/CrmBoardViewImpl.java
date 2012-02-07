@@ -61,7 +61,7 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
-import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -133,12 +133,12 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         return (filters != null ? filters.getBuildingListerView() : null);
     }
 
-    public void setDashboardFiltering(IBuildingGadget.FilterData filterData) {
+    public void setDashboardFiltering(IBuildingBoardGadgetInstance.FilterData filterData) {
         IGadgetIterator it = board.getBoard().getGadgetIterator();
         while (it.hasNext()) {
             IGadget gadget = it.next();
-            if (gadget instanceof IBuildingGadget) {
-                ((IBuildingGadget) gadget).setFiltering(filterData);
+            if (gadget instanceof IBuildingBoardGadgetInstance) {
+                ((IBuildingBoardGadgetInstance) gadget).setFiltering(filterData);
             }
         }
     }
@@ -399,8 +399,8 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             return description;
         }
 
-        private IBuildingGadget.FilterData getFiltering() {
-            IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
+        private IBuildingBoardGadgetInstance.FilterData getFiltering() {
+            IBuildingBoardGadgetInstance.FilterData filterData = new IBuildingBoardGadgetInstance.FilterData();
 
             List<Building> selectedBuildings = buildingLister.getLister().getCheckedItems();
             if (!selectedBuildings.isEmpty()) {

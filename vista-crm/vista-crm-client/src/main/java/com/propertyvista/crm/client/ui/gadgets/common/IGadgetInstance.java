@@ -11,17 +11,26 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets;
+package com.propertyvista.crm.client.ui.gadgets.common;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public interface IGadgetInstanceBase extends IGadget {
+public interface IGadgetInstance extends IGadget {
 
 // in:    
     void setPresenter(IGadgetInstancePresenter presenter);
 
 // out:    
-    public GadgetMetadata getMetadata();
+    GadgetMetadata getMetadata();
+
+    void setStatusDateSource(StatusDateSource source);
+
+    interface StatusDateSource {
+
+        LogicalDate getStatusDate();
+
+    }
 }

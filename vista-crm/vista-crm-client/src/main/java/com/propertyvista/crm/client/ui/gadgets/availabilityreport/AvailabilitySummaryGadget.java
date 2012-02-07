@@ -31,20 +31,20 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.Directory;
-import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummary> {
+
     private static final I18n i18n = I18n.get(AvailabilitySummaryGadget.class);
 
-    public static class AvailabiltySummaryGadgetInstance extends GadgetInstanceBase<AvailabilitySummary> implements IBuildingGadget {
-        //private static final I18n i18n = I18n.get(AvailabiltySummaryGadgetInstance.class);
+    public static class AvailabiltySummaryGadgetInstance extends GadgetInstanceBase<AvailabilitySummary> implements IBuildingBoardGadgetInstance {
 
         public CrmEntityForm<UnitVacancyReportSummaryDTO> form;
 
@@ -53,6 +53,8 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
         private final AvailabilityReportService service;
 
         private FilterData filter;
+
+        private BuildingsSource buildingsSource;
 
         public AvailabiltySummaryGadgetInstance(GadgetMetadata gmd) {
             super(gmd, AvailabilitySummary.class);
@@ -127,6 +129,11 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
         public void setFiltering(FilterData filterData) {
             this.filter = filterData;
             populate();
+        }
+
+        @Override
+        public void setBuildingsSource(BuildingsSource source) {
+            this.buildingsSource = source;
         }
 
         private void setData(UnitVacancyReportSummaryDTO summary) {

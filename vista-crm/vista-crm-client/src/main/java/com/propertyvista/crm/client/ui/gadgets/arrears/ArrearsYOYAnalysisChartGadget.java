@@ -41,18 +41,20 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
-import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.Directory;
-import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChart;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnalysisChart> {
+
     private static final I18n i18n = I18n.get(ArrearsYOYAnalysisChartGadget.class);
 
-    public static class ArrearsYOYAnalysisChartGadgetImpl extends GadgetInstanceBase<ArrearsYOYAnalysisChart> implements IBuildingGadget {
+    public static class ArrearsYOYAnalysisChartGadgetImpl extends GadgetInstanceBase<ArrearsYOYAnalysisChart> implements IBuildingBoardGadgetInstance {
+
         private static final I18n i18n = I18n.get(ArrearsYOYAnalysisChartGadgetImpl.class);
 
         /** Sets graph height in <i>EMs</i>. */
@@ -71,6 +73,8 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
 
         private final SvgFactoryForGwt factory;
 
+        private BuildingsSource buildingsSource;
+
         public ArrearsYOYAnalysisChartGadgetImpl(GadgetMetadata gmd) {
             super(gmd, ArrearsYOYAnalysisChart.class);
             service = GWT.create(ArrearsReportService.class);
@@ -88,6 +92,11 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         public void setFiltering(FilterData filterData) {
             this.filterData = filterData;
             populate();
+        }
+
+        @Override
+        public void setBuildingsSource(BuildingsSource source) {
+            this.buildingsSource = source;
         }
 
         @Override
@@ -117,7 +126,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
                 service.arrearsMonthlyComparison(new AsyncCallback<Vector<Vector<Double>>>() {
                     @Override
                     public void onSuccess(Vector<Vector<Double>> result) {
-                        setData(result);
+                        setYoyAnalysisData(result);
                         populateSucceded();
                     }
 
@@ -127,12 +136,12 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
                     }
                 }, new Vector<Key>(filterData.buildings), YEARS_TO_COMPARE);
             } else {
-                setData(null);
+                setYoyAnalysisData(null);
                 populateSucceded();
             }
         }
 
-        void setData(Vector<Vector<Double>> data) {
+        private void setYoyAnalysisData(Vector<Vector<Double>> data) {
             this.data = data;
             redraw();
         }

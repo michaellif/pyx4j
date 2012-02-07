@@ -17,7 +17,7 @@ import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
-import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 
 public class GadgetDescriptionCell extends AbstractCell<IGadgetFactory> {
     private static final GadgetCellTemplates GADGET_CELL_TEMPLATES = GWT.create(GadgetCellTemplates.class);

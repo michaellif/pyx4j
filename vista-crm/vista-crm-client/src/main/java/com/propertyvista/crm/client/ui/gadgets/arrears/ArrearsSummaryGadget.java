@@ -30,11 +30,11 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.Directory;
-import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.ListerGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
+import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMeta;
@@ -43,12 +43,15 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMeta> {
     private static final I18n i18n = I18n.get(ArrearsSummaryGadget.class);
 
-    private static class ArrearsSummaryGadgetImpl extends ListerGadgetInstanceBase<ArrearsSummary, ArrearsSummaryGadgetMeta> implements IBuildingGadget {
+    private static class ArrearsSummaryGadgetImpl extends ListerGadgetInstanceBase<ArrearsSummary, ArrearsSummaryGadgetMeta> implements
+            IBuildingBoardGadgetInstance {
         private static final I18n i18n = I18n.get(ArrearsSummaryGadgetImpl.class);
 
         FilterData filterData = null;
 
         ArrearsReportService service;
+
+        private BuildingsSource buildingsSource;
 
         public ArrearsSummaryGadgetImpl(GadgetMetadata gmd) {
             super(gmd, ArrearsSummary.class, ArrearsSummaryGadgetMeta.class);
@@ -71,6 +74,11 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
         public void setFiltering(FilterData filterData) {
             this.filterData = filterData;
             populatePage(0);
+        }
+
+        @Override
+        public void setBuildingsSource(BuildingsSource source) {
+            this.buildingsSource = source;
         }
 
         @Override

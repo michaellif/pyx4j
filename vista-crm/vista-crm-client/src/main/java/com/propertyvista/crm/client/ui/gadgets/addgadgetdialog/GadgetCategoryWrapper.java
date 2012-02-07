@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 
 public class GadgetCategoryWrapper {
     private final String category;

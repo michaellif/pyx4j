@@ -32,9 +32,9 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
-import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.Directory;
-import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public class LineChartGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChart> {

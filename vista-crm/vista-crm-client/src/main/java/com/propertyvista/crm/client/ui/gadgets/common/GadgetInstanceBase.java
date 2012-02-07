@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets;
+package com.propertyvista.crm.client.ui.gadgets.common;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -32,7 +32,8 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
 
-public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IGadgetInstanceBase {
+public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IGadgetInstance {
+
     private static final I18n i18n = I18n.get(GadgetInstanceBase.class);
 
     private boolean isRunning;
@@ -56,6 +57,8 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     private final T metadata;
 
     protected final Class<T> metadataClass;
+
+    protected StatusDateSource statusDateSource;
 
     @SuppressWarnings("unchecked")
     public GadgetInstanceBase(GadgetMetadata gmd, Class<T> metadataClass) {
@@ -108,6 +111,11 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     @Override
     public void setPresenter(IGadgetInstancePresenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void setStatusDateSource(StatusDateSource source) {
+        this.statusDateSource = source;
     }
 
     /**
@@ -443,4 +451,5 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
             resume();
         }
     }
+
 }

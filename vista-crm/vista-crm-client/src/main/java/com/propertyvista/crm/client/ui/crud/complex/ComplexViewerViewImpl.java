@@ -18,7 +18,7 @@ import com.pyx4j.commons.Key;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardView;
 import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardViewImpl;
-import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.ComplexDTO;
@@ -49,8 +49,8 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
 
     // Internals:
 
-    private IBuildingGadget.FilterData calculateFiltering(ComplexDTO value) {
-        IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
+    private IBuildingBoardGadgetInstance.FilterData calculateFiltering(ComplexDTO value) {
+        IBuildingBoardGadgetInstance.FilterData filterData = new IBuildingBoardGadgetInstance.FilterData();
 
         if (value != null && !value.buildings().isEmpty()) {
             for (Building building : value.buildings()) {

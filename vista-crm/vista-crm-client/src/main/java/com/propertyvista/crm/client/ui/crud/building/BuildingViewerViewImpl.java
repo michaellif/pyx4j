@@ -34,7 +34,7 @@ import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
-import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -171,8 +171,8 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     // Internals:
 
-    private IBuildingGadget.FilterData calculateFiltering(BuildingDTO value) {
-        IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
+    private IBuildingBoardGadgetInstance.FilterData calculateFiltering(BuildingDTO value) {
+        IBuildingBoardGadgetInstance.FilterData filterData = new IBuildingBoardGadgetInstance.FilterData();
 
         if (value != null) {
             filterData.buildings.add(value.getPrimaryKey());

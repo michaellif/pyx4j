@@ -50,9 +50,9 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
-import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.util.TimeRange;
 import com.propertyvista.crm.client.ui.gadgets.util.Tuple;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
@@ -62,9 +62,11 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 
 public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysisMetadata> {
+
     private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadget.class);
 
-    private static class TurnoverAnalysisGraphGadgetInstance extends GadgetInstanceBase<TurnoverAnalysisMetadata> implements IBuildingGadget {
+    private static class TurnoverAnalysisGraphGadgetInstance extends GadgetInstanceBase<TurnoverAnalysisMetadata> implements IBuildingBoardGadgetInstance {
+
         private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadgetInstance.class);
 
         //@formatter:off
@@ -115,6 +117,8 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
 
         private FilterData filter;
 
+        private BuildingsSource buildingsSource;
+
         public TurnoverAnalysisGraphGadgetInstance(GadgetMetadata gmd) {
             super(gmd, TurnoverAnalysisMetadata.class);
             service = GWT.create(AvailabilityReportService.class);
@@ -159,6 +163,11 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
                 }
             }
             populate();
+        }
+
+        @Override
+        public void setBuildingsSource(BuildingsSource source) {
+            this.buildingsSource = source;
         }
 
         /**
