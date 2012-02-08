@@ -16,45 +16,40 @@ package com.propertyvista.portal.ptapp.client;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.AppPlaceDispatcher;
+import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.shared.meta.PublicPlace;
 
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.WizardStepPlace;
 
-public class PtAppPlaceDispatcher extends AppPlaceDispatcher {
+public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
-    public void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback) {
-
-        if (isAuthenticated()) {
-            if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveSubmited)) {
-                callback.onSuccess(new PtSiteMap.ApplicationStatus());
-                return;
-            } else if (newPlace instanceof WizardStepPlace) {
-                PtAppSite.getWizardManager().forwardTo(newPlace, callback);
-                return;
-            } else if (newPlace instanceof PublicPlace) {
-                PtAppSite.getWizardManager().forwardTo(null, callback);
-                return;
-            }
-        } else if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired)) {
-            callback.onSuccess(new PtSiteMap.PasswordReset());
-            return;
-        } else {
-            if (!(newPlace instanceof PublicPlace)) {
-                callback.onSuccess(new PtSiteMap.Login());
-                return;
-            }
-        }
-
-        callback.onSuccess(newPlace);
+    protected boolean isApplicationAuthenticated() {
+        return SecurityController.checkBehavior(VistaBasicBehavior.ProspectiveApp);
     }
 
-    public boolean isAuthenticated() {
-        return SecurityController.checkBehavior(VistaBasicBehavior.ProspectiveApp);
+    @Override
+    protected void obtainDefaulPublicPlacePlace(AsyncCallback<AppPlace> callback) {
+        callback.onSuccess(new PtSiteMap.Login());
+    }
+
+    @Override
+    protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
+        PtAppSite.getWizardManager().isPlaceNavigable(targetPlace, callback);
+    }
+
+    @Override
+    protected void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback) {
+        PtAppSite.getWizardManager().obtainPlace(callback);
+    }
+
+    @Override
+    protected AppPlace specialForward(AppPlace newPlace) {
+        if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired)) {
+            return new PtSiteMap.PasswordReset();
+        } else {
+            return null;
+        }
     }
 }

@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientSecurityController;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -43,6 +43,8 @@ public class PtAppWizardManager {
     private static final I18n i18n = I18n.get(PtAppWizardManager.class);
 
     private final static Logger log = LoggerFactory.getLogger(PtAppWizardManager.class);
+
+    private final ApplicationService applicationService = GWT.create(ApplicationService.class);
 
     private Application application;
 
@@ -88,7 +90,7 @@ public class PtAppWizardManager {
         AppPlace currentPlace = AppSite.getWhere();
         ApplicationWizardStep currentStep = getStep(currentPlace);
         ApplicationWizardSubstep substep = getSubStep(currentPlace, currentStep);
-        ((ApplicationService) GWT.create(ApplicationService.class)).getApplicationProgress(new DefaultAsyncCallback<Application>() {
+        applicationService.getApplicationProgress(new DefaultAsyncCallback<Application>() {
             @Override
             public void onSuccess(Application result) {
                 application = result;
@@ -103,48 +105,49 @@ public class PtAppWizardManager {
         }, currentStep, substep);
     }
 
-    public void forwardTo(final AppPlace place, final AsyncCallback<AppPlace> callback) {
-        if (!ClientSecurityController.checkAnyBehavior(VistaTenantBehavior.Prospective, VistaTenantBehavior.Guarantor)) {
-            callback.onSuccess(null);
-        }
+    public void onLogout() {
+        application = null;
+    }
+
+    public void isPlaceNavigable(final AppPlace targetPlace, final AsyncCallback<Boolean> callback) {
         if (application != null) {
-            forwardToApplicationNavigablePlace(place, callback);
+            callback.onSuccess(isStepNavigable(targetPlace));
         } else {
-            ((ApplicationService) GWT.create(ApplicationService.class)).getApplication(new DefaultAsyncCallback<Application>() {
+            applicationService.getApplication(new DefaultAsyncCallback<Application>() {
                 @Override
                 public void onSuccess(Application result) {
                     application = result;
-                    forwardToApplicationNavigablePlace(place, callback);
+                    callback.onSuccess(isStepNavigable(targetPlace));
                 }
             });
         }
     }
 
-    public void onLogout() {
-        application = null;
-    }
-
     private boolean isStepNavigable(AppPlace place) {
-        for (ApplicationWizardStep step : application.steps()) {
-            if (place.getPlaceId().equals(step.placeId().getValue()) && (!ApplicationWizardStep.Status.notVisited.equals(step.status().getValue()))) {
-                if (step.substeps().size() > 0) {
-                    for (ApplicationWizardSubstep substep : step.substeps()) {
-                        if (substep.placeArgument().getStringView().equals(place.getFirstArg(PtSiteMap.STEP_ARG_NAME))) {
-                            return (!ApplicationWizardStep.Status.notVisited.equals(substep.status().getValue()));
+        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveSubmited)) {
+            return (place instanceof PtSiteMap.ApplicationStatus);
+        } else {
+            for (ApplicationWizardStep step : application.steps()) {
+                if (place.getPlaceId().equals(step.placeId().getValue()) && (!ApplicationWizardStep.Status.notVisited.equals(step.status().getValue()))) {
+                    if (step.substeps().size() > 0) {
+                        for (ApplicationWizardSubstep substep : step.substeps()) {
+                            if (substep.placeArgument().getStringView().equals(place.getFirstArg(PtSiteMap.STEP_ARG_NAME))) {
+                                return (!ApplicationWizardStep.Status.notVisited.equals(substep.status().getValue()));
+                            }
                         }
+                    } else {
+                        return true;
                     }
-                } else {
-                    return true;
+                    return false;
                 }
-                return false;
             }
+            return false;
         }
-        return false;
     }
 
-    private void forwardToApplicationNavigablePlace(AppPlace place, AsyncCallback<AppPlace> callback) {
-        if (place != null && isStepNavigable(place)) {
-            callback.onSuccess(place);
+    protected void obtainPlace(AsyncCallback<AppPlace> callback) {
+        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveSubmited)) {
+            callback.onSuccess(new PtSiteMap.ApplicationStatus());
         } else {
             forwardByApplicationProgress(callback);
         }

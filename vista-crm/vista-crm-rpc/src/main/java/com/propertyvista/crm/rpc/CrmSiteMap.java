@@ -19,6 +19,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
+import com.pyx4j.site.shared.meta.SigningOutPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 public class CrmSiteMap implements SiteMap {
@@ -27,7 +28,7 @@ public class CrmSiteMap implements SiteMap {
     public static class Login extends AppPlace implements PublicPlace {
     }
 
-    public static class SigningOut extends AppPlace {
+    public static class SigningOut extends AppPlace implements SigningOutPlace {
     }
 
     /**

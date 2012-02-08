@@ -30,6 +30,7 @@ import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
@@ -50,6 +51,8 @@ public class PtAppSite extends VistaSite {
 
     private PtAppWizardManager wizardManager;
 
+    private boolean initialized = false;
+
     public PtAppSite() {
         super(PtSiteMap.class, new PtAppPlaceDispatcher());
     }
@@ -60,7 +63,7 @@ public class PtAppSite extends VistaSite {
 
         UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new PtSiteMap.Login());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 
         RootPanel.get().add(new PtAppSitePanel());
 
@@ -72,42 +75,6 @@ public class PtAppSite extends VistaSite {
             }
         });
 
-        wizardManager = new PtAppWizardManager();
-
-        SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
-        siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
-            @Override
-            public void onSuccess(SiteDefinitionsDTO descriptor) {
-                com.propertyvista.portal.ptapp.client.ui.LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
-                Window.setTitle(pmcName = descriptor.siteTitles().prospectPortalTitle().getStringView());
-                StyleManger.installTheme(new PtAppTheme(), new VistaPalette(descriptor.palette()));
-                authenticateAndInit();
-            }
-        }, ClentNavigUtils.getCurrentLocale());
-
-    }
-
-    private void authenticateAndInit() {
-        ClientContext.obtainAuthenticationData((com.pyx4j.security.rpc.AuthenticationService) GWT.create(PtAuthenticationService.class),
-                new DefaultAsyncCallback<Boolean>() {
-
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        init();
-                    }
-
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        init();
-                        super.onFailure(caught);
-                    }
-                });
-    }
-
-    private void init() {
-        hideLoadingIndicator();
-        PtAppSite.getHistoryHandler().handleCurrentHistory();
-
         AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
@@ -115,12 +82,44 @@ public class PtAppSite extends VistaSite {
                     getWizardManager().onLogout();
                     PtAppViewFactory.clear();
                 }
-
-                getPlaceController().goTo(getPlaceController().getWhere());
-
+                if (initialized) {
+                    AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+                }
             }
         });
 
+        wizardManager = new PtAppWizardManager();
+
+        SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
+        siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
+            @Override
+            public void onSuccess(SiteDefinitionsDTO descriptor) {
+                hideLoadingIndicator();
+                com.propertyvista.portal.ptapp.client.ui.LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
+                Window.setTitle(pmcName = descriptor.siteTitles().prospectPortalTitle().getStringView());
+                StyleManger.installTheme(new PtAppTheme(), new VistaPalette(descriptor.palette()));
+                obtainAuthenticationData();
+            }
+        }, ClentNavigUtils.getCurrentLocale());
+
+    }
+
+    private void obtainAuthenticationData() {
+        ClientContext.obtainAuthenticationData((com.pyx4j.security.rpc.AuthenticationService) GWT.create(PtAuthenticationService.class),
+                new DefaultAsyncCallback<Boolean>() {
+
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        PtAppSite.getHistoryHandler().handleCurrentHistory();
+                        initialized = true;
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        PtAppSite.getHistoryHandler().handleCurrentHistory();
+                        super.onFailure(caught);
+                    }
+                });
     }
 
     @Override

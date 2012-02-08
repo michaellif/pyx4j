@@ -17,6 +17,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
+import com.pyx4j.site.shared.meta.SigningOutPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 public class PtSiteMap implements SiteMap {
@@ -33,11 +34,13 @@ public class PtSiteMap implements SiteMap {
      * Used while user is waiting for authentication required for password reset or when new application is created for him.
      */
     public static class LoginWithToken extends AppPlace implements PublicPlace {
-
     }
 
     @PlaceProperties(caption = "Application Form")
     public static class PasswordResetRequest extends AppPlace implements PublicPlace {
+    }
+
+    public static class SigningOut extends AppPlace implements SigningOutPlace {
     }
 
     @PlaceProperties(caption = "Application Form")
