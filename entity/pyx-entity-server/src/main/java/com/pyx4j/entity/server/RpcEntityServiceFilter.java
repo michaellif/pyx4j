@@ -32,6 +32,7 @@ import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -133,32 +134,37 @@ public class RpcEntityServiceFilter implements IServiceFilter {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (memberMeta.isRpcTransient()) {
                 me.setValue(null);
-            } else if (memberMeta.isEntity()) {
-                filterMembers((IEntity) entity.getMember(memberName), processed, in);
-            } else if (ISet.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                for (IEntity value : (ISet<?>) entity.getMember(memberName)) {
-                    filterMembers(value, processed, in);
-                }
-            } else if (IList.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                for (IEntity value : (IList<?>) entity.getMember(memberName)) {
-                    filterMembers(value, processed, in);
-                }
-            } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                if ((me.getValue() != null) && (!(memberMeta.getValueClass().isAssignableFrom(me.getValue().getClass())))) {
-                    log.error("Got Value " + memberName + " {} instead of {}", me.getValue().getClass(), memberMeta.getValueClass());
-                    throw new DevInfoUnRecoverableRuntimeException("Data type corruption; Got ''{0}'' Value {1} instead of {2} in {3}", memberName, me
-                            .getValue().getClass(), memberMeta.getValueClass(), entity.getDebugExceptionInfoString());
-                }
-            } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                for (Object value : (IPrimitiveSet<?>) entity.getMember(memberName)) {
-                    if ((value != null) && (!(memberMeta.getValueClass().isAssignableFrom(value.getClass())))) {
-                        log.error("Got Value " + memberName + " {} instead of {}", value.getClass(), memberMeta.getValueClass());
-                        throw new DevInfoUnRecoverableRuntimeException("Data type corruption; Got ''{0}'' Value {1} instead of {2} in {3}", memberName,
-                                value.getClass(), memberMeta.getValueClass(), entity.getDebugExceptionInfoString());
-                    }
-                }
             } else {
-                throw new Error("Data type corruption");
+                if (me.getValue() == AttachLevel.Detached) {
+                    continue;
+                }
+                if (memberMeta.isEntity()) {
+                    filterMembers((IEntity) entity.getMember(memberName), processed, in);
+                } else if (ISet.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    for (IEntity value : (ISet<?>) entity.getMember(memberName)) {
+                        filterMembers(value, processed, in);
+                    }
+                } else if (IList.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    for (IEntity value : (IList<?>) entity.getMember(memberName)) {
+                        filterMembers(value, processed, in);
+                    }
+                } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    if ((me.getValue() != null) && (!(memberMeta.getValueClass().isAssignableFrom(me.getValue().getClass())))) {
+                        log.error("Got Value " + memberName + " {} instead of {}", me.getValue().getClass(), memberMeta.getValueClass());
+                        throw new DevInfoUnRecoverableRuntimeException("Data type corruption; Got ''{0}'' Value {1} instead of {2} in {3}", memberName, me
+                                .getValue().getClass(), memberMeta.getValueClass(), entity.getDebugExceptionInfoString());
+                    }
+                } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    for (Object value : (IPrimitiveSet<?>) entity.getMember(memberName)) {
+                        if ((value != null) && (!(memberMeta.getValueClass().isAssignableFrom(value.getClass())))) {
+                            log.error("Got Value " + memberName + " {} instead of {}", value.getClass(), memberMeta.getValueClass());
+                            throw new DevInfoUnRecoverableRuntimeException("Data type corruption; Got ''{0}'' Value {1} instead of {2} in {3}", memberName,
+                                    value.getClass(), memberMeta.getValueClass(), entity.getDebugExceptionInfoString());
+                        }
+                    }
+                } else {
+                    throw new Error("Data type corruption");
+                }
             }
         }
     }
