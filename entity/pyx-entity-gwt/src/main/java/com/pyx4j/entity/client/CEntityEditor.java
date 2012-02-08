@@ -186,8 +186,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         }
         //      this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
 
-        setComponentsValue(entity, fireEvent, populate);
         super.setValue(entity, fireEvent, populate);
+        setComponentsValue(entity, fireEvent, populate);
     }
 
     @Override

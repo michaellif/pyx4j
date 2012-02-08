@@ -100,8 +100,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     @Override
     public void setValue(E value, boolean fireEvent, boolean populate) {
-        setComponentsValue(value, fireEvent, populate);
         super.setValue(value, fireEvent, populate);
+        setComponentsValue(value, fireEvent, populate);
     }
 
     public void addValidations() {
