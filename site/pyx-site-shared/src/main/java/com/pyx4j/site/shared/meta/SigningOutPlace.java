@@ -14,21 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 10, 2011
- * @author michaellif
+ * Created on Feb 8, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.client;
+package com.pyx4j.site.shared.meta;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.site.rpc.AppPlace;
-
-public interface AppPlaceDispatcher {
-
-    public abstract void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback);
-
-    public void confirm(String message, Command onConfirmed);
+public interface SigningOutPlace {
 
 }

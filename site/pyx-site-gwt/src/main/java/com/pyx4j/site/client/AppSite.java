@@ -29,6 +29,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -73,9 +74,18 @@ public abstract class AppSite implements EntryPoint {
 
     public AppSite(Class<? extends SiteMap> siteMapClass) {
         this(siteMapClass, new AppPlaceDispatcher() {
+
             @Override
             public void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback) {
                 callback.onSuccess(newPlace);
+            }
+
+            @Override
+            public void confirm(String message, Command onConfirmed) {
+                log.debug("We show JS confirm {}", message);
+                if (Window.confirm(message)) {
+                    onConfirmed.execute();
+                }
             }
         });
     }
