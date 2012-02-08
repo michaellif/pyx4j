@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -246,7 +247,11 @@ public class XMLEntityWriter {
     }
 
     protected boolean emitMemeber(IEntity entity, String memberName, IObject<?> member) {
-        return !member.isNull();
+        if (member.getAttachLevel() == AttachLevel.Detached) {
+            return false;
+        } else {
+            return !member.isNull();
+        }
     }
 
     protected String getValueAsString(Object value) {
