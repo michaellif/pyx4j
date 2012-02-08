@@ -140,7 +140,7 @@ public class MessageTemplates {
 
     public static String createMasterApplicationInvitationEmail(String name, String token) {
         String url = ServerSideConfiguration.instance().getMainApplicationURL()
-                + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.PasswordReset.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+                + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
 
         return wrapHtml(i18n.tr("Dear {0},<br/>\n" + "This email was sent to you in response to your request to apply for Property Vista apartments.<br/>\n"
                 + "Click the link below to go to the Property Vista site:<br/>\n" + "    <a style=\"color:#929733\" href=\"{1}\">Application</a>", name, url));
