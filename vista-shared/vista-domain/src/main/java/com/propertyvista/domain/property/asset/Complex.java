@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -43,5 +44,6 @@ public interface Complex extends PolicyNode {
     DashboardMetadata dashboard();
 
     @Transient
+    @JoinTable(value = Building.class, orderColumn = Building.OrderInComplexId.class, cascade = false)
     IList<Building> buildings();
 }

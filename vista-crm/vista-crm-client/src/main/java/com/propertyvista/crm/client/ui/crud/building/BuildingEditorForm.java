@@ -157,12 +157,13 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().info().residentialStoreys()), 5).build());
 
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().propertyManager()), 20).build());
-        main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().complexPrimary()), 15).build());
+        main.setBR(row++, 1, 1);
 
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().externalId()), 15).build());
 
         if (isEditable()) {
             main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().complex()), 15).build());
+            get(proto().complex()).setViewable(true);
         } else {
             main.setWidget(row++, 1,
                     new DecoratorBuilder(inject(proto().complex(), new CEntityCrudHyperlink<Complex>(MainActivityMapper.getCrudAppPlace(Complex.class))), 15)
