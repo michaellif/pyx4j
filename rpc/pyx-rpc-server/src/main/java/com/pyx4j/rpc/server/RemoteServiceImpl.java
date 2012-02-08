@@ -113,6 +113,7 @@ public class RemoteServiceImpl implements RemoteService {
             if (visit != null) {
                 userVisit = visit.getUserVisit();
             }
+            boolean inService = false;
             try {
                 List<IServiceFilter> filters = serviceFactory.getServiceFilterChain(clazz);
                 if (filters != null) {
@@ -120,7 +121,9 @@ public class RemoteServiceImpl implements RemoteService {
                         serviceRequest = filter.filterIncomming(clazz, serviceRequest);
                     }
                 }
+                inService = true;
                 Serializable returnValue = serviceInstance.execute(serviceRequest);
+                inService = false;
                 if (filters != null) {
                     // Run filters in reverse order
                     ListIterator<IServiceFilter> li = filters.listIterator(filters.size());
@@ -150,7 +153,7 @@ public class RemoteServiceImpl implements RemoteService {
             } catch (Throwable e) {
                 logOnce = false;
                 // Avoid duplicated log
-                if (!serviceInterfaceClassName.equals(IServiceAdapter.class.getName())) {
+                if (!inService || !serviceInterfaceClassName.equals(IServiceAdapter.class.getName())) {
                     if (e instanceof IsWarningException) {
                         log.warn("Service call exception for {}", Context.getVisit(), e);
                     } else {
