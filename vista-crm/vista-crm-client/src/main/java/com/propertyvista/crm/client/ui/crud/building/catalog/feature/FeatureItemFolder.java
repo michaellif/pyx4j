@@ -22,9 +22,9 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
-import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -76,16 +76,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 if (comp instanceof CEntityComboBox<?>) {
                     @SuppressWarnings("unchecked")
                     CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) comp;
-                    combo.setOptionsFilter(new OptionsFilter<ProductItemType>() {
-                        @Override
-                        public boolean acceptOption(ProductItemType entity) {
-                            Feature value = parent.getValue();
-                            if (value != null && !value.isNull()) {
-                                return entity.featureType().equals(value.type());
-                            }
-                            return false;
-                        }
-                    });
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().featureType(), parent.getValue().type()));
                     combo.addValueChangeHandler(new ValueChangeHandler<ProductItemType>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<ProductItemType> event) {

@@ -74,9 +74,6 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-
-            // TODO: this method was called during/after population, so the parent's value was set already. 
-            // Now it's not true - we need to re-think custom component creation depending on the parent's type technique...                  
             Class<? extends IEntity> buildingElementClass = null;
             switch (parent.getValue().type().getValue()) {
             case residentialUnit:
@@ -99,9 +96,9 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             if (column.getObject() == proto().element()) {
                 if (buildingElementClass != null) {
                     if (parent.isEditable()) {
-                        comp = inject(column.getObject(), new CEntityComboBox(buildingElementClass));
-                        CEntityComboBox<BuildingElement> combo = (CEntityComboBox) comp;
+                        CEntityComboBox<BuildingElement> combo = new CEntityComboBox(buildingElementClass);
                         combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().belongsTo().detach()));
+                        comp = inject(column.getObject(), combo);
                     } else {
                         comp = inject(column.getObject(), new CEntityCrudHyperlink<BuildingElement>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
                     }
@@ -109,17 +106,13 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                     comp = new CLabel(""); // there is no building element for this item!
                 }
             } else {
-                if (column.getObject() == proto().type()) {
-                    comp = super.createCell(column);
-                } else {
-                    comp = super.createCell(column);
-                }
+                comp = super.createCell(column);
             }
 
             if (column.getObject() == proto().type()) {
                 if (comp instanceof CEntityComboBox<?>) {
                     CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().type().getValue()));
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().type()));
                 }
             }
 
