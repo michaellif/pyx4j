@@ -27,7 +27,10 @@ import com.pyx4j.entity.shared.IEntity;
  * DTO - Data Transfer Object
  * 
  * enhanceXXX methods supposed to be overridden in ancestors to perform some DTO customisation.
+ * 
+ * @deprecated use AbstractCrudServiceDtoImpl
  */
+@Deprecated
 public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends DBO> extends GenericListServiceDtoImpl<DBO, DTO> implements
         AbstractCrudService<DTO> {
 

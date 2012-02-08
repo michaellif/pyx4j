@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -42,7 +43,7 @@ public interface Complex extends PolicyNode {
     @Detached
     DashboardMetadata dashboard();
 
-    @Detached
+    @Detached(level = AttachLevel.Detached)
     @JoinTable(value = Building.class, orderColumn = Building.OrderInComplexId.class, cascade = false)
     IList<Building> buildings();
 }
