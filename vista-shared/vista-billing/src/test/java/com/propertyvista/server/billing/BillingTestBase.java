@@ -97,6 +97,7 @@ public class BillingTestBase extends VistaDBTestBase {
 
             productCatalogGenerator.createProductCatalog(catalog);
             catalog.belongsTo().set(building);
+
             Persistence.service().persist(catalog);
 
             Persistence.service().persist(catalog.features());
@@ -104,7 +105,12 @@ public class BillingTestBase extends VistaDBTestBase {
             Persistence.service().persist(catalog.services());
 
             Persistence.service().merge(catalog);
+
+            //       List<ProductItem> serviceItems = productCatalogGenerator.createAptUnitServices(catalog, unit);
+            //   Persistence.service().persist(serviceItems);
+
             building.serviceCatalog().set(catalog);
+
         }
 
         {

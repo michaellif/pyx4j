@@ -86,8 +86,6 @@ class Billing {
         bill.paymentReceivedAmount().setValue(new BigDecimal(0));
         bill.totalRecurringFeatureCharges().setValue(new BigDecimal(0));
         bill.totalOneTimeFeatureCharges().setValue(new BigDecimal(0));
-        bill.totalRecurringFeatureCharges().setValue(new BigDecimal(0));
-        bill.totalOneTimeFeatureCharges().setValue(new BigDecimal(0));
         bill.totalAdjustments().setValue(new BigDecimal(0));
         bill.totalImmediateAdjustments().setValue(new BigDecimal(0));
         bill.latePaymentCharges().setValue(new BigDecimal(0));
@@ -154,7 +152,7 @@ class Billing {
         } else if (isRecurringFeature(charge.billableItem().item().product())) { //Recurring Feature
             bill.totalRecurringFeatureCharges().setValue(bill.totalRecurringFeatureCharges().getValue().add(charge.price().getValue()));
         } else {
-//            bill.totalOneTimeFeatureCharges().setValue(bill.totalOneTimeFeatureCharges().getValue() + charge.price().getValue());
+//            bill.totalOneTimeFeatureCharges().setValue(bill.totalOneTimeFeatureCharges().getValue().add(charge.price().getValue()));
         }
     }
 

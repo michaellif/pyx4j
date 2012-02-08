@@ -30,32 +30,25 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class BillingRunTest extends BillingTestBase {
 
     public void testSequentialBillingRun() {
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-
-        //=========== Load lease and check if latest build is null ===========//
-        Lease lease = Persistence.service().query(criteria).get(0);
-        Bill bill = BillingUtils.getLatestBill(lease.leaseFinancial().billingAccount());
-        assertNull("No bill is expected here", bill);
-
         runBilling(1, true);
         runBilling(2, true);
-//        runBilling(3, false);
-//        runBilling(4, true);
-//        runBilling(5, true);
-
+        runBilling(3, false);
+        runBilling(4, true);
+        runBilling(5, true);
     }
 
     private void runBilling(int billNumber, boolean confirm) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         Lease lease = Persistence.service().query(criteria).get(0);
         BillingLifecycle.runBilling(lease);
-        Bill bill = BillingUtils.getLatestBill(lease.leaseFinancial().billingAccount());
+
+        Bill bill = BillingUtils.getBill(lease.leaseFinancial().billingAccount(), lease.leaseFinancial().billingAccount().currentBillingRun());
         if (confirm) {
-            BillingUtils.confirmBill(bill);
+            BillingLifecycle.confirmBill(bill);
         } else {
-            BillingUtils.rejectBill(bill);
+            BillingLifecycle.rejectBill(bill);
         }
-        //System.out.println("++++++" + bill);
+        System.out.println("++++++" + bill);
         assertEquals("Bill Sequence Number", (int) bill.billSequenceNumber().getValue(), billNumber);
         assertEquals("Bill Confirmation Status", bill.billStatus().getValue(), confirm ? BillStatus.Confirmed : BillStatus.Rejected);
     }

@@ -31,6 +31,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.BillingRun.BillingRunStatus;
@@ -41,7 +43,7 @@ public class BillingLifecycle {
 
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycle.class);
 
-    public static void runBilling(Lease lease) {
+    public static BillingRun runBilling(Lease lease) {
         BillingAccount billingAccount = BillingUtils.ensureBillingAccount(lease);
         if (!billingAccount.currentBillingRun().isNull()) {
             throw new UserRuntimeException("Can't run billing on Account with non-confirmed bills");
@@ -59,10 +61,13 @@ public class BillingLifecycle {
         Persistence.service().persist(billingAccount);
 
         runBilling(billingRun);
+
+        return billingRun;
     }
 
-    public static void runBilling(Building building, BillingPeriod billingPeriod, Integer billingDay, LogicalDate billingPeriodStartDate) {
+    public static BillingRun runBilling(Building building, BillingPeriod billingPeriod, Integer billingDay, LogicalDate billingPeriodStartDate) {
         //TODO
+        return null;
     }
 
     private static void runBilling(BillingRun billingRun) {
@@ -86,4 +91,24 @@ public class BillingLifecycle {
         }
     }
 
+    public static void confirmBill(Bill bill) {
+        verifyBill(bill, BillStatus.Confirmed);
+    }
+
+    public static void rejectBill(Bill bill) {
+        verifyBill(bill, BillStatus.Rejected);
+    }
+
+    private static void verifyBill(Bill bill, BillStatus billStatus) {
+        if (BillStatus.Finished.equals(bill.billStatus().getValue())) {
+            bill.billStatus().setValue(billStatus);
+            Persistence.service().persist(bill);
+
+            bill.billingAccount().currentBillingRun().setValue(null);
+            bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
+            Persistence.service().persist(bill.billingAccount());
+        } else {
+            throw new Error("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
+        }
+    }
 }

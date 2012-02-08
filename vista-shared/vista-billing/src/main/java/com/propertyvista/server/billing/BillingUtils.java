@@ -34,13 +34,14 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingCycle.BillingPeriod;
+import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class BillingUtils {
 
     static LogicalDate getNextBillingPeriodStartDate(BillingAccount billingAccount) {
-        Bill bill = BillingUtils.getLatestConfirmedBill(billingAccount);
+        Bill bill = BillingUtils.getLatestBill(billingAccount);
         if (bill != null) {
             Calendar c = new GregorianCalendar();
             c.setTime(bill.billingRun().billingPeriodStartDate().getValue());
@@ -62,32 +63,8 @@ public class BillingUtils {
 
     }
 
-    static Bill getLatestBill(BillingAccount billingAccount, Bill.BillStatus status) {
-        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        if (status != null) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), status));
-        }
-        criteria.desc(criteria.proto().billingRun().billingPeriodStartDate());
-        return Persistence.service().retrieve(criteria);
-    }
-
-    /**
-     * Returns last bill in any status
-     */
-    static Bill getLatestBill(BillingAccount billingAccount) {
-        return getLatestBill(billingAccount, null);
-    }
-
-    /**
-     * Returns last bill in status 'Confirmed'
-     */
-    static Bill getLatestConfirmedBill(BillingAccount billingAccount) {
-        return getLatestBill(billingAccount, BillStatus.Confirmed);
-    }
-
     /*
-     * Creates BillingAccount when possible
+     * Creates BillingAccount when needed
      */
     static BillingAccount ensureBillingAccount(Lease lease) {
         if (lease.leaseFrom().isNull()) {
@@ -124,24 +101,19 @@ public class BillingUtils {
 
     }
 
-    public static void confirmBill(Bill bill) {
-        verifyBill(bill, BillStatus.Confirmed);
+    static Bill getLatestBill(BillingAccount billingAccount) {
+        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), BillStatus.Confirmed));
+        criteria.desc(criteria.proto().billingRun().billingPeriodStartDate());
+        return Persistence.service().retrieve(criteria);
     }
 
-    public static void rejectBill(Bill bill) {
-        verifyBill(bill, BillStatus.Rejected);
+    public static Bill getBill(BillingAccount billingAccount, BillingRun billingRun) {
+        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingRun(), billingRun));
+        return Persistence.service().retrieve(criteria);
     }
 
-    private static void verifyBill(Bill bill, BillStatus billStatus) {
-        if (BillStatus.Finished.equals(bill.billStatus().getValue())) {
-            bill.billStatus().setValue(billStatus);
-            Persistence.service().persist(bill);
-
-            bill.billingAccount().currentBillingRun().setValue(null);
-            bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
-            Persistence.service().persist(bill.billingAccount());
-        } else {
-            throw new Error("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
-        }
-    }
 }
