@@ -23,7 +23,6 @@ import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.Complex;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexCrudServiceImpl extends GenericCrudServiceDtoImpl<Complex, ComplexDTO> implements ComplexCrudService {
@@ -49,9 +48,12 @@ public class ComplexCrudServiceImpl extends GenericCrudServiceDtoImpl<Complex, C
 
         if (!fromList) {
             // fill transient data:
-            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().complex(), in));
-            dto.buildings().addAll(Persistence.service().query(criteria));
+//            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+//            criteria.add(PropertyCriterion.eq(criteria.proto().complex(), in));
+//            dto.buildings().addAll(Persistence.service().query(criteria));
+
+            // load detached data:
+            Persistence.service().retrieve(in.buildings());
         }
     }
 
