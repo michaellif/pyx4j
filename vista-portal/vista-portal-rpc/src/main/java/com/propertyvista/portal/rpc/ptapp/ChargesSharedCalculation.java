@@ -14,6 +14,7 @@
 package com.propertyvista.portal.rpc.ptapp;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 import com.pyx4j.commons.TimeUtils;
@@ -69,7 +70,8 @@ public class ChargesSharedCalculation {
         sb.append(TimeUtils.MONTH_NAMES_SHORT[rentStart.getMonth()]);
         sb.append(" ").append(monthDays).append(")");
 
-        BigDecimal proratedTotal = DomainUtil.roundMoney(monthly.multiply(new BigDecimal(numDays).divide(new BigDecimal(monthDays))));
+        BigDecimal propation = new BigDecimal(numDays).divide(new BigDecimal(monthDays), 2, RoundingMode.HALF_UP);
+        BigDecimal proratedTotal = DomainUtil.roundMoney(monthly.multiply(propation));
 
         ChargeLine proratedCharge = EntityFactory.create(ChargeLine.class);
         proratedCharge.type().setValue(ChargeType.prorated);
