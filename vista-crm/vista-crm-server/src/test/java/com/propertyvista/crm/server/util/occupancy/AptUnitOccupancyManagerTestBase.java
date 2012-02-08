@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.util.occupancy;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
@@ -125,8 +127,18 @@ public class AptUnitOccupancyManagerTestBase {
     protected void assertExpectedTimeline() {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
         criteria.desc(criteria.proto().dateFrom());
-        List<AptUnitOccupancySegment> actual = Persistence.service().query(criteria);
-        Assert.assertEquals("expected and actual timelines don't match", expectedTimeline, actual);
+        List<AptUnitOccupancySegment> actualTimeline = Persistence.service().query(criteria);
+        Assert.assertEquals("expected and actual timelines' number of segments don't match", expectedTimeline.size(), actualTimeline.size());
+
+        Iterator<AptUnitOccupancySegment> a = actualTimeline.iterator();
+        Iterator<AptUnitOccupancySegment> e = expectedTimeline.iterator();
+
+        while (a.hasNext()) {
+            AptUnitOccupancySegment actual = a.next();
+            AptUnitOccupancySegment expected = e.next();
+            Assert.assertTrue(SimpleMessageFormat.format("unexpected occupancy segment {0}", actual), EntityGraph.fullyEqualValues(actual, expected));
+        }
+
     }
 
     /**
