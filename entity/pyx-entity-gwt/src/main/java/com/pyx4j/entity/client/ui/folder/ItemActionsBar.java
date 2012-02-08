@@ -31,6 +31,8 @@ import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageButton;
@@ -41,6 +43,15 @@ public class ItemActionsBar extends FlowPanel {
 
     public static enum SortingState {
         First, Last, Only, Inner
+    }
+
+    public static enum DebugIds implements IDebugId {
+        RemoveButton, UpButton, DownButton;
+
+        @Override
+        public String debugId() {
+            return name();
+        }
     }
 
     private final Image removeCommand;
@@ -71,6 +82,7 @@ public class ItemActionsBar extends FlowPanel {
         upCommand = new ImageButton(images.moveUp(), images.moveUpHover(), i18n.tr("Move up"));
         upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
         upCommand.setStyleName(EntityFolderUpButton.name());
+
         orderActionsPanel.add(upCommand);
 
     }
@@ -127,5 +139,14 @@ public class ItemActionsBar extends FlowPanel {
 
     public void setRemoveButtonVisible(boolean show) {
         removeCommand.setVisible(show);
+    }
+
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        super.onEnsureDebugId(baseID);
+
+        removeCommand.ensureDebugId(new CompositeDebugId(baseID, DebugIds.RemoveButton).debugId());
+        upCommand.ensureDebugId(new CompositeDebugId(baseID, DebugIds.UpButton).debugId());
+        downCommand.ensureDebugId(new CompositeDebugId(baseID, DebugIds.DownButton).debugId());
     }
 }

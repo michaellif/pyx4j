@@ -49,7 +49,6 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
             addButton = new Button(new Image(images.add()), title);
             addButton.setStyleName(EntityFolderAddButton.name());
-
         }
     }
 

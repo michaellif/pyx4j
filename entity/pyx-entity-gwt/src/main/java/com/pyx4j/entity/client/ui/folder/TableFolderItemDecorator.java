@@ -79,8 +79,12 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         validationMessageHolder = new HTML();
         validationMessageHolder.getElement().getStyle().setColor("red");
         mainPanel.add(validationMessageHolder, DockPanel.SOUTH);
+        validationMessageHolder.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator,
+                IFolderDecorator.DecoratorsIds.Label).debugId());
 
         actionsPanel = new ItemActionsBar(true, Direction.RTL, images);
+        actionsPanel.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator, IFolderDecorator.DecoratorsIds.ActionPanel)
+                .debugId());
         mainPanel.add(actionsPanel, DockPanel.EAST);
 
         contentHolder = new SimplePanel();
@@ -120,7 +124,8 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
-        validationMessageHolder.ensureDebugId(new CompositeDebugId(baseID, IFolderDecorator.DecoratorsIds.Label).debugId());
+        //validationMessageHolder.ensureDebugId(new CompositeDebugId(baseID, IFolderDecorator.DecoratorsIds.Label).debugId());
+        //actionsPanel.ensureDebugId(new CompositeDebugId(baseID, IFolderDecorator.DecoratorsIds.ActionPanel).debugId());
     }
 
     @Override

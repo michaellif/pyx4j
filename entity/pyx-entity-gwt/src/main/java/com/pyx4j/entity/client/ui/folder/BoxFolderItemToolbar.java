@@ -30,9 +30,20 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.gwt.commons.BrowserType;
 
 public class BoxFolderItemToolbar extends HorizontalPanel {
+
+    public static enum DebugIds implements IDebugId {
+        CollapseImage, Caption, Decorator, ImageWarn, TitleIcon;
+
+        @Override
+        public String debugId() {
+            return name();
+        }
+    }
 
     private final BoxFolderItemDecorator<?> decorator;
 
@@ -107,6 +118,15 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
             actionsPanel.getElement().getStyle().setMarginRight(40, Unit.PX);
         }
 
+        decorator.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.Decorator).debugId());
+        actionsPanel.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, IFolderDecorator.DecoratorsIds.ActionPanel)
+                .debugId());
+
+        caption.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.Caption).debugId());
+        titleIcon.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.TitleIcon).debugId());
+        imageWarn.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.ImageWarn).debugId());
+        collapseImage.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.CollapseImage).debugId());
+
         update(decorator.isExpended());
 
     }
@@ -139,5 +159,4 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
     public void setCollapseButtonVisible(boolean collapsible) {
         collapseImage.setVisible(collapsible);
     }
-
 }

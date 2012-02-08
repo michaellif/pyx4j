@@ -41,7 +41,7 @@ public interface IFolderDecorator<E extends IEntity> extends IDecorator<CEntityF
     void setComponent(CEntityFolder<E> folder);
 
     public enum DecoratorsIds implements IDebugId {
-        Validation, Label;
+        ActionPanel, Validation, Label, Mandatory, BoxFolderItemToolbar, TableFolderDecorator, TableFolderItemDecorator;
 
         @Override
         public String debugId() {

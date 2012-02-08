@@ -34,6 +34,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -41,6 +43,15 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
+
+    public static enum DebugIds implements IDebugId {
+        BoxFolderItemDecorator, ToolBar;
+
+        @Override
+        public String debugId() {
+            return name();
+        }
+    }
 
     private boolean expended = true;
 
@@ -80,6 +91,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         setWidget(mainPanel);
 
         toolbar = new BoxFolderItemToolbar(this);
+        toolbar.ensureDebugId(new CompositeDebugId(DebugIds.BoxFolderItemDecorator, DebugIds.ToolBar).debugId());
         mainPanel.add(toolbar);
 
         contentHolder = new SimplePanel();

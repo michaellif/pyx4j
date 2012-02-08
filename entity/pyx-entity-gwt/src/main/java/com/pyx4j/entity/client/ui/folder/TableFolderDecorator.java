@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.images.EntityFolderImages;
@@ -87,9 +88,14 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
                 mandatoryImage.setTitle("This field is mandatory");
                 mandatoryImage.setVisible(false);
 
+                mandatoryImage.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderDecorator, column.getObject().getMeta()
+                        .getFieldName()
+                        + "-" + IFolderDecorator.DecoratorsIds.Mandatory).debugId());
+
                 headerLabelPanel.add(mandatoryImage);
                 headerLabelPanel.setCellWidth(mandatoryImage, "1px");
                 mandatoryImages.add(mandatoryImage);
+
             }
 
             HTML label = new HTML(caption);
