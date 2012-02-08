@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.board;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 
@@ -30,22 +29,6 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
 
     public BoardViewImpl() {
         super(Unit.EM);
-    }
-
-    public BoardViewImpl(BoardBase board) {
-        this();
-        setBoard(board);
-    }
-
-    public BoardViewImpl(Widget header, double size) {
-        this();
-        addNorth(header, size);
-        header.setHeight("100%"); // fill all that Header Height!..
-    }
-
-    public BoardViewImpl(Widget header, double size, BoardBase board) {
-        this(header, size);
-        setBoard(board);
     }
 
     /*

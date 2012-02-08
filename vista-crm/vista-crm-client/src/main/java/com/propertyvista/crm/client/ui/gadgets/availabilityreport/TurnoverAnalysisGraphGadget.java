@@ -115,9 +115,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         private AnalysisResolution currentDefaultResolution;
         //@formatter:on
 
-        private FilterData filter;
-
-        private BuildingsSource buildingsSource;
+        private BuildingsProvider buildingsProvider;
 
         public TurnoverAnalysisGraphGadgetInstance(GadgetMetadata gmd) {
             super(gmd, TurnoverAnalysisMetadata.class);
@@ -150,24 +148,8 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         }
 
         @Override
-        public void setFiltering(FilterData filterData) {
-            this.filter = filterData;
-
-            if (filter != null) {
-                fillResolutionSelector();
-                AnalysisResolution selected = getSelectedResolution();
-                AnalysisResolution defaultResolution = getDefaultResolution(filter.fromDate, filter.toDate);
-                if (selected == null || currentDefaultResolution != defaultResolution) {
-                    setResolution(defaultResolution);
-                    currentDefaultResolution = defaultResolution;
-                }
-            }
-            populate();
-        }
-
-        @Override
-        public void setBuildingsSource(BuildingsSource source) {
-            this.buildingsSource = source;
+        public void setBuildingsProvider(BuildingsProvider provider) {
+            this.buildingsProvider = provider;
         }
 
         /**
@@ -197,10 +179,10 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         }
 
         private boolean isResolutionAcceptable(AnalysisResolution resolution) {
-            if (filter.toDate == null | filter.fromDate == null) {
+            if (statusDateProvider == null) {
                 return resolution == DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX;
             } else {
-                long requestedTimerange = filter.toDate.getTime() - filter.fromDate.getTime();
+                long requestedTimerange = 365l * 24l * 60l * 60l * 1000l;
                 for (Tuple<Long, List<AnalysisResolution>> rangeToResolutions : RANGE_TO_ACCEPTED_RESOLUTIONS_MAP) {
                     if (requestedTimerange > rangeToResolutions.car()) {
                         return rangeToResolutions.cdr().contains(resolution);
@@ -264,7 +246,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         private void redraw() {
             graph.clear();
 
-            if ((data == null || data.size() == 0) | (filter == null)) {
+            if ((data == null || data.size() == 0) | buildingsProvider == null | statusDateProvider == null) {
                 // TODO show something like "no data provided"/"no search criteria"?)
                 return;
             }
@@ -304,7 +286,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
 
         private void doPopulate() {
             AnalysisResolution scale = getSelectedResolution();
-            if (filter == null | scale == null) {
+            if (buildingsProvider == null | statusDateProvider == null | scale == null) {
                 setTurnoverAnalysisData(null);
                 populateSucceded();
                 return;
@@ -321,8 +303,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
                     setTurnoverAnalysisData(result);
                     populateSucceded();
                 }
-            }, new Vector<Key>(filter.buildings), filter.fromDate == null ? null : new LogicalDate(filter.fromDate), filter.toDate == null ? null
-                    : new LogicalDate(filter.toDate), scale);
+            }, new Vector<Key>(buildingsProvider.getBuildings()), statusDateProvider.getStatusDate(), new LogicalDate(), scale);
         }
 
         @Override

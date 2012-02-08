@@ -23,7 +23,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -47,11 +46,9 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
             IBuildingBoardGadgetInstance {
         private static final I18n i18n = I18n.get(ArrearsSummaryGadgetImpl.class);
 
-        FilterData filterData = null;
-
         ArrearsReportService service;
 
-        private BuildingsSource buildingsSource;
+        private BuildingsProvider buildingsSource;
 
         public ArrearsSummaryGadgetImpl(GadgetMetadata gmd) {
             super(gmd, ArrearsSummary.class, ArrearsSummaryGadgetMeta.class);
@@ -71,19 +68,13 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
         }
 
         @Override
-        public void setFiltering(FilterData filterData) {
-            this.filterData = filterData;
-            populatePage(0);
-        }
-
-        @Override
-        public void setBuildingsSource(BuildingsSource source) {
+        public void setBuildingsProvider(BuildingsProvider source) {
             this.buildingsSource = source;
         }
 
         @Override
         public void populatePage(final int pageNumber) {
-            if (filterData != null) {
+            if (buildingsSource != null & statusDateProvider != null) {
                 service.summary(new AsyncCallback<EntitySearchResult<ArrearsSummary>>() {
                     @Override
                     public void onSuccess(EntitySearchResult<ArrearsSummary> result) {
@@ -95,8 +86,8 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
                     public void onFailure(Throwable caught) {
                         populateFailed(caught);
                     }
-                }, new Vector<Key>(filterData.buildings), filterData.toDate == null ? null : new LogicalDate(filterData.toDate),
-                        new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
+                }, new Vector<Key>(buildingsSource.getBuildings()), statusDateProvider.getStatusDate(), new Vector<Sort>(getSorting()), getPageNumber(),
+                        getPageSize());
             } else {
                 setPageData(new ArrayList<ArrearsSummary>(1), 0, 0, false);
                 populateSucceded();

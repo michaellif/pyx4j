@@ -39,20 +39,12 @@ public class ReportPanel extends BoardBase implements ReportView {
 
     private static final I18n i18n = I18n.get(ReportPanel.class);
 
-    private ReportView.Presenter _presenter;
-
     public ReportPanel() {
     }
 
     @Override
     protected IBoard createBoard() {
         return new Reportboard();
-    }
-
-    @Override
-    public void setPresenter(com.propertyvista.crm.client.ui.report.ReportView.Presenter presenter) {
-        setPresenter((BoardView.Presenter) presenter);
-        _presenter = presenter;
     }
 
     @Override
@@ -110,12 +102,6 @@ public class ReportPanel extends BoardBase implements ReportView {
                     print.setResource(CrmImages.INSTANCE.dashboardPrint());
                 }
             });
-            print.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    _presenter.print();
-                }
-            });
             print.getElement().getStyle().setCursor(Cursor.POINTER);
 
             add(addGadget);
@@ -124,4 +110,5 @@ public class ReportPanel extends BoardBase implements ReportView {
 
         }
     }
+    
 }

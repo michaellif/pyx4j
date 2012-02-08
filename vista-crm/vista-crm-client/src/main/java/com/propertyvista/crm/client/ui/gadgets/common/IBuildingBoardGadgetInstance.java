@@ -13,65 +13,25 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.common;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.pyx4j.commons.Key;
 
 /**
- * Gadget instance that is supported by building gadget.
+ * Gadget instance that is supported by building gadget, i.e a gadget that implements this interface is expected to display statistics that is
+ * dependent on a set of buildings.
  */
 // TODO add marker interface for gadget metadata, and thing how to bind between metadata building interface and this interface as painless as possible
 public interface IBuildingBoardGadgetInstance extends IGadgetInstance {
 
-    void setBuildingsSource(BuildingsSource source);
+    void setBuildingsProvider(BuildingsProvider provider);
 
-    interface BuildingsSource {
+    interface BuildingsProvider {
 
+        /**
+         * can't be <code>null</code>.
+         */
         List<Key> getBuildings();
 
-    }
-
-    @Deprecated
-    void setFiltering(FilterData filterData);
-
-    @Deprecated
-    class FilterData {
-        /**
-         * Process all buildings if list is empty.
-         */
-        public final List<Key> buildings = new ArrayList<Key>();
-
-        /**
-         * Use all past records if null.
-         */
-        public Date fromDate = null;
-
-        /**
-         * Use all current/future records if null.
-         */
-        public Date toDate = null;
-
-        // Construction:
-
-        public FilterData() {
-        }
-
-        public FilterData(Key buildingId) {
-            this(buildingId, null, null);
-        }
-
-        public FilterData(Date from, Date to) {
-            this(null, from, to);
-        }
-
-        public FilterData(Key buildingId, Date from, Date to) {
-            if (buildingId != null) {
-                buildings.add(buildingId);
-            }
-            fromDate = from;
-            toDate = to;
-        }
     }
 }

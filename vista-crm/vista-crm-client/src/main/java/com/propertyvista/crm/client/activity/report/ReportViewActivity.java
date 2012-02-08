@@ -13,15 +13,9 @@
  */
 package com.propertyvista.crm.client.activity.report;
 
-import java.net.ProtocolException;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Window;
 
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.activity.board.CrmBoardViewActivity;
@@ -29,8 +23,6 @@ import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
-import com.propertyvista.crm.rpc.services.reports.DashboardReportService;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class ReportViewActivity extends CrmBoardViewActivity<ReportView> implements ReportView.Presenter {
 
@@ -50,12 +42,5 @@ public class ReportViewActivity extends CrmBoardViewActivity<ReportView> impleme
     @Override
     protected BoardMetadataServiceBase getService() {
         return service;
-    }
-
-    @Override
-    public void print() {
-        EntityQueryCriteria<DashboardMetadata> criteria = new EntityQueryCriteria<DashboardMetadata>(DashboardMetadata.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), view.getData().getPrimaryKey()));
-        ReportDialog.start(GWT.<DashboardReportService> create(DashboardReportService.class), criteria);
     }
 }

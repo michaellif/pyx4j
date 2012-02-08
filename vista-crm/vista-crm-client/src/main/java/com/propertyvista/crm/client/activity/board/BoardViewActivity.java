@@ -117,6 +117,7 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
 
     protected void onSaveSuccess(DashboardMetadata result) {
         view.onSaveSuccess();
+        onPopulateSuccess(result);
     }
 
     protected void onSaveFail(Throwable caught) {

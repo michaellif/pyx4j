@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
@@ -26,6 +29,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
@@ -37,12 +42,13 @@ import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public abstract class BoardBase extends DockLayoutPanel implements BoardView {
+public abstract class BoardBase extends DockLayoutPanel implements BoardView, IGadgetInstance.StatusDateSource, IBuildingBoardGadgetInstance.BuildingsProvider {
 
     public static String DEFAULT_STYLE_PREFIX = "vista_DashboardView";
 
@@ -156,13 +162,31 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     }
 
     public void addGadget(IGadgetInstance gadget) {
-        gadget.setPresenter(presenter);
+        bindGadget(gadget);
         board.addGadget(gadget);
     }
 
     public void addGadget(IGadgetInstance gadget, int column) {
-        gadget.setPresenter(presenter);
+        bindGadget(gadget);
         board.addGadget(gadget, column);
+    }
+
+    private void bindGadget(IGadgetInstance gadget) {
+        gadget.setPresenter(presenter);
+        gadget.setStatusDateSource(this);
+        if (gadget instanceof IBuildingBoardGadgetInstance) {
+            ((IBuildingBoardGadgetInstance) gadget).setBuildingsProvider(this);
+        }
+    }
+
+    @Override
+    public List<Key> getBuildings() {
+        return new ArrayList<Key>(dashboardMetadata.buildings());
+    }
+
+    @Override
+    public LogicalDate getStatusDate() {
+        return dashboardMetadata.statusDate().isNull() ? new LogicalDate() : dashboardMetadata.statusDate().getValue();
     }
 
     @Override

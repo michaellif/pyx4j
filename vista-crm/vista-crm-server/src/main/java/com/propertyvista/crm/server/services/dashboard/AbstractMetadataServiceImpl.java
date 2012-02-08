@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.server.services.dashboard;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -23,15 +26,20 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.server.common.security.VistaContext;
 
 abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
+
+    private final static I18n i18n = I18n.get(AbstractMetadataServiceImpl.class);
 
     abstract void addTypeCriteria(EntityQueryCriteria<DashboardMetadata> criteria);
 
@@ -67,7 +75,46 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         } else {
             dm = Persistence.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
         }
+
+        // construct buildings view
+        if (dm.type().getValue() == DashboardType.building) {
+            dm.buildingsStringView().setValue(constructBuildingsView(dm.buildings()));
+        }
+
         callback.onSuccess(dm);
+    }
+
+    private String constructBuildingsView(Set<Key> buildingPKs) {
+        List<Building> buildings = new ArrayList<Building>(buildingPKs.size() + 1); // + 1 for an empty set
+        // FIXME change to secure retrieve that does this in one request if possible
+        for (Key pk : buildingPKs) {
+            buildings.add(Persistence.secureRetrieve(Building.class, pk));
+        }
+        return constructBuildingsView(buildings);
+    }
+
+    /**
+     * @return property codes of the provided buildings separated by ", "
+     */
+    private String constructBuildingsView(List<Building> buildings) {
+        if (buildings.isEmpty()) {
+            return i18n.tr("All");
+        } else {
+            List<String> propertyCodes = new ArrayList<String>(buildings.size());
+            for (Building b : buildings) {
+                propertyCodes.add(b.propertyCode().getValue());
+            }
+            java.util.Collections.sort(propertyCodes);
+
+            final int last = propertyCodes.size() - 1;
+            StringBuilder stringView = new StringBuilder();
+            for (int i = 0; i < last; ++i) {
+                stringView.append(propertyCodes.get(i)).append(", ");
+            }
+            stringView.append(propertyCodes.get(last));
+
+            return stringView.toString();
+        }
     }
 
     @Override
@@ -86,6 +133,12 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         }
 
         Persistence.secureSave(dm);
+
+        // construct buildings view
+        if (dm.type().getValue() == DashboardType.building) {
+            dm.buildingsStringView().setValue(constructBuildingsView(dm.buildings()));
+        }
+
         callback.onSuccess(dm);
     }
 

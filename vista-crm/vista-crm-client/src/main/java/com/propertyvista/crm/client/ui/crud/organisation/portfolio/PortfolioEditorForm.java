@@ -16,26 +16,21 @@ package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.building.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.rpc.services.selections.SelectBuildingCrudService;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -115,33 +110,5 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
             }.show();
         }
 
-    }
-
-    private abstract class BuildingSelectorDialog extends EntitySelectorDialog<Building> {
-
-        public BuildingSelectorDialog(List<Building> alreadySelected) {
-            super(Building.class, true, alreadySelected, i18n.tr("Select Buildings"));
-            setSize("700px", "400px");
-        }
-
-        @Override
-        protected List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(//@formatter:off                    
-                    new MemberColumnDescriptor.Builder(proto().propertyCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().complex()).build(),
-                    new MemberColumnDescriptor.Builder(proto().propertyManager()).build(),
-                    new MemberColumnDescriptor.Builder(proto().marketing().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().info().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().info().type()).build(),
-                    new MemberColumnDescriptor.Builder(proto().info().address().city()).build(),
-                    new MemberColumnDescriptor.Builder(proto().info().address().province()).build(),
-                    new MemberColumnDescriptor.Builder(proto().info().address().country()).build()
-            ); //@formatter:on
-        }
-
-        @Override
-        protected AbstractListService<Building> getSelectService() {
-            return GWT.<AbstractListService<Building>> create(SelectBuildingCrudService.class);
-        }
     }
 }

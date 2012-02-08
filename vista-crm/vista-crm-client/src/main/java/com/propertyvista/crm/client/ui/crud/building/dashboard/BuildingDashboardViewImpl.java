@@ -19,11 +19,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.widgets.client.dashboard.IGadget;
-import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.ui.dashboard.DashboardPanel;
-import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -31,8 +28,6 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 public class BuildingDashboardViewImpl extends DashboardPanel implements BuildingDashboardView {
 
     private final CEntityComboBox<DashboardMetadata> dashboardSelect = new CEntityComboBox<DashboardMetadata>(DashboardMetadata.class);
-
-    private IBuildingBoardGadgetInstance.FilterData filterData;
 
     public BuildingDashboardViewImpl() {
 
@@ -43,7 +38,6 @@ public class BuildingDashboardViewImpl extends DashboardPanel implements Buildin
             @Override
             public void onValueChange(ValueChangeEvent<DashboardMetadata> event) {
                 BuildingDashboardViewImpl.super.populate(event.getValue());
-                applyFiltering();
             }
         });
 
@@ -61,23 +55,4 @@ public class BuildingDashboardViewImpl extends DashboardPanel implements Buildin
         dashboardSelect.populate(metadata);
     }
 
-    @Override
-    public void setFiltering(IBuildingBoardGadgetInstance.FilterData filterData) {
-        this.filterData = filterData;
-        applyFiltering();
-    }
-
-    // Internals:
-
-    private void applyFiltering() {
-        if (filterData != null && this.getBoard() != null) {
-            IGadgetIterator it = this.getBoard().getGadgetIterator();
-            while (it.hasNext()) {
-                IGadget gadget = it.next();
-                if (gadget instanceof IBuildingBoardGadgetInstance) {
-                    ((IBuildingBoardGadgetInstance) gadget).setFiltering(filterData);
-                }
-            }
-        }
-    }
 }

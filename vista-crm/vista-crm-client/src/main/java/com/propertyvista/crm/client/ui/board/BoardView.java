@@ -31,6 +31,8 @@ public interface BoardView extends IsWidget {
         void populate(DashboardMetadata boardData);
 
         void save();
+
+        void print();
     }
 
     void setPresenter(Presenter presenter);

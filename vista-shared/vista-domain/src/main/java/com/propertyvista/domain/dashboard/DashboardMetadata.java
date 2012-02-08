@@ -13,14 +13,18 @@
  */
 package com.propertyvista.domain.dashboard;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -28,6 +32,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
+// FIXME i guess some refactoring is needed to create polymorphic metadata for each type of dashboard: system, building, report
 @Caption(name = "Dashboard")
 public interface DashboardMetadata extends ISharedUserEntity {
 
@@ -74,6 +79,28 @@ public interface DashboardMetadata extends ISharedUserEntity {
     @ToString(index = 0)
     @NotNull
     IPrimitive<String> name();
+
+    /**
+     * Holds the date of the reports/gadgets that are contained in this dashboard<br/>
+     * Note: gadgets can override the dashboard date setting or use it as some kind of reference point<br/>
+     * 
+     * Can be <code>null</code> if dashboard displays information for today.
+     */
+    IPrimitive<LogicalDate> statusDate();
+
+    /**
+     * For {@link DashboardType#building} kind of gadget this property holds the buildings filtering. An empty list means: use all buildings.
+     */
+    IPrimitiveSet<Key> buildings();
+
+    /**
+     * For {@link DashboardType#building} kind of gadget this property is filled on retrieval in server and represents the set of buildings this dashboard
+     * displays
+     * 
+     * @return
+     */
+    @Transient
+    IPrimitive<String> buildingsStringView();
 
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();

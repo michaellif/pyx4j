@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -57,7 +56,6 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
     public static class UnitAvailabilityReportGadgetImpl extends ListerGadgetInstanceBase<UnitAvailabilityStatusDTO, UnitAvailability> implements
             IBuildingBoardGadgetInstance {
         //@formatter:off        
-        private FilterData filter;
     
         private VerticalPanel gadgetPanel;
     
@@ -76,7 +74,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         private final AvailabilityReportService service;    
         //@formatter:on
 
-        private BuildingsSource buildingsSource;
+        private BuildingsProvider buildingsSource;
 
         public UnitAvailabilityReportGadgetImpl(GadgetMetadata gmd) {
             super(gmd, UnitAvailabilityStatusDTO.class, UnitAvailability.class);
@@ -91,20 +89,15 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         }
 
         @Override
-        public void setFiltering(FilterData filterData) {
-            this.filter = filterData;
-            populatePage(0);
-        }
-
-        @Override
-        public void setBuildingsSource(BuildingsSource source) {
+        public void setBuildingsProvider(BuildingsProvider source) {
             this.buildingsSource = source;
         }
 
         @Override
         public void populatePage(int pageNumber) {
-            if (filter == null) {
+            if (buildingsSource == null | statusDateProvider == null) {
                 setPageData(new Vector<UnitAvailabilityStatusDTO>(), 0, 0, false);
+                populateSucceded();
                 return;
             }
 
@@ -122,8 +115,8 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 public void onFailure(Throwable caught) {
                     populateFailed(caught);
                 }
-            }, new Vector<Key>(filter.buildings), select.occupied, select.vacant, select.notice, select.rented, select.notrented, filter.toDate == null ? null
-                    : new LogicalDate(filter.toDate), new Vector<Sort>(getSorting()), pageNumber, getPageSize());
+            }, new Vector<Key>(buildingsSource.getBuildings()), select.occupied, select.vacant, select.notice, select.rented, select.notrented,
+                    statusDateProvider.getStatusDate(), new Vector<Sort>(getSorting()), pageNumber, getPageSize());
         }
 
         @Override

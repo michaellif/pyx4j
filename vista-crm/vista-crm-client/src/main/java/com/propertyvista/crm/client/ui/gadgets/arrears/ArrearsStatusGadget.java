@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
@@ -59,11 +58,9 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
 
         private final ArrearsReportService service;
 
-        private FilterData filterData;
-
         private FormFlexPanel panel;
 
-        private BuildingsSource buildingsSource;
+        private BuildingsProvider buildingsProvider;
 
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
             super(gmd, MockupArrearsState.class, ArrearsStatus.class);
@@ -149,14 +146,8 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
         }
 
         @Override
-        public void setFiltering(FilterData filterData) {
-            this.filterData = filterData;
-            populatePage(0);
-        }
-
-        @Override
-        public void setBuildingsSource(BuildingsSource source) {
-            this.buildingsSource = source;
+        public void setBuildingsProvider(BuildingsProvider source) {
+            this.buildingsProvider = source;
         }
 
         @Override
@@ -177,7 +168,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
 
         @Override
         public void populatePage(final int pageNumber) {
-            if (filterData != null) {
+            if (buildingsProvider != null & statusDateProvider != null) {
                 service.arrearsList(new AsyncCallback<EntitySearchResult<MockupArrearsState>>() {
                     @Override
                     public void onSuccess(EntitySearchResult<MockupArrearsState> result) {
@@ -189,8 +180,8 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
                     public void onFailure(Throwable caught) {
                         populateFailed(caught);
                     }
-                }, getCustomCriteria(), new Vector<Key>(filterData.buildings), filterData.toDate == null ? null : new LogicalDate(filterData.toDate),
-                        new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
+                }, getCustomCriteria(), new Vector<Key>(buildingsProvider.getBuildings()), statusDateProvider.getStatusDate(), new Vector<Sort>(getSorting()),
+                        getPageNumber(), getPageSize());
             } else {
                 setPageData(new ArrayList<MockupArrearsState>(1), 0, 0, false);
             }

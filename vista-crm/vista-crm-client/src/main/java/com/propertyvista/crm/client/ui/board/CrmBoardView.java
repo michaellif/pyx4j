@@ -13,11 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-
-import com.propertyvista.domain.property.asset.building.Building;
-
 public interface CrmBoardView extends BoardView {
 
-    IListerView<Building> getBuildingListerView();
 }

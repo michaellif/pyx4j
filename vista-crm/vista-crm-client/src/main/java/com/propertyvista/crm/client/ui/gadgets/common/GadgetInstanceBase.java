@@ -58,7 +58,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     protected final Class<T> metadataClass;
 
-    protected StatusDateSource statusDateSource;
+    protected StatusDateSource statusDateProvider;
 
     @SuppressWarnings("unchecked")
     public GadgetInstanceBase(GadgetMetadata gmd, Class<T> metadataClass) {
@@ -115,7 +115,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     @Override
     public void setStatusDateSource(StatusDateSource source) {
-        this.statusDateSource = source;
+        this.statusDateProvider = source;
     }
 
     /**

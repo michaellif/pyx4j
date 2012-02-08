@@ -13,14 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.complex;
 
-import com.pyx4j.commons.Key;
-
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardView;
 import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardViewImpl;
-import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> implements ComplexViewerView {
@@ -37,29 +33,10 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
     @Override
     public void populate(ComplexDTO value) {
         super.populate(value);
-
-        // calculate and set current dashboard filtering here:
-        dashboardView.setFiltering(calculateFiltering(value));
     }
 
     @Override
     public BuildingDashboardView getDashboardView() {
         return dashboardView;
-    }
-
-    // Internals:
-
-    private IBuildingBoardGadgetInstance.FilterData calculateFiltering(ComplexDTO value) {
-        IBuildingBoardGadgetInstance.FilterData filterData = new IBuildingBoardGadgetInstance.FilterData();
-
-        if (value != null && !value.buildings().isEmpty()) {
-            for (Building building : value.buildings()) {
-                filterData.buildings.add(building.getPrimaryKey());
-            }
-        } else {
-            filterData.buildings.add(new Key(-1l));
-        }
-
-        return filterData;
     }
 }

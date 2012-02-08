@@ -16,15 +16,13 @@ package com.propertyvista.crm.client.activity.board;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.client.ReportDialog;
 
 import com.propertyvista.crm.client.ui.board.BoardView;
-import com.propertyvista.crm.client.ui.board.CrmBoardView;
-import com.propertyvista.crm.rpc.services.selections.SelectBuildingCrudService;
+import com.propertyvista.crm.rpc.services.reports.DashboardReportService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.property.asset.building.Building;
 
 public abstract class CrmBoardViewActivity<V extends BoardView> extends BoardViewActivity<V> {
 
@@ -32,16 +30,10 @@ public abstract class CrmBoardViewActivity<V extends BoardView> extends BoardVie
         super(view, place);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void onPopulateSuccess(DashboardMetadata result) {
-        super.onPopulateSuccess(result);
-
-        // create ListerActivity for building lister if necessary (if we run Building dashboard): 
-        if (view instanceof CrmBoardView && ((CrmBoardView) view).getBuildingListerView() != null) {
-            IListerView.Presenter buildingsLister = new ListerActivityBase<Building>(getPlace(), ((CrmBoardView) view).getBuildingListerView(),
-                    (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
-            buildingsLister.retrieveData(0);
-        }
+    public void print() {
+        EntityQueryCriteria<DashboardMetadata> criteria = new EntityQueryCriteria<DashboardMetadata>(DashboardMetadata.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), view.getData().getPrimaryKey()));
+        ReportDialog.start(GWT.<DashboardReportService> create(DashboardReportService.class), criteria);
     }
 }

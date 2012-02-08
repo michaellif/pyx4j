@@ -14,9 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.building.dashboard;
 
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
-import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 
 public interface BuildingDashboardView extends DashboardView {
 
-    void setFiltering(IBuildingBoardGadgetInstance.FilterData filterData);
 }

@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgRoot;
@@ -63,8 +62,6 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         // TODO make this constant setupable
         private static final int YEARS_TO_COMPARE = 3;
 
-        FilterData filterData = null;
-
         LayoutPanel graph;
 
         ArrearsReportService service;
@@ -73,7 +70,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
 
         private final SvgFactoryForGwt factory;
 
-        private BuildingsSource buildingsSource;
+        private BuildingsProvider buildingsProvider;
 
         public ArrearsYOYAnalysisChartGadgetImpl(GadgetMetadata gmd) {
             super(gmd, ArrearsYOYAnalysisChart.class);
@@ -89,14 +86,8 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         }
 
         @Override
-        public void setFiltering(FilterData filterData) {
-            this.filterData = filterData;
-            populate();
-        }
-
-        @Override
-        public void setBuildingsSource(BuildingsSource source) {
-            this.buildingsSource = source;
+        public void setBuildingsProvider(BuildingsProvider source) {
+            this.buildingsProvider = source;
         }
 
         @Override
@@ -122,7 +113,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         }
 
         private void doPopulate() {
-            if (filterData != null) {
+            if (buildingsProvider != null & statusDateProvider != null) {
                 service.arrearsMonthlyComparison(new AsyncCallback<Vector<Vector<Double>>>() {
                     @Override
                     public void onSuccess(Vector<Vector<Double>> result) {
@@ -134,7 +125,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
                     public void onFailure(Throwable caught) {
                         populateFailed(caught);
                     }
-                }, new Vector<Key>(filterData.buildings), YEARS_TO_COMPARE);
+                }, new Vector<Key>(buildingsProvider.getBuildings()), YEARS_TO_COMPARE);
             } else {
                 setYoyAnalysisData(null);
                 populateSucceded();
@@ -177,7 +168,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         }
 
         private List<String> createSeriesDescription() {
-            int lastYear = ((filterData != null) && (filterData.toDate != null) ? new LogicalDate(filterData.toDate) : new LogicalDate()).getYear() + 1900;
+            int lastYear = statusDateProvider.getStatusDate().getYear() + 1900;
             int firstYear = lastYear - YEARS_TO_COMPARE + 1;
             List<String> description = new ArrayList<String>(lastYear - firstYear);
             for (int year = firstYear; year <= lastYear; ++year) {

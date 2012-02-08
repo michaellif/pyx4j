@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -52,9 +51,7 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
 
         private final AvailabilityReportService service;
 
-        private FilterData filter;
-
-        private BuildingsSource buildingsSource;
+        private BuildingsProvider buildingsProvider;
 
         public AvailabiltySummaryGadgetInstance(GadgetMetadata gmd) {
             super(gmd, AvailabilitySummary.class);
@@ -126,14 +123,8 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
         }
 
         @Override
-        public void setFiltering(FilterData filterData) {
-            this.filter = filterData;
-            populate();
-        }
-
-        @Override
-        public void setBuildingsSource(BuildingsSource source) {
-            this.buildingsSource = source;
+        public void setBuildingsProvider(BuildingsProvider source) {
+            this.buildingsProvider = source;
         }
 
         private void setData(UnitVacancyReportSummaryDTO summary) {
@@ -141,7 +132,7 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
         }
 
         private void doPopulate() {
-            if (filter == null) {
+            if (statusDateProvider == null & buildingsProvider == null) {
                 setData(EntityFactory.create(UnitVacancyReportSummaryDTO.class));
                 populateSucceded();
             } else {
@@ -156,7 +147,7 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
                     public void onFailure(Throwable caught) {
                         populateFailed(caught);
                     }
-                }, new Vector<Key>(filter.buildings), filter.toDate == null ? null : new LogicalDate(filter.toDate));
+                }, new Vector<Key>(buildingsProvider.getBuildings()), statusDateProvider.getStatusDate());
             }
         }
 
