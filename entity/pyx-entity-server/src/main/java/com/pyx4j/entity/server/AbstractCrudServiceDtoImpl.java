@@ -38,6 +38,10 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
         super(entityClass, dtoClass);
     }
 
+    /**
+     * This method called for single entity returned to the GWT client. As opposite to entries in list.
+     * This is empty callback function that don't need to be called from implementation.
+     */
     protected void enhanceRetrieved(E entity, DTO dto) {
     }
 
