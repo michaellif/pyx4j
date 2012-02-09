@@ -14,32 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 1, 2012
+ * Created on Feb 8, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.join;
+package com.pyx4j.entity.test.shared.domain.ownership.managed;
 
-import com.pyx4j.entity.annotations.ColumnId;
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
-public interface OneToOneReadChild extends IEntity {
+// This table have column that references child, New table Om0OneToManyOwner$children  is created to manage this 
+public interface Om0OneToManyOwner extends IEntity {
+
+    @Owned
+    IList<Om0OneToManyChild> children();
 
     IPrimitive<String> testId();
 
     IPrimitive<String> name();
-
-    interface OwnedId extends ColumnId {
-
-    }
-
-    @Owner
-    @JoinColumn(OwnedId.class)
-    OneToOneReadOwner o2oOwner();
-
 }

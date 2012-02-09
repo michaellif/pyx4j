@@ -39,4 +39,9 @@ public interface OneToOneReadOwner extends IEntity {
     @Detached
     OneToOneReadChild child();
 
+// Alternative syntaxes for the same DB structure  
+//    @Owned(mappedby = OneToOneReadChild.OwnedId.class)
+//    @Detached
+//    OneToOneReadChild child();
+
 }

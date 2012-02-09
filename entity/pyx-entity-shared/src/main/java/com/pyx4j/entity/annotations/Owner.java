@@ -27,9 +27,12 @@ import java.lang.annotation.Target;
 
 /**
  * Maps to javax.persistence.OneToOne or javax.persistence.OneToMany with CascadeType.ALL
+ * Effectively enforce the Member as ReadOnly
  */
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Owner {
+
+    Class<? extends ColumnId> mappedby() default ColumnId.class;
 
 }

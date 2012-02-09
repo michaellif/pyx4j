@@ -14,11 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 1, 2012
+ * Created on Feb 8, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.join;
+package com.pyx4j.entity.test.shared.domain.ownership.managed;
 
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -28,18 +28,17 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
-public interface OneToOneReadChild extends IEntity {
+public interface Om2OneToOneChild extends IEntity {
 
-    IPrimitive<String> testId();
-
-    IPrimitive<String> name();
-
-    interface OwnedId extends ColumnId {
+    interface LinkColumnInChild extends ColumnId {
 
     }
 
     @Owner
-    @JoinColumn(OwnedId.class)
-    OneToOneReadOwner o2oOwner();
+    @JoinColumn(LinkColumnInChild.class)
+    Om2OneToOneOwner owner();
 
+    IPrimitive<String> testId();
+
+    IPrimitive<String> name();
 }

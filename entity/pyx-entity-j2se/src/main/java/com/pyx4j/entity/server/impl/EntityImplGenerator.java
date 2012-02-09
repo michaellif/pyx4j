@@ -47,6 +47,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ClassFinder;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
@@ -340,23 +342,7 @@ public class EntityImplGenerator {
             lazyCreateMember.setBody("return " + EntityImplReflectionHelper.class.getName() + ".lazyCreateMember(" + interfaceName + ".class, this, $1);");
             implClass.addMethod(lazyCreateMember);
 
-            List<CtMethod> allMethodsSortedByDeclaration = new Vector<CtMethod>();
-            for (CtMethod method : interfaceCtClass.getDeclaredMethods()) {
-                if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
-                        || (method.getDeclaringClass().equals(ctClassIObject))) {
-                    continue;
-                }
-                allMethodsSortedByDeclaration.add(method);
-            }
-            for (CtMethod method : interfaceCtClass.getMethods()) {
-                if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
-                        || (method.getDeclaringClass().equals(ctClassIObject))) {
-                    continue;
-                }
-                if (!allMethodsSortedByDeclaration.contains(method)) {
-                    allMethodsSortedByDeclaration.add(method);
-                }
-            }
+            List<CtMethod> allMethodsSortedByDeclaration = getAllMethodsSortedByDeclaration(interfaceCtClass);
 
             StringBuilder membersNamesStringArray = new StringBuilder();
             // Members access, Use CtClass to get the list of Methods ordered by declaration order.
@@ -369,6 +355,7 @@ public class EntityImplGenerator {
                 if (method.getName().equals(IEntity.PRIMARY_KEY)) {
                     continue;
                 }
+                assertOwnership(interfaceCtClass, method);
                 //System.out.println("Creating " + method.getName() + " of " + method.getDeclaringClass().getName());
                 CtMethod member = new CtMethod(type, method.getName(), null, implClass);
                 member.setBody("return (" + type.getName() + ")getMember(\"" + method.getName() + "\");");
@@ -400,9 +387,62 @@ public class EntityImplGenerator {
         } catch (CannotCompileException e) {
             log.error("Impl " + interfaceName + " compile error", e);
             throw new Error("Can't create class " + name);
+        } catch (ClassNotFoundException e) {
+            log.error("Impl " + interfaceName + " construction error", e);
+            throw new Error("Can't create class " + name);
         } catch (NotFoundException e) {
             log.error("Impl " + interfaceName + " construction error", e);
             throw new Error("Can't create class " + name);
         }
+    }
+
+    List<CtMethod> getAllMethodsSortedByDeclaration(CtClass interfaceCtClass) {
+        List<CtMethod> allMethodsSortedByDeclaration = new Vector<CtMethod>();
+        for (CtMethod method : interfaceCtClass.getDeclaredMethods()) {
+            if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
+                    || (method.getDeclaringClass().equals(ctClassIObject))) {
+                continue;
+            }
+            allMethodsSortedByDeclaration.add(method);
+        }
+        for (CtMethod method : interfaceCtClass.getMethods()) {
+            if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
+                    || (method.getDeclaringClass().equals(ctClassIObject))) {
+                continue;
+            }
+            if (!allMethodsSortedByDeclaration.contains(method)) {
+                allMethodsSortedByDeclaration.add(method);
+            }
+        }
+        return allMethodsSortedByDeclaration;
+    }
+
+    private void assertOwnership(CtClass interfaceCtClass, CtMethod method) throws ClassNotFoundException, NotFoundException {
+        //TODO move to meta generator where GenericArtumentTypes are avalablel
+        if (true) {
+            return;
+        }
+        Owner owner = (Owner) method.getAnnotation(Owner.class);
+        if (owner == null) {
+            return;
+        }
+        CtClass ownerType = method.getReturnType();
+        boolean ownedRefferenceFound = false;
+        for (CtMethod ownerMethod : getAllMethodsSortedByDeclaration(ownerType)) {
+            if (ownerMethod.getReturnType().equals(interfaceCtClass)) {
+                Owned owned = (Owned) ownerMethod.getAnnotation(Owned.class);
+                if (owned == null) {
+                    throw new AssertionError("Missing @Owned annotation on member '" + ownerMethod.getName() + "' in " + ownerType.getName());
+                }
+                ownedRefferenceFound = true;
+            } else {
+                //TODO Polymorphic case
+            }
+
+        }
+        if (!ownedRefferenceFound) {
+            //throw new AssertionError("Missing @Owned member of type " + interfaceCtClass.getName() + " in " + ownerType.getName());
+        }
+
     }
 }

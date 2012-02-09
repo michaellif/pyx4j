@@ -652,7 +652,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 if (!EqualsHelper.equals(childEntity.getPrimaryKey(), baseChildEntity.getPrimaryKey())) {
                     if (childEntity.getPrimaryKey() != null) {
                         if (ApplicationMode.isDevelopment()) {
-                            throw new SecurityViolationException(ApplicationMode.DEV + "attempt to attach to different entity graphs "
+                            throw new SecurityViolationException(ApplicationMode.DEV + "owned entity should not be attached to different entity graph, "
                                     + childEntity.getDebugExceptionInfoString());
                         } else {
                             throw new SecurityViolationException("Permission denied");
