@@ -13,7 +13,8 @@
  */
 package com.propertyvista.domain.site;
 
+import com.propertyvista.domain.File;
 
-public interface SiteImageResource extends Resource {
+public interface SiteImageResource extends File {
 
 }

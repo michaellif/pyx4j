@@ -45,7 +45,7 @@ public interface PageContent extends IEntity {
     IPrimitive<String> content();
 
     // Image for landing page and for static
-    Resource image();
+    PortalImageResource image();
 
     // =========================
 

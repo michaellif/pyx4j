@@ -64,11 +64,11 @@ public class SiteImageResourceUploadServiceImpl extends UploadServiceImpl<IEntit
         response.uploadKey = blobKey;
 
         SiteImageResource newDocument = EntityFactory.create(SiteImageResource.class);
-        newDocument.file().blobKey().setValue(blobKey);
-        newDocument.file().fileName().setValue(response.fileName);
-        newDocument.file().fileSize().setValue(response.fileSize);
-        newDocument.file().timestamp().setValue(response.timestamp);
-        newDocument.file().contentMimeType().setValue(response.fileContentType);
+        newDocument.blobKey().setValue(blobKey);
+        newDocument.fileName().setValue(response.fileName);
+        newDocument.fileSize().setValue(response.fileSize);
+        newDocument.timestamp().setValue(response.timestamp);
+        newDocument.contentMimeType().setValue(response.fileContentType);
         Persistence.service().persist(newDocument);
 
         response.data = newDocument;

@@ -93,8 +93,8 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
 
             if (isEditable()) {
                 CRichTextArea editor = new CRichTextArea();
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor), 60).build());
                 editor.setImageProvider(new SiteImageResourceProvider());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor), 60).build());
             } else {
                 CLabel content = new CLabel();
                 content.setAllowHtml(true);
@@ -113,6 +113,5 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
             get(proto().content()).setVisible(staticPage);
             get(proto()._caption().secondaryCaption()).setVisible(staticPage);
         }
-
     }
 }

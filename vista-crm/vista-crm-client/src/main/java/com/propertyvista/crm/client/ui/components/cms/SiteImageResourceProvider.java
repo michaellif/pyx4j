@@ -34,7 +34,7 @@ import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.CancelOption;
+import com.pyx4j.widgets.client.dialog.CloseOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.richtext.ImageGallery;
@@ -45,7 +45,7 @@ import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.SiteImageResource;
 
-public class SiteImageResourceProvider extends Dialog implements CancelOption, RichTextImageProvider {
+public class SiteImageResourceProvider extends Dialog implements CloseOption, RichTextImageProvider {
 
     private static final I18n i18n = I18n.get(SiteImageResourceProvider.class);
 
@@ -109,14 +109,14 @@ public class SiteImageResourceProvider extends Dialog implements CancelOption, R
         uploadPanel = new UploadPanel<IEntity, SiteImageResource>((UploadService<IEntity, SiteImageResource>) GWT.create(SiteImageResourceUploadService.class)) {
             @Override
             protected void onUploadSubmit() {
-                SiteImageResourceProvider.this.getCancelButton().setEnabled(false);
+                SiteImageResourceProvider.this.getCloseButton().setEnabled(false);
                 submitButton.setEnabled(false);
             }
 
             @Override
             protected void onUploadError(UploadError error, String args) {
                 super.onUploadError(error, args);
-                SiteImageResourceProvider.this.getCancelButton().setEnabled(true);
+                SiteImageResourceProvider.this.getCloseButton().setEnabled(true);
                 submitButton.setEnabled(true);
                 uploadPanel.reset();
             }
@@ -124,9 +124,10 @@ public class SiteImageResourceProvider extends Dialog implements CancelOption, R
             @Override
             protected void onUploadComplete(UploadResponse<SiteImageResource> serverUploadResponse) {
                 String url = MediaUtils.createSiteImageResourceUrl(serverUploadResponse.data);
+                imageResourceMap.put(url, serverUploadResponse.data);
                 gallery.addImage(url);
 
-                SiteImageResourceProvider.this.getCancelButton().setEnabled(true);
+                SiteImageResourceProvider.this.getCloseButton().setEnabled(true);
                 submitButton.setEnabled(true);
             }
         };
@@ -186,7 +187,13 @@ public class SiteImageResourceProvider extends Dialog implements CancelOption, R
     }
 
     @Override
-    public boolean onClickCancel() {
+    public boolean onClickClose() {
+        if (imageSelectionHandler != null) {
+            imageSelectionHandler.onSuccess(null);
+        }
+        if (resourceSelectionHandler != null) {
+            resourceSelectionHandler.onSuccess(null);
+        }
         return true;
     }
 }

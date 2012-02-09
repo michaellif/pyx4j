@@ -70,7 +70,7 @@ public class SiteResourcesServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_GONE);
             return;
         }
-        File file = descriptor.logo().get(0).file();
+        File file = descriptor.logo().get(0).imageResource();
 
         if (file.blobKey().isNull()) {
             log.debug("resources {} {} is not file", id, filename);

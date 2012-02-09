@@ -41,6 +41,7 @@ import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -410,14 +411,16 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         }
         if (raw != null) {
             Key blobKey = BlobService.persist(raw, "crm-logo.png", "image/png");
+            SiteImageResource siteImage = EntityFactory.create(SiteImageResource.class);
+            siteImage.blobKey().setValue(blobKey);
+            siteImage.fileSize().setValue(raw.length);
+            siteImage.contentMimeType().setValue("image/png");
+            siteImage.timestamp().setValue(System.currentTimeMillis());
+            Persistence.service().persist(siteImage);
             for (LocaleInfo li : siteLocale) {
-                SiteImageResource res = site.logo().$();
+                PortalImageResource res = site.logo().$();
                 res.locale().set(li.aLocale);
-                res.file().blobKey().setValue(blobKey);
-                res.file().fileSize().setValue(raw.length);
-                res.file().contentMimeType().setValue("image/png");
-                res.file().timestamp().setValue(System.currentTimeMillis());
-                Persistence.service().persist(res);
+                res.imageResource().set(siteImage);
                 site.logo().add(res);
             }
         }

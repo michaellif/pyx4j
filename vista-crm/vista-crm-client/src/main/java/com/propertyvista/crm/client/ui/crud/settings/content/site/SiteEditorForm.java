@@ -89,7 +89,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         main.setWidget(row++, 0, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
 
         main.setH1(row++, 0, 1, proto().logo().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().logo(), new SiteImageResourceFolder(isEditable())));
+        main.setWidget(row++, 0, inject(proto().logo(), new PortalImageResourceFolder(isEditable())));
 
         main.setH1(row++, 0, 1, proto().slogan().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().slogan(), new VistaBoxFolder<HtmlContent>(HtmlContent.class) {
@@ -105,8 +105,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
                             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
                             if (isEditable()) {
                                 CRichTextArea editor = new CRichTextArea();
-                                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), editor), 60).build());
                                 editor.setImageProvider(new SiteImageResourceProvider());
+                                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), editor), 60).build());
                             } else {
                                 CLabel content = new CLabel();
                                 content.setAllowHtml(true);
@@ -122,7 +122,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         }));
 
         main.setH1(row++, 0, 1, proto().banner().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().banner(), new SiteImageResourceFolder(isEditable())));
+        main.setWidget(row++, 0, inject(proto().banner(), new PortalImageResourceFolder(isEditable())));
 
         main.setH1(row++, 0, 1, proto().childPages().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));

@@ -78,11 +78,11 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
             dbo.parent().childPages().add(dbo);
             log.debug("2. create child of ", dbo);
             Persistence.service().merge(dbo.parent());
-        } else {
-            EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
-            SiteDescriptor siteDescriptor = Persistence.service().retrieve(criteria);
-            siteDescriptor._updateFlag().updated().setValue(new Date());
-            Persistence.service().persist(siteDescriptor);
         }
+        // set update flag
+        EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
+        SiteDescriptor siteDescriptor = Persistence.service().retrieve(criteria);
+        siteDescriptor._updateFlag().updated().setValue(new Date());
+        Persistence.service().persist(siteDescriptor);
     }
 }

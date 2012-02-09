@@ -29,8 +29,8 @@ public interface DeploymentConsts {
 
     public static final String siteResourcesServletMapping = "site-resource/";
 
-    public static final String applicationDocumentServletMapping = "application_document/";
+    public static final String siteImageResourceServletMapping = "site-imageresource/";
 
-    public static final String siteImageResourceServletMapping = "resource_siteimage/";
+    public static final String applicationDocumentServletMapping = "application_document/";
 
 }

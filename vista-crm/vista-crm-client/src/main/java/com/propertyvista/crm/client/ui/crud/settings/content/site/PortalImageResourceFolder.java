@@ -34,29 +34,30 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.File;
+import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.SiteImageResource;
 
-public class SiteImageResourceFolder extends VistaBoxFolder<SiteImageResource> {
-    private static final I18n i18n = I18n.get(SiteImageResourceFolder.class);
+public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResource> {
+    private static final I18n i18n = I18n.get(PortalImageResourceFolder.class);
 
-    public SiteImageResourceFolder(boolean editable) {
-        super(SiteImageResource.class, editable);
+    public PortalImageResourceFolder(boolean editable) {
+        super(PortalImageResource.class, editable);
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof SiteImageResource) {
-            return new SiteImageResourceEditor();
+        if (member instanceof PortalImageResource) {
+            return new PortalImageResourceEditor();
         }
         return super.create(member);
     }
 
-    class SiteImageResourceEditor extends CEntityDecoratableEditor<SiteImageResource> {
+    class PortalImageResourceEditor extends CEntityDecoratableEditor<PortalImageResource> {
 
         private final SiteImageThumbnail thumb = new SiteImageThumbnail();
 
-        public SiteImageResourceEditor() {
-            super(SiteImageResource.class);
+        public PortalImageResourceEditor() {
+            super(PortalImageResource.class);
         }
 
         @Override
@@ -65,7 +66,7 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteImageResource> {
 
             int row = -1;
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
-            if (SiteImageResourceFolder.this.isEditable()) {
+            if (PortalImageResourceFolder.this.isEditable()) {
 
                 CEntityHyperlink<File> link = new CEntityHyperlink<File>(new Command() {
                     @Override
@@ -79,7 +80,7 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteImageResource> {
 
                             @Override
                             public void onSuccess(SiteImageResource rc) {
-                                getValue().file().set(rc.file());
+                                getValue().imageResource().set(rc);
                             }
                         });
                     }
@@ -99,18 +100,18 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteImageResource> {
                         return null;
                     }
                 });
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), link), 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().imageResource(), link), 10).build());
             } else {
                 CEntityHyperlink<File> link = new CEntityHyperlink<File>(new Command() {
                     @Override
                     public void execute() {
-                        OkDialog dialog = new OkDialog(getValue().file().fileName().getValue()) {
+                        OkDialog dialog = new OkDialog(getValue().imageResource().fileName().getValue()) {
                             @Override
                             public boolean onClickOk() {
                                 return true;
                             }
                         };
-                        dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl(getValue())));
+                        dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl(getValue().imageResource())));
                         dialog.center();
                     }
                 });
@@ -129,7 +130,7 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteImageResource> {
                         return null;
                     }
                 });
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), link), 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().imageResource(), link), 10).build());
             }
             main.setWidget(0, 1, thumb);
             main.getFlexCellFormatter().setRowSpan(0, 1, row + 1);
@@ -140,7 +141,7 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteImageResource> {
         @Override
         public void onPopulate() {
             super.onPopulate();
-            thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue()));
+            thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().imageResource()));
         }
     }
 

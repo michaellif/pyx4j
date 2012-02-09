@@ -31,7 +31,6 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.File;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.server.common.blob.ETag;
 import com.propertyvista.server.domain.FileBlob;
@@ -62,14 +61,12 @@ public class SiteImageResourceServlet extends HttpServlet {
         }
 
         //TODO deserialize key
-        SiteImageResource doc = Persistence.service().retrieve(SiteImageResource.class, new Key(id));
-        if (doc == null) {
+        SiteImageResource file = Persistence.service().retrieve(SiteImageResource.class, new Key(id));
+        if (file == null) {
             log.debug("no such document {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-
-        File file = doc.file();
 
         if (file.blobKey().isNull()) {
             log.debug("resources {} {} is not file", id, filename);
@@ -102,7 +99,7 @@ public class SiteImageResourceServlet extends HttpServlet {
             response.setContentType(file.contentMimeType().getValue());
         }
 
-        FileBlob blob = Persistence.service().retrieve(FileBlob.class, doc.file().blobKey().getValue());
+        FileBlob blob = Persistence.service().retrieve(FileBlob.class, file.blobKey().getValue());
         if (blob == null) {
             log.debug("no such blob {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);

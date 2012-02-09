@@ -108,7 +108,7 @@
         </init-param>
         <init-param>
             <param-name>ignorePaths</param-name>
-            <param-value>/o/,/public/,/media/,/admin/,/crm/,/portal/,/ptapp/,/tester/,/corp/,/rest/,/demo/</param-value>
+            <param-value>/o/,/public/,/media//site-resource/,/site-imageresource/,/admin/,/crm/,/portal/,/ptapp/,/tester/,/corp/,/rest/,/demo/</param-value>
         </init-param>
     </filter>
 
@@ -325,7 +325,7 @@
 
     <servlet-mapping>
         <servlet-name>SiteImageResourceServlet</servlet-name>
-        <url-pattern>/resource_siteimage/*</url-pattern>
+        <url-pattern>/site-imageresource/*</url-pattern>
     </servlet-mapping>
     
     <!--  need this for deployments where CRM is directly on root URL e.g. http://redridge.propertyvista.com/ -->
