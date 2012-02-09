@@ -7,27 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 26, 2011
- * @author michaellif
+ * Created on 2011-05-21
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.financial.offering;
+package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.tax.Tax;
 
-public interface ChargeCode extends IEntity {
-
-    @ToString
-    IPrimitive<String> name();
-
-    GlCode glCode();
-
-    IList<Tax> taxes();
+public interface SelectTaxCrudService extends AbstractCrudService<Tax> {
 
 }

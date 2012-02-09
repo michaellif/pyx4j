@@ -90,6 +90,9 @@ import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceIte
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.ChargeCodeEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.ChargeCodeListerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.ChargeCodeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeViewerActivity;
@@ -655,6 +658,19 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     }
 
+                } else if (place instanceof CrmSiteMap.Settings.ChargeCode) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ChargeCodeEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ChargeCodeViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new ChargeCodeListerActivity(place);
+                        break;
+
+                    }
 // - Complex:
                 } else if (place instanceof CrmSiteMap.Properties.Complex) {
                     switch (((CrudAppPlace) place).getType()) {
