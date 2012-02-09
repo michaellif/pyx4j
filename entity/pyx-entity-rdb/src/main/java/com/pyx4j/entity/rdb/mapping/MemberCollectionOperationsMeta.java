@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class MemberCollectionOperationsMeta extends MemberExternalOperationsMeta {
@@ -27,8 +28,9 @@ public class MemberCollectionOperationsMeta extends MemberExternalOperationsMeta
     private final String sqlOrderColumnName;
 
     public MemberCollectionOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath,
-            boolean joinTableSameAsTarget, String sqlOwnerName, ValueAdapter ownerValueAdapter, String sqlValueName, String sqlOrderColumnName) {
-        super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, joinTableSameAsTarget, sqlOwnerName, ownerValueAdapter, sqlValueName);
+            Class<? extends IEntity> joinTableClass, boolean joinTableSameAsTarget, String sqlOwnerName, ValueAdapter ownerValueAdapter, String sqlValueName,
+            String sqlOrderColumnName) {
+        super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, joinTableClass, joinTableSameAsTarget, sqlOwnerName, ownerValueAdapter, sqlValueName);
         this.sqlOrderColumnName = sqlOrderColumnName;
     }
 

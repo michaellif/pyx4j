@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
@@ -154,10 +153,10 @@ public class Mappings {
 
         if (initRefferencedTables) {
             for (MemberCollectionOperationsMeta member : model.operationsMeta().getJoinTablesCollectionMembers()) {
-                this.getTableModel(connection, member.getMemberMeta().getAnnotation(JoinTable.class).value());
+                this.getTableModel(connection, member.joinTableClass());
             }
             for (MemberExternalOperationsMeta member : model.operationsMeta().getExternalMembers()) {
-                this.getTableModel(connection, member.getMemberMeta().getAnnotation(JoinTable.class).value());
+                this.getTableModel(connection, member.joinTableClass());
             }
         }
 

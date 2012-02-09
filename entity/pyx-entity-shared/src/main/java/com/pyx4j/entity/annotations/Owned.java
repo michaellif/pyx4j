@@ -34,6 +34,12 @@ import com.pyx4j.entity.shared.IEntity;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Owned {
 
+    public static boolean TODO = true;
+
+    /**
+     * @deprecated for now no plans implementing this
+     */
+    @Deprecated
     Class<? extends IEntity> joinTable() default IEntity.class;
 
     /**

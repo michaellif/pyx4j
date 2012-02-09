@@ -41,7 +41,7 @@ public @interface JoinTable {
      * N.B. cascade() true is not implemented!
      */
     @Deprecated
-    boolean cascade() default true;
+    boolean cascade() default false;
 
     /**
      * Optional, Should match value of @JoinColumn when defined.

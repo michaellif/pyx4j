@@ -430,6 +430,11 @@ public class TableModel {
             TableModelCollections.retrieve(connection, dialect, entity, member);
         }
         for (MemberExternalOperationsMeta member : entityOperationsMeta.getExternalMembers()) {
+            // Special handling for recursive retrieve of Owner
+            if ((entity.getOwner() != null) && (entity.getMeta() != null) && entity.getMeta().isOwnedRelationships()) {
+                // verify graph integrity
+                continue;
+            }
             TableModleExternal.retrieve(connection, dialect, entity, member);
         }
     }
