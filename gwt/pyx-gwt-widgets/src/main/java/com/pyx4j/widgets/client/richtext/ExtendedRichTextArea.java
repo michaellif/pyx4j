@@ -20,9 +20,6 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -43,8 +40,6 @@ import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.RichTextArea;
 
 public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
-    private static final Logger log = LoggerFactory.getLogger(ExtendedRichTextArea.class);
-
     private final RichTextArea richTextArea;
 
     private final ExtendedRichTextToolbar toolbar;
@@ -151,6 +146,14 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
     @Override
     public void onBrowserEvent(Event event) {
         super.onBrowserEvent(event);
+        /*
+         * This is needed to help handling richTextArea onBlur events. When toolbar is inOperation state
+         * it may open other dialogs that may have focusable components. When those components receive
+         * focus it should not fire onBlur for the editor (see RichTextArea#ignoreBlur())
+         */
+        if (toolbar.inOperation()) {
+            return;
+        }
         switch (event.getTypeInt()) {
         case Event.ONMOUSEOUT:
             toolbar.getElement().getStyle().setOpacity(0.3);

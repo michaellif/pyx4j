@@ -15,6 +15,8 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -49,7 +51,7 @@ public class ExtendedRichTextToolbar extends Composite {
      * We use an inner EventListener class to avoid exposing event methods on the
      * RichTextToolbar itself.
      */
-    private class EventHandler implements ClickHandler, ChangeHandler, KeyUpHandler {
+    private class EventHandler implements ClickHandler, ChangeHandler, KeyUpHandler, BlurHandler {
 
         @Override
         public void onChange(ChangeEvent event) {
@@ -95,6 +97,7 @@ public class ExtendedRichTextToolbar extends Composite {
             } else if (sender == justifyRight) {
                 formatter.setJustification(RichTextArea.Justification.RIGHT);
             } else if (sender == insertImage) {
+                inOperation = true;
                 if (provider != null) {
                     provider.selectImage(new AsyncCallback<String>() {
                         @Override
@@ -104,17 +107,15 @@ public class ExtendedRichTextToolbar extends Composite {
 
                         @Override
                         public void onSuccess(String result) {
-                            formatter.insertImage(result);
+                            onImageUrl(result);
                         }
                     });
                 } else {
-                    formatter.insertImage(Window.prompt("Enter an image URL:", "http://"));
+                    onImageUrl(Window.prompt("Enter target image URL:", "http://"));
                 }
             } else if (sender == createLink) {
-                String url = getLinkUrl();
-                if (url != null) {
-                    formatter.createLink(url);
-                }
+                inOperation = true;
+                onLinkUrl(Window.prompt("Enter target page URL:", "http://"));
             } else if (sender == removeLink) {
                 formatter.removeLink();
             } else if (sender == hr) {
@@ -141,6 +142,11 @@ public class ExtendedRichTextToolbar extends Composite {
                 // keyboard, or uses one of the browser's built-in keyboard shortcuts.
                 updateStatus();
             }
+        }
+
+        @Override
+        public void onBlur(BlurEvent event) {
+            richText.setFocus(true);
         }
     }
 
@@ -208,6 +214,14 @@ public class ExtendedRichTextToolbar extends Composite {
 
     private RichTextImageProvider provider;
 
+    /*
+     * This is needed to help handling richTextArea onBlur events. When toolbar is inOperation state
+     * it may open other dialogs that may have focusable components. This should not fire onBlur for
+     * the editor (see RichTextArea#ignoreBlur()). Note that those dialogs may require some custom
+     * handling (see ExtendedRichTextToolbar#onLinkUrl() and ExtendedRichTextToolbar#onImageUrl())
+     */
+    private boolean inOperation;
+
     /**
      * Creates a new toolbar that drives the given rich text area.
      * 
@@ -261,11 +275,14 @@ public class ExtendedRichTextToolbar extends Composite {
         // unless at least basic editing is supported.
         richText.addKeyUpHandler(handler);
         richText.addClickHandler(handler);
+
+        inOperation = false;
     }
 
     private ListBox createColorList(String caption) {
         ListBox lb = new ListBox();
         lb.addChangeHandler(handler);
+        lb.addBlurHandler(handler);
         lb.setVisibleItemCount(1);
 
         lb.addItem(caption);
@@ -281,6 +298,7 @@ public class ExtendedRichTextToolbar extends Composite {
     private ListBox createFontList() {
         ListBox lb = new ListBox();
         lb.addChangeHandler(handler);
+        lb.addBlurHandler(handler);
         lb.setVisibleItemCount(1);
 
         lb.addItem("font", "");
@@ -297,6 +315,7 @@ public class ExtendedRichTextToolbar extends Composite {
     private ListBox createFontSizes() {
         ListBox lb = new ListBox();
         lb.addChangeHandler(handler);
+        lb.addBlurHandler(handler);
         lb.setVisibleItemCount(1);
 
         lb.addItem("size");
@@ -313,6 +332,7 @@ public class ExtendedRichTextToolbar extends Composite {
     private PushButton createPushButton(ImageResource img, String tip) {
         PushButton pb = new PushButton(new Image(img));
         pb.addClickHandler(handler);
+        pb.addBlurHandler(handler);
         pb.setTitle(tip);
         return pb;
     }
@@ -320,6 +340,7 @@ public class ExtendedRichTextToolbar extends Composite {
     private ToggleButton createToggleButton(ImageResource img, String tip) {
         ToggleButton tb = new ToggleButton(new Image(img));
         tb.addClickHandler(handler);
+        tb.addBlurHandler(handler);
         tb.setTitle(tip);
         return tb;
     }
@@ -336,11 +357,28 @@ public class ExtendedRichTextToolbar extends Composite {
         strikethrough.setDown(formatter.isStrikethrough());
     }
 
-    public String getLinkUrl() {
-        return Window.prompt("Enter an link URL:", "http://");
+    public void onLinkUrl(String url) {
+        formatter.createLink(url);
+        // make sure the richTextArea will receive focus and will handle onBlur after this method completes.
+        inOperation = false;
+        richText.ignoreBlur(false);
+        richText.setFocus(true);
+    }
+
+    public void onImageUrl(String url) {
+        formatter.insertImage(url);
+        // make sure the richTextArea will receive focus and will handle onBlur after this method completes.
+        inOperation = false;
+        richText.ignoreBlur(false);
+        richText.setFocus(true);
     }
 
     public void setImageProvider(RichTextImageProvider provider) {
         this.provider = provider;
     }
+
+    public boolean inOperation() {
+        return inOperation;
+    }
+
 }

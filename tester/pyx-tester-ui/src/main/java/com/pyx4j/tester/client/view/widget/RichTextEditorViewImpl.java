@@ -70,6 +70,7 @@ public class RichTextEditorViewImpl extends ScrollPanel implements RichTextEdito
 
         @Override
         public boolean onClickCancel() {
+            selectionHandler.onSuccess(null);
             return true;
         }
     }
