@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.crud.building;
 
+import java.util.Arrays;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -43,6 +45,7 @@ import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
@@ -55,7 +58,7 @@ import com.propertyvista.dto.RoofDTO;
 
 public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> implements BuildingViewerView.Presenter {
 
-    private final DashboardView.Presenter dashboard;
+    private final DashboardView.Presenter dashboardPresenter;
 
     private final IListerView.Presenter<?> floorplanLister;
 
@@ -81,7 +84,7 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
     public BuildingViewerActivity(Place place) {
         super(place, BuildingViewFactory.instance(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
 
-        dashboard = new DashboardViewActivity(((BuildingViewerView) view).getDashboardView());
+        dashboardPresenter = new DashboardViewActivity(((BuildingViewerView) view).getDashboardView());
 
         floorplanLister = ListerActivityFactory.create(place, ((BuildingViewerView) view).getFloorplanListerView(),
                 (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class), FloorplanDTO.class, VistaCrmBehavior.PropertyManagement);
@@ -120,7 +123,7 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
 
     @Override
     public DashboardView.Presenter getDashboardPresenter() {
-        return dashboard;
+        return dashboardPresenter;
     }
 
     @Override
@@ -180,12 +183,10 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
 
     @Override
     public void onPopulateSuccess(BuildingDTO result) {
-
-        // should be called before call to super, because
-        // BuildingViewerViewImpl.populate sets building filtering!
-        dashboard.populate(result.dashboard());
-
         super.onPopulateSuccess(result);
+
+        ((BuildingViewerView) view).getDashboardView().setBuildings(Arrays.asList(result.<Building> duplicate(Building.class)));
+        dashboardPresenter.populate(result.dashboard().getPrimaryKey());
 
         // -------------------------------------------------------
 
@@ -228,7 +229,7 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
 
     @Override
     public void onStop() {
-        ((AbstractActivity) dashboard).onStop();
+        ((AbstractActivity) dashboardPresenter).onStop();
         ((AbstractActivity) floorplanLister).onStop();
         ((AbstractActivity) unitLister).onStop();
         ((AbstractActivity) elevatorLister).onStop();

@@ -80,4 +80,5 @@ public interface BuildingViewerView extends IViewerView<BuildingDTO> {
     IListerView<Feature> getFeatureListerView();
 
     IListerView<Concession> getConcessionListerView();
+
 }

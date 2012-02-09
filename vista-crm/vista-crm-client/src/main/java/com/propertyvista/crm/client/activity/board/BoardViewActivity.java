@@ -104,11 +104,6 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
         }, boardId);
     }
 
-    @Override
-    public void populate(DashboardMetadata boardData) {
-        onPopulateSuccess(boardData);
-    }
-
     public void onPopulateSuccess(DashboardMetadata result) {
         view.populate(result);
     }

@@ -288,8 +288,9 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 //
 
     protected Widget createDateStatusSelectWidget() {
-        HorizontalPanel dateStatusSelectPanel = new HorizontalPanel();
-
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        panel.setWidth("30em");
         datePicker = new CDatePicker();
         datePicker.setWidth("10em");
         datePicker.setValue(new LogicalDate());
@@ -299,9 +300,9 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
                 propagateStatusDate();
             }
         });
-        dateStatusSelectPanel.add(datePicker);
+        panel.add(datePicker);
 
-        return dateStatusSelectPanel;
+        return panel;
     }
 
     protected void procesDashboardEvent(Reason reason) {

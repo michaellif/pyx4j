@@ -28,8 +28,6 @@ import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.ComplexDTO;
 
-// TODO possible optimization: when fetching buildings for the lister, propagate these results to the dashboard filter
-
 public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implements ComplexViewerView.Presenter {
 
     private final DashboardViewActivity dashboardViewActivity;
@@ -53,12 +51,9 @@ public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implem
 
     @Override
     protected void onPopulateSuccess(ComplexDTO result) {
-
-        // should be called before call to super, because
-        // ComplexViewerViewImpl.populate sets building filtering!  
-        dashboardViewActivity.populate(result.dashboard());
-
         super.onPopulateSuccess(result);
+        getView().getDashboardView().setBuildings(result.buildings());
+        dashboardViewActivity.populate(result.dashboard().getPrimaryKey());
     }
 
     @Override

@@ -49,6 +49,7 @@ import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -61,6 +62,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
+    private ValueChangeHandler<DashboardMetadata> dashboardSelectedHandler;
+
     public BuildingEditorForm() {
         this(false);
     }
@@ -72,7 +75,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.addDisable(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
+        tabPanel.addDisable(isEditable() ? new HTML() : createDashboardTab(), i18n.tr("Dashboard"));
 
         tabPanel.add(createGeneralTab(), i18n.tr("General"));
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
@@ -140,6 +143,14 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     @Override
     public int getActiveTab() {
         return tabPanel.getSelectedIndex();
+    }
+
+    private Widget createDashboardTab() {
+        return ((BuildingViewerView) getParentView()).getDashboardView().asWidget();
+    }
+
+    public void setDashboardSelectedHandler(ValueChangeHandler<DashboardMetadata> handler) {
+        this.dashboardSelectedHandler = handler;
     }
 
     private Widget createGeneralTab() {
