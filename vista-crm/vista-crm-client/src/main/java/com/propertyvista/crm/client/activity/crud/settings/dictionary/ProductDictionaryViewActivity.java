@@ -24,23 +24,23 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
-import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceDictionaryView;
+import com.propertyvista.crm.client.ui.crud.settings.dictionary.ProductDictionaryView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureItemTypeCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceItemTypeCrudService;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceDictionaryViewActivity extends AbstractActivity implements ServiceDictionaryView.Presenter {
+public class ProductDictionaryViewActivity extends AbstractActivity implements ProductDictionaryView.Presenter {
 
-    protected final ServiceDictionaryView view;
+    protected final ProductDictionaryView view;
 
     IListerView.Presenter serviceLister;
 
     IListerView.Presenter featureLister;
 
     @SuppressWarnings("unchecked")
-    public ServiceDictionaryViewActivity(Place place) {
-        this.view = SettingsViewFactory.instance(ServiceDictionaryView.class);
+    public ProductDictionaryViewActivity(Place place) {
+        this.view = SettingsViewFactory.instance(ProductDictionaryView.class);
 
         serviceLister = new ListerActivityBase<ProductItemType>(place, view.getServiceListerView(),
                 (AbstractCrudService<ProductItemType>) GWT.create(ServiceItemTypeCrudService.class), ProductItemType.class);

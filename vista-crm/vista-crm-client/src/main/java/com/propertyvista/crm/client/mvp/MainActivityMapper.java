@@ -84,7 +84,7 @@ import com.propertyvista.crm.client.activity.crud.settings.content.SiteEditorAct
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.FeatureItemTypeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.FeatureItemTypeViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceDictionaryViewActivity;
+import com.propertyvista.crm.client.activity.crud.settings.dictionary.ProductDictionaryViewActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceItemTypeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceItemTypeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleEditorActivity;
@@ -589,8 +589,8 @@ public class MainActivityMapper implements AppActivityMapper {
 
                 } else if (place instanceof CrmSiteMap.Settings.Policy) {
                     activity = new PolicyManagementActivity(place);
-                } else if (place instanceof CrmSiteMap.Settings.ServiceDictionary) {
-                    activity = new ServiceDictionaryViewActivity(place);
+                } else if (place instanceof CrmSiteMap.Settings.ProductDictionary) {
+                    activity = new ProductDictionaryViewActivity(place);
                 } else if (place instanceof CrmSiteMap.Settings.ServiceItemType) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:

@@ -22,15 +22,15 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceDictionaryViewForm extends CrmEntityForm<ProductItemType> {
+public class ProductDictionaryViewForm extends CrmEntityForm<ProductItemType> {
 
-    private static final I18n i18n = I18n.get(ServiceDictionaryViewForm.class);
+    private static final I18n i18n = I18n.get(ProductDictionaryViewForm.class);
 
-    public ServiceDictionaryViewForm() {
+    public ProductDictionaryViewForm() {
         this(false);
     }
 
-    public ServiceDictionaryViewForm(boolean viewMode) {
+    public ProductDictionaryViewForm(boolean viewMode) {
         super(ProductItemType.class, viewMode);
     }
 
@@ -40,10 +40,10 @@ public class ServiceDictionaryViewForm extends CrmEntityForm<ProductItemType> {
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Service Types"));
-        main.setWidget(++row, 0, ((ServiceDictionaryView) getParentView()).getServiceListerView().asWidget());
+        main.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getServiceListerView().asWidget());
 
         main.setH1(++row, 0, 1, i18n.tr("Feature Types"));
-        main.setWidget(++row, 0, ((ServiceDictionaryView) getParentView()).getFeatureListerView().asWidget());
+        main.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getFeatureListerView().asWidget());
 
         return new ScrollPanel(main);
     }

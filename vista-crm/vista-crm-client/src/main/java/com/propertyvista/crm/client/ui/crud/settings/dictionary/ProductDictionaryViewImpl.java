@@ -20,20 +20,20 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceDictionaryViewImpl extends CrmViewerViewImplBase<ProductItemType> implements ServiceDictionaryView {
+public class ProductDictionaryViewImpl extends CrmViewerViewImplBase<ProductItemType> implements ProductDictionaryView {
 
     private final IListerView<ProductItemType> serviceLister;
 
     private final IListerView<ProductItemType> featureLister;
 
-    public ServiceDictionaryViewImpl() {
-        super(CrmSiteMap.Settings.ServiceDictionary.class, true);
+    public ProductDictionaryViewImpl() {
+        super(CrmSiteMap.Settings.ProductDictionary.class, true);
 
         serviceLister = new ListerInternalViewImplBase<ProductItemType>(new ServiceTypeLister());
         featureLister = new ListerInternalViewImplBase<ProductItemType>(new FeatureTypeLister());
 
         // set main form here: 
-        setForm(new ServiceDictionaryViewForm());
+        setForm(new ProductDictionaryViewForm());
     }
 
     @Override

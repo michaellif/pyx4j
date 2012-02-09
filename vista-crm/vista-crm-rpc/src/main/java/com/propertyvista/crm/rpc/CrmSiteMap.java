@@ -335,7 +335,7 @@ public class CrmSiteMap implements SiteMap {
 
         @PlaceProperties(caption = "Product Dictionary")
         @NavigationItem(navigLabel = "Product Dictionary")
-        public static class ServiceDictionary extends CrudAppPlace {
+        public static class ProductDictionary extends CrudAppPlace {
         }
 
         @PlaceProperties(caption = "Service Item Type")

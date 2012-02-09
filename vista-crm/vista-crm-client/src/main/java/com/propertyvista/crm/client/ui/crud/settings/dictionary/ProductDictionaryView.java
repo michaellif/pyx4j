@@ -18,7 +18,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public interface ServiceDictionaryView extends IViewerView<ProductItemType> {
+public interface ProductDictionaryView extends IViewerView<ProductItemType> {
 
     public interface Presenter extends IViewerView.Presenter {
 

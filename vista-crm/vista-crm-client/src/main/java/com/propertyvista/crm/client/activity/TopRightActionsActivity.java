@@ -130,7 +130,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void showSettings() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Settings.ServiceDictionary());
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Settings.ProductDictionary());
     }
 
     @Override

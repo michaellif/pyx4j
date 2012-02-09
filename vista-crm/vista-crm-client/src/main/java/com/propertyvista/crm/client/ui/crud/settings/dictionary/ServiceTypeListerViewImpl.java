@@ -20,7 +20,7 @@ import com.propertyvista.domain.financial.offering.ProductItemType;
 public class ServiceTypeListerViewImpl extends CrmListerViewImplBase<ProductItemType> implements ServiceTypeListerView {
 
     public ServiceTypeListerViewImpl() {
-        super(CrmSiteMap.Settings.ServiceDictionary.class);
+        super(CrmSiteMap.Settings.ProductDictionary.class);
         setLister(new ServiceTypeLister());
     }
 }

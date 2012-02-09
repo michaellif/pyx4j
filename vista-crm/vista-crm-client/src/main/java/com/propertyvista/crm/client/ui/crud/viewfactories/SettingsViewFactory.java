@@ -24,8 +24,8 @@ import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewer;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewerImpl;
-import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceDictionaryView;
-import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceDictionaryViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.dictionary.ProductDictionaryView;
+import com.propertyvista.crm.client.ui.crud.settings.dictionary.ProductDictionaryViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeEditorView;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeViewerView;
@@ -57,8 +57,8 @@ public class SettingsViewFactory extends ViewFactoryBase {
             } else if (PageEditor.class.equals(type)) {
                 map.put(type, new PageEditorImpl());
 
-            } else if (ServiceDictionaryView.class.equals(type)) {
-                map.put(type, new ServiceDictionaryViewImpl());
+            } else if (ProductDictionaryView.class.equals(type)) {
+                map.put(type, new ProductDictionaryViewImpl());
 
             } else if (ServiceTypeViewerView.class.equals(type)) {
                 map.put(type, new ServiceTypeViewerViewImpl());
