@@ -20,6 +20,8 @@ public interface GlCode extends IEntity {
 
     IPrimitive<Integer> glId();
 
-    GlCodeCategory glCodeCategory();
+    IPrimitive<String> description();
 
+    // not used currently!
+    GlCodeCategory glCodeCategory();
 }
