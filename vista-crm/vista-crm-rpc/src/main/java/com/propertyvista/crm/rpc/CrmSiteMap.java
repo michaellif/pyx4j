@@ -329,7 +329,7 @@ public class CrmSiteMap implements SiteMap {
         }
 
         @PlaceProperties(caption = "User Role")
-        @NavigationItem(navigLabel = "User Role")
+        @NavigationItem(navigLabel = "User Roles")
         public static class UserRole extends CrudAppPlace {
         }
 
@@ -362,6 +362,11 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Tax")
         @NavigationItem(navigLabel = "Taxes")
         public static class Tax extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "GlCode")
+        @NavigationItem(navigLabel = "GlCodes")
+        public static class GlCode extends CrudAppPlace {
         }
     }
 

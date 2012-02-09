@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -90,6 +90,9 @@ import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceIte
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeListerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxViewerActivity;
@@ -545,7 +548,7 @@ public class MainActivityMapper implements AppActivityMapper {
 // - Other:
                 } else if (place instanceof CrmSiteMap.Account) {
                     // the service that the Account related activites use doesn't care about the 'id' arg,
-                    // but nevertheless the base "Activity" classes need it, so we just add a value let them be happy                    
+                    // but nevertheless the base "Activity" classes need it, so we just add a value let them be happy
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         ((CrmSiteMap.Account) place).formEditorPlace(new Key(1));
@@ -638,7 +641,21 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     }
 
-// - Complex:                    
+                } else if (place instanceof CrmSiteMap.Settings.GlCode) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new GlCodeEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new GlCodeViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new GlCodeListerActivity(place);
+                        break;
+
+                    }
+
+// - Complex:
                 } else if (place instanceof CrmSiteMap.Properties.Complex) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:

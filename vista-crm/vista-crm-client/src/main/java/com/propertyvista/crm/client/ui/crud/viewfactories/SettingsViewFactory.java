@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -36,6 +36,12 @@ import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeListerView;
+import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.tax.TaxEditorView;
 import com.propertyvista.crm.client.ui.crud.settings.tax.TaxEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.tax.TaxListerView;
@@ -78,6 +84,13 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new TaxEditorViewImpl());
             } else if (TaxViewerView.class.equals(type)) {
                 map.put(type, new TaxViewerViewImpl());
+
+            } else if (GlCodeListerView.class.equals(type)) {
+                map.put(type, new GlCodeListerViewImpl());
+            } else if (GlCodeEditorView.class.equals(type)) {
+                map.put(type, new GlCodeEditorViewImpl());
+            } else if (GlCodeViewerView.class.equals(type)) {
+                map.put(type, new GlCodeViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")
