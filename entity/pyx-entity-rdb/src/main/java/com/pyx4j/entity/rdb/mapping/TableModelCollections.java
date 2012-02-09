@@ -378,7 +378,7 @@ public class TableModelCollections {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                long currKey = rs.getLong("owner");
+                long currKey = rs.getLong(member.sqlOwnerName());
                 T entity = entities.get(currKey);
                 @SuppressWarnings("unchecked")
                 Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
