@@ -90,7 +90,6 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             }
         }
         updateAdjustments(dbo.serviceAgreement());
-        Persistence.service().merge(dbo.serviceAgreement());
         Persistence.service().merge(dbo.leaseFinancial());
         Persistence.service().merge(dbo);
 

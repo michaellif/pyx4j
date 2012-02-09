@@ -22,7 +22,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 public class BillLister extends ListerBase<Bill> {
 
     public BillLister() {
-        super(Bill.class, CrmSiteMap.Tenants.Bill.class, false, true);
+        super(Bill.class, CrmSiteMap.Tenants.Bill.class, false, false);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off
