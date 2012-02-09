@@ -110,6 +110,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    public Connection getConnection() {
+        return connectionProvider.getConnection(ConnectionTarget.forUpdate);
+    }
+
     @Override
     public void dispose() {
         connectionProvider.dispose();
