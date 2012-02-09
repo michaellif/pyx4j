@@ -94,18 +94,19 @@ public interface AddressStructured extends IEntity {
     IPrimitive<String> county();
 
     @NotNull
-    @Caption(name = "Province/State")
+    @Caption(name = "Province")
     @Editor(type = EditorType.combo)
     @Reference(adapter = ProvinceReferenceAdapter.class)
     Province province();
 
     @NotNull
-    @Editor(type = EditorType.suggest)
+    @Caption(name = "Country")
+    @Editor(type = EditorType.combo)
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();
 
     @NotNull
-    @Caption(name = "Zip/Postal Code")
+    @Caption(name = "Postal Code")
     IPrimitive<String> postalCode();
 
     IPrimitive<GeoPoint> location();

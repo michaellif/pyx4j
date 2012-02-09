@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -12,6 +12,10 @@
  * @version $Id$
  */
 package com.propertyvista.common.client.ui.components.editors;
+
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.ui.OptionsFilter;
@@ -53,9 +57,28 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
     @SuppressWarnings("unchecked")
     protected FormFlexPanel internalCreateContent() {
         FormFlexPanel main = new FormFlexPanel();
+        final VerticalPanel county = new VerticalPanel();
 
         int row = 0;
         int column = 0;
+        final CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().country());
+        main.setWidget(row++, column, new DecoratorBuilder(country, 15).build());
+
+        final CComponent<Province, ?> province = (CComponent<Province, ?>) inject(proto().province());
+        main.setWidget(row++, column, new DecoratorBuilder(province, 17).build());
+        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().city()), 15).build());
+
+        // Need local variables to avoid extended casting that make the code unreadable
+
+        final CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().postalCode());
+        main.setWidget(row++, column, new DecoratorBuilder(postalCode, 7).build());
+        county.add(new DecoratorBuilder(inject(proto().county()), 15).build());
+        main.setWidget(row++, column, county);
+
+        if (twoColumns) {
+            row = 0;
+            column = 1;
+        }
         if (showUnit) {
             main.setWidget(row++, column, new DecoratorBuilder(inject(proto().suiteNumber()), 12).build());
         }
@@ -66,24 +89,15 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetType()), 10).build());
         main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetDirection()), 10).build());
 
-        if (twoColumns) {
-            row = 0;
-            column = 1;
-        }
-        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().city()), 15).build());
-        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().county()), 15).build());
-
-        // Need local variables to avoid extended casting that make the code unreadable
-        CComponent<Province, ?> province = (CComponent<Province, ?>) inject(proto().province());
-        main.setWidget(row++, column, new DecoratorBuilder(province, 17).build());
-
-        CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().country());
-        main.setWidget(row++, column, new DecoratorBuilder(country, 15).build());
-
-        CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().postalCode());
-        main.setWidget(row++, column, new DecoratorBuilder(postalCode, 7).build());
-
         attachFilters(proto(), province, country, postalCode);
+
+        get(proto().country()).addValueChangeHandler(new ValueChangeHandler<Country>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Country> event) {
+                checkCountry();
+            }
+        });
 
         return main;
     }
@@ -104,5 +118,27 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
                 }
             }
         });
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+        checkCountry();
+    }
+
+    private void checkCountry() {
+        if (getValue() != null) {
+            if (getValue().country().name().getStringView().compareTo("United States") == 0) {
+                get(proto().county()).setVisible(true);
+                get(proto().postalCode()).setTitle("Zip Code");
+                get(proto().province()).setTitle("State");
+            } else if (getValue().country().name().getStringView().compareTo("Canada") == 0) {
+                get(proto().county()).setVisible(false);
+                get(proto().postalCode()).setTitle("Postal Code");
+                get(proto().province()).setTitle("Province");
+            } else {
+                //TODO generic case for other countries
+            }
+        }
     }
 }
