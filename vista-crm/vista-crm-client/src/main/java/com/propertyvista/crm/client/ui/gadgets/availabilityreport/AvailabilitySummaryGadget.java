@@ -51,9 +51,10 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
 
         private final AvailabilityReportService service;
 
-        private BuildingsProvider buildingsProvider;
+        private List<Key> buildings;
 
         public AvailabiltySummaryGadgetInstance(GadgetMetadata gmd) {
+
             super(gmd, AvailabilitySummary.class);
             service = GWT.create(AvailabilityReportService.class);
 
@@ -122,17 +123,12 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
             return false;
         }
 
-        @Override
-        public void setBuildingsProvider(BuildingsProvider source) {
-            this.buildingsProvider = source;
-        }
-
         private void setData(UnitVacancyReportSummaryDTO summary) {
             form.populate(summary);
         }
 
         private void doPopulate() {
-            if (statusDateProvider == null & buildingsProvider == null) {
+            if (buildings == null) {
                 setData(EntityFactory.create(UnitVacancyReportSummaryDTO.class));
                 populateSucceded();
             } else {
@@ -147,8 +143,14 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
                     public void onFailure(Throwable caught) {
                         populateFailed(caught);
                     }
-                }, new Vector<Key>(buildingsProvider.getBuildings()), statusDateProvider.getStatusDate());
+                }, new Vector<Key>(buildings), getStatusDate());
             }
+        }
+
+        @Override
+        public void setBuildings(List<Key> buildings) {
+            // TODO Auto-generated method stub
+
         }
 
     }

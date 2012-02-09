@@ -113,9 +113,9 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         private final AvailabilityReportService service;
     
         private AnalysisResolution currentDefaultResolution;
+        
+        private List<Key> buildings;
         //@formatter:on
-
-        private BuildingsProvider buildingsProvider;
 
         public TurnoverAnalysisGraphGadgetInstance(GadgetMetadata gmd) {
             super(gmd, TurnoverAnalysisMetadata.class);
@@ -147,11 +147,6 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
             return false;
         }
 
-        @Override
-        public void setBuildingsProvider(BuildingsProvider provider) {
-            this.buildingsProvider = provider;
-        }
-
         /**
          * This method is supposed to be used to adjust the available scale (resolution) combo box for the selected filtering criteria.
          */
@@ -179,7 +174,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         }
 
         private boolean isResolutionAcceptable(AnalysisResolution resolution) {
-            if (statusDateProvider == null) {
+            if (getStatusDate() == null) {
                 return resolution == DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX;
             } else {
                 long requestedTimerange = 365l * 24l * 60l * 60l * 1000l;
@@ -246,7 +241,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         private void redraw() {
             graph.clear();
 
-            if ((data == null || data.size() == 0) | buildingsProvider == null | statusDateProvider == null) {
+            if ((data == null || data.size() == 0) | buildings == null) {
                 // TODO show something like "no data provided"/"no search criteria"?)
                 return;
             }
@@ -286,7 +281,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
 
         private void doPopulate() {
             AnalysisResolution scale = getSelectedResolution();
-            if (buildingsProvider == null | statusDateProvider == null | scale == null) {
+            if (buildings == null | scale == null) {
                 setTurnoverAnalysisData(null);
                 populateSucceded();
                 return;
@@ -303,7 +298,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
                     setTurnoverAnalysisData(result);
                     populateSucceded();
                 }
-            }, new Vector<Key>(buildingsProvider.getBuildings()), statusDateProvider.getStatusDate(), new LogicalDate(), scale);
+            }, new Vector<Key>(buildings), getStatusDate(), new LogicalDate(), scale);
         }
 
         @Override
@@ -401,6 +396,12 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         public void onMinimize(boolean minimized_restored) {
             super.onMinimize(minimized_restored);
             redraw();
+        }
+
+        @Override
+        public void setBuildings(List<Key> buildings) {
+            // TODO Auto-generated method stub
+
         }
     }
 

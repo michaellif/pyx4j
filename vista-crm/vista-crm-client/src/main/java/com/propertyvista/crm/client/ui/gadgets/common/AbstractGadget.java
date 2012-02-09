@@ -53,8 +53,6 @@ public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> impleme
         }
     }
 
-    protected abstract GadgetInstanceBase<GADGET_TYPE> createInstance(GadgetMetadata gadgetMetadata) throws Error;
-
     @Override
     public final String getType() {
         return type;
@@ -69,4 +67,6 @@ public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> impleme
     public boolean isAcceptedBy(DashboardType dashboardType) {
         return (DashboardType.system.equals(dashboardType) & !isBuildingGadget()) | (DashboardType.building.equals(dashboardType) & isBuildingGadget());
     }
+
+    protected abstract GadgetInstanceBase<GADGET_TYPE> createInstance(GadgetMetadata gadgetMetadata) throws Error;
 }

@@ -18,20 +18,12 @@ import java.util.List;
 import com.pyx4j.commons.Key;
 
 /**
- * Gadget instance that is supported by building gadget, i.e a gadget that implements this interface is expected to display statistics that is
+ * Gadget instance that is supported by building dashboard, i.e a gadget that implements this interface is expected to display data that is
  * dependent on a set of buildings.
  */
 // TODO add marker interface for gadget metadata, and thing how to bind between metadata building interface and this interface as painless as possible
 public interface IBuildingBoardGadgetInstance extends IGadgetInstance {
 
-    void setBuildingsProvider(BuildingsProvider provider);
+    void setBuildings(List<Key> buildings);
 
-    interface BuildingsProvider {
-
-        /**
-         * can't be <code>null</code>.
-         */
-        List<Key> getBuildings();
-
-    }
 }

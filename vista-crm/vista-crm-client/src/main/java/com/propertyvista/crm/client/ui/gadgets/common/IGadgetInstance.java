@@ -23,14 +23,9 @@ public interface IGadgetInstance extends IGadget {
 // in:    
     void setPresenter(IGadgetInstancePresenter presenter);
 
+    void setStatusDate(LogicalDate date);
+
 // out:    
     GadgetMetadata getMetadata();
 
-    void setStatusDateSource(StatusDateSource source);
-
-    interface StatusDateSource {
-
-        LogicalDate getStatusDate();
-
-    }
 }

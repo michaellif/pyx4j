@@ -40,15 +40,17 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMeta> {
+
     private static final I18n i18n = I18n.get(ArrearsSummaryGadget.class);
 
     private static class ArrearsSummaryGadgetImpl extends ListerGadgetInstanceBase<ArrearsSummary, ArrearsSummaryGadgetMeta> implements
             IBuildingBoardGadgetInstance {
+
         private static final I18n i18n = I18n.get(ArrearsSummaryGadgetImpl.class);
 
         ArrearsReportService service;
 
-        private BuildingsProvider buildingsSource;
+        private List<Key> buildings;
 
         public ArrearsSummaryGadgetImpl(GadgetMetadata gmd) {
             super(gmd, ArrearsSummary.class, ArrearsSummaryGadgetMeta.class);
@@ -68,13 +70,8 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
         }
 
         @Override
-        public void setBuildingsProvider(BuildingsProvider source) {
-            this.buildingsSource = source;
-        }
-
-        @Override
         public void populatePage(final int pageNumber) {
-            if (buildingsSource != null & statusDateProvider != null) {
+            if (buildings != null) {
                 service.summary(new AsyncCallback<EntitySearchResult<ArrearsSummary>>() {
                     @Override
                     public void onSuccess(EntitySearchResult<ArrearsSummary> result) {
@@ -86,8 +83,7 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
                     public void onFailure(Throwable caught) {
                         populateFailed(caught);
                     }
-                }, new Vector<Key>(buildingsSource.getBuildings()), statusDateProvider.getStatusDate(), new Vector<Sort>(getSorting()), getPageNumber(),
-                        getPageSize());
+                }, new Vector<Key>(buildings), getStatusDate(), new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
             } else {
                 setPageData(new ArrayList<ArrearsSummary>(1), 0, 0, false);
                 populateSucceded();
@@ -102,6 +98,12 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
         @Override
         protected boolean isFilterRequired() {
             return false;
+        }
+
+        @Override
+        public void setBuildings(List<Key> buildings) {
+            // TODO Auto-generated method stub
+
         }
     }
 

@@ -13,21 +13,31 @@
  */
 package com.propertyvista.crm.client.activity.board;
 
+import java.util.ArrayList;
+
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.board.BoardView;
+import com.propertyvista.crm.client.ui.crud.building.BuildingSelectorDialog;
 import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
+import com.propertyvista.crm.rpc.services.reports.DashboardReportService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public abstract class BoardViewActivity<V extends BoardView> extends AbstractActivity implements BoardView.Presenter {
 
@@ -40,7 +50,10 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
     public BoardViewActivity(V view, Place place) {
         this.view = view;
         assert (view != null);
+
         view.setPresenter(this);
+        view.setStatusDate(new LogicalDate());
+        view.setBuildings(new ArrayList<Building>());
         if (place != null) {
             setPlace(place);
         }
@@ -112,7 +125,7 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
             public void onFailure(Throwable caught) {
                 onSaveFail(caught);
             }
-        }, view.getData());
+        }, view.getDashboardMetadata());
     }
 
     protected void onSaveSuccess(DashboardMetadata result) {
@@ -124,6 +137,34 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
         if (!view.onSaveFail(caught)) {
             throw new UnrecoverableClientError(caught);
         }
+    }
+
+    @Override
+    public void print() {
+        EntityQueryCriteria<DashboardMetadata> criteria = new EntityQueryCriteria<DashboardMetadata>(DashboardMetadata.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), view.getDashboardMetadata().getPrimaryKey()));
+        ReportDialog.start(GWT.<DashboardReportService> create(DashboardReportService.class), criteria);
+    }
+
+    @Override
+    public void selectBuildings() {
+        new BuildingSelectorDialog(new ArrayList<Building>(1)) {
+            @Override
+            public boolean onClickOk() {
+                view.setBuildings(getSelectedItems());
+                return true;
+            }
+        }.show();
+    }
+
+    @Override
+    public void selectAllBuildings() {
+        view.setBuildings(new ArrayList<Building>(1));
+    }
+
+    @Override
+    public void onSelectStatusDate() {
+
     }
 
 // GadgetPresenter:

@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
@@ -60,7 +61,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
 
         private FormFlexPanel panel;
 
-        private BuildingsProvider buildingsProvider;
+        private List<Key> buildings;
 
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
             super(gmd, MockupArrearsState.class, ArrearsStatus.class);
@@ -146,11 +147,6 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
         }
 
         @Override
-        public void setBuildingsProvider(BuildingsProvider source) {
-            this.buildingsProvider = source;
-        }
-
-        @Override
         public ISetup getSetup() {
             return new SetupForm(new CEntityDecoratableEditor<ArrearsStatus>(ArrearsStatus.class) {
                 @Override
@@ -168,7 +164,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
 
         @Override
         public void populatePage(final int pageNumber) {
-            if (buildingsProvider != null & statusDateProvider != null) {
+            if (buildings != null) {
                 service.arrearsList(new AsyncCallback<EntitySearchResult<MockupArrearsState>>() {
                     @Override
                     public void onSuccess(EntitySearchResult<MockupArrearsState> result) {
@@ -180,8 +176,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
                     public void onFailure(Throwable caught) {
                         populateFailed(caught);
                     }
-                }, getCustomCriteria(), new Vector<Key>(buildingsProvider.getBuildings()), statusDateProvider.getStatusDate(), new Vector<Sort>(getSorting()),
-                        getPageNumber(), getPageSize());
+                }, getCustomCriteria(), new Vector<Key>(buildings), getStatusDate(), new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
             } else {
                 setPageData(new ArrayList<MockupArrearsState>(1), 0, 0, false);
             }
@@ -214,6 +209,18 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
                 }
             }
             return customCriteria;
+        }
+
+        @Override
+        public void setStatusDate(LogicalDate date) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void setBuildings(List<Key> buildings) {
+            // TODO Auto-generated method stub
+
         }
     }
 

@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -58,7 +59,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     protected final Class<T> metadataClass;
 
-    protected StatusDateSource statusDateProvider;
+    private LogicalDate statusDate;
 
     @SuppressWarnings("unchecked")
     public GadgetInstanceBase(GadgetMetadata gmd, Class<T> metadataClass) {
@@ -114,8 +115,12 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     }
 
     @Override
-    public void setStatusDateSource(StatusDateSource source) {
-        this.statusDateProvider = source;
+    public void setStatusDate(LogicalDate date) {
+        this.statusDate = date;
+    }
+
+    protected LogicalDate getStatusDate() {
+        return this.statusDate;
     }
 
     /**

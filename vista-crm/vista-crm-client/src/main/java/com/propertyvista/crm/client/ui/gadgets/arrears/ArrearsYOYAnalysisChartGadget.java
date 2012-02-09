@@ -62,15 +62,15 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         // TODO make this constant setupable
         private static final int YEARS_TO_COMPARE = 3;
 
-        LayoutPanel graph;
+        private List<Key> buildings;
 
-        ArrearsReportService service;
+        private LayoutPanel graph;
 
-        Vector<Vector<Double>> data;
+        private final ArrearsReportService service;
+
+        private Vector<Vector<Double>> data;
 
         private final SvgFactoryForGwt factory;
-
-        private BuildingsProvider buildingsProvider;
 
         public ArrearsYOYAnalysisChartGadgetImpl(GadgetMetadata gmd) {
             super(gmd, ArrearsYOYAnalysisChart.class);
@@ -83,11 +83,6 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
                     doPopulate();
                 }
             });
-        }
-
-        @Override
-        public void setBuildingsProvider(BuildingsProvider source) {
-            this.buildingsProvider = source;
         }
 
         @Override
@@ -113,7 +108,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         }
 
         private void doPopulate() {
-            if (buildingsProvider != null & statusDateProvider != null) {
+            if (buildings != null) {
                 service.arrearsMonthlyComparison(new AsyncCallback<Vector<Vector<Double>>>() {
                     @Override
                     public void onSuccess(Vector<Vector<Double>> result) {
@@ -125,7 +120,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
                     public void onFailure(Throwable caught) {
                         populateFailed(caught);
                     }
-                }, new Vector<Key>(buildingsProvider.getBuildings()), YEARS_TO_COMPARE);
+                }, new Vector<Key>(buildings), YEARS_TO_COMPARE);
             } else {
                 setYoyAnalysisData(null);
                 populateSucceded();
@@ -168,7 +163,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         }
 
         private List<String> createSeriesDescription() {
-            int lastYear = statusDateProvider.getStatusDate().getYear() + 1900;
+            int lastYear = getStatusDate().getYear() + 1900;
             int firstYear = lastYear - YEARS_TO_COMPARE + 1;
             List<String> description = new ArrayList<String>(lastYear - firstYear);
             for (int year = firstYear; year <= lastYear; ++year) {
@@ -201,6 +196,11 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         public void onResize() {
             super.onResize();
             redraw();
+        }
+
+        @Override
+        public void setBuildings(List<Key> buildings) {
+            // TODO Auto-generated method stub
         }
     }
 

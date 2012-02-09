@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstancePresenter;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public interface BoardView extends IsWidget {
 
@@ -33,19 +37,30 @@ public interface BoardView extends IsWidget {
         void save();
 
         void print();
+
+        void selectBuildings();
+
+        void selectAllBuildings();
+
+        void onSelectStatusDate();
     }
 
     void setPresenter(Presenter presenter);
+
+    void setStatusDate(LogicalDate statusDate);
+
+    void setBuildings(List<Building> buildings);
 
     void populate(DashboardMetadata dashboardMetadata);
 
     void stop();
 
-    DashboardMetadata getData();
+    DashboardMetadata getDashboardMetadata();
 
     void onSaveSuccess();
 
     // may return TRUE in case of processed event and no need to re-throw the exception further.
     // FALSE - re-throws the exception (new UnrecoverableClientError(caught)).
     boolean onSaveFail(Throwable caught);
+
 }
