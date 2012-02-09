@@ -237,7 +237,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 //            }
 //        }
 
-        // Date Access
+        // Data Access
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingDatasetAccessRule(), Building.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingElementDatasetAccessRule(), AptUnit.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingElementDatasetAccessRule(), LockerArea.class);

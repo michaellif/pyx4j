@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 9, 2011
- * @author vadims
+ * Created on Jan 12, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.settings;
+package com.propertyvista.crm.client.activity.crud.settings.tax;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -19,16 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.tax.TaxViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.building.catalog.FeatureItemTypeCrudService;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
+import com.propertyvista.domain.financial.tax.Tax;
 
-public class FeatureItemTypeViewerActivity extends ViewerActivityBase<ProductItemType> {
+public class TaxViewerActivity extends ViewerActivityBase<Tax> {
 
-    @SuppressWarnings("unchecked")
-    public FeatureItemTypeViewerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(ServiceTypeViewerView.class), (AbstractCrudService<ProductItemType>) GWT
-                .create(FeatureItemTypeCrudService.class));
+    public TaxViewerActivity(Place place) {
+        super(place, SettingsViewFactory.instance(TaxViewerView.class),
+
+        GWT.<AbstractCrudService<Tax>> create(TaxCrudService.class));
     }
 }

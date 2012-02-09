@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.settings;
+package com.propertyvista.crm.client.activity.crud.settings.dictionary;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;

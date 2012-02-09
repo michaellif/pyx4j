@@ -76,20 +76,23 @@ import com.propertyvista.crm.client.activity.crud.organisation.EmployeeViewerAct
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioEditorActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioListerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.FeatureItemTypeEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.FeatureItemTypeViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.PageEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.PageViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.PolicyManagementActivity;
-import com.propertyvista.crm.client.activity.crud.settings.ServiceDictionaryViewActivity;
-import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.SiteActivity;
-import com.propertyvista.crm.client.activity.crud.settings.SiteEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.SiteViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.content.PageEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.content.PageViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.content.SiteActivity;
+import com.propertyvista.crm.client.activity.crud.settings.content.SiteEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.content.SiteViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.dictionary.FeatureItemTypeEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.dictionary.FeatureItemTypeViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceDictionaryViewActivity;
+import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceItemTypeEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceItemTypeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.TaxEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.TaxListerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.TaxViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantViewerActivity;
@@ -522,6 +525,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new PortfolioListerActivity(place);
                         break;
                     }
+
                 } else if (place instanceof CrmSiteMap.PasswordChange) {
                     activity = new PasswordChangeActivity(place);
 // Reports:
@@ -553,6 +557,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new AccountViewerActivity(place);
                         break;
                     }
+
                 } else if (place instanceof CrmSiteMap.Alert) {
                     activity = new AlertActivity(place);
                 } else if (place instanceof CrmSiteMap.Message) {
@@ -571,6 +576,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new SiteActivity(place);
                         break;
                     }
+
                 } else if (place instanceof CrmSiteMap.Settings.Page) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -580,6 +586,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new PageViewerActivity(place);
                         break;
                     }
+
                 } else if (place instanceof CrmSiteMap.Settings.Policy) {
                     activity = new PolicyManagementActivity(place);
                 } else if (place instanceof CrmSiteMap.Settings.ServiceDictionary) {
@@ -613,6 +620,20 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case lister:
                         activity = new CrmRoleListerActivity(place);
+                        break;
+
+                    }
+
+                } else if (place instanceof CrmSiteMap.Settings.Tax) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new TaxEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new TaxViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new TaxListerActivity(place);
                         break;
 
                     }
@@ -657,6 +678,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new ApplicationDocumentationPolicyViewerActivity(place);
                         break;
                     }
+
                 } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseTerms) {
                     switch (((CrudAppPlace) place).getType()) {
                     case lister:
@@ -695,6 +717,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new EmailTemplatesPolicyViewerActivity(place);
                         break;
                     }
+
                 } else if (place instanceof CrmSiteMap.Settings.Policies.Misc) {
                     switch (((CrudAppPlace) place).getType()) {
                     case lister:

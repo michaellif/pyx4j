@@ -358,6 +358,11 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Page")
         public static class Page extends CrudAppPlace {
         }
+
+        @PlaceProperties(caption = "Tax")
+        @NavigationItem(navigLabel = "Taxes")
+        public static class Tax extends CrudAppPlace {
+        }
     }
 
     @NavigationItem(navigLabel = "Alerts")

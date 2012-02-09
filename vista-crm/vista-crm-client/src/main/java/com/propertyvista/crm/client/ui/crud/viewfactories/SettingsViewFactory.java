@@ -36,6 +36,12 @@ import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.tax.TaxEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.tax.TaxEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.tax.TaxListerView;
+import com.propertyvista.crm.client.ui.crud.settings.tax.TaxListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.tax.TaxViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.tax.TaxViewerViewImpl;
 
 public class SettingsViewFactory extends ViewFactoryBase {
 
@@ -65,8 +71,14 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new CrmRoleEditorViewImpl());
             } else if (CrmRoleViewerView.class.equals(type)) {
                 map.put(type, new CrmRoleViewerViewImpl());
-            }
 
+            } else if (TaxListerView.class.equals(type)) {
+                map.put(type, new TaxListerViewImpl());
+            } else if (TaxEditorView.class.equals(type)) {
+                map.put(type, new TaxEditorViewImpl());
+            } else if (TaxViewerView.class.equals(type)) {
+                map.put(type, new TaxViewerViewImpl());
+            }
         }
         @SuppressWarnings("unchecked")
         T impl = (T) map.get(type);

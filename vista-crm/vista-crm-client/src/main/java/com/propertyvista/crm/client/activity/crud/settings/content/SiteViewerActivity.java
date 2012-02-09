@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.settings;
+package com.propertyvista.crm.client.activity.crud.settings.content;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -22,27 +22,28 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
-import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewer;
+import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
-import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
+import com.propertyvista.dto.SiteDescriptorDTO;
 
-public class PageViewerActivity extends ViewerActivityBase<PageDescriptor> implements PageViewer.Presenter {
+public class SiteViewerActivity extends ViewerActivityBase<SiteDescriptorDTO> implements SiteViewer.Presenter {
 
     @SuppressWarnings("unchecked")
-    public PageViewerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(PageViewer.class), (AbstractCrudService<PageDescriptor>) GWT.create(PageDescriptorCrudService.class));
+    public SiteViewerActivity(Place place) {
+        super(place, SettingsViewFactory.instance(SiteViewer.class), (AbstractCrudService<SiteDescriptorDTO>) GWT.create(SiteDescriptorCrudService.class));
     }
 
     @Override
     public void viewChild(Key id) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(id));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class).formViewerPlace(id));
     }
 
     @Override
     public void editNew(Key parentid) {
         AppSite.getPlaceController().goTo(
-                AppSite.getHistoryMapper().createPlace(placeClass).formNewItemPlace(parentid)
-                        .arg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.page.name()));
+                AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class).formNewItemPlace(parentid)
+                        .arg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.site.name()));
     }
 }
