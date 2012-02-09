@@ -333,8 +333,8 @@ public class CrmSiteMap implements SiteMap {
         public static class UserRole extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Service Dictionary")
-        @NavigationItem(navigLabel = "Service Dictionary")
+        @PlaceProperties(caption = "Product Dictionary")
+        @NavigationItem(navigLabel = "Product Dictionary")
         public static class ServiceDictionary extends CrudAppPlace {
         }
 
