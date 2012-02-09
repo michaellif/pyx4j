@@ -41,7 +41,6 @@ import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -360,12 +359,11 @@ public class QueryBuilder<T extends IEntity> {
         if (memberJoin == null) {
             memberJoin = new JoinDef("j" + String.valueOf(memberJoinAliases.size() + 1), leftJoin);
 
-            if (memberOper.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
+            if (memberOper instanceof MemberExternalOperationsMeta) {
+                memberJoin.sqlTableName = memberOper.sqlName();
+            } else {
                 memberJoin.sqlTableName = TableModel.getTableName(dialect,
                         EntityFactory.getEntityMeta((Class<? extends IEntity>) memberOper.getMemberMeta().getObjectClass()));
-            } else {
-                // Collections
-                memberJoin.sqlTableName = memberOper.sqlName();
             }
 
             putMemberJoin(memberOper.getMemberPath(), leftJoin, memberJoin);
