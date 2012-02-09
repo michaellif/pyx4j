@@ -95,6 +95,8 @@ public interface Building extends PolicyNode {
     IList<Media> media();
 
     @Detached
+    //TODO
+    //@Owned(joinTable = ProductCatalog.class)
     ProductCatalog serviceCatalog();
 
     @Detached
