@@ -36,21 +36,16 @@ public @interface Owned {
 
     public static boolean TODO = true;
 
-    /**
-     * @deprecated for now no plans implementing this
-     */
+    //TODO REMOVE
     @Deprecated
     Class<? extends IEntity> joinTable() default IEntity.class;
 
-    /**
-     * Optional, Should match value of @JoinColumn when defined.
-     * By default Entity class match is used. Or first column of the same type with @JoinColumn annotation without value.
-     */
+    //TODO REMOVE
+    @Deprecated
     Class<? extends ColumnId> mappedby() default ColumnId.class;
 
-    /**
-     * Required for IList collections
-     */
+    //TODO REMOVE
+    @Deprecated
     Class<? extends ColumnId> orderColumn() default ColumnId.class;
 
 }
