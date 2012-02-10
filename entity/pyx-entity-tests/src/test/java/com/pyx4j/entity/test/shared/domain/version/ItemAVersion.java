@@ -21,6 +21,7 @@
 package com.pyx4j.entity.test.shared.domain.version;
 
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -31,10 +32,12 @@ public interface ItemAVersion extends IEntity {
 
     IPrimitive<String> name();
 
-    IPrimitive<Integer> version();
-
     @Owner
+    @JoinColumn
     ItemA item();
+
+    @OrderColumn
+    IPrimitive<Integer> version();
 
     @JoinColumn
     RefToVersioned refToVersioned();

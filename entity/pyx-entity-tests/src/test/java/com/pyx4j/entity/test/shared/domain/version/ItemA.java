@@ -20,18 +20,17 @@
  */
 package com.pyx4j.entity.test.shared.domain.version;
 
-import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
 public interface ItemA extends IEntity {
 
-    @Owned
     @MemberColumn(name = "cur")
     ItemAVersion current();
 
     @Owned
-    @JoinTable(value = ItemAVersion.class, cascade = false)
-    ItemAVersion versions();
+    IList<ItemAVersion> versions();
+
 }
