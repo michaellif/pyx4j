@@ -31,25 +31,8 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 public interface BillableItem extends IEntity {
 
     @ToString(index = 0)
-    @Caption(name = "Service Item")
+    @Caption(name = "Product Item")
     ProductItem item();
-
-    // base price: originally - comes from item
-    @ToString(index = 1)
-    @Format("#0.00")
-    //TODO Take from ProductItem
-    @Deprecated
-    IPrimitive<BigDecimal> originalPrice();
-
-    /*
-     * agreed price: contractual price value, override the Service Item�s price
-     */
-    @ToString(index = 2)
-    @Format("#0.00")
-    @Caption(name = "Price")
-    //TODO originalPrice + adjustment
-    @Deprecated
-    IPrimitive<BigDecimal> agreedPrice();
 
     @Owned
     IList<BillableItemAdjustment> adjustments();
@@ -62,4 +45,12 @@ public interface BillableItem extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> expirationDate();
 
+    /**
+     * Current price: contractual price value (ProductItem.price + adjustments),
+     * should be recalculated (@link PriceCalculationHelpers.calculateChargeItemAdjustments()) before use!..
+     */
+    @ToString(index = 1)
+    @Format("#0.00")
+    @Caption(name = "Price")
+    IPrimitive<BigDecimal> _currentPrice();
 }

@@ -120,7 +120,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                 Lease lease = Persistence.service().retrieve(leaseCriteria);
                 if (lease != null && !lease.serviceAgreement().isNull() && !lease.serviceAgreement().serviceItem().isNull()) {
                     PriceCalculationHelpers.calculateChargeItemAdjustments(lease.serviceAgreement().serviceItem());
-                    unit.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem().agreedPrice().getValue());
+                    unit.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem()._currentPrice().getValue());
                 }
 
                 BigDecimal marketRent = unit.financial()._marketRent().isNull() ? new BigDecimal(0) : unit.financial()._marketRent().getValue();

@@ -110,11 +110,11 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             clearServiceAgreement(currentValue, false);
 
             // set selected service:
-            currentValue.serviceAgreement().serviceItem().set(createChargeItem(serviceItem));
+            currentValue.serviceAgreement().serviceItem().set(createBillableItem(serviceItem));
 
             // pre-populate utilities for the new service:
             for (ProductItem item : currentValue.selectedUtilityItems()) {
-                currentValue.serviceAgreement().featureItems().add(createChargeItem(item));
+                currentValue.serviceAgreement().featureItems().add(createBillableItem(item));
             }
 
             view.populate(currentValue);
@@ -208,11 +208,12 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         return (selectedService != null);
     }
 
-    private BillableItem createChargeItem(ProductItem serviceItem) {
-        BillableItem chargeItem = EntityFactory.create(BillableItem.class);
-        chargeItem.item().set(serviceItem);
-        chargeItem.originalPrice().setValue(serviceItem.price().getValue());
-        chargeItem.agreedPrice().setValue(serviceItem.price().getValue());
-        return chargeItem;
+    private BillableItem createBillableItem(ProductItem item) {
+        BillableItem newItem = EntityFactory.create(BillableItem.class);
+        newItem.item().set(item);
+        newItem._currentPrice().setValue(item.price().getValue());
+        newItem.effectiveDate().setValue(new LogicalDate());
+        newItem.expirationDate().setValue(new LogicalDate());
+        return newItem;
     }
 }

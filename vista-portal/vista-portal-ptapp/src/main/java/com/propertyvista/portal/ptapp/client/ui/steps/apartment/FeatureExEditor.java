@@ -53,8 +53,8 @@ class FeatureExEditor extends CEntityDecoratableEditor<BillableItem> {
         lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         CNumberLabel nl;
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice(), nl = new CNumberLabel()), 6).build());
-        nl.setNumberFormat(proto().agreedPrice().getMeta().getFormat(), proto().agreedPrice().getMeta().useMessageFormat());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto()._currentPrice(), nl = new CNumberLabel()), 6).build());
+        nl.setNumberFormat(proto()._currentPrice().getMeta().getFormat(), proto()._currentPrice().getMeta().useMessageFormat());
         nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         main.setWidget(++row, 0, extraDataPanel);

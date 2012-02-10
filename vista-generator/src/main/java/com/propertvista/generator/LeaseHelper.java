@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -59,7 +60,7 @@ public class LeaseHelper {
                 Persistence.service().retrieve(service.items());
                 for (ProductItem item : service.items()) {
                     if (lease.unit().equals(item.element())) {
-                        lease.serviceAgreement().serviceItem().set(createChargeItem(item));
+                        lease.serviceAgreement().serviceItem().set(createBillableItem(item));
                         selectedService = service;
                         lease.type().set(selectedService.type());
                         break;
@@ -78,7 +79,7 @@ public class LeaseHelper {
                     for (ProductItem item : feature.items()) {
                         if (!building.serviceCatalog().includedUtilities().contains(item.type())
                                 && !building.serviceCatalog().externalUtilities().contains(item.type())) {
-                            lease.serviceAgreement().featureItems().add(createChargeItem(item));
+                            lease.serviceAgreement().featureItems().add(createBillableItem(item));
                         }
                     }
                 }
@@ -93,11 +94,11 @@ public class LeaseHelper {
         }
     }
 
-    private static BillableItem createChargeItem(ProductItem serviceItem) {
-        BillableItem chargeItem = EntityFactory.create(BillableItem.class);
-        chargeItem.item().set(serviceItem);
-        chargeItem.originalPrice().setValue(serviceItem.price().getValue());
-        chargeItem.agreedPrice().setValue(serviceItem.price().getValue());
-        return chargeItem;
+    private static BillableItem createBillableItem(ProductItem serviceItem) {
+        BillableItem newItem = EntityFactory.create(BillableItem.class);
+        newItem.item().set(serviceItem);
+        newItem.effectiveDate().setValue(new LogicalDate());
+        newItem.expirationDate().setValue(new LogicalDate());
+        return newItem;
     }
 }

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +24,8 @@ import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
@@ -64,12 +59,12 @@ class AgreedItemEditor extends CEntityDecoratableEditor<BillableItem> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type().name(), new CLabel())).customLabel("").useLabelSemicolon(false).build());
         get(proto().item().type().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice()), 6).customLabel(i18n.tr("Agreed Price")).build());
-        get(proto().agreedPrice()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().item().price()), 6).build());
+        get(proto().item().price()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+        get(proto().item().price()).setViewable(true);
 
-        CNumberLabel nl;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().originalPrice(), nl = new CNumberLabel()), 6).build());
-        nl.setNumberFormat(proto().originalPrice().getMeta().getFormat(), proto().originalPrice().getMeta().useMessageFormat());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().effectiveDate()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().expirationDate()), 10).build());
 
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -132,24 +127,6 @@ class AgreedItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 extraDataPanel.setWidget(editor);
             }
         }
-    }
-
-    @Override
-    public void addValidations() {
-        get(proto().agreedPrice()).addValueValidator(new EditableValueValidator<BigDecimal>() {
-            @Override
-            //TODO validate and look over again
-            public ValidationFailure isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
-                if (value != null && getValue() != null && !getValue().isEmpty()) {
-                    Double originalPrice = getValue().originalPrice().getValue().doubleValue();
-                    return ((value.doubleValue() > originalPrice * 0.5 && originalPrice < value.doubleValue() * 1.5) ? null : new ValidationFailure(i18n
-                            .tr("The price should not be differ +-50% of original price")));
-                }
-                return null;
-            }
-        });
-
-        super.addValidations();
     }
 
     private class ChargeItemAdjustmentFolder extends VistaTableFolder<BillableItemAdjustment> {

@@ -15,6 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -87,8 +88,9 @@ public class FeatureExFolder extends VistaBoxFolder<BillableItem> {
                             if (getValue().size() < getMaxCount()) {
                                 BillableItem newItem = EntityFactory.create(BillableItem.class);
                                 newItem.item().set(item);
-                                newItem.originalPrice().setValue(item.price().getValue());
-                                newItem.agreedPrice().setValue(item.price().getValue());
+                                newItem._currentPrice().setValue(item.price().getValue());
+                                newItem.effectiveDate().setValue(new LogicalDate());
+                                newItem.expirationDate().setValue(new LogicalDate());
                                 addItem(newItem);
                             }
                         }

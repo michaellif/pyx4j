@@ -90,16 +90,16 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
 
             PriceCalculationHelpers.calculateChargeItemAdjustments(serviceItem);
             charges.monthlyCharges().charges()
-                    .add(DomainUtil.createChargeLine(serviceItem.item().type().getStringView(), serviceItem.agreedPrice().getValue()));
+                    .add(DomainUtil.createChargeLine(serviceItem.item().type().getStringView(), serviceItem._currentPrice().getValue()));
 
             // create/update deposits:
             charges.applicationCharges().charges().clear();
 
             if (miscPolicy.oneMonthDeposit().isBooleanTrue()) {
-                charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem.agreedPrice().getValue()));
+                charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem._currentPrice().getValue()));
             } else {
                 charges.applicationCharges().charges()
-                        .add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem.agreedPrice().getValue().multiply(new BigDecimal(2))));
+                        .add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem._currentPrice().getValue().multiply(new BigDecimal(2))));
             }
 
             // TODO: find where get/put this info (application/equifax check fee)!
@@ -115,11 +115,13 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
                     case pet:
                     case parking:
                     case locker:
-                        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.agreedPrice().getValue()));
+                        charges.monthlyCharges().charges()
+                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item._currentPrice().getValue()));
                         break;
 
                     default:
-                        charges.oneTimeCharges().charges().add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.agreedPrice().getValue()));
+                        charges.oneTimeCharges().charges()
+                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item._currentPrice().getValue()));
                     }
                 }
             }

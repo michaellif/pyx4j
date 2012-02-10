@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -48,8 +49,9 @@ class AgreedItemFolder extends VistaBoxFolder<BillableItem> {
                     for (ProductItem item : getSelectedItems()) {
                         BillableItem newItem = EntityFactory.create(BillableItem.class);
                         newItem.item().set(item);
-                        newItem.originalPrice().setValue(item.price().getValue());
-                        newItem.agreedPrice().setValue(item.price().getValue());
+                        newItem._currentPrice().setValue(item.price().getValue());
+                        newItem.effectiveDate().setValue(new LogicalDate());
+                        newItem.expirationDate().setValue(new LogicalDate());
                         addItem(newItem);
                     }
                     return true;
