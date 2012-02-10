@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -60,11 +61,13 @@ public interface Bill extends IEntity {
     BillingRun billingRun();
 
     @Detached
-    @JoinTable(value = BillCharge.class, orderColumn = BillCharge.OrderId.class, cascade = false)
+    @JoinTable(value = BillCharge.class, cascade = false)
+    @OrderBy(BillCharge.OrderId.class)
     IList<BillCharge> charges();
 
     @Detached
-    @JoinTable(value = BillChargeAdjustment.class, orderColumn = BillChargeAdjustment.OrderId.class, cascade = false)
+    @JoinTable(value = BillChargeAdjustment.class, cascade = false)
+    @OrderBy(BillChargeAdjustment.OrderId.class)
     IList<BillChargeAdjustment> adjustments();
 
     //TODO BillLeaseAdjustment

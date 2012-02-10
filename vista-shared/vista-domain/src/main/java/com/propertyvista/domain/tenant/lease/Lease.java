@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
@@ -87,7 +88,8 @@ public interface Lease extends IEntity {
     AptUnit unit();
 
     @Detached
-    @JoinTable(value = TenantInLease.class, orderColumn = TenantInLease.OrderInLeaseId.class, cascade = false)
+    @JoinTable(value = TenantInLease.class, cascade = false)
+    @OrderBy(TenantInLease.OrderInLeaseId.class)
     IList<TenantInLease> tenants();
 
     // Dates:

@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -77,7 +78,8 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
     @Owned
     @Detached
     @Caption(name = "Identification Documents")
-    @JoinTable(value = ApplicationDocument.class, orderColumn = ApplicationDocument.OrderColumnId.class, cascade = false)
+    @JoinTable(value = ApplicationDocument.class, cascade = false)
+    @OrderBy(ApplicationDocument.OrderColumnId.class)
     IList<ApplicationDocument> documents();
 
     //=============== Financial =============//
@@ -101,7 +103,8 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
 
     @Detached
     @Length(2)
-    @JoinTable(value = PersonGuarantor.class, orderColumn = PersonGuarantor.OrderInGuarantee.class, cascade = false)
+    @JoinTable(value = PersonGuarantor.class, cascade = false)
+    @OrderBy(PersonGuarantor.OrderInGuarantee.class)
     IList<PersonGuarantor> guarantors();
 
     //=============== Security Info =============//
