@@ -1,0 +1,63 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Feb 10, 2012
+ * @author ArtyomB
+ * @version $Id$
+ */
+package com.propertyvista.server.common.util;
+
+import java.util.Random;
+
+public class RandomAccountNumberGenerator {
+
+    public static final int ACCOUNT_NUMBER_LENGTH = 13;
+
+    private static final int[] SUM_OF_DOUBLE_DIGIT = new int[] { 0, 2, 4, 6, 8, 1, 3, 5, 7, 9 };
+
+    private static final char[] CHAR_OF = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
+    private final RandomDigitGenerator digitGenerator;
+
+    public RandomAccountNumberGenerator(final Random rnd) {
+        this(new RandomDigitGenerator() {
+            @Override
+            public int nextRandomDigit() {
+                return rnd.nextInt(10);
+            }
+        });
+    }
+
+    protected RandomAccountNumberGenerator(RandomDigitGenerator digitGenerator) {
+        this.digitGenerator = digitGenerator;
+    }
+
+    public String generateRandomAccountNumber() {
+        int sum = 0;
+        char[] digits = new char[ACCOUNT_NUMBER_LENGTH + 1]; // add one more for the checksum digit        
+        for (int i = 0; i < ACCOUNT_NUMBER_LENGTH; ++i) {
+            int digit = digitGenerator.nextRandomDigit();
+            digits[ACCOUNT_NUMBER_LENGTH - 1 - i] = CHAR_OF[digit];
+            sum += (i & 1) == 0 ? SUM_OF_DOUBLE_DIGIT[digit] : digit;
+        }
+        sum %= 10;
+        digits[ACCOUNT_NUMBER_LENGTH] = CHAR_OF[sum == 0 ? 0 : 10 - sum];
+
+        return String.valueOf(digits);
+    }
+
+    /**
+     * Generator of digits of an account from right to left (less significant to most significant)
+     */
+    protected interface RandomDigitGenerator {
+
+        int nextRandomDigit();
+
+    }
+}
