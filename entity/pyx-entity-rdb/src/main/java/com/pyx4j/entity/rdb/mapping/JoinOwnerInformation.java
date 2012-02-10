@@ -69,7 +69,7 @@ public class JoinOwnerInformation extends JoinInformation {
 
         Class<? extends IEntity> rootEntityClass = rootEntityMeta.getEntityClass();
         Table tableAnnotation = rootEntityMeta.getAnnotation(Table.class);
-        if ((tableAnnotation != null) && (tableAnnotation.expands() != null)) {
+        if ((tableAnnotation != null) && (tableAnnotation.expands() != IEntity.class)) {
             rootEntityClass = tableAnnotation.expands();
         }
 
@@ -86,8 +86,8 @@ public class JoinOwnerInformation extends JoinInformation {
             }
         }
         if (ownerMemberMeta == null) {
-            throw new Error("Unmapped @Owned member in join table '" + ownerEntityMeta.getEntityClass().getName() + "' for " + memberMeta.getFieldName()
-                    + " of type " + entityMeta.getEntityClass().getName());
+            throw new AssertionError("Unmapped @Owned member in join table '" + ownerEntityMeta.getEntityClass().getName() + "' for "
+                    + memberMeta.getFieldName() + " of type " + entityMeta.getEntityClass().getName());
         } else {
             return ownerMemberMeta;
         }

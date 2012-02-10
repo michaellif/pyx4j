@@ -71,8 +71,8 @@ class JoinTableInformation extends JoinInformation {
         MemberMeta orderMemberMeta = findOrderMember(joinEntityMeta);
 
         if (orderMemberMeta == null && memberMeta.getObjectClassType() == ObjectClassType.EntityList) {
-            throw new Error("Unmapped @OrderBy member in join table " + joinEntityMeta.getEntityClass().getName() + " for '" + memberMeta.getFieldName()
-                    + "' in " + entityMeta.getEntityClass().getName());
+            throw new AssertionError("Unmapped @OrderBy member in join table " + joinEntityMeta.getEntityClass().getName() + " for '"
+                    + memberMeta.getFieldName() + "' in " + entityMeta.getEntityClass().getName());
         } else if (orderMemberMeta != null) {
             sqlOrderColumnName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(orderMemberMeta));
         }
@@ -83,7 +83,7 @@ class JoinTableInformation extends JoinInformation {
 
         Class<? extends IEntity> rootEntityClass = rootEntityMeta.getEntityClass();
         Table tableAnnotation = rootEntityMeta.getAnnotation(Table.class);
-        if ((tableAnnotation != null) && (tableAnnotation.expands() != null)) {
+        if ((tableAnnotation != null) && (tableAnnotation.expands() != IEntity.class)) {
             rootEntityClass = tableAnnotation.expands();
         }
 
@@ -115,7 +115,7 @@ class JoinTableInformation extends JoinInformation {
             }
         }
         if (ownerMemberMeta == null) {
-            throw new Error("Unmapped owner member in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName() + " in "
+            throw new AssertionError("Unmapped owner member in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName() + " in "
                     + entityMeta.getEntityClass().getName());
         } else {
             return ownerMemberMeta;

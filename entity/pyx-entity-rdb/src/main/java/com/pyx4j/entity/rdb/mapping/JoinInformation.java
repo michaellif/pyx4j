@@ -92,7 +92,7 @@ abstract class JoinInformation {
     private static MemberMeta findOwnerMember(EntityMeta childEntityMeta, MemberMeta memberMeta, EntityMeta rootEntityMeta) {
         Class<? extends IEntity> rootEntityClass = rootEntityMeta.getEntityClass();
         Table tableAnnotation = rootEntityMeta.getAnnotation(Table.class);
-        if ((tableAnnotation != null) && (tableAnnotation.expands() != null)) {
+        if ((tableAnnotation != null) && (tableAnnotation.expands() != IEntity.class)) {
             rootEntityClass = tableAnnotation.expands();
         }
         MemberMeta ownerMemberMeta = null;
@@ -101,10 +101,13 @@ abstract class JoinInformation {
             if (!jmemberMeta.isTransient() && (jmemberMeta.getAnnotation(Owner.class) != null)) {
                 if ((jmemberMeta.getObjectClass().equals(rootEntityMeta.getEntityClass())) || (jmemberMeta.getObjectClass().equals(rootEntityClass))) {
                     if (ownerMemberMeta != null) {
-                        throw new AssertionError("Duplicate @Owner member in join table '" + childEntityMeta.getEntityClass().getName() + "' for "
+                        throw new AssertionError("Duplicate @Owner member in table " + childEntityMeta.getEntityClass().getName() + " for "
                                 + memberMeta.getFieldName() + " of type " + memberMeta.getValueClass().getName());
                     }
                     ownerMemberMeta = jmemberMeta;
+                } else {
+                    throw new AssertionError("Invalid type @Owner member '" + jmemberName + "' in table " + childEntityMeta.getEntityClass().getName()
+                            + " for " + memberMeta.getFieldName() + " of type " + memberMeta.getValueClass().getName());
                 }
             }
         }
