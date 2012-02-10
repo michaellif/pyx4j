@@ -140,12 +140,17 @@ public class QueryBuilder<T extends IEntity> {
                 } else {
                     sortsSql.append(", ");
                 }
-                MemberWithAlias descr = getMemberOperationsMetaByPath(new JoinDef(alias, true), sort.getPropertyPath(), true);
-                if (descr == null) {
+                MemberWithAlias memeberWithAlias = getMemberOperationsMetaByPath(new JoinDef(alias, true), sort.getPropertyPath(), true);
+                if (memeberWithAlias == null) {
                     throw new RuntimeException("Unknown member " + sort.getPropertyPath() + " in " + entityMeta.getEntityClass().getName());
                 }
-                sortsSql.append(descr.joinDef.alias).append('.');
-                sortsSql.append(descr.memberOper.sqlName());
+                if (memeberWithAlias.memberOper instanceof MemberExternalOperationsMeta) {
+                    String memberJoinAlias = getJoin(memeberWithAlias.memberOper, memeberWithAlias.joinDef.alias, true).alias;
+                    sortsSql.append(memberJoinAlias).append('.').append(((MemberExternalOperationsMeta) (memeberWithAlias.memberOper)).sqlValueName());
+                } else {
+                    sortsSql.append(memeberWithAlias.joinDef.alias).append('.').append(memeberWithAlias.memberOper.sqlName());
+                }
+
                 sortsSql.append(' ').append(sort.isDescending() ? "DESC" : "ASC");
                 // TODO Make it configurable in API
                 sortsSql.append(dialect.sqlSortNulls(sort.isDescending()));
