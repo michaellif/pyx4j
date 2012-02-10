@@ -132,6 +132,9 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.charges.ChargePolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.charges.ChargePolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.charges.ChargePolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyViewerActivity;
@@ -761,6 +764,18 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case viewer:
                         activity = new MiscPolicyViewerActivity(place);
+                        break;
+                    }
+                } else if (place instanceof CrmSiteMap.Settings.Policies.Charges) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case lister:
+                        activity = new ChargePolicyListerActivity(place);
+                        break;
+                    case editor:
+                        activity = new ChargePolicyEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ChargePolicyViewerActivity(place);
                         break;
                     }
                 }

@@ -20,6 +20,12 @@ import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.Ap
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyEdtiorView;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.charges.ChargePolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.charges.ChargePolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.charges.ChargePolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.charges.ChargePolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.charges.ChargePolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.charges.ChargePolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyListerView;
@@ -76,6 +82,13 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(MiscPolicyEditorView.class, new MiscPolicyEditorViewImpl());
             } else if (MiscPolicyViewerView.class.equals(type)) {
                 map.put(MiscPolicyViewerView.class, new MiscPolicyViewerViewImpl());
+
+            } else if (ChargePolicyListerView.class.equals(type)) {
+                map.put(ChargePolicyListerView.class, new ChargePolicyListerViewImpl());
+            } else if (ChargePolicyEditorView.class.equals(type)) {
+                map.put(ChargePolicyEditorView.class, new ChargePolicyEditorViewImpl());
+            } else if (ChargePolicyViewerView.class.equals(type)) {
+                map.put(ChargePolicyViewerView.class, new ChargePolicyViewerViewImpl());
             }
 
         }
