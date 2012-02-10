@@ -31,6 +31,8 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 
 public abstract class AssociationMappingTestCase extends DatastoreTestBase {
 
+    public static boolean POLYMORPHIC_TODO = false;
+
     public boolean testColumnExists(Class<? extends IEntity> type, String columnName) {
         EntityPersistenceServiceRDB service = ((EntityPersistenceServiceRDB) srv);
         Connection connection = service.getConnection();
