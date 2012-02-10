@@ -302,11 +302,11 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     }
 
     public void testUnidirectionalOneToManyPersist() {
-        testUnidirectionalOneToOneSave(TestCaseMethod.Persist);
+        testUnidirectionalOneToManySave(TestCaseMethod.Persist);
     }
 
     public void testUnidirectionalOneToManyMerge() {
-        testUnidirectionalOneToOneSave(TestCaseMethod.Merge);
+        testUnidirectionalOneToManySave(TestCaseMethod.Merge);
     }
 
     public void testUnidirectionalOneToManySave(TestCaseMethod testCaseMethod) {
@@ -325,8 +325,8 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         o.children().get(0).testId().setValue(testId);
         o.children().get(0).name().setValue(uniqueString());
 
-        o.children().get(0).testId().setValue(testId);
-        o.children().get(0).name().setValue(uniqueString());
+        o.children().get(1).testId().setValue(testId);
+        o.children().get(1).name().setValue(uniqueString());
 
         // Save child and owner
         srvSave(o, testCaseMethod);
@@ -336,37 +336,32 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             UnidirectionalOneToManyParent parent = srv.retrieve(UnidirectionalOneToManyParent.class, o.getPrimaryKey());
             Assert.assertNotNull("data retrieved ", parent);
         }
-//
-//        // Get Child and see that child is retrieved, then verify values
-//        {
-//            BidirectionalOneToOneInversedChild child = srv.retrieve(BidirectionalOneToOneInversedChild.class, o.child().getPrimaryKey());
-//            Assert.assertNotNull("data retrieved ", child);
-//            Assert.assertEquals("owner data retrieved", AttachLevel.Attached, child.parent().getAttachLevel());
-//            Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
-//        }
-//
-//        // update child and owner
-//        o.name().setValue(uniqueString());
-//        o.children().get(0).name().setValue(uniqueString());
-//        srvSave(o, testCaseMethod);
-//
-//        // Get Owner and see that child is retrieved, then verify values
-//        {
-//            BidirectionalOneToOneInversedParent parent = srv.retrieve(BidirectionalOneToOneInversedParent.class, o.getPrimaryKey());
-//            Assert.assertNotNull("data retrieved ", parent);
-//            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
-//            Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
-//            Assert.assertEquals("owner in child data retrieved", AttachLevel.Attached, parent.child().parent().getAttachLevel());
-//            Assert.assertEquals("owner in child correct data retrieved", o.getPrimaryKey(), parent.child().parent().getPrimaryKey());
-//            Assert.assertEquals("owner in child correct data retrieved", o.name(), parent.child().parent().name());
-//        }
-//
-//        // Get Child and see that child is retrieved, then verify values
-//        {
-//            BidirectionalOneToOneInversedChild child = srv.retrieve(BidirectionalOneToOneInversedChild.class, o.child().getPrimaryKey());
-//            Assert.assertNotNull("data retrieved ", child);
-//            Assert.assertEquals("owner data retrieved", AttachLevel.Attached, child.parent().getAttachLevel());
-//            Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
-//        }
+
+        // Get Child and see that child is retrieved, then verify values
+        {
+            UnidirectionalOneToManyChild child = srv.retrieve(UnidirectionalOneToManyChild.class, o.children().get(0).getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", child);
+            Assert.assertEquals("correct data retrieved", o.children().get(0).name(), child.name());
+        }
+
+        // update child and owner
+        o.name().setValue(uniqueString());
+        o.children().get(0).name().setValue(uniqueString());
+        srvSave(o, testCaseMethod);
+
+        // Get Owner and see that child is retrieved, then verify values
+        {
+            UnidirectionalOneToManyParent parent = srv.retrieve(UnidirectionalOneToManyParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.children().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.children().get(0).name(), parent.children().get(0).name());
+        }
+
+        // Get Child and see that child is retrieved, then verify values
+        {
+            UnidirectionalOneToManyChild child = srv.retrieve(UnidirectionalOneToManyChild.class, o.children().get(1).getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", child);
+            Assert.assertEquals("correct data retrieved", o.children().get(1).name(), child.name());
+        }
     }
 }
