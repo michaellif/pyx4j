@@ -320,4 +320,9 @@ public class EntityMetaImpl implements EntityMeta {
         return updatedTimestampMember;
     }
 
+    @Override
+    public String toString() {
+        return "EntityMeta " + entityClass.getSimpleName();
+    }
+
 }
