@@ -157,7 +157,7 @@ class Billing {
     }
 
     private void createLeaseAdjustments() {
-        for (LeaseAdjustment item : bill.billingAccount().leaseFinancial().adjustmantItems()) {
+        for (LeaseAdjustment item : bill.billingAccount().leaseFinancial().adjustmentItems()) {
             createeLeaseAdjustment(item);
         }
     }
