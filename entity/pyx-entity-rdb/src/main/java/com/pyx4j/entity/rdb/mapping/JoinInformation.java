@@ -53,11 +53,9 @@ abstract class JoinInformation {
 
     static JoinInformation build(Dialect dialect, NamingConvention namingConvention, EntityMeta rootEntityMeta, EntityMeta entityMeta, MemberMeta memberMeta) {
         if (memberMeta.getAnnotation(JoinTable.class) != null) {
+            assert ((memberMeta.getAnnotation(Owner.class) == null) && (memberMeta.getAnnotation(Owned.class) == null)) : "Incompatible @JoinTable and @Owned/@Owner on '"
+                    + memberMeta.getFieldName() + "' in table " + entityMeta.getEntityClass().getName();
             return new JoinTableInformation(dialect, rootEntityMeta, entityMeta, memberMeta);
-        }
-        if (Owned.TODO) {
-            //Disable all new Owned/Owner mapping until it is tested
-            return null;
         }
 
         Owner owner = memberMeta.getAnnotation(Owner.class);

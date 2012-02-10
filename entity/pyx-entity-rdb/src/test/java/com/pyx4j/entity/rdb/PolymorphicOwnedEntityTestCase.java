@@ -24,7 +24,6 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -45,11 +44,6 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
     }
 
     public void testUnidirectionalOneToOneSave(TestCaseMethod testCaseMethod) {
-        // hide the tests for now
-        if (Owned.TODO) {
-            return;
-        }
-
         String testId = uniqueString();
         UnidirectionalOneToOneParent o = EntityFactory.create(UnidirectionalOneToOneParent.class);
         o.testId().setValue(testId);
