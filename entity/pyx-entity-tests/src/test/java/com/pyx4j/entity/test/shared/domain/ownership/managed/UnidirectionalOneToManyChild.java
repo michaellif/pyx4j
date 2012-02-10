@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
 //This table does not have column that references owner because this is one to one relationship
-public interface Om0OneToManyChild extends IEntity {
+public interface UnidirectionalOneToManyChild extends IEntity {
 
     IPrimitive<String> testId();
 

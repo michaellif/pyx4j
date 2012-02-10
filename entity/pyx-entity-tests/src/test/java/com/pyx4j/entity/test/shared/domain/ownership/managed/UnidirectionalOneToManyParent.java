@@ -28,10 +28,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
 // This table have column that references child, New table Om0OneToManyOwner$children  is created to manage this 
-public interface Om0OneToManyOwner extends IEntity {
+public interface UnidirectionalOneToManyParent extends IEntity {
 
     @Owned
-    IList<Om0OneToManyChild> children();
+    IList<UnidirectionalOneToManyChild> children();
 
     IPrimitive<String> testId();
 

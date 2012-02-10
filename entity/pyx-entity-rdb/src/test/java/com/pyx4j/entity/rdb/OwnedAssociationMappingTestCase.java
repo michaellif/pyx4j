@@ -26,21 +26,27 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneChild;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneInversedChild;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneInversedParent;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneParent;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.UnidirectionalOneToManyChild;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.UnidirectionalOneToManyParent;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.UnidirectionalOneToOneChild;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.UnidirectionalOneToOneParent;
 
 public abstract class OwnedAssociationMappingTestCase extends AssociationMappingTestCase {
+
+    //================================================ UnidirectionalOneToOne =========================================================//
 
     public void testUnidirectionalOneToOneTable() {
         if (Owned.TODO) {
             return;
         }
         Assert.assertTrue(
-                "UnidirectionalOneToOneParent existance",
+                "UnidirectionalOneToOneParent table should exist",
                 testColumnExists(UnidirectionalOneToOneParent.class, EntityFactory.getEntityPrototype(UnidirectionalOneToOneParent.class).name().getFieldName()));
         Assert.assertTrue(
-                "Child column existance",
+                "Child column should exist",
                 testColumnExists(UnidirectionalOneToOneParent.class, EntityFactory.getEntityPrototype(UnidirectionalOneToOneParent.class).child()
                         .getFieldName()));
     }
@@ -107,15 +113,17 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
     }
 
+    //================================================ BidirectionalOneToOne =========================================================//
+
     public void testBidirectionalOneToOneTable() {
         if (Owned.TODO) {
             return;
         }
-        Assert.assertTrue("BidirectionalOneToOneParent existance",
+        Assert.assertTrue("BidirectionalOneToOneParent table should exist",
                 testColumnExists(BidirectionalOneToOneParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneParent.class).name().getFieldName()));
-        Assert.assertTrue("Child column existance",
+        Assert.assertTrue("Child column should exist",
                 testColumnExists(BidirectionalOneToOneParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneParent.class).child().getFieldName()));
-        Assert.assertFalse("Parent column existance",
+        Assert.assertFalse("Parent column should exist",
                 testColumnExists(BidirectionalOneToOneChild.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneChild.class).parent().getFieldName()));
 
     }
@@ -188,4 +196,177 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         }
     }
 
+    //================================================ BidirectionalOneToOneInversed =========================================================//
+
+    public void testBidirectionalOneToOneInversedTable() {
+        if (Owned.TODO) {
+            return;
+        }
+        Assert.assertTrue(
+                "BidirectionalOneToOneParent table should exist",
+                testColumnExists(BidirectionalOneToOneInversedParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedParent.class).name()
+                        .getFieldName()));
+        Assert.assertTrue(
+                "Child column should exist",
+                testColumnExists(BidirectionalOneToOneInversedParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedParent.class).child()
+                        .getFieldName()));
+        Assert.assertFalse(
+                "Parent column should not exist",
+                !testColumnExists(BidirectionalOneToOneInversedChild.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedChild.class).parent()
+                        .getFieldName()));
+
+    }
+
+    public void testBidirectionalOneToOneInversedPersist() {
+        testUnidirectionalOneToOneSave(TestCaseMethod.Persist);
+    }
+
+    public void testBidirectionalOneToOneInversedMerge() {
+        testUnidirectionalOneToOneSave(TestCaseMethod.Merge);
+    }
+
+    public void testBidirectionalOneToOneInversedSave(TestCaseMethod testCaseMethod) {
+        // hide the tests for now
+        if (Owned.TODO) {
+            return;
+        }
+
+        String testId = uniqueString();
+        BidirectionalOneToOneInversedParent o = EntityFactory.create(BidirectionalOneToOneInversedParent.class);
+        o.testId().setValue(testId);
+        o.name().setValue(uniqueString());
+        o.child().testId().setValue(testId);
+        o.child().name().setValue(uniqueString());
+
+        // Save child and owner
+        srvSave(o, testCaseMethod);
+
+        // Get Owner and see that child is retrieved, then verify values
+        {
+            BidirectionalOneToOneInversedParent parent = srv.retrieve(BidirectionalOneToOneInversedParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
+            Assert.assertEquals("owner in child data retrieved", AttachLevel.Attached, parent.child().parent().getAttachLevel());
+            Assert.assertEquals("owner in child correct data retrieved", o.getPrimaryKey(), parent.child().parent().getPrimaryKey());
+            Assert.assertEquals("owner in child correct data retrieved", o.name(), parent.child().parent().name());
+        }
+
+        // Get Child and see that child is retrieved, then verify values
+        {
+            BidirectionalOneToOneInversedChild child = srv.retrieve(BidirectionalOneToOneInversedChild.class, o.child().getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", child);
+            Assert.assertEquals("owner data retrieved", AttachLevel.Attached, child.parent().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+        }
+
+        // update child and owner
+        o.name().setValue(uniqueString());
+        o.child().name().setValue(uniqueString());
+        srvSave(o, testCaseMethod);
+
+        // Get Owner and see that child is retrieved, then verify values
+        {
+            BidirectionalOneToOneInversedParent parent = srv.retrieve(BidirectionalOneToOneInversedParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
+            Assert.assertEquals("owner in child data retrieved", AttachLevel.Attached, parent.child().parent().getAttachLevel());
+            Assert.assertEquals("owner in child correct data retrieved", o.getPrimaryKey(), parent.child().parent().getPrimaryKey());
+            Assert.assertEquals("owner in child correct data retrieved", o.name(), parent.child().parent().name());
+        }
+
+        // Get Child and see that child is retrieved, then verify values
+        {
+            BidirectionalOneToOneInversedChild child = srv.retrieve(BidirectionalOneToOneInversedChild.class, o.child().getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", child);
+            Assert.assertEquals("owner data retrieved", AttachLevel.Attached, child.parent().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+        }
+    }
+
+    //================================================ UnidirectionalOneToManyParent =========================================================//
+
+    public void testUnidirectionalOneToManyTable() {
+        if (Owned.TODO) {
+            return;
+        }
+        Assert.assertTrue(
+                UnidirectionalOneToManyParent.class.getName() + " table should exist",
+                testColumnExists(UnidirectionalOneToManyParent.class, EntityFactory.getEntityPrototype(UnidirectionalOneToManyParent.class).name()
+                        .getFieldName()));
+        Assert.assertTrue(
+                "Child column should not exist",
+                !testColumnExists(UnidirectionalOneToManyParent.class, EntityFactory.getEntityPrototype(UnidirectionalOneToManyParent.class).children()
+                        .getFieldName()));
+    }
+
+    public void testUnidirectionalOneToManyPersist() {
+        testUnidirectionalOneToOneSave(TestCaseMethod.Persist);
+    }
+
+    public void testUnidirectionalOneToManyMerge() {
+        testUnidirectionalOneToOneSave(TestCaseMethod.Merge);
+    }
+
+    public void testUnidirectionalOneToManySave(TestCaseMethod testCaseMethod) {
+        // hide the tests for now
+        if (Owned.TODO) {
+            return;
+        }
+
+        String testId = uniqueString();
+        UnidirectionalOneToManyParent o = EntityFactory.create(UnidirectionalOneToManyParent.class);
+        o.testId().setValue(testId);
+        o.name().setValue(uniqueString());
+        o.children().add(EntityFactory.create(UnidirectionalOneToManyChild.class));
+        o.children().add(EntityFactory.create(UnidirectionalOneToManyChild.class));
+
+        o.children().get(0).testId().setValue(testId);
+        o.children().get(0).name().setValue(uniqueString());
+
+        o.children().get(0).testId().setValue(testId);
+        o.children().get(0).name().setValue(uniqueString());
+
+        // Save child and owner
+        srvSave(o, testCaseMethod);
+
+        // Get Owner and see that child is retrieved, then verify values
+        {
+            UnidirectionalOneToManyParent parent = srv.retrieve(UnidirectionalOneToManyParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+        }
+//
+//        // Get Child and see that child is retrieved, then verify values
+//        {
+//            BidirectionalOneToOneInversedChild child = srv.retrieve(BidirectionalOneToOneInversedChild.class, o.child().getPrimaryKey());
+//            Assert.assertNotNull("data retrieved ", child);
+//            Assert.assertEquals("owner data retrieved", AttachLevel.Attached, child.parent().getAttachLevel());
+//            Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+//        }
+//
+//        // update child and owner
+//        o.name().setValue(uniqueString());
+//        o.children().get(0).name().setValue(uniqueString());
+//        srvSave(o, testCaseMethod);
+//
+//        // Get Owner and see that child is retrieved, then verify values
+//        {
+//            BidirectionalOneToOneInversedParent parent = srv.retrieve(BidirectionalOneToOneInversedParent.class, o.getPrimaryKey());
+//            Assert.assertNotNull("data retrieved ", parent);
+//            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
+//            Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
+//            Assert.assertEquals("owner in child data retrieved", AttachLevel.Attached, parent.child().parent().getAttachLevel());
+//            Assert.assertEquals("owner in child correct data retrieved", o.getPrimaryKey(), parent.child().parent().getPrimaryKey());
+//            Assert.assertEquals("owner in child correct data retrieved", o.name(), parent.child().parent().name());
+//        }
+//
+//        // Get Child and see that child is retrieved, then verify values
+//        {
+//            BidirectionalOneToOneInversedChild child = srv.retrieve(BidirectionalOneToOneInversedChild.class, o.child().getPrimaryKey());
+//            Assert.assertNotNull("data retrieved ", child);
+//            Assert.assertEquals("owner data retrieved", AttachLevel.Attached, child.parent().getAttachLevel());
+//            Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+//        }
+    }
 }
