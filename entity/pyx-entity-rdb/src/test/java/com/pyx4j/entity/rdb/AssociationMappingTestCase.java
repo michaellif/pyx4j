@@ -33,16 +33,19 @@ public abstract class AssociationMappingTestCase extends DatastoreTestBase {
 
     public boolean testColumnExists(Class<? extends IEntity> type, String columnName) {
         EntityPersistenceServiceRDB service = ((EntityPersistenceServiceRDB) srv);
-
         Connection connection = service.getConnection();
-
-        TableModel tableModel = service.tableModel(connection, EntityFactory.getEntityMeta(type));
-
         try {
+            if (service.isTableExists(type)) {
+                service.dropTable(type);
+            }
+            TableModel tableModel = service.tableModel(connection, EntityFactory.getEntityMeta(type));
+
             TableMetadata tableMetadata = TableMetadata.getTableMetadata(connection, tableModel.getTableName());
             return tableMetadata.getColumn(columnName) != null;
         } catch (SQLException e) {
             throw new Error("Error in getTableMetadata", e);
+        } finally {
+            SQLUtils.closeQuietly(connection);
         }
     }
 

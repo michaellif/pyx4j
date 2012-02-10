@@ -20,11 +20,15 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneChild;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneInversedChild;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneInversedParent;
@@ -106,11 +110,19 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         {
             UnidirectionalOneToOneChild child = srv.retrieve(UnidirectionalOneToOneChild.class, o.child().getPrimaryKey());
             Assert.assertNotNull("data retrieved ", child);
+            Assert.assertEquals("correct data retrieved", o.child().name(), child.name());
         }
-    }
 
-    public void TODO_testOmQuery() {
+        // Query Parent By Child
+        {
+            EntityQueryCriteria<UnidirectionalOneToOneParent> criteria = EntityQueryCriteria.create(UnidirectionalOneToOneParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().child().name(), o.child().name()));
 
+            List<UnidirectionalOneToOneParent> parents = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, parents.size());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parents.get(0).child().name());
+        }
     }
 
     //================================================ BidirectionalOneToOne =========================================================//
@@ -129,11 +141,11 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     }
 
     public void testBidirectionalOneToOnePersist() {
-        testUnidirectionalOneToOneSave(TestCaseMethod.Persist);
+        testBidirectionalOneToOneSave(TestCaseMethod.Persist);
     }
 
     public void testBidirectionalOneToOneMerge() {
-        testUnidirectionalOneToOneSave(TestCaseMethod.Merge);
+        testBidirectionalOneToOneSave(TestCaseMethod.Merge);
     }
 
     public void testBidirectionalOneToOneSave(TestCaseMethod testCaseMethod) {
@@ -194,6 +206,28 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             Assert.assertEquals("owner data retrieved", AttachLevel.Attached, child.parent().getAttachLevel());
             Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
         }
+
+        // Query Parent By Child
+        {
+            EntityQueryCriteria<BidirectionalOneToOneParent> criteria = EntityQueryCriteria.create(BidirectionalOneToOneParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().child().name(), o.child().name()));
+
+            List<BidirectionalOneToOneParent> parents = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, parents.size());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parents.get(0).child().name());
+        }
+
+        // Query Child By Parent
+        {
+            EntityQueryCriteria<BidirectionalOneToOneChild> criteria = EntityQueryCriteria.create(BidirectionalOneToOneChild.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().parent().name(), o.name()));
+
+            List<BidirectionalOneToOneChild> children = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, children.size());
+            Assert.assertEquals("correct data retrieved", o.name(), children.get(0).parent().name());
+        }
     }
 
     //================================================ BidirectionalOneToOneInversed =========================================================//
@@ -206,23 +240,23 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
                 "BidirectionalOneToOneParent table should exist",
                 testColumnExists(BidirectionalOneToOneInversedParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedParent.class).name()
                         .getFieldName()));
-        Assert.assertTrue(
-                "Child column should exist",
+        Assert.assertFalse(
+                "Child column should not exist",
                 testColumnExists(BidirectionalOneToOneInversedParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedParent.class).child()
                         .getFieldName()));
-        Assert.assertFalse(
-                "Parent column should not exist",
-                !testColumnExists(BidirectionalOneToOneInversedChild.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedChild.class).parent()
+        Assert.assertTrue(
+                "Parent column should exist",
+                testColumnExists(BidirectionalOneToOneInversedChild.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedChild.class).parent()
                         .getFieldName()));
 
     }
 
     public void testBidirectionalOneToOneInversedPersist() {
-        testUnidirectionalOneToOneSave(TestCaseMethod.Persist);
+        testBidirectionalOneToOneInversedSave(TestCaseMethod.Persist);
     }
 
     public void testBidirectionalOneToOneInversedMerge() {
-        testUnidirectionalOneToOneSave(TestCaseMethod.Merge);
+        testBidirectionalOneToOneInversedSave(TestCaseMethod.Merge);
     }
 
     public void testBidirectionalOneToOneInversedSave(TestCaseMethod testCaseMethod) {
@@ -282,6 +316,28 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             Assert.assertNotNull("data retrieved ", child);
             Assert.assertEquals("owner data retrieved", AttachLevel.Attached, child.parent().getAttachLevel());
             Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+        }
+
+        // Query Parent By Child
+        {
+            EntityQueryCriteria<BidirectionalOneToOneInversedParent> criteria = EntityQueryCriteria.create(BidirectionalOneToOneInversedParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().child().name(), o.child().name()));
+
+            List<BidirectionalOneToOneInversedParent> parents = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, parents.size());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parents.get(0).child().name());
+        }
+
+        // Query Child By Parent
+        {
+            EntityQueryCriteria<BidirectionalOneToOneInversedChild> criteria = EntityQueryCriteria.create(BidirectionalOneToOneInversedChild.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().parent().name(), o.name()));
+
+            List<BidirectionalOneToOneInversedChild> children = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, children.size());
+            Assert.assertEquals("correct data retrieved", o.name(), children.get(0).parent().name());
         }
     }
 
@@ -362,6 +418,17 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             UnidirectionalOneToManyChild child = srv.retrieve(UnidirectionalOneToManyChild.class, o.children().get(1).getPrimaryKey());
             Assert.assertNotNull("data retrieved ", child);
             Assert.assertEquals("correct data retrieved", o.children().get(1).name(), child.name());
+        }
+
+        // Query Parent By Child
+        {
+            EntityQueryCriteria<UnidirectionalOneToManyParent> criteria = EntityQueryCriteria.create(UnidirectionalOneToManyParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().children().$().name(), o.children().get(0).name()));
+
+            List<UnidirectionalOneToManyParent> parents = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, parents.size());
+            Assert.assertEquals("correct data retrieved", o.children().get(0).name(), parents.get(0).children().get(0).name());
         }
     }
 }

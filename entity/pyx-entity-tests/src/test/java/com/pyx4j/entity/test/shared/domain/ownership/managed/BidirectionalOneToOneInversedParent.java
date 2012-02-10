@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface BidirectionalOneToOneInversedParent extends IEntity {
 
     @Owned
-    BidirectionalOneToOneChild child();
+    BidirectionalOneToOneInversedChild child();
 
     IPrimitive<String> testId();
 

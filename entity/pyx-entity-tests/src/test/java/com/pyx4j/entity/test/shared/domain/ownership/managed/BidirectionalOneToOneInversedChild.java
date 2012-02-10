@@ -32,7 +32,7 @@ public interface BidirectionalOneToOneInversedChild extends IEntity {
 
     @Owner
     @JoinColumn
-    BidirectionalOneToOneParent parent();
+    BidirectionalOneToOneInversedParent parent();
 
     IPrimitive<String> testId();
 
