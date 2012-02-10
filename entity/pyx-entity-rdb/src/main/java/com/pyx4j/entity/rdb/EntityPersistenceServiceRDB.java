@@ -282,6 +282,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
                 TableModelCollections.insert(connection, connectionProvider.getDialect(), entity, member);
             }
+            for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembersSecondPass()) {
+                IEntity childEntity = (IEntity) member.getMember(entity);
+                if ((!childEntity.isNull()) && (!childEntity.isValueDetached())) {
+                    childEntity = childEntity.cast();
+                    persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                }
+            }
         } finally {
             if (trace) {
                 log.info(Trace.returns() + "insert {}", tm.getTableName());
@@ -332,6 +339,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             for (IEntity ce : cascadeRemove) {
                 cascadeDelete(connection, ce.getEntityMeta(), ce.getPrimaryKey(), ce);
+            }
+            for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembersSecondPass()) {
+                IEntity childEntity = (IEntity) member.getMember(entity);
+                if ((!childEntity.isNull()) && (!childEntity.isValueDetached())) {
+                    childEntity = childEntity.cast();
+                    if (doMerge) {
+                        merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                    } else {
+                        persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                    }
+                }
             }
             return updated;
         } finally {
