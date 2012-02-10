@@ -22,7 +22,7 @@ import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.JoinTableOrderColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -70,7 +70,7 @@ public interface TenantInLease extends IBoundToApplication {
 
     }
 
-    @JoinTableOrderColumn(OrderInLeaseId.class)
+    @OrderColumn(OrderInLeaseId.class)
     IPrimitive<Integer> orderInLease();
 
     @NotNull

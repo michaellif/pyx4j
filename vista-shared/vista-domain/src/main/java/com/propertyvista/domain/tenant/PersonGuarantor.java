@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.JoinTableOrderColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -42,7 +42,7 @@ public interface PersonGuarantor extends IEntity {
 
     }
 
-    @JoinTableOrderColumn(OrderInGuarantee.class)
+    @OrderColumn(OrderInGuarantee.class)
     IPrimitive<Integer> orderInGuarantee();
 
     @NotNull

@@ -23,7 +23,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.JoinTableOrderColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -54,7 +54,7 @@ public interface BillEntry extends IEntity {
     @JoinColumn
     Bill bill();
 
-    @JoinTableOrderColumn(OrderId.class)
+    @OrderColumn(OrderId.class)
     IPrimitive<Integer> orderId();
 
 }

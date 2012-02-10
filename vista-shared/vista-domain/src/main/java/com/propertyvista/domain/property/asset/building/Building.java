@@ -22,7 +22,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
-import com.pyx4j.entity.annotations.JoinTableOrderColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Reference;
@@ -54,7 +54,7 @@ public interface Building extends PolicyNode {
     interface OrderInComplexId extends ColumnId {
     }
 
-    @JoinTableOrderColumn(OrderInComplexId.class)
+    @OrderColumn(OrderInComplexId.class)
     IPrimitive<Integer> orderInComplex();
 
     @Owner
