@@ -99,9 +99,12 @@ public class ChargeCodeTaxFolder extends VistaTableFolder<Tax> {
         public boolean onClickOk() {
             if (getSelectedItems().isEmpty()) {
                 return false;
+            } else {
+                for (Tax tax : getSelectedItems()) {
+                    addItem(tax);
+                }
             }
             return true;
-
         }
 
         @Override
