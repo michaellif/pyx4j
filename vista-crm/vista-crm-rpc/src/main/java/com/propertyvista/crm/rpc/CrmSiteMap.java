@@ -315,6 +315,12 @@ public class CrmSiteMap implements SiteMap {
             public static class EmailTemplates extends CrudAppPlace {
 
             }
+
+            @PlaceProperties(caption = "Charges")
+            @NavigationItem(navigLabel = "Charges")
+            public static class Charges extends CrudAppPlace {
+
+            }
         }
 
         @PlaceProperties(caption = "Lease Terms")

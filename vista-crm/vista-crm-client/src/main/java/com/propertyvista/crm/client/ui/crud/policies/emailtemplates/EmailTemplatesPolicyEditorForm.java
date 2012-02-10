@@ -20,11 +20,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
@@ -52,51 +54,58 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
     private Widget createEmailTemplatesPanel() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
-        for (EmailTemplate template : templates()) {
-            panel.setH1(++row, 0, 1, template.getMeta().getCaption());
-            panel.setWidget(++row, 0, inject(template, new EmailTemplateEditor()));
-        }
+        //for (EmailTemplate template : templates()) {
+        //   panel.setH1(++row, 0, 1, template.getMeta().getCaption());
+        panel.setWidget(++row, 0, inject(proto().templates(), new EmailTemplateEditorFolder()));
+        //}
 
         return panel;
-    }
-
-    private List<EmailTemplate> templates() {
-        return Arrays.asList(//@formatter:off
-                proto().passwordRetrievalCrm(),
-                proto().passwordRetrievalTenant(),
-                proto().applicationCreatedApplicant(),
-                proto().applicationCreatedCoApplicant(),
-                proto().applicationCreatedGuarantor(),
-                proto().applicationApproved(),
-                proto().applicationDeclined()
-        );//@formatter:on
     }
 
     // TODO this cannot be used because too many tabs are too wide and unable to fit in one sceen
     @Deprecated
     private TabDescriptor createEmailTemplateTab(IObject<?> template) {
-        return new TabDescriptor(new CrmScrollPanel(inject(template, new EmailTemplateEditor()).asWidget()), template.getMeta().getCaption());
+        return new TabDescriptor(new CrmScrollPanel(inject(template, new EmailTemplateEditorFolder()).asWidget()), template.getMeta().getCaption());
     }
 
-    private static class EmailTemplateEditor extends CEntityDecoratableEditor<EmailTemplate> {
+    private static class EmailTemplateEditorFolder extends VistaBoxFolder<EmailTemplate> {
 
-        public EmailTemplateEditor() {
+        public EmailTemplateEditorFolder() {
             super(EmailTemplate.class);
         }
 
         @Override
-        public IsWidget createContent() {
-            FormFlexPanel content = new FormFlexPanel();
-            int row = -1;
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).build());
-            if (isEditable()) {
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content())).build());
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof EmailTemplate) {
+                return new EmailTemplateEditor();
             } else {
-                CLabel body = new CLabel();
-                body.setAllowHtml(true);
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), body), 60).build());
+                return super.create(member);
             }
-            return content;
+        }
+
+        private static class EmailTemplateEditor extends CEntityDecoratableEditor<EmailTemplate> {
+
+            public EmailTemplateEditor() {
+                super(EmailTemplate.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel content = new FormFlexPanel();
+                int row = -1;
+
+                //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).build());
+                if (isEditable()) {
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content())).build());
+                } else {
+                    CLabel body = new CLabel();
+                    body.setAllowHtml(true);
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), body), 60).build());
+                }
+                return content;
+            }
         }
 
     }

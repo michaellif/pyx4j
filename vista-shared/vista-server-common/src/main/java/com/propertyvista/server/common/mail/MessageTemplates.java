@@ -67,24 +67,12 @@ public class MessageTemplates {
     }
 
     private static EmailTemplate fetchEmailTemplate(EmailTemplateType type, EmailTemplatesPolicy policy) {
-        switch (type) {
-        case ApplicationApproved:
-            return policy.applicationApproved();
-        case ApplicationCreatedApplicant:
-            return policy.applicationCreatedApplicant();
-        case ApplicationCreatedCoApplicant:
-            return policy.applicationCreatedCoApplicant();
-        case ApplicationCreatedGuarantor:
-            return policy.applicationCreatedGuarantor();
-        case ApplicationDeclined:
-            return policy.applicationDeclined();
-        case PasswordRetrievalCrm:
-            return policy.passwordRetrievalCrm();
-        case PasswordRetrievalTenant:
-            return policy.passwordRetrievalTenant();
-        default:
-            throw new Error("Something weird has just happened!!!");
+        for (EmailTemplate emt : policy.templates()) {
+            if (emt.type().getValue() == type)
+                return emt;
         }
+
+        throw new Error("Something weird has just happened!!!");
     }
 
     // TODO This is prototype!

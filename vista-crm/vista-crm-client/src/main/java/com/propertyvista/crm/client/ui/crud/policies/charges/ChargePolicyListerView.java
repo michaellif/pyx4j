@@ -11,17 +11,12 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies;
+package com.propertyvista.crm.client.ui.crud.policies.charges;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.policy.framework.BuildingPolicy;
-import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
+import com.propertyvista.domain.policy.dto.ChargePolicyDTO;
 
-@DiscriminatorValue("EmailTemplatesPolicy")
-public interface EmailTemplatesPolicy extends BuildingPolicy {
-    @Owned
-    IList<EmailTemplate> templates();
+public interface ChargePolicyListerView extends IListerView<ChargePolicyDTO> {
+
 }

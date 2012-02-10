@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -151,13 +152,13 @@ public class PolicyPreloader extends AbstractVistaDataPreloader {
     private EmailTemplatesPolicy createDefaultEmailTemplatesPolicy() {
         EmailTemplatesPolicy policy = EntityFactory.create(EmailTemplatesPolicy.class);
 
-        policy.passwordRetrievalCrm().set(defaultEmailTemplatePasswordRetrievalCrm());
-        policy.passwordRetrievalTenant().set(defaultEmailTemplatePasswordRetrievalTenant());
-        policy.applicationCreatedApplicant().set(defaultEmailTemplateApplicationCreatedApplicant());
-        policy.applicationCreatedCoApplicant().set(defaultEmailTemplateApplicationCreatedCoApplicant());
-        policy.applicationCreatedGuarantor().set(defaultEmailTemplateApplicationCreatedGuarantor());
-        policy.applicationApproved().set(defaultEmailTemplateApplicationApproved());
-        policy.applicationDeclined().set(defaultEmailTemplateApplicationDeclined());
+        policy.templates().add(defaultEmailTemplatePasswordRetrievalCrm());
+        policy.templates().add(defaultEmailTemplatePasswordRetrievalTenant());
+        policy.templates().add(defaultEmailTemplateApplicationCreatedApplicant());
+        policy.templates().add(defaultEmailTemplateApplicationCreatedCoApplicant());
+        policy.templates().add(defaultEmailTemplateApplicationCreatedGuarantor());
+        policy.templates().add(defaultEmailTemplateApplicationApproved());
+        policy.templates().add(defaultEmailTemplateApplicationDeclined());
 
         Persistence.service().persist(policy);
         return policy;
@@ -175,6 +176,8 @@ public class PolicyPreloader extends AbstractVistaDataPreloader {
 
     private EmailTemplate defaultEmailTemplatePasswordRetrievalCrm() {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+
+        template.type().setValue(EmailTemplateType.PasswordRetrievalCrm);
         template.subject().setValue(i18n.tr("here be subject"));
         template.content().setValue(
                 wrapHtml(i18n.tr("Dear {userName},<br/>\n"
@@ -186,6 +189,8 @@ public class PolicyPreloader extends AbstractVistaDataPreloader {
 
     private EmailTemplate defaultEmailTemplatePasswordRetrievalTenant() {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+
+        template.type().setValue(EmailTemplateType.PasswordRetrievalTenant);
         template.subject().setValue(i18n.tr("here be subject"));
         template.content().setValue(wrapHtml(i18n.tr("here be body")));
         return template;
@@ -193,6 +198,8 @@ public class PolicyPreloader extends AbstractVistaDataPreloader {
 
     private EmailTemplate defaultEmailTemplateApplicationCreatedApplicant() {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+
+        template.type().setValue(EmailTemplateType.ApplicationCreatedApplicant);
         template.subject().setValue(i18n.tr("here be subject"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
                 "<h3>Congratulations {applicant.firstname}!</h3><br/><br/>" +
@@ -218,6 +225,8 @@ public class PolicyPreloader extends AbstractVistaDataPreloader {
 
     private EmailTemplate defaultEmailTemplateApplicationCreatedCoApplicant() {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+
+        template.type().setValue(EmailTemplateType.ApplicationCreatedCoApplicant);
         template.subject().setValue(i18n.tr("here be subject"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
                 "<h3>Thank you, {co-applicant.firstname}!<h3/><br/><br/>" +
@@ -246,6 +255,8 @@ public class PolicyPreloader extends AbstractVistaDataPreloader {
 
     private EmailTemplate defaultEmailTemplateApplicationCreatedGuarantor() {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+
+        template.type().setValue(EmailTemplateType.ApplicationCreatedGuarantor);
         template.subject().setValue(i18n.tr("here be subject"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
                 "<h3>Thank you, {guarantor.firstname}!<h3/>" +
@@ -274,6 +285,8 @@ public class PolicyPreloader extends AbstractVistaDataPreloader {
 
     private EmailTemplate defaultEmailTemplateApplicationApproved() {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+
+        template.type().setValue(EmailTemplateType.ApplicationApproved);
         template.subject().setValue(i18n.tr("Your Application To Lease has been approved"));
         template.content().setValue(
                 wrapHtml(i18n.tr(//@formatter:off
@@ -303,6 +316,8 @@ public class PolicyPreloader extends AbstractVistaDataPreloader {
 
     private EmailTemplate defaultEmailTemplateApplicationDeclined() {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+
+        template.type().setValue(EmailTemplateType.ApplicationDeclined);
         template.subject().setValue(i18n.tr("here be subject"));
         template.content().setValue(wrapHtml(i18n.tr("here be body")));
         return template;

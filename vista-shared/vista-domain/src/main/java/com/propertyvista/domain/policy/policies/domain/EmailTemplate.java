@@ -15,10 +15,13 @@ package com.propertyvista.domain.policy.policies.domain;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.communication.EmailTemplateType;
 
 public interface EmailTemplate extends IEntity {
 
@@ -32,4 +35,6 @@ public interface EmailTemplate extends IEntity {
     //TODO Blob
     IPrimitive<String> content();
 
+    @MemberColumn(name = "templateType")
+    IPrimitive<EmailTemplateType> type();
 }
