@@ -31,6 +31,7 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 
 public abstract class AssociationMappingTestCase extends DatastoreTestBase {
 
+    // TODO POLYMORPHIC
     public static boolean POLYMORPHIC_TODO = false;
 
     public boolean testColumnExists(Class<? extends IEntity> type, String columnName) {
