@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.gadgets.common;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -30,6 +31,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.crm.client.ui.board.BoardView;
+import com.propertyvista.crm.client.ui.board.events.DashboardDateChangedEvent;
+import com.propertyvista.crm.client.ui.board.events.DashboardDateChangedEventHandler;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
 
@@ -59,7 +63,9 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     protected final Class<T> metadataClass;
 
-    private LogicalDate statusDate;
+    private HandlerRegistration dashboardDateChangedEventRegistration = null;
+
+    protected BoardView containerBoard;
 
     @SuppressWarnings("unchecked")
     public GadgetInstanceBase(GadgetMetadata gmd, Class<T> metadataClass) {
@@ -115,12 +121,16 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     }
 
     @Override
-    public void setStatusDate(LogicalDate date) {
-        this.statusDate = date;
+    public void setContainerBoard(BoardView board) {
+        this.containerBoard = board;
     }
 
-    protected LogicalDate getStatusDate() {
-        return this.statusDate;
+    /**
+     * Gadgets should override this function in order to get the date that is required for their queries, the default implementation returns the date from the
+     * containing dashboard.
+     */
+    public LogicalDate getStatusDate() {
+        return null;
     }
 
     /**
@@ -283,6 +293,17 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     @Override
     public void start() {
+        // this is just safeguard, stop() also removes event handlers
+        if (dashboardDateChangedEventRegistration != null) {
+            dashboardDateChangedEventRegistration.removeHandler();
+        }
+        dashboardDateChangedEventRegistration = containerBoard.addDashboardDateChangedEventHandler(new DashboardDateChangedEventHandler() {
+            @Override
+            public void onDashboardDateChanged(DashboardDateChangedEvent event) {
+                onDashboardDateChangeEvent(event.getNewDate());
+            }
+        });
+
         initView();
         isRunning = true;
         populate(defaultPopulator, true);
@@ -302,6 +323,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     @Override
     public void stop() {
+        dashboardDateChangedEventRegistration.removeHandler();
         isRunning = false;
         getRefreshTimer().deactivate();
     }
@@ -336,6 +358,11 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     }
 
     // notifications:
+
+    protected void onDashboardDateChangeEvent(LogicalDate changedDate) {
+
+    }
+
     @Override
     public void onResize() {
     }
@@ -354,7 +381,15 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     //
     // Internal classes:
-    //
+    //    
+    /**
+     * Override to implement population. Finish population with call to {@link #populateSucceded()} or {@link #populateFailed(Throwable)}.
+     */
+    protected abstract class Populator {
+
+        public abstract void populate();
+
+    }
 
     /**
      * This class provides refresh support for the gadget. A gadget that wishes to perform refresh operations has to override
@@ -407,13 +442,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
             timer.cancel();
             isActive = false;
         }
-    }
-
-    /**
-     * Override to implement population. Finish population with call to {@link #populateSucceded()} or {@link #populateFailed(Throwable)}.
-     */
-    protected abstract class Populator {
-        public abstract void populate();
     }
 
     protected class SetupForm implements ISetup {

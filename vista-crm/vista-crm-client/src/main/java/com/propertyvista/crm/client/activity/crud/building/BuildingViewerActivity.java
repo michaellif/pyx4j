@@ -185,7 +185,7 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
     public void onPopulateSuccess(BuildingDTO result) {
         super.onPopulateSuccess(result);
 
-        ((BuildingViewerView) view).getDashboardView().setBuildings(Arrays.asList(result.<Building> duplicate(Building.class)));
+        ((BuildingViewerView) view).getDashboardView().setBuildings(Arrays.asList(result.<Building> duplicate(Building.class)), false);
         dashboardPresenter.populate(result.dashboard().getPrimaryKey());
 
         // -------------------------------------------------------

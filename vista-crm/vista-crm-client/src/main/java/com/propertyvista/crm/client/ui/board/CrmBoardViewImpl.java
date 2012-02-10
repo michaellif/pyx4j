@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -29,6 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.themes.CrmTheme;
+import com.propertyvista.crm.client.ui.crud.building.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -41,8 +43,6 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
     private final CrmTitleBar header;
 
     private final BuildingsBar buildingsBar;
-
-    private Presenter presenter;
 
     public CrmBoardViewImpl(BoardBase board) {
         header = new CrmTitleBar();
@@ -66,14 +66,16 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
-        super.setPresenter(presenter);
-        this.presenter = presenter;
+    public void setBuildings(List<Building> buildings, boolean fireEvents) {
+        super.setBuildings(buildings, fireEvents);
+        updateBuildingsBar(buildings);
     }
 
-    @Override
-    public void setBuildings(List<Building> buildings) {
-        super.setBuildings(buildings);
+    private void updateBuildingsBar(List<Building> buildings) {
+        buildingsBar.setBuildingsStringView(asStringView(buildings));
+    }
+
+    protected String asStringView(List<Building> buildings) {
         String stringView;
         if (buildings.isEmpty()) {
             stringView = i18n.tr("Status for All Buildings");
@@ -86,7 +88,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             stringViewBuilder.append(buildings.get(last).propertyCode().getValue());
             stringView = stringViewBuilder.toString();
         }
-        buildingsBar.setBuildingsStringView(stringView);
+        return stringView;
     }
 
     /**
@@ -123,18 +125,40 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             buttons.add(new Button(i18n.tr("Clear Selected"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    presenter.selectAllBuildings();
+                    selectAllBuildings();
                 }
             }));
 
             buttons.add(new Button(i18n.tr("Add Buildings..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    presenter.selectBuildings();
+                    selectBuildings();
                 }
             }));
             bar.add(buildingsStringView);
             bar.add(buttons);
+        }
+
+        protected void selectAllBuildings() {
+            CrmBoardViewImpl.this.setBuildings(new ArrayList<Building>(1), true);
+        }
+
+        protected void selectBuildings() {
+            new BuildingSelectorDialog(getSelectedBuildings()) {
+                @Override
+                public boolean onClickOk() {
+                    ArrayList<Building> selected = new ArrayList<Building>(getSelectedBuildings().size() + getSelectedItems().size());
+                    selected.addAll(getSelectedBuildings());
+                    selected.addAll(getSelectedItems());
+                    CrmBoardViewImpl.this.setBuildings(selected, true);
+                    return true;
+                }
+
+            }.show();
+        }
+
+        public void setBuildingsStringView(String stringView) {
+            buildingsStringView.setHTML(new SafeHtmlBuilder().appendEscaped(stringView).toSafeHtml());
         }
 
         @Override
@@ -142,8 +166,5 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             return bar;
         }
 
-        public void setBuildingsStringView(String stringView) {
-            buildingsStringView.setHTML(new SafeHtmlBuilder().appendEscaped(stringView).toSafeHtml());
-        }
     }
 }

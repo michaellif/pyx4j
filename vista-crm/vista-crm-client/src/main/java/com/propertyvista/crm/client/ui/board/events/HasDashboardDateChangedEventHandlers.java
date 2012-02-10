@@ -7,18 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-29
- * @author Vlad
+ * Created on Feb 10, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.common;
+package com.propertyvista.crm.client.ui.board.events;
 
+import com.google.gwt.event.shared.HandlerRegistration;
 
-/**
- * Gadget instance that is supported by building dashboard, i.e a gadget that implements this interface is expected to display data that is
- * dependent on a set of buildings.
- */
-// TODO add marker interface for gadget metadata, and thing how to bind between metadata building interface and this interface as painless as possible
-public interface IBuildingBoardGadgetInstance extends IGadgetInstance {
+public interface HasDashboardDateChangedEventHandlers {
+
+    HandlerRegistration addDashboardDateChangedEventHandler(DashboardDateChangedEventHandler handler);
 
 }

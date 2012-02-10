@@ -52,7 +52,7 @@ public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implem
     @Override
     protected void onPopulateSuccess(ComplexDTO result) {
         super.onPopulateSuccess(result);
-        getView().getDashboardView().setBuildings(result.buildings());
+        getView().getDashboardView().setBuildings(result.buildings(), false);
         dashboardViewActivity.populate(result.dashboard().getPrimaryKey());
     }
 

@@ -198,10 +198,6 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
             redraw();
         }
 
-        @Override
-        public void setBuildings(List<Key> buildings) {
-            // TODO Auto-generated method stub
-        }
     }
 
     public ArrearsYOYAnalysisChartGadget() {

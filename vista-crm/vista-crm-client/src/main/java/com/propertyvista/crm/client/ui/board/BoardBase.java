@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +24,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -32,11 +34,12 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.Key;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
 import com.pyx4j.widgets.client.dashboard.BoardEvent.Reason;
 import com.pyx4j.widgets.client.dashboard.BoardLayout;
@@ -45,8 +48,11 @@ import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.themes.CrmTheme;
+import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
+import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
+import com.propertyvista.crm.client.ui.board.events.DashboardDateChangedEvent;
+import com.propertyvista.crm.client.ui.board.events.DashboardDateChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
-import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -62,13 +68,21 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         filtersPanel, actionsPanel, filtersDescription
     }
 
+    public static enum DebugIds implements IDebugId {
+
+        dashboardSaveButton;
+
+        @Override
+        public String debugId() {
+            return this.name();
+        }
+    }
+
     private static final I18n i18n = I18n.get(BoardBase.class);
 
     private final HorizontalPanel actionsPanel;
 
-    private final Button btnSave = new Button(i18n.tr("Save"));
-
-    private CDatePicker datePicker;
+    private Button btnSave;
 
     private final boolean showSaveButton = false; // true; // Save button used in test purpose only!..
 
@@ -78,11 +92,17 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
     protected Presenter presenter;
 
+    private CDatePicker datePicker;
+
     private DashboardMetadata dashboardMetadata;
+
+    private List<Building> selectedBuildings;
 
     private boolean filling;
 
     private final boolean readOnly;
+
+    private final EventBus eventBus;
 
     public BoardBase() {
         this(false);
@@ -91,6 +111,8 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     public BoardBase(boolean readOnly) {
         super(Unit.EM);
         this.readOnly = readOnly;
+        this.eventBus = new SimpleEventBus();
+        this.selectedBuildings = Collections.emptyList();
 
         actionsPanel = new HorizontalPanel();
         actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
@@ -103,6 +125,8 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         addNorth(actionsPanel, 2);
 
         if (showSaveButton) {
+            // TODO debug ID for btnSave
+            btnSave = new Button(i18n.tr("Save"));
             addAction(btnSave);
             btnSave.setEnabled(false);
             btnSave.addStyleName(btnSave.getStylePrimaryName() + CrmTheme.StyleSuffixEx.SaveButton);
@@ -116,7 +140,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
         add(scroll);
 
-        addAction(createDateStatusSelectWidget());
+        addAction(createDashboardDateControls());
 
         setSize("100%", "100%");
     }
@@ -163,7 +187,9 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         scroll.setWidget(board);
 
         filling = false; // ok, filled already..
-        btnSave.setEnabled(false);
+        if (btnSave != null) {
+            btnSave.setEnabled(false);
+        }
 
         IGadgetIterator it = board.getGadgetIterator();
         while (it.hasNext()) {
@@ -172,19 +198,41 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     }
 
     @Override
-    public void setBuildings(List<Building> buildings) {
+    public void setBuildings(List<Building> buildings, boolean fireEvent) {
         if (board != null && getDashboardMetadata() != null && getDashboardMetadata().type().getValue() == DashboardType.building) {
-            List<Key> keys = new ArrayList<Key>(buildings.size());
-            for (Building b : buildings) {
-                keys.add(b.getPrimaryKey());
+            selectedBuildings = buildings;
+            if (fireEvent) {
+                fireBuildingsSelectionChanged();
             }
-            propagateBulidngsFiltering(keys);
         }
     }
 
+    protected void fireBuildingsSelectionChanged() {
+        getEventBus().fireEvent(new BuildingSelectionChangedEvent(selectedBuildings));
+    }
+
     @Override
-    public void setStatusDate(LogicalDate statusDate) {
-        datePicker.setValue(statusDate);
+    public HandlerRegistration addBuildingSelectionChangedEventHandler(BuildingSelectionChangedEventHandler handler) {
+        return getEventBus().addHandler(BuildingSelectionChangedEvent.TYPE, handler);
+    }
+
+    @Override
+    public void setDashboardDate(LogicalDate dashboardDate, boolean fireEvent) {
+        datePicker.setValue(dashboardDate, fireEvent);
+    }
+
+    @Override
+    public HandlerRegistration addDashboardDateChangedEventHandler(final DashboardDateChangedEventHandler handler) {
+        return getEventBus().addHandler(DashboardDateChangedEvent.TYPE, handler);
+    }
+
+    protected void fireDashboardDateChanged() {
+        getEventBus().fireEvent(new DashboardDateChangedEvent(getDashboardDate()));
+    }
+
+    @Override
+    public EventBus getEventBus() {
+        return eventBus;
     }
 
     public void addGadget(IGadgetInstance gadget) {
@@ -199,6 +247,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
     private void bindGadget(IGadgetInstance gadget) {
         gadget.setPresenter(presenter);
+        gadget.setContainerBoard(this);
     }
 
     @Override
@@ -211,30 +260,18 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         }
     }
 
-    protected void propagateStatusDate() {
-        if (board != null && getDashboardMetadata() != null) {
-            IGadgetIterator i = board.getGadgetIterator();
-            LogicalDate date = new LogicalDate(datePicker.getValue());
-            while (i.hasNext()) {
-                // FIXME merge IGadget and IGadgetInstance
-                ((IGadgetInstance) i.next()).setStatusDate(date);
-            }
-        }
-    }
-
-    protected void propagateBulidngsFiltering(List<Key> buildings) {
-        if (getDashboardMetadata() != null) {
-            if (board != null) {
-                IGadgetIterator i = board.getGadgetIterator();
-                while (i.hasNext()) {
-                    ((IBuildingBoardGadgetInstance) i.next()).setBuildings(buildings);
-                }
-            }
-        }
-    }
-
     public boolean isReadOnly() {
         return readOnly;
+    }
+
+    @Override
+    public List<Building> getSelectedBuildings() {
+        return selectedBuildings;
+    }
+
+    @Override
+    public LogicalDate getDashboardDate() {
+        return new LogicalDate(datePicker.getValue());
     }
 
     @Override
@@ -263,7 +300,9 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
     @Override
     public void onSaveSuccess() {
-        btnSave.setEnabled(false);
+        if (btnSave != null) {
+            btnSave.setEnabled(false);
+        }
     }
 
     @Override
@@ -287,17 +326,17 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 // Internals:
 //
 
-    protected Widget createDateStatusSelectWidget() {
+    protected Widget createDashboardDateControls() {
         HorizontalPanel panel = new HorizontalPanel();
         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         panel.setWidth("30em");
         datePicker = new CDatePicker();
         datePicker.setWidth("10em");
-        datePicker.setValue(new LogicalDate());
+        datePicker.setValue(new LogicalDate(), false);
         datePicker.addValueChangeHandler(new ValueChangeHandler<Date>() {
             @Override
             public void onValueChange(ValueChangeEvent<Date> event) {
-                propagateStatusDate();
+                fireDashboardDateChanged();
             }
         });
         panel.add(datePicker);

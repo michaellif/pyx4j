@@ -100,11 +100,6 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
             return false;
         }
 
-        @Override
-        public void setBuildings(List<Key> buildings) {
-            // TODO Auto-generated method stub
-
-        }
     }
 
     public ArrearsSummaryGadget() {

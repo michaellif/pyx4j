@@ -32,7 +32,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.board.BoardView;
-import com.propertyvista.crm.client.ui.crud.building.BuildingSelectorDialog;
 import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
 import com.propertyvista.crm.rpc.services.reports.DashboardReportService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -52,8 +51,8 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
         assert (view != null);
 
         view.setPresenter(this);
-        view.setStatusDate(new LogicalDate());
-        view.setBuildings(new ArrayList<Building>());
+        view.setDashboardDate(new LogicalDate(), false);
+        view.setBuildings(new ArrayList<Building>(), false);
         if (place != null) {
             setPlace(place);
         }
@@ -139,27 +138,6 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
         EntityQueryCriteria<DashboardMetadata> criteria = new EntityQueryCriteria<DashboardMetadata>(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), view.getDashboardMetadata().getPrimaryKey()));
         ReportDialog.start(GWT.<DashboardReportService> create(DashboardReportService.class), criteria);
-    }
-
-    @Override
-    public void selectBuildings() {
-        new BuildingSelectorDialog(new ArrayList<Building>(1)) {
-            @Override
-            public boolean onClickOk() {
-                view.setBuildings(getSelectedItems());
-                return true;
-            }
-        }.show();
-    }
-
-    @Override
-    public void selectAllBuildings() {
-        view.setBuildings(new ArrayList<Building>(1));
-    }
-
-    @Override
-    public void onSelectStatusDate() {
-
     }
 
 // GadgetPresenter:

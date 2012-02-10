@@ -398,11 +398,6 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
             redraw();
         }
 
-        @Override
-        public void setBuildings(List<Key> buildings) {
-            // TODO Auto-generated method stub
-
-        }
     }
 
     public TurnoverAnalysisGraphGadget() {

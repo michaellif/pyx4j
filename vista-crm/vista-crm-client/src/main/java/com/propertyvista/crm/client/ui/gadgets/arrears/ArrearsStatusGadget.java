@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
@@ -53,7 +52,8 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
     private static final I18n i18n = I18n.get(ArrearsStatusGadget.class);
 
     private static class ArrearsStatusGadgetInstance extends ListerGadgetInstanceBase<MockupArrearsState, ArrearsStatus> implements
-            IBuildingBoardGadgetInstance {
+
+    IBuildingBoardGadgetInstance {
 
         private static final I18n i18n = I18n.get(ArrearsStatusGadgetInstance.class);
 
@@ -211,17 +211,6 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
             return customCriteria;
         }
 
-        @Override
-        public void setStatusDate(LogicalDate date) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void setBuildings(List<Key> buildings) {
-            // TODO Auto-generated method stub
-
-        }
     }
 
     public ArrearsStatusGadget() {

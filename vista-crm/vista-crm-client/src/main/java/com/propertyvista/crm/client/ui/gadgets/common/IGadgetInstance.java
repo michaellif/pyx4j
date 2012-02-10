@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.common;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 
+import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public interface IGadgetInstance extends IGadget {
@@ -23,7 +23,7 @@ public interface IGadgetInstance extends IGadget {
 // in:    
     void setPresenter(IGadgetInstancePresenter presenter);
 
-    void setStatusDate(LogicalDate date);
+    void setContainerBoard(BoardView board);
 
 // out:    
     GadgetMetadata getMetadata();

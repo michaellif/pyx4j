@@ -15,16 +15,19 @@ package com.propertyvista.crm.client.ui.board;
 
 import java.util.List;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.crm.client.ui.board.events.HasBuildingSelectionChangedEventHandlers;
+import com.propertyvista.crm.client.ui.board.events.HasDashboardDateChangedEventHandlers;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstancePresenter;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface BoardView extends IsWidget {
+public interface BoardView extends IsWidget, HasDashboardDateChangedEventHandlers, HasBuildingSelectionChangedEventHandlers {
 
     public interface Presenter extends IGadgetInstancePresenter {
 
@@ -36,24 +39,31 @@ public interface BoardView extends IsWidget {
 
         void print();
 
-        void selectBuildings();
-
-        void selectAllBuildings();
-
-        void onSelectStatusDate();
     }
 
     void setPresenter(Presenter presenter);
-
-    void setStatusDate(LogicalDate statusDate);
-
-    void setBuildings(List<Building> buildings);
 
     void populate(DashboardMetadata dashboardMetadata);
 
     void stop();
 
+    void setDashboardDate(LogicalDate statusDate, boolean fireEvent);
+
+    void setBuildings(List<Building> buildings, boolean fireEvent);
+
+    /**
+     * @return date that this view was set up to display, can't be <code>null</code>
+     */
+    LogicalDate getDashboardDate();
+
+    /**
+     * @return the buildings that this view was set up to display, can't be <code>null</code>, empty list denotes all buildings.
+     */
+    List<Building> getSelectedBuildings();
+
     DashboardMetadata getDashboardMetadata();
+
+    EventBus getEventBus();
 
     void onSaveSuccess();
 

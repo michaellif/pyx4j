@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -39,6 +38,9 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.crm.client.ui.board.BoardView;
+import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
+import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
@@ -49,6 +51,7 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailab
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailability> {
 
@@ -75,8 +78,6 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         private final AvailabilityReportService service;    
         //@formatter:on
 
-        private List<Key> buildings;
-
         public UnitAvailabilityReportGadgetImpl(GadgetMetadata gmd) {
             super(gmd, UnitAvailabilityStatusDTO.class, UnitAvailability.class);
             service = GWT.create(AvailabilityReportService.class);
@@ -90,8 +91,19 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         }
 
         @Override
+        public void setContainerBoard(final BoardView board) {
+            super.setContainerBoard(board);
+            board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
+                @Override
+                public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
+                    populate();
+                }
+            });
+        }
+
+        @Override
         public void populatePage(int pageNumber) {
-            if (buildings == null) {
+            if (containerBoard.getSelectedBuildings() == null) {
                 setPageData(new Vector<UnitAvailabilityStatusDTO>(), 0, 0, false);
                 populateSucceded();
                 return;
@@ -99,6 +111,10 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
             final int page = pageNumber;
             final UnitSelectionCriteria select = buttonStateToSelectionCriteria();
+            final Vector<Key> pks = new Vector<Key>(containerBoard.getSelectedBuildings().size());
+            for (Building b : containerBoard.getSelectedBuildings()) {
+                pks.add(b.getPrimaryKey());
+            }
 
             service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>>() {
                 @Override
@@ -111,8 +127,8 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 public void onFailure(Throwable caught) {
                     populateFailed(caught);
                 }
-            }, new Vector<Key>(buildings), select.occupied, select.vacant, select.notice, select.rented, select.notrented, getStatusDate(), new Vector<Sort>(
-                    getSorting()), pageNumber, getPageSize());
+            }, pks, select.occupied, select.vacant, select.notice, select.rented, select.notrented, getStatusDate(), new Vector<Sort>(getSorting()),
+                    pageNumber, getPageSize());
         }
 
         @Override
@@ -276,18 +292,6 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                     return p;
                 }
             });
-        }
-
-        @Override
-        public void setStatusDate(LogicalDate date) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void setBuildings(List<Key> buildings) {
-            // TODO Auto-generated method stub
-
         }
 
     }

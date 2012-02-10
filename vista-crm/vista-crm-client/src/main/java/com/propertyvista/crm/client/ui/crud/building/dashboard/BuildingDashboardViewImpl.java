@@ -18,12 +18,16 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
+import com.propertyvista.crm.client.ui.board.events.DashboardDateChangedEventHandler;
 import com.propertyvista.crm.client.ui.dashboard.DashboardPanel;
 import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -74,13 +78,23 @@ public class BuildingDashboardViewImpl implements BuildingDashboardView {
     }
 
     @Override
-    public void setStatusDate(LogicalDate statusDate) {
-        dashboard.setStatusDate(statusDate);
+    public void setDashboardDate(LogicalDate statusDate, boolean fireEvent) {
+        dashboard.setDashboardDate(statusDate, fireEvent);
     }
 
     @Override
-    public void setBuildings(List<Building> buildings) {
-        dashboard.setBuildings(buildings);
+    public HandlerRegistration addDashboardDateChangedEventHandler(DashboardDateChangedEventHandler handler) {
+        return dashboard.addDashboardDateChangedEventHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addBuildingSelectionChangedEventHandler(BuildingSelectionChangedEventHandler handler) {
+        return dashboard.addBuildingSelectionChangedEventHandler(handler);
+    }
+
+    @Override
+    public void setBuildings(List<Building> buildings, boolean fireEvent) {
+        dashboard.setBuildings(buildings, fireEvent);
     }
 
     @Override
@@ -106,6 +120,21 @@ public class BuildingDashboardViewImpl implements BuildingDashboardView {
     @Override
     public Widget asWidget() {
         return dashboard;
+    }
+
+    @Override
+    public LogicalDate getDashboardDate() {
+        return dashboard.getDashboardDate();
+    }
+
+    @Override
+    public List<Building> getSelectedBuildings() {
+        return dashboard.getSelectedBuildings();
+    }
+
+    @Override
+    public EventBus getEventBus() {
+        return dashboard.getEventBus();
     }
 
 }
