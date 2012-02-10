@@ -23,10 +23,10 @@ package com.pyx4j.entity.rdb.mapping;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
@@ -35,8 +35,20 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 class JoinTableInformation extends JoinInformation {
 
-    JoinTableInformation(Dialect dialect, NamingConvention namingConvention, EntityMeta rootEntityMeta, EntityMeta entityMeta, MemberMeta memberMeta,
-            JoinTable joinTable) {
+    private final EntityMeta rootEntityMeta;
+
+    private final EntityMeta entityMeta;
+
+    private final MemberMeta memberMeta;
+
+    private final JoinTable joinTable;
+
+    JoinTableInformation(Dialect dialect, EntityMeta rootEntityMeta, EntityMeta entityMeta, MemberMeta memberMeta) {
+        this.rootEntityMeta = rootEntityMeta;
+        this.entityMeta = entityMeta;
+        this.memberMeta = memberMeta;
+        this.joinTable = memberMeta.getAnnotation(JoinTable.class);
+
         @SuppressWarnings("unchecked")
         Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getValueClass();
         Class<? extends IEntity> joinEntityClass = joinTable.value();
@@ -49,25 +61,24 @@ class JoinTableInformation extends JoinInformation {
             sqlValueName = IEntity.PRIMARY_KEY;
             joinTableSameAsTarget = true;
         } else {
-            sqlValueName = namingConvention.sqlFieldName(EntityOperationsMeta.memberPersistenceName(findValueMember(entityMeta, memberMeta, joinTable,
-                    joinEntityMeta, entityClass)));
+            sqlValueName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(findValueMember(joinEntityMeta, entityClass)));
             joinTableSameAsTarget = false;
         }
-        MemberMeta ownerMemberMeta = findOwnerMember(entityMeta, memberMeta, joinTable, joinEntityMeta, rootEntityMeta);
-        sqlOwnerName = namingConvention.sqlFieldName(EntityOperationsMeta.memberPersistenceName(ownerMemberMeta));
+        MemberMeta ownerMemberMeta = findOwnerMember(joinEntityMeta);
+        sqlOwnerName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(ownerMemberMeta));
         ownerValueAdapter = EntityOperationsMeta.createEntityValueAdapter(dialect, ownerMemberMeta);
 
-        MemberMeta orderMemberMeta = findOrderMember(entityMeta, memberMeta, joinTable, joinEntityMeta);
+        MemberMeta orderMemberMeta = findOrderMember(joinEntityMeta);
 
         if (orderMemberMeta == null && memberMeta.getObjectClassType() == ObjectClassType.EntityList) {
-            throw new Error("Unmapped orderColumn member in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName() + " in "
-                    + entityMeta.getEntityClass().getName());
+            throw new Error("Unmapped @OrderBy member in join table " + joinEntityMeta.getEntityClass().getName() + " for '" + memberMeta.getFieldName()
+                    + "' in " + entityMeta.getEntityClass().getName());
         } else if (orderMemberMeta != null) {
-            sqlOrderColumnName = namingConvention.sqlFieldName(EntityOperationsMeta.memberPersistenceName(orderMemberMeta));
+            sqlOrderColumnName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(orderMemberMeta));
         }
     }
 
-    private MemberMeta findOwnerMember(EntityMeta entityMeta, MemberMeta memberMeta, JoinTable joinTable, EntityMeta joinEntityMeta, EntityMeta rootEntityMeta) {
+    private MemberMeta findOwnerMember(EntityMeta joinEntityMeta) {
         MemberMeta ownerMemberMeta = null;
 
         Class<? extends IEntity> rootEntityClass = rootEntityMeta.getEntityClass();
@@ -111,8 +122,7 @@ class JoinTableInformation extends JoinInformation {
         }
     }
 
-    private MemberMeta findValueMember(EntityMeta entityMeta, MemberMeta memberMeta, JoinTable joinTable, EntityMeta joinEntityMeta,
-            Class<? extends IEntity> entityClass) {
+    private MemberMeta findValueMember(EntityMeta joinEntityMeta, Class<? extends IEntity> entityClass) {
         MemberMeta valueMemberMeta = null;
 
         for (String jmemberName : joinEntityMeta.getMemberNames()) {
@@ -131,13 +141,19 @@ class JoinTableInformation extends JoinInformation {
         }
     }
 
-    private MemberMeta findOrderMember(EntityMeta entityMeta, MemberMeta memberMeta, JoinTable joinTable, EntityMeta joinEntityMeta) {
+    private MemberMeta findOrderMember(EntityMeta joinEntityMeta) {
+        Class<? extends ColumnId> orderColumn = null;
+        OrderBy orderBy = memberMeta.getAnnotation(OrderBy.class);
+        if (orderBy != null) {
+            orderColumn = orderBy.value();
+        }
+
         MemberMeta orderMemberMeta = null;
         for (String jmemberName : joinEntityMeta.getMemberNames()) {
             MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
             if (!jmemberMeta.isTransient()) {
                 OrderColumn joinTableOrderColumn = jmemberMeta.getAnnotation(OrderColumn.class);
-                if ((joinTableOrderColumn != null) && (joinTable.orderColumn() != ColumnId.class) && (joinTable.orderColumn() == joinTableOrderColumn.value())) {
+                if ((joinTableOrderColumn != null) && (orderColumn == joinTableOrderColumn.value())) {
                     if (orderMemberMeta != null) {
                         throw new Error("Duplicate orderColumn member in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName()
                                 + " in " + entityMeta.getEntityClass().getName());

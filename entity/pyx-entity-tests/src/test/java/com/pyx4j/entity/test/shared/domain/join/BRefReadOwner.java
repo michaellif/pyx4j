@@ -21,6 +21,7 @@
 package com.pyx4j.entity.test.shared.domain.join;
 
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -33,6 +34,7 @@ public interface BRefReadOwner extends IEntity {
 
     IPrimitive<String> name();
 
-    @JoinTable(value = BRefReadChild.class, orderColumn = BRefReadChild.SortColumnId.class, cascade = false)
+    @JoinTable(value = BRefReadChild.class, cascade = false)
+    @OrderBy(BRefReadChild.SortColumnId.class)
     IList<BRefReadChild> children();
 }

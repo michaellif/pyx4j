@@ -22,6 +22,7 @@ package com.pyx4j.entity.test.shared.domain.join;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -35,6 +36,7 @@ public interface BRefPolyReadOwner2 extends IEntity, BRefPolyReadAbstractOwner {
 
     IPrimitive<String> name();
 
-    @JoinTable(value = BRefPolyReadChild.class, orderColumn = BRefPolyReadChild.SortColumnId.class, cascade = false)
+    @JoinTable(value = BRefPolyReadChild.class, cascade = false)
+    @OrderBy(BRefPolyReadChild.SortColumnId.class)
     IList<BRefPolyReadChild> children();
 }

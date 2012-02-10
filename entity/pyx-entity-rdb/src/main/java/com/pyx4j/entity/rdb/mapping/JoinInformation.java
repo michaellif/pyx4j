@@ -51,9 +51,8 @@ abstract class JoinInformation {
     ValueAdapter ownerValueAdapter;
 
     static JoinInformation build(Dialect dialect, NamingConvention namingConvention, EntityMeta rootEntityMeta, EntityMeta entityMeta, MemberMeta memberMeta) {
-        JoinTable joinTable = memberMeta.getAnnotation(JoinTable.class);
-        if (joinTable != null) {
-            return new JoinTableInformation(dialect, namingConvention, rootEntityMeta, entityMeta, memberMeta, joinTable);
+        if (memberMeta.getAnnotation(JoinTable.class) != null) {
+            return new JoinTableInformation(dialect, rootEntityMeta, entityMeta, memberMeta);
         }
         if (Owned.TODO) {
             //Disable all new Owned/Owner mapping until it is tested

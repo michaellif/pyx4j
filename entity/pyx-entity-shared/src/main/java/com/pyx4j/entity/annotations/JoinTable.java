@@ -30,6 +30,8 @@ import com.pyx4j.entity.shared.IEntity;
 /**
  * Define the join table between entities for many(one) to many(one) relationship.
  * N.B. implemented only for query and Entity read.
+ * 
+ * @OrderBy Required for IList collections
  */
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
@@ -49,9 +51,4 @@ public @interface JoinTable {
      */
     Class<? extends ColumnId> mappedby() default ColumnId.class;
 
-    /**
-     * Required for IList collections
-     */
-    @Deprecated
-    Class<? extends ColumnId> orderColumn() default ColumnId.class;
 }
