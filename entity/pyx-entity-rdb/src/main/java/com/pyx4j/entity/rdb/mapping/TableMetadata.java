@@ -80,7 +80,7 @@ public class TableMetadata {
         log.debug("columns {} " + columnsMetadata);
     }
 
-    ColumnMetadata getColumn(String name) {
+    public ColumnMetadata getColumn(String name) {
         return columnsMetadata.get(name.toUpperCase(Locale.ENGLISH));
     }
 
@@ -88,7 +88,7 @@ public class TableMetadata {
         return name;
     }
 
-    static class ColumnMetadata {
+    public static class ColumnMetadata {
 
         private final String name;
 

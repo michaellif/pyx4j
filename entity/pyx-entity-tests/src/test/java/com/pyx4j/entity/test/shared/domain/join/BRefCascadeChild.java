@@ -22,7 +22,7 @@ package com.pyx4j.entity.test.shared.domain.join;
 
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.JoinTableOrderColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -43,6 +43,6 @@ public interface BRefCascadeChild extends IEntity {
 
     }
 
-    @JoinTableOrderColumn(SortColumnId.class)
+    @OrderColumn(SortColumnId.class)
     IPrimitive<Integer> sortColumn();
 }

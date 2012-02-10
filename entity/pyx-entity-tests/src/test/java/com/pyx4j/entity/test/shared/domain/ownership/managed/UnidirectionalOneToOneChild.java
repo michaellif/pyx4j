@@ -20,18 +20,13 @@
  */
 package com.pyx4j.entity.test.shared.domain.ownership.managed;
 
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
-// Relationship is managed in  children table Om2OneToManyChild
-public interface Om2OneToManyOwner extends IEntity {
-
-    @Owned()
-    IList<Om2OneToManyChild> children();
+//This table does not have column that references owner because this is one to one relationship
+public interface UnidirectionalOneToOneChild extends IEntity {
 
     IPrimitive<String> testId();
 

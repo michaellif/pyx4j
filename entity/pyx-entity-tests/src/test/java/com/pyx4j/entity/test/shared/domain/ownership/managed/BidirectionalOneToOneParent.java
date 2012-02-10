@@ -14,27 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 15, 2012
+ * Created on Feb 8, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.entity.test.shared.domain.ownership.managed;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-/**
- * IPrimitive<Integer> column for sorting IList collections
- * 
- * Analog of org.hibernate.annotations.IndexColumn
- * 
- */
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface JoinTableOrderColumn {
+@Table(prefix = "test")
+// This table have column that references child
+public interface BidirectionalOneToOneParent extends IEntity {
 
-    Class<? extends ColumnId> value();
+    @Owned
+    BidirectionalOneToOneChild child();
 
+    IPrimitive<String> testId();
+
+    IPrimitive<String> name();
 }

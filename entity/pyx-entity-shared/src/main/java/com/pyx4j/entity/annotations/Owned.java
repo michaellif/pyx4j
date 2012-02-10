@@ -25,8 +25,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.shared.IEntity;
-
 /**
  * Maps to javax.persistence.OneToOne or javax.persistence.OneToMany with CascadeType.ALL
  */
@@ -35,17 +33,5 @@ import com.pyx4j.entity.shared.IEntity;
 public @interface Owned {
 
     public static boolean TODO = true;
-
-    //TODO REMOVE
-    @Deprecated
-    Class<? extends IEntity> joinTable() default IEntity.class;
-
-    //TODO REMOVE
-    @Deprecated
-    Class<? extends ColumnId> mappedby() default ColumnId.class;
-
-    //TODO REMOVE
-    @Deprecated
-    Class<? extends ColumnId> orderColumn() default ColumnId.class;
 
 }

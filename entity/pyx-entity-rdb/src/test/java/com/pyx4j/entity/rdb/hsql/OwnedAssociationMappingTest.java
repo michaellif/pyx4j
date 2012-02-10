@@ -18,17 +18,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.oracle;
+package com.pyx4j.entity.rdb.hsql;
 
-import com.pyx4j.entity.rdb.OneToOneTestCase;
+import com.pyx4j.entity.rdb.OwnedAssociationMappingTestCase;
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class OneToOneTest extends OneToOneTestCase {
+public class OwnedAssociationMappingTest extends OwnedAssociationMappingTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getOraclePersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
     }
 
 }

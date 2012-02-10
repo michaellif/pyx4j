@@ -52,5 +52,6 @@ public @interface JoinTable {
     /**
      * Required for IList collections
      */
+    @Deprecated
     Class<? extends ColumnId> orderColumn() default ColumnId.class;
 }

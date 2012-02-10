@@ -23,7 +23,7 @@ package com.pyx4j.entity.rdb.mapping;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
-import com.pyx4j.entity.annotations.JoinTableOrderColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
@@ -136,7 +136,7 @@ class JoinTableInformation extends JoinInformation {
         for (String jmemberName : joinEntityMeta.getMemberNames()) {
             MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
             if (!jmemberMeta.isTransient()) {
-                JoinTableOrderColumn joinTableOrderColumn = jmemberMeta.getAnnotation(JoinTableOrderColumn.class);
+                OrderColumn joinTableOrderColumn = jmemberMeta.getAnnotation(OrderColumn.class);
                 if ((joinTableOrderColumn != null) && (joinTable.orderColumn() != ColumnId.class) && (joinTable.orderColumn() == joinTableOrderColumn.value())) {
                     if (orderMemberMeta != null) {
                         throw new Error("Duplicate orderColumn member in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName()

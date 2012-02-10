@@ -161,7 +161,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
-    private TableModel tableModel(Connection connection, EntityMeta entityMeta) {
+    TableModel tableModel(Connection connection, EntityMeta entityMeta) {
         return mappings.ensureTable(connection, connectionProvider.getDialect(), entityMeta);
     }
 

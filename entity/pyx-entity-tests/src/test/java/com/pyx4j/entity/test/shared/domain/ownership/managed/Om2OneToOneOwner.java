@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 // This table does not have column that references child
 public interface Om2OneToOneOwner extends IEntity {
 
-    @Owned(mappedby = Om2OneToOneChild.LinkColumnInChild.class)
+    @Owned()
     Om2OneToOneChild child();
 
     IPrimitive<String> testId();

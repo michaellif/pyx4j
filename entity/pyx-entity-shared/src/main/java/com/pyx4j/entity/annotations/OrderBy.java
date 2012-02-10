@@ -14,21 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 9, 2012
+ * Created on Jan 8, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.hsql;
+package com.pyx4j.entity.annotations;
 
-import com.pyx4j.entity.rdb.OneToOneTestCase;
-import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
-import com.pyx4j.entity.test.server.PersistenceEnvironment;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class OneToOneTest extends OneToOneTestCase {
+/**
+ * Specifies location of the member that provides index for sorting
+ */
+@Target({ ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface OrderBy {
 
-    @Override
-    protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
-    }
-
+    Class<? extends ColumnId> value();
 }

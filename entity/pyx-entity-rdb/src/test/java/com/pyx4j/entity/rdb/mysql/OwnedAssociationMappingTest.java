@@ -14,25 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 8, 2012
+ * Created on Feb 9, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.ownership.managed;
+package com.pyx4j.entity.rdb.mysql;
 
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.rdb.OwnedAssociationMappingTestCase;
+import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-@Table(prefix = "test")
-//This table does not have column that references owner because this is one to one relationship
-public interface Om0OneToOneChild extends IEntity {
+public class OwnedAssociationMappingTest extends OwnedAssociationMappingTestCase {
 
-    @Owner
-    Om0OneToOneOwner owner();
+    @Override
+    protected PersistenceEnvironment getPersistenceEnvironment() {
+        return PersistenceEnvironmentFactory.getMySQLPersistenceEnvironment();
+    }
 
-    IPrimitive<String> testId();
-
-    IPrimitive<String> name();
 }

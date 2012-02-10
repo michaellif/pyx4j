@@ -14,26 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 8, 2012
+ * Created on Feb 9, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.ownership.managed;
+package com.pyx4j.entity.rdb.oracle;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.rdb.OwnedAssociationMappingTestCase;
+import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-@Table(prefix = "test")
-// Relationship is managed in  children table Om2OneToManyChild
-public interface Om2OneToManyOwner extends IEntity {
+public class OwnedAssociationMappingTest extends OwnedAssociationMappingTestCase {
 
-    @Owned()
-    IList<Om2OneToManyChild> children();
+    @Override
+    protected PersistenceEnvironment getPersistenceEnvironment() {
+        return PersistenceEnvironmentFactory.getOraclePersistenceEnvironment();
+    }
 
-    IPrimitive<String> testId();
-
-    IPrimitive<String> name();
 }
