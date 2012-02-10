@@ -33,11 +33,11 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.rpc.services.selections.SelectTaxCrudService;
 import com.propertyvista.domain.financial.tax.Tax;
 
-public class ChargeCodeTaxFolder extends VistaTableFolder<Tax> {
+public class LeaseAdjustmentReasonTaxFolder extends VistaTableFolder<Tax> {
 
-    private static final I18n i18n = I18n.get(ChargeCodeTaxFolder.class);
+    private static final I18n i18n = I18n.get(LeaseAdjustmentReasonTaxFolder.class);
 
-    public ChargeCodeTaxFolder(boolean modifyable) {
+    public LeaseAdjustmentReasonTaxFolder(boolean modifyable) {
         super(Tax.class, modifyable);
     }
 
@@ -55,7 +55,7 @@ public class ChargeCodeTaxFolder extends VistaTableFolder<Tax> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Tax) {
-            return new ChargeCodeTaxEditor();
+            return new LeaseAdjustmentReasonTaxEditor();
         }
         return super.create(member);
     }
@@ -65,9 +65,9 @@ public class ChargeCodeTaxFolder extends VistaTableFolder<Tax> {
         new TaxSelectorDialog().show();
     }
 
-    private class ChargeCodeTaxEditor extends CEntityFolderRowEditor<Tax> {
+    private class LeaseAdjustmentReasonTaxEditor extends CEntityFolderRowEditor<Tax> {
 
-        public ChargeCodeTaxEditor() {
+        public LeaseAdjustmentReasonTaxEditor() {
             super(Tax.class, columns());
             setViewable(true);
         }

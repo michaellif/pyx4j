@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -41,7 +41,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             //DEMO add(new ProdSitePreloader());
         } else {
 
-            // TODO - these two should be moved to production preload when structure has been agreed!..  
+            // TODO - these two should be moved to production preload when structure has been agreed!..
             add(new DashboardPreloader());
             add(new ReportPreloader());
             // end TODO
@@ -70,6 +70,9 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
 
             // Arrears Report Gadgets related
             add(new MockupTenantPreloader());
+
+            // Taxes preloader
+            add(new ChargeCodePreloader());
         }
 
         //DEMO Different data for different PMC

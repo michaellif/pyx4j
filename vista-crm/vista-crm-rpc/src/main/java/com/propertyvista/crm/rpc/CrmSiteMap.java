@@ -379,6 +379,11 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Charge Codes")
         public static class ChargeCode extends CrudAppPlace {
         }
+
+        @PlaceProperties(caption = "Lease Adjustment Reason")
+        @NavigationItem(navigLabel = "Lease Adjustment Reason")
+        public static class LeaseAdjustmentReason extends CrudAppPlace {
+        }
     }
 
     @NavigationItem(navigLabel = "Alerts")

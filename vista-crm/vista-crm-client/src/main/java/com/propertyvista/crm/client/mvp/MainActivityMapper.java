@@ -96,6 +96,9 @@ import com.propertyvista.crm.client.activity.crud.settings.tax.ChargeCodeViewerA
 import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.LeaseAdjustmentReasonEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.LeaseAdjustmentReasonListerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.LeaseAdjustmentReasonViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxViewerActivity;
@@ -671,6 +674,20 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case lister:
                         activity = new ChargeCodeListerActivity(place);
+                        break;
+
+                    }
+
+                } else if (place instanceof CrmSiteMap.Settings.LeaseAdjustmentReason) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new LeaseAdjustmentReasonEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new LeaseAdjustmentReasonViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new LeaseAdjustmentReasonListerActivity(place);
                         break;
 
                     }
