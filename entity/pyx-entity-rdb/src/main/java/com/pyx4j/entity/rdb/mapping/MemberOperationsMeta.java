@@ -136,6 +136,6 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     @Override
     public String toString() {
-        return memberPath + " " + memberMeta.toString();
+        return memberPath + " " + memberMeta.toString() + " " + valueAdapter.toString();
     }
 }

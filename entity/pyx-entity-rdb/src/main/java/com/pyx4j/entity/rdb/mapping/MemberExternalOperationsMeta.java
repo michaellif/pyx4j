@@ -65,4 +65,8 @@ public class MemberExternalOperationsMeta extends MemberOperationsMeta {
         return ownerValueAdapter;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + " External";
+    }
 }

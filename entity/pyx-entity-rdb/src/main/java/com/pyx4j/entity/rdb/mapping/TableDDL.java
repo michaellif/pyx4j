@@ -50,6 +50,19 @@ class TableDDL {
 
         Map<String, String> columns = new HashMap<String, String>();
 
+        List<MemberOperationsMeta> members = new Vector<MemberOperationsMeta>();
+
+        public String debugInfo() {
+            StringBuilder b = new StringBuilder();
+            for (MemberOperationsMeta m : members) {
+                if (b.length() > 0) {
+                    b.append(", ");
+                }
+                b.append('(').append(m.toString()).append(')');
+            }
+            return b.toString();
+        }
+
     }
 
     protected static int itentityOffset = 0;
@@ -78,7 +91,7 @@ class TableDDL {
                 member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
 
                 if (member.getMemberMeta().isIndexed()) {
-                    addIndexDef(indexes, sqlName, member.getMemberMeta().getAnnotation(Indexed.class));
+                    addIndexDef(indexes, member, sqlName, member.getMemberMeta().getAnnotation(Indexed.class));
                 }
             }
 
@@ -100,8 +113,17 @@ class TableDDL {
 
         Collections.reverse(sqls);
 
+        // Index validations
+        Map<String, IndexDef> indexValidations = new HashMap<String, IndexDef>();
+
         for (IndexDef indexDef : indexes) {
             sqls.add(createIndexSql(dialect, tableModel.tableName, indexDef));
+
+            if (indexValidations.containsKey(indexDef.name)) {
+                throw new AssertionError("Duplicate indexes " + indexDef.debugInfo() + " and " + indexValidations.get(indexDef.name).debugInfo());
+            } else {
+                indexValidations.put(indexDef.name, indexDef);
+            }
         }
 
         if (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
@@ -110,7 +132,7 @@ class TableDDL {
         return sqls;
     }
 
-    private static void addIndexDef(List<IndexDef> indexes, String sqlName, Indexed indexedAnnotation) {
+    private static void addIndexDef(List<IndexDef> indexes, MemberOperationsMeta member, String sqlName, Indexed indexedAnnotation) {
         if ((indexedAnnotation.group() != null) && (indexedAnnotation.group().length > 0)) {
             nextGroup: for (String group : indexedAnnotation.group()) {
                 // find index of the same group
@@ -134,6 +156,9 @@ class TableDDL {
                 def.uniqueConstraint = indexedAnnotation.uniqueConstraint();
                 def.group = group;
                 def.columns.put(sqlName, position);
+                if (!def.members.contains(member)) {
+                    def.members.add(member);
+                }
                 indexes.add(def);
             }
         } else {
@@ -141,6 +166,9 @@ class TableDDL {
             def.name = indexedAnnotation.name();
             def.uniqueConstraint = indexedAnnotation.uniqueConstraint();
             def.columns.put(sqlName, "");
+            if (!def.members.contains(member)) {
+                def.members.add(member);
+            }
             indexes.add(def);
         }
 
@@ -163,11 +191,11 @@ class TableDDL {
             sql.append("UNIQUE ");
         }
         sql.append("INDEX ");
-        if (CommonsStringUtils.isStringSet(indexDef.name)) {
-            sql.append(indexDef.name);
-        } else {
-            sql.append(dialect.getNamingConvention().sqlTableIndexName(tableName, columnsSorted));
+        if (!CommonsStringUtils.isStringSet(indexDef.name)) {
+            indexDef.name = dialect.getNamingConvention().sqlTableIndexName(tableName, columnsSorted);
         }
+        sql.append(indexDef.name);
+
         sql.append(" ON ").append(tableName).append(" (");
         boolean first = true;
         if (dialect.isMultitenant()) {

@@ -66,4 +66,9 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
         return value;
     }
 
+    @Override
+    public String toString() {
+        return "Primitive " + valueClass.getSimpleName();
+    }
+
 }

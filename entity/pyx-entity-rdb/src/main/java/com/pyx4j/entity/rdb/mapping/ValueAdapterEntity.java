@@ -123,4 +123,9 @@ class ValueAdapterEntity implements ValueAdapter {
     public Object ensureType(Object value) {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "Entity '" + entityClass.getSimpleName() + "'";
+    }
 }
