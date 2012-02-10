@@ -135,11 +135,12 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
 
         Organization org1 = EntityFactory.create(Organization.class);
         org1.name().setValue("A" + uniqueString());
-        srv.persist(org1);
 
         Department department1 = EntityFactory.create(Department.class);
         department1.name().setValue("A" + uniqueString());
         department1.organization().set(org1);
+        org1.departments().add(department1);
+        srv.persist(org1);
         srv.persist(department1);
 
         Employee emp1 = EntityFactory.create(Employee.class);
@@ -152,11 +153,12 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
 
         Organization org2 = EntityFactory.create(Organization.class);
         org2.name().setValue("B" + uniqueString());
-        srv.persist(org2);
 
         Department department2 = EntityFactory.create(Department.class);
         department2.name().setValue("B" + uniqueString());
         department2.organization().set(org2);
+        org2.departments().add(department2);
+        srv.persist(org2);
         srv.persist(department2);
 
         Employee emp2 = EntityFactory.create(Employee.class);
@@ -165,6 +167,26 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         emp2.workAddress().streetName().setValue(setId);
         emp2.department().set(department2);
         srv.persist(emp2);
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), setId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().department().organization(), org1));
+
+            List<Employee> empsSortedAsc = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, empsSortedAsc.size());
+            Assert.assertEquals("PK Value", empsSortedAsc.get(0).getPrimaryKey(), emp1.getPrimaryKey());
+        }
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), setId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().department().organization().name(), org2.name()));
+
+            List<Employee> empsSortedAsc = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, empsSortedAsc.size());
+            Assert.assertEquals("PK Value", empsSortedAsc.get(0).getPrimaryKey(), emp2.getPrimaryKey());
+        }
 
         {
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
