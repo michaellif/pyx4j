@@ -156,7 +156,10 @@ public class Mappings {
                 this.getTableModel(connection, member.joinTableClass());
             }
             for (MemberExternalOperationsMeta member : model.operationsMeta().getExternalMembers()) {
-                this.getTableModel(connection, member.joinTableClass());
+                // TODO create all Polymorphic variations
+                if (member.joinTableClass().getAnnotation(AbstractEntity.class) == null) {
+                    this.getTableModel(connection, member.joinTableClass());
+                }
             }
         }
 
