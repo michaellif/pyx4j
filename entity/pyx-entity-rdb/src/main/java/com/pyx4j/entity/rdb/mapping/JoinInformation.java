@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Owned;
@@ -74,7 +75,7 @@ abstract class JoinInformation {
             @SuppressWarnings("unchecked")
             Class<? extends IEntity> childEntityClass = (Class<IEntity>) memberMeta.getValueClass();
             EntityMeta childEntityMeta = EntityFactory.getEntityMeta(childEntityClass);
-            MemberMeta ownerMemberMeta = findOwnerMember(childEntityMeta, memberMeta, rootEntityMeta);
+            MemberMeta ownerMemberMeta = findOwnerMember(childEntityMeta, memberMeta, rootEntityMeta, entityMeta);
             if (ownerMemberMeta == null) {
                 return null;
             }
@@ -89,7 +90,7 @@ abstract class JoinInformation {
         return null;
     }
 
-    private static MemberMeta findOwnerMember(EntityMeta childEntityMeta, MemberMeta memberMeta, EntityMeta rootEntityMeta) {
+    private static MemberMeta findOwnerMember(EntityMeta childEntityMeta, MemberMeta memberMeta, EntityMeta rootEntityMeta, EntityMeta entityMeta) {
         Class<? extends IEntity> rootEntityClass = rootEntityMeta.getEntityClass();
         Table tableAnnotation = rootEntityMeta.getAnnotation(Table.class);
         if ((tableAnnotation != null) && (tableAnnotation.expands() != IEntity.class)) {
@@ -99,7 +100,9 @@ abstract class JoinInformation {
         for (String jmemberName : childEntityMeta.getMemberNames()) {
             MemberMeta jmemberMeta = childEntityMeta.getMemberMeta(jmemberName);
             if (!jmemberMeta.isTransient() && (jmemberMeta.getAnnotation(Owner.class) != null)) {
-                if ((jmemberMeta.getObjectClass().equals(rootEntityMeta.getEntityClass())) || (jmemberMeta.getObjectClass().equals(rootEntityClass))) {
+                @SuppressWarnings("unchecked")
+                Class<? extends IEntity> entityClass = (Class<IEntity>) jmemberMeta.getObjectClass();
+                if (ownerClassMatch(entityClass, rootEntityMeta.getEntityClass(), rootEntityClass)) {
                     if (ownerMemberMeta != null) {
                         throw new AssertionError("Duplicate @Owner member in table " + childEntityMeta.getEntityClass().getName() + " for "
                                 + memberMeta.getFieldName() + " of type " + memberMeta.getValueClass().getName());
@@ -107,11 +110,29 @@ abstract class JoinInformation {
                     ownerMemberMeta = jmemberMeta;
                 } else {
                     throw new AssertionError("Invalid type @Owner member '" + jmemberName + "' in table " + childEntityMeta.getEntityClass().getName()
-                            + " for " + memberMeta.getFieldName() + " of type " + memberMeta.getValueClass().getName());
+                            + " for " + memberMeta.getFieldName() + " of type " + entityMeta.getEntityClass().getName() + ",\n expected "
+                            + rootEntityClass.getName() + ", got " + entityClass.getName());
                 }
             }
         }
         return ownerMemberMeta;
+    }
+
+    private static boolean ownerClassMatch(Class<?> memeberClass, Class<?>... entityClasses) {
+        if (memeberClass.getAnnotation(Inheritance.class) != null) {
+            for (Class<?> entityClass : entityClasses) {
+                if (memeberClass.isAssignableFrom(entityClass)) {
+                    return true;
+                }
+            }
+        } else {
+            for (Class<?> entityClass : entityClasses) {
+                if (memeberClass.equals(entityClass)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
