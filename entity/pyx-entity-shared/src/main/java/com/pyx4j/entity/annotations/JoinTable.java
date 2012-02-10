@@ -49,6 +49,8 @@ public @interface JoinTable {
      * Optional, Should match value of @JoinColumn when defined.
      * By default Entity class match is used. Or first column of the same type with @JoinColumn annotation without value.
      */
-    Class<? extends ColumnId> mappedby() default ColumnId.class;
+    Class<? extends ColumnId> mappedBy() default ColumnId.class;
 
+    //?
+    //Class<? extends ColumnId> mapsTo() default ColumnId.class;
 }

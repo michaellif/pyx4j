@@ -90,14 +90,14 @@ class JoinTableInformation extends JoinInformation {
         for (String jmemberName : joinEntityMeta.getMemberNames()) {
             MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
             if (!jmemberMeta.isTransient()) {
-                if ((joinTable.mappedby() == ColumnId.class)
+                if ((joinTable.mappedBy() == ColumnId.class)
                         && ((jmemberMeta.getObjectClass().equals(rootEntityMeta.getEntityClass())) || (jmemberMeta.getObjectClass().equals(rootEntityClass)))) {
                     ownerMemberMeta = jmemberMeta;
                 } else {
                     JoinColumn joinColumn = jmemberMeta.getAnnotation(JoinColumn.class);
                     if (joinColumn != null) {
-                        if (joinTable.mappedby() != ColumnId.class) {
-                            if (joinColumn.value() == joinTable.mappedby()) {
+                        if (joinTable.mappedBy() != ColumnId.class) {
+                            if (joinColumn.value() == joinTable.mappedBy()) {
                                 ownerMemberMeta = jmemberMeta;
                                 break;
                             }
