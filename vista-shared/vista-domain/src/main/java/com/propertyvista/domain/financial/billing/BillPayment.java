@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -21,6 +22,6 @@ public interface BillPayment extends IEntity {
     Payment payment();
 
     @Owner
+    @JoinColumn
     Bill bill();
-
 }

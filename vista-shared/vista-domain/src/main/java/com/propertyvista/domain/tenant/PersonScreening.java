@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderBy;
@@ -50,6 +51,7 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
     @Owner
     @Detached
     @ReadOnly
+    @JoinColumn
     PersonScreeningHolder screene();
 
     @Format("MM/dd/yyyy")
@@ -78,7 +80,6 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
     @Owned
     @Detached
     @Caption(name = "Identification Documents")
-    @JoinTable(value = ApplicationDocument.class, cascade = false)
     @OrderBy(ApplicationDocument.OrderColumnId.class)
     IList<ApplicationDocument> documents();
 

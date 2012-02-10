@@ -23,7 +23,7 @@ public class PriceCalculationHelpers {
     public static BigDecimal calculateChargeItemAdjustments(BillableItem item) {
         BigDecimal adjustedPrice = item.item().price().getValue();
         for (BillableItemAdjustment adjustment : item.adjustments()) {
-            adjustedPrice = calculateChargeItemAdjustments(adjustedPrice, adjustment);
+            adjustedPrice = calculateBillableItemAdjustments(adjustedPrice, adjustment);
         }
 
         // update transient Value:
@@ -32,7 +32,7 @@ public class PriceCalculationHelpers {
         return adjustedPrice;
     }
 
-    public static BigDecimal calculateChargeItemAdjustments(BigDecimal startPrice, BillableItemAdjustment adjustment) {
+    public static BigDecimal calculateBillableItemAdjustments(BigDecimal startPrice, BillableItemAdjustment adjustment) {
         // preconditions:
         if (adjustment.isNull() || adjustment.adjustmentType().isNull() || adjustment.termType().isNull()) {
             return startPrice; // not fully filled adjustment!.. 

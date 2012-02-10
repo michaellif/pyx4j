@@ -15,6 +15,7 @@ package com.propertyvista.domain.property.asset.unit.occupancy;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -29,6 +30,7 @@ public interface AptUnitOccupancy extends IEntity {
     @Owner
     @ReadOnly
     @Detached
+    @JoinColumn
     AptUnit unit();
 
     @Owned

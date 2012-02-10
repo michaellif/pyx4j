@@ -22,9 +22,9 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
@@ -36,13 +36,21 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.PropertyManagerReferenceAdapter;
+import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.Elevator;
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.LockerArea;
+import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.domain.property.asset.Roof;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
 
@@ -57,7 +65,6 @@ public interface Building extends PolicyNode {
     @OrderColumn(OrderInComplexId.class)
     IPrimitive<Integer> orderInComplex();
 
-    @Owner
     Complex complex();
 
     @Caption(name = "Primary in Complex")
@@ -94,6 +101,7 @@ public interface Building extends PolicyNode {
     @Detached
     IList<Media> media();
 
+    @Owned
     @Detached
     //TODO
     //@Owned(joinTable = ProductCatalog.class)
@@ -106,4 +114,42 @@ public interface Building extends PolicyNode {
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = CrmUserBuildings.class, cascade = false)
     ISet<CrmUser> userAccess();
+
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<Floorplan> _Floorplans();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<AptUnit> _Units();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<Elevator> _Elevators();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<Boiler> _Boilers();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<Parking> _Parkings();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<LockerArea> _LockerAreas();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<Roof> _Roofs();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<BuildingAmenity> _BuildingAmenities();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<ArrearsSummary> _ArrearsSummaries();
 }

@@ -15,14 +15,18 @@ package com.propertyvista.domain.tenant.lead;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.annotations.Translate;
@@ -140,6 +144,9 @@ public interface Lead extends IEntity {
     @ReadOnly
     IPrimitive<LogicalDate> createDate();
 
-// double reference - currently use just back reference from Appointment itself.
-//  IList<Appointment> appointments();
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<Appointment> _Appointments();
 }

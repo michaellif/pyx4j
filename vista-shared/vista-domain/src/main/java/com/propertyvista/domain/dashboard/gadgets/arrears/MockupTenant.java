@@ -16,10 +16,14 @@ package com.propertyvista.domain.dashboard.gadgets.arrears;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
@@ -46,6 +50,13 @@ public interface MockupTenant extends IEntity {
     @Owner
     @Detached
     @ReadOnly
+    @JoinColumn
     @Caption(name = "Unit")
     AptUnit belongsTo();
+
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<MockupArrearsState> _MockupArrearsStates();
 }

@@ -20,16 +20,21 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
+import com.propertyvista.domain.dashboard.gadgets.arrears.MockupTenant;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancy;
 import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;
 
 @DiscriminatorValue("Unit_BuildingElement")
@@ -37,6 +42,7 @@ public interface AptUnit extends BuildingElement, PolicyNode {
 
     @NotNull
     @Detached
+    @JoinColumn
     @MemberColumn(modificationAdapters = { FloorplanCountersUpdateAdapter.class })
     @Indexed(group = { "b,11", "f" })
     Floorplan floorplan();
@@ -69,4 +75,18 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     @Detached
     @Owned
     Marketing marketing();
+
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<AptUnitItem> _AptUnitItems();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<AptUnitOccupancy> _AptUnitOccupancies();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<MockupTenant> _MockupTenant();
 }

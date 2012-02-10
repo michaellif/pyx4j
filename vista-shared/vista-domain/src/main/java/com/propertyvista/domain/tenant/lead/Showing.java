@@ -14,6 +14,7 @@
 package com.propertyvista.domain.tenant.lead;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
@@ -76,6 +77,7 @@ public interface Showing extends IEntity {
     @Owner
     @Detached
     @ReadOnly
+    @JoinColumn
     Appointment appointment();
 
     @Transient

@@ -15,6 +15,7 @@ package com.propertyvista.domain.media;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.annotations.I18n;
@@ -24,6 +25,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface ApplicationDocumentHolder extends IEntity {
 
+    @Owned
     IList<ApplicationDocument> documents();
 
 }

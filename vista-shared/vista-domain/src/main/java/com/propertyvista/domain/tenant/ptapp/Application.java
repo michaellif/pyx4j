@@ -14,6 +14,7 @@
 package com.propertyvista.domain.tenant.ptapp;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -35,6 +36,7 @@ public interface Application extends IEntity {
     @Owner
     @Detached
     @ReadOnly
+    @JoinColumn
     MasterApplication belongsTo();
 
     @NotNull

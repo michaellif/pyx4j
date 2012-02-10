@@ -19,7 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
@@ -69,8 +69,8 @@ public interface MasterApplication extends IEntity {
 
     IPrimitive<Status> status();
 
+    @Owned
     @Detached
-    @JoinTable(value = Application.class, cascade = false)
     ISet<Application> applications();
 
     Employee decidedBy();

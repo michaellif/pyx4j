@@ -14,6 +14,7 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -26,6 +27,7 @@ public interface RoofSegment extends IEntity {
     @Owner
     @Detached
     @ReadOnly
+    @JoinColumn
     Roof belongsTo();
 
     @ToString(index = 0)

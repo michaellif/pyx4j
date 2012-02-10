@@ -18,12 +18,16 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.media.Media;
@@ -37,6 +41,7 @@ public interface Floorplan extends PolicyNode {
     @Detached
     @ReadOnly
     @Indexed
+    @JoinColumn
     Building building();
 
     @ToString(index = 0)
@@ -67,4 +72,10 @@ public interface Floorplan extends PolicyNode {
 
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     FloorplanCounters counters();
+
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<FloorplanAmenity> _FloorplanAmenities();
 }

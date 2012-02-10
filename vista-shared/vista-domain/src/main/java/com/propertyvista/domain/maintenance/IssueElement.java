@@ -13,9 +13,10 @@
  */
 package com.propertyvista.domain.maintenance;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,6 +29,7 @@ public interface IssueElement extends IEntity {
     @ToString(index = 0)
     IPrimitive<String> name();
 
-    @Transient
+    @Owned
+    @Detached
     IList<IssueRepairSubject> subjects();
 }

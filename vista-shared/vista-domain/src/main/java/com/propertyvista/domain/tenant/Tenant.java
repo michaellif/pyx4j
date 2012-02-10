@@ -35,6 +35,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.company.Company;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.security.TenantUserHolder;
 
 @DiscriminatorValue("Tenant")
@@ -75,4 +76,10 @@ public interface Tenant extends IEntity, PersonScreeningHolder, TenantUserHolder
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = TenantInLease.class, cascade = false)
     ISet<TenantInLease> _tenantInLease();
+
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<MaintenanceRequest> _MaintenanceRequests();
 }

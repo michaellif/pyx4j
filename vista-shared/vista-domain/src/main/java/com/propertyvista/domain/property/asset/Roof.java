@@ -14,14 +14,18 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
@@ -39,4 +43,10 @@ public interface Roof extends LicensedWarrantedMaintained, Notes, BuildingElemen
     @Editor(type = EditorType.yearpicker)
     @Format("yyyy")
     IPrimitive<LogicalDate> year();
+
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<RoofSegment> _RoofSegments();
 }

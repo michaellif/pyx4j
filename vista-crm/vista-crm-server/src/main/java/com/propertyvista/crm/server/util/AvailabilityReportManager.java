@@ -58,7 +58,7 @@ public class AvailabilityReportManager {
 
     private List<AptUnitOccupancySegment> queryOccupancy(AptUnit unit) {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
+        criteria.add(PropertyCriterion.eq(criteria.proto().occupancy().unit(), unit));
         criteria.sort(new Sort(criteria.proto().dateFrom().getPath().toString(), false));
         return Persistence.service().query(criteria);
     }

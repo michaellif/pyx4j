@@ -17,6 +17,8 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -34,7 +36,11 @@ public interface Product extends IEntity {
     @Owner
     @Detached
     @ReadOnly
+    @JoinColumn
     ProductCatalog catalog();
+
+    @OrderColumn
+    IPrimitive<Integer> orderInCatalog();
 
     @Owned
     @Detached

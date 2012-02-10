@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -145,6 +146,7 @@ public interface MockupArrearsState extends IEntity {
     @Owner
     @Detached
     @ReadOnly
+    @JoinColumn
     MockupTenant belongsTo();
 
     @CustomComparator(clazz = ComparableComparator.class)

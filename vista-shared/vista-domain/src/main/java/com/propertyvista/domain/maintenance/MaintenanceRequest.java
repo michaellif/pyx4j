@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -30,6 +31,7 @@ public interface MaintenanceRequest extends IEntity {
     @Owner
     @Detached
     @NotNull
+    @JoinColumn
     Tenant tenant();
 
     //TODO Add 

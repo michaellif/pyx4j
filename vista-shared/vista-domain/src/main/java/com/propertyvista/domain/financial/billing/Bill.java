@@ -16,12 +16,14 @@ package com.propertyvista.domain.financial.billing;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -61,12 +63,12 @@ public interface Bill extends IEntity {
     BillingRun billingRun();
 
     @Detached
-    @JoinTable(value = BillCharge.class, cascade = false)
+    @Owned
     @OrderBy(BillCharge.OrderId.class)
     IList<BillCharge> charges();
 
     @Detached
-    @JoinTable(value = BillChargeAdjustment.class, cascade = false)
+    @Owned
     @OrderBy(BillChargeAdjustment.OrderId.class)
     IList<BillChargeAdjustment> adjustments();
 
@@ -119,4 +121,9 @@ public interface Bill extends IEntity {
      */
     IPrimitive<BigDecimal> totalDueAmount();
 
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<BillPayment> _BillPayments();
 }

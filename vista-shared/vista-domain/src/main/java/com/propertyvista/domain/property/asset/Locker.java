@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -47,6 +48,7 @@ public interface Locker extends IEntity {
     @Owner
     @Detached
     @ReadOnly
+    @JoinColumn
     LockerArea belongsTo();
 
     @ToString(index = 1)

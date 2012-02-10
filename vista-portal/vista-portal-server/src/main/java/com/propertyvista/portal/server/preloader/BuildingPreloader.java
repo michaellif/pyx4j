@@ -160,7 +160,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                     log.warn("Unable find location for {}", building.info().address().getStringView());
                 }
             }
-            Persistence.service().persist(building);
 
             if (DataGenerator.randomBoolean()) {
                 building.complex().set(DataGenerator.random(complexes));
@@ -172,18 +171,9 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             building.propertyManager().set(DataGenerator.random(managements)); // temporary for Starlight!..
 
             // Service Catalog:
-            ProductCatalog catalog = EntityFactory.create(ProductCatalog.class);
-            catalog.belongsTo().set(building);
-            Persistence.service().persist(catalog);
+            productCatalogGenerator.createProductCatalog(building.serviceCatalog());
 
-            productCatalogGenerator.createProductCatalog(catalog);
-
-            Persistence.service().persist(catalog.features());
-            Persistence.service().persist(catalog.concessions());
-            Persistence.service().persist(catalog.services());
-
-            Persistence.service().merge(catalog);
-            building.serviceCatalog().set(catalog);
+            Persistence.service().persist(building);
 
             //Media
             if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {
@@ -272,7 +262,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             unitCount += units.size();
             for (AptUnitGDO unitData : units) {
 
-                List<ProductItem> serviceItems = productCatalogGenerator.createAptUnitServices(catalog, unitData.unit());
+                List<ProductItem> serviceItems = productCatalogGenerator.createAptUnitServices(building.serviceCatalog(), unitData.unit());
 
                 // persist plain internal lists:
 
@@ -285,7 +275,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             // Save the ServiceItem references
-            Persistence.service().persist(catalog.services());
+            Persistence.service().persist(building.serviceCatalog().services());
 
             // fill Service Catalog with building elements:
 
@@ -301,7 +291,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             buildingRoofsCriteria.add(PropertyCriterion.eq(buildingRoofsCriteria.proto().belongsTo(), building));
             List<Roof> buildingRoofs = Persistence.service().query(buildingRoofsCriteria);
 
-            for (Service service : catalog.services()) {
+            for (Service service : building.serviceCatalog().services()) {
                 switch (service.type().getValue()) {
                 case garage:
                     for (ProductItem item : service.items()) {
@@ -324,7 +314,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 }
             }
 
-            Persistence.service().merge(catalog);
+            Persistence.service().merge(building.serviceCatalog());
 
             //Do not publish until data is clean-up
             if (true) {

@@ -14,9 +14,10 @@
 package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -39,23 +40,9 @@ public interface ProductCatalog extends IEntity {
     @Owner
     @Detached
     @ReadOnly
+    @JoinColumn
     //TODO Why not to name 'building'?
     Building belongsTo();
-
-    /**
-     * Double links - main dependency in appropriate entity:\
-     * 
-     * Note: Is not maintained! Should be synchronised if necessary in service!!!
-     * (see @link LeaseCrudServiceImpl.syncBuildingProductCatalog(Building building)).
-     */
-    @Transient
-    IList<Service> services();
-
-    @Transient
-    IList<Feature> features();
-
-    @Transient
-    IList<Concession> concessions();
 
     // ----------------------------------------------------
 
@@ -64,4 +51,20 @@ public interface ProductCatalog extends IEntity {
 
     // Utilities provided by 3-d party and should be EXCLUDED from Lease Service Agreement 
     IList<ProductItemType> externalUtilities();
+
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+
+    @Owned
+    @Detached
+    IList<Feature> features();
+
+    @Owned
+    @Detached
+    IList<Concession> concessions();
+
+    @Owned
+    @Detached
+    IList<Service> services();
+
 }

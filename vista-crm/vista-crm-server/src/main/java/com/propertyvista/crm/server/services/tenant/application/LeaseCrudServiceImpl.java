@@ -14,7 +14,6 @@
 package com.propertyvista.crm.server.services.tenant.application;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -139,15 +138,15 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         Persistence.service().retrieve(building);
         Persistence.service().retrieve(building.serviceCatalog());
 
-        // update service catalogue double-reference lists:
-        EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Service> services = Persistence.service().query(serviceCriteria);
-        building.serviceCatalog().services().clear();
-        building.serviceCatalog().services().addAll(services);
+//        // update service catalogue double-reference lists:
+//        EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
+//        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
+//        List<Service> services = Persistence.service().query(serviceCriteria);
+//        building.serviceCatalog().services().clear();
+//        building.serviceCatalog().services().addAll(services);
 
         // load detached data:
-        for (Service item : services) {
+        for (Service item : building.serviceCatalog().services()) {
             Persistence.service().retrieve(item.items());
             Persistence.service().retrieve(item.features());
             for (Feature fi : item.features()) {

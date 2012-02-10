@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -44,6 +45,7 @@ public interface BuildingElement extends IEntity {
     @ReadOnly
     @Caption(name = "Building")
     @XmlTransient
+    @JoinColumn
     @Indexed(group = "b,10")
     Building belongsTo();
 }

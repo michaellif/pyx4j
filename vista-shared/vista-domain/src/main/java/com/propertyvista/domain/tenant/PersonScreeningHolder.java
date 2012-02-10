@@ -14,10 +14,14 @@
 package com.propertyvista.domain.tenant;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.person.Person;
@@ -30,4 +34,10 @@ public interface PersonScreeningHolder extends IEntity {
     @ToString(index = 0)
     @EmbeddedEntity
     Person person();
+
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<PersonScreening> _PersonScreenings();
 }

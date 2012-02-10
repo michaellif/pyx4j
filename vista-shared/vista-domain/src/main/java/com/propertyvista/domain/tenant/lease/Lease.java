@@ -121,7 +121,6 @@ public interface Lease extends IEntity {
     IPrimitive<LogicalDate> signDate();
 
     @Owned
-    @JoinTable(value = LeaseFinancial.class, cascade = false)
     LeaseFinancial leaseFinancial();
 
     @EmbeddedEntity

@@ -84,7 +84,7 @@ public class AvailablilityReportManagerTest {
 
     private final AptUnitOccupancySegment convert(MockupOccupancyStatus mockup) {
         AptUnitOccupancySegment status = EntityFactory.create(AptUnitOccupancySegment.class);
-        status.unit().set(unit);
+        status.occupancy().unit().set(unit);
         status.status().set(mockup.status());
         status.dateFrom().set(mockup.dateFrom());
         status.dateTo().set(mockup.dateTo());

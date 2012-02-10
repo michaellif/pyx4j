@@ -16,8 +16,10 @@ package com.propertyvista.domain.property.asset;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -29,12 +31,14 @@ import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 
+@AbstractEntity
 @ToStringFormat("{0} {1}")
 public interface Equipment extends LicensedWarrantedMaintained, Notes {
 
     @Owner
     @Detached
     @ReadOnly
+    @JoinColumn
     @XmlTransient
     Building belongsTo();
 

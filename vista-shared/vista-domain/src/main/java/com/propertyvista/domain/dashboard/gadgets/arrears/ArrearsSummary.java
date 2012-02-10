@@ -15,6 +15,7 @@ package com.propertyvista.domain.dashboard.gadgets.arrears;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,9 +23,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface ArrearsSummary extends Arrears {
+
+    @Owner
     @Detached
     @ReadOnly
-    @Owner
+    @JoinColumn
     Building belongsTo();
 
     IPrimitive<String> propertyCode();
