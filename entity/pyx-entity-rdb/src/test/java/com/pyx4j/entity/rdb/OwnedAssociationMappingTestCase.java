@@ -79,6 +79,8 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         // Save child and owner
         srvSave(o, testCaseMethod);
 
+        Assert.assertNotNull("Id Assigned", o.child().getPrimaryKey());
+
         // Get Owner and see that child is retrieved, then verify values
         {
             UnidirectionalOneToOneParent parent = srv.retrieve(UnidirectionalOneToOneParent.class, o.getPrimaryKey());
@@ -163,6 +165,8 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
         // Save child and owner
         srvSave(o, testCaseMethod);
+
+        Assert.assertNotNull("Id Assigned", o.child().getPrimaryKey());
 
         // Get Owner and see that child is retrieved, then verify values
         {
@@ -275,6 +279,8 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         // Save child and owner
         srvSave(o, testCaseMethod);
 
+        Assert.assertNotNull("Id Assigned", o.child().getPrimaryKey());
+
         // Get Owner and see that child is retrieved, then verify values
         {
             BidirectionalOneToOneInversedParent parent = srv.retrieve(BidirectionalOneToOneInversedParent.class, o.getPrimaryKey());
@@ -386,6 +392,9 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
         // Save child and owner
         srvSave(o, testCaseMethod);
+
+        Assert.assertNotNull("Id Assigned", o.children().get(0).getPrimaryKey());
+        Assert.assertNotNull("Id Assigned", o.children().get(1).getPrimaryKey());
 
         // Get Owner and see that child is retrieved, then verify values
         {
