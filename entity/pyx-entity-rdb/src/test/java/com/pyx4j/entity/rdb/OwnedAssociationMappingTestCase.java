@@ -723,11 +723,22 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             Assert.assertEquals("correct data retrieved", o.children().get(0).name(), parents.get(0).children().get(0).name());
         }
 
-        // Query Child By Parent
+        // Query Child By Parent name
         {
             EntityQueryCriteria<BidirectionalOneToManyAutoChild> criteria = EntityQueryCriteria.create(BidirectionalOneToManyAutoChild.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             criteria.add(PropertyCriterion.eq(criteria.proto().parent().name(), o.name()));
+
+            List<BidirectionalOneToManyAutoChild> children = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, children.size());
+            Assert.assertEquals("correct data retrieved", o.name(), children.get(0).parent().name());
+        }
+
+        // Query Child By Parent id
+        {
+            EntityQueryCriteria<BidirectionalOneToManyAutoChild> criteria = EntityQueryCriteria.create(BidirectionalOneToManyAutoChild.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().parent(), o));
 
             List<BidirectionalOneToManyAutoChild> children = srv.query(criteria);
             Assert.assertEquals("result set size", 1, children.size());
