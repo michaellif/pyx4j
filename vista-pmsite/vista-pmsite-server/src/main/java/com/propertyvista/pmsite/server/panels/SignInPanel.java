@@ -20,6 +20,9 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import net.tanesha.recaptcha.ReCaptcha;
+import net.tanesha.recaptcha.ReCaptchaFactory;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
@@ -34,14 +37,22 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 
+import com.pyx4j.commons.Pair;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
+import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
 
 public class SignInPanel extends Panel {
 
@@ -56,12 +67,22 @@ public class SignInPanel extends Panel {
 
     private String username;
 
+    private final Pair<String, String> captchaResponse;
+
+    private boolean captchaRequired = false;
+
+    private SignInForm form;
+
     public SignInPanel(final String id) {
         super(id);
 
         add(new FeedbackPanel("feedback"));
 
-        add(new SignInForm("signInForm"));
+        add(form = new SignInForm("signInForm"));
+
+        IRequestParameters params = getRequest().getRequestParameters();
+        captchaResponse = new Pair<String, String>(params.getParameterValue("recaptcha_challenge_field").toString(), params.getParameterValue(
+                "recaptcha_response_field").toString());
     }
 
     @Override
@@ -73,7 +94,7 @@ public class SignInPanel extends Panel {
 
             if ((data != null) && (data.length > 1)) {
                 // try to sign in the user
-                if (signIn(data[0], data[1])) {
+                if (signIn(data[0], data[1], null)) {
                     username = data[0];
                     password = data[1];
 
@@ -83,6 +104,10 @@ public class SignInPanel extends Panel {
                         throw new RestartResponseException(getApplication().getSessionSettings().getPageFactory().newPage(getApplication().getHomePage()));
                     }
                 }
+            }
+            // Captcha may be required after form.onSubmit() returns
+            if (useCaptcha()) {
+                form.addCaptcha();
             }
         }
 
@@ -114,8 +139,27 @@ public class SignInPanel extends Panel {
         this.rememberMe = rememberMe;
     }
 
-    private boolean signIn(String username, String password) {
-        return AuthenticatedWebSession.get().signIn(username, password);
+    public boolean useCaptcha() {
+        return captchaRequired;
+    }
+
+    private boolean signIn(String username, String password, Pair<String, String> captcha) {
+        try {
+            AuthenticationRequest request = EntityFactory.create(AuthenticationRequest.class);
+            request.email().setValue(username);
+            request.password().setValue(password);
+            request.captcha().setValue(captcha);
+
+            // This does the actual authentication; will throw an exception in case of failure
+            new PortalAuthenticationServiceImpl().beginSession(request);
+            // Our wicket session authentication simply returns true, so this call will just create wicket session
+            return AuthenticatedWebSession.get().signIn(username, password);
+        } catch (Exception e) {
+            if (e instanceof ChallengeVerificationRequired) {
+                captchaRequired = true;
+            }
+        }
+        return false;
     }
 
     private boolean isSignedIn() {
@@ -126,6 +170,8 @@ public class SignInPanel extends Panel {
 
         private static final long serialVersionUID = 1L;
 
+        private final Label captcha = new Label("captcha", "");
+
         public SignInForm(final String id) {
             super(id);
 
@@ -133,6 +179,9 @@ public class SignInPanel extends Panel {
 
             add(new TextField<String>("username"));
             add(new PasswordTextField("password"));
+
+            // captcha
+            add(captcha.setVisible(false));
 
             add(new CheckBox("rememberMe"));
             add(new Button("signIn").add(AttributeModifier.replace("value", i18n.tr("Sign In"))));
@@ -147,11 +196,17 @@ public class SignInPanel extends Panel {
             }
         }
 
+        public void addCaptcha() {
+            String pubKey = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey();
+            ReCaptcha c = ReCaptchaFactory.newReCaptcha(pubKey, "", false);
+            captcha.setDefaultModelObject(c.createRecaptchaHtml(null, null)).setEscapeModelStrings(false).setVisible(true);
+        }
+
         @Override
         public final void onSubmit() {
             IAuthenticationStrategy strategy = getApplication().getSecuritySettings().getAuthenticationStrategy();
 
-            if (signIn(getUsername(), getPassword())) {
+            if (signIn(getUsername(), getPassword(), captchaResponse)) {
                 if (rememberMe == true) {
                     strategy.save(username, password);
                 } else {

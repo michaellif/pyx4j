@@ -19,11 +19,7 @@ import org.apache.wicket.request.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.server.contexts.Lifecycle;
-
-import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
 
 public class PMSiteSession extends AuthenticatedWebSession {
 
@@ -37,18 +33,7 @@ public class PMSiteSession extends AuthenticatedWebSession {
 
     @Override
     public boolean authenticate(final String username, final String password) {
-        AuthenticationRequest request = EntityFactory.create(AuthenticationRequest.class);
-        request.email().setValue(username);
-        request.password().setValue(password);
-
-        try {
-            new PortalAuthenticationServiceImpl().beginSession(request);
-            return true;
-        } catch (Throwable e) {
-            // TODO What to do with Error messages ?
-            log.error("Error", e);
-            return false;
-        }
+        return true;
     }
 
     @Override
