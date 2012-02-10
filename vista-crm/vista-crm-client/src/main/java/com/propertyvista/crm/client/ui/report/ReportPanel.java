@@ -102,6 +102,12 @@ public class ReportPanel extends BoardBase implements ReportView {
                     print.setResource(CrmImages.INSTANCE.dashboardPrint());
                 }
             });
+            print.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    ReportPanel.this.presenter.print();
+                }
+            });
             print.getElement().getStyle().setCursor(Cursor.POINTER);
 
             add(addGadget);
@@ -110,5 +116,5 @@ public class ReportPanel extends BoardBase implements ReportView {
 
         }
     }
-    
+
 }

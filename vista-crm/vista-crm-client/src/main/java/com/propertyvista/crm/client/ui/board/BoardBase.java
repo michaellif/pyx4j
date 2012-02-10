@@ -76,7 +76,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
     private IBoard board;
 
-    private Presenter presenter;
+    protected Presenter presenter;
 
     private DashboardMetadata dashboardMetadata;
 

@@ -186,6 +186,12 @@ public class DashboardPanel extends BoardBase implements DashboardView {
                     print.setResource(CrmImages.INSTANCE.dashboardPrint());
                 }
             });
+            print.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    DashboardPanel.this.presenter.print();
+                }
+            });
             print.getElement().getStyle().setCursor(Cursor.POINTER);
 
             this.add(layout1);
