@@ -13,8 +13,11 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -33,4 +36,9 @@ public interface LeaseAdjustment extends IEntity {
 
     IPrimitive<String> description();
 
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> targetDate();
+
+    @Timestamp(Update.Created)
+    IPrimitive<LogicalDate> createdWhen();
 }

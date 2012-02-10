@@ -55,10 +55,14 @@ public interface BillableItemAdjustment extends IEntity {
         }
     }
 
+    /**
+     * postLease - applied during renewal
+     * 
+     */
     @I18n
     @XmlType(name = "TermType")
     enum TermType {
-        firstMonth, lastMonth, term;
+        postLease, term, oneTime;
 
         @Override
         public String toString() {
@@ -89,6 +93,12 @@ public interface BillableItemAdjustment extends IEntity {
     IPrimitive<BigDecimal> value();
 
     Employee createdBy();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> effectiveDate();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> exparationDate();
 
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createdWhen();

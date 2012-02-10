@@ -33,6 +33,6 @@ public interface LeaseFinancial extends IEntity {
     BillingAccount billingAccount();
 
     @Owned
-    IList<LeaseAdjustment> adjustmantItems();
+    IList<LeaseAdjustment> adjustmentItems();
 
 }
