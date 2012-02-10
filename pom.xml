@@ -118,6 +118,8 @@
         <module>entity/pyx-entity-tests</module>
         <module>entity/pyx-entity-gae</module>
         <module>entity/pyx-entity-rdb</module>
+
+        <module>entity/pyx-entity-assert</module>
 <!--
         <module>entity/entity-hibernate</module>
 -->

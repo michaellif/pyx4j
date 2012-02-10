@@ -25,6 +25,6 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface BO3Owner extends IEntity {
 
-    @Owned(mappedby = BO3Child.OwnedId.class)
+    @Owned
     BO3Child child();
 }
