@@ -44,7 +44,7 @@ import com.pyx4j.entity.test.shared.domain.ownership.managed.UnidirectionalOneTo
 
 public abstract class OwnedAssociationMappingTestCase extends AssociationMappingTestCase {
 
-    //================================================ UnidirectionalOneToOne =========================================================//
+    //================================================ Unidirectional One-to-One =========================================================//
 
     public void testUnidirectionalOneToOneTable() {
         if (Owned.TODO) {
@@ -131,7 +131,7 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         }
     }
 
-    //================================================ BidirectionalOneToOne =========================================================//
+    //================================================ Bidirectional One-to-One =========================================================//
 
     public void testBidirectionalOneToOneTable() {
         if (Owned.TODO) {
@@ -238,7 +238,7 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         }
     }
 
-    //================================================ BidirectionalOneToOneInversed =========================================================//
+    //================================================ Bidirectional One-to-One Inversed =========================================================//
 
     public void testBidirectionalOneToOneInversedTable() {
         if (Owned.TODO) {
@@ -351,7 +351,7 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         }
     }
 
-    //================================================ UnidirectionalOneToManyParent =========================================================//
+    //================================================ Unidirectional One-to-Many =========================================================//
 
     public void testUnidirectionalOneToManyTable() {
         if (Owned.TODO) {
@@ -445,7 +445,7 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         }
     }
 
-    //================================================ Bidirectional OneToMany =========================================================//
+    //================================================ Bidirectional One-to-Many =========================================================//
 
     public void testBidirectionalOneToManyTable() {
         if (Owned.TODO) {
@@ -555,7 +555,7 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         }
     }
 
-    //================================================ Bidirectional OneToMany Auto =========================================================//
+    //================================================ Bidirectional One-to-Many (Join Table) =========================================================//
 
     public void testBidirectionalOneToManyAutoTable() {
         if (Owned.TODO) {
