@@ -196,9 +196,18 @@ public class TableModelCollections {
         ResultSet rs = null;
         StringBuilder sql = new StringBuilder();
         try {
-            sql.append("SELECT id");
+            sql.append("SELECT ");
+            boolean first = true;
+            if (!member.sqlValueName().equals(IEntity.PRIMARY_KEY)) {
+                sql.append(IEntity.PRIMARY_KEY);
+                first = false;
+            }
             for (String name : member.getValueAdapter().getColumnNames(member.sqlValueName())) {
-                sql.append(", ");
+                if (first) {
+                    first = false;
+                } else {
+                    sql.append(", ");
+                }
                 sql.append(name);
             }
             if (isList) {

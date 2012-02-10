@@ -134,7 +134,7 @@ class JoinTableInformation extends JoinInformation {
             }
         }
         if (valueMemberMeta == null) {
-            throw new Error("Unmapped value member '" + entityClass.getName() + "' in join table '" + joinEntityMeta.getCaption() + "' for "
+            throw new AssertionError("Unmapped value member '" + entityClass.getName() + "' in join table '" + joinEntityMeta.getCaption() + "' for "
                     + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
         } else {
             return valueMemberMeta;
@@ -155,12 +155,12 @@ class JoinTableInformation extends JoinInformation {
                 OrderColumn joinTableOrderColumn = jmemberMeta.getAnnotation(OrderColumn.class);
                 if ((joinTableOrderColumn != null) && (orderColumn == joinTableOrderColumn.value())) {
                     if (orderMemberMeta != null) {
-                        throw new Error("Duplicate orderColumn member in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName()
-                                + " in " + entityMeta.getEntityClass().getName());
+                        throw new AssertionError("Duplicate orderColumn member in join table '" + joinEntityMeta.getCaption() + "' for "
+                                + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
                     }
                     if (jmemberMeta.getObjectClass().equals(Integer.class)) {
-                        throw new Error("Expected Integer orderColumn in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName()
-                                + " in " + entityMeta.getEntityClass().getName());
+                        throw new AssertionError("Expected Integer orderColumn in join table '" + joinEntityMeta.getCaption() + "' for "
+                                + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
                     }
                     orderMemberMeta = jmemberMeta;
                 }
