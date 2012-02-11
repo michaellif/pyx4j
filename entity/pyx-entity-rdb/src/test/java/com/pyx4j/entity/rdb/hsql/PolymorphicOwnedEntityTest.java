@@ -28,7 +28,7 @@ public class PolymorphicOwnedEntityTest extends PolymorphicOwnedEntityTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getMySQLPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
     }
 
 }
