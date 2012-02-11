@@ -76,6 +76,7 @@ public class BillingTestBase extends VistaDBTestBase {
         {
             BuildingsGenerator generator = new BuildingsGenerator(1);
             building = generator.createBuilding(1);
+            building.propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(4));
             Persistence.service().persist(building);
 
             Floorplan floorplan = EntityFactory.create(Floorplan.class);
@@ -93,23 +94,12 @@ public class BillingTestBase extends VistaDBTestBase {
             ProductCatalogGenerator productCatalogGenerator = new ProductCatalogGenerator(productItemTypesGDO);
 
             // Service Catalog:
-            ProductCatalog catalog = EntityFactory.create(ProductCatalog.class);
-
-            productCatalogGenerator.createProductCatalog(catalog);
-            catalog.belongsTo().set(building);
-
-            Persistence.service().persist(catalog);
-
-            Persistence.service().persist(catalog.features());
-            Persistence.service().persist(catalog.concessions());
-            Persistence.service().persist(catalog.services());
-
-            Persistence.service().merge(catalog);
+            ProductCatalog catalog = building.serviceCatalog();
+            productCatalogGenerator.createProductCatalog(building.serviceCatalog());
 
             //       List<ProductItem> serviceItems = productCatalogGenerator.createAptUnitServices(catalog, unit);
             //   Persistence.service().persist(serviceItems);
-
-            building.serviceCatalog().set(catalog);
+            Persistence.service().persist(catalog);
 
         }
 
