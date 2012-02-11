@@ -766,8 +766,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
                 if (childEntity.getPrimaryKey() != null) {
                     if (cascadeRetrieve(connection, childEntity) == null) {
-                        throw new RuntimeException("Entity '" + memberMeta.getCaption() + "' " + childEntity.getPrimaryKey() + " " + childEntity.getPath()
-                                + " NotFound");
+                        throw new RuntimeException("Entity '" + memberMeta.getCaption() + "' [primary key =  " + childEntity.getPrimaryKey() + "; path = "
+                                + childEntity.getPath() + "] is not found");
                     }
                 }
             } else {
@@ -1103,7 +1103,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
 
             if (!tm.delete(connection, primaryKey)) {
-                throw new RuntimeException("Entity " + entityMeta.getCaption() + " " + primaryKey + " NotFound");
+                throw new RuntimeException("Entity '" + entityMeta.getCaption() + "' " + primaryKey + " NotFound");
             }
         } finally {
             if (trace) {
