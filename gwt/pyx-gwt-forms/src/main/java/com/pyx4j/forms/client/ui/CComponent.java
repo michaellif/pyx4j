@@ -166,16 +166,13 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         this.parent = parent;
         setContainerAccessRules(true);
 
-        if (debugIdSuffix != null) {
-            debugId = new CompositeDebugId(parent.getDebugId(), debugIdSuffix);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.debugId);
-        }
+        setDebugIdSuffix(debugIdSuffix);
     }
 
     public void onAbandon() {
         parent = null;
         setContainerAccessRules(false);
-        debugId = null;
+        setDebugIdSuffix(null);
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.debugId);
     }
 
@@ -414,12 +411,20 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void setDebugIdSuffix(IDebugId debugIdSuffix) {
         this.debugIdSuffix = debugIdSuffix;
-
-        if ((parent != null) && isWidgetCreated()) {
-            debugId = new CompositeDebugId(parent.getDebugId(), debugIdSuffix);
-            widget.setDebugId(debugId);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.debugId);
+        if (debugIdSuffix != null) {
+            if (parent != null) {
+                debugId = new CompositeDebugId(parent.getDebugId(), debugIdSuffix);
+            } else {
+                debugId = debugIdSuffix;
+            }
+        } else {
+            debugId = null;
         }
+        if (isWidgetCreated()) {
+            widget.setDebugId(debugId);
+        }
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.debugId);
+
     }
 
     public void applyVisibilityRules() {

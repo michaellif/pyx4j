@@ -36,4 +36,9 @@ public class StringDebugId implements IDebugId {
     public String debugId() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return debugId();
+    }
 }

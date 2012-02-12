@@ -36,7 +36,9 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -64,9 +66,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     private final HashMap<CComponent<?, ?>, Path> binding;
 
-    @SuppressWarnings("rawtypes")
-    private final ValueChangeHandler valuePropagationHandler;
-
     public CEntityEditor(Class<E> clazz) {
         this(clazz, new EntityFormComponentFactory());
     }
@@ -77,8 +76,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
         this.factory = factory;
 
-        this.valuePropagationHandler = new ValuePropagationHandler();
-
+        setDebugIdSuffix(new StringDebugId(GWTJava5Helper.getSimpleName(clazz)));
     }
 
     public E proto() {
@@ -141,19 +139,17 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     public void bind(CComponent<?, ?> component, IObject<?> member) {
         // verify that member actually exists in entity.
         assert (proto().getMember(member.getPath()) != null);
-        applyAttributes(component, member);
         binding.put(component, member.getPath());
-
-        component.addValueChangeHandler(valuePropagationHandler);
-
         adopt(component);
     }
 
-    protected void applyAttributes(CComponent<?, ?> component, IObject<?> member) {
+    @Override
+    public void adopt(CComponent<?, ?> component) {
+        component.addValueChangeHandler(new ValuePropagationHandler());
+        IObject<?> member = proto().getMember(binding.get(component));
         MemberMeta mm = member.getMeta();
         if (mm.isValidatorAnnotationPresent(NotNull.class)) {
             component.setMandatory(true);
@@ -168,7 +164,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
             component.setTooltip(mm.getDescription());
         }
         component.setTitle(mm.getCaption());
-        component.setDebugIdSuffix(member.getPath());
+        component.setDebugIdSuffix(new StringDebugId(member.getFieldName()));
+        super.adopt(component);
     }
 
     @Override

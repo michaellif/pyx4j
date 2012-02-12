@@ -36,6 +36,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -306,6 +308,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     public void adopt(final CComponent<?, ?> component) {
         itemsList.add((CEntityFolderItem<E>) component);
         container.add(component);
+
+        IDebugId rowDebugId = new CompositeDebugId("row", currentRowDebugId);
+        component.setDebugIdSuffix(rowDebugId);
         currentRowDebugId++;
 
         super.adopt(component);
