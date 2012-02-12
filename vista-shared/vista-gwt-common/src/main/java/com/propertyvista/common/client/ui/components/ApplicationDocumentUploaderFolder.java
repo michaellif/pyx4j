@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
@@ -163,6 +164,12 @@ public class ApplicationDocumentUploaderFolder extends VistaTableFolder<Applicat
         @Override
         public void setComponent(CEntityFolder<ApplicationDocument> w) {
             vistaTableFolder.setComponent(w);
+        }
+
+        @Override
+        public void onSetDebugId(IDebugId parentDebugId) {
+            // TODO Auto-generated method stub
+
         }
     }
 

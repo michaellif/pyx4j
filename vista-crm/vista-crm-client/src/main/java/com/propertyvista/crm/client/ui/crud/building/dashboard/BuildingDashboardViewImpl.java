@@ -47,7 +47,7 @@ public class BuildingDashboardViewImpl implements BuildingDashboardView {
         dashboard = new DashboardPanel();
         dashboard.setSize("100%", "100%");
 
-        dashboardSelector.setDebugId(VistaCrmDebugId.BuildingDashboardSelector);
+        dashboardSelector.setDebugIdSuffix(VistaCrmDebugId.BuildingDashboardSelector);
         dashboardSelector.setWidth("25em");
         dashboardSelector.addCriterion(PropertyCriterion.eq(dashboardSelector.proto().type(), DashboardType.building));
         dashboardSelector.addValueChangeHandler(new ValueChangeHandler<DashboardMetadata>() {

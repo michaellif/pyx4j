@@ -68,7 +68,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 presenter.logout();
             }
         });
-        logout.setDebugId(new StringDebugId("logout"));
+        logout.setDebugIdSuffix(new StringDebugId("logout"));
         logout.setValue(i18n.tr("LogOut"));
         logout.setVisible(false);
         logout.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
@@ -79,7 +79,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 presenter.login();
             }
         });
-        login.setDebugId(new StringDebugId("login"));
+        login.setDebugIdSuffix(new StringDebugId("login"));
         login.setValue(i18n.tr("Log In"));
         login.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
@@ -89,7 +89,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 presenter.showAccount();
             }
         });
-        account.setDebugId(new StringDebugId("settings"));
+        account.setDebugIdSuffix(new StringDebugId("settings"));
         account.setValue(i18n.tr("Settings"));
         account.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 

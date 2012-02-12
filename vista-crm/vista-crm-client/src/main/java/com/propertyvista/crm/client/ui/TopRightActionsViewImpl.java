@@ -81,7 +81,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 presenter.logout();
             }
         });
-        logout.setDebugId(new StringDebugId("logout"));
+        logout.setDebugIdSuffix(new StringDebugId("logout"));
         logout.setValue(i18n.tr("LogOut"));
         logout.setVisible(false);
         logout.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
@@ -92,7 +92,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 presenter.login();
             }
         });
-        login.setDebugId(new StringDebugId("login"));
+        login.setDebugIdSuffix(new StringDebugId("login"));
         login.setValue(i18n.tr("Log In"));
         login.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
@@ -102,7 +102,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 presenter.showAccount();
             }
         });
-        account.setDebugId(new StringDebugId("account"));
+        account.setDebugIdSuffix(new StringDebugId("account"));
         account.setValue(i18n.tr("Account"));
         account.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
@@ -112,7 +112,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 presenter.SwitchCrmAndSettings();
             }
         });
-        settings.setDebugId(new StringDebugId("administration"));
+        settings.setDebugIdSuffix(new StringDebugId("administration"));
         settings.setValue(i18n.tr("Administration"));
         settings.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
@@ -149,7 +149,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
             }
         });
 
-        getSatisfaction.setDebugId(new StringDebugId("getSatisfaction"));
+        getSatisfaction.setDebugIdSuffix(new StringDebugId("getSatisfaction"));
         getSatisfaction.setValue(i18n.tr("Get Satisfaction"));
         getSatisfaction.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 

@@ -87,7 +87,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
                 presenter.logout();
             }
         });
-        logout.setDebugId(VistaFormsDebugId.Auth_LogOutTop);
+        logout.setDebugIdSuffix(VistaFormsDebugId.Auth_LogOutTop);
         logout.setValue(i18n.tr("Log Out"));
         logout.setVisible(false);
         topLinksPanel.add(logout);
@@ -98,9 +98,9 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
                 presenter.login();
             }
         });
-        login.setDebugId(new StringDebugId("login"));
+        login.setDebugIdSuffix(new StringDebugId("login"));
         login.setValue(i18n.tr("Log In"));
-        login.setDebugId(VistaFormsDebugId.Auth_LoginTop);
+        login.setDebugIdSuffix(VistaFormsDebugId.Auth_LoginTop);
         topLinksPanel.add(login);
 
         topLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
