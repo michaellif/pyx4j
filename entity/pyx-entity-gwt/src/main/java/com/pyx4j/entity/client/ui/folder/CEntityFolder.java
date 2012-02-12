@@ -309,7 +309,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         itemsList.add((CEntityFolderItem<E>) component);
         container.add(component);
 
-        IDebugId rowDebugId = new CompositeDebugId("row", currentRowDebugId);
+        IDebugId rowDebugId = new CompositeDebugId(IDebugId.ROW_PREFIX, currentRowDebugId);
         component.setDebugIdSuffix(rowDebugId);
         currentRowDebugId++;
 

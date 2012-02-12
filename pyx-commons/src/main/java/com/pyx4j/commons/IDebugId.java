@@ -22,6 +22,10 @@ package com.pyx4j.commons;
 
 public interface IDebugId {
 
+    public static final char DEBUGID_SEPARATOR = '-';
+
+    public static final String ROW_PREFIX = "row";
+
     public String debugId();
 
 }

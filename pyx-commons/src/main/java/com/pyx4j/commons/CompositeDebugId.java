@@ -40,7 +40,7 @@ public class CompositeDebugId implements IDebugId {
     }
 
     public CompositeDebugId(IDebugId parent, String child, int itemNumber) {
-        this(parent, new StringDebugId(child + "-" + itemNumber));
+        this(parent, new StringDebugId(child + DEBUGID_SEPARATOR + itemNumber));
     }
 
     public CompositeDebugId(String parent, IDebugId child) {
@@ -53,7 +53,7 @@ public class CompositeDebugId implements IDebugId {
 
     @Override
     public String debugId() {
-        return (parent != null ? parent.debugId() + "-" : "") + (child != null ? child.debugId() : "unknown");
+        return (parent != null ? parent.debugId() + DEBUGID_SEPARATOR : "") + (child != null ? child.debugId() : "unknown");
     }
 
     @Override

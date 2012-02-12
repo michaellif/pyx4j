@@ -51,7 +51,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 public class D {
 
     public static IDebugId id(IList<?> formFolder, int itemNumber) {
-        return new CompositeDebugId(formFolder.getPath(), "row", itemNumber);
+        return new CompositeDebugId(formFolder.getPath(), IDebugId.ROW_PREFIX, itemNumber);
     }
 
     public static IDebugId id(IList<?> formFolder, int itemNumber, IObject<?> member) {
