@@ -11,19 +11,23 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertvista.generator.II.test;
+package com.propertvista.generator.II;
 
-import com.propertvista.generator.II.DataSource;
-import com.propertvista.generator.II.DataSourceCriteria;
+import java.util.List;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-public class InMemoryDataSource implements DataSource {
+public interface DataModel {
 
-    @Override
-    public IEntity getRef(Class<? extends IEntity> type, DataSourceCriteria criteria) {
+    <T extends IEntity> T retreive(EntityQueryCriteria<T> criteria);
 
-        return null;
-    }
+    <T extends IEntity> List<T> query(Class<T> type);
+
+    <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria);
+
+    <T extends IEntity> void persist(T entity);
+
+    <T extends IEntity> void persist(List<T> entityList);
 
 }

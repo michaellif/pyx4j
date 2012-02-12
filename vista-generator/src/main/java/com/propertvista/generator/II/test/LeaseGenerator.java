@@ -13,12 +13,11 @@
  */
 package com.propertvista.generator.II.test;
 
-import com.propertvista.generator.II.DataSource;
+import com.propertvista.generator.II.DataModel;
 import com.propertvista.generator.II.TreeGenerator;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -26,11 +25,11 @@ import com.propertyvista.misc.VistaDevPreloadConfig;
 
 public class LeaseGenerator implements TreeGenerator<Lease> {
 
-    private final DataSource dataSource;
+    private final DataModel dataSource;
 
     private final VistaDevPreloadConfig config;
 
-    public LeaseGenerator(DataSource dataSource, VistaDevPreloadConfig config) {
+    public LeaseGenerator(DataModel dataSource, VistaDevPreloadConfig config) {
         this.dataSource = dataSource;
         this.config = config;
     }
@@ -45,7 +44,7 @@ public class LeaseGenerator implements TreeGenerator<Lease> {
         TenantInLease tl = EntityFactory.create(TenantInLease.class);
         lease.tenants().add(tl);
         tl.role().setValue(Role.Applicant);
-        tl.tenant().set(dataSource.getRef(Tenant.class, null));
+        // tl.tenant().set(dataSource.retreive(Tenant.class, null));
 
         return lease;
     }

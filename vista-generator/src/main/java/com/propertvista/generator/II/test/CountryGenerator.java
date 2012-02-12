@@ -7,16 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 3, 2012
+ * Created on Feb 12, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertvista.generator.II;
+package com.propertvista.generator.II.test;
 
-import com.pyx4j.entity.shared.IEntity;
-
-public interface DataSource {
-
-    IEntity getRef(Class<? extends IEntity> type, DataSourceCriteria criteria);
+public class CountryGenerator {
 
 }
