@@ -131,10 +131,8 @@ public interface MockupArrearsState extends IEntity {
     IPrimitive<String> city();
 
     // TODO special comparator
-    @EmbeddedEntity
     Province province();
 
-    @EmbeddedEntity
     // TODO special comparator
     Country country();
 
