@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -61,6 +62,10 @@ public interface IEntityPersistenceService {
      * @return false If entity not found.
      */
     public <T extends IEntity> boolean retrieve(T entity);
+
+    public <T extends IEntity> void retrieveMember(T entityMember);
+
+    public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember);
 
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria);
 

@@ -734,6 +734,68 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    @Override
+    public <T extends IEntity> void retrieveMember(T entityMember) {
+        switch (entityMember.getAttachLevel()) {
+        case Attached:
+            throw new RuntimeException("Values of " + entityMember.getPath() + " already Attached");
+        case IdOnly:
+        case ToStringMembers:
+            retrieve(entityMember);
+            break;
+        case Detached:
+            assert (entityMember.getOwner().getPrimaryKey() != null);
+            Connection connection = null;
+            try {
+                connection = connectionProvider.getConnection(ConnectionTarget.forRead);
+                TableModel tm = tableModel(connection, entityMember.getOwner().getEntityMeta());
+                tm.retrieveMember(connection, entityMember.getOwner(), entityMember);
+                if (cascadeRetrieve(connection, entityMember) == null) {
+                    throw new RuntimeException("Entity '" + entityMember.getEntityMeta().getCaption() + "' " + entityMember.getPrimaryKey() + " "
+                            + entityMember.getPath() + " NotFound");
+                }
+            } finally {
+                SQLUtils.closeQuietly(connection);
+            }
+        }
+    }
+
+    @Override
+    public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember) {
+        switch (collectionMember.getAttachLevel()) {
+        case Attached:
+            // There are no distinction in IdOnly/Attached  for now  
+            //TODO throw new RuntimeException("Values of " + collectionMember.getPath() + " already Attached");
+            retrieve(collectionMember);
+
+        case IdOnly: // This is not implemented now.
+        case ToStringMembers:
+            retrieve(collectionMember);
+            collectionMember.setAttachLevel(AttachLevel.Attached);
+            break;
+
+        case Detached:
+            assert (collectionMember.getOwner().getPrimaryKey() != null);
+            Connection connection = null;
+            try {
+                connection = connectionProvider.getConnection(ConnectionTarget.forRead);
+                TableModel tm = tableModel(connection, collectionMember.getOwner().getEntityMeta());
+                //TODO collectionMember.setAttachLevel(AttachLevel.IdOnly);
+                collectionMember.setAttachLevel(AttachLevel.Attached);
+                tm.retrieveMember(connection, collectionMember.getOwner(), collectionMember);
+                for (IEntity childEntity : collectionMember) {
+                    if (cascadeRetrieve(connection, childEntity) == null) {
+                        throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
+                                + childEntity.getPath() + " NotFound");
+                    }
+                }
+                collectionMember.setAttachLevel(AttachLevel.Attached);
+            } finally {
+                SQLUtils.closeQuietly(connection);
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private <T extends IEntity> T cascadeRetrieve(Connection connection, T entity) {
         if (entity.getPrimaryKey() == null) {

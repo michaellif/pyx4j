@@ -269,9 +269,6 @@ public class TableModelCollections {
     }
 
     static void retrieve(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member) {
-        if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
-            return;
-        }
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ObjectClassType type = member.getMemberMeta().getObjectClassType();

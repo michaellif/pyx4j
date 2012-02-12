@@ -46,8 +46,11 @@ import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -427,7 +430,9 @@ public class TableModel {
 
     private void retrieveExternal(Connection connection, Dialect dialect, IEntity entity) {
         for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
-            TableModelCollections.retrieve(connection, dialect, entity, member);
+            if (member.getMemberMeta().getAttachLevel() != AttachLevel.Detached) {
+                TableModelCollections.retrieve(connection, dialect, entity, member);
+            }
         }
         for (MemberExternalOperationsMeta member : entityOperationsMeta.getExternalMembers()) {
             // Special handling for recursive retrieve of Owner
@@ -437,6 +442,18 @@ public class TableModel {
             }
             TableModleExternal.retrieve(connection, dialect, entity, member);
         }
+    }
+
+    public void retrieveMember(Connection connection, IEntity entity, IEntity entityMember) {
+        MemberOperationsMeta member = entityOperationsMeta.getMember(new Path(entity.getValueClass(), entityMember.getFieldName()).toString());
+        assert (member != null) : "Member " + entityMember.getFieldName() + " not found";
+        TableModleExternal.retrieve(connection, dialect, entity, (MemberExternalOperationsMeta) member);
+    }
+
+    public void retrieveMember(Connection connection, IEntity entity, ICollection<?, ?> collectionMember) {
+        MemberOperationsMeta member = entityOperationsMeta.getMember(new Path(entity.getValueClass(), collectionMember.getFieldName()).toString());
+        assert (member != null) : "Member " + collectionMember.getFieldName() + " not found";
+        TableModelCollections.retrieve(connection, dialect, entity, (MemberCollectionOperationsMeta) member);
     }
 
     public boolean retrieve(Connection connection, Key primaryKey, IEntity entity) {
