@@ -269,7 +269,9 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 Persistence.service().merge(unitData.unit());
 
                 // persist internal lists and with belongness:
-                Persistence.service().persist(unitData.occupancies());
+                //TODO fix this model
+                //Persistence.service().persist(unitData.occupancies());
+
                 Persistence.service().persist(unitData.details());
                 Persistence.service().persist(serviceItems);
             }

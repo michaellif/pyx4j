@@ -14,7 +14,6 @@
 package com.propertyvista.domain.financial;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -26,11 +25,9 @@ import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public interface BillingAccount extends IEntity {
 
-    //Bidirectional reference
     @ReadOnly
     @Detached
     @Owner
-    @JoinColumn
     LeaseFinancial leaseFinancial();
 
     @ReadOnly

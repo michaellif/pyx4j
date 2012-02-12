@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -37,6 +38,9 @@ public interface PageContent extends IEntity {
     @ReadOnly
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     PageDescriptor descriptor();
+
+    @OrderColumn
+    IPrimitive<Integer> orderInDescriptor();
 
     // -------------------------
 

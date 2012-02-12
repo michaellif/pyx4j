@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
@@ -58,6 +59,9 @@ public interface PageDescriptor extends Descriptor {
     @JoinColumn
     @Detached
     Descriptor parent();
+
+    @OrderColumn
+    IPrimitive<Integer> orderInDescriptor();
 
     // -------------------------------
 

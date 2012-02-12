@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -28,7 +29,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 
-// TODO rename to AptUnitOccupancySegment
 public interface AptUnitOccupancySegment extends IEntity {
 
     @I18n
@@ -93,6 +93,9 @@ public interface AptUnitOccupancySegment extends IEntity {
     @Detached
     @ReadOnly
     AptUnitOccupancy occupancy();
+
+    @OrderColumn
+    IPrimitive<Integer> orderInOccupancy();
 
     @NotNull
     @Format("MM/dd/yyyy")
