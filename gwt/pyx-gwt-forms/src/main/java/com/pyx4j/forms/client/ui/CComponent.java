@@ -85,6 +85,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private IDebugId debugId;
 
+    private IDebugId debugIdSuffix;
+
     private String mandatoryValidationMessage = i18n.tr("This field is Mandatory");
 
     private DATA_TYPE value = null;
@@ -163,11 +165,18 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         assert (this.parent == null) : "Component " + this.getClass().getName() + " is already bound to " + this.parent;
         this.parent = parent;
         setContainerAccessRules(true);
+
+        if (debugIdSuffix != null) {
+            debugId = new CompositeDebugId(parent.getDebugId(), debugIdSuffix);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.debugId);
+        }
     }
 
     public void onAbandon() {
         parent = null;
         setContainerAccessRules(false);
+        debugId = null;
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.debugId);
     }
 
     @Override
@@ -370,9 +379,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         widget.setHeight(getHeight());
 
         setNativeValue(getValue());
+
         if (debugId != null) {
-            widget.setDebugId(getCompositeDebugId());
+            widget.setDebugId(debugId);
         }
+
         this.addPropertyChangeHandler(widget);
     }
 
@@ -397,18 +408,17 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return widget;
     }
 
-    public IDebugId getCompositeDebugId() {
-        if ((parent != null) && (debugId != null)) {
-            return new CompositeDebugId(parent.getCompositeDebugId(), debugId);
-        } else {
-            return debugId;
-        }
+    public IDebugId getDebugId() {
+        return debugId;
     }
 
-    public void setDebugId(IDebugId debugId) {
-        this.debugId = debugId;
-        if (isWidgetCreated() && (debugId != null)) {
-            getWidget().setDebugId(getCompositeDebugId());
+    public void setDebugIdSuffix(IDebugId debugIdSuffix) {
+        this.debugIdSuffix = debugIdSuffix;
+
+        if ((parent != null) && isWidgetCreated()) {
+            debugId = new CompositeDebugId(parent.getDebugId(), debugIdSuffix);
+            widget.setDebugId(debugId);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.debugId);
         }
     }
 
@@ -618,7 +628,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     public String shortDebugInfo() {
-        return GWTJava5Helper.getSimpleName(this.getClass()) + ((getCompositeDebugId() != null) ? " " + getCompositeDebugId() : "");
+        return GWTJava5Helper.getSimpleName(this.getClass()) + ((debugId != null) ? " " + debugId : "");
     }
 
     protected void setNativeValue(DATA_TYPE value) {

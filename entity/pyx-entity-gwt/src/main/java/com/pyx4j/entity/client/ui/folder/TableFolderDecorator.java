@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.images.EntityFolderImages;
@@ -43,6 +44,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
@@ -129,7 +131,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
     }
 
     @Override
-    public void setComponent(CEntityFolder<E> folder) {
+    public void setComponent(final CEntityFolder<E> folder) {
         this.folder = folder;
         super.setComponent(folder);
         folder.addPropertyChangeHandler(new PropertyChangeHandler() {
@@ -141,6 +143,17 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         });
 
         applyFolderProperties();
+
+        folder.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyName.debugId) {
+                    onSetDebugId(folder.getDebugId());
+                }
+            }
+        });
+
+        onSetDebugId(folder.getDebugId());
 
     }
 
@@ -177,4 +190,8 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         }
     }
 
+    @Override
+    public void onSetDebugId(IDebugId parentDebugId) {
+
+    }
 }

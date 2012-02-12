@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -41,6 +42,15 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
+
+    public static enum DebugIds implements IDebugId {
+        TableFolderItemDecorator, ToolBar;
+
+        @Override
+        public String debugId() {
+            return name();
+        }
+    }
 
     private final HTML validationMessageHolder;
 
@@ -79,12 +89,8 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         validationMessageHolder = new HTML();
         validationMessageHolder.getElement().getStyle().setColor("red");
         mainPanel.add(validationMessageHolder, DockPanel.SOUTH);
-        validationMessageHolder.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator,
-                IFolderDecorator.DecoratorsIds.Label).debugId());
 
         actionsPanel = new ItemActionsBar(true, Direction.RTL, images);
-        actionsPanel.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator, IFolderDecorator.DecoratorsIds.ActionPanel)
-                .debugId());
         mainPanel.add(actionsPanel, DockPanel.EAST);
 
         contentHolder = new SimplePanel();
@@ -104,6 +110,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
                 }
             }
         });
+
     }
 
     @Override
@@ -122,15 +129,16 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     }
 
     @Override
-    protected void onEnsureDebugId(String baseID) {
-        super.onEnsureDebugId(baseID);
-        //validationMessageHolder.ensureDebugId(new CompositeDebugId(baseID, IFolderDecorator.DecoratorsIds.Label).debugId());
-        //actionsPanel.ensureDebugId(new CompositeDebugId(baseID, IFolderDecorator.DecoratorsIds.ActionPanel).debugId());
-    }
-
-    @Override
     public void setActionsState(boolean removable, boolean up, boolean down) {
         actionsPanel.setActionsState(removable, up, down);
     }
 
+    @Override
+    public void onSetDebugId(IDebugId parentDebugId) {
+        validationMessageHolder.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator,
+                IFolderDecorator.DecoratorsIds.Label)).debugId());
+
+        actionsPanel.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator,
+                IFolderDecorator.DecoratorsIds.ActionPanel)).debugId());
+    }
 }

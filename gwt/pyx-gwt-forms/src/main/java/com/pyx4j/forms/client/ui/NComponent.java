@@ -83,7 +83,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     protected void onEditorCreate() {
         editor.asWidget().setWidth(getCComponent().getWidth());
-        setDebugId(getCComponent().getCompositeDebugId());
+        setDebugId(getCComponent().getDebugId());
     }
 
     protected void onEditorInit() {
@@ -91,7 +91,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     }
 
     protected void onViewerCreate() {
-        setDebugId(getCComponent().getCompositeDebugId());
+        setDebugId(getCComponent().getDebugId());
     }
 
     protected void onViewerInit() {

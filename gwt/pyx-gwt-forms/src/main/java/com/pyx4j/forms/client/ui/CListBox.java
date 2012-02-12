@@ -32,8 +32,10 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.ICloneable;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
@@ -46,6 +48,16 @@ public class CListBox<E> extends CFocusComponent<List<E>, NativeListBox<E>> impl
 
     public static enum Layout {
         PLAIN, TRIGGERED, INLINE;
+    }
+
+    public static enum DebugIds implements IDebugId {
+        POP;
+
+        @Override
+        public String debugId() {
+            return name();
+        }
+
     }
 
     public static class ListBoxDisplayProperties {
@@ -235,8 +247,8 @@ public class CListBox<E> extends CFocusComponent<List<E>, NativeListBox<E>> impl
                 return CListBox.this.getItemName(item);
             }
         };
-        if (this.getCompositeDebugId() != null) {
-            pop.ensureDebugId(this.getCompositeDebugId().toString());
+        if (this.getDebugId() != null) {
+            pop.ensureDebugId(new CompositeDebugId(this.getDebugId(), DebugIds.POP).debugId());
         }
         pop.setComparator(getComparator());
         pop.setRequiredValues(getRequiredValues());
@@ -251,7 +263,7 @@ public class CListBox<E> extends CFocusComponent<List<E>, NativeListBox<E>> impl
 
         ((Widget) nativeListBox).setSize("400px", "200px");
 
-        pop.setBody((Widget) nativeListBox);
+        pop.setBody(nativeListBox);
         pop.show();
 
     }

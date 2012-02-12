@@ -28,8 +28,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.widgets.client.Button;
@@ -79,16 +83,26 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     }
 
     @Override
-    public void setComponent(CEntityFolder<E> folder) {
+    public void setComponent(final CEntityFolder<E> folder) {
         container.setWidget(folder.getContainer());
+
+        folder.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyName.debugId) {
+                    onSetDebugId(folder.getDebugId());
+                }
+            }
+        });
+
+        onSetDebugId(folder.getDebugId());
     }
 
     @Override
-    protected void onEnsureDebugId(String baseID) {
-        super.onEnsureDebugId(baseID);
-        //TODO use inheritance of objects
-        //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
+    public void onSetDebugId(IDebugId parentDebugId) {
         if (isAddable()) {
+            String baseID = parentDebugId.debugId();
+
             if (baseID.endsWith(IFolderDecorator.DEBUGID_SUFIX)) {
                 baseID = baseID.substring(0, baseID.length() - IFolderDecorator.DEBUGID_SUFIX.length());
             }

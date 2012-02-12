@@ -91,7 +91,6 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         setWidget(mainPanel);
 
         toolbar = new BoxFolderItemToolbar(this);
-        toolbar.ensureDebugId(new CompositeDebugId(DebugIds.BoxFolderItemDecorator, DebugIds.ToolBar).debugId());
         mainPanel.add(toolbar);
 
         contentHolder = new SimplePanel();
@@ -164,4 +163,8 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         toolbar.getActionsPanel().setActionsState(removable, up, down);
     }
 
+    @Override
+    public void onSetDebugId(IDebugId parentDebugId) {
+        toolbar.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(DebugIds.BoxFolderItemDecorator, DebugIds.ToolBar)).debugId());
+    }
 }

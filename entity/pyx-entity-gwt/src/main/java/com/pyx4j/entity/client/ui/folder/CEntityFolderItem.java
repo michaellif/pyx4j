@@ -33,6 +33,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -246,6 +247,14 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
             return null;
         }
         return Arrays.asList(new CComponent<?, ?>[] { editor });
+    }
+
+    @Override
+    public void setDebugIdSuffix(IDebugId debugIdSuffix) {
+        // TODO Auto-generated method stub
+        super.setDebugIdSuffix(debugIdSuffix);
+
+        System.out.println("Debug ID: " + debugIdSuffix);
     }
 
 }

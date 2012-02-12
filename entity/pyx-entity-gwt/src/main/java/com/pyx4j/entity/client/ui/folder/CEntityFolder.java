@@ -36,8 +36,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -172,10 +170,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         ((IFolderDecorator) getDecorator()).setAddButtonVisible(modifiable);
 
         addValueChangeHandler((IFolderDecorator) getDecorator());
-        //TODO use components inheritance
-        if (this.getCompositeDebugId() != null) {
-            getDecorator().asWidget().ensureDebugId(this.getCompositeDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
-        }
 
         ((IFolderDecorator) getDecorator()).addItemAddClickHandler(new ClickHandler() {
             @Override
@@ -185,13 +179,15 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         });
     }
 
-    @Override
-    public void setDebugId(IDebugId debugId) {
-        super.setDebugId(debugId);
-        if ((debugId != null) && (getDecorator() != null)) {
-            getDecorator().asWidget().ensureDebugId(this.getCompositeDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
-        }
-    }
+    // TODO Igor K. delete comment code
+
+//    @Override
+//    public void setDebugId(IDebugId debugId) {
+//        super.setDebugId(debugId);
+//        if ((debugId != null) && (getDecorator() != null)) {
+//            getDecorator().asWidget().ensureDebugId(this.getCompositeDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
+//        }
+//    }
 
     @SuppressWarnings("unchecked")
     protected void addItem() {
@@ -321,8 +317,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         itemsList.add((CEntityFolderItem<E>) component);
         container.add(component);
 
-        IDebugId rowDebugId = new CompositeDebugId(this.getCompositeDebugId(), "row", currentRowDebugId);
-        component.setDebugId(rowDebugId);
+        // TODO Igor K. delete commented roews
+        //IDebugId rowDebugId = new CompositeDebugId(this.getCompositeDebugId(), "row", currentRowDebugId);
+        //component.setDebugId(rowDebugId);
         currentRowDebugId++;
 
         super.adopt(component);

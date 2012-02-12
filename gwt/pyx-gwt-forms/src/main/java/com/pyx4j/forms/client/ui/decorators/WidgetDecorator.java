@@ -117,7 +117,7 @@ public class WidgetDecorator extends FlexTable {
             });
         }
 
-        label.ensureDebugId(CompositeDebugId.debugId(component.getCompositeDebugId(), DebugIds.Label));
+        label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
 
         infoImageHolder = new SpaceHolder();
         infoImageHolder.setStyleName(WidgetDecoratorInfoImage.name());
@@ -126,9 +126,8 @@ public class WidgetDecorator extends FlexTable {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
             infoImage.setTitle(component.getTooltip());
 
-            infoImageHolder.ensureDebugId(CompositeDebugId.debugId(component.getCompositeDebugId(), DebugIds.InfoImageHolder));
-            infoImage.ensureDebugId(CompositeDebugId.debugId(component.getCompositeDebugId(),
-                    new CompositeDebugId(DebugIds.InfoImageHolder, DebugIds.InfoImage)));
+            infoImageHolder.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.InfoImageHolder));
+            infoImage.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), new CompositeDebugId(DebugIds.InfoImageHolder, DebugIds.InfoImage)));
             infoImageHolder.setWidget(infoImage);
         }
 
@@ -215,8 +214,8 @@ public class WidgetDecorator extends FlexTable {
                 mandatoryImage.setResource(ImageFactory.getImages().mandatory());
                 mandatoryImage.setTitle("This field is mandatory");
 
-                if (component.getCompositeDebugId() != null) {
-                    mandatoryImage.ensureDebugId(new CompositeDebugId(component.getCompositeDebugId(), DebugIds.MandatoryImage).debugId());
+                if (component.getDebugId() != null) {
+                    mandatoryImage.ensureDebugId(new CompositeDebugId(component.getDebugId(), DebugIds.MandatoryImage).debugId());
                 }
             }
             mandatoryImageHolder.add(mandatoryImage);
@@ -232,8 +231,8 @@ public class WidgetDecorator extends FlexTable {
             validationLabel.setText(null);
         }
 
-        if (component.getCompositeDebugId() != null) {
-            validationLabel.ensureDebugId(new CompositeDebugId(component.getCompositeDebugId(), DebugIds.ValidationLabel).debugId());
+        if (component.getDebugId() != null) {
+            validationLabel.ensureDebugId(new CompositeDebugId(component.getDebugId(), DebugIds.ValidationLabel).debugId());
         }
     }
 

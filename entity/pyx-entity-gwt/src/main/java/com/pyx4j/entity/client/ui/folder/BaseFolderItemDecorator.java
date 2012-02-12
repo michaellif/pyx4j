@@ -24,6 +24,9 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimplePanel implements IFolderItemDecorator<E> {
 
@@ -38,6 +41,17 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
     @Override
     public void setComponent(final CEntityFolderItem<E> folderItem) {
         this.folderItem = folderItem;
+
+        folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyName.debugId) {
+                    onSetDebugId(folderItem.getDebugId());
+                }
+            }
+        });
+
+        onSetDebugId(folderItem.getDebugId());
     }
 
     public CEntityFolderItem<E> getFolderItem() {
@@ -47,5 +61,4 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
     public EntityFolderImages getImages() {
         return images;
     }
-
 }

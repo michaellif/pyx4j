@@ -33,8 +33,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -140,23 +138,23 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
 
         decorator.setEditor(this);
 
-        //TODO use components inheritance
-        if (this.getCompositeDebugId() != null) {
-            decorator.asWidget().ensureDebugId(this.getCompositeDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
-        }
+//        //TODO use components inheritance
+//        if (this.getCompositeDebugId() != null) {
+//            decorator.asWidget().ensureDebugId(this.getCompositeDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
+//        }
     }
 
     public IPolymorphicEditorDecorator<E> getPolymorphicEditorDecorator() {
         return decorator;
     }
 
-    @Override
-    public void setDebugId(IDebugId debugId) {
-        super.setDebugId(debugId);
-        if ((debugId != null) && (decorator != null)) {
-            decorator.asWidget().ensureDebugId(this.getCompositeDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
-        }
-    }
+//    @Override
+//    public void setDebugId(IDebugId debugId) {
+//        super.setDebugId(debugId);
+//        if ((debugId != null) && (decorator != null)) {
+//            decorator.asWidget().ensureDebugId(this.getCompositeDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
+//        }
+//    }
 
 //    protected void setItem(Class<E> type) {
 //        addItem(EntityFactory.create(type));

@@ -35,9 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -170,7 +168,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
             component.setTooltip(mm.getDescription());
         }
         component.setTitle(mm.getCaption());
-        component.setDebugId(member.getPath());
+        component.setDebugIdSuffix(member.getPath());
     }
 
     @Override
@@ -223,11 +221,11 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         }
     }
 
-    public void setComponentsDebugId(IDebugId debugId) {
-        for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
-            me.getKey().setDebugId(new CompositeDebugId(debugId, me.getValue()));
-        }
-    }
+//    public void setComponentsDebugId(IDebugId debugId) {
+//        for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
+//            me.getKey().setDebugIdSuffix(new CompositeDebugId(debugId, me.getValue()));
+//        }
+//    }
 
     @Override
     public Collection<? extends CComponent<?, ?>> getComponents() {

@@ -26,6 +26,8 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
     public static enum PropertyName {
 
+        debugId,
+
         tooltip,
 
         title,

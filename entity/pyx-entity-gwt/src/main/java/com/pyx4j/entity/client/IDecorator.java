@@ -22,8 +22,12 @@ package com.pyx4j.entity.client;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IDebugId;
+
 public interface IDecorator<E extends CEntityContainer<?>> extends IsWidget {
 
     void setComponent(E component);
+
+    void onSetDebugId(IDebugId parentDebugId);
 
 }
