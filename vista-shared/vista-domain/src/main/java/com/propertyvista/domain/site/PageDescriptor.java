@@ -16,6 +16,7 @@ package com.propertyvista.domain.site;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -54,6 +55,7 @@ public interface PageDescriptor extends Descriptor {
     IPrimitive<Type> type();
 
     @Owner
+    @JoinColumn
     @Detached
     Descriptor parent();
 

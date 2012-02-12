@@ -14,6 +14,7 @@
 package com.propertyvista.domain.maintenance;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
@@ -24,6 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface IssueSubjectDetails extends IEntity {
 
     @Owner
+    @JoinColumn
     @Detached
     IssueRepairSubject subject();
 

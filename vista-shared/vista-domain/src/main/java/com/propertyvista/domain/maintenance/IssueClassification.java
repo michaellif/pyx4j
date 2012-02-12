@@ -14,6 +14,7 @@
 package com.propertyvista.domain.maintenance;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -23,6 +24,7 @@ public interface IssueClassification extends IEntity {
 
     @Owner
     @Detached
+    @JoinColumn
     IssueSubjectDetails subjectDetails();
 
     @ToString(index = 0)
