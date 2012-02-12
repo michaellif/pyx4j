@@ -63,4 +63,16 @@ public class AccountNumberGenerator {
         int nextRandomDigit();
 
     }
+
+    public static String formatAccountNumber(String accountNumber) {
+        String numbers = accountNumber.trim().replaceAll("\\s", "").replaceAll("-", "");
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < numbers.length(); ++i) {
+            b.append(numbers.charAt(i));
+            if (i % 3 == 2) {
+                b.append('-');
+            }
+        }
+        return b.toString();
+    }
 }

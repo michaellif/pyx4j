@@ -38,8 +38,7 @@ public class AccountNumberGeneratorTest {
     }
 
     private AccountNumberGenerator generatorOf(final String accountNumber) {
-        String validationMessage = "account number must be a string of length " + AccountNumberGenerator.ACCOUNT_NUMBER_LENGTH
-                + " and contain only digits";
+        String validationMessage = "account number must be a string of length " + AccountNumberGenerator.ACCOUNT_NUMBER_LENGTH + " and contain only digits";
         if (accountNumber.length() != AccountNumberGenerator.ACCOUNT_NUMBER_LENGTH | !accountNumber.matches("\\d*")) {
             throw new IllegalStateException(validationMessage);
         }
@@ -64,7 +63,7 @@ public class AccountNumberGeneratorTest {
 
     private void validateAndPrint(String accountNomber) {
         Assert.assertTrue("Account validation " + accountNomber, ValidationUtils.isCreditCardNumberValid(accountNomber));
-        System.out.println(accountNomber);
+        System.out.println(accountNomber + "\t" + AccountNumberGenerator.formatAccountNumber(accountNomber));
     }
 
 }
