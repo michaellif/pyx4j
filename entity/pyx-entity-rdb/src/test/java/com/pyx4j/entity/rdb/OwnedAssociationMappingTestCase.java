@@ -295,6 +295,7 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         {
             BidirectionalOneToOneInversedParent parent = srv.retrieve(BidirectionalOneToOneInversedParent.class, o.getPrimaryKey());
             Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("correct data retrieved", o.name(), parent.name());
             Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
             Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
             Assert.assertEquals("owner in child data retrieved", AttachLevel.Attached, parent.child().parent().getAttachLevel());
@@ -491,11 +492,11 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     }
 
     public void testBidirectionalOneToManyPersist() {
-//        testBidirectionalOneToManySave(TestCaseMethod.Persist);
+        testBidirectionalOneToManySave(TestCaseMethod.Persist);
     }
 
     public void testBidirectionalOneToManyMerge() {
-//        testBidirectionalOneToManySave(TestCaseMethod.Merge);
+        testBidirectionalOneToManySave(TestCaseMethod.Merge);
     }
 
     public void testBidirectionalOneToManySave(TestCaseMethod testCaseMethod) {
@@ -522,6 +523,15 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         {
             BidirectionalOneToManyParent parent = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
             Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("correct data retrieved", o.name(), parent.name());
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.children().getAttachLevel());
+            Assert.assertEquals("child data size", o.children().size(), parent.children().size());
+            Assert.assertEquals("correct data retrieved", o.children().get(0).name(), parent.children().get(0).name());
+            Assert.assertEquals("correct data retrieved", o.children().get(1).name(), parent.children().get(1).name());
+            for (BidirectionalOneToManyChild child : o.children()) {
+                Assert.assertEquals("correct data retrieved", o.id(), child.parent().id());
+                Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+            }
         }
 
         // Get Child and see that child is retrieved, then verify values
@@ -540,8 +550,11 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         {
             BidirectionalOneToManyParent parent = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
             Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("correct data retrieved", o.name(), parent.name());
             Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.children().getAttachLevel());
+            Assert.assertEquals("child data size", o.children().size(), parent.children().size());
             Assert.assertEquals("correct data retrieved", o.children().get(0).name(), parent.children().get(0).name());
+            Assert.assertEquals("correct data retrieved", o.children().get(1).name(), parent.children().get(1).name());
         }
 
         // Get Child and see that child is retrieved, then verify values
@@ -549,6 +562,39 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             BidirectionalOneToManyChild child = srv.retrieve(BidirectionalOneToManyChild.class, o.children().get(1).getPrimaryKey());
             Assert.assertNotNull("data retrieved ", child);
             Assert.assertEquals("correct data retrieved", o.children().get(1).name(), child.name());
+        }
+
+        // Add Child v1 via owner
+        BidirectionalOneToManyChild c2 = EntityFactory.create(BidirectionalOneToManyChild.class);
+        c2.parent().set(o);
+        c2.testId().setValue(testId);
+        c2.name().setValue(uniqueString());
+        o.children().add(c2);
+        srvSave(o, testCaseMethod);
+
+        {
+            BidirectionalOneToManyParent parent = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
+            Assert.assertEquals("child data size", 3, parent.children().size());
+            for (BidirectionalOneToManyChild child : o.children()) {
+                Assert.assertEquals("correct data retrieved", o.id(), child.parent().id());
+                Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+            }
+        }
+
+        // Add Child v2
+        BidirectionalOneToManyChild c3 = EntityFactory.create(BidirectionalOneToManyChild.class);
+        c3.parent().set(o);
+        c3.testId().setValue(testId);
+        c3.name().setValue(uniqueString());
+        srvSave(c3, testCaseMethod);
+
+        {
+            BidirectionalOneToManyParent parent = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
+            Assert.assertEquals("child data size", 4, parent.children().size());
+            for (BidirectionalOneToManyChild child : o.children()) {
+                Assert.assertEquals("correct data retrieved", o.id(), child.parent().id());
+                Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+            }
         }
 
         // Query Parent By Child
@@ -562,8 +608,19 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             Assert.assertEquals("correct data retrieved", o.children().get(0).name(), parents.get(0).children().get(0).name());
         }
 
-        // Query Child By Parent
+        // Query Child By Parent id
         {
+            EntityQueryCriteria<BidirectionalOneToManyChild> criteria = EntityQueryCriteria.create(BidirectionalOneToManyChild.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().parent(), o));
+
+            List<BidirectionalOneToManyChild> children = srv.query(criteria);
+            Assert.assertEquals("result set size", 4, children.size());
+            Assert.assertEquals("correct data retrieved", o.name(), children.get(0).parent().name());
+        }
+
+        // TODO Query Child By Parent filed
+        if (false) {
             EntityQueryCriteria<BidirectionalOneToManyChild> criteria = EntityQueryCriteria.create(BidirectionalOneToManyChild.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             criteria.add(PropertyCriterion.eq(criteria.proto().parent().name(), o.name()));
@@ -575,16 +632,16 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
         // Get Child, change and save independently
         {
-            BidirectionalOneToManyChild child = srv.retrieve(BidirectionalOneToManyChild.class, o.children().get(1).getPrimaryKey());
-            child.name().setValue(child.name().getValue() + "#");
+            BidirectionalOneToManyParent parent = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
+            BidirectionalOneToManyChild child = srv.retrieve(BidirectionalOneToManyChild.class, parent.children().get(1).getPrimaryKey());
+            child.name().setValue(uniqueString());
             srvSave(child, testCaseMethod);
 
-            child = srv.retrieve(BidirectionalOneToManyChild.class, o.children().get(1).getPrimaryKey());
-            Assert.assertTrue("child update", child.name().getValue().endsWith("#"));
+            BidirectionalOneToManyChild childR1 = srv.retrieve(BidirectionalOneToManyChild.class, parent.children().get(1).getPrimaryKey());
+            Assert.assertEquals("child update", child.name(), childR1.name());
 
-            BidirectionalOneToManyParent parent = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
-            Assert.assertTrue("child update", parent.children().get(1).name().getValue().endsWith("#"));
-
+            BidirectionalOneToManyParent parentR1 = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
+            Assert.assertEquals("child update", child.name(), parentR1.children().get(1).name());
         }
     }
 
@@ -603,11 +660,11 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     }
 
     public void testBidirectionalOneToManyAutoPersist() {
-//        testBidirectionalOneToManyAutoSave(TestCaseMethod.Persist);
+        testBidirectionalOneToManyAutoSave(TestCaseMethod.Persist);
     }
 
     public void testBidirectionalOneToManyAutoMerge() {
-//        testBidirectionalOneToManyAutoSave(TestCaseMethod.Merge);
+        testBidirectionalOneToManyAutoSave(TestCaseMethod.Merge);
     }
 
     public void testBidirectionalOneToManyAutoSave(TestCaseMethod testCaseMethod) {
@@ -674,8 +731,8 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             Assert.assertEquals("correct data retrieved", o.children().get(0).name(), parents.get(0).children().get(0).name());
         }
 
-        // Query Child By Parent name
-        {
+        //TODO Query Child By Parent field
+        if (false) {
             EntityQueryCriteria<BidirectionalOneToManyAutoChild> criteria = EntityQueryCriteria.create(BidirectionalOneToManyAutoChild.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             criteria.add(PropertyCriterion.eq(criteria.proto().parent().name(), o.name()));
@@ -692,22 +749,21 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             criteria.add(PropertyCriterion.eq(criteria.proto().parent(), o));
 
             List<BidirectionalOneToManyAutoChild> children = srv.query(criteria);
-            Assert.assertEquals("result set size", 1, children.size());
+            Assert.assertEquals("result set size", 2, children.size());
             Assert.assertEquals("correct data retrieved", o.name(), children.get(0).parent().name());
         }
 
         // Get Child, change and save independently
         {
             BidirectionalOneToManyAutoChild child = srv.retrieve(BidirectionalOneToManyAutoChild.class, o.children().get(1).getPrimaryKey());
-            child.name().setValue(child.name().getValue() + "#");
+            child.name().setValue(uniqueString());
             srvSave(child, testCaseMethod);
 
-            child = srv.retrieve(BidirectionalOneToManyAutoChild.class, o.children().get(1).getPrimaryKey());
-            Assert.assertTrue("child update", child.name().getValue().endsWith("#"));
+            BidirectionalOneToManyAutoChild childR1 = srv.retrieve(BidirectionalOneToManyAutoChild.class, o.children().get(1).getPrimaryKey());
+            Assert.assertEquals("child update", child.name(), childR1.name());
 
             BidirectionalOneToManyAutoParent parent = srv.retrieve(BidirectionalOneToManyAutoParent.class, o.getPrimaryKey());
-            Assert.assertTrue("child update", parent.children().get(1).name().getValue().endsWith("#"));
-
+            Assert.assertEquals("child update", child.name(), parent.children().get(1).name());
         }
     }
 }
