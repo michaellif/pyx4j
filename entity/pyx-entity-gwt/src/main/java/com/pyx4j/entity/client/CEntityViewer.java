@@ -31,10 +31,10 @@ import com.pyx4j.forms.client.ui.ValidationResults;
 public abstract class CEntityViewer<E extends IObject<?>> extends CEntityContainer<E> {
 
     @Override
-    public void setValue(E value, boolean fireEvent, boolean populate) {
-        super.setValue(value, fireEvent, populate);
+    protected void propagateValue(E value, boolean fireEvent, boolean populate) {
+        super.propagateValue(value, fireEvent, populate);
         setContent(createContent(value));
-    }
+    };
 
     @Override
     protected NativeEntityPanel<E> createWidget() {

@@ -99,8 +99,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     }
 
     @Override
-    public void setValue(E value, boolean fireEvent, boolean populate) {
-        super.setValue(value, fireEvent, populate);
+    protected void propagateValue(E value, boolean fireEvent, boolean populate) {
+        super.propagateValue(value, fireEvent, populate);
         setComponentsValue(value, fireEvent, populate);
     }
 

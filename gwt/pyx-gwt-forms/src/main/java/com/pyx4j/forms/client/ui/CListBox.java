@@ -128,13 +128,13 @@ public class CListBox<E> extends CFocusComponent<List<E>, NativeListBox<E>> impl
     }
 
     @Override
-    public void setValue(List<E> value, boolean fireEvent, boolean populate) {
+    protected List<E> preprocessValue(List<E> value, boolean fireEvent, boolean populate) {
         if (value != null) {
             if (getComparator() != null) {
                 Collections.sort(value, getComparator());
             }
         }
-        super.setValue(value, fireEvent, populate);
+        return value;
     }
 
     /**

@@ -170,19 +170,17 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     @Override
     @SuppressWarnings("unchecked")
-    public void setValue(E entity, boolean fireEvent, boolean populate) {
-        assert (entity == null) || proto().isAssignableFrom(entity.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
-                + proto().getValueClass() + ", got " + entity.getInstanceValueClass();
+    protected void propagateValue(E value, boolean fireEvent, boolean populate) {
+        assert (value == null) || proto().isAssignableFrom(value.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
+                + proto().getValueClass() + ", got " + value.getInstanceValueClass();
         if (populate) {
-            assert entity != null : "Entity Editor should not be populated with null. Use discard() instead";
+            assert value != null : "Entity Editor should not be populated with null. Use discard() instead";
             if (!isAttached()) {
-                this.origEntity = (E) entity.duplicate();
+                this.origEntity = (E) value.duplicate();
             }
         }
-        //      this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
+        super.propagateValue(value, fireEvent, populate);
 
-        super.setValue(entity, fireEvent, populate);
-        setComponentsValue(entity, fireEvent, populate);
     }
 
     @Override

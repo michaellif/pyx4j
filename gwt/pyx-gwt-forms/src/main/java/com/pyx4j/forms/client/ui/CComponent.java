@@ -505,15 +505,16 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
-    public void setValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
+    public final void setValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
         if (!isValuesEquals(getValue(), value)) {
-            this.value = value;
-            setNativeValue(value);
+            this.value = preprocessValue(value, fireEvent, populate);
+            setNativeValue(this.value);
             revalidate();
             if (fireEvent) {
-                ValueChangeEvent.fire(this, value);
+                ValueChangeEvent.fire(this, this.value);
             }
         }
+        propagateValue(this.value, fireEvent, populate);
         if (populate) {
             setVisited(false);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
@@ -542,6 +543,13 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     protected void onPopulate() {
+    }
+
+    protected void propagateValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
+    }
+
+    protected DATA_TYPE preprocessValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
+        return value;
     }
 
     public final DATA_TYPE getValue() {
