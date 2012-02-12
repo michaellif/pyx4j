@@ -179,16 +179,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         });
     }
 
-    // TODO Igor K. delete comment code
-
-//    @Override
-//    public void setDebugId(IDebugId debugId) {
-//        super.setDebugId(debugId);
-//        if ((debugId != null) && (getDecorator() != null)) {
-//            getDecorator().asWidget().ensureDebugId(this.getCompositeDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
-//        }
-//    }
-
     @SuppressWarnings("unchecked")
     protected void addItem() {
         addItem((E) EntityFactory.create(entityPrototype.getValueClass()));
@@ -316,10 +306,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     public void adopt(final CComponent<?, ?> component) {
         itemsList.add((CEntityFolderItem<E>) component);
         container.add(component);
-
-        // TODO Igor K. delete commented roews
-        //IDebugId rowDebugId = new CompositeDebugId(this.getCompositeDebugId(), "row", currentRowDebugId);
-        //component.setDebugId(rowDebugId);
         currentRowDebugId++;
 
         super.adopt(component);
