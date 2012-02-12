@@ -15,7 +15,10 @@ package com.propertyvista.server.common.util;
 
 import java.util.Random;
 
-public class RandomAccountNumberGenerator {
+/**
+ * @see http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Account+Numbers
+ */
+public class AccountNumberGenerator {
 
     public static final int ACCOUNT_NUMBER_LENGTH = 13;
 
@@ -25,7 +28,7 @@ public class RandomAccountNumberGenerator {
 
     private final RandomDigitGenerator digitGenerator;
 
-    public RandomAccountNumberGenerator(final Random rnd) {
+    public AccountNumberGenerator(final Random rnd) {
         this(new RandomDigitGenerator() {
             @Override
             public int nextRandomDigit() {
@@ -34,7 +37,7 @@ public class RandomAccountNumberGenerator {
         });
     }
 
-    protected RandomAccountNumberGenerator(RandomDigitGenerator digitGenerator) {
+    protected AccountNumberGenerator(RandomDigitGenerator digitGenerator) {
         this.digitGenerator = digitGenerator;
     }
 
