@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.policies.domain.ChargePolicyItem;
 
 /**
  * Type of service/feature, applicable taxes, revenue code, GL, accountability for late payment

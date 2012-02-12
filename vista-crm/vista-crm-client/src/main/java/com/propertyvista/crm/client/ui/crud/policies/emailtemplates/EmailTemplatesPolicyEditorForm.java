@@ -54,10 +54,8 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
     private Widget createEmailTemplatesPanel() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
-        //for (EmailTemplate template : templates()) {
-        //   panel.setH1(++row, 0, 1, template.getMeta().getCaption());
+
         panel.setWidget(++row, 0, inject(proto().templates(), new EmailTemplateEditorFolder()));
-        //}
 
         return panel;
     }

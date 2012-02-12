@@ -16,13 +16,21 @@ package com.propertyvista.crm.client.ui.crud.policies.charges;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.dto.ChargePolicyDTO;
+import com.propertyvista.domain.policy.policies.domain.ChargePolicyItem;
 
 public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<ChargePolicyDTO> {
     private final static I18n i18n = I18n.get(ChargePolicyEditorForm.class);
@@ -38,13 +46,61 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
     @Override
     protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm.TabDescriptor> createCustomTabPanels() {
         return Arrays.asList(//@formatter:off
-                new TabDescriptor(createChargesPanel(), i18n.tr("Items"))
+                new TabDescriptor(createItemsPanel(), i18n.tr("Items"))
         );
     }
 
-    private Widget createChargesPanel() {
+    private Widget createItemsPanel() {
         FormFlexPanel panel = new FormFlexPanel();
+        
+        int row = -1;
+        
+        panel.setWidget(++row, 0, inject(proto().chargePolicyItems(), new ChargePolicyEditorFolder()));
 
         return panel;
     }
+    
+    
+    private static class ChargePolicyEditorFolder extends VistaBoxFolder<ChargePolicyItem> {
+
+        public ChargePolicyEditorFolder() {
+            super(ChargePolicyItem.class);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof ChargePolicyItem) {
+                return new ChargePolicyItemEditor();
+            } else {
+                return super.create(member);
+            }
+        }
+
+        private static class ChargePolicyItemEditor extends CEntityDecoratableEditor<ChargePolicyItem> {
+
+            public ChargePolicyItemEditor() {
+                super(ChargePolicyItem.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel content = new FormFlexPanel();
+                int row = -1;
+                
+                if (isEditable()) {
+                    CComboBox<ProductItemType.Type>  itemTypes = new CComboBox<ProductItemType.Type>();
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType().type())).build()); 
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType().serviceType())).build()); 
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType().featureType())).build()); 
+                }
+
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeCode())).build());
+  
+                return content;
+            }
+        }
+
+    }
+
 }
