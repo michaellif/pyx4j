@@ -102,8 +102,6 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
         for (Media item : dbo.media()) {
             Persistence.service().merge(item);
         }
-        // save detached entities:
-        Persistence.service().merge(dbo.serviceCatalog());
 
         // Geotagging:
         if (!in.geoLocation().isNull()) {

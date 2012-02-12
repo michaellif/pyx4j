@@ -103,8 +103,6 @@ public interface Building extends PolicyNode {
 
     @Owned
     @Detached
-    //TODO
-    //@Owned(joinTable = ProductCatalog.class)
     ProductCatalog serviceCatalog();
 
     @Detached
