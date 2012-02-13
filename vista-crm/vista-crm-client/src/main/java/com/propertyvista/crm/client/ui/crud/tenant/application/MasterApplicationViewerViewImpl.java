@@ -88,11 +88,28 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new ActionBox(MORE_INFO) {
+                new SelectDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Acqure info"), true, form.getValue().tenantInfo(),
+                        new SelectDialog.Formatter<TenantInfoDTO>() {
+                            @Override
+                            public String format(TenantInfoDTO enntity) {
+                                return enntity.person().name().getStringView();
+                            }
+                        }) {
+
                     @Override
                     public boolean onClickOk() {
-                        ((MasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.InformationRequested));
+                        // TODO make the credit check happen
                         return true;
+                    }
+
+                    @Override
+                    public String defineWidth() {
+                        return "350px";
+                    }
+
+                    @Override
+                    public String defineHeight() {
+                        return "100px";
                     }
                 }.show();
             }
