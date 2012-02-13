@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 public interface ReferenceAdapter<E extends IEntity> {
 
     /**
-     * Server would lockup new referenced entity by this criteria and use if one exists.
+     * Server would lock-up new referenced entity by this criteria and use it if entity found.
      * 
      * @param newEntity
      * @return Criteria to retrieve one item, null if creation of new Entities is disabled
