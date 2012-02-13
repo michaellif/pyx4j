@@ -71,7 +71,7 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         this.view = view;
     }
 
-    private static boolean isRecurring = true;
+    private static boolean isRecurring = false;
 
     @Override
     public IsWidget createContent() {

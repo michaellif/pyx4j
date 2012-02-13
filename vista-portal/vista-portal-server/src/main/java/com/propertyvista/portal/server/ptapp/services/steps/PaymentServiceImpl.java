@@ -67,8 +67,10 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
 
         // TODO VladS find a better way to retrieve just monthlyCharges
         Charges charges = retrieveApplicationEntity(Charges.class);
-        payment.applicationCharges().charges().addAll(charges.applicationCharges().charges());
-        ChargesSharedCalculation.calculateTotal(payment.applicationCharges());
+        if (charges != null) {
+            payment.applicationCharges().charges().addAll(charges.applicationCharges().charges());
+            ChargesSharedCalculation.calculateTotal(payment.applicationCharges());
+        }
 
         // Legal stuff:
         LeaseTermsPolicy termsPolicy = LegalStuffUtils.retrieveLegalTermsPolicy();
