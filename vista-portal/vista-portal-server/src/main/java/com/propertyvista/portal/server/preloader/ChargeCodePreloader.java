@@ -32,11 +32,13 @@ public class ChargeCodePreloader extends BaseVistaDevDataPreloader {
 
     private static final int CHARGECODE_QUANTITY = 5;
 
+    private static final int REASON_QUANTITY = 5;
+
     @Override
     public String create() {
         List<Tax> taxes = new ArrayList<Tax>();
         List<GlCode> glCodes = new ArrayList<GlCode>();
-        int i, j, k;
+        int i, j, k, l;
 
         for (i = 0; i < TAX_QUANTITY; i++) {
             Tax tax = ChargeCodeGenerator.createTax(i);
@@ -53,7 +55,12 @@ public class ChargeCodePreloader extends BaseVistaDevDataPreloader {
             Persistence.service().persist(ChargeCodeGenerator.createChargeCode(k, taxes, glCodes));
         }
 
-        return "Created " + i + " demo taxes \nCreated " + j + " demo GlCodes \nCreated " + k + " demo ChargeCodes";
+        for (l = 0; l < REASON_QUANTITY; l++) {
+            Persistence.service().persist(ChargeCodeGenerator.createLeaseAdjustmentReason(l, taxes, glCodes));
+        }
+
+        return "Created " + i + " demo taxes \nCreated " + j + " demo GlCodes \nCreated " + k + " demo ChargeCodes \nCreated " + l
+                + " demo LeaseAdjustmentReasons";
 
     }
 

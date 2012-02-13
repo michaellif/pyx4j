@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.offering.ChargeCode;
 import com.propertyvista.domain.financial.tax.Tax;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class ChargeCodeGenerator {
 
@@ -63,6 +64,20 @@ public class ChargeCodeGenerator {
         glCode.glId().setValue(Integer.valueOf((int) (randomGenerator.nextDouble() * 10000)));
         glCode.description().setValue("description...");
         return glCode;
+    }
+
+    public static LeaseAdjustmentReason createLeaseAdjustmentReason(int k, List<Tax> taxes, List<GlCode> glCodes) {
+
+        LeaseAdjustmentReason leaseAdjustmentReason = EntityFactory.create(LeaseAdjustmentReason.class);
+        int j = RandomUtils.nextInt(5) + 1;
+
+        for (int i = 0; i < j; i++) {
+            leaseAdjustmentReason.taxes().add(RandomUtil.random(taxes));
+        }
+        leaseAdjustmentReason.name().setValue("Reason #" + k);
+        leaseAdjustmentReason.glCode().set(RandomUtil.random(glCodes));
+
+        return leaseAdjustmentReason;
     }
 
 }

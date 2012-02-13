@@ -48,6 +48,10 @@ import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeListerView;
 import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.tax.LeaseAdjustmentReasonEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.tax.LeaseAdjustmentReasonEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.tax.LeaseAdjustmentReasonListerView;
+import com.propertyvista.crm.client.ui.crud.settings.tax.LeaseAdjustmentReasonListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.tax.LeaseAdjustmentReasonViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.tax.LeaseAdjustmentReasonViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.tax.TaxEditorView;
@@ -106,6 +110,10 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new ChargeCodeEditorViewImpl());
             } else if (ChargeCodeViewerView.class.equals(type)) {
                 map.put(type, new ChargeCodeViewerViewImpl());
+            } else if (LeaseAdjustmentReasonListerView.class.equals(type)) {
+                map.put(type, new LeaseAdjustmentReasonListerViewImpl());
+            } else if (LeaseAdjustmentReasonEditorView.class.equals(type)) {
+                map.put(type, new LeaseAdjustmentReasonEditorViewImpl());
             } else if (LeaseAdjustmentReasonViewerView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentReasonViewerViewImpl());
             }
