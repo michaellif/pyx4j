@@ -21,11 +21,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.tax.Tax;
 
-///**
-// *
-// * Corporate-wide reasons (AS defined 20 major)
-// *
-// */
+/**
+ * 
+ * Corporate-wide reasons (AS defined 20 major)
+ * 
+ */
 public interface LeaseAdjustmentReason extends IEntity {
 
     @ToString

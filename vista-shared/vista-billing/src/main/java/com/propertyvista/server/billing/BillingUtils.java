@@ -33,7 +33,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
-import com.propertyvista.domain.financial.billing.BillingCycle.BillingPeriod;
+import com.propertyvista.domain.financial.billing.BillingCycle.BillingFrequency;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
@@ -82,13 +82,13 @@ public class BillingUtils {
         int billingDay = 1;
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingDay(), billingDay));
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingPeriod(), BillingPeriod.monthly));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingPeriod(), BillingFrequency.monthly));
         BillingCycle billingCycle = Persistence.service().retrieve(criteria);
         // Auto Create BillingCycle for now. 
         if (billingCycle == null) {
             billingCycle = EntityFactory.create(BillingCycle.class);
             billingCycle.billingDay().setValue(billingDay);
-            billingCycle.billingPeriod().setValue(BillingPeriod.monthly);
+            billingCycle.billingPeriod().setValue(BillingFrequency.monthly);
             Persistence.service().persist(billingCycle);
         }
         leaseFinancial.billingAccount().billingCycle().set(billingCycle);

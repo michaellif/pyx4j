@@ -33,7 +33,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
-import com.propertyvista.domain.financial.billing.BillingCycle.BillingPeriod;
+import com.propertyvista.domain.financial.billing.BillingCycle.BillingFrequency;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.BillingRun.BillingRunStatus;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -65,7 +65,7 @@ public class BillingLifecycle {
         return billingRun;
     }
 
-    public static BillingRun runBilling(Building building, BillingPeriod billingPeriod, Integer billingDay, LogicalDate billingPeriodStartDate) {
+    public static BillingRun runBilling(Building building, BillingFrequency billingPeriod, Integer billingDay, LogicalDate billingPeriodStartDate) {
         //TODO
         return null;
     }

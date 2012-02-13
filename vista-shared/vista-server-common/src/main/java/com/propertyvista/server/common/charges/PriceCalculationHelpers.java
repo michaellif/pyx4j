@@ -40,7 +40,7 @@ public class PriceCalculationHelpers {
 
         // Calculate adjustments:
         BigDecimal adjustedPrice = startPrice;
-        if (adjustment.termType().getValue().equals(BillableItemAdjustment.TermType.term)) {
+        if (adjustment.termType().getValue().equals(BillableItemAdjustment.TermType.inLease)) {
             if (adjustment.adjustmentType().getValue().equals(BillableItemAdjustment.AdjustmentType.free)) {
                 adjustedPrice = new BigDecimal(0);
             } else {

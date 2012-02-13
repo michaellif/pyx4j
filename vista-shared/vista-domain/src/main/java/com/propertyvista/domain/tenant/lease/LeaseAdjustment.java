@@ -23,6 +23,8 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.company.Employee;
+
 public interface LeaseAdjustment extends IEntity {
 
     @NotNull
@@ -37,8 +39,13 @@ public interface LeaseAdjustment extends IEntity {
     IPrimitive<String> description();
 
     @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> targetDate();
+    IPrimitive<LogicalDate> effectiveDate();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> exparationDate();
 
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createdWhen();
+
+    Employee createdBy();
 }

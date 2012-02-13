@@ -62,7 +62,7 @@ public interface BillableItemAdjustment extends IEntity {
     @I18n
     @XmlType(name = "TermType")
     enum TermType {
-        postLease, term, oneTime;
+        postLease, inLease, oneTime;
 
         @Override
         public String toString() {
@@ -92,8 +92,6 @@ public interface BillableItemAdjustment extends IEntity {
     @MemberColumn(name = "adjustmentValue")
     IPrimitive<BigDecimal> value();
 
-    Employee createdBy();
-
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> effectiveDate();
 
@@ -103,27 +101,5 @@ public interface BillableItemAdjustment extends IEntity {
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createdWhen();
 
-//    @I18n
-//    @XmlType(name = "AdjustmentType")
-    /**
-     * we need to support mid lease BillableItemAdjustments such as AGI ("Above Guideline Increases"),
-     * that might be in pending status,
-     * i.e.waiting for lease to expire first and then to be aplied as part of Lease Renewal process.
-     * These adjustments (status = "postLease") need to be counted as Lease Renewal time but need not be picked up by billing during regular month.
-     * 
-     * @author Alex
-     * 
-     *         enum Status {
-     *         postLease, inLease, expired;
-     * 
-     * @Override
-     *           public String toString() {
-     *           return I18nEnum.toString(this);
-     *           }
-     * 
-     * 
-     * 
-     * 
-     */
-
+    Employee createdBy();
 }
