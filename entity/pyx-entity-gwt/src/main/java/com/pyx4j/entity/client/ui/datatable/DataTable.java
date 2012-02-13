@@ -26,8 +26,6 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -37,13 +35,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.BrowserType;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public class DataTable<E extends IEntity> extends FlexTable implements DataTableModelListener {
 
@@ -499,58 +497,24 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
         selector.setTitle("Select Columns");
         selector.addClickHandler(new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
-                final ColumnSelectorPopup columnSelectorPopup = new ColumnSelectorPopup();
-                columnSelectorPopup.setPopupPositionAndShow(new PositionCallback() {
-                    @Override
-                    public void setPosition(int offsetWidth, int offsetHeight) {
-                        columnSelectorPopup.setPopupPosition(selector.getAbsoluteLeft() - offsetWidth, selector.getAbsoluteTop());
-                    }
-                });
-                columnSelectorPopup.addCloseHandler(new CloseHandler<PopupPanel>() {
-                    @Override
-                    public void onClose(CloseEvent<PopupPanel> event) {
-                        boolean hasChanged = false;
-                        for (int i = 0; i < model.getColumnDescriptors().size(); ++i) {
-                            boolean isVisible = model.getColumnDescriptor(i).isVisible();
-                            boolean requestedVisible = columnSelectorPopup.isChecked(i);
-                            if (isVisible != requestedVisible) {
-                                model.getColumnDescriptor(i).setVisible(requestedVisible);
-                                hasChanged = true;
-                            }
-
-                        }
-                        if (hasChanged) {
-                            renderTable();
-                            if (columnSelectionHandlers != null) {
-                                for (ColumnSelectionHandler handler : columnSelectionHandlers) {
-                                    handler.onColumSelectionChanged();
-                                }
-                            }
-                        }
-                    }
-                });
-
+                new ColumnSelectorDialog().show();
             }
-
         });
 
         return selector;
     }
 
-    protected class ColumnSelectorPopup extends PopupPanel {
+    protected class ColumnSelectorDialog extends OkCancelDialog {
 
         private final List<CheckBox> columnChecksList = new ArrayList<CheckBox>();
 
-        ColumnSelectorPopup() {
-            super(true);
-            setStyleName(DefaultDataTableTheme.StyleName.DataTableColumnMenu.name());
-            getElement().getStyle().setZIndex(1000);
+        public ColumnSelectorDialog() {
+            super("Select Columns");
 
             FlowPanel panel = new FlowPanel();
-
+            panel.setStyleName(DefaultDataTableTheme.StyleName.DataTableColumnMenu.name());
             for (ColumnDescriptor column : model.getColumnDescriptors()) {
                 CheckBox columnCheck = new CheckBox(column.getColumnTitle());
                 columnCheck.setValue(column.isVisible());
@@ -559,13 +523,36 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 panel.add(new HTML());
             }
 
-            setWidget(panel);
+            ScrollPanel scroll = new ScrollPanel(panel);
+            scroll.getElement().getStyle().setProperty("minWidth", "20em");
+            scroll.getElement().getStyle().setProperty("maxHeight", "20em");
+
+            setBody(scroll.asWidget());
         }
 
-        boolean isChecked(int index) {
-            return columnChecksList.get(index).getValue();
-        }
+        @Override
+        public boolean onClickOk() {
+            boolean hasChanged = false;
+            for (int i = 0; i < model.getColumnDescriptors().size(); ++i) {
+                boolean isVisible = model.getColumnDescriptor(i).isVisible();
+                boolean requestedVisible = columnChecksList.get(i).getValue();
+                if (isVisible != requestedVisible) {
+                    model.getColumnDescriptor(i).setVisible(requestedVisible);
+                    hasChanged = true;
+                }
 
+            }
+            if (hasChanged) {
+                renderTable();
+                if (columnSelectionHandlers != null) {
+                    for (ColumnSelectionHandler handler : columnSelectionHandlers) {
+                        handler.onColumSelectionChanged();
+                    }
+                }
+            }
+
+            return true;
+        }
     }
 
     // Check box column item class: 
