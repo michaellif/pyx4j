@@ -506,7 +506,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         return selector;
     }
 
-    protected class ColumnSelectorDialog extends OkCancelDialog {
+    private class ColumnSelectorDialog extends OkCancelDialog {
 
         private final List<CheckBox> columnChecksList = new ArrayList<CheckBox>();
 
@@ -514,7 +514,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             super("Select Columns");
 
             FlowPanel panel = new FlowPanel();
-            panel.setStyleName(DefaultDataTableTheme.StyleName.DataTableColumnMenu.name());
             for (ColumnDescriptor column : model.getColumnDescriptors()) {
                 CheckBox columnCheck = new CheckBox(column.getColumnTitle());
                 columnCheck.setValue(column.isVisible());
@@ -526,6 +525,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             ScrollPanel scroll = new ScrollPanel(panel);
             scroll.getElement().getStyle().setProperty("minWidth", "20em");
             scroll.getElement().getStyle().setProperty("maxHeight", "20em");
+            scroll.setStyleName(DefaultDataTableTheme.StyleName.DataTableColumnMenu.name());
 
             setBody(scroll.asWidget());
         }
@@ -542,6 +542,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 }
 
             }
+
             if (hasChanged) {
                 renderTable();
                 if (columnSelectionHandlers != null) {
