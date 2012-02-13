@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -132,8 +132,9 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
                     counters.add(new BuildingImporter().persist(building, mediaConfig));
                     break;
                 case updateUnitAvailability:
-                    counters.add(new BuildingUpdater().updateUnitAvailability(building, mediaConfig));
-                    break;
+                    throw new Error("This functionality is currently disabled, use 'Type: Update Data' instead"); //TODO fix later, unit availability update should not create new buildings, update data should
+//                    counters.add(new BuildingUpdater().updateUnitAvailability(building, mediaConfig));
+//                    break;
                 case updateData:
                     counters.add(new BuildingUpdater().updateData(building, mediaConfig));
                     break;
