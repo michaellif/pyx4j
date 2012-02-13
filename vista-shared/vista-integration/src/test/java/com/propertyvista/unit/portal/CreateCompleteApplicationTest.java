@@ -56,7 +56,6 @@ import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
-import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.util.TenantConverter;
 
 public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
@@ -66,7 +65,6 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        SharedData.init();
         // This is just to make the test more visual
         selenium.setFocusOnGetValue(true);
     }

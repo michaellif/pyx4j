@@ -19,21 +19,12 @@ import com.pyx4j.entity.cache.CacheService;
 
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.server.common.generator.LocationsGenerator;
 
 /**
  * Please remove this class and every usage of one!! VladS
  */
 @Deprecated
 public class SharedData {
-
-    public static void init() {
-        if (CacheService.get("provinces") == null) {
-            List<Province> provinces;
-            registerProvinces(provinces = LocationsGenerator.loadProvincesFromFile());
-            registerCountries(LocationsGenerator.createCountries(provinces));
-        }
-    }
 
     public static void registerProvinces(List<Province> p) {
         CacheService.put("provinces", p);
@@ -45,15 +36,6 @@ public class SharedData {
 
     public static List<Province> getProvinces() {
         return CacheService.get("provinces");
-    }
-
-    public static Province findProvinceByCode(String code) {
-        for (Province province : getProvinces()) {
-            if (province.code().getValue().equals(code)) {
-                return province;
-            }
-        }
-        return null;
     }
 
     public static Country findCountryCanada() {

@@ -15,9 +15,7 @@ package com.propertyvista.crm.server.openapi.model.util;
 import java.util.List;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.server.openapi.model.AddressRS;
@@ -35,8 +33,6 @@ import com.propertyvista.crm.server.openapi.model.ParkingRS;
 import com.propertyvista.crm.server.openapi.model.PhoneRS;
 import com.propertyvista.crm.server.openapi.model.UtilityRS;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
@@ -49,8 +45,6 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
-import com.propertyvista.domain.property.asset.building.BuildingInfo.Shape;
-import com.propertyvista.server.common.reference.SharedData;
 
 public class Converter {
 
@@ -92,18 +86,6 @@ public class Converter {
         }
     }
 
-    public static Building convertBuilding(BuildingRS from) {
-        Building to = EntityFactory.create(Building.class);
-
-        to.propertyCode().setValue(from.propertyCode);
-
-        // TODO finish this up, conversion of all other parts
-        to.info().set(convertBuildingInfo(from.info));
-        to.marketing().set(convertMarketing(from.marketing));
-
-        return to;
-    }
-
     public static MarketingRS convertMarketing(Marketing from) {
         MarketingRS to = new MarketingRS();
 
@@ -118,32 +100,10 @@ public class Converter {
         return to;
     }
 
-    public static Marketing convertMarketing(MarketingRS from) {
-        Marketing to = EntityFactory.create(Marketing.class);
-
-        to.name().setValue(from.name);
-        to.description().setValue(from.description);
-
-        for (AdvertisingBlurbRS blurbRS : from.blurbs) {
-            AdvertisingBlurb blurb = convertBlurb(blurbRS);
-            to.adBlurbs().add(blurb);
-        }
-
-        return to;
-    }
-
     public static AdvertisingBlurbRS convertBlurb(AdvertisingBlurb blurb) {
         AdvertisingBlurbRS to = new AdvertisingBlurbRS();
 
         to.content = blurb.content().getStringView();
-
-        return to;
-    }
-
-    public static AdvertisingBlurb convertBlurb(AdvertisingBlurbRS blurb) {
-        AdvertisingBlurb to = EntityFactory.create(AdvertisingBlurb.class);
-
-        to.content().setValue(blurb.content);
 
         return to;
     }
@@ -178,30 +138,6 @@ public class Converter {
         to.waterSupply = from.waterSupply().getValue();
         to.centralAir = from.centralAir().getValue();
         to.centralHeat = from.centralHeat().getValue();
-
-        return to;
-    }
-
-    public static BuildingInfo convertBuildingInfo(BuildingInfoRS from) {
-        BuildingInfo to = EntityFactory.create(BuildingInfo.class);
-
-        to.name().setValue(from.name);
-        to.address().set(convertAddress(from.address));
-        to.type().setValue(BuildingInfo.Type.valueOf(from.buildingType.name()));
-
-        to.shape().setValue(Shape.valueOf(from.shape));
-        to.totalStoreys().setValue(from.totalStoreys);
-        to.residentialStoreys().setValue(from.residentialStoreys);
-        to.structureType().setValue(from.structureType);
-        to.structureBuildYear().setValue(new LogicalDate(TimeUtils.simpleParse(from.structureBuildYear, DATE_PATTERN)));
-
-        to.constructionType().setValue(from.constructionType);
-        to.foundationType().setValue(from.foundationType);
-        to.floorType().setValue(from.floorType);
-        to.landArea().setValue(from.landArea);
-        to.waterSupply().setValue(from.waterSupply);
-        to.centralAir().setValue(from.centralAir);
-        to.centralHeat().setValue(from.centralHeat);
 
         return to;
     }
@@ -270,30 +206,6 @@ public class Converter {
 
         to.name = from.name().getStringView();
         to.description = from.description().getStringView();
-
-        return to;
-    }
-
-    public static AddressStructured convertAddress(AddressRS from) {
-        AddressStructured to = EntityFactory.create(AddressStructured.class);
-
-        to.streetName().setValue(from.streetName);
-        to.streetNumber().setValue(from.streetNumber);
-        if (CommonsStringUtils.isStringSet(from.streetNumberSuffix)) {
-            to.streetNumberSuffix().setValue(from.streetNumberSuffix);
-        }
-        if (CommonsStringUtils.isStringSet(from.streetDirection)) {
-            to.streetDirection().setValue(StreetDirection.valueOf(from.streetDirection));
-        }
-        if (CommonsStringUtils.isStringSet(from.streetType)) {
-            to.streetType().setValue(StreetType.valueOf(from.streetType));
-        }
-        to.suiteNumber().setValue(from.unitNumber);
-        to.city().setValue(from.city);
-        to.province().set(SharedData.findProvinceByCode(from.province));
-        to.postalCode().setValue(from.postalCode);
-        to.country().set(to.province().country());
-        to.county().setValue(from.county);
 
         return to;
     }

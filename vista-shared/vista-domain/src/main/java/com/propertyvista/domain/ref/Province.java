@@ -15,6 +15,8 @@ package com.propertyvista.domain.ref;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -30,6 +32,8 @@ public interface Province extends PolicyNode {
     @Indexed
     IPrimitive<String> code();
 
+    @Owner
+    @JoinColumn
     Country country();
 
 }

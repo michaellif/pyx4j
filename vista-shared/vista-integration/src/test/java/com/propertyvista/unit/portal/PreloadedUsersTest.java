@@ -26,14 +26,12 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.server.common.reference.SharedData;
 
 public class PreloadedUsersTest extends PortalVerificationTestBase {
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        SharedData.init();
         // This is just to make the test more visual
         selenium.setFocusOnGetValue(true);
     }

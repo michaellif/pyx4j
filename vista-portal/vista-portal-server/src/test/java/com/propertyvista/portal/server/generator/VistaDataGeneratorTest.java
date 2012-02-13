@@ -21,7 +21,6 @@ import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.TestUtil;
-import com.propertyvista.server.common.reference.SharedData;
 
 public class VistaDataGeneratorTest extends TestCase {
 
@@ -33,7 +32,6 @@ public class VistaDataGeneratorTest extends TestCase {
     public void testConsistentDataCreation() {
         final long seed1 = 250;
 
-        SharedData.init();
         VistaDevPreloadConfig config = VistaDevPreloadConfig.createTest();
         config.ptGenerationSeed = 250;
         PTGenerator generator1 = new PTGenerator(config);
@@ -47,8 +45,6 @@ public class VistaDataGeneratorTest extends TestCase {
         PTGenerator generatorX = new PTGenerator(configX);
         TenantUser userX = generatorX.createUser(1);
         generatorX.createSummary(userX, null);
-
-        SharedData.init();
 
         VistaDevPreloadConfig config2 = VistaDevPreloadConfig.createTest();
         config2.ptGenerationSeed = System.currentTimeMillis();

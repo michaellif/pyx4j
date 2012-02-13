@@ -44,7 +44,6 @@ import com.propertyvista.crm.server.openapi.model.MediaRS;
 import com.propertyvista.crm.server.openapi.model.util.Converter;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.server.common.reference.SharedData;
 
 public class OpenApiModelTest {
 
@@ -81,8 +80,6 @@ public class OpenApiModelTest {
 
             Assert.assertNotNull("Converted building", buildingRS);
 
-            Building building2 = Converter.convertBuilding(buildingRS);
-            Assert.assertEquals("propertyCode", building.propertyCode().getStringView(), building2.propertyCode().getStringView());
         }
     }
 
@@ -122,6 +119,5 @@ public class OpenApiModelTest {
     @BeforeClass
     public static void init() {
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
-        SharedData.init();
     }
 }

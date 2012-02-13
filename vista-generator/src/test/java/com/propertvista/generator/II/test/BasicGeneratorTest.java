@@ -21,7 +21,6 @@ import com.propertvista.generator.II.DataModel;
 import com.propertvista.generator.II.InMemoryDataModel;
 
 import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.common.generator.LocationsGenerator;
 
 public class BasicGeneratorTest extends TestCase {
@@ -36,13 +35,11 @@ public class BasicGeneratorTest extends TestCase {
 
         {
 
-            List<Province> provinces = LocationsGenerator.loadProvincesFromFile();
-            List<Country> countries = LocationsGenerator.createCountries(provinces);
-
+            List<Country> countries = LocationsGenerator.createCountries();
             dataModel.persist(countries);
-            dataModel.persist(provinces);
 
         }
+
     }
 
     public void testCountries() {

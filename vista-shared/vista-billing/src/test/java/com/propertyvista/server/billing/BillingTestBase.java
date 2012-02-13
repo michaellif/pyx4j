@@ -40,7 +40,6 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.server.common.generator.LocationsGenerator;
 
@@ -58,11 +57,9 @@ public class BillingTestBase extends VistaDBTestBase {
 
         {
 
-            List<Province> provinces = LocationsGenerator.loadProvincesFromFile();
-            List<Country> countries = LocationsGenerator.createCountries(provinces);
+            List<Country> countries = LocationsGenerator.createCountries();
 
             Persistence.service().persist(countries);
-            Persistence.service().persist(provinces);
 
         }
 

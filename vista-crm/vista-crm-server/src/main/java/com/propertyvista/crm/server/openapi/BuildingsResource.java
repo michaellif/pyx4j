@@ -13,24 +13,16 @@
  */
 package com.propertyvista.crm.server.openapi;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBException;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +33,6 @@ import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
@@ -69,36 +60,6 @@ public class BuildingsResource {
 
     public BuildingsResource() {
         service = Persistence.service();
-    }
-
-    @POST
-    @Consumes({ MediaType.APPLICATION_XML })
-    public Response createBuildings(InputStream is) {
-        try {
-            // retrieve xml
-            String xml = IOUtils.toString(is);
-
-            // parse xml
-            BuildingRS buildingRS = MarshallUtil.unmarshal(BuildingRS.class, xml);
-
-            // convert building to vista
-            Building building = Converter.convertBuilding(buildingRS);
-            log.info("Parsed building {}", building);
-
-            // save building related data
-            log.info("For now not saving this to the database");
-//            service.persist(building.info().address());
-//            service.persist(building.info());
-//            service.persist(building.marketing());
-//            service.persist(building);
-        } catch (JAXBException je) {
-            log.error("Failed to parse XML", je);
-        } catch (IOException ie) {
-            log.error("IO error", ie);
-        }
-
-        // for now we just show all the buildings, later we will have to show just the one that they've passed
-        return Response.created(URI.create("/buildings")).build();
     }
 
     @GET

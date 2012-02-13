@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
 
@@ -65,7 +64,8 @@ public class GetPropertyConfigurationsMapper {
         address.streetNumber().setValue(streetNumber);
         address.streetName().setValue(streetName);
         address.city().setValue(property.getCity());
-        address.province().set(SharedData.findProvinceByCode(property.getState()));
+        //TODO fix me
+        // address.province().set(findProvinceByCode(property.getState()));
         address.country().set(address.province().country());
         address.postalCode().setValue(property.getPostalCode());
 

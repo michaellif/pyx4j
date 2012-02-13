@@ -36,7 +36,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
 import com.propertyvista.yardi.bean.mits.Customer;
@@ -201,6 +200,5 @@ public class XmlBeanTest {
     @BeforeClass
     public static void init() {
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
-        SharedData.init();
     }
 }

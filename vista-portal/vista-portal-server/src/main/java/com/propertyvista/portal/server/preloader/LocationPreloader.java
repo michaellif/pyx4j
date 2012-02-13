@@ -13,9 +13,8 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
@@ -30,33 +29,25 @@ public class LocationPreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {
-        int countriesCount = 0;
-        int provinceCount = 0;
 
-        List<Province> provinces = LocationsGenerator.loadProvincesFromFile();
-        List<Country> countries = LocationsGenerator.createCountries(provinces);
-
-        SharedData.registerProvinces(provinces);
-        SharedData.registerCountries(countries);
+        List<Country> countries = LocationsGenerator.createCountries();
 
         Persistence.service().persist(countries);
-        countriesCount += countries.size();
-        Persistence.service().persist(provinces);
-        provinceCount += provinces.size();
 
-        Map<String, Province> provincesMap = new HashMap<String, Province>();
-        for (Province province : provinces) {
-            provincesMap.put(province.name().getValue(), province);
+        List<Province> provinces = new ArrayList<Province>();
+        for (Country country : countries) {
+            provinces.addAll(country.provinces());
         }
+
+        SharedData.registerCountries(countries);
+        SharedData.registerProvinces(provinces);
+
         List<City> cities = LocationsGenerator.loadCityFromFile();
-        for (City c : cities) {
-            c.province().set(provincesMap.get(c.province().name().getValue()));
-        }
         Persistence.service().persist(cities);
 
         StringBuilder b = new StringBuilder();
-        b.append("Created " + countriesCount + " Countries").append('\n');
-        b.append("Created " + provinceCount + " Provinces").append('\n');
+        b.append("Created " + countries.size() + " Countries").append('\n');
+        b.append("Created " + provinces.size() + " Provinces").append('\n');
         b.append("Created " + cities.size() + " Cities");
         return b.toString();
     }

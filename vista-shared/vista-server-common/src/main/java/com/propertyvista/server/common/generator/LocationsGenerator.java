@@ -27,30 +27,31 @@ import com.propertyvista.domain.ref.Province;
 
 public class LocationsGenerator {
 
-    public static List<Province> loadProvincesFromFile() {
+    public static List<Country> createCountries() {
+
+        List<Province> provinces = loadProvincesFromFile();
+
+        Map<String, Country> countriesByName = new HashMap<String, Country>();
+        List<Country> countries = new Vector<Country>();
+        for (Province province : provinces) {
+            Country country = countriesByName.get(province.country().name().getValue());
+            if (country == null) {
+                country = province.country();
+                countriesByName.put(country.name().getValue(), country);
+                countries.add(country);
+            }
+            country.provinces().add(province);
+        }
+
+        return countries;
+    }
+
+    private static List<Province> loadProvincesFromFile() {
         List<Province> provinces = EntityCSVReciver.create(Province.class).loadFile(IOUtils.resourceFileName("Province.csv", LocationsGenerator.class));
         return provinces;
     }
 
-    public static List<Country> createCountries(List<Province> provinces) {
-
-        Map<String, Country> countries = new HashMap<String, Country>();
-        List<Country> toSaveCountry = new Vector<Country>();
-        for (Province provinceInfo : provinces) {
-            Country c = countries.get(provinceInfo.country().name().getValue());
-            if (c == null) {
-                c = provinceInfo.country();
-                countries.put(c.name().getValue(), c);
-                toSaveCountry.add(c);
-            } else {
-                provinceInfo.country().set(c);
-            }
-        }
-
-        return toSaveCountry;
-    }
-
-    private static List<City> mergeProvinces(List<City> list) {
+    private static List<City> updateCitiesWithProvince(List<City> list) {
         List<City> all = new Vector<City>();
         String provinceName = null;
         for (City c : list) {
@@ -68,8 +69,10 @@ public class LocationsGenerator {
 
     public static List<City> loadCityFromFile() {
         List<City> all = new Vector<City>();
-        all.addAll(mergeProvinces(EntityCSVReciver.create(City.class).loadFile(IOUtils.resourceFileName("City-Canada-city.csv", LocationsGenerator.class))));
-        all.addAll(mergeProvinces(EntityCSVReciver.create(City.class).loadFile(IOUtils.resourceFileName("City-Canada-town.csv", LocationsGenerator.class))));
+        all.addAll(updateCitiesWithProvince(EntityCSVReciver.create(City.class).loadFile(
+                IOUtils.resourceFileName("City-Canada-city.csv", LocationsGenerator.class))));
+        all.addAll(updateCitiesWithProvince(EntityCSVReciver.create(City.class).loadFile(
+                IOUtils.resourceFileName("City-Canada-town.csv", LocationsGenerator.class))));
         return all;
     }
 }

@@ -27,7 +27,6 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.server.common.reference.SharedData;
 
 public class YardiInteractiveExample {
 
@@ -49,7 +48,6 @@ public class YardiInteractiveExample {
         // init db
         VistaTestsServerSideConfiguration conf = new VistaTestsServerSideConfiguration(true);
         ServerSideConfiguration.setInstance(conf);
-        SharedData.init();
 
         // execute different actions
         try {
