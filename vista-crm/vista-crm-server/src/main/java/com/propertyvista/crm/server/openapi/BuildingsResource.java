@@ -116,6 +116,8 @@ public class BuildingsResource {
                         buildingRS = Converter.convertBuilding(building);
 
                         buildingsRS.buildings.add(buildingRS);
+                        complexes.put(building.complex(), buildingRS);
+
                         buildingRS.unitCount = 0;
                     }
                     if (building.complexPrimary().isBooleanTrue()) {
