@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -196,8 +197,7 @@ public class BuildingsResource {
                     //From all floorplans matched by beds/baths, We select 1 with closest availability and we show it on the site
                     FloorplanRS floorplanSameRS = findSameFloorplan(buildingRS.floorplans, Converter.convertFloorplan(floorplan));
                     if (floorplanSameRS != null) {
-                        if ((floorplanRS.availableFrom == null) || (floorplanSameRS.availableFrom == null)
-                                || floorplanRS.availableFrom.after(floorplanSameRS.availableFrom)) {
+                        if (afterOrNull(floorplanRS.availableFrom, floorplanSameRS.availableFrom)) {
                             // Ignore this floorplanRS
                             floorplanSameRS.unitCount += floorplanRS.unitCount;
                             floorplanSameRS.rentFrom = DomainUtil.min(floorplanSameRS.rentFrom, floorplanRS.rentFrom);
@@ -268,6 +268,16 @@ public class BuildingsResource {
         }
         // Not found
         return null;
+    }
+
+    private boolean afterOrNull(LogicalDate availableFromNew, LogicalDate availableFromPrev) {
+        if (availableFromPrev == null) {
+            return (availableFromNew == null);
+        } else if (availableFromNew == null) {
+            return true;
+        } else {
+            return availableFromNew.after(availableFromPrev);
+        }
     }
 
     boolean equalsInteger(Integer value1, Integer value2) {
