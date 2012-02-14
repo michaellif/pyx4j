@@ -381,7 +381,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
         @Override
         public void onValueChange(ValueChangeEvent event) {
-            if (!(event.getSource() instanceof CEntityContainer)) {
+            if ((event.getSource() instanceof CPolymorphicEntityEditorTEMP) || !(event.getSource() instanceof CEntityContainer)) {
                 Path memberPath = binding.get(event.getSource());
                 if ((memberPath != null) && (getValue() != null)) {
                     Object value = event.getValue();
