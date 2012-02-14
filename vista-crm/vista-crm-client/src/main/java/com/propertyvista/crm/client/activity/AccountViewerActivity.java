@@ -19,10 +19,10 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -32,7 +32,7 @@ import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 /**
  * This one should use separate service (just for self management)
  */
-public class AccountViewerActivity extends ViewerActivityBase<EmployeeDTO> implements EmployeeViewerView.Presenter {
+public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implements EmployeeViewerView.Presenter {
 
     public AccountViewerActivity(Place place) {
         super(place, OrganizationViewFactory.instance(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class));

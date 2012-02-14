@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.unit.UnitOccupancyViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
-public class UnitOccupancyViewerActivity extends ViewerActivityBase<AptUnitOccupancySegment> {
+public class UnitOccupancyViewerActivity extends CrmViewerActivity<AptUnitOccupancySegment> {
 
     @SuppressWarnings("unchecked")
     public UnitOccupancyViewerActivity(Place place) {

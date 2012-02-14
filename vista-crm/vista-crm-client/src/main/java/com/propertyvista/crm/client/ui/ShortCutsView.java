@@ -30,10 +30,8 @@ public interface ShortCutsView extends IsWidget {
 
         public String getNavigLabel(AppPlace place);
 
-        public List<NavigFolder> getNavigFolders();
-
         public Place getWhere();
-
     }
 
+    public void setNavigFolders(List<NavigFolder> folders);
 }

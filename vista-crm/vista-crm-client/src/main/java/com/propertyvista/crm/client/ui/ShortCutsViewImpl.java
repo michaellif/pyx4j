@@ -51,20 +51,18 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
         search.getElement().getStyle().setMarginLeft(0.33, Unit.EM);
     }
 
-    /**
-     * TODO change implementation later
-     */
-
     @Override
     public void setPresenter(final ShortCutsPresenter presenter) {
         this.presenter = presenter;
+    }
 
-        //TODO Clean for now. Implement comparizon later
+    @Override
+    public void setNavigFolders(List<NavigFolder> folders) {
+
+        //TODO Clean for now. Implement comparison later
         this.clear();
 
-        List<NavigFolder> folders = presenter.getNavigFolders();
         for (NavigFolder navigFolder : folders) {
-
             ScrollPanel scroll = new ScrollPanel();
             SimplePanel searchcontainer = new SimplePanel();
             searchcontainer.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchBar);

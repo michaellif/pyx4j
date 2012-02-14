@@ -24,19 +24,26 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.event.CrudNavigateEvent;
+import com.propertyvista.crm.client.event.CrudNavigateHandler;
 import com.propertyvista.crm.client.ui.ShortCutsView;
 import com.propertyvista.crm.client.ui.ShortCutsView.ShortCutsPresenter;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
-public class ShortCutsActivity extends AbstractActivity implements ShortCutsPresenter {
+public class ShortCutsActivity extends AbstractActivity implements ShortCutsPresenter, CrudNavigateHandler {
 
     private static final I18n i18n = I18n.get(ShortCutsActivity.class);
 
     private final ShortCutsView view;
 
+    private final List<NavigFolder> navigfolders = new ArrayList<NavigFolder>();;
+
+    private final NavigFolder shortcutsFolder = new NavigFolder(i18n.tr("Shortcuts"));
+
     public ShortCutsActivity(Place place) {
-        view = (ShortCutsView) CrmVeiwFactory.instance(ShortCutsView.class);
+        view = CrmVeiwFactory.instance(ShortCutsView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -48,14 +55,16 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
+        navigfolders.add(shortcutsFolder);
+        view.setNavigFolders(navigfolders);
 
+        panel.setWidget(view);
+        eventBus.addHandler(CrudNavigateEvent.getType(), this);
     }
 
     @Override
     public void navigTo(Place place) {
         AppSite.getPlaceController().goTo(place);
-
     }
 
     @Override
@@ -64,20 +73,19 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
     }
 
     @Override
-    public List<NavigFolder> getNavigFolders() {
-
-        ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
-        //ShortCuts
-        NavigFolder folder = new NavigFolder(i18n.tr("Shortcuts"));
-        list.add(folder);
-
-        return list;
-
-    }
-
-    @Override
     public Place getWhere() {
         return AppSite.getPlaceController().getWhere();
     }
 
+    @Override
+    public void onCrudNavigate(CrudNavigateEvent event) {
+        view.setNavigFolders(updateNavigFolders(event.getPlace()));
+    }
+
+    private List<NavigFolder> updateNavigFolders(CrudAppPlace place) {
+
+        shortcutsFolder.addNavigItem(place);
+
+        return navigfolders;
+    }
 }

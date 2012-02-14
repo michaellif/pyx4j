@@ -16,14 +16,13 @@ package com.propertyvista.crm.client.activity.policies.charges;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
-
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.charges.ChargePolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.ChargePolicyCrudService;
 import com.propertyvista.domain.policy.dto.ChargePolicyDTO;
 
-public class ChargePolicyViewerActivity extends ViewerActivityBase<ChargePolicyDTO> {
+public class ChargePolicyViewerActivity extends CrmViewerActivity<ChargePolicyDTO> {
 
     public ChargePolicyViewerActivity(Place place) {
         super(place, PolicyViewFactory.instance(ChargePolicyViewerView.class), GWT.<ChargePolicyCrudService> create(ChargePolicyCrudService.class));

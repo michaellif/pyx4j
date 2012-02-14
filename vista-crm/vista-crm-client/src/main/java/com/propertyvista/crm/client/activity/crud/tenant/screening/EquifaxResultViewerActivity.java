@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.EquifaxResultViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.tenant.screening.EquifaxResultCrudService;
 import com.propertyvista.misc.EquifaxResult;
 
-public class EquifaxResultViewerActivity extends ViewerActivityBase<EquifaxResult> {
+public class EquifaxResultViewerActivity extends CrmViewerActivity<EquifaxResult> {
 
     @SuppressWarnings("unchecked")
     public EquifaxResultViewerActivity(Place place) {

@@ -140,6 +140,7 @@ public class CrmPanel extends LayoutPanel {
         bind(new FooterActivityMapper(), footerDisplay, eventBus);
         bind(new NavigActivityMapper(), navigDisplay, eventBus);
         bind(new ShortCutsActivityMapper(), shortcutsDisplay, eventBus);
+
         bind(new MainActivityMapper(), mainDisplay, eventBus);
     }
 

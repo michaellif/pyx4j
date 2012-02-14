@@ -21,7 +21,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
-import com.propertyvista.crm.client.event.NavigationUpdateEvent;
+import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.ui.dashboard.DashboardManagement;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
@@ -41,7 +41,7 @@ public class DashboardManagementActivity extends ListerActivityBase<DashboardMet
         super.onDeleted(itemID, isSuccessful);
         if (isSuccessful) {
             AppSite.instance();
-            AppSite.getEventBus().fireEvent(new NavigationUpdateEvent());
+            AppSite.getEventBus().fireEvent(new BoardUpdateEvent());
         }
     }
 }

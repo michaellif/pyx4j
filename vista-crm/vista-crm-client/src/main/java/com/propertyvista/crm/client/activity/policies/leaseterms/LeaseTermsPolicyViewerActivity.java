@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyViewerViewImpl;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseTermsPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 
-public class LeaseTermsPolicyViewerActivity extends ViewerActivityBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyViewerView.Presenter {
+public class LeaseTermsPolicyViewerActivity extends CrmViewerActivity<LeaseTermsPolicyDTO> implements LeaseTermsPolicyViewerView.Presenter {
 
     public LeaseTermsPolicyViewerActivity(Place place) {
         // TODO take the view from pool

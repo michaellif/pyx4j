@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerViewImpl;
 import com.propertyvista.crm.rpc.services.policies.policy.ApplicationDocumentationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
-public class ApplicationDocumentationPolicyViewerActivity extends ViewerActivityBase<ApplicationDocumentationPolicyDTO> implements
+public class ApplicationDocumentationPolicyViewerActivity extends CrmViewerActivity<ApplicationDocumentationPolicyDTO> implements
         ApplicationDocumentationPolicyViewerView.Presenter {
 
     public ApplicationDocumentationPolicyViewerActivity(Place place) {

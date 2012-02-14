@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.tenant.lead.ShowingCrudService;
 import com.propertyvista.domain.tenant.lead.Showing;
 
-public class ShowingViewerActivity extends ViewerActivityBase<Showing> {
+public class ShowingViewerActivity extends CrmViewerActivity<Showing> {
 
     @SuppressWarnings("unchecked")
     public ShowingViewerActivity(Place place) {

@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.event;
 
 import com.google.gwt.event.shared.EventHandler;
 
-public interface NavigationUpdateHandler extends EventHandler {
+public interface CrudNavigateHandler extends EventHandler {
 
-    void onNavigationUpdate(NavigationUpdateEvent event);
+    void onCrudNavigate(CrudNavigateEvent event);
 }

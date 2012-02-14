@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.tax.ChargeCodeViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.ChargeCodeCrudService;
 import com.propertyvista.domain.financial.offering.ChargeCode;
 
-public class ChargeCodeViewerActivity extends ViewerActivityBase<ChargeCode> {
+public class ChargeCodeViewerActivity extends CrmViewerActivity<ChargeCode> {
 
     public ChargeCodeViewerActivity(Place place) {
         super(place, SettingsViewFactory.instance(ChargeCodeViewerView.class),

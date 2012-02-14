@@ -13,26 +13,9 @@
  */
 package com.propertyvista.crm.client.event;
 
-import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.EventHandler;
 
-public class NavigationUpdateEvent extends GwtEvent<NavigationUpdateHandler> {
+public interface BoardUpdateHandler extends EventHandler {
 
-    private static Type<NavigationUpdateHandler> TYPE;
-
-    public static Type<NavigationUpdateHandler> getType() {
-        if (TYPE == null) {
-            TYPE = new Type<NavigationUpdateHandler>();
-        }
-        return TYPE;
-    }
-
-    @Override
-    public final Type<NavigationUpdateHandler> getAssociatedType() {
-        return TYPE;
-    }
-
-    @Override
-    protected void dispatch(NavigationUpdateHandler handler) {
-        handler.onNavigationUpdate(this);
-    }
+    void onBoardUpdate(BoardUpdateEvent event);
 }

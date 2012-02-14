@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.tenant.screening.PersonScreeningCrudService;
 import com.propertyvista.domain.tenant.PersonScreening;
 
-public class PersonScreeningViewerActivity extends ViewerActivityBase<PersonScreening> {
+public class PersonScreeningViewerActivity extends CrmViewerActivity<PersonScreening> {
 
     @SuppressWarnings("unchecked")
     public PersonScreeningViewerActivity(Place place) {

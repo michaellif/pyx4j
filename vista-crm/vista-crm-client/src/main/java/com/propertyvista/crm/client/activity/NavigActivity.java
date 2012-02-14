@@ -30,8 +30,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.event.NavigationUpdateEvent;
-import com.propertyvista.crm.client.event.NavigationUpdateHandler;
+import com.propertyvista.crm.client.event.BoardUpdateEvent;
+import com.propertyvista.crm.client.event.BoardUpdateHandler;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
@@ -41,7 +41,7 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, NavigationUpdateHandler {
+public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, BoardUpdateHandler {
 
     private static final I18n i18n = I18n.get(NavigActivity.class);
 
@@ -64,7 +64,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setNavigFolders(currentfolders = createNavigFolders());
         panel.setWidget(view);
-        eventBus.addHandler(NavigationUpdateEvent.getType(), this);
+        eventBus.addHandler(BoardUpdateEvent.getType(), this);
     }
 
     @Override
@@ -191,7 +191,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
     }
 
     @Override
-    public void onNavigationUpdate(NavigationUpdateEvent event) {
+    public void onBoardUpdate(BoardUpdateEvent event) {
         view.setNavigFolders(currentfolders = createNavigFolders());
     }
 }

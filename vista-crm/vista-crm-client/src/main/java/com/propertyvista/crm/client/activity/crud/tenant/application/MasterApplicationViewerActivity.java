@@ -20,9 +20,9 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
@@ -33,7 +33,7 @@ import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
-public class MasterApplicationViewerActivity extends ViewerActivityBase<MasterApplicationDTO> implements MasterApplicationViewerView.Presenter {
+public class MasterApplicationViewerActivity extends CrmViewerActivity<MasterApplicationDTO> implements MasterApplicationViewerView.Presenter {
 
     private final IListerView.Presenter applicationLister;
 
