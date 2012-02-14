@@ -39,8 +39,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
 
 public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE extends ListerGadgetBaseMetadata> extends GadgetInstanceBase<GADGET_TYPE> {
-    private static final I18n i18n = I18n.get(ListerGadgetInstanceBase.class);
-
+	
     protected static final int DEFAULT_PAGE_SIZE = 10;
 
     private DataTablePanel<E> dataTablePanel;
@@ -66,7 +65,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     protected final E proto() {
         return proto;
     }
-
+    
     protected Widget initListerWidget() {
         dataTablePanel = new DataTablePanel<E>(entityClass);
         dataTablePanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings());
@@ -153,6 +152,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         return dataTablePanel;
     }
 
+    // FIXME put this in the constructor
     protected abstract boolean isFilterRequired();
 
     /**
@@ -162,6 +162,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
      */
     public abstract void populatePage(int pageNumber);
 
+    // FIXME put this in the constructor
     public abstract List<ColumnDescriptor> defineColumnDescriptors();
 
     /**

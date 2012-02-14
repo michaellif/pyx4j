@@ -293,10 +293,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     @Override
     public void start() {
-        // this is just safeguard, stop() also removes event handlers
-        if (dashboardDateChangedEventRegistration != null) {
-            dashboardDateChangedEventRegistration.removeHandler();
-        }
         dashboardDateChangedEventRegistration = containerBoard.addDashboardDateChangedEventHandler(new DashboardDateChangedEventHandler() {
             @Override
             public void onDashboardDateChanged(DashboardDateChangedEvent event) {

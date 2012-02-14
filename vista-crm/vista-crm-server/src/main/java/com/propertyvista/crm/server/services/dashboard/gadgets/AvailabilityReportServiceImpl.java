@@ -46,13 +46,14 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailab
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
     private static SortingFactory<UnitAvailabilityStatusDTO> SORTING_FACTORY = new SortingFactory<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
 
     @Override
-    public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>> callback, Vector<Key> buildings, boolean displayOccupied,
-            boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayNotRented, LogicalDate to, Vector<Sort> sortingCriteria,
+    public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>> callback, Vector<Key> buildings, UnitAvailability.FilterPreset filterPreset, LogicalDate to, Vector<Sort> sortingCriteria,
             int pageNumber, int pageSize) {
         try {
             EntityListCriteria<UnitAvailabilityStatus> criteria = new EntityListCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
@@ -94,7 +95,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             Iterator<UnitAvailabilityStatusDTO> i = allUnitStatuses.iterator();
             while (i.hasNext()) {
                 UnitAvailabilityStatusDTO unitStatus = i.next();
-                if (isAcceptable(unitStatus, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
+                if (isAcceptable(unitStatus, filterPreset)) {
                     ++currentPagePosition;
                     ++totalRows;
                     if (currentPagePosition > pageSize) {
@@ -113,7 +114,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             }
             while (i.hasNext()) {
                 UnitAvailabilityStatusDTO unitStatus = i.next();
-                if (isAcceptable(unitStatus, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
+                if (isAcceptable(unitStatus, filterPreset)) {
                     ++totalRows;
                 }
             }
@@ -129,16 +130,21 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         }
     }
 
-    private static boolean isAcceptable(UnitAvailabilityStatusDTO unit, boolean displayOccupied, boolean displayVacant, boolean displayNotice,
+    private boolean isAcceptable(UnitAvailabilityStatusDTO unitStatus,
+			FilterPreset filterPreset) {
+    	// TODO implement this
+		return false;
+	}
+
+	private static boolean isAcceptable(UnitAvailabilityStatusDTO unit, boolean displayOccupied, boolean displayVacant, boolean displayNotice,
             boolean displayRented, boolean displayNotRented) {
 
         VacancyStatus vacancyStatus = unit.vacancyStatus().getValue();
         RentedStatus rentedStatus = unit.rentedStatus().getValue();
 
-        return (displayOccupied & vacancyStatus == null) //
+        return (displayOccupied & vacancyStatus == null) //XS
                 | ((displayVacant & vacancyStatus == VacancyStatus.Vacant) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented))) //
                 | ((displayNotice & vacancyStatus == VacancyStatus.Notice) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented)));
-
     }
 
     @Override

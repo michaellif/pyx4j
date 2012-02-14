@@ -22,6 +22,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -29,6 +30,7 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
@@ -38,6 +40,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.crm.client.ui.board.BoardBase.DebugIds;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -48,6 +51,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstan
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusDTO;
+import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
@@ -57,30 +61,33 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
     private static final I18n i18n = I18n.get(UnitAvailabilityReportGadget.class);
 
-    public static class UnitAvailabilityReportGadgetImpl extends ListerGadgetInstanceBase<UnitAvailabilityStatusDTO, UnitAvailability> implements
+    public static class UnitAvailabilityReportGadgetInstance extends ListerGadgetInstanceBase<UnitAvailabilityStatusDTO, UnitAvailability> implements
             IBuildingBoardGadgetInstance {
-        //@formatter:off        
-    
+    	
+    	public static enum DebugIds implements IDebugId {
+    		
+    		allFilter, vacantFilter, noticeFilter, vacantAndNoticeFilter, rentedFilter, netExposureFilter;
+
+			@Override
+			public String debugId() {				
+				return this.name();
+			} 
+    	}
+    	
         private VerticalPanel gadgetPanel;
     
         private FlexTable controlsPanel;
     
-        ToggleButton allButton;
-        ToggleButton vacantButton;
-        ToggleButton noticeButton;
-        ToggleButton vacantNoticeButton;
-        ToggleButton netExposureButton;
-        ToggleButton rentedButton;
+        private List<FilterButton> filteringButtons;
     
-        List<ToggleButton> filteringButtons;
-    
+        private FilterButtonClickHanlder filterButtonClickHandler;
         
-        private final AvailabilityReportService service;    
-        //@formatter:on
+        private final AvailabilityReportService service;
 
-        public UnitAvailabilityReportGadgetImpl(GadgetMetadata gmd) {
+        public UnitAvailabilityReportGadgetInstance(GadgetMetadata gmd) {
             super(gmd, UnitAvailabilityStatusDTO.class, UnitAvailability.class);
             service = GWT.create(AvailabilityReportService.class);
+            filterButtonClickHandler = new FilterButtonClickHanlder();
         }
 
         @Override
@@ -109,11 +116,10 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 return;
             }
 
-            final int page = pageNumber;
-            final UnitSelectionCriteria select = buttonStateToSelectionCriteria();
-            final Vector<Key> pks = new Vector<Key>(containerBoard.getSelectedBuildings().size());
+            final int page = pageNumber;            
+            final Vector<Key> buildingPks = new Vector<Key>(containerBoard.getSelectedBuildings().size());
             for (Building b : containerBoard.getSelectedBuildings()) {
-                pks.add(b.getPrimaryKey());
+                buildingPks.add(b.getPrimaryKey());
             }
 
             service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>>() {
@@ -127,124 +133,61 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 public void onFailure(Throwable caught) {
                     populateFailed(caught);
                 }
-            }, pks, select.occupied, select.vacant, select.notice, select.rented, select.notrented, getStatusDate(), new Vector<Sort>(getSorting()),
+            }, buildingPks, getMetadata().defaultFilteringPreset().getValue(), getStatusDate(), new Vector<Sort>(getSorting()),
                     pageNumber, getPageSize());
         }
 
         @Override
         public Widget initContentPanel() {
-            controlsPanel = new FlexTable();
-            ClickHandler filterButtonClickHandler = new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    for (ToggleButton button : filteringButtons) {
-                        if (event.getSource().equals(button)) {
-                            button.setDown(true);
-                        } else {
-                            button.setDown(false);
-                        }
-                    }
-                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                        @Override
-                        public void execute() {
-                            getMetadata().pageNumber().setValue(0);
-                            populate(false);
-                        }
-                    });
-                }
-            };
-            allButton = new ToggleButton(FilterPreset.All.toString(), filterButtonClickHandler);
-            vacantButton = new ToggleButton(FilterPreset.Vacant.toString(), filterButtonClickHandler);
-            noticeButton = new ToggleButton(FilterPreset.Notice.toString(), filterButtonClickHandler);
-            vacantNoticeButton = new ToggleButton(FilterPreset.VacantAndNotice.toString(), filterButtonClickHandler);
-            rentedButton = new ToggleButton(FilterPreset.Rented.toString(), filterButtonClickHandler);
-            netExposureButton = new ToggleButton(FilterPreset.NetExposure.toString(), filterButtonClickHandler);
-            filteringButtons = Arrays.asList(allButton, vacantButton, noticeButton, vacantNoticeButton, rentedButton, netExposureButton);
-
-            int col = -1;
-            for (ToggleButton button : filteringButtons) {
-                controlsPanel.setWidget(0, ++col, button);
-            }
-
+        	
             gadgetPanel = new VerticalPanel();
-            gadgetPanel.add(controlsPanel);
+            gadgetPanel.add(initFilteringConrolsPanel());
             gadgetPanel.add(initListerWidget());
             gadgetPanel.setCellHorizontalAlignment(controlsPanel, VerticalPanel.ALIGN_CENTER);
             gadgetPanel.setWidth("100%");
 
             return gadgetPanel;
         }
+        
+        private Widget initFilteringConrolsPanel() {
+        	
+            controlsPanel = new FlexTable();
+            
+            filteringButtons = Arrays.asList(//@formatter:off
+            		new FilterButton(FilterPreset.All, DebugIds.allFilter),
+            		new FilterButton(FilterPreset.Vacant, DebugIds.vacantFilter),
+            		new FilterButton(FilterPreset.Notice, DebugIds.noticeFilter),
+            		new FilterButton(FilterPreset.VacantAndNotice, DebugIds.vacantAndNoticeFilter),
+            		new FilterButton(FilterPreset.Rented, DebugIds.rentedFilter),
+            		new FilterButton(FilterPreset.NetExposure, DebugIds.netExposureFilter)
+            );//@formatter:on
+
+            int col = -1;
+            for (ToggleButton button : filteringButtons) {
+                controlsPanel.setWidget(0, ++col, button);
+            }
+
+        	return controlsPanel;
+        }
 
         @Override
         public void start() {
-            setSelectedFiltering();
+            setupFilteringButtons();
             super.start();
         }
 
-        private void setSelectedFiltering() {
-            for (ToggleButton button : filteringButtons) {
-                if (button.getText().equals(getMetadata().defaultFilteringPreset().getValue().toString())) {
-                    button.setDown(true);
+        /**
+         * Set the filtering buttons according to the state in metadata.
+         */
+        private void setupFilteringButtons() {
+            for (FilterButton button : filteringButtons) {
+                if (button.filterPreset ==  getMetadata().defaultFilteringPreset().getValue()) {
+                    button.setValue(true, false);
                 } else {
-                    button.setDown(false);
+                    button.setValue(false, false);
                 }
             }
         }
-
-        // AUXILLIARY STUFF    
-        private UnitSelectionCriteria buttonStateToSelectionCriteria() {
-            // it's done here and not in the toggle button click handler because it separates view from presenter 
-            UnitSelectionCriteria select = new UnitSelectionCriteria();
-            if (allButton.isDown()) {
-                select.occupied = true;
-                select.vacant = true;
-                select.notice = true;
-                select.rented = true;
-                select.notrented = true;
-            } else if (vacantButton.isDown()) {
-                select.occupied = false;
-                select.vacant = true;
-                select.notice = false;
-                select.rented = true;
-                select.notrented = true;
-            } else if (noticeButton.isDown()) {
-                select.occupied = false;
-                select.vacant = false;
-                select.notice = true;
-                select.rented = true;
-                select.notrented = true;
-            } else if (vacantNoticeButton.isDown()) {
-                select.occupied = false;
-                select.vacant = true;
-                select.notice = true;
-                select.rented = true;
-                select.notrented = true;
-            } else if (rentedButton.isDown()) {
-                select.occupied = false;
-                select.vacant = true;
-                select.notice = true;
-                select.rented = true;
-                select.notrented = false;
-            } else if (netExposureButton.isDown()) {
-                select.occupied = false;
-                select.vacant = true;
-                select.notice = true;
-                select.rented = false;
-                select.notrented = true;
-            }
-
-            return select;
-        }
-
-        //@formatter:off
-        private static class UnitSelectionCriteria {
-            boolean occupied;
-            boolean vacant;
-            boolean notice;
-            boolean rented;
-            boolean notrented;
-        }
-        //@formatter:on
 
         @Override
         protected boolean isFilterRequired() {
@@ -293,7 +236,41 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 }
             });
         }
+        
+        private class FilterButton extends ToggleButton {
+        	
+        	public final UnitAvailability.FilterPreset filterPreset;
+        	        	
+        	public FilterButton(FilterPreset filterPreset, IDebugId debugId) {        		
+        		super(new SafeHtmlBuilder().appendEscaped(filterPreset.toString()).toSafeHtml().asString());
+        		this.filterPreset = filterPreset;
+        		this.ensureDebugId(debugId.toString());
+        		this.addClickHandler(filterButtonClickHandler);        		
+        	}
+        	
+        }
 
+        private class FilterButtonClickHanlder implements ClickHandler {
+        	
+            @Override
+            public void onClick(ClickEvent event) {
+                for (FilterButton button : filteringButtons) {
+                    if (event.getSource().equals(button)) {                    	
+                        button.setDown(true);
+                        getMetadata().defaultFilteringPreset().setValue(button.filterPreset);
+                    } else {
+                        button.setDown(false);
+                    }
+                }
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        getMetadata().pageNumber().setValue(0);
+                        populate(false);
+                    }
+                });
+            }
+        }
     }
 
     public UnitAvailabilityReportGadget() {
@@ -317,6 +294,6 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
     @Override
     protected GadgetInstanceBase<UnitAvailability> createInstance(GadgetMetadata gadgetMetadata) throws Error {
-        return new UnitAvailabilityReportGadgetImpl(gadgetMetadata);
+        return new UnitAvailabilityReportGadgetInstance(gadgetMetadata);
     }
 }
