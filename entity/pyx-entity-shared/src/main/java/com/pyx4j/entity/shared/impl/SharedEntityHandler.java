@@ -299,25 +299,30 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             }
             MemberMeta memberMeta = root.getEntityMeta().getMemberMeta(memberName);
             switch (memberMeta.getObjectClassType()) {
-            case Entity:
+            case Entity: {
                 IEntity member = (IEntity) root.getMember(memberName);
                 if (member.equals(entity)) {
                     it.remove();
                 } else {
                     removeValueFromGraph(member, entity, processed);
                 }
+            }
                 break;
             case EntityList:
-            case EntitySet:
-                Iterator<IEntity> lit = ((ICollection<IEntity, ?>) root.getMember(memberName)).iterator();
-                while (lit.hasNext()) {
-                    IEntity listMember = lit.next();
-                    if (listMember.equals(entity)) {
-                        lit.remove();
-                    } else {
-                        removeValueFromGraph(listMember, entity, processed);
+            case EntitySet: {
+                IObject<?> member = root.getMember(memberName);
+                if (member.getAttachLevel() != AttachLevel.Detached) {
+                    Iterator<IEntity> lit = ((ICollection<IEntity, ?>) member).iterator();
+                    while (lit.hasNext()) {
+                        IEntity listMember = lit.next();
+                        if (listMember.equals(entity)) {
+                            lit.remove();
+                        } else {
+                            removeValueFromGraph(listMember, entity, processed);
+                        }
                     }
                 }
+            }
                 break;
             }
         }
