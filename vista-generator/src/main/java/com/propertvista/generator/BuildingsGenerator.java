@@ -548,7 +548,7 @@ public class BuildingsGenerator {
     public Complex createComplex(String name) {
         Complex complex = EntityFactory.create(Complex.class);
         complex.name().setValue(name);
-        complex.website().setValue("www." + name + ".com");
+        complex.website().setValue("www." + name.replace("#", "").replace(" ", "") + ".com");
 
         return complex;
     }
