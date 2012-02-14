@@ -32,12 +32,14 @@ public interface LeaseAdjustment extends IEntity {
     @MemberColumn(name = "itemType")
     LeaseAdjustmentReason reason();
 
+    @NotNull
     @ToString(index = 1)
     @Format("#0.00")
     IPrimitive<Double> amount();
 
     IPrimitive<String> description();
 
+    @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> effectiveDate();
 

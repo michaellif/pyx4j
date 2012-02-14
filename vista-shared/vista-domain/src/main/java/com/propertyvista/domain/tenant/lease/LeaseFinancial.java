@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -35,6 +36,6 @@ public interface LeaseFinancial extends IEntity {
     BillingAccount billingAccount();
 
     @Owned
-    IList<LeaseAdjustment> adjustmentItems();
-
+    @Caption(name = "Lease Adjustments")
+    IList<LeaseAdjustment> adjustments();
 }

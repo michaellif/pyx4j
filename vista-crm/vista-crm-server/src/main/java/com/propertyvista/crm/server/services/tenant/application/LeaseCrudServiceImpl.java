@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -34,8 +35,10 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.ServiceAgreement;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
@@ -82,13 +85,16 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     @Override
     protected void persistDBO(Lease dbo, LeaseDTO in) {
-        // persist non-owned lists items:
+
         for (BillableItem item : dbo.serviceAgreement().featureItems()) {
+            // save extra data:
             if (!item.extraData().isNull()) {
                 Persistence.service().merge(item.extraData());
             }
         }
-        updateAdjustments(dbo.serviceAgreement());
+
+        updateAdjustments(dbo);
+
         Persistence.service().merge(dbo.leaseFinancial());
         Persistence.service().merge(dbo);
 
@@ -100,18 +106,42 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         }
     }
 
-    private void updateAdjustments(ServiceAgreement serviceAgreement) {
-        updateAdjustments(serviceAgreement.serviceItem());
-        for (BillableItem ci : serviceAgreement.featureItems()) {
-            updateAdjustments(ci);
+    private void updateAdjustments(Lease lease) {
+        // ServiceItem Adjustments:
+        updateAdjustments(lease.serviceAgreement().serviceItem(), lease.leaseTo().getValue());
+
+        // BillableItem Adjustments:
+        for (BillableItem ci : lease.serviceAgreement().featureItems()) {
+            updateAdjustments(ci, lease.leaseTo().getValue());
+        }
+
+        // Lease Financial Adjustments:
+        updateAdjustments(lease.leaseFinancial());
+    }
+
+    private void updateAdjustments(BillableItem item, LogicalDate leaseEndDate) {
+        for (BillableItemAdjustment adj : item.adjustments()) {
+            // set creator:
+            if (adj.createdWhen().isNull()) {
+                adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
+            }
+            // set adjustment expiration date:
+            if (TermType.oneTime.equals(adj.termType().getValue())) {
+                adj.exparationDate().setValue(item.effectiveDate().getValue());
+            } else {
+                adj.exparationDate().setValue(leaseEndDate);
+            }
         }
     }
 
-    private void updateAdjustments(BillableItem chargeItem) {
-        for (BillableItemAdjustment cia : chargeItem.adjustments()) {
-            if (cia.createdWhen().isNull()) {
-                cia.createdBy().set(CrmAppContext.getCurrentUserEmployee());
+    private void updateAdjustments(LeaseFinancial leaseFinancial) {
+        for (LeaseAdjustment adj : leaseFinancial.adjustments()) {
+            // set creator:
+            if (adj.createdWhen().isNull()) {
+                adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
             }
+            // set adjustment expiration date:
+            adj.exparationDate().setValue(adj.effectiveDate().getValue());
         }
     }
 
@@ -135,17 +165,10 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         }
 
         // load detached entities:
-        Persistence.service().retrieve(building);
         Persistence.service().retrieve(building.serviceCatalog());
+        Persistence.service().retrieve(building.serviceCatalog().services());
 
-//        // update service catalogue double-reference lists:
-//        EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
-//        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
-//        List<Service> services = Persistence.service().query(serviceCriteria);
-//        building.serviceCatalog().services().clear();
-//        building.serviceCatalog().services().addAll(services);
-
-        // load detached data:
+        // load detached service eligibility matrix data:
         for (Service item : building.serviceCatalog().services()) {
             Persistence.service().retrieve(item.items());
             Persistence.service().retrieve(item.features());
@@ -188,5 +211,4 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         ApplicationManager.sendMasterApplicationEmail(ma);
         callback.onSuccess(null);
     }
-
 }

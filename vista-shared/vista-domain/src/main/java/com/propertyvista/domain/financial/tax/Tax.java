@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.financial.tax;
 
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -21,11 +22,12 @@ public interface Tax extends IEntity {
 
     IPrimitive<String> authority();
 
+    @NotNull
     IPrimitive<String> name();
 
+    @NotNull
     //TODO rate for particular period
     IPrimitive<Double> rate();
 
     IPrimitive<Boolean> compound();
-
 }

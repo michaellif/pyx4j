@@ -14,7 +14,6 @@
 package com.propertyvista.portal.server.ptapp.services.steps;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +23,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.Feature;
@@ -182,19 +179,18 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     private ProductCatalog syncBuildingProductCatalog(Building building) {
+        if (building == null || building.isNull()) {
+            return null;
+        }
 
         // load detached entities:
         Persistence.service().retrieve(building.serviceCatalog());
+        Persistence.service().retrieve(building.serviceCatalog().services());
 
-        // update service catalogue double-reference lists:
-        EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Service> services = Persistence.service().query(serviceCriteria);
-        building.serviceCatalog().services().clear();
-        building.serviceCatalog().services().addAll(services);
+        // load detached service eligibility matrix data:
 
         // load detached data:
-        for (Service item : services) {
+        for (Service item : building.serviceCatalog().services()) {
             Persistence.service().retrieve(item.items());
             Persistence.service().retrieve(item.features());
             for (Feature fi : item.features()) {

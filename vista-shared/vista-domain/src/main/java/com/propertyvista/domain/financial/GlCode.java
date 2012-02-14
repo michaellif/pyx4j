@@ -16,11 +16,13 @@ package com.propertyvista.domain.financial;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface GlCode extends IEntity {
 
+    @NotNull
     @ToString
     IPrimitive<Integer> glId();
 
