@@ -38,11 +38,6 @@ public interface DataPreloader {
      */
     public String delete();
 
-    /**
-     * Load, verify and print what you've just saved
-     */
-    public String print();
-
     public Set<String> getParameters();
 
     public void setParametersValues(Map<String, Serializable> parameters);

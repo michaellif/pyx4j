@@ -125,19 +125,12 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
     }
 
     public String preloadAll() {
-        return preloadAll(false);
-    }
-
-    public String preloadAll(boolean print) {
         StringBuilder b = new StringBuilder();
         String txt = delete();
         if (CommonsStringUtils.isStringSet(txt)) {
             b.append(txt).append('\n');
         }
         b.append(create());
-        if (print) {
-            b.append(print());
-        }
         return b.toString();
     }
 
@@ -152,9 +145,9 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             if (CommonsStringUtils.isStringSet(txt)) {
                 b.append(txt).append('\n');
             }
-            if (TimeUtils.since(start) > 1 * Consts.SEC2MSEC) {
-                b.append(" ! ").append(preloader.getClass().getSimpleName() + " " + TimeUtils.secSince(start) + "\n");
-            }
+            //if (TimeUtils.since(start) > 1 * Consts.SEC2MSEC) {
+            b.append(" ! ").append(preloader.getClass().getSimpleName() + " " + TimeUtils.secSince(start) + "\n");
+            //}
         }
         return b.toString();
     }
@@ -169,20 +162,6 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             log.debug("delete preloader {}", preloader.getClass());
             String txt = preloader.delete();
             if (CommonsStringUtils.isStringSet(txt)) {
-                b.append(txt).append('\n');
-            }
-        }
-        return b.toString();
-    }
-
-    @Override
-    public String print() {
-        StringBuilder b = new StringBuilder();
-        for (DataPreloader preloader : childPreloaders) {
-            preloader.setParametersValues(parameters);
-            log.debug("print preloader {}", preloader.getClass());
-            String txt = preloader.print();
-            if (txt != null) {
                 b.append(txt).append('\n');
             }
         }

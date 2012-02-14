@@ -650,4 +650,13 @@ public class Dialog extends DialogPanel {
         }
 
     }
+
+    @Override
+    public void setSize(String width, String height) {
+        if (BrowserType.isIE8()) {
+            setWidth(width);
+        } else {
+            super.setSize(width, height);
+        }
+    }
 }
