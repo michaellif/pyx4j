@@ -183,23 +183,6 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
         return sb.toString();
     }
 
-    @Override
-    public String print() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n\nLoaded ");
-
-        List<Tenant> tenants = Persistence.service().query(new EntityQueryCriteria<Tenant>(Tenant.class));
-        sb.append(tenants.size()).append(" tenants\n");
-        for (Tenant tenant : tenants) {
-            sb.append("\t");
-            sb.append(tenant);
-            sb.append("\n");
-        }
-
-        sb.append("\n");
-        return sb.toString();
-    }
-
     public void persistTenant(Tenant tenant) {
         switch (tenant.type().getValue()) {
         case company:

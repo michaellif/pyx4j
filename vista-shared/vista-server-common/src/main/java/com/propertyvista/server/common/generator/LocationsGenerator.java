@@ -33,6 +33,7 @@ public class LocationsGenerator {
 
         Map<String, Country> countriesByName = new HashMap<String, Country>();
         List<Country> countries = new Vector<Country>();
+
         for (Province province : provinces) {
             Country country = countriesByName.get(province.country().name().getValue());
             if (country == null) {

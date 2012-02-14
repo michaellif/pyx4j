@@ -32,7 +32,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.company.Portfolio;
@@ -47,7 +46,6 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
-import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -59,7 +57,6 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
@@ -233,10 +230,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             // Amenities:
-            List<BuildingAmenity> amenities = generator.createBuildingAmenities(building, 1 + RandomUtil.randomInt(5));
-            for (BuildingAmenity item : amenities) {
-                Persistence.service().persist(item);
-            }
+            Persistence.service().persist(generator.createBuildingAmenities(building, 1 + RandomUtil.randomInt(5)));
 
             // Floorplans:
             List<FloorplanDTO> floorplans = generator.createFloorplans(building, config().numFloorplans);
@@ -349,92 +343,4 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         return sb.toString();
     }
 
-    @Override
-    public String print() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n\n");
-
-        List<Parking> parkings = Persistence.service().query(new EntityQueryCriteria<Parking>(Parking.class));
-        sb.append(parkings.size()).append(" parkings\n");
-        for (Parking parking : parkings) {
-            sb.append("\t");
-            sb.append(parking);
-            sb.append("\n");
-        }
-
-        List<Locker> lockers = Persistence.service().query(new EntityQueryCriteria<Locker>(Locker.class));
-        sb.append(lockers.size()).append(" lockers\n");
-        for (Locker locker : lockers) {
-            sb.append("\t");
-            sb.append(locker);
-            sb.append("\n");
-        }
-
-        List<Floorplan> floorplans = Persistence.service().query(new EntityQueryCriteria<Floorplan>(Floorplan.class));
-        sb.append(floorplans.size()).append(" floorplans\n");
-        for (Floorplan floorplan : floorplans) {
-            sb.append("\t");
-            sb.append(floorplan);
-            sb.append("\n");
-        }
-
-        // EntityQueryCriteria<Floorplan> floorplanCriteria =
-        // EntityQueryCriteria.create(Floorplan.class);
-        // floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(),
-        // DemoData.REGISTRATION_DEFAULT_FLOORPLAN));
-        // floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().propertyCode(),
-        // DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE));
-        // Floorplan floorplan =
-        // Persistence.service().retrieve(floorplanCriteria);
-        // sb.append("Floorplan: ").append(floorplan);
-
-        List<Building> buildings = Persistence.service().query(new EntityQueryCriteria<Building>(Building.class));
-        sb.append("\n\nLoaded ").append(buildings.size()).append(" buildings\n\n");
-        for (Building building : buildings) {
-            // b.append(building.getStringView());
-            sb.append(building.info().type().getStringView());
-            sb.append("\t");
-            sb.append(building.info().address().streetNumber().getStringView()).append(", ");
-            sb.append(building.info().address().streetName().getStringView()).append(", ");
-            sb.append(building.info().address().streetType().getStringView()).append(", ");
-            sb.append(building.info().address().city().getStringView()).append(" ").append(building.info().address().province().getStringView()).append(", ");
-            sb.append(building.info().address().postalCode().getStringView()).append(", ").append(building.info().address().country().getStringView());
-
-            // phones
-            sb.append("\t");
-
-            for (PropertyPhone phone : building.contacts().phones()) {
-                sb.append(phone.number().getStringView());
-                sb.append("/").append(phone.type().getStringView());
-            }
-
-            // // email
-            // b.append("\t");
-            // b.append(building.email().getStringView());
-
-            sb.append("\n");
-
-            // get the units
-            EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-            criteria.add(new PropertyCriterion(criteria.proto().belongsTo(), Restriction.EQUAL, building.getPrimaryKey()));
-            List<AptUnit> units = Persistence.service().query(criteria);
-            sb.append("\tBuilding has ").append(units.size()).append(" units\n");
-
-            for (AptUnit unit : units) {
-                sb.append("\t");
-                sb.append(unit.info().floor().getStringView()).append(" floor");
-                sb.append(" ");
-                sb.append(unit.info().area().getStringView()).append(" sq. ft.");
-                sb.append(" ");
-                sb.append(unit.belongsTo().propertyCode().getStringView());
-                sb.append(" ");
-                sb.append(unit.floorplan());
-                sb.append(" | ");
-                sb.append(unit.floorplan().name().getStringView()); // .append(" ").append(unit.floorplan().pictures());
-                sb.append("\n");
-            }
-        }
-        sb.append("\n");
-        return sb.toString();
-    }
 }

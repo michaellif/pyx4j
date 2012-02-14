@@ -44,7 +44,7 @@ public class PortalServicesTest extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        new VistaDataPreloaders(VistaDevPreloadConfig.createTest()).preloadAll(false);
+        new VistaDataPreloaders(VistaDevPreloadConfig.createTest()).preloadAll();
     }
 
     /**

@@ -38,17 +38,4 @@ public class SharedData {
         return CacheService.get("provinces");
     }
 
-    public static Country findCountryCanada() {
-        return findCountry("Canada");
-    }
-
-    public static Country findCountry(String name) {
-        List<Country> countries = CacheService.get("countries");
-        for (Country country : countries) {
-            if (country.name().getValue().equals(name)) {
-                return country;
-            }
-        }
-        return null;
-    }
 }
