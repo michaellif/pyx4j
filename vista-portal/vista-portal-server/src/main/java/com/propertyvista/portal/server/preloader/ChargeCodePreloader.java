@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.propertvista.generator.ChargeCodeGenerator;
@@ -22,6 +23,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.tax.Tax;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 
 public class ChargeCodePreloader extends BaseVistaDevDataPreloader {
@@ -32,7 +34,10 @@ public class ChargeCodePreloader extends BaseVistaDevDataPreloader {
 
     private static final int CHARGECODE_QUANTITY = 5;
 
-    private static final int REASON_QUANTITY = 5;
+    private static final List<String> reasons = Arrays.asList("Admin Expenses", "Commisions", "Maintenance Fees", "Maintenance Labour", "Legal Expences",
+            "Security", "Repairs Material", "Management Fee", "Rental Deposit", "Late Fee", "NSF Fees", "Application Fee", "Tenant Improvements",
+            "Good Will - general", "Move In Charges", "Move Out Charges", "Deposit Forfeit", "Marketing And Promotion", "Billing Adjustment", "Misc Labour",
+            "Misc Material", "Misc Generic(no tax)", "Misc Generic(tax included)");
 
     @Override
     public String create() {
@@ -55,8 +60,10 @@ public class ChargeCodePreloader extends BaseVistaDevDataPreloader {
             Persistence.service().persist(ChargeCodeGenerator.createChargeCode(k, taxes, glCodes));
         }
 
-        for (l = 0; l < REASON_QUANTITY; l++) {
-            Persistence.service().persist(ChargeCodeGenerator.createLeaseAdjustmentReason(l, taxes, glCodes));
+        for (l = 0; l < reasons.size(); l++) {
+            LeaseAdjustmentReason lar = ChargeCodeGenerator.createLeaseAdjustmentReason(l, taxes, glCodes);
+            lar.name().setValue(reasons.get(l));
+            Persistence.service().persist(lar);
         }
 
         return "Created " + i + " demo taxes \nCreated " + j + " demo GlCodes \nCreated " + k + " demo ChargeCodes \nCreated " + l

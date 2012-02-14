@@ -74,8 +74,7 @@ public class ChargeCodeGenerator {
         for (int i = 0; i < j; i++) {
             leaseAdjustmentReason.taxes().add(RandomUtil.random(taxes));
         }
-        leaseAdjustmentReason.name().setValue("Reason #" + k);
-        leaseAdjustmentReason.glCode().set(RandomUtil.random(glCodes));
+        leaseAdjustmentReason.glCode().set(RandomUtil.random(glCodes)); //name is set in preloader
 
         return leaseAdjustmentReason;
     }
