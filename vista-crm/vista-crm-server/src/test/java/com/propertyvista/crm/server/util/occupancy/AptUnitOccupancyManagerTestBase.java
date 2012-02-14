@@ -19,8 +19,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.AssertionFailedError;
-
 import org.junit.Assert;
 import org.junit.Before;
 
@@ -141,36 +139,6 @@ public class AptUnitOccupancyManagerTestBase {
 
     }
 
-    /**
-     * Assert that this occupancy is valid, for validity criteria see {@link #isValidOccupancyTimeline(List)}.
-     * 
-     * @param occupancyTimeline
-     */
-    public static void assertValidOccupancyTimeline(List<AptUnitOccupancySegment> occupancyTimeline) {
-        Error error = isValidOccupancyTimeline(occupancyTimeline);
-        if (error != null) {
-            throw new AssertionFailedError(error.getMessage());
-        }
-    }
-
-    /**
-     * Validate that the {@code occupancyTimeline} satisfies the following constraints:<br/>
-     * 
-     * <li>The segments must not overlap.</li><br/>
-     * <li>The segments must cover the whole time.</li><br/>
-     * <li>The segments must be in ascending order with respect to {@link AptUnitOccupancySegment#dateFrom()}</li><br/>
-     * <li>TBD...</li>
-     * 
-     * @param occupancyTimeline
-     * @return
-     *         <li><code>null</code> if the occupancy that was provided is valid</li>
-     * 
-     *         <li><code>{@link Error}</code> that hopefully contains a message describing what is wrong, if some of the constraints are not satisfied</li>
-     */
-    public static Error isValidOccupancyTimeline(List<AptUnitOccupancySegment> occupancyTimeline) {
-        return null; // TODO implement isValidOccupancyTimeline and documentation
-    }
-
     public static LogicalDate asDate(String dateRepr) {
         if ("MAX_DATE".equals(dateRepr)) {
             return new LogicalDate(AptUnitOccupancyManagerHelper.MAX_DATE);
@@ -263,7 +231,10 @@ public class AptUnitOccupancyManagerTestBase {
             this.expectedTimeline = expectedTimeline;
         }
 
-        public void check() {
+        /**
+         * execute the statement.
+         */
+        public void x() {
             assertVaildSegment();
 
             expectedTimeline.add(segment);
@@ -290,7 +261,10 @@ public class AptUnitOccupancyManagerTestBase {
 
     protected static class SetupBuilder extends SegmentBuilder<SetupBuilder> {
 
-        public void prepare() {
+        /**
+         * execute the statement
+         */
+        public void x() {
             assertVaildSegment();
             Persistence.service().merge(segment);
         }

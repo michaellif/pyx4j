@@ -19,7 +19,9 @@ import java.util.ListIterator;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 
 /**
  * This class contains utility methods for unit occupancy manager.
@@ -31,6 +33,10 @@ public class AptUnitOccupancyManagerHelper {
     public static final LogicalDate MAX_DATE = new LogicalDate(1100, 0, 1); // 3000-0-1
 
     private static final long MILLIS_IN_DAY = 1000l * 60l * 60l * 24l;
+
+    public static void merge(AptUnit unit, List<Status> relevantStatuses, SegmentPredicate pred, MergeHandler handler) {
+
+    }
 
     /**
      * @param occupancyTimeline
@@ -77,5 +83,17 @@ public class AptUnitOccupancyManagerHelper {
 
     public static LogicalDate addDay(LogicalDate date) {
         return new LogicalDate(date.getTime() + MILLIS_IN_DAY);
+    }
+
+    public static interface SegmentPredicate {
+
+        boolean check(AptUnitOccupancySegment segment);
+
+    }
+
+    public static interface MergeHandler {
+
+        void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2);
+
     }
 }
