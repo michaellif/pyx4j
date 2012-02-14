@@ -84,6 +84,7 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
         }
 
         private static class ChargePolicyItemEditor extends CEntityDecoratableEditor<ChargePolicyItem> {
+            private CComponent itemTypeCb;
             private CComponent serviceTypesCb;
             private CComponent featureTypeCb;
             private CEntityComboBox<ProductItemType> productItemTypeCb;
@@ -101,7 +102,8 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
                 
                 if (isEditable()) {
                     WidgetDecorator wd = new DecoratorBuilder(inject(proto().productItemType().type())).build();
-                    ((CComboBox<ProductItemType.Type>)wd.getComnponent()).addValueChangeHandler(new ValueChangeHandler<ProductItemType.Type>() {
+                    itemTypeCb = wd.getComnponent();
+                    ((CComboBox<ProductItemType.Type>)itemTypeCb).addValueChangeHandler(new ValueChangeHandler<ProductItemType.Type>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<ProductItemType.Type> event) {
                             productItemTypeCb.resetCriteria();
@@ -109,10 +111,12 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
                             if (event.getValue() == ProductItemType.Type.service)
                             {
                                 productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().type(), ProductItemType.Type.service));
+                                productItemTypeCb.setValue(null);
                                 serviceTypesCb.setVisible(true);
                                 featureTypeCb.setVisible(false);
                             }else {
                                 productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().type(), ProductItemType.Type.feature));
+                                productItemTypeCb.setValue(null);
                                 serviceTypesCb.setVisible(false);
                                 featureTypeCb.setVisible(true);
                             }
@@ -126,7 +130,14 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
                     ((CComboBox<Service.Type>)serviceTypesCb).addValueChangeHandler(new ValueChangeHandler<Service.Type>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<Service.Type> event) {
-                           
+                            productItemTypeCb.resetCriteria();
+                            productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().type(), ((CComboBox<ProductItemType.Type>)itemTypeCb).getValue()));
+                            
+                            if (event.getValue() != null) {
+                                productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().serviceType(), event.getValue()));
+                            }
+                            
+                            productItemTypeCb.setValue(null);
                         }
                     });
                     serviceTypesCb.setVisible(false);
@@ -137,7 +148,14 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
                     ((CComboBox<Feature.Type>)featureTypeCb).addValueChangeHandler(new ValueChangeHandler<Feature.Type>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<Feature.Type> event) {
-                           
+                            productItemTypeCb.resetCriteria();
+                            productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().type(), ((CComboBox<ProductItemType.Type>)itemTypeCb).getValue()));
+                            
+                            if (event.getValue() != null) {
+                                productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().featureType(), event.getValue()));
+                            }
+                            
+                            productItemTypeCb.setValue(null);
                         }
                     });
                     featureTypeCb.setVisible(false);
@@ -156,17 +174,16 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
                                 } else{
                                     ((CComboBox<Feature.Type>)featureTypeCb).setValue(pt.featureType().getValue());
                                 }
+                                
+                                ((CComboBox<ProductItemType.Type>)itemTypeCb).setValue(pt.type().getValue());
                             }
-                           
-                           // get(proto().);
                         }
                     });
-                    //productItemTypeCb.setVisible(false);
+                    
                     content.setWidget(++row, 0, wd);
                     
                     wd = new DecoratorBuilder(inject(proto().chargeCode())).build();
                     chargeCodeCb = wd.getComnponent();
-                    //chargeCodeCb.setVisible(false);
                     content.setWidget(++row, 0, wd);
                 }
 
