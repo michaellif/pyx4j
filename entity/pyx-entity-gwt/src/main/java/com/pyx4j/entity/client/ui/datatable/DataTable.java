@@ -294,9 +294,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         removeAllRows();
 
         if (!BrowserType.isIE()) {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 30; i++) {
                 getColumnFormatter().setWidth(i, "0");
             }
+        } else {
+            for (int i = 0; i < 30; i++) {
+                DOM.setStyleAttribute(getColumnFormatter().getElement(i), "width", "0px");
+            }
+
         }
 
         renderHeader();
@@ -330,7 +335,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         if (hasCheckboxColumn()) {
             selectionCheckBoxAll = new SelectionCheckBox(HEADER_RAW_INDEX, model.isAllChecked());
             setWidget(0, 0, selectionCheckBoxAll);
-            getColumnFormatter().setWidth(colIndex, CHECK_MARK_COLUMN_SIZE);
+            if (!BrowserType.isIE()) {
+                getColumnFormatter().setWidth(colIndex, CHECK_MARK_COLUMN_SIZE);
+            } else {
+                DOM.setStyleAttribute(getColumnFormatter().getElement(colIndex), "width", CHECK_MARK_COLUMN_SIZE);
+            }
             getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
             ++colIndex;
         }
@@ -353,7 +362,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             }
             setHTML(0, colIndex, headerText.toString());
 
-            getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
+            if (!BrowserType.isIE()) {
+                getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
+            } else {
+                DOM.setStyleAttribute(getColumnFormatter().getElement(colIndex), "width", columnDescriptor.getWidth());
+            }
 
             getCellFormatter().setWordWrap(0, colIndex, false);
             ++colIndex;
@@ -361,7 +374,12 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
         if (isColumnSelectorVisible()) {
             setWidget(0, colIndex, createHeaderColumnSelector());
-            getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
+            if (!BrowserType.isIE()) {
+                getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
+            } else {
+                DOM.setStyleAttribute(getColumnFormatter().getElement(colIndex), "width", COLUMNS_SELECTOR_COLUMN_SIZE);
+            }
+
             getCellFormatter().setStyleName(0, colIndex, DefaultDataTableTheme.StyleName.DataTableColumnSelector.name());
             getCellFormatter().setVerticalAlignment(0, colIndex, HasVerticalAlignment.ALIGN_MIDDLE);
             getCellFormatter().setHorizontalAlignment(0, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
