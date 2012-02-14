@@ -52,6 +52,8 @@ import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
+import com.propertyvista.pmsite.server.model.WicketUtils.PageLink;
+import com.propertyvista.pmsite.server.pages.PwdResetPage;
 import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
 
 public class SignInPanel extends Panel {
@@ -184,6 +186,7 @@ public class SignInPanel extends Panel {
             add(captcha.setVisible(false));
 
             add(new CheckBox("rememberMe"));
+            add(new PageLink("pwdreset", PwdResetPage.class).setText("Forgot Password"));
             add(new Button("signIn").add(AttributeModifier.replace("value", i18n.tr("Sign In"))));
 
             if (ApplicationMode.isDevelopment()) {

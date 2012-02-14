@@ -459,7 +459,7 @@ public class WicketUtils {
 
         // This will generate the correct property name and bind to corresponding property 
         public <S> IModel<S> bind(IObject<S> ieProp) {
-            T modelObj = getObject().getEntityValue();
+            T modelObj = proto();
             // build the property expression
             String propName = ieProp.getMeta().getFieldName();
             IObject<?> parent = ieProp.getParent();
@@ -469,6 +469,10 @@ public class WicketUtils {
             }
             // bind to the given property
             return bind(propName);
+        }
+
+        public T proto() {
+            return getObject().getEntityValue();
         }
     }
 }

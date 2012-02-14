@@ -26,6 +26,7 @@ import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
@@ -50,6 +51,7 @@ import org.apache.wicket.util.time.Duration;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.security.rpc.AuthenticationService;
 
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
@@ -58,6 +60,8 @@ import com.propertyvista.pmsite.server.pages.InquiryPage;
 import com.propertyvista.pmsite.server.pages.InquirySuccessPage;
 import com.propertyvista.pmsite.server.pages.InternalErrorPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
+import com.propertyvista.pmsite.server.pages.PwdChangePage;
+import com.propertyvista.pmsite.server.pages.PwdResetPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.SignInPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
@@ -87,6 +91,8 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         MountMap.put("aptinfo", AptDetailsPage.class);
         MountMap.put("unitinfo", UnitDetailsPage.class);
         MountMap.put("residents", ResidentsPage.class);
+        MountMap.put("pwdreset", PwdResetPage.class);
+        MountMap.put("pwdchange", PwdChangePage.class);
         MountMap.put("inquiry", InquiryPage.class);
         MountMap.put("inquiryok", InquirySuccessPage.class);
         MountMap.put("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
@@ -264,12 +270,36 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         return SignInPage.class;
     }
 
+    protected Class<? extends WebPage> getPwdChangePage() {
+        return PwdChangePage.class;
+    }
+
+    protected String getReturnToTargetUrl() {
+        Url target = RequestCycle.get().getRequest().getUrl();
+        // remove auth token if present
+        target.removeQueryParameters(AuthenticationService.AUTH_TOKEN_ARG);
+        return target.toString();
+    }
+
     // we want to use target url parameter to avoid storing it in session
     @Override
     public void restartResponseAtSignInPage() {
         PageParameters pp = new PageParameters();
-        pp.add(ParamNameTarget, RequestCycle.get().getRequest().getUrl().toString());
+        pp.add(ParamNameTarget, getReturnToTargetUrl());
         throw new RestartResponseException(getSignInPageClass(), pp);
+    }
+
+    @Override
+    protected void onUnauthorizedPage(final Page page) {
+        if (hasAnyRole(new Roles(PMSiteSession.PasswordChangeRequiredRole))) {
+            // redirect to Change Password page
+            PageParameters pp = new PageParameters();
+            pp.add(ParamNameTarget, getReturnToTargetUrl());
+            throw new RestartResponseException(getPwdChangePage(), pp);
+        } else {
+            // redirect to home page
+            throw new RestartResponseException(getHomePage());
+        }
     }
 
     public String getApplicationBaseURL(boolean secure) {

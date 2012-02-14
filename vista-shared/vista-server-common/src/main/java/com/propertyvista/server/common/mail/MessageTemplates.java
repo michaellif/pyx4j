@@ -116,6 +116,10 @@ public class MessageTemplates {
             url = ServerSideConfiguration.instance().getMainApplicationURL()
                     + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
             break;
+        case TenantPortal:
+            url = ServerSideConfiguration.instance().getMainApplicationURL() + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
+                    + token;
+            break;
         default:
             throw new Error("TODO");
         }

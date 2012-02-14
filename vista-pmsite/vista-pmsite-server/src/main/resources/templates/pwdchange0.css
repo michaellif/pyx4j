@@ -1,0 +1,63 @@
+.vista-pmsite-pwdChangePage {
+    color: #777;
+    font-size: 16px;
+}
+
+.vista-pmsite-pwdChangePage .vista-pmsite-contentWrap {
+	background: url("images/template0/inner_content_bg.png") repeat-x scroll 0 0 #37393F;
+}
+
+.vista-pmsite-pwdChangePage .vista-pmsite-content {
+	background: url("images/template0/inner_bg.png") no-repeat scroll 50% 0 transparent;
+}
+
+.vista-pmsite-pwdChangePage .caption {
+	background: url("images/template0/title_bg.gif") repeat-y scroll 0 -40px
+		transparent;
+	background-size: 100% 100%;
+	height: 80px;
+	overflow: hidden;
+	padding: 40px 0 0 30px;
+}
+
+.vista-pmsite-pwdChangePage .caption h1 {
+	font-size: 36px;
+	font-weight: normal;
+	line-height: 38px;
+	padding: 0 0 20px;
+	color:#ccc;
+}
+
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap {
+	padding:20px;
+	background-color:white;
+	min-height:300px;
+	padding-left:200px;
+}
+
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap input[type=submit] {
+    background: url("images/template0/btn.png") no-repeat;
+    border: none;
+    width: 128px;
+    height: 32px;
+    padding: 5px 0;
+    color: #000000;
+    font-size: 16px;
+    text-shadow: 0 1px 0 #CCCCCC;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap .pwdChangeFormInput {
+	padding:20px 0 0 60px;
+}
+
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap .pwdChangeFormInput label {
+	display:inline-block;
+	width:150px;
+	padding-right:4px;
+}
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap .pwdChangeFormInput input[type=text],
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap .pwdChangeFormInput input[type=password] {
+	width:300px;
+}

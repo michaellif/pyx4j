@@ -21,6 +21,8 @@ public interface DeploymentConsts {
 
     public static final String CRM_URL = "crm/";
 
+    public static final String TENANT_URL = "residents/";
+
     public static final String ADMIN_URL = "admin/";
 
     public static final String uploadServletMapping = "upload/";

@@ -1,0 +1,42 @@
+<html>
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+	<wicket:extend>
+		<div class="vista-pmsite-pwdChangePage">
+			<div class="vista-pmsite-contentWrap">
+				<div class="vista-pmsite-mainWrap">
+					<div class="vista-pmsite-content">
+						<div class="caption">
+							<h1><wicket:i18n>Resident Password Change</wicket:i18n></h1>
+						</div>
+						<div class="content">
+							<span wicket:id="feedback"/>
+							<form id="pwdChangeForm" wicket:id="pwdChangeForm" class="pwdChangeFormWrap">
+								<div class="pwdChangeFormInput password">
+									<label><wicket:i18n>Old Password</wicket:i18n>:</label>
+									<input wicket:id="oldPassword" type="password"/>
+								</div>
+								<div class="pwdChangeFormInput password">
+									<label><wicket:i18n>New Password</wicket:i18n>:</label>
+									<input wicket:id="newPassword" type="password"/>
+								</div>
+								<div class="pwdChangeFormInput password">
+									<label><wicket:i18n>Confirm Password</wicket:i18n>:</label>
+									<input wicket:id="pwdConfirm" type="password"/>
+								</div>
+								<div class="pwdChangeFormInput captcha" wicket:id="captcha" />
+								<div class="pwdChangeFormInput submit">
+									<input wicket:id="submit" type="submit" value="Submit"/>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</wicket:extend>
+</body>
+</html>

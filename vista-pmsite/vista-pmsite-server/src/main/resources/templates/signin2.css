@@ -45,7 +45,6 @@
 	color: ${object1_10};
 	cursor: pointer;
 	font-size: 16px;
-	margin: 15px auto 0;
 	text-transform: uppercase;
 	width: 128px;
 	height: 32px;
@@ -57,11 +56,16 @@
 
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput label {
 	display:inline-block;
-	width:80px;
+	width:120px;
 	padding-right:4px;
 }
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput.remember label {
 	display:inline;
+}
+.vista-pmsite-signInPage .signInFormWrap .signInFormInput .pwdreset {
+	float:right;
+	margin-right:370px;
+	text-decoration:underline;
 }
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput.hint a {
 	color: ${foreground_100};
@@ -69,5 +73,5 @@
 }
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput input[type=text],
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput input[type=password] {
-	width:200px;
+	width:300px;
 }

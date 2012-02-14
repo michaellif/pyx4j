@@ -1,0 +1,61 @@
+.vista-pmsite-pwdResetPage {
+    color: ${foreground_100};
+    font-size: 16px;
+}
+
+.vista-pmsite-pwdResetPage .vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.vista-pmsite-pwdResetPage .caption {
+	height: 80px;
+	overflow: hidden;
+	padding: 40px 0 0 30px;
+}
+
+.vista-pmsite-pwdResetPage .caption h1 {
+	font-size: 36px;
+	font-weight: normal;
+	line-height: 38px;
+	padding: 0 0 20px;
+}
+
+.vista-pmsite-pwdResetPage .content {
+	min-height: 396px;
+	color: ${foreground_100};
+	border-top:1px solid ${foreground_20};
+	background-color: white;
+	line-height: 20px;
+	overflow: hidden;
+	padding: 30px 30px 0;
+}
+.vista-pmsite-pwdResetPage .pwdResetFormWrap {
+	padding:20px;
+}
+
+.vista-pmsite-pwdResetPage .pwdResetFormWrap input[type=submit] {
+	background: ${contrast1_100};
+	border: 2px solid ${contrast1_120};
+	color: ${contrast1_10};
+	cursor: pointer;
+	font-size: 16px;
+	margin: 15px auto 0;
+	text-transform: uppercase;
+	width: 128px;
+	height: 32px;
+}
+
+.vista-pmsite-pwdResetPage .pwdResetFormWrap .pwdResetFormInput {
+	padding:20px 0 0 60px;
+}
+
+.vista-pmsite-pwdResetPage .pwdResetFormWrap .pwdResetFormInput label {
+	display:inline-block;
+	width:120px;
+	padding-right:4px;
+}
+.vista-pmsite-pwdResetPage .pwdResetFormWrap .pwdResetFormInput input[type=text] {
+	width:200px;
+}
