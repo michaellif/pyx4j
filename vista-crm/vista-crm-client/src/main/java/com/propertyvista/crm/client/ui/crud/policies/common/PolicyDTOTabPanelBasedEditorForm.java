@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CPolymorphicEntityEditorTEMP;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -116,6 +117,8 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                     get(proto().node()).setVisible(!isOrganizationPoliciesNodeSelected);
                     if (isOrganizationPoliciesNodeSelected | !selectedNodeType.equals(getValue().node().getInstanceValueClass())) {
                         get(proto().node()).populate(EntityFactory.create(selectedNodeType));
+//                        getValue().node().set(EntityFactory.create(selectedNodeType));
+//                        setValue(getValue(), false, true);
                     }
                 } else {
                     get(proto().node()).setVisible(false);
@@ -147,11 +150,8 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                             throw new Error("got unsupported or unknown policy scope:" + getValue().getInstanceValueClass().getName());
                         }
                     }
-                    if (policyScope == null) {
-                        selectPolicyScopeBox.setValue(null, true);
-                    } else {
-                        selectPolicyScopeBox.setValue(policyScope, true);
-                    }
+                    selectPolicyScopeBox.setValue(policyScope, true);
+                    
                 }
             }
         });
@@ -159,17 +159,33 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         return content;
     }
 
+    @Override
+    protected void onPopulate() {
+    	// TODO Auto-generated method stub
+    	super.onPopulate();
+    	System.out.println(getValue().node());
+    	System.out.println(System.identityHashCode(getValue().node()));
+    }
+    
     /**
      * A component that to choose the polymorphic PolicyNode
      * 
      * @author ArtyomB
      */
-    private static class PolicyNodeEditor extends CEntityEditor<PolicyNode> {
+    private static class PolicyNodeEditor extends CPolymorphicEntityEditorTEMP<PolicyNode> {
 
         public PolicyNodeEditor() {
             super(PolicyNode.class);
         }
-
+        
+        @Override
+        protected void onPopulate() {
+        	// TODO Auto-generated method stub
+        	super.onPopulate();
+            System.out.println(getValue());
+            System.out.println(System.identityHashCode(getValue()));
+        }
+        
         @SuppressWarnings("unchecked")
         @Override
         public IsWidget createContent() {
@@ -224,6 +240,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
             return content;
         }
 
+       
     }
 
     public static class TabDescriptor {
