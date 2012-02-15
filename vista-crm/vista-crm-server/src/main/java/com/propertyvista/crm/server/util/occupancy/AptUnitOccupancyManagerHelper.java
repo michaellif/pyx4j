@@ -13,12 +13,11 @@
  */
 package com.propertyvista.crm.server.util.occupancy;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.ListIterator;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -51,7 +50,7 @@ public class AptUnitOccupancyManagerHelper {
      * @return a new segment that was created starting from splitDay until segment.dateFrom(), can return <code>null</code> if no splitting happened (in case
      *         spitDay.equals(segment.dateTo()))
      */
-    public static AptUnitOccupancySegment splitSegment(AptUnitOccupancySegment segment, LogicalDate splitDay, SplittingHandler handler) {
+    public static AptUnitOccupancySegment split(AptUnitOccupancySegment segment, LogicalDate splitDay, SplittingHandler handler) {
         if (splitDay.equals(segment.dateFrom().getValue())) {
             handler.updateAfterSplitPointSegment(segment);
             Persistence.service().merge(segment);
@@ -74,73 +73,30 @@ public class AptUnitOccupancyManagerHelper {
         }
     }
 
-    /**
-     * Find a segment <code>s</code> in a occupancy that contains <code>splitDay</code> and then split it to two parts <code>s1</code> and <code>s2</code>,
-     * where <code>s1.dateFrom = s.dateFrom, s1.dateTo = splitDay - day, s2.dateFrom = splitDay, s2.dateTo = s1.dateTo</code>.
-     * 
-     * @param occupancyTimeline
-     * @param splitDay
-     *            The beginning of a newly inserted segment: <b>note</b> if the date of <code>splitDay</code> falls on some segments start date, then it's going
-     *            to be replaced by the new one, and if it falls on some segments end date, it will not be changed, also in those cases handler for the
-     *            new/altered segment, will not be called.
-     * @param handler
-     *            A handler that performs operations on the split segment, i.e. updates status of the new part.
-     * @return index of the new segment in the <code>occupancyTimeline</code> list.
-     * @throws IllegalStateException
-     *             Might be thrown by the {@code handler} methods when the handler is requested to update the wrong occupancy state.
-     */
-    public static int splitOccupancy(List<AptUnitOccupancySegment> occupancyTimeline, LogicalDate splitDay, SplittingHandler handler)
-            throws IllegalStateException {
-
-        ListIterator<AptUnitOccupancySegment> i = occupancyTimeline.listIterator();
-        AptUnitOccupancySegment segment = null;
-
-        while (!splitDay.after((segment = i.next()).dateTo().getValue())) {
-            // iterate until candidate segment for splitting operation is found
-        }
-
-        int indexOfTheNewSegment = -1;
-        if (splitDay.equals(segment.dateTo().getValue())) {
-            indexOfTheNewSegment = i.previousIndex();
+    public static AptUnitOccupancySegment split(AptUnit unit, LogicalDate splitDay, SplittingHandler handler) {
+        AptUnitOccupancySegment segment = retrieveOccupancySegment(unit, splitDay);
+        if (segment == null) {
+            throw new IllegalStateException("failed to retrieve segment that contains the " + SimpleDateFormat.getDateInstance().format(splitDay));
         } else {
-            AptUnitOccupancySegment newSegment = EntityFactory.create(AptUnitOccupancySegment.class);
-            newSegment.dateFrom().setValue(splitDay);
-            newSegment.dateTo().setValue(segment.dateTo().getValue());
-            handler.updateAfterSplitPointSegment(newSegment);
-            if (splitDay.equals(segment.dateFrom().getValue())) {
-                i.remove();
-            } else {
-                segment.dateTo().setValue(substractDay(splitDay));
-                handler.updateBeforeSplitPointSegment(segment);
-            }
-            i.add(newSegment);
-            indexOfTheNewSegment = i.previousIndex();
+            return split(segment, splitDay, handler);
         }
-
-        return indexOfTheNewSegment;
     }
 
-    public static int splitOccupancy(final AptUnit unit, LogicalDate splitDay, final SplittingHandler handler) {
-
-        int i = splitOccupancy(retrieveOccupancy(unit, splitDay), splitDay, new SplittingHandler() {
-
-            @Override
-            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-                handler.updateBeforeSplitPointSegment(segment);
-                Persistence.service().merge(segment);
-
-            }
-
-            @Override
-            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                handler.updateAfterSplitPointSegment(segment);
-                segment.unit().set(unit);
-                Persistence.service().merge(segment);
-            }
-        });
-
-        return i;
-    }
+//    /**
+//     * Find a segment <code>s</code> in a occupancy that contains <code>splitDay</code> and then split it to two parts <code>s1</code> and <code>s2</code>,
+//     * where <code>s1.dateFrom = s.dateFrom, s1.dateTo = splitDay - day, s2.dateFrom = splitDay, s2.dateTo = s1.dateTo</code>.
+//     * 
+//     * @param occupancyTimeline
+//     * @param splitDay
+//     *            The beginning of a newly inserted segment: <b>note</b> if the date of <code>splitDay</code> falls on some segments start date, then it's going
+//     *            to be replaced by the new one, and if it falls on some segments end date, it will not be changed, also in those cases handler for the
+//     *            new/altered segment, will not be called.
+//     * @param handler
+//     *            A handler that performs operations on the split segment, i.e. updates status of the new part.
+//     * @return index of the new segment in the <code>occupancyTimeline</code> list.
+//     * @throws IllegalStateException
+//     *             Might be thrown by the {@code handler} methods when the handler is requested to update the wrong occupancy state.
+//     */
 
     /**
      * 
@@ -169,8 +125,8 @@ public class AptUnitOccupancyManagerHelper {
 
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
-        criteria.add(PropertyCriterion.ge(criteria.proto().dateFrom(), contained));
-        criteria.add(PropertyCriterion.le(criteria.proto().dateTo(), contained));
+        criteria.add(PropertyCriterion.le(criteria.proto().dateFrom(), contained));
+        criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), contained));
 
         return Persistence.secureRetrieve(criteria);
     }

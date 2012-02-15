@@ -17,10 +17,10 @@ import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManage
 import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.assertStatus;
 import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancy;
 import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancySegment;
-import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.splitOccupancy;
-import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.splitSegment;
+import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.split;
 import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.substractDay;
 
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
 
@@ -84,7 +84,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     @Override
     public void scopeOffMarket(final OffMarketType type, LogicalDate startDate) {
-        AptUnitOccupancyManagerHelper.splitOccupancy(unit, startDate, new SplittingHandler() {
+        AptUnitOccupancyManagerHelper.split(unit, startDate, new SplittingHandler() {
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
                 if (segment.status().getValue() != AptUnitOccupancySegment.Status.vacant) {
@@ -111,10 +111,20 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         LogicalDate now = nowProvider.getNow();
         AptUnitOccupancySegment vacantSegment = null;
         AptUnitOccupancySegment segment = AptUnitOccupancyManagerHelper.retrieveOccupancySegment(unit, now);
-        if (segment.status().getValue() == Status.vacant) {
+
+        if (segment == null) {
+
+            throw new IllegalStateException("failed to find an segment with status for that contains the following date: "
+                    + SimpleDateFormat.getInstance().format(now));
+
+        } else if (segment.status().getValue() == Status.vacant) {
+
             vacantSegment = segment;
+
         } else if (segment.status().getValue() == Status.leased) {
+
             vacantSegment = AptUnitOccupancyManagerHelper.retrieveOccupancySegment(unit, AptUnitOccupancyManagerHelper.addDay(segment.dateTo().getValue()));
+
         }
 
         if (vacantSegment == null) {
@@ -130,7 +140,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
         }
 
-        AptUnitOccupancySegment renovationSegment = splitSegment(vacantSegment, now, new SplittingHandler() {
+        AptUnitOccupancySegment renovationSegment = split(vacantSegment, now, new SplittingHandler() {
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
                 // should be ok: we checked it before
@@ -144,7 +154,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         if (renovationSegment == null) {
             throw new IllegalStateException("failed to create 'renovation' segment");
         }
-        AptUnitOccupancySegment availableSegment = AptUnitOccupancyManagerHelper.splitSegment(renovationSegment, renovationEndDate, new SplittingHandler() {
+        AptUnitOccupancySegment availableSegment = AptUnitOccupancyManagerHelper.split(renovationSegment, renovationEndDate, new SplittingHandler() {
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
 
@@ -172,7 +182,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         } else {
             throw new IllegalStateException("cannot find a segment to convert it to 'vacant'");
         }
-        splitOccupancy(unit, vacantFrom, new SplittingHandler() {
+        split(unit, vacantFrom, new SplittingHandler() {
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
                 assertStatus(segment, Status.offMarket);
@@ -195,7 +205,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         assertStatus(segment, Status.available);
 
         LogicalDate splitDay = now.before(leaseFrom) ? segment.dateFrom().getValue() : leaseFrom;
-        splitSegment(segment, splitDay, new SplittingHandler() {
+        split(segment, splitDay, new SplittingHandler() {
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
                 assertStatus(segment, Status.available);
@@ -220,7 +230,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, now);
         for (AptUnitOccupancySegment segment : occupancy) {
             if (segment.status().getValue() == Status.reserved) {
-                splitSegment(segment, segment.lease().leaseFrom().getValue(), new SplittingHandler() {
+                split(segment, segment.lease().leaseFrom().getValue(), new SplittingHandler() {
                     @Override
                     public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
                         // already checked that we are in 'reserved'
@@ -231,6 +241,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                         segment.status().setValue(Status.leased);
                     }
                 });
+                return;
             }
         }
         throw new IllegalStateException("'approveLease' operation failed: a 'reserved' segment was not found");
@@ -241,7 +252,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         LogicalDate now = nowProvider.getNow();
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unit, now);
         assertStatus(segment, Status.leased);
-        splitOccupancy(unit, addDay(segment.lease().leaseTo().getValue()), new SplittingHandler() {
+        split(unit, addDay(segment.lease().leaseTo().getValue()), new SplittingHandler() {
 
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {

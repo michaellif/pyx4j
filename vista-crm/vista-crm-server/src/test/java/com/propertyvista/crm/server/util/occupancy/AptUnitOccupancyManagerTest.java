@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.util.occupancy;
 
+import junit.framework.Assert;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -89,6 +91,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
     @Test
     public void testUnreserveFutureReserved() {
+        Assert.assertTrue("this test has not yet been implemented", false);
         Lease lease = createLease("2011-02-15", "2011-10-25");
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
@@ -105,22 +108,19 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
-        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
-
         now("2011-02-10");
 
         getUOM().approveLease();
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).x();
-        expect().from("2011-01-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).x();
+        expect().from("2011-02-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
         assertExpectedTimeline();
     }
 
     @Test
     public void testApproveLeaseWhenReservedInFuture() {
-        throw new RuntimeException("this test has not yet been implemented");
+        Assert.assertTrue("this test has not yet been implemented", false);
     }
 
     @Test
@@ -188,7 +188,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
     @Test
     public void testScopeOffMarketSingle() {
-        setup().fromTheBeginning().to("2011-02-02").status(Status.vacant).x();
+        setup().fromTheBeginning().toTheEndOfTime().status(Status.vacant).x();
 
         now("2011-05-01");
 
@@ -201,8 +201,9 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
     @Test
     public void testScopeOffMarketCanAddAnotherOffMarketSegment() {
-        setup().fromTheBeginning().to("2011-02-02").status(Status.vacant).x();
-        setup().from("2011-05-20").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
+        setup().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2011-07-20").toTheEndOfTime().status(Status.vacant).x();
 
         now("2011-05-02");
 
@@ -210,7 +211,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         expect().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         expect().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        expect().from("2011-07-19").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.model).x();
+        expect().from("2011-07-20").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.model).x();
         assertExpectedTimeline();
     }
 
