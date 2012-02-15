@@ -20,6 +20,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+// TODO add test cases for future in present where applicable
 @Ignore
 public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase {
 
@@ -37,13 +38,12 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
-    public void testReserve() {
+    public void testReserveWhenAvailable() {
         setup().fromTheBeginning().toTheEndOfTime().status(Status.available).x();
 
         now("2011-02-03");
 
         Lease lease = createLease("2011-02-15", "2011-10-25");
-
         getUOM().reserve(lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
@@ -52,20 +52,59 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
-    public void testUnreserve() {
+    public void testReserveWhenLeasedNoSegmentSplitting() {
+        Lease lease1 = createLease("2011-02-02", "2011-10-01");
+        setup().fromTheBeginning().to("2011-02-01").status(Status.available).x();
+        setup().from("2011-02-02").to("2011-10-02").status(Status.leased).withLease(lease1).x();
+        setup().from("2011-10-03").toTheEndOfTime().status(Status.available).x();
+
+        now("2011-09-03");
+
+        Lease lease2 = createLease("2011-10-03", "2012-12-31");
+        getUOM().reserve(lease2);
+
+        expect().fromTheBeginning().to("2011-02-01").status(Status.available).x();
+        expect().from("2011-02-02").to("2011-10-02").status(Status.leased).withLease(lease1).x();
+        expect().from("2011-10-03").toTheEndOfTime().status(Status.leased).withLease(lease2).x();
+        assertExpectedTimeline();
+    }
+
+    @Test
+    public void testReserveWhenLeasedWithSegmentSplitting() {
+        Lease lease1 = createLease("2011-02-02", "2011-10-01");
+        setup().fromTheBeginning().to("2011-02-01").status(Status.available).x();
+        setup().from("2011-02-02").to("2011-10-02").status(Status.leased).withLease(lease1).x();
+        setup().from("2011-10-03").toTheEndOfTime().status(Status.available).x();
+
+        now("2011-09-03");
+
+        Lease lease2 = createLease("2011-12-31", "2012-12-31");
+        getUOM().reserve(lease2);
+
+        expect().fromTheBeginning().to("2011-02-01").status(Status.available).x();
+        expect().from("2011-02-02").to("2011-10-02").status(Status.leased).withLease(lease1).x();
+        expect().from("2011-10-03").toTheEndOfTime().status(Status.reserved).withLease(lease2).x();
+        expect().from("2011-12-31").toTheEndOfTime().status(Status.leased).withLease(lease2).x();
+        assertExpectedTimeline();
+    }
+
+    @Test
+    public void testUnreserveFutureReserved() {
         Lease lease = createLease("2011-02-15", "2011-10-25");
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
-        now("2011-02-10");
+        now("2011-02-01");
 
         expect().fromTheBeginning().toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
     }
 
     @Test
-    public void testApproveLease() {
+    public void testUnreservePresentReserved() {
         Lease lease = createLease("2011-02-15", "2011-10-25");
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
@@ -81,6 +120,11 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
+    public void testApproveLeaseWhenReservedInFuture() {
+        // TODO
+    }
+
+    @Test
     public void testEndLease() {
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
@@ -90,7 +134,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-08-01");
 
-        // TODO I couldn't find any specification for this issue, but for now let's pretend "moveOutNotice" in lease means the date when the move out notice was given (@author Artyom)  
+        // TODO Artyom: I couldn't find any specification for this issue, but for now let's pretend "moveOutNotice" in lease means the date when the move out notice was given  
         lease.moveOutNotice().setValue(asDate("2011-08-01"));
         lease.expectedMoveOut().setValue(asDate("2011-10-23")); // two days before leaseTo() date
         updateLease(lease);

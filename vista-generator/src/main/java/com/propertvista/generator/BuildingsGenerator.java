@@ -503,7 +503,7 @@ public class BuildingsGenerator {
         unit.availableForRent().setValue(RandomUtil.randomLogicalDate(2012, 2012));
 
         AptUnitOccupancySegment occupancy = EntityFactory.create(AptUnitOccupancySegment.class);
-        occupancy.occupancy().unit().set(unit);
+        occupancy.unit().set(unit);
         occupancy.status().setValue(AptUnitOccupancySegment.Status.available);
         occupancy.dateFrom().setValue(unit.availableForRent().getValue());
         occupancy.dateTo().setValue(new LogicalDate(occupancy.dateFrom().getValue().getTime() + RandomUtil.randomInt()));

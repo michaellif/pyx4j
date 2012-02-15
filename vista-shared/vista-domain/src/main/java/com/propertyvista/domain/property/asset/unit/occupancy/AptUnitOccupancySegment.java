@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface AptUnitOccupancySegment extends IEntity {
@@ -89,14 +90,12 @@ public interface AptUnitOccupancySegment extends IEntity {
     }
 
     @Owner
-    @JoinColumn
-    @Detached
     @ReadOnly
-    AptUnitOccupancy occupancy();
+    @Detached
+    @JoinColumn
+    AptUnit unit();
 
     @OrderColumn
-    IPrimitive<Integer> orderInOccupancy();
-
     @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dateFrom();

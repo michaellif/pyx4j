@@ -19,9 +19,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
@@ -29,13 +31,19 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
+import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
+import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AptUnitOccupancyManagerTestBase {
@@ -55,8 +63,9 @@ public class AptUnitOccupancyManagerTestBase {
     List<AptUnitOccupancySegment> expectedTimeline = null;
 
     @Before
-    public void prepare() {
+    public void setUp() {
         VistaTestDBSetup.init();
+        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
 
         now = null;
         manager = null;
@@ -70,6 +79,14 @@ public class AptUnitOccupancyManagerTestBase {
         Persistence.service().persist(unit);
 
         expectedTimeline = new LinkedList<AptUnitOccupancySegment>();
+
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
+        TestLifecycle.beginRequest();
+    }
+
+    @After
+    public void tearDown() {
+        TestLifecycle.tearDown();
     }
 
     protected void now(String nowDate) {
@@ -223,7 +240,7 @@ public class AptUnitOccupancyManagerTestBase {
 
     }
 
-    protected static class ExpectBuilder extends SegmentBuilder<ExpectBuilder> {
+    protected class ExpectBuilder extends SegmentBuilder<ExpectBuilder> {
 
         private final List<AptUnitOccupancySegment> expectedTimeline;
 
@@ -236,7 +253,7 @@ public class AptUnitOccupancyManagerTestBase {
          */
         public void x() {
             assertVaildSegment();
-
+            segment.set(unit);
             expectedTimeline.add(segment);
 
             EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
@@ -259,13 +276,14 @@ public class AptUnitOccupancyManagerTestBase {
         }
     }
 
-    protected static class SetupBuilder extends SegmentBuilder<SetupBuilder> {
+    protected class SetupBuilder extends SegmentBuilder<SetupBuilder> {
 
         /**
          * execute the statement
          */
         public void x() {
             assertVaildSegment();
+            segment.set(unit);
             Persistence.service().merge(segment);
         }
 

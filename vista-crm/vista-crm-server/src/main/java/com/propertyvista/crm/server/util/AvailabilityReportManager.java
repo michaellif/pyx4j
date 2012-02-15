@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -24,7 +25,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
@@ -57,10 +57,8 @@ public class AvailabilityReportManager {
     }
 
     private List<AptUnitOccupancySegment> queryOccupancy(AptUnit unit) {
-        EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().occupancy().unit(), unit));
-        criteria.sort(new Sort(criteria.proto().dateFrom().getPath().toString(), false));
-        return Persistence.service().query(criteria);
+        Persistence.service().retrieve(unit._AptUnitOccupancySegment());
+        return new LinkedList<AptUnitOccupancySegment>(unit._AptUnitOccupancySegment());
     }
 
     /**

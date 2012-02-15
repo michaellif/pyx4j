@@ -34,7 +34,7 @@ import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;
 
 @DiscriminatorValue("Unit_BuildingElement")
@@ -84,7 +84,7 @@ public interface AptUnit extends BuildingElement, PolicyNode {
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<AptUnitOccupancy> _AptUnitOccupancies();
+    ISet<AptUnitOccupancySegment> _AptUnitOccupancySegment();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

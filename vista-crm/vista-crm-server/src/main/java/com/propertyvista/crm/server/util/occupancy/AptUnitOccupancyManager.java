@@ -61,7 +61,7 @@ public interface AptUnitOccupancyManager {
     void approveLease();
 
     /**
-     * Source: CRM/Lease form/Button or Portal (becomes {@link Status#vacant)).
+     * Source: CRM/Lease form/Button or Portal (becomes {@link Status#vacant})).
      */
     void endLease();
 }
