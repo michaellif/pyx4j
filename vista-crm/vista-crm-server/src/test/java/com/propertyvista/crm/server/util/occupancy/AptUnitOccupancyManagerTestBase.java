@@ -242,6 +242,10 @@ public class AptUnitOccupancyManagerTestBase {
                 throw new IllegalStateException(SimpleMessageFormat.format("{0} was not set for {1} unit", segment.lease().getMeta().getCaption(),
                         Status.leased));
             }
+            if (segment.status().getValue().equals(Status.reserved) & segment.lease().isNull()) {
+                throw new IllegalStateException(SimpleMessageFormat.format("{0} was not set for {1} unit", segment.lease().getMeta().getCaption(),
+                        Status.leased));
+            }
             if (segment.status().getValue().equals(Status.offMarket) & segment.offMarket().isNull()) {
                 throw new IllegalStateException("off market type was not set");
             }

@@ -15,18 +15,21 @@ package com.propertyvista.crm.server.util.occupancy;
 
 import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.addDay;
 import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.assertStatus;
+import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.merge;
 import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancy;
 import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancySegment;
 import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.split;
 import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.substractDay;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -109,22 +112,17 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         // 2. scope happens after lease
         //   - then it happens during 'vacant' segment
         LogicalDate now = nowProvider.getNow();
+
         AptUnitOccupancySegment vacantSegment = null;
         AptUnitOccupancySegment segment = AptUnitOccupancyManagerHelper.retrieveOccupancySegment(unit, now);
 
         if (segment == null) {
-
             throw new IllegalStateException("failed to find an segment with status for that contains the following date: "
                     + SimpleDateFormat.getInstance().format(now));
-
         } else if (segment.status().getValue() == Status.vacant) {
-
             vacantSegment = segment;
-
         } else if (segment.status().getValue() == Status.leased) {
-
             vacantSegment = AptUnitOccupancyManagerHelper.retrieveOccupancySegment(unit, AptUnitOccupancyManagerHelper.addDay(segment.dateTo().getValue()));
-
         }
 
         if (vacantSegment == null) {
@@ -133,14 +131,9 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
             throw new IllegalStateException("It's impossible to apply 'scopeRenovation' operation during " + segment.status().getValue());
         }
 
-        if (now.after(vacantSegment.dateFrom().getValue())) {
-            AptUnitOccupancySegment newSegment = vacantSegment.duplicate();
-            newSegment.id().set(null);
-            newSegment.dateFrom().setValue(now);
+        LogicalDate renovationStart = now.after(vacantSegment.dateFrom().getValue()) ? now : vacantSegment.dateFrom().getValue();
 
-        }
-
-        AptUnitOccupancySegment renovationSegment = split(vacantSegment, now, new SplittingHandler() {
+        AptUnitOccupancySegment renovationSegment = split(vacantSegment, renovationStart, new SplittingHandler() {
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
                 // should be ok: we checked it before
@@ -154,7 +147,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         if (renovationSegment == null) {
             throw new IllegalStateException("failed to create 'renovation' segment");
         }
-        AptUnitOccupancySegment availableSegment = AptUnitOccupancyManagerHelper.split(renovationSegment, renovationEndDate, new SplittingHandler() {
+        AptUnitOccupancySegment availableSegment = AptUnitOccupancyManagerHelper.split(renovationSegment, addDay(renovationEndDate), new SplittingHandler() {
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
 
@@ -201,11 +194,13 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
     public void reserve(final Lease lease) {
         LogicalDate leaseFrom = lease.leaseFrom().getValue();
         LogicalDate now = nowProvider.getNow();
+
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unit, leaseFrom);
         assertStatus(segment, Status.available);
 
-        LogicalDate splitDay = now.before(leaseFrom) ? segment.dateFrom().getValue() : leaseFrom;
-        split(segment, splitDay, new SplittingHandler() {
+        LogicalDate reservedFrom = now.before(segment.dateFrom().getValue()) ? segment.dateFrom().getValue() : now;
+
+        split(segment, reservedFrom, new SplittingHandler() {
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
                 assertStatus(segment, Status.available);
@@ -221,7 +216,35 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     @Override
     public void unreserve() {
-        // for this one we have to implement Merge operation
+        LogicalDate now = nowProvider.getNow();
+        AptUnitOccupancySegment nowSegment = retrieveOccupancySegment(unit, now);
+        if (nowSegment == null) {
+            throw new IllegalStateException("unable to find current occupancy for 'unreserve' operation");
+        } else if (nowSegment.status().getValue() == Status.reserved) {
+            split(unit, now, new SplittingHandler() {
+                @Override
+                public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
+
+                }
+
+                @Override
+                public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
+                }
+            });
+        }
+        merge(unit, now, Arrays.asList(Status.available, Status.reserved), new MergeHandler() {
+            @Override
+            public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
+                merged.status().setValue(Status.available);
+                merged.lease().set(null);
+            }
+
+            @Override
+            public boolean isMergeable(AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
+                return true;
+            }
+        });
+
     }
 
     @Override

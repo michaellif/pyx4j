@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.server.util.occupancy;
 
-import junit.framework.Assert;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -23,7 +20,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.tenant.lease.Lease;
 
 // TODO add test cases for future in present where applicable
-@Ignore
 public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase {
 
     @Test
@@ -53,7 +49,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
-    public void testReserveWhenLeasedNoSegmentSplitting() {
+    public void testReserveWhenLeased() {
         Lease lease1 = createLease("2011-02-02", "2011-10-01");
         setup().fromTheBeginning().to("2011-02-01").status(Status.available).x();
         setup().from("2011-02-02").to("2011-10-02").status(Status.leased).withLease(lease1).x();
@@ -61,42 +57,24 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-09-03");
 
-        Lease lease2 = createLease("2011-10-03", "2012-12-31");
-        getUOM().reserve(lease2);
-
-        expect().fromTheBeginning().to("2011-02-01").status(Status.available).x();
-        expect().from("2011-02-02").to("2011-10-02").status(Status.leased).withLease(lease1).x();
-        expect().from("2011-10-03").toTheEndOfTime().status(Status.leased).withLease(lease2).x();
-        assertExpectedTimeline();
-    }
-
-    @Test
-    public void testReserveWhenLeasedWithSegmentSplitting() {
-        Lease lease1 = createLease("2011-02-02", "2011-10-01");
-        setup().fromTheBeginning().to("2011-02-01").status(Status.available).x();
-        setup().from("2011-02-02").to("2011-10-02").status(Status.leased).withLease(lease1).x();
-        setup().from("2011-10-03").toTheEndOfTime().status(Status.available).x();
-
-        now("2011-09-03");
-
-        Lease lease2 = createLease("2011-12-31", "2012-12-31");
+        Lease lease2 = createLease("2011-10-05", "2012-12-31");
         getUOM().reserve(lease2);
 
         expect().fromTheBeginning().to("2011-02-01").status(Status.available).x();
         expect().from("2011-02-02").to("2011-10-02").status(Status.leased).withLease(lease1).x();
         expect().from("2011-10-03").toTheEndOfTime().status(Status.reserved).withLease(lease2).x();
-        expect().from("2011-12-31").toTheEndOfTime().status(Status.leased).withLease(lease2).x();
         assertExpectedTimeline();
     }
 
     @Test
     public void testUnreserveFutureReserved() {
-        Assert.assertTrue("this test has not yet been implemented", false);
         Lease lease = createLease("2011-02-15", "2011-10-25");
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
         now("2011-02-01");
+
+        getUOM().unreserve();
 
         expect().fromTheBeginning().toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
@@ -108,19 +86,30 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
-        now("2011-02-10");
+        now("2011-02-05");
 
-        getUOM().approveLease();
+        getUOM().unreserve();
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).x();
-        expect().from("2011-02-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-03").to("2011-02-04").status(Status.reserved).withLease(lease).x();
+        expect().from("2011-02-05").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
     }
 
     @Test
     public void testApproveLeaseWhenReservedInFuture() {
-        Assert.assertTrue("this test has not yet been implemented", false);
+        Lease lease = createLease("2011-02-15", "2011-10-25");
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
+
+        now("2011-02-10");
+
+        getUOM().approveLease();
+
+        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().from("2011-02-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        assertExpectedTimeline();
     }
 
     @Test
@@ -128,7 +117,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
         setup().from("2011-01-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
 
         now("2011-08-01");
@@ -141,7 +130,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         getUOM().endLease();
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).x();
+        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
         expect().from("2011-01-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.vacant).x();
         assertExpectedTimeline();
@@ -152,7 +141,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
         setup().from("2011-01-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
         setup().from("2011-10-26").toTheEndOfTime().status(Status.vacant).x();
 
@@ -160,28 +149,49 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         getUOM().scopeAvailable();
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).x();
+        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
         expect().from("2011-01-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
     }
 
     @Test
-    public void testScopeRenovation() {
+    public void testScopeRenovationWhenLeased() {
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).x();
-        setup().from("2011-01-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
         setup().from("2011-10-26").toTheEndOfTime().status(Status.vacant).x();
 
         now("2011-09-25");
         getUOM().scopeRenovation(asDate("2011-11-10"));
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
-        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).x();
-        expect().from("2011-01-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
+        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-26").to("2011-11-10").status(Status.renovation).x();
+        expect().from("2011-11-11").toTheEndOfTime().status(Status.available).x();
+        assertExpectedTimeline();
+    }
+
+    @Test
+    public void testScopeRenovationWhenVacant() {
+        Lease lease = createLease("2011-02-15", "2011-10-25");
+
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
+        setup().from("2011-10-26").toTheEndOfTime().status(Status.vacant).x();
+
+        now("2011-11-05");
+        getUOM().scopeRenovation(asDate("2011-11-10"));
+
+        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
+        expect().from("2011-10-26").to("2011-11-04").status(Status.vacant).x();
+        expect().from("2011-11-05").to("2011-11-10").status(Status.renovation).x();
         expect().from("2011-11-11").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
     }

@@ -37,10 +37,15 @@ public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTe
 
         now("2011-10-01");
 
-        AptUnitOccupancyManagerHelper.merge(getUnit(), asList(Status.available), null, new MergeHandler() {
+        AptUnitOccupancyManagerHelper.merge(getUnit(), AptUnitOccupancyManagerHelper.MIN_DATE, asList(Status.available), new MergeHandler() {
             @Override
             public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
                 merged.status().setValue(Status.vacant);
+            }
+
+            @Override
+            public boolean isMergeable(AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
+                return true;
             }
         });
 
@@ -48,7 +53,7 @@ public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTe
         assertExpectedTimeline();
     }
 
-    public void testMerge1() {
+    public void testMergeTwoMerges() {
         setup().fromTheBeginning().to("2010-05-01").status(Status.available).x();
         setup().from("2010-05-02").to("2010-12-31").status(Status.vacant).x();
         setup().from("2011-01-01").to("2012-12-31").status(Status.vacant).x();
@@ -59,11 +64,16 @@ public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTe
 
         now("2011-10-01");
 
-        AptUnitOccupancyManagerHelper.merge(getUnit(), asList(Status.vacant), null, new MergeHandler() {
+        AptUnitOccupancyManagerHelper.merge(getUnit(), AptUnitOccupancyManagerHelper.MIN_DATE, asList(Status.vacant), new MergeHandler() {
             @Override
             public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
                 merged.status().setValue(Status.offMarket);
                 merged.offMarket().setValue(OffMarketType.down);
+            }
+
+            @Override
+            public boolean isMergeable(AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
+                return true;
             }
         });
 
@@ -86,11 +96,16 @@ public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTe
 
         now("2010-04-20");
 
-        AptUnitOccupancyManagerHelper.merge(getUnit(), asList(Status.vacant, Status.available), null, new MergeHandler() {
+        AptUnitOccupancyManagerHelper.merge(getUnit(), AptUnitOccupancyManagerHelper.MIN_DATE, asList(Status.vacant, Status.available), new MergeHandler() {
             @Override
             public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
                 merged.status().setValue(Status.offMarket);
                 merged.offMarket().setValue(OffMarketType.down);
+            }
+
+            @Override
+            public boolean isMergeable(AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
+                return true;
             }
         });
 

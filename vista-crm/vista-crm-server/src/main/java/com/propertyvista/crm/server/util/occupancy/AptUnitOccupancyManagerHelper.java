@@ -14,10 +14,15 @@
 package com.propertyvista.crm.server.util.occupancy;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -36,8 +41,61 @@ public class AptUnitOccupancyManagerHelper {
 
     private static final long MILLIS_IN_DAY = 1000l * 60l * 60l * 24l;
 
-    public static void merge(AptUnit unit, List<Status> relevantStatuses, SegmentPredicate pred, MergeHandler handler) {
+    public static void merge(AptUnit unit, LogicalDate startingAt, List<Status> relevantStatuses, MergeHandler handler) {
+        if (relevantStatuses.isEmpty()) {
+            return;
+        }
+        EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
+        criteria.asc(criteria.proto().dateFrom());
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
+        criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), startingAt));
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), new ArrayList<Status>(relevantStatuses)));
 
+        Vector<AptUnitOccupancySegment> segments = Persistence.secureQuery(criteria);
+        LinkedList<AptUnitOccupancySegment> deleteCandidates = new LinkedList<AptUnitOccupancySegment>();
+
+        Iterator<AptUnitOccupancySegment> i = segments.iterator();
+
+        if (!i.hasNext()) {
+            return;
+        }
+        AptUnitOccupancySegment s1 = i.next();
+
+        if (i.hasNext()) {
+            while (i.hasNext()) {
+                AptUnitOccupancySegment s2 = i.next();
+                if (s1.dateTo().getValue().equals(substractDay(s2.dateFrom().getValue())) & handler.isMergeable(s1, s2)) {
+                    AptUnitOccupancySegment merged = EntityFactory.create(AptUnitOccupancySegment.class);
+                    merged.unit().set(unit);
+                    merged.dateFrom().setValue(s1.dateFrom().getValue());
+                    merged.dateTo().setValue(s2.dateTo().getValue());
+                    merged.status().setValue(s1.status().getValue());
+                    handler.onMerged(merged, s1, s2);
+
+                    deleteCandidates.add(s1);
+                    deleteCandidates.add(s2);
+
+                    Persistence.secureSave(merged);
+
+                    s1 = merged;
+                } else {
+                    if (handler.isMergeable(s2, s2)) {
+                        handler.onMerged(s2, s2, s2);
+                        Persistence.secureSave(s2);
+                        s1 = s2;
+                    }
+                }
+            }
+            for (AptUnitOccupancySegment s : deleteCandidates) {
+                Persistence.service().delete(s);
+            }
+        } else {
+            // here we treat the special case when there's only one segment to be merged
+            if (handler.isMergeable(s1, s1)) {
+                handler.onMerged(s1, s1, s1);
+                Persistence.secureSave(s1);
+            }
+        }
     }
 
     /**
@@ -153,11 +211,13 @@ public class AptUnitOccupancyManagerHelper {
 
     public static interface SegmentPredicate {
 
-        boolean check(AptUnitOccupancySegment segment);
+        boolean isMergeApplicableTo(AptUnitOccupancySegment segment);
 
     }
 
     public static interface MergeHandler {
+
+        boolean isMergeable(AptUnitOccupancySegment s1, AptUnitOccupancySegment s2);
 
         void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2);
 
