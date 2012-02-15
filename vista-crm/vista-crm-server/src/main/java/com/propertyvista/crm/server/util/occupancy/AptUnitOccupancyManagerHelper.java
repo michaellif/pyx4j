@@ -145,14 +145,14 @@ public class AptUnitOccupancyManagerHelper {
     /**
      * 
      * @param unit
-     * @param fistSegmentContained
+     * @param dateContainedByTheFirstSegment
      *            the first segment in the retrieved list must contain this date
      * @return
      */
-    public static List<AptUnitOccupancySegment> retrieveOccupancy(AptUnit unit, LogicalDate firstSegmentContained) {
+    public static List<AptUnitOccupancySegment> retrieveOccupancy(AptUnit unit, LogicalDate dateContainedByTheFirstSegment) {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
-        criteria.add(PropertyCriterion.le(criteria.proto().dateTo(), firstSegmentContained));
+        criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), dateContainedByTheFirstSegment));
         criteria.asc(criteria.proto().dateFrom());
         List<AptUnitOccupancySegment> occupancyTimeline = Persistence.secureQuery(criteria);
         return occupancyTimeline;

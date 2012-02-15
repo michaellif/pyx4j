@@ -30,7 +30,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
@@ -137,7 +136,7 @@ public class AptUnitOccupancyManagerTestBase {
      */
     protected void assertExpectedTimeline() {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
-        criteria.desc(criteria.proto().dateFrom());
+        criteria.asc(criteria.proto().dateFrom());
         List<AptUnitOccupancySegment> actualTimeline = Persistence.service().query(criteria);
         Assert.assertEquals("expected and actual timelines' number of segments don't match", expectedTimeline.size(), actualTimeline.size());
 
@@ -147,7 +146,7 @@ public class AptUnitOccupancyManagerTestBase {
         while (a.hasNext()) {
             AptUnitOccupancySegment actual = a.next();
             AptUnitOccupancySegment expected = e.next();
-            Assert.assertTrue(SimpleMessageFormat.format("unexpected occupancy segment {0}", actual), EntityGraph.fullyEqualValues(actual, expected));
+            assertEqualSegments(expected, actual);
         }
 
     }
@@ -163,6 +162,20 @@ public class AptUnitOccupancyManagerTestBase {
             } catch (ParseException e) {
                 throw new Error("Invalid date format " + dateRepr);
             }
+        }
+    }
+
+    protected static void assertEqualSegments(AptUnitOccupancySegment expected, AptUnitOccupancySegment actual) {
+        String msg = "The actual and expected segments equality does not hold";
+        Assert.assertEquals(msg, expected.unit().getPrimaryKey(), actual.unit().getPrimaryKey());
+        Assert.assertEquals(msg, expected.status().getValue(), actual.status().getValue());
+        Assert.assertEquals(msg, expected.dateFrom().getValue(), actual.dateFrom().getValue());
+        Assert.assertEquals(msg, expected.dateTo().getValue(), actual.dateTo().getValue());
+        Assert.assertEquals(msg, expected.offMarket().getValue(), actual.offMarket().getValue());
+        if (expected.lease().isNull()) {
+            Assert.assertEquals(msg, expected.lease().isNull(), actual.lease().isNull());
+        } else {
+            Assert.assertEquals(msg, expected.lease().getPrimaryKey(), actual.lease().getPrimaryKey());
         }
     }
 
@@ -254,11 +267,11 @@ public class AptUnitOccupancyManagerTestBase {
 
             EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
 
-            criteria.add(PropertyCriterion.eq(criteria.proto().dateFrom(), segment.dateFrom()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().dateTo(), segment.dateTo()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().status(), segment.status()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().offMarket(), segment.offMarket()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), segment.lease()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().dateFrom(), segment.dateFrom().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().dateTo(), segment.dateTo().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().status(), segment.status().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().offMarket(), segment.offMarket().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), segment.lease().isNull() ? null : segment.lease()));
 
             AptUnitOccupancySegment actual = Persistence.service().retrieve(criteria);
             Assert.assertNotNull(SimpleMessageFormat.format("the expected occupancy segment was not found in the DB:\n[{0}, {1}] : {2}", segment.dateFrom()
