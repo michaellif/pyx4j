@@ -25,8 +25,10 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.services.TenantPasswordChangeUserService;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
@@ -40,10 +42,13 @@ public class TenantPasswordChangeUserServiceImpl implements TenantPasswordChange
 
     @Override
     public void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request) {
+        SecurityController.assertAnyBehavior(VistaBasicBehavior.TenantPortalPasswordChangeRequired, VistaBasicBehavior.ProspectiveAppPasswordChangeRequired);
         TenantUserCredential cr = Persistence.service().retrieve(TenantUserCredential.class, VistaContext.getCurrentUserPrimaryKey());
         if (!cr.enabled().isBooleanTrue()) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
+        Persistence.service().retrieve(cr.user());
+        AbstractAntiBot.assertLogin(cr.user().email().getValue(), null);
         if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), cr.credential().getValue())) {
             log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
             if (AbstractAntiBot.authenticationFailed(Context.getVisit().getUserVisit().getEmail())) {
@@ -59,5 +64,4 @@ public class TenantPasswordChangeUserServiceImpl implements TenantPasswordChange
         log.info("password changed by user {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
         callback.onSuccess(null);
     }
-
 }

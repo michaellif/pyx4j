@@ -24,7 +24,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.security.rpc.PasswordResetService;
+import com.pyx4j.security.rpc.AbstractPasswordResetService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -35,9 +35,9 @@ public class AbstractPasswordResetActivity extends AbstractActivity implements P
 
     private final PasswordResetView view;
 
-    private final PasswordResetService service;
+    private final AbstractPasswordResetService service;
 
-    public AbstractPasswordResetActivity(Place place, PasswordResetView view, PasswordResetService service) {
+    public AbstractPasswordResetActivity(Place place, PasswordResetView view, AbstractPasswordResetService service) {
         this.view = view;
         this.service = service;
         view.setPresenter(this);

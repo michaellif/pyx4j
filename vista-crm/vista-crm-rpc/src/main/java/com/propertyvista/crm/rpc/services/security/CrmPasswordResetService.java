@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.security;
 
-import com.pyx4j.security.rpc.PasswordResetService;
+import com.pyx4j.security.rpc.AbstractPasswordResetService;
 
-public interface CrmPasswordResetService extends PasswordResetService {
+public interface CrmPasswordResetService extends AbstractPasswordResetService {
 
 }

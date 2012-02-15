@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.rpc.portal.services;
 
-import com.pyx4j.security.rpc.PasswordResetService;
+import com.pyx4j.security.rpc.AbstractPasswordResetService;
 
-public interface PortalPasswordResetService extends PasswordResetService {
+public interface PortalPasswordResetService extends AbstractPasswordResetService {
 
 }

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.security;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.security.rpc.PasswordResetService;
+import com.pyx4j.security.rpc.AbstractPasswordResetService;
 
 import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 public class PasswordResetActivity extends AbstractPasswordResetActivity implements PasswordResetView.Presenter {
 
     public PasswordResetActivity(Place place) {
-        super(place, SecurityViewFactory.instance(PasswordResetView.class), GWT.<PasswordResetService> create(CrmPasswordResetService.class));
+        super(place, SecurityViewFactory.instance(PasswordResetView.class), GWT.<AbstractPasswordResetService> create(CrmPasswordResetService.class));
     }
 
 }

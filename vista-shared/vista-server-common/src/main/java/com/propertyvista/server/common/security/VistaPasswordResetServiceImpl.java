@@ -24,13 +24,13 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.security.rpc.PasswordResetService;
+import com.pyx4j.security.rpc.AbstractPasswordResetService;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.server.domain.security.AbstractUserCredential;
 
-public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCredential<? extends AbstractUser>> implements PasswordResetService {
+public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCredential<? extends AbstractUser>> implements AbstractPasswordResetService {
 
     private static Logger log = LoggerFactory.getLogger(VistaPasswordResetServiceImpl.class);
 
