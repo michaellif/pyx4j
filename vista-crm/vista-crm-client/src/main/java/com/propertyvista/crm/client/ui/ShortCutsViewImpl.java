@@ -78,7 +78,7 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
             list.add(searchcontainer);
 
             for (final AppPlace place : folder.getNavigItems()) {
-                list.add(createListItem(place));
+                list.insert(createListItem(place), 1);
             }
 
             scroll.setWidget(list);
@@ -93,7 +93,7 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
     @Override
     public void updateHistoryFolder(CrudAppPlace place) {
         if (historyList != null) {
-            historyList.add(createListItem(place));
+            historyList.insert(createListItem(place), 1);
         }
     }
 
