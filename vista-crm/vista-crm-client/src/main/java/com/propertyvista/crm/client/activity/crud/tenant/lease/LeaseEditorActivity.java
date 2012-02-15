@@ -146,7 +146,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     private void fillserviceItems(LeaseDTO currentValue) {
         currentValue.selectedServiceItems().clear();
-        for (Service service : currentValue.selectedBuilding().serviceCatalog().services()) {
+        for (Service service : currentValue.selectedBuilding().productCatalog().services()) {
             if (service.type().equals(currentValue.type())) {
                 for (ProductItem item : service.items()) {
                     if (currentValue.unit().equals(item.element())) {
@@ -164,7 +164,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
         // find the service by Service item:
         Service selectedService = null;
-        for (Service service : currentValue.selectedBuilding().serviceCatalog().services()) {
+        for (Service service : currentValue.selectedBuilding().productCatalog().services()) {
             for (ProductItem item : service.items()) {
                 if (item.equals(serviceItem)) {
                     selectedService = service;
@@ -182,7 +182,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         currentValue.selectedConcessions().clear();
 
         if (selectedService != null) {
-            ProductCatalog catalog = currentValue.selectedBuilding().serviceCatalog();
+            ProductCatalog catalog = currentValue.selectedBuilding().productCatalog();
             List<ProductItemType> utilitiesToExclude = new ArrayList<ProductItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
             utilitiesToExclude.addAll(catalog.includedUtilities());
             utilitiesToExclude.addAll(catalog.externalUtilities());

@@ -88,10 +88,10 @@ class UtilityFolder extends VistaTableFolder<ProductItemType> {
 
     private static List<ProductItemType> getNotSelectedUtilities(CEntityEditor<BuildingDTO> building) {
         List<ProductItemType> alreadySelected = new ArrayList<ProductItemType>();
-        for (ProductItemType item : building.getValue().serviceCatalog().includedUtilities()) {
+        for (ProductItemType item : building.getValue().productCatalog().includedUtilities()) {
             alreadySelected.add(item);
         }
-        for (ProductItemType item : building.getValue().serviceCatalog().externalUtilities()) {
+        for (ProductItemType item : building.getValue().productCatalog().externalUtilities()) {
             alreadySelected.add(item);
         }
         List<ProductItemType> canBeSelected = new ArrayList<ProductItemType>();

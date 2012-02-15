@@ -217,13 +217,13 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
         // -----------------------------------------------------------------------
 
-        serviceLister.setParent(result.serviceCatalog().getPrimaryKey());
+        serviceLister.setParent(result.productCatalog().getPrimaryKey());
         serviceLister.populate();
 
-        featureLister.setParent(result.serviceCatalog().getPrimaryKey());
+        featureLister.setParent(result.productCatalog().getPrimaryKey());
         featureLister.populate();
 
-        concessionLister.setParent(result.serviceCatalog().getPrimaryKey());
+        concessionLister.setParent(result.productCatalog().getPrimaryKey());
         concessionLister.populate();
     }
 

@@ -103,7 +103,7 @@ public interface Building extends PolicyNode {
 
     @Owned
     @Detached
-    ProductCatalog serviceCatalog();
+    ProductCatalog productCatalog();
 
     @Detached
     DashboardMetadata dashboard();

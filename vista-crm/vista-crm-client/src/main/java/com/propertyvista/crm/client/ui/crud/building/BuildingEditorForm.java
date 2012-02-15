@@ -270,11 +270,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
 
         main.setH1(++row, 0, 2, i18n.tr("Included Utilities/Add-ons"));
-        main.setWidget(++row, 0, inject(proto().serviceCatalog().includedUtilities(), new UtilityFolder(this)));
+        main.setWidget(++row, 0, inject(proto().productCatalog().includedUtilities(), new UtilityFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setH1(++row, 0, 2, i18n.tr("Excluded Utilities/Add-ons"));
-        main.setWidget(++row, 0, inject(proto().serviceCatalog().externalUtilities(), new UtilityFolder(this)));
+        main.setWidget(++row, 0, inject(proto().productCatalog().externalUtilities(), new UtilityFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         return new CrmScrollPanel(main);

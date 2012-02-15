@@ -160,8 +160,8 @@ public class BuildingsResource {
                     }
 
                     {
-                        Persistence.service().retrieve(building.serviceCatalog());
-                        for (ProductItemType utility : building.serviceCatalog().includedUtilities()) {
+                        Persistence.service().retrieve(building.productCatalog());
+                        for (ProductItemType utility : building.productCatalog().includedUtilities()) {
                             buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
                         }
                     }

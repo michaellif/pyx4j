@@ -184,13 +184,13 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         // load detached entities:
-        Persistence.service().retrieve(building.serviceCatalog());
-        Persistence.service().retrieve(building.serviceCatalog().services());
+        Persistence.service().retrieve(building.productCatalog());
+        Persistence.service().retrieve(building.productCatalog().services());
 
         // load detached service eligibility matrix data:
 
         // load detached data:
-        for (Service item : building.serviceCatalog().services()) {
+        for (Service item : building.productCatalog().services()) {
             Persistence.service().retrieve(item.items());
             Persistence.service().retrieve(item.features());
             for (Feature fi : item.features()) {
@@ -213,7 +213,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 //        building.serviceCatalog().concessions().clear();
 //        building.serviceCatalog().concessions().addAll(concessions);
 
-        return building.serviceCatalog();
+        return building.productCatalog();
     }
 
     private void fillServiceItems(ApartmentInfoDTO entity, Building building, Lease lease) {
@@ -237,8 +237,8 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         syncBuildingProductCatalog(lease.unit().belongsTo());
 
-        entity.includedUtilities().addAll(building.serviceCatalog().includedUtilities());
-        entity.externalUtilities().addAll(building.serviceCatalog().externalUtilities());
+        entity.includedUtilities().addAll(building.productCatalog().includedUtilities());
+        entity.externalUtilities().addAll(building.productCatalog().externalUtilities());
 
         // fill agreed items:
         for (BillableItem item : lease.serviceAgreement().featureItems()) {
@@ -264,7 +264,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         // fill available items:
-        for (Service service : building.serviceCatalog().services()) {
+        for (Service service : building.productCatalog().services()) {
             if (service.type().equals(lease.type())) {
                 for (Feature feature : service.features()) {
                     for (ProductItem item : feature.items()) {

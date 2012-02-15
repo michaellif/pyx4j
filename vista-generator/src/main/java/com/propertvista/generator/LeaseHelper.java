@@ -53,7 +53,7 @@ public class LeaseHelper {
         // TODO use the code above when sserviceOrFeatureervice implemented
         if (true) {
             EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.productCatalog()));
             List<Service> services = Persistence.service().query(serviceCriteria);
 
             for (Service service : services) {
@@ -70,15 +70,15 @@ public class LeaseHelper {
         }
 
         if (!lease.serviceAgreement().serviceItem().isEmpty()) {
-            Persistence.service().retrieve(building.serviceCatalog());
+            Persistence.service().retrieve(building.productCatalog());
             // pre-populate utilities for the new service: 
             Persistence.service().retrieve(selectedService.features());
             for (Feature feature : selectedService.features()) {
                 if (Feature.Type.utility.equals(feature.type().getValue())) {
                     Persistence.service().retrieve(feature.items());
                     for (ProductItem item : feature.items()) {
-                        if (!building.serviceCatalog().includedUtilities().contains(item.type())
-                                && !building.serviceCatalog().externalUtilities().contains(item.type())) {
+                        if (!building.productCatalog().includedUtilities().contains(item.type())
+                                && !building.productCatalog().externalUtilities().contains(item.type())) {
                             lease.serviceAgreement().featureItems().add(createBillableItem(item));
                         }
                     }

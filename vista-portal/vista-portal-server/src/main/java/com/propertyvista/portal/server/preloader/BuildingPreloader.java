@@ -168,7 +168,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             building.propertyManager().set(DataGenerator.random(managements)); // temporary for Starlight!..
 
             // Service Catalog:
-            productCatalogGenerator.createProductCatalog(building.serviceCatalog());
+            productCatalogGenerator.createProductCatalog(building.productCatalog());
 
             Persistence.service().persist(building);
 
@@ -256,7 +256,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             unitCount += units.size();
             for (AptUnitGDO unitData : units) {
 
-                List<ProductItem> serviceItems = productCatalogGenerator.createAptUnitServices(building.serviceCatalog(), unitData.unit());
+                List<ProductItem> serviceItems = productCatalogGenerator.createAptUnitServices(building.productCatalog(), unitData.unit());
 
                 // persist plain internal lists:
 
@@ -271,7 +271,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             // Save the ServiceItem references
-            Persistence.service().persist(building.serviceCatalog().services());
+            Persistence.service().persist(building.productCatalog().services());
 
             // fill Service Catalog with building elements:
 
@@ -287,7 +287,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             buildingRoofsCriteria.add(PropertyCriterion.eq(buildingRoofsCriteria.proto().belongsTo(), building));
             List<Roof> buildingRoofs = Persistence.service().query(buildingRoofsCriteria);
 
-            for (Service service : building.serviceCatalog().services()) {
+            for (Service service : building.productCatalog().services()) {
                 switch (service.type().getValue()) {
                 case garage:
                     for (ProductItem item : service.items()) {
@@ -310,7 +310,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 }
             }
 
-            Persistence.service().merge(building.serviceCatalog());
+            Persistence.service().merge(building.productCatalog());
 
             //Do not publish until data is clean-up
             if (true) {
