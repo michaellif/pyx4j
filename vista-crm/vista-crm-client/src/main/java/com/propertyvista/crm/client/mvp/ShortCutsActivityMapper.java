@@ -23,6 +23,8 @@ import com.propertyvista.crm.client.activity.ShortCutsActivity;
 
 public class ShortCutsActivityMapper implements ActivityMapper {
 
+    private final ShortCutsActivity activity = new ShortCutsActivity();
+
     public ShortCutsActivityMapper() {
     }
 
@@ -30,11 +32,9 @@ public class ShortCutsActivityMapper implements ActivityMapper {
     public Activity getActivity(Place place) {
 
         if (ClientContext.isAuthenticated()) {
-            return new ShortCutsActivity(place);
+            return activity.withPlace(place);
         } else {
             return null;
         }
-
     }
-
 }

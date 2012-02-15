@@ -2,8 +2,6 @@ package com.propertyvista.crm.client.ui;
 
 import java.util.List;
 
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.shared.CompiledLocale;
@@ -13,10 +11,6 @@ public interface TopRightActionsView extends IsWidget {
     void setPresenter(Presenter presenter);
 
     interface Presenter {
-
-        PlaceController getPlaceController();
-
-        Place getWhere();
 
         void logout();
 
@@ -33,6 +27,8 @@ public interface TopRightActionsView extends IsWidget {
         void back2CrmView();
 
         void SwitchCrmAndSettings();
+
+        boolean isSettingsPlace();
 
         void setLocale(CompiledLocale locale);
 

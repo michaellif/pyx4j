@@ -22,10 +22,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.NavigFolder.Type;
 import com.propertyvista.crm.client.event.CrudNavigateEvent;
 import com.propertyvista.crm.client.event.CrudNavigateHandler;
 import com.propertyvista.crm.client.ui.ShortCutsView;
@@ -38,15 +36,10 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
 
     private final ShortCutsView view;
 
-    private final List<NavigFolder> navigfolders = new ArrayList<NavigFolder>();;
-
-    private final NavigFolder shortcutsFolder = new NavigFolder(i18n.tr("Shortcuts"));
-
-    public ShortCutsActivity(Place place) {
+    public ShortCutsActivity() {
         view = CrmVeiwFactory.instance(ShortCutsView.class);
         assert (view != null);
         view.setPresenter(this);
-        withPlace(place);
     }
 
     public ShortCutsActivity withPlace(Place place) {
@@ -55,36 +48,21 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        navigfolders.add(shortcutsFolder);
-        view.setNavigFolders(navigfolders);
+        view.setShortCutFolders(createFolders());
 
         panel.setWidget(view);
         eventBus.addHandler(CrudNavigateEvent.getType(), this);
     }
 
     @Override
-    public void navigTo(Place place) {
-        AppSite.getPlaceController().goTo(place);
-    }
-
-    @Override
-    public String getNavigLabel(AppPlace place) {
-        return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
-    }
-
-    @Override
-    public Place getWhere() {
-        return AppSite.getPlaceController().getWhere();
-    }
-
-    @Override
     public void onCrudNavigate(CrudNavigateEvent event) {
-        view.setNavigFolders(updateNavigFolders(event.getPlace()));
+        view.updateHistoryFolder(event.getPlace());
     }
 
-    private List<NavigFolder> updateNavigFolders(CrudAppPlace place) {
+    private List<NavigFolder> createFolders() {
+        List<NavigFolder> navigfolders = new ArrayList<NavigFolder>();
 
-        shortcutsFolder.addNavigItem(place);
+        navigfolders.add(new NavigFolder(Type.History, i18n.tr("History")));
 
         return navigfolders;
     }

@@ -41,12 +41,14 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
 import com.propertyvista.crm.client.activity.NavigFolder;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
@@ -379,20 +381,20 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
         public NavigItemAnchor(AppPlace place) {
             this.place = place;
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Item);
-            anchor = new Anchor(presenter.getNavigLabel(place));
+            anchor = new Anchor(getNavigLabel(place));
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    presenter.navigTo(NavigItemAnchor.this.place);
+                    AppSite.getPlaceController().goTo(NavigItemAnchor.this.place);
                 }
             });
-            anchor.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Item, presenter.getNavigLabel(place)).toString());
+            anchor.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Item, getNavigLabel(place)).toString());
             setWidget(anchor);
         }
 
         public void update(AppPlace place) {
             this.place = place;
-            anchor.setText(presenter.getNavigLabel(place));
+            anchor.setText(getNavigLabel(place));
         }
 
         @Override
@@ -410,5 +412,14 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
         public int hashCode() {
             return (place != null ? place.hashCode() : 0);
         }
+    }
+
+    private String getNavigLabel(AppPlace place) {
+        if (place instanceof CrmSiteMap.Report) {
+            return ((CrmSiteMap.Report) place).getName();
+        } else if (place instanceof CrmSiteMap.Dashboard) {
+            return ((CrmSiteMap.Dashboard) place).getName();
+        }
+        return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
     }
 }

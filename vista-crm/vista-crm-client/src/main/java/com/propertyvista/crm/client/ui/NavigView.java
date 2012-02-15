@@ -15,10 +15,7 @@ package com.propertyvista.crm.client.ui;
 
 import java.util.List;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
-
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.activity.NavigFolder;
 
@@ -27,12 +24,6 @@ public interface NavigView extends IsWidget {
     public void setPresenter(MainNavigPresenter presenter);
 
     public interface MainNavigPresenter {
-
-        public void navigTo(Place place);
-
-        public String getNavigLabel(AppPlace place);
-
-        public Place getWhere();
     }
 
     public void setNavigFolders(List<NavigFolder> folders);

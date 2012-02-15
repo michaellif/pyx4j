@@ -22,6 +22,12 @@ import com.pyx4j.site.rpc.AppPlace;
 
 public class NavigFolder {
 
+    public enum Type {
+        Regular, History
+    }
+
+    private final Type type;
+
     private final String title;
 
     private final ImageResource normal;
@@ -36,7 +42,16 @@ public class NavigFolder {
         this(title, null, null, null);
     }
 
+    public NavigFolder(Type type, String title) {
+        this(type, title, null, null, null);
+    }
+
     public NavigFolder(String title, ImageResource normal, ImageResource hover, ImageResource active) {
+        this(Type.Regular, title, null, null, null);
+    }
+
+    public NavigFolder(Type type, String title, ImageResource normal, ImageResource hover, ImageResource active) {
+        this.type = type;
         this.title = title;
         this.normal = normal;
         this.hover = hover;
@@ -54,6 +69,10 @@ public class NavigFolder {
     }
 
     // resources:
+
+    public Type getType() {
+        return type;
+    }
 
     public String getTitle() {
         return title;

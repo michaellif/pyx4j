@@ -25,7 +25,6 @@ import com.pyx4j.widgets.client.Tooltip;
 
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.shared.CompiledLocale;
 
 public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
@@ -188,7 +187,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         this.presenter = presenter;
 
         // style settings link:
-        if (presenter.getWhere().getClass().getName().contains(CrmSiteMap.Settings.class.getName())) {
+        if (presenter.isSettingsPlace()) {
             settings.setValue(i18n.tr("Home"));
             settings.asWidget().addStyleName(BACK_TO_CRM);
         } else {

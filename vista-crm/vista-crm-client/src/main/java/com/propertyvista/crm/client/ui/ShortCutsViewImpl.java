@@ -23,11 +23,15 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.NavigFolder;
+import com.propertyvista.crm.client.activity.NavigFolder.Type;
 
 public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView {
 
@@ -40,6 +44,8 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
     private ShortCutsPresenter presenter;
 
     private final SearchBox search;
+
+    private FlowPanel historyList;
 
     public ShortCutsViewImpl() {
         super(Unit.EM);
@@ -57,41 +63,53 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
     }
 
     @Override
-    public void setNavigFolders(List<NavigFolder> folders) {
-
-        //TODO Clean for now. Implement comparison later
+    public void setShortCutFolders(List<NavigFolder> folders) {
         this.clear();
-
-        for (NavigFolder navigFolder : folders) {
+        for (NavigFolder folder : folders) {
             ScrollPanel scroll = new ScrollPanel();
+
             SimplePanel searchcontainer = new SimplePanel();
             searchcontainer.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchBar);
             searchcontainer.setHeight("2em");
             searchcontainer.setWidth("100%");
-//            searchcontainer.getElement().getStyle().setPaddingTop(0.4, Unit.EM);
-            //   searchcontainer.getElement().getStyle().setPaddingLeft(0.4, Unit.EM);
             searchcontainer.add(search);
 
             FlowPanel list = new FlowPanel();
             list.add(searchcontainer);
 
-            for (final AppPlace place : navigFolder.getNavigItems()) {
-                SimplePanel line = new SimplePanel();
-                //VS to add spacing
-                line.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Item);
-                Anchor anchor = new Anchor(presenter.getNavigLabel(place));
-                anchor.addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        presenter.navigTo(place);
-                    }
-                });
-                line.setWidget(anchor);
-                list.add(line);
+            for (final AppPlace place : folder.getNavigItems()) {
+                list.add(createListItem(place));
             }
 
             scroll.setWidget(list);
-            add(scroll, navigFolder.getTitle(), 3);
+            add(scroll, folder.getTitle(), 3);
+
+            if (folder.getType() == Type.History) {
+                historyList = list;
+            }
         }
+    }
+
+    @Override
+    public void updateHistoryFolder(CrudAppPlace place) {
+        if (historyList != null) {
+            historyList.add(createListItem(place));
+        }
+    }
+
+    private Widget createListItem(final AppPlace place) {
+        Anchor anchor = new Anchor(AppSite.getHistoryMapper().getPlaceInfo(place).getCaption());
+        anchor.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                AppSite.getPlaceController().goTo(place);
+            }
+        });
+
+        SimplePanel item = new SimplePanel();
+        item.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Item);
+        item.setWidget(anchor);
+
+        return item;
     }
 }

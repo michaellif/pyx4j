@@ -22,8 +22,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
@@ -49,21 +47,6 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setNavigFolders(createNavigFolders());
         panel.setWidget(view);
-    }
-
-    @Override
-    public void navigTo(Place place) {
-        AppSite.getPlaceController().goTo(place);
-    }
-
-    @Override
-    public String getNavigLabel(AppPlace place) {
-        return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
-    }
-
-    @Override
-    public Place getWhere() {
-        return AppSite.getPlaceController().getWhere();
     }
 
     public List<NavigFolder> createNavigFolders() {

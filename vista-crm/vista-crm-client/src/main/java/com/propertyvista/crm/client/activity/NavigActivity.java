@@ -27,8 +27,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.event.BoardUpdateHandler;
@@ -65,26 +63,6 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         view.setNavigFolders(currentfolders = createNavigFolders());
         panel.setWidget(view);
         eventBus.addHandler(BoardUpdateEvent.getType(), this);
-    }
-
-    @Override
-    public void navigTo(Place place) {
-        AppSite.getPlaceController().goTo(place);
-    }
-
-    @Override
-    public String getNavigLabel(AppPlace place) {
-        if (place instanceof CrmSiteMap.Report) {
-            return ((CrmSiteMap.Report) place).getName();
-        } else if (place instanceof CrmSiteMap.Dashboard) {
-            return ((CrmSiteMap.Dashboard) place).getName();
-        }
-        return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
-    }
-
-    @Override
-    public Place getWhere() {
-        return AppSite.getPlaceController().getWhere();
     }
 
     public List<NavigFolder> createNavigFolders() {
