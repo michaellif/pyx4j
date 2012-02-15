@@ -59,7 +59,6 @@ public class TenantPasswordChangeUserServiceImpl implements TenantPasswordChange
         }
         cr.accessKey().setValue(null);
         cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
-        cr.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
         Persistence.service().persist(cr);
         log.info("password changed by user {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
         callback.onSuccess(null);

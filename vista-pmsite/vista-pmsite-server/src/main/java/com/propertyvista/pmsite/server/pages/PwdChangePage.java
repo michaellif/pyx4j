@@ -20,6 +20,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -45,6 +46,7 @@ import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
@@ -52,6 +54,7 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
+import com.propertyvista.portal.server.portal.services.PortalPasswordResetServiceImpl;
 import com.propertyvista.portal.server.portal.services.TenantPasswordChangeUserServiceImpl;
 
 @AuthorizeInstantiation({ Roles.USER, PMSiteSession.PasswordChangeRequiredRole })
@@ -71,6 +74,8 @@ public final class PwdChangePage extends BasePage {
     private boolean captchaRequired = false;
 
     private ChangePwdForm form;
+
+    boolean pwdReset = PMSiteSession.get().getRoles().hasRole(PMSiteSession.PasswordChangeRequiredRole);
 
     public PwdChangePage() {
         this(null);
@@ -139,7 +144,9 @@ public final class PwdChangePage extends BasePage {
         public ChangePwdForm(final String id, final CompoundPropertyModel<PwdChangePage> model) {
             super(id, model);
 
-            add(new PasswordTextField("oldPassword"));
+            WebMarkupContainer oldPwd = new WebMarkupContainer("oldPwdEntry");
+            oldPwd.add(new PasswordTextField("oldPassword"));
+            add(oldPwd.setVisible(!pwdReset));
             PasswordTextField newPasswd = new PasswordTextField("newPassword");
             add(newPasswd);
             PasswordTextField pwdConfirm = new PasswordTextField("pwdConfirm", new Model<String>(""));
@@ -164,27 +171,35 @@ public final class PwdChangePage extends BasePage {
             request.newPassword().setValue(getNewPassword());
             request.captcha().setValue(captchaResponse);
             try {
-                new TenantPasswordChangeUserServiceImpl().changePassword(new AsyncCallback<VoidSerializable>() {
-                    @Override
-                    public void onSuccess(VoidSerializable result) {
-                        // success - redirect to target will follow
-                    }
+                if (pwdReset) {
+                    new PortalPasswordResetServiceImpl().resetPassword(new AsyncCallback<AuthenticationResponse>() {
+                        @Override
+                        public void onSuccess(AuthenticationResponse result) {
+                            // success - restart wicket session and redirect to target
+                            PMSiteSession.get().signIn(null, null);
+                            redirectToTarget();
+                        }
 
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        // show error message
-                        error(caught.getMessage());
-                    }
-                }, request);
-
-                // Success - redirect to target page
-                String targetUrl = getPage().getPageParameters().get(PMSiteApplication.ParamNameTarget).toString();
-                if (targetUrl == null || targetUrl.length() == 0) {
-                    setResponsePage(ResidentsPage.class);
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            // show error message
+                            error(caught.getMessage());
+                        }
+                    }, request);
                 } else {
-                    // get path relative to context root
-                    String toRoot = PMSiteApplication.get().getPathToRoot();
-                    throw new RedirectToUrlException(toRoot + targetUrl);
+                    new TenantPasswordChangeUserServiceImpl().changePassword(new AsyncCallback<VoidSerializable>() {
+                        @Override
+                        public void onSuccess(VoidSerializable result) {
+                            // success - redirect to target
+                            redirectToTarget();
+                        }
+
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            // show error message
+                            error(caught.getMessage());
+                        }
+                    }, request);
                 }
             } catch (ChallengeVerificationRequired e) {
                 captchaRequired = true;
@@ -192,6 +207,18 @@ public final class PwdChangePage extends BasePage {
             } catch (UserRuntimeException e) {
                 error(e.getMessage());
             }
+        }
+    }
+
+    private void redirectToTarget() {
+        // Success - redirect to target page
+        String targetUrl = getPage().getPageParameters().get(PMSiteApplication.ParamNameTarget).toString();
+        if (targetUrl == null || targetUrl.length() == 0) {
+            setResponsePage(ResidentsPage.class);
+        } else {
+            // get path relative to context root
+            String toRoot = PMSiteApplication.get().getPathToRoot();
+            throw new RedirectToUrlException(toRoot + targetUrl);
         }
     }
 }
