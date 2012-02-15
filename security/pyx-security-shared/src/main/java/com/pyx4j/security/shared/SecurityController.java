@@ -85,6 +85,16 @@ public abstract class SecurityController {
         }
     }
 
+    public static void assertAnyBehavior(Behavior... behaviors) {
+        if (!checkAnyBehavior(behaviors)) {
+            if (ApplicationMode.isDevelopment()) {
+                throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + behaviors);
+            } else {
+                throw new SecurityViolationException("Permission denied");
+            }
+        }
+    }
+
     public static Set<Behavior> getBehaviors() {
         return controller.getAcl().getBehaviours();
     }

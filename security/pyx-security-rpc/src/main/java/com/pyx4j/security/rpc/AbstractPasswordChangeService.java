@@ -27,6 +27,11 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AbstractPasswordChangeService extends IService {
 
+    /**
+     * Expects current password and new password for current user.
+     * Throw ChallengeVerificationRequired if N wrong attempts have been made to enter password.
+     * Then you need to provide captcha.
+     */
     public void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request);
 
 }
