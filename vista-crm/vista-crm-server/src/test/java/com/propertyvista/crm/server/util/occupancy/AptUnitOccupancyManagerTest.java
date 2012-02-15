@@ -27,7 +27,6 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     @Test
     public void testInitialization() {
         setup().from("2011-01-01").toTheEndOfTime().status(Status.vacant).x();
-        expect().from("2011-01-01").toTheEndOfTime().status(Status.vacant).x(); // sanity check
 
         now("2011-02-03");
         getUOM().scopeAvailable();
@@ -121,7 +120,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
     @Test
     public void testApproveLeaseWhenReservedInFuture() {
-        // TODO
+        throw new RuntimeException("this test has not yet been implemented");
     }
 
     @Test

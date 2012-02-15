@@ -166,15 +166,19 @@ public class AptUnitOccupancyManagerHelper {
      * @return
      */
     public static AptUnitOccupancySegment retrieveOccupancySegment(AptUnit unit, LogicalDate contained) {
+
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
         criteria.add(PropertyCriterion.ge(criteria.proto().dateFrom(), contained));
         criteria.add(PropertyCriterion.le(criteria.proto().dateTo(), contained));
-        return Persistence.service().retrieve(criteria);
+
+        return Persistence.secureRetrieve(criteria);
     }
 
     public static void assertStatus(AptUnitOccupancySegment segment, Status status) throws IllegalStateException {
-        if (segment.status().getValue() != status) {
+        if (segment == null) {
+            throw new IllegalStateException("expected segment with status that equals " + status + " but got NULL");
+        } else if (segment.status().getValue() != status) {
             throw new IllegalStateException("expected segment with status that equals " + status + " but got " + segment.status().getValue());
         }
     }

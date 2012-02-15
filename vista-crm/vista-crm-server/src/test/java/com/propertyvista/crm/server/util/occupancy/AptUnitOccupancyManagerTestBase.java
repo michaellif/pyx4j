@@ -32,11 +32,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -65,7 +63,8 @@ public class AptUnitOccupancyManagerTestBase {
     @Before
     public void setUp() {
         VistaTestDBSetup.init();
-        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
+        TestLifecycle.beginRequest();
 
         now = null;
         manager = null;
@@ -76,12 +75,9 @@ public class AptUnitOccupancyManagerTestBase {
 
         unit = EntityFactory.create(AptUnit.class);
         unit.info().number().setValue("1");
-        Persistence.service().persist(unit);
+        Persistence.service().merge(unit);
 
         expectedTimeline = new LinkedList<AptUnitOccupancySegment>();
-
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
-        TestLifecycle.beginRequest();
     }
 
     @After
@@ -115,7 +111,7 @@ public class AptUnitOccupancyManagerTestBase {
             lease.unit().set(unit);
             lease.leaseFrom().setValue(asDate(leaseFrom));
             lease.leaseTo().setValue(asDate(leaseTo));
-            Persistence.service().persist(lease);
+            Persistence.service().merge(lease);
             return lease;
         } else {
             throw new IllegalStateException("can't create a lease without a unit");
@@ -252,8 +248,8 @@ public class AptUnitOccupancyManagerTestBase {
          * execute the statement.
          */
         public void x() {
+            segment.unit().set(unit);
             assertVaildSegment();
-            segment.set(unit);
             expectedTimeline.add(segment);
 
             EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
@@ -282,8 +278,8 @@ public class AptUnitOccupancyManagerTestBase {
          * execute the statement
          */
         public void x() {
+            segment.unit().set(unit);
             assertVaildSegment();
-            segment.set(unit);
             Persistence.service().merge(segment);
         }
 
