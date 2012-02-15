@@ -40,13 +40,18 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.server.LocalService;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 
 import com.propertyvista.domain.DemoData;
@@ -54,7 +59,7 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.PageLink;
 import com.propertyvista.pmsite.server.pages.PwdResetPage;
-import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
+import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 
 public class SignInPanel extends Panel {
 
@@ -145,23 +150,30 @@ public class SignInPanel extends Panel {
         return captchaRequired;
     }
 
-    private boolean signIn(String username, String password, Pair<String, String> captcha) {
-        try {
-            AuthenticationRequest request = EntityFactory.create(AuthenticationRequest.class);
-            request.email().setValue(username);
-            request.password().setValue(password);
-            request.captcha().setValue(captcha);
+    private boolean signIn(final String username, final String password, Pair<String, String> captcha) {
+        AuthenticationRequest request = EntityFactory.create(AuthenticationRequest.class);
+        request.email().setValue(username);
+        request.password().setValue(password);
+        request.captcha().setValue(captcha);
 
-            // This does the actual authentication; will throw an exception in case of failure
-            new PortalAuthenticationServiceImpl().beginSession(request);
-            // Our wicket session authentication simply returns true, so this call will just create wicket session
-            return AuthenticatedWebSession.get().signIn(username, password);
-        } catch (Exception e) {
-            if (e instanceof ChallengeVerificationRequired) {
-                captchaRequired = true;
+        // This does the actual authentication; will throw an exception in case of failure
+        LocalService.create(PortalAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof ChallengeVerificationRequired) {
+                    captchaRequired = true;
+                }
             }
-        }
-        return false;
+
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                // Our wicket session authentication simply returns true, so this call will just create wicket session
+                AuthenticatedWebSession.get().signIn(username, password);
+            }
+        }, new ClientSystemInfo(), request);
+
+        return true;
     }
 
     private boolean isSignedIn() {
