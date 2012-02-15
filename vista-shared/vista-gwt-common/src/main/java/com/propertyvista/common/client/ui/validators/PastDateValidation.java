@@ -27,10 +27,14 @@ public class PastDateValidation {
     private static final I18n i18n = I18n.get(PastDateValidation.class);
 
     public PastDateValidation(CComponent<LogicalDate, ?> value) {
+        this(value, i18n.tr("The Date Must Be Earlier Than Today's Date"));
+    }
+
+    public PastDateValidation(CComponent<LogicalDate, ?> value, final String message) {
         value.addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                return (value != null) && !value.after(TimeUtils.today()) ? null : new ValidationFailure(i18n.tr("The Date Must Be Earlier Than Today's Date"));
+                return (value == null) || !value.after(TimeUtils.today()) ? null : new ValidationFailure(message);
             }
 
         });

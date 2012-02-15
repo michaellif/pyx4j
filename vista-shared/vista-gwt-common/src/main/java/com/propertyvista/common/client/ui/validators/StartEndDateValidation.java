@@ -26,29 +26,7 @@ public class StartEndDateValidation {
     private static final I18n i18n = I18n.get(StartEndDateValidation.class);
 
     public StartEndDateValidation(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2) {
-        value1.addValueValidator(new EditableValueValidator<Date>() {
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                if (value1.getValue() == null || value2.getValue() == null) {
-                    return null;
-                }
-                Date end = value2.getValue();
-                return (value != null) && !value.after(end) ? null : new ValidationFailure(i18n.tr("The Start Date Must Be Earlier Than The End Date"));
-            }
-
-        });
-
-        value2.addValueValidator(new EditableValueValidator<Date>() {
-            @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                if (value1.getValue() == null || value2.getValue() == null) {
-                    return null;
-                }
-                Date start = value1.getValue();
-                return (value != null) && !value.before(start) ? null : new ValidationFailure(i18n.tr("The Start Date Must Be Earlier Than The End Date"));
-            }
-
-        });
+        this(value1, value2, i18n.tr("The Start Date Must Be Earlier Than The End Date"));
     }
 
     public StartEndDateValidation(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2, final String message) {

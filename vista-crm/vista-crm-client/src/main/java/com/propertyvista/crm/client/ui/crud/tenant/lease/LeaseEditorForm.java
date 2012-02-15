@@ -23,11 +23,14 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
@@ -35,6 +38,9 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
+import com.propertyvista.common.client.ui.validators.FutureDateValidation;
+import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
@@ -173,6 +179,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate(), new CDateLabel()), 9).build());
 
+        addLocalValidations();
         return new CrmScrollPanel(main);
     }
 
@@ -244,5 +251,27 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, inject(proto().leaseFinancial().adjustments(), new LeaseAdjustmentFolder(isEditable())));
 
         return new CrmScrollPanel(main);
+    }
+
+    private void addLocalValidations() {
+        new FutureDateValidation(get(proto().expectedMoveIn()));
+        new FutureDateValidation(get(proto().expectedMoveOut()));
+        new PastDateValidation(get(proto().signDate()));
+        validate(get(proto().leaseFrom()), get(proto().leaseTo()));
+        validate(get(proto().leaseFrom()), get(proto().actualLeaseTo()));
+        validate(get(proto().expectedMoveIn()), get(proto().expectedMoveOut()));
+        validate(get(proto().actualMoveIn()), get(proto().actualMoveOut()));
+        validate(get(proto().expectedMoveIn()), get(proto().leaseTo()));
+        validate(get(proto().expectedMoveOut()), get(proto().leaseTo()));
+        validate(get(proto().moveOutNotice()), get(proto().leaseTo()));
+        validate(get(proto().leaseFrom()), get(proto().expectedMoveIn()));
+        validate(get(proto().leaseFrom()), get(proto().expectedMoveOut()));
+
+    }
+
+    private void validate(CComponent<LogicalDate, ?> date1, CComponent<LogicalDate, ?> date2) {
+        new StartEndDateValidation(date1, date2);
+        date1.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date2));
+        date2.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date1));
     }
 }

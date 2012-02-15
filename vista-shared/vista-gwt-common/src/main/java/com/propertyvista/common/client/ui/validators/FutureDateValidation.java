@@ -27,10 +27,14 @@ public class FutureDateValidation {
     private static final I18n i18n = I18n.get(FutureDateValidation.class);
 
     public FutureDateValidation(CComponent<LogicalDate, ?> value) {
+        this(value, i18n.tr("The Date Must Be Later Than Today's Date"));
+    }
+
+    public FutureDateValidation(CComponent<LogicalDate, ?> value, final String message) {
         value.addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                return (value != null) && !value.before(TimeUtils.today()) ? null : new ValidationFailure(i18n.tr("The Date Must Be Later Than Today's Date"));
+                return (value == null) || !value.before(TimeUtils.today()) ? null : new ValidationFailure(message);
             }
 
         });
