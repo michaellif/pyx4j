@@ -23,7 +23,7 @@ import com.pyx4j.site.rpc.AppPlace;
 public class NavigFolder {
 
     public enum Type {
-        Regular, History
+        Regular, Shortcuts, Favorites
     }
 
     private final Type type;

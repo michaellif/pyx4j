@@ -48,7 +48,7 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setShortCutFolders(createFolders());
+        view.setNavigationFolders(createFolders());
 
         panel.setWidget(view);
         eventBus.addHandler(CrudNavigateEvent.getType(), this);
@@ -56,13 +56,13 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
 
     @Override
     public void onCrudNavigate(CrudNavigateEvent event) {
-        view.updateHistoryFolder(event.getPlace());
+        view.updateShortcutFolder(event.getPlace(), event.getValue());
     }
 
     private List<NavigFolder> createFolders() {
         List<NavigFolder> navigfolders = new ArrayList<NavigFolder>();
 
-        navigfolders.add(new NavigFolder(Type.History, i18n.tr("History")));
+        navigfolders.add(new NavigFolder(Type.Shortcuts, i18n.tr(Type.Shortcuts.name())));
 
         return navigfolders;
     }

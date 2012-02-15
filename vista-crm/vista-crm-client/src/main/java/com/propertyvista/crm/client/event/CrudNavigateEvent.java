@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CrudNavigateEvent extends GwtEvent<CrudNavigateHandler> {
@@ -23,13 +24,23 @@ public class CrudNavigateEvent extends GwtEvent<CrudNavigateHandler> {
 
     private final CrudAppPlace place;
 
+    private final IEntity value;
+
     public CrudNavigateEvent(CrudAppPlace place) {
-        super();
+        this(place, null);
+    }
+
+    public CrudNavigateEvent(CrudAppPlace place, IEntity value) {
         this.place = place;
+        this.value = value;
     }
 
     public CrudAppPlace getPlace() {
         return place;
+    }
+
+    public IEntity getValue() {
+        return value;
     }
 
     public static Type<CrudNavigateHandler> getType() {

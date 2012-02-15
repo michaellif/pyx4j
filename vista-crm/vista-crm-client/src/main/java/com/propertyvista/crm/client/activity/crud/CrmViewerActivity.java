@@ -39,6 +39,6 @@ public class CrmViewerActivity<E extends IEntity> extends ViewerActivityBase<E> 
     protected void onPopulateSuccess(E result) {
         super.onPopulateSuccess(result);
         AppSite.instance();
-        AppSite.getEventBus().fireEvent(new CrudNavigateEvent(place));
+        AppSite.getEventBus().fireEvent(new CrudNavigateEvent(place, result));
     }
 }
