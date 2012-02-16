@@ -89,7 +89,7 @@ public class FirstServiceTest extends TestCase {
 
             @Override
             public void onSuccess(Boolean result) {
-                assertEquals("Error not expected", Boolean.FALSE, result);
+                assertEquals("Result not expected", Boolean.FALSE, result);
             }
         }, Boolean.FALSE);
 

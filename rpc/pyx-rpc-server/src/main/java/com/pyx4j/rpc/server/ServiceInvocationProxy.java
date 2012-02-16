@@ -21,7 +21,9 @@
 package com.pyx4j.rpc.server;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +31,15 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.Trace;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.server.IServiceAdapterImpl.ServerAsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.Context;
 
 class ServiceInvocationProxy implements java.lang.reflect.InvocationHandler {
 
@@ -52,6 +57,9 @@ class ServiceInvocationProxy implements java.lang.reflect.InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] serviceArgs) throws Throwable {
         @SuppressWarnings({ "unchecked" })
         AsyncCallback<Serializable> callback = (AsyncCallback<Serializable>) serviceArgs[0];
+        assert callback != null : "AsyncCallback, First argument is required for method " + serviceInterfaceClass.getName() + "." + method.getName();
+        ServerAsyncCallback verificationCallback = new ServerAsyncCallback();
+        Class<? extends IService> serviceImplClass = null;
         try {
             SecurityController.assertPermission(new IServiceExecutePermission(serviceInterfaceClass));
 
@@ -64,7 +72,7 @@ class ServiceInvocationProxy implements java.lang.reflect.InvocationHandler {
             if (serviceFactory == null) {
                 serviceFactory = new ReflectionServiceFactory();
             }
-            Class<? extends IService> serviceImplClass = serviceFactory.getIServiceClass(serviceInterfaceClass.getName());
+            serviceImplClass = serviceFactory.getIServiceClass(serviceInterfaceClass.getName());
             IService serviceInstance;
             try {
                 serviceInstance = serviceImplClass.newInstance();
@@ -77,11 +85,28 @@ class ServiceInvocationProxy implements java.lang.reflect.InvocationHandler {
             }
 
             // invoke the service method and return the result using callback
-            callback.onSuccess((Serializable) method.invoke(serviceInstance, serviceArgs));
+            Object[] methodArgs = Arrays.copyOf(serviceArgs, serviceArgs.length);
+            methodArgs[0] = verificationCallback;
+            method.invoke(serviceInstance, methodArgs);
+
+        } catch (InvocationTargetException e) {
+            log.error("Service call error\n{}\n for user:" + Context.getVisit(), Trace.clickableClassLocation(serviceImplClass), e.getCause());
+            callback.onFailure(e.getCause());
+            return null;
         } catch (Throwable e) {
             callback.onFailure(e);
+            return null;
+        }
+
+        if (verificationCallback.caught != null) {
+            log.error("Error", verificationCallback.caught);
+            callback.onFailure(verificationCallback.caught);
+        } else if (!verificationCallback.onSuccessCalled) {
+            log.error("Error forgot to call \"onSuccess\" from method {} in class {}", method.getName(), serviceInterfaceClass.getName());
+            callback.onFailure(new UnRecoverableRuntimeException(i18n.tr("Fatal system error")));
+        } else {
+            callback.onSuccess(verificationCallback.result);
         }
         return null;
     }
-
 }

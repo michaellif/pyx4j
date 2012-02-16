@@ -144,7 +144,7 @@ public class IServiceAdapterImpl implements IServiceAdapter {
         return s;
     }
 
-    private static class ServerAsyncCallback implements AsyncCallback<Serializable> {
+    static class ServerAsyncCallback implements AsyncCallback<Serializable> {
 
         Throwable caught;
 
