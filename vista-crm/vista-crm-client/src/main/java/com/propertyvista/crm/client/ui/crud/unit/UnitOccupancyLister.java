@@ -22,7 +22,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 public class UnitOccupancyLister extends ListerBase<AptUnitOccupancySegment> {
 
     public UnitOccupancyLister() {
-        super(AptUnitOccupancySegment.class, CrmSiteMap.Properties.UnitOccupancy.class, false, true);
+        super(AptUnitOccupancySegment.class, CrmSiteMap.Properties.UnitOccupancy.class, false, false);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
@@ -30,8 +30,9 @@ public class UnitOccupancyLister extends ListerBase<AptUnitOccupancySegment> {
             new MemberColumnDescriptor.Builder(proto().dateTo()).build(),
             new MemberColumnDescriptor.Builder(proto().status()).build(),
             new MemberColumnDescriptor.Builder(proto().offMarket()).build(),
-            new MemberColumnDescriptor.Builder(proto().description()).build()
+            new MemberColumnDescriptor.Builder(proto().lease().leaseID()).build(),
+            new MemberColumnDescriptor.Builder(proto().lease().leaseFrom()).build(),
+            new MemberColumnDescriptor.Builder(proto().lease().leaseTo()).build()
         );//@formatter:on
     }
-
 }
