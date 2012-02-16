@@ -147,7 +147,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
                 return false;
             }
         } else {
-            throw new ClassCastException("Collection member type expected " + getValueClass());
+            throw new ClassCastException("Collection member type expected " + getValueClass().getName() + ", got " + o.getClass());
         }
     }
 
