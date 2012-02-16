@@ -40,15 +40,15 @@ public class BillingRunTest extends BillingTestBase {
     private void runBilling(int billNumber, boolean confirm) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         Lease lease = Persistence.service().query(criteria).get(0);
-        BillingLifecycle.runBilling(lease);
+        BillingFacade.runBilling(lease);
 
-        Bill bill = BillingUtils.getBill(lease.leaseFinancial().billingAccount(), lease.leaseFinancial().billingAccount().currentBillingRun());
+        Bill bill = BillingFacade.getBill(lease.leaseFinancial().billingAccount(), lease.leaseFinancial().billingAccount().currentBillingRun());
         if (confirm) {
-            BillingLifecycle.confirmBill(bill);
+            BillingFacade.confirmBill(bill);
         } else {
-            BillingLifecycle.rejectBill(bill);
+            BillingFacade.rejectBill(bill);
         }
-//        System.out.println("++++++" + bill);
+        System.out.println("++++++" + bill);
         assertEquals("Bill Sequence Number", billNumber, (int) bill.billSequenceNumber().getValue());
         assertEquals("Bill Confirmation Status", confirm ? BillStatus.Confirmed : BillStatus.Rejected, bill.billStatus().getValue());
     }

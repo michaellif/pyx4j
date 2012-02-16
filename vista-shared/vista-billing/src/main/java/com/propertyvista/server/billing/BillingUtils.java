@@ -78,6 +78,16 @@ public class BillingUtils {
             return leaseFinancial.billingAccount();
         }
 
+        leaseFinancial.billingAccount().billingCycle().set(ensureBillingCycle());
+        leaseFinancial.billingAccount().leaseFinancial().set(leaseFinancial);
+        leaseFinancial.billingAccount().billCounter().setValue(1);
+        Persistence.service().persist(lease);
+
+        return leaseFinancial.billingAccount();
+
+    }
+
+    static BillingCycle ensureBillingCycle() {
         // TOTO select a day base on lease.leaseFrom(), e.g. use Policy
         int billingDay = 1;
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
@@ -91,13 +101,7 @@ public class BillingUtils {
             billingCycle.billingPeriod().setValue(BillingFrequency.monthly);
             Persistence.service().persist(billingCycle);
         }
-        leaseFinancial.billingAccount().billingCycle().set(billingCycle);
-        leaseFinancial.billingAccount().leaseFinancial().set(leaseFinancial);
-        leaseFinancial.billingAccount().billCounter().setValue(1);
-        Persistence.service().persist(lease);
-
-        return leaseFinancial.billingAccount();
-
+        return billingCycle;
     }
 
     static Bill getLatestBill(BillingAccount billingAccount) {
@@ -108,7 +112,7 @@ public class BillingUtils {
         return Persistence.service().retrieve(criteria);
     }
 
-    public static Bill getBill(BillingAccount billingAccount, BillingRun billingRun) {
+    static Bill getBill(BillingAccount billingAccount, BillingRun billingRun) {
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.eq(criteria.proto().billingRun(), billingRun));

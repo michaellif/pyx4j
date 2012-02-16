@@ -43,7 +43,7 @@ public class BillingLifecycle {
 
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycle.class);
 
-    public static BillingRun runBilling(Lease lease) {
+    static BillingRun runBilling(Lease lease) {
         BillingAccount billingAccount = BillingUtils.ensureBillingAccount(lease);
         if (!billingAccount.currentBillingRun().isNull()) {
             throw new UserRuntimeException("Can't run billing on Account with non-confirmed bills");
@@ -65,7 +65,7 @@ public class BillingLifecycle {
         return billingRun;
     }
 
-    public static BillingRun runBilling(Building building, BillingFrequency billingPeriod, Integer billingDay, LogicalDate billingPeriodStartDate) {
+    static BillingRun runBilling(Building building, BillingFrequency billingPeriod, Integer billingDay, LogicalDate billingPeriodStartDate) {
         //TODO
         return null;
     }
@@ -91,11 +91,11 @@ public class BillingLifecycle {
         }
     }
 
-    public static void confirmBill(Bill bill) {
+    static void confirmBill(Bill bill) {
         verifyBill(bill, BillStatus.Confirmed);
     }
 
-    public static void rejectBill(Bill bill) {
+    static void rejectBill(Bill bill) {
         verifyBill(bill, BillStatus.Rejected);
     }
 

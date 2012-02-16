@@ -30,7 +30,7 @@ public class BillingExecutionServiceImpl implements BillingExecutionService {
     @Override
     public void startBilling(AsyncCallback<String> callback, Key leaseEntityId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseEntityId);
-        callback.onSuccess(DeferredProcessRegistry.fork(new BillLiaseDeferredProcess(lease), ThreadPoolNames.BILL_SINGLE));
+        callback.onSuccess(DeferredProcessRegistry.fork(new BillLeaseDeferredProcess(lease), ThreadPoolNames.BILL_SINGLE));
     }
 
     @Override
