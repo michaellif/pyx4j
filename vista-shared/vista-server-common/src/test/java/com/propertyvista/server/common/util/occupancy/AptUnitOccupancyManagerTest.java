@@ -11,15 +11,16 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util.occupancy;
+package com.propertyvista.server.common.util.occupancy;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-// TODO add test cases for future in present where applicable
+@Ignore
 public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase {
 
     @Test

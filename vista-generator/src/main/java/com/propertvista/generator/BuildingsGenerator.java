@@ -25,7 +25,6 @@ import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.CompanyVendor;
 import com.propertvista.generator.util.RandomUtil;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
@@ -56,6 +55,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 
 public class BuildingsGenerator {
 
@@ -502,13 +502,13 @@ public class BuildingsGenerator {
         // some ServerSideDomainUtils
         unit.availableForRent().setValue(RandomUtil.randomLogicalDate(2012, 2012));
 
-        AptUnitOccupancySegment occupancy = EntityFactory.create(AptUnitOccupancySegment.class);
-        occupancy.unit().set(unit);
-        occupancy.status().setValue(AptUnitOccupancySegment.Status.available);
-        occupancy.dateFrom().setValue(unit.availableForRent().getValue());
-        occupancy.dateTo().setValue(new LogicalDate(occupancy.dateFrom().getValue().getTime() + RandomUtil.randomInt()));
-        occupancy.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
-        data.occupancies().add(occupancy);
+        AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
+        occupancySegment.unit().set(unit);
+        occupancySegment.status().setValue(AptUnitOccupancySegment.Status.vacant);
+        occupancySegment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
+        occupancySegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+        occupancySegment.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
+        data.unit()._AptUnitOccupancySegment().add(occupancySegment);
 
         unit.floorplan().set(floorplan);
 

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util.occupancy;
+package com.propertyvista.server.common.util.occupancy;
 
 import com.pyx4j.commons.LogicalDate;
 

@@ -13,11 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.dto.AptUnitDTO;
 
 public interface UnitViewerView extends IViewerView<AptUnitDTO> {
@@ -27,6 +29,15 @@ public interface UnitViewerView extends IViewerView<AptUnitDTO> {
         IListerView.Presenter getUnitItemsPresenter();
 
         IListerView.Presenter getOccupanciesPresenter();
+
+        void scopeOffMarket(OffMarketType type, LogicalDate startDate);
+
+        void scopeRenovation(LogicalDate renovationEndDate);
+
+        void scopeAvailable();
+
+        void makeVacant(LogicalDate vacantFrom);
+
     }
 
     IListerView<AptUnitItem> getUnitItemsListerView();

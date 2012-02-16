@@ -11,17 +11,18 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util.occupancy;
+package com.propertyvista.server.common.util.occupancy;
 
 import static java.util.Arrays.asList;
 
 import org.junit.Ignore;
 
-import com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
 
 @Ignore
 public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTestBase {

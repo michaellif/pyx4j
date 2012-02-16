@@ -11,30 +11,31 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util.occupancy;
+package com.propertyvista.server.common.util.occupancy;
 
-import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.addDay;
-import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.assertStatus;
-import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.merge;
-import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancy;
-import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancySegment;
-import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.split;
-import static com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.substractDay;
+import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.addDay;
+import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.assertStatus;
+import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.merge;
+import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancy;
+import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancySegment;
+import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.split;
+import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.substractDay;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
 
 public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
@@ -51,9 +52,17 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         });
     }
 
+    public AptUnitOccupancyManagerImpl(Key unitPk) {
+        this(Persistence.secureRetrieve(AptUnit.class, unitPk));
+    }
+
     public AptUnitOccupancyManagerImpl(AptUnit unit, NowSource nowProvider) {
         this.nowProvider = nowProvider;
         this.unit = unit;
+
+        if (unit == null) {
+            throw new IllegalArgumentException("unit cannot be null");
+        }
     }
 
     @Override

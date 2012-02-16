@@ -17,7 +17,10 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -29,8 +32,10 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
+import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AptUnitDTO;
 
@@ -39,6 +44,8 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     private final IListerView.Presenter<?> unitItemsLister;
 
     private final IListerView.Presenter<?> OccupanciesLister;
+
+    private final UnitOccupancyManagerService occupancyManagerService;
 
     @SuppressWarnings("unchecked")
     public UnitViewerActivity(Place place) {
@@ -49,6 +56,8 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
         OccupanciesLister = new ListerActivityBase<AptUnitOccupancySegment>(place, ((UnitViewerView) view).getOccupanciesListerView(),
                 (AbstractCrudService<AptUnitOccupancySegment>) GWT.create(UnitOccupancyCrudService.class), AptUnitOccupancySegment.class);
+
+        occupancyManagerService = GWT.create(UnitOccupancyManagerService.class);
 
     }
 
@@ -83,5 +92,53 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
         ((AbstractActivity) unitItemsLister).onStop();
         ((AbstractActivity) OccupanciesLister).onStop();
         super.onStop();
+    }
+
+    @Override
+    public void scopeOffMarket(OffMarketType type, LogicalDate startDate) {
+        occupancyManagerService.scopeOffMarket(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                getOccupanciesPresenter().populate();
+            }
+
+        }, entityId, type, startDate);
+    }
+
+    @Override
+    public void scopeRenovation(LogicalDate renovationEndDate) {
+        occupancyManagerService.scopeRenovation(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                getOccupanciesPresenter().populate();
+            }
+
+        }, entityId, renovationEndDate);
+    }
+
+    @Override
+    public void scopeAvailable() {
+        occupancyManagerService.scopeAvailable(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                getOccupanciesPresenter().populate();
+            }
+
+        }, entityId);
+    }
+
+    @Override
+    public void makeVacant(LogicalDate vacantFrom) {
+        occupancyManagerService.makeVacant(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                getOccupanciesPresenter().populate();
+            }
+
+        }, entityId, vacantFrom);
     }
 }

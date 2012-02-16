@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util.occupancy;
+package com.propertyvista.server.common.util.occupancy;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,7 +34,6 @@ import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.crm.server.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -42,6 +41,10 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
 
 public class AptUnitOccupancyManagerTestBase {
 
