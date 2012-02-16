@@ -125,7 +125,8 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
         public NavigItem(AppPlace place, IEntity value) {
             this.place = place;
 
-            Anchor anchor = new Anchor(AppSite.getHistoryMapper().getPlaceInfo(place).getCaption() + (value != null ? ": " + value.getStringView() : ""));
+            Anchor anchor = new Anchor("<i>" + AppSite.getHistoryMapper().getPlaceInfo(place).getCaption()
+                    + (value != null ? ": </i>" + value.getStringView() : "</i>"), true);
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
