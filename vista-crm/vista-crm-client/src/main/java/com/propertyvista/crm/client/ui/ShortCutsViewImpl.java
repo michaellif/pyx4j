@@ -77,14 +77,11 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
             FlowPanel list = new FlowPanel() {
                 @Override
                 public void insert(Widget w, int beforeIndex) {
-
                     if (w instanceof ShortcutItem) {
                         for (Widget item : getChildren()) {
-                            if (item instanceof ShortcutItem) {
-                                if (((ShortcutItem) w).getPlace().equals(((ShortcutItem) item).getPlace())) {
-                                    remove(item); // remove 
-                                    break;
-                                }
+                            if (((ShortcutItem) w).equals(item)) {
+                                remove(item); // remove the same shortcut if exists...
+                                break;
                             }
                         }
                     }
@@ -98,9 +95,6 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
             switch (folder.getType()) {
             case Shortcuts:
                 shortcutsList = list;
-                for (final AppPlace place : folder.getNavigItems()) {
-                    list.insert(new ShortcutItem(place, null), 1);
-                }
                 break;
             default:
                 for (final AppPlace place : folder.getNavigItems()) {
@@ -131,7 +125,7 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
         public NavigItem(AppPlace place, IEntity value) {
             this.place = place;
 
-            Anchor anchor = new Anchor(value != null ? value.getStringView() : AppSite.getHistoryMapper().getPlaceInfo(place).getCaption());
+            Anchor anchor = new Anchor(AppSite.getHistoryMapper().getPlaceInfo(place).getCaption() + (value != null ? ": " + value.getStringView() : ""));
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -152,6 +146,14 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
 
         public ShortcutItem(AppPlace place, IEntity value) {
             super(place, value);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (getClass() == obj.getClass()) {
+                return getPlace().equals(((ShortcutItem) obj).getPlace());
+            }
+            return false;
         }
     }
 }

@@ -226,8 +226,9 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         // Item style defines anchor specific styling
-        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Item));
-        style.addProperty("margin-bottom", "0.3em");
+        style = new Style(Selector.valueOf(prefix, ShortCutsViewImpl.StyleSuffix.Item));
+        style.addProperty("margin-left", "0.3em");
+        style.addProperty("margin-right", "0.2em");
         addStyle(style);
 
         // Search line style
