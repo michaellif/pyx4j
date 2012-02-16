@@ -99,7 +99,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
 
     protected Map<String, Object> ensureTypedValue(TYPE entity) {
         if (!entity.isInstanceOf(getValueClass())) {
-            throw new ClassCastException("Collection member type expected " + getValueClass() + ", got " + entity.getValueClass());
+            throw new ClassCastException("Collection member type expected " + getValueClass().getName() + ", got " + entity.getValueClass().getName());
         }
         Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
         if (!this.getValueClass().equals(entity.getInstanceValueClass())) {
