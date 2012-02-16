@@ -131,6 +131,13 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
         dataSource.addPreDefinedFilters(filters);
     }
 
+    /**
+     * Called from within constructor.
+     * In order to add additional filters - overwrite it in your class
+     * and use addFilter(s) AFTER call to super.setFilters(filters)!..
+     * 
+     * @param filters
+     */
     protected void setFilters(List<DataTableFilterData> filters) {
         dataSource.setPreDefinedFilters(filters);
     }
