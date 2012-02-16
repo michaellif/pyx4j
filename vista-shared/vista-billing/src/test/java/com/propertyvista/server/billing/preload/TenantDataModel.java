@@ -13,13 +13,25 @@
  */
 package com.propertyvista.server.billing.preload;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
-public class TenantGenerator {
+import com.propertyvista.domain.tenant.Tenant;
 
-    public static IEntity generate(RDBDataModel model) {
-        // TODO Auto-generated method stub
-        return null;
+public class TenantDataModel {
+
+    private Tenant tenant;
+
+    public TenantDataModel() {
+        generate();
+    }
+
+    private void generate() {
+        tenant = EntityFactory.create(Tenant.class);
+    }
+
+    public IEntity getTenant() {
+        return tenant;
     }
 
 }

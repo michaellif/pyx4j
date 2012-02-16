@@ -22,12 +22,16 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
 
-public class ProductItemTypesGenerator {
+public class ProductItemTypesDataModel {
 
-    public final List<ProductItemType> productItemTypes;
+    public final List<ProductItemType> serviceItemTypes;
 
-    public ProductItemTypesGenerator(DataModel dataModel) {
-        productItemTypes = new ArrayList<ProductItemType>();
+    public final List<ProductItemType> featureItemTypes;
+
+    public ProductItemTypesDataModel() {
+        serviceItemTypes = new ArrayList<ProductItemType>();
+        featureItemTypes = new ArrayList<ProductItemType>();
+        generate();
     }
 
     private void generate() {
@@ -66,7 +70,7 @@ public class ProductItemTypesGenerator {
         type.name().setValue(name);
         type.type().setValue(ProductItemType.Type.service);
         type.serviceType().setValue(serviceType);
-        productItemTypes.add(type);
+        serviceItemTypes.add(type);
     }
 
     private void generateChargeItemType(String name, Feature.Type featureType) {
@@ -74,12 +78,22 @@ public class ProductItemTypesGenerator {
         type.name().setValue(name);
         type.type().setValue(ProductItemType.Type.feature);
         type.featureType().setValue(featureType);
-        productItemTypes.add(type);
+        featureItemTypes.add(type);
     }
 
-    public static List<ProductItemType> generate(DataModel dataModel) {
-        ProductItemTypesGenerator generator = new ProductItemTypesGenerator(dataModel);
-        generator.generate();
-        return generator.productItemTypes;
+    public List<ProductItemType> getProductItemTypes() {
+        List<ProductItemType> productItemTypes = new ArrayList<ProductItemType>();
+        productItemTypes.addAll(serviceItemTypes);
+        productItemTypes.addAll(featureItemTypes);
+        return productItemTypes;
     }
+
+    public List<ProductItemType> getServiceItemTypes() {
+        return serviceItemTypes;
+    }
+
+    public List<ProductItemType> getFeatureItemTypes() {
+        return featureItemTypes;
+    }
+
 }

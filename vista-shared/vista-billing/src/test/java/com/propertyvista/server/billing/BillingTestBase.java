@@ -20,10 +20,14 @@
  */
 package com.propertyvista.server.billing;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.server.billing.preload.BuildingGenerator;
-import com.propertyvista.server.billing.preload.ProductItemTypesGenerator;
-import com.propertyvista.server.billing.preload.RDBDataModel;
+import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.server.billing.preload.BuildingDataModel;
+import com.propertyvista.server.billing.preload.LeaseDataModel;
+import com.propertyvista.server.billing.preload.ProductItemTypesDataModel;
+import com.propertyvista.server.billing.preload.TenantDataModel;
 
 public class BillingTestBase extends VistaDBTestBase {
 
@@ -31,15 +35,19 @@ public class BillingTestBase extends VistaDBTestBase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        RDBDataModel model = new RDBDataModel();
+        ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel();
+        for (ProductItemType productItemType : productItemTypesDataModel.getProductItemTypes()) {
+            Persistence.service().persist(productItemType);
+        }
 
-        model.persist(ProductItemTypesGenerator.generate(model));
+        BuildingDataModel buildingDataModel = new BuildingDataModel(productItemTypesDataModel);
+        Persistence.service().persist(buildingDataModel.getBuilding());
 
-        model.persist(BuildingGenerator.generate(model));
+        TenantDataModel tenantDataModel = new TenantDataModel();
+        Persistence.service().persist(tenantDataModel.getTenant());
 
-//        model.persist(TenantGenerator.generate(model));
-
-//        model.persist(LeaseGenerator.generate(model));
+        LeaseDataModel leaseDataModel = new LeaseDataModel(buildingDataModel, tenantDataModel);
+        Persistence.service().persist(leaseDataModel.getLease());
 
     }
 }

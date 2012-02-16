@@ -30,12 +30,11 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class BillingRunTest extends BillingTestBase {
 
     public void testSequentialBillingRun() {
-//        runBilling(1, true);
-        //TODO uncomment after query fix
-//        runBilling(2, true);
-//        runBilling(3, false);
-//        runBilling(4, true);
-//        runBilling(5, true);
+        runBilling(1, true);
+        runBilling(2, true);
+        runBilling(3, false);
+        runBilling(4, true);
+        runBilling(5, true);
     }
 
     private void runBilling(int billNumber, boolean confirm) {
@@ -49,8 +48,8 @@ public class BillingRunTest extends BillingTestBase {
         } else {
             BillingLifecycle.rejectBill(bill);
         }
-        System.out.println("++++++" + bill);
-        assertEquals("Bill Sequence Number", (int) bill.billSequenceNumber().getValue(), billNumber);
-        assertEquals("Bill Confirmation Status", bill.billStatus().getValue(), confirm ? BillStatus.Confirmed : BillStatus.Rejected);
+//        System.out.println("++++++" + bill);
+        assertEquals("Bill Sequence Number", billNumber, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Bill Confirmation Status", confirm ? BillStatus.Confirmed : BillStatus.Rejected, bill.billStatus().getValue());
     }
 }

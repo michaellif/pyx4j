@@ -94,8 +94,7 @@ public class BillingUtils {
         leaseFinancial.billingAccount().billingCycle().set(billingCycle);
         leaseFinancial.billingAccount().leaseFinancial().set(leaseFinancial);
         leaseFinancial.billingAccount().billCounter().setValue(1);
-        Persistence.service().persist(leaseFinancial.billingAccount());
-        Persistence.service().persist(leaseFinancial);
+        Persistence.service().persist(lease);
 
         return leaseFinancial.billingAccount();
 

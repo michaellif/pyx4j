@@ -16,12 +16,14 @@ package com.propertyvista.server.billing.preload;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.financial.offering.DepositType;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -32,7 +34,11 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public class BuildingGenerator {
+public class BuildingDataModel {
+
+    enum Usage {
+        notAvailable, available, used
+    }
 
     private static final int UNITS_PER_TYPE = 2;
 
@@ -40,17 +46,38 @@ public class BuildingGenerator {
 
     private Map<Feature.Type, List<ProductItemType>> featureMeta;
 
-    private List<AptUnit> residentialUnits;;
+    private LinkedHashMap<AptUnit, Usage> residentialUnits;
 
-    private final DataModel dataModel;
+    private final ProductItemTypesDataModel productItemTypesDataModel;
 
     private final Building building;
 
-    public BuildingGenerator(DataModel dataModel) {
-        this.dataModel = dataModel;
+    public BuildingDataModel(ProductItemTypesDataModel productItemTypesDataModel) {
+        this.productItemTypesDataModel = productItemTypesDataModel;
         building = EntityFactory.create(Building.class);
 
         createServiceMeta();
+
+        generate();
+    }
+
+    public IEntity getBuilding() {
+        return building;
+    }
+
+    public AptUnit useNextAvailableAptUnit() {
+        for (AptUnit unit : residentialUnits.keySet()) {
+            if (Usage.notAvailable.equals(residentialUnits.get(unit))) {
+                residentialUnits.put(unit, Usage.available);
+                return unit;
+            }
+        }
+        return null;
+    }
+
+    private void generate() {
+        generateResidentialUnits();
+        generateCatalog();
 
     }
 
@@ -58,30 +85,23 @@ public class BuildingGenerator {
         serviceMeta = new HashMap<Service.Type, List<ProductItemType>>();
         featureMeta = new HashMap<Feature.Type, List<ProductItemType>>();
 
-        List<ProductItemType> productItemTypes = dataModel.query(ProductItemType.class);
-        for (ProductItemType productItemType : productItemTypes) {
-            if (ProductItemType.Type.service.equals(productItemType.type().getValue())) {
-                if (!serviceMeta.containsKey(productItemType.serviceType().getValue())) {
-                    serviceMeta.put(productItemType.serviceType().getValue(), new ArrayList<ProductItemType>());
-                }
-                serviceMeta.get(productItemType.serviceType().getValue()).add(productItemType);
-            } else if (ProductItemType.Type.feature.equals(productItemType.type().getValue())) {
-                if (!featureMeta.containsKey(productItemType.featureType().getValue())) {
-                    featureMeta.put(productItemType.featureType().getValue(), new ArrayList<ProductItemType>());
-                }
-                featureMeta.get(productItemType.featureType().getValue()).add(productItemType);
+        for (ProductItemType serviceItemType : productItemTypesDataModel.getServiceItemTypes()) {
+            if (!serviceMeta.containsKey(serviceItemType.serviceType().getValue())) {
+                serviceMeta.put(serviceItemType.serviceType().getValue(), new ArrayList<ProductItemType>());
             }
+            serviceMeta.get(serviceItemType.serviceType().getValue()).add(serviceItemType);
+        }
+
+        for (ProductItemType featureItemType : productItemTypesDataModel.getFeatureItemTypes()) {
+            if (!featureMeta.containsKey(featureItemType.featureType().getValue())) {
+                featureMeta.put(featureItemType.featureType().getValue(), new ArrayList<ProductItemType>());
+            }
+            featureMeta.get(featureItemType.featureType().getValue()).add(featureItemType);
         }
     }
 
-    private void generate() {
-        generateAptUnits();
-        generateCatalog();
-
-    }
-
-    private void generateAptUnits() {
-        residentialUnits = new ArrayList<AptUnit>();
+    private void generateResidentialUnits() {
+        residentialUnits = new LinkedHashMap<AptUnit, Usage>();
         for (ProductItemType type : serviceMeta.get(Service.Type.residentialUnit)) {
             for (int i = 0; i < UNITS_PER_TYPE; i++) {
                 generateResidentialUnit();
@@ -92,7 +112,7 @@ public class BuildingGenerator {
     private void generateResidentialUnit() {
         AptUnit unit = EntityFactory.create(AptUnit.class);
         building._Units().add(unit);
-        residentialUnits.add(unit);
+        residentialUnits.put(unit, Usage.notAvailable);
     }
 
     private void generateCatalog() {
@@ -112,10 +132,15 @@ public class BuildingGenerator {
 
         service.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
-        int index = 0;
         for (ProductItemType type : serviceMeta.get(Service.Type.residentialUnit)) {
             for (int i = 0; i < UNITS_PER_TYPE; i++) {
-                generateResidentialUnitServiceItem(service, type, residentialUnits.get(index++));
+                for (AptUnit unit : residentialUnits.keySet()) {
+                    if (Usage.notAvailable.equals(residentialUnits.get(unit))) {
+                        generateResidentialUnitServiceItem(service, type, unit);
+                        residentialUnits.put(unit, Usage.available);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -163,12 +188,6 @@ public class BuildingGenerator {
     private void generateConcessions() {
         // TODO Auto-generated method stub
 
-    }
-
-    public static Building generate(DataModel dataModel) {
-        BuildingGenerator generator = new BuildingGenerator(dataModel);
-        generator.generate();
-        return generator.building;
     }
 
 }
