@@ -33,7 +33,7 @@ public abstract class BuildingSelectorDialog extends EntitySelectorDialog<Buildi
 
     public BuildingSelectorDialog(List<Building> alreadySelected) {
         super(Building.class, true, alreadySelected, i18n.tr("Select Buildings"));
-        setSize("700px", "400px");
+        setWidth("700px");
     }
 
     @Override

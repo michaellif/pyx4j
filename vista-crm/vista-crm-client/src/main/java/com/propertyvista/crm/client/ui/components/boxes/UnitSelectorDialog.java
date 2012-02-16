@@ -39,7 +39,7 @@ public abstract class UnitSelectorDialog extends EntitySelectorDialog<AptUnit> {
     @SuppressWarnings("unchecked")
     public UnitSelectorDialog(boolean displayAvailableUnitsOnly) {
         super(AptUnit.class, false, Collections.EMPTY_LIST, i18n.tr("Select Unit"));
-        setSize("900px", "400px");
+        setWidth("700px");
     }
 
     @Override

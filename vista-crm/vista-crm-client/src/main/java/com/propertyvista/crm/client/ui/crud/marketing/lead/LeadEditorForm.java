@@ -172,7 +172,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
 
         public FloorplanSelectorDialogDialog() {
             super(Floorplan.class, false, new ArrayList<Floorplan>(1), i18n.tr("Building/Floorplan Selection"));
-            setSize("900px", "500px");
+            setWidth("700px");
         }
 
         @Override

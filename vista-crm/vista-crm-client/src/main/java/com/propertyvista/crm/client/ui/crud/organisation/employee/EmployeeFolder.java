@@ -117,7 +117,7 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
 
         public EmployeeSelectorDialog() {
             super(Employee.class, true, getValue(), i18n.tr("Select Employee"));
-            setSize("700px", "400px");
+            setWidth("700px");
 
             // add restriction for papa/mama employee, so that he/she won't be able manage himself :)
             // FIXME: somehow we need to forbid circular references. maybe only server side (if someone wants to be a smart ass)

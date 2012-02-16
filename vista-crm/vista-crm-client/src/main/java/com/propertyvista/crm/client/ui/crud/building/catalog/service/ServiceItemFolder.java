@@ -117,7 +117,6 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             }
 
             return comp;
-
         }
     }
 }

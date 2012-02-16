@@ -104,7 +104,7 @@ public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
 
         public CrmBehaviorDTOSelectorDialog(List<VistaCrmBehaviorDTO> alreadySelected) {
             super(VistaCrmBehaviorDTO.class, true, alreadySelected, i18n.tr("Select Permissions"));
-            setSize("500px", "400px");
+            setWidth("500px");
         }
 
         @Override

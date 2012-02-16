@@ -106,7 +106,7 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
         public PortfolioSelectorDialog(List<Portfolio> alreadySelected) {
             super(Portfolio.class, true, alreadySelected, i18n.tr("Select Portfolio"));
-            setSize("700px", "400px");
+            setWidth("700px");
         }
 
         @Override
