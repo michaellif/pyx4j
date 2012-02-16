@@ -265,10 +265,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     public void addValidations() {
         super.addValidations();
 
-        validate(get(proto().leaseFrom()), get(proto().leaseTo()));
-        validate(get(proto().leaseFrom()), get(proto().actualLeaseTo()));
-        validate(get(proto().expectedMoveIn()), get(proto().expectedMoveOut()));
-        validate(get(proto().actualMoveIn()), get(proto().actualMoveOut()));
+        validate(get(proto().leaseFrom()), get(proto().leaseTo()), null);
+        validate(get(proto().leaseFrom()), get(proto().actualLeaseTo()), null);
+        validate(get(proto().expectedMoveIn()), get(proto().expectedMoveOut()), null);
+        validate(get(proto().actualMoveIn()), get(proto().actualMoveOut()), null);
         new StartEndDateValidation(get(proto().moveOutNotice()), get(proto().leaseTo()), i18n.tr("The Date Should Be Before The End Of Lease"));
         new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveIn()), get(proto().leaseTo()),
                 i18n.tr("The Date Should Be Within The Lease Period"));
@@ -280,10 +280,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
         get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().moveOutNotice())));
 
-    }
-
-    private void validate(CComponent<LogicalDate, ?> date1, CComponent<LogicalDate, ?> date2) {
-        validate(date1, date2, null);
     }
 
     private void validate(CComponent<LogicalDate, ?> date1, CComponent<LogicalDate, ?> date2, String message) {

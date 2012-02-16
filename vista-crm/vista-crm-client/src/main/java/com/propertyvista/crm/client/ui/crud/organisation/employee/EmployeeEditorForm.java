@@ -175,11 +175,12 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
             }
         })));
 
-        addLocalValidations();
         return new CrmScrollPanel(main);
     }
 
-    private void addLocalValidations() {
+    @Override
+    public void addValidations() {
+        super.addValidations();
         get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
             @Override
             public ValidationFailure isValid(CComponent<String, ?> component, String value) {

@@ -48,12 +48,12 @@ public class ContractEditor extends CEntityDecoratableEditor<Contract> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        addLocalValidations();
-
         return main;
     }
 
-    private void addLocalValidations() {
+    @Override
+    public void addValidations() {
+        super.addValidations();
         new StartEndDateValidation(get(proto().start()), get(proto().end()));
         get(proto().start()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().end()))); //connects validation of both fields
         get(proto().end()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().start())));
