@@ -40,6 +40,7 @@ import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSitePanel;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
+import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -81,6 +82,7 @@ public class PtAppSite extends VistaSite {
                 if (!ClientContext.isAuthenticated()) {
                     getWizardManager().onLogout();
                     PtAppViewFactory.clear();
+                    WizardStepsViewFactory.clear();
                 }
                 if (initialized) {
                     AppSite.getPlaceController().goTo(AppPlace.NOWHERE);

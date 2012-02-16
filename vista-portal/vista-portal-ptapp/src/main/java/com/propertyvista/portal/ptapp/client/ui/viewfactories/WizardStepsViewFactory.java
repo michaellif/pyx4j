@@ -63,4 +63,8 @@ public class WizardStepsViewFactory extends ViewFactoryBase {
         }
         return impl;
     }
+
+    public static void clear() {
+        map.clear();
+    }
 }
