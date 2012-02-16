@@ -38,6 +38,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
+import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
@@ -187,7 +188,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate(), new CDateLabel()), 9).build());
 
-        addValidations();
         return new CrmScrollPanel(main);
     }
 
@@ -269,15 +269,25 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         validate(get(proto().leaseFrom()), get(proto().actualLeaseTo()));
         validate(get(proto().expectedMoveIn()), get(proto().expectedMoveOut()));
         validate(get(proto().actualMoveIn()), get(proto().actualMoveOut()));
-        validate(get(proto().expectedMoveIn()), get(proto().leaseTo()));
-        validate(get(proto().expectedMoveOut()), get(proto().leaseTo()));
-        validate(get(proto().moveOutNotice()), get(proto().leaseTo()));
-        validate(get(proto().leaseFrom()), get(proto().expectedMoveIn()));
-        validate(get(proto().leaseFrom()), get(proto().expectedMoveOut()));
+        new StartEndDateValidation(get(proto().moveOutNotice()), get(proto().leaseTo()), i18n.tr("The Date Should Be Before The End Of Lease"));
+        new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveIn()), get(proto().leaseTo()),
+                i18n.tr("The Date Should Be Within The Lease Period"));
+        new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveOut()), get(proto().leaseTo()),
+                i18n.tr("The Date Should Be Within The Lease Period"));
+        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
+        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
+        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
+        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
+        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().moveOutNotice())));
+
     }
 
     private void validate(CComponent<LogicalDate, ?> date1, CComponent<LogicalDate, ?> date2) {
-        new StartEndDateValidation(date1, date2);
+        validate(date1, date2, null);
+    }
+
+    private void validate(CComponent<LogicalDate, ?> date1, CComponent<LogicalDate, ?> date2, String message) {
+        new StartEndDateValidation(date1, date2, message);
         date1.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date2));
         date2.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date1));
     }
