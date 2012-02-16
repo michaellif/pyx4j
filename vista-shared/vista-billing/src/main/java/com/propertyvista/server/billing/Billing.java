@@ -84,12 +84,12 @@ class Billing {
 
         //Set accumulating fields to 0 value
         bill.paymentReceivedAmount().setValue(new BigDecimal(0));
-        bill.totalRecurringFeatureCharges().setValue(new BigDecimal(0));
-        bill.totalOneTimeFeatureCharges().setValue(new BigDecimal(0));
+        bill.recurringFeatureCharges().setValue(new BigDecimal(0));
+        bill.oneTimeFeatureCharges().setValue(new BigDecimal(0));
         bill.totalAdjustments().setValue(new BigDecimal(0));
-        bill.totalImmediateAdjustments().setValue(new BigDecimal(0));
+        bill.immediateAdjustments().setValue(new BigDecimal(0));
         bill.latePaymentCharges().setValue(new BigDecimal(0));
-        bill.totalTaxes().setValue(new BigDecimal(0));
+        bill.taxes().setValue(new BigDecimal(0));
 
         getPreviousTotals();
         createPayments();
@@ -157,9 +157,9 @@ class Billing {
         if (isService(charge.billableItem().item().product())) { //Service
             bill.serviceCharge().setValue(charge.price().getValue());
         } else if (isRecurringFeature(charge.billableItem().item().product())) { //Recurring Feature
-            bill.totalRecurringFeatureCharges().setValue(bill.totalRecurringFeatureCharges().getValue().add(charge.price().getValue()));
+            bill.recurringFeatureCharges().setValue(bill.recurringFeatureCharges().getValue().add(charge.price().getValue()));
         } else {
-            bill.totalOneTimeFeatureCharges().setValue(bill.totalOneTimeFeatureCharges().getValue().add(charge.price().getValue()));
+            bill.oneTimeFeatureCharges().setValue(bill.oneTimeFeatureCharges().getValue().add(charge.price().getValue()));
         }
     }
 

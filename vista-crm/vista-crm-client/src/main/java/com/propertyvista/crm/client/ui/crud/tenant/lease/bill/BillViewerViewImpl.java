@@ -72,8 +72,8 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<Bill> implements B
 
     @Override
     public void populate(Bill value) {
-        approveAction.setVisible(value.billStatus().getValue() != BillStatus.Confirmed);
-        declineAction.setVisible(value.billStatus().getValue() != BillStatus.Confirmed);
+        approveAction.setVisible(value.billStatus().getValue() == BillStatus.Finished);
+        declineAction.setVisible(value.billStatus().getValue() == BillStatus.Finished);
         super.populate(value);
     }
 

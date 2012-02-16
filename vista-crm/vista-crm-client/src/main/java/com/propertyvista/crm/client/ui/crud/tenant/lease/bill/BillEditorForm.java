@@ -40,7 +40,7 @@ public class BillEditorForm extends CrmEntityForm<Bill> {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
-        main.setH1(++row, 0, 2, i18n.tr("Cycle:"));
+        main.setH1(++row, 0, 2, i18n.tr("Status"));
         int row2 = row;
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionDate()), 10).build());
@@ -50,24 +50,24 @@ public class BillEditorForm extends CrmEntityForm<Bill> {
         main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billStatus()), 10).build());
         main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 15).build());
 
-        main.setH1(++row, 0, 2, i18n.tr("Values:"));
+        main.setH1(++row, 0, 2, i18n.tr("Values"));
         row2 = row;
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceCharge()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalRecurringFeatureCharges()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalOneTimeFeatureCharges()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recurringFeatureCharges()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().oneTimeFeatureCharges()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalAdjustments()), 10).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositPaidAmount()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().latePaymentCharges()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalCurrentAmount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalTaxes()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes()), 10).build());
 
         // second column:
         main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().previousBalanceAmount()), 10).build());
         main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().paymentReceivedAmount()), 10).build());
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().totalImmediateAdjustments()), 10).build());
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().immediateAdjustments()), 10).build());
 
         // Dues: 
         main.setHR(++row, 0, 2);
