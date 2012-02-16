@@ -118,8 +118,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
         actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         actionsPanel.setWidth("100%");
-        actionsPanel.add(new HTML()); // just for %-tage cells alignment...
-
+        actionsPanel.add(new HTML()); // just for %-tage cells alignment...        
         actionsPanel.add(createActionsWidget());
 
         addNorth(actionsPanel, 2);
@@ -312,6 +311,11 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     }
 
     public void addAction(Widget action) {
+        HTML separator = new HTML("&nbsp&nbsp&nbsp&nbsp");
+        actionsPanel.setVisible(true);
+        actionsPanel.insert(separator, 1);
+        actionsPanel.setCellWidth(separator, "1%");
+
         actionsPanel.setVisible(true);
         actionsPanel.insert(action, 1);
         actionsPanel.setCellWidth(action, "1%");
@@ -327,11 +331,12 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 //
 
     protected Widget createDashboardDateControls() {
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        panel.setWidth("30em");
+//        HorizontalPanel panel = new HorizontalPanel();
+//        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+//        panel.setWidth("30em");
         datePicker = new CDatePicker();
         datePicker.setWidth("10em");
+        datePicker.asWidget().getElement().getStyle().setPaddingLeft(1, Unit.EM);
         datePicker.setValue(new LogicalDate(), false);
         datePicker.addValueChangeHandler(new ValueChangeHandler<Date>() {
             @Override
@@ -339,9 +344,9 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
                 fireDashboardDateChanged();
             }
         });
-        panel.add(datePicker);
+//        panel.add(datePicker);
 
-        return panel;
+        return datePicker.asWidget();
     }
 
     protected void procesDashboardEvent(Reason reason) {
