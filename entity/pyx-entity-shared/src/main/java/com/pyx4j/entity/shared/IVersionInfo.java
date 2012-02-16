@@ -14,26 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 6, 2012
- * @author vlads
+ * Created on Feb 15, 2012
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.version;
+package com.pyx4j.entity.shared;
 
-import com.pyx4j.entity.annotations.Versioned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import java.util.Date;
 
-public interface RefToVersioned extends IEntity {
+import com.pyx4j.entity.annotations.ManagedColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Transient;
 
-    IPrimitive<String> testId();
+@Transient
+public interface IVersionInfo extends IEntity {
 
-    IPrimitive<String> name();
+    @ManagedColumn
+    IPrimitive<Date> fromDate();
 
-    @Versioned
-    ItemA itemA();
+    @ManagedColumn
+    IPrimitive<Date> toDate();
 
-    @Versioned
-    ItemB itemB();
+    @ManagedColumn
+    @OrderColumn
+    IPrimitive<Integer> versionNumber();
 
 }

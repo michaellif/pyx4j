@@ -62,7 +62,7 @@ public class ServerEntityFactory implements IEntityFactory {
         Class<?> handlerClass = null;
         handlerClass = impClasses.get(clazz);
         if (handlerClass == null) {
-            String handlerClassName = clazz.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
+            String handlerClassName = EntityImplGenerator.implClassName(clazz);
             // Try to find class first
             if (parent != null) {
                 try {

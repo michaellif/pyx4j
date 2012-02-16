@@ -14,26 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 6, 2012
- * @author vlads
+ * Created on Feb 15, 2012
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.version;
+package com.pyx4j.entity.annotations;
 
-import com.pyx4j.entity.annotations.Versioned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface RefToVersioned extends IEntity {
-
-    IPrimitive<String> testId();
-
-    IPrimitive<String> name();
-
-    @Versioned
-    ItemA itemA();
-
-    @Versioned
-    ItemB itemB();
+@Target({ ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ManagedColumn {
 
 }

@@ -34,4 +34,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AbstractEntity {
 
+    boolean generateMetadata() default true;
+
 }

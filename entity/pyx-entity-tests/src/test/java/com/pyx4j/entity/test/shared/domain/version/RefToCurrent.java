@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.version;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -29,5 +30,9 @@ public interface RefToCurrent extends IEntity {
 
     IPrimitive<String> name();
 
+    /**
+     * Brings the version for current date based on server clock
+     */
+    @Owned
     ItemA itemA();
 }

@@ -46,6 +46,7 @@ import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.config.server.ClassFinder;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -126,7 +127,7 @@ public class EntityImplGenerator {
         if (instance == null) {
             instance = new EntityImplGenerator(webapp);
         } else if (instance.webapp != webapp) {
-            log.error("chaning weapp classpath configuration at runtime");
+            log.error("chaning webapp classpath configuration at runtime");
         }
         return instance;
     }
@@ -279,7 +280,7 @@ public class EntityImplGenerator {
     public synchronized <T extends IEntity> Class<T> generateImplementation(Class<T> interfaceClass) {
         // synchronization
         try {
-            return (Class<T>) Class.forName(interfaceClass.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX, true, getContextClassLoader());
+            return (Class<T>) Class.forName(implClassName(interfaceClass), true, getContextClassLoader());
         } catch (ClassNotFoundException continueToCreationOfClass) {
         }
 
@@ -289,6 +290,10 @@ public class EntityImplGenerator {
             log.error("Impl compile error", e);
             throw new Error("Can't create class " + interfaceClass.getName());
         }
+    }
+
+    public static String implClassName(Class<?> interfaceClass) {
+        return interfaceClass.getPackage().getName() + "." + SharedEntityHandler.implClassName(GWTJava5Helper.getSimpleName(interfaceClass));
     }
 
     @SuppressWarnings("unchecked")
@@ -308,7 +313,7 @@ public class EntityImplGenerator {
         //        }
 
         String interfaceName = interfaceClass.getName();
-        String name = interfaceName + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
+        String name = implClassName(interfaceClass);
         try {
             initClassPool();
             CtClass interfaceCtClass = pool.get(interfaceName);

@@ -80,6 +80,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     private transient final boolean isTemplateEntity;
 
+    public static String implClassName(String interfaceSimpleClassName) {
+        return interfaceSimpleClassName.replace('.', '_').replace('$', '_') + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
+    }
+
     /**
      * Creation of stand alone or member Entity
      * 

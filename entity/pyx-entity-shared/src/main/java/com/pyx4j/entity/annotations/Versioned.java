@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,26 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 6, 2012
+ * Created on Jan 5, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.version;
+package com.pyx4j.entity.annotations;
 
-import com.pyx4j.entity.annotations.Versioned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface RefToVersioned extends IEntity {
-
-    IPrimitive<String> testId();
-
-    IPrimitive<String> name();
-
-    @Versioned
-    ItemA itemA();
-
-    @Versioned
-    ItemB itemB();
+@Target({ ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Versioned {
 
 }

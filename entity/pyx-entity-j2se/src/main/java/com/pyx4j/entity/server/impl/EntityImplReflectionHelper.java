@@ -25,6 +25,7 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,7 +52,7 @@ public class EntityImplReflectionHelper {
         }
     }
 
-    static Class<?> primitiveValueClass(Type type) {
+    public static Class<?> primitiveValueClass(Type type) {
         if (type instanceof Class<?>) {
             return (Class<?>) type;
         } else {
@@ -62,6 +63,29 @@ public class EntityImplReflectionHelper {
                 return (Class<?>) ((ParameterizedType) type).getRawType();
             }
         }
+    }
+
+    public static Class<?> resolveGenericType(Type genericType, Class<?> interfaceClass) {
+        if (genericType instanceof TypeVariable) {
+            TypeVariable<?> typeVariable = (TypeVariable<?>) genericType;
+            for (Type extendedInterfaceType : interfaceClass.getGenericInterfaces()) {
+                if (extendedInterfaceType instanceof ParameterizedType) {
+                    ParameterizedType parameterizedType = (ParameterizedType) extendedInterfaceType;
+                    if (typeVariable.getGenericDeclaration() == parameterizedType.getRawType()) {
+                        Class<?> rawType = (Class<?>) parameterizedType.getRawType();
+                        TypeVariable<?>[] typeParameters = rawType.getTypeParameters();
+                        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+                        for (int i = 0; i < actualTypeArguments.length; i++) {
+                            //System.out.println("Actual Type:" + typeParameters[i] + "->" + actualTypeArguments[i]);
+                            if (typeVariable == typeParameters[i]) {
+                                return (Class<?>) actualTypeArguments[i];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private static class MethodInfo {
@@ -93,6 +117,11 @@ public class EntityImplReflectionHelper {
                     methodInfo.valueCalss = primitiveValueClass(paramType);
                 } else {
                     methodInfo.valueCalss = (Class<?>) paramType;
+                }
+            } else {
+                Class<?> genericClass = resolveGenericType(method.getGenericReturnType(), interfaceClass);
+                if (genericClass != null) {
+                    methodInfo.klass = genericClass;
                 }
             }
             members.put(uName, methodInfo);

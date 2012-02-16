@@ -57,7 +57,7 @@ public class EntityHandlerWriter {
         TreeLogger implLogger = logger.branch(TreeLogger.DEBUG, "Creating implementation for " + interfaceType.getName());
 
         String packageName = interfaceType.getPackage().getName();
-        String simpleName = interfaceType.getSimpleSourceName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
+        String simpleName = SharedEntityHandler.implClassName(interfaceType.getName());
         ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
 
         composer.addImport(interfaceType.getQualifiedSourceName());
@@ -70,7 +70,7 @@ public class EntityHandlerWriter {
         composer.addImplementedInterface(interfaceType.getName());
         composer.addAnnotationDeclaration("@SuppressWarnings(\"serial\")");
 
-        PrintWriter printWriter = contextHelper.context.tryCreate(implLogger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
+        PrintWriter printWriter = contextHelper.context.tryCreate(implLogger, composer.getCreatedPackage(), simpleName);
         if (printWriter == null) {
             // the generated type already exists
             return;

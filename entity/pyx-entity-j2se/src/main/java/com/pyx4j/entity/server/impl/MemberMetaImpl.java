@@ -101,14 +101,19 @@ public class MemberMetaImpl implements MemberMeta {
     private final int length;
 
     @SuppressWarnings("unchecked")
-    public MemberMetaImpl(Method method) {
+    public MemberMetaImpl(Class<? extends IEntity> interfaceClass, Method method) {
         this.method = method;
         objectClass = (Class<? extends IObject<?>>) method.getReturnType();
         if (IPrimitive.class.equals(objectClass)) {
             valueClass = EntityImplReflectionHelper.primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0]);
             objectClassType = ObjectClassType.Primitive;
         } else if (IEntity.class.isAssignableFrom(objectClass)) {
-            valueClass = objectClass;
+            Class<?> genericClass = EntityImplReflectionHelper.resolveGenericType(method.getGenericReturnType(), interfaceClass);
+            if (genericClass != null) {
+                valueClass = genericClass;
+            } else {
+                valueClass = objectClass;
+            }
             objectClassType = ObjectClassType.Entity;
         } else if (ISet.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];

@@ -20,17 +20,22 @@
  */
 package com.pyx4j.entity.test.shared.domain.version;
 
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
 
-public interface ItemA extends IEntity {
+public interface ItemA extends IVersionedEntity<ItemAVersion> {
 
-    @MemberColumn(name = "cur")
-    ItemAVersion current();
+    IPrimitive<String> testId();
 
-    @Owned
-    IList<ItemAVersion> versions();
+    IPrimitive<String> name();
+
+    public interface ItemAVersion extends IEntity {
+
+        IPrimitive<String> testId();
+
+        IPrimitive<String> name();
+    }
 
 }

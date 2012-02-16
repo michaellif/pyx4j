@@ -65,17 +65,20 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
+import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 public class EntityMetaWriter {
 
-    static String META_IMPL = "_Meta" + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
+    static String metaImplClassName(String interfaceSimpleClassName) {
+        return SharedEntityHandler.implClassName(interfaceSimpleClassName + "_Meta");
+    }
 
     static int createEntityMetaImpl(TreeLogger logger, ContextHelper contextHelper, JClassType interfaceType) throws UnableToCompleteException {
         TreeLogger implLogger = logger.branch(TreeLogger.DEBUG, "Creating EntityMeta implementation for " + interfaceType.getName());
         String packageName = interfaceType.getPackage().getName();
-        String simpleName = interfaceType.getSimpleSourceName() + META_IMPL;
+        String simpleName = metaImplClassName(interfaceType.getName());
         ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
 
         composer.addImport(IObject.class.getName());

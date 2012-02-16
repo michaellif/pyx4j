@@ -170,7 +170,7 @@ public class EntityMetaImpl implements EntityMeta {
         MemberMeta memberMeta = membersMeta.get(memberName);
         if (memberMeta == null) {
             try {
-                memberMeta = new MemberMetaImpl(entityClass.getMethod(memberName, (Class[]) null));
+                memberMeta = new MemberMetaImpl(entityClass, entityClass.getMethod(memberName, (Class[]) null));
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException("Unknown member '" + memberName + "' of '" + persistenceName + "'");
             }

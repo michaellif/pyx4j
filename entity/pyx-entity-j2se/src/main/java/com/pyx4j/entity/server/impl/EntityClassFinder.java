@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ClassFinder;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.shared.IEntity;
 
 public class EntityClassFinder extends ClassFinder {
@@ -90,6 +91,14 @@ public class EntityClassFinder extends ClassFinder {
             log.warn("Can't load class {} {}", className, e);
             return false;
         }
-        return candidate.isInterface() && IEntity.class.isAssignableFrom(candidate);// && (candidate.getAnnotation(AbstractEntity.class) == null);
+        if (candidate.isInterface() && IEntity.class.isAssignableFrom(candidate)) {
+            if ((candidate.getAnnotation(AbstractEntity.class) != null) && (!candidate.getAnnotation(AbstractEntity.class).generateMetadata())) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 }
