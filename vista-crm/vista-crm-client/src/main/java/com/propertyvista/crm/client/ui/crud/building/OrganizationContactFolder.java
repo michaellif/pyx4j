@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
@@ -21,6 +23,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
 
 class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
@@ -54,6 +57,16 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 35).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
+
+            // repopulate related fields from selected employee:
+            get(proto().person()).addValueChangeHandler(new ValueChangeHandler<Employee>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Employee> event) {
+                    OrganizationContact value = getValue();
+                    value.person().set(event.getValue());
+                    setValue(value);
+                }
+            });
 
             return main;
         }
