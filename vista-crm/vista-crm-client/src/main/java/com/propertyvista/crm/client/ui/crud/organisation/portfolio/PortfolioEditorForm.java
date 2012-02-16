@@ -28,8 +28,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.building.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -99,7 +99,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
 
         @Override
         protected void addItem() {
-            new BuildingSelectorDialog(getValue()) {
+            new BuildingSelectorDialog(true, getValue()) {
                 @Override
                 public boolean onClickOk() {
                     for (Building building : getSelectedItems()) {

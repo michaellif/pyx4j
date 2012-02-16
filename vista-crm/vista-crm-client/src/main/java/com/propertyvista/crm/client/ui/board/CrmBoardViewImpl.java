@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.themes.CrmTheme;
-import com.propertyvista.crm.client.ui.crud.building.BuildingSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -144,7 +144,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         }
 
         protected void selectBuildings() {
-            new BuildingSelectorDialog(getSelectedBuildings()) {
+            new BuildingSelectorDialog(true, getSelectedBuildings()) {
                 @Override
                 public boolean onClickOk() {
                     ArrayList<Building> selected = new ArrayList<Building>(getSelectedBuildings().size() + getSelectedItems().size());

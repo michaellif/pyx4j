@@ -133,7 +133,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             unitPanel.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    new UnitSelectorDialog(true) {
+                    new UnitSelectorDialog() {
                         @Override
                         protected void setFilters(List<DataTableFilterData> filters) {
                             if (!getValue().leaseFrom().isNull() && !getValue().leaseTo().isNull() && filters != null) {
@@ -148,10 +148,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         public boolean onClickOk() {
                             if (!getSelectedItems().isEmpty()) {
                                 ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
-                                return true;
-                            } else {
-                                return false;
                             }
+                            return !getSelectedItems().isEmpty();
                         }
                     }.show();
                 }

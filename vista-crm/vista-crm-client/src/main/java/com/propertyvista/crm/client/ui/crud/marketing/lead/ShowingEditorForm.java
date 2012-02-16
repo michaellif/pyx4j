@@ -63,10 +63,8 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
                         public boolean onClickOk() {
                             if (!getSelectedItems().isEmpty()) {
                                 ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
-                                return true;
-                            } else {
-                                return false;
                             }
+                            return !getSelectedItems().isEmpty();
                         }
                     }.show();
                 }

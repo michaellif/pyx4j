@@ -33,12 +33,23 @@ public abstract class UnitSelectorDialog extends EntitySelectorDialog<AptUnit> {
     private static final I18n i18n = I18n.get(UnitSelectorDialog.class);
 
     public UnitSelectorDialog() {
-        this(false);
+        this(Collections.<AptUnit> emptyList());
     }
 
-    @SuppressWarnings("unchecked")
-    public UnitSelectorDialog(boolean displayAvailableUnitsOnly) {
-        super(AptUnit.class, false, Collections.EMPTY_LIST, i18n.tr("Select Unit"));
+    public UnitSelectorDialog(boolean isMultiselect) {
+        this(isMultiselect, Collections.<AptUnit> emptyList());
+    }
+
+    public UnitSelectorDialog(List<AptUnit> alreadySelected) {
+        this(false, alreadySelected, i18n.tr("Select Unit"));
+    }
+
+    public UnitSelectorDialog(boolean isMultiselect, List<AptUnit> alreadySelected) {
+        this(isMultiselect, alreadySelected, i18n.tr("Select Unit"));
+    }
+
+    public UnitSelectorDialog(boolean isMultiselect, List<AptUnit> alreadySelected, String caption) {
+        super(AptUnit.class, isMultiselect, alreadySelected, caption);
         setWidth("700px");
     }
 

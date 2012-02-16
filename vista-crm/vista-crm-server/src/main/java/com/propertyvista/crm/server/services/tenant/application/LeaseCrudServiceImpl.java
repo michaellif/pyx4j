@@ -147,6 +147,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void setSelectededUnit(AsyncCallback<AptUnit> callback, Key unitId) {
         AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId);
+        Persistence.service().retrieve(unit.belongsTo());
         syncBuildingProductCatalog(unit.belongsTo());
         callback.onSuccess(unit);
     }
