@@ -55,8 +55,13 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
         this.entityClass = entityClass;
         this.isMultiselect = isMultiselect;
         this.alreadySelected = new ArrayList<E>(alreadySelected);
-
-        lister = new SelectEntityLister(this.entityClass);
+        this.lister = new SelectEntityLister(this.entityClass) {
+            @Override
+            protected void onObtainSuccess() {
+                super.onObtainSuccess();
+                EntitySelectorDialog.super.show();
+            }
+        };
         if (this.isMultiselect) {
             lister.getDataTablePanel().getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
                 @Override
@@ -81,8 +86,8 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
 
     @Override
     public void show() {
-        lister.obtain(0); // populate lister... 
-        super.show();
+        lister.obtain(0); // populate lister...
+        // super.show() will be called in lister.onObtainSuccess() 
     }
 
     protected abstract List<ColumnDescriptor> defineColumnDescriptors();
