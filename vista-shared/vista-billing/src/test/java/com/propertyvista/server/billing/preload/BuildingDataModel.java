@@ -30,6 +30,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -46,7 +47,7 @@ public class BuildingDataModel {
 
     private final ProductItemTypesDataModel productItemTypesDataModel;
 
-    private final Building building;
+    private Building building;
 
     private Service standardResidentialService;
 
@@ -54,8 +55,6 @@ public class BuildingDataModel {
 
     public BuildingDataModel(ProductItemTypesDataModel productItemTypesDataModel) {
         this.productItemTypesDataModel = productItemTypesDataModel;
-        building = EntityFactory.create(Building.class);
-
         createServiceMeta();
     }
 
@@ -76,7 +75,7 @@ public class BuildingDataModel {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(serviceMeta.get(Service.Type.residentialUnit).get(0));
         productItem.element().set(generateResidentialUnit());
-        productItem.price().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
+        productItem.price().setValue(new BigDecimal("930.30"));
 
         standardResidentialService.items().add(productItem);
 
@@ -90,11 +89,25 @@ public class BuildingDataModel {
     public void generate(boolean persist) {
         this.persist = persist;
 
+        building = EntityFactory.create(Building.class);
+
+        generateParking();
+        generateLockerArea();
         generateCatalog();
 
         if (persist) {
             Persistence.service().persist(building);
         }
+    }
+
+    private void generateParking() {
+        Parking parking = EntityFactory.create(Parking.class);
+        building._Parkings().add(parking);
+    }
+
+    private void generateLockerArea() {
+        LockerArea lockerArea = EntityFactory.create(LockerArea.class);
+        building._LockerAreas().add(lockerArea);
     }
 
     private void createServiceMeta() {
@@ -150,20 +163,53 @@ public class BuildingDataModel {
         feature.description().setValue("Feature - " + type.name());
 
         feature.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
+        feature.isRecurring().setValue(true);
 
-        generateFeatureItems(type);
+        generateFeatureItems(feature);
+
         building.productCatalog().features().add(feature);
+
+        standardResidentialService.features().add(feature);
+
     }
 
-    private void generateFeatureItems(Feature.Type type) {
-        for (Parking parking : building._Parkings()) {
-            generateParkingFeatureItem(parking);
+    private void generateFeatureItems(Feature feature) {
+        switch (feature.type().getValue()) {
+        case parking:
+            for (Parking parking : building._Parkings()) {
+                for (ProductItemType type : featureMeta.get(Feature.Type.parking)) {
+                    generateParkingFeatureItem(feature, parking, type);
+                }
+            }
+            break;
+        case locker:
+            for (LockerArea lockerArea : building._LockerAreas()) {
+                for (ProductItemType type : featureMeta.get(Feature.Type.locker)) {
+                    generateLockerAreaFeatureItem(feature, lockerArea, type);
+                }
+            }
+            break;
+
+        default:
+            break;
         }
+
     }
 
-    private void generateParkingFeatureItem(Parking parking) {
-        // TODO Auto-generated method stub
+    private void generateParkingFeatureItem(Feature feature, Parking parking, ProductItemType type) {
+        ProductItem productItem = EntityFactory.create(ProductItem.class);
+        productItem.type().set(type);
+        productItem.element().set(parking);
+        productItem.price().setValue(new BigDecimal("44.50"));
+        feature.items().add(productItem);
+    }
 
+    private void generateLockerAreaFeatureItem(Feature feature, LockerArea lockerArea, ProductItemType type) {
+        ProductItem productItem = EntityFactory.create(ProductItem.class);
+        productItem.type().set(type);
+        productItem.element().set(lockerArea);
+        productItem.price().setValue(new BigDecimal("23.88"));
+        feature.items().add(productItem);
     }
 
     private void generateConcessions() {

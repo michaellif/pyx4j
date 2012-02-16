@@ -20,8 +20,11 @@
  */
 package com.propertyvista.server.billing;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.essentials.server.dev.DataDump;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
@@ -48,8 +51,13 @@ public class BillingRunTest extends BillingTestBase {
         } else {
             BillingFacade.rejectBill(bill);
         }
-        System.out.println("++++++" + bill);
+        DataDump.dump("bill", bill);
+        DataDump.dump("lease", lease);
+
         assertEquals("Bill Sequence Number", billNumber, (int) bill.billSequenceNumber().getValue());
         assertEquals("Bill Confirmation Status", confirm ? BillStatus.Confirmed : BillStatus.Rejected, bill.billStatus().getValue());
+
+        assertEquals("ServiceCharge", new BigDecimal("930.30"), bill.serviceCharge().getValue());
+        assertEquals("RecurringFeatureCharges", new BigDecimal("68.38"), bill.recurringFeatureCharges().getValue());
     }
 }

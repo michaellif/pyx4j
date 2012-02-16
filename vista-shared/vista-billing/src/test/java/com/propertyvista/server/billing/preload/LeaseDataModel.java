@@ -19,9 +19,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeaseDataModel {
@@ -30,15 +33,20 @@ public class LeaseDataModel {
 
     private final TenantDataModel tenantDataModel;
 
-    private final ProductItem serviceItem;
+    private final BuildingDataModel buildingDataModel;
+
+    private ProductItem serviceItem;
 
     public LeaseDataModel(BuildingDataModel buildingDataModel, TenantDataModel tenantDataModel) {
+        this.buildingDataModel = buildingDataModel;
         this.tenantDataModel = tenantDataModel;
-        serviceItem = buildingDataModel.generateResidentialUnitServiceItem();
 
     }
 
     public void generate(boolean persist) {
+
+        serviceItem = buildingDataModel.generateResidentialUnitServiceItem();
+
         lease = EntityFactory.create(Lease.class);
 
         lease.unit().set(serviceItem.element());
@@ -56,6 +64,16 @@ public class LeaseDataModel {
 
     private void generateAgreement() {
         lease.serviceAgreement().serviceItem().item().set(serviceItem);
+        Service service = serviceItem.product().cast();
+
+        for (Feature feature : service.features()) {
+            if (feature.type().getValue().isInAgreement() && feature.items().size() > 0) {
+                BillableItem billableItem = EntityFactory.create(BillableItem.class);
+                billableItem.item().set(feature.items().get(0));
+                lease.serviceAgreement().featureItems().add(billableItem);
+            }
+        }
+
     }
 
     private void addTenants() {

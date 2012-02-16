@@ -197,15 +197,15 @@ class Billing {
     }
 
     private boolean isService(Product product) {
-        return product.getObjectClass().isAssignableFrom(Service.class);
+        return product.cast().isAssignableFrom(Service.class);
     }
 
     private boolean isFeature(Product product) {
-        return product.getObjectClass().isAssignableFrom(Feature.class);
+        return product.cast().isAssignableFrom(Feature.class);
     }
 
     private boolean isRecurringFeature(Product product) {
-        return isFeature(product) && ((Feature) product).isRecurring().getValue();
+        return isFeature(product) && ((Feature) product.cast()).isRecurring().getValue();
     }
 
 }
