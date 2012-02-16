@@ -121,7 +121,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
         public BuildingSelectorDialog() {
             super(Building.class, true, getValue(), i18n.tr("Select Building"));
             addFilter(new DataTableFilterData(ComplexBuildingFolder.this.proto().complex().getPath(), Operators.is, null));
-            setSize("700px", "400px");
+            setWidth("700px");
         }
 
         @Override

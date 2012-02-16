@@ -88,6 +88,16 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         return tabPanel.getSelectedIndex();
     }
 
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        // disable some editing on signed lease:
+        get(proto().signDate()).setEditable(getValue().signDate().isNull());
+        get(proto().leaseFrom()).setEditable(getValue().signDate().isNull());
+        get(proto().leaseTo()).setEditable(getValue().signDate().isNull());
+    }
+
     private Widget createDetailsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
