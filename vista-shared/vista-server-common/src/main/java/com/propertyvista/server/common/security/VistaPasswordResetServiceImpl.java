@@ -58,7 +58,7 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
         credentials.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
         credentials.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
         Persistence.service().persist(credentials);
-        log.info("password changed by user {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
+        log.info("password changed by user {} {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
 
         // logout
         VistaLifecycle.endSession();
