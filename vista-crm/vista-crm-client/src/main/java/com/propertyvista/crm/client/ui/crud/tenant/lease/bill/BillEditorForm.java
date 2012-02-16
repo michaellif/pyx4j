@@ -21,6 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 
 public class BillEditorForm extends CrmEntityForm<Bill> {
 
@@ -37,17 +38,20 @@ public class BillEditorForm extends CrmEntityForm<Bill> {
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
-
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Cycle:"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionDate()), 10).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().billStatus()), 10).build());
 
+        main.setH1(++row, 0, 2, i18n.tr("Cycle:"));
+        int row2 = row;
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionDate()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingPeriod()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingDay()), 5).build());
 
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billStatus()), 10).build());
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 15).build());
+
         main.setH1(++row, 0, 2, i18n.tr("Values:"));
-        int row2 = row;
+        row2 = row;
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceCharge()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalRecurringFeatureCharges()), 10).build());
@@ -74,5 +78,12 @@ public class BillEditorForm extends CrmEntityForm<Bill> {
         main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        get(proto().rejectReason()).setVisible(getValue().billStatus().getValue() == BillStatus.Rejected);
     }
 }

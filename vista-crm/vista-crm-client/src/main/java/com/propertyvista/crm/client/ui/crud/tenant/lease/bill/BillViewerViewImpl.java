@@ -49,7 +49,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<Bill> implements B
 
             @Override
             public void onClick(ClickEvent event) {
-                ((BillViewerView.Presenter) presenter).setStatus(BillStatus.Confirmed, null);
+                ((BillViewerView.Presenter) presenter).confirm();
             }
         });
         addToolbarItem(approveAction.asWidget());
@@ -60,7 +60,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<Bill> implements B
                 new ActionBox(DECLINE) {
                     @Override
                     public boolean onClickOk() {
-                        ((BillViewerView.Presenter) presenter).setStatus(BillStatus.Rejected, getReason());
+                        ((BillViewerView.Presenter) presenter).reject(getReason());
                         return true;
                     }
                 }.show();
@@ -68,6 +68,13 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<Bill> implements B
         });
         addToolbarItem(declineAction.asWidget());
 
+    }
+
+    @Override
+    public void populate(Bill value) {
+        approveAction.setVisible(value.billStatus().getValue() != BillStatus.Confirmed);
+        declineAction.setVisible(value.billStatus().getValue() != BillStatus.Confirmed);
+        super.populate(value);
     }
 
     private abstract class ActionBox extends OkCancelDialog {

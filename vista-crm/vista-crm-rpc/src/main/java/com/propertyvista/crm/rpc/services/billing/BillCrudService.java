@@ -13,21 +13,17 @@
  */
 package com.propertyvista.crm.rpc.services.billing;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.financial.billing.Bill;
 
 public interface BillCrudService extends AbstractCrudService<Bill> {
 
-    //TODO Review
-    /**
-     * Make bill Confirmed
-     */
-    //void confirmBill(AsyncCallback<VoidSerializable> callback, Key billEntityId);
+    void confirm(AsyncCallback<Bill> callback, Key entityId);
 
-    /**
-     * Make bill Rejected
-     */
-    //void rejectedBill(AsyncCallback<VoidSerializable> callback, Key billEntityId);
+    void reject(AsyncCallback<Bill> callback, Key entityId, String reason);
 
 }

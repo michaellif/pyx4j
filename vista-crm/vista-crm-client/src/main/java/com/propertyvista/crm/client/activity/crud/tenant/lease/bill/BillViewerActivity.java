@@ -17,13 +17,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 
 public class BillViewerActivity extends CrmViewerActivity<Bill> implements BillViewerView.Presenter {
 
@@ -33,8 +33,22 @@ public class BillViewerActivity extends CrmViewerActivity<Bill> implements BillV
     }
 
     @Override
-    public void setStatus(BillStatus status, String reason) {
-        // TODO Auto-generated method stub
+    public void confirm() {
+        ((BillCrudService) service).confirm(new DefaultAsyncCallback<Bill>() {
+            @Override
+            public void onSuccess(Bill result) {
+                view.populate(result);
+            }
+        }, entityId);
+    }
 
+    @Override
+    public void reject(String reason) {
+        ((BillCrudService) service).reject(new DefaultAsyncCallback<Bill>() {
+            @Override
+            public void onSuccess(Bill result) {
+                view.populate(result);
+            }
+        }, entityId, reason);
     }
 }

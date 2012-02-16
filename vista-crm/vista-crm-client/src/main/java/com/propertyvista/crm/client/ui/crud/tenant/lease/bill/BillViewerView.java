@@ -21,6 +21,8 @@ public interface BillViewerView extends IViewerView<Bill> {
 
     interface Presenter extends IViewerView.Presenter {
 
-        void setStatus(Bill.BillStatus status, String reason);
+        void confirm();
+
+        void reject(String reason);
     }
 }
