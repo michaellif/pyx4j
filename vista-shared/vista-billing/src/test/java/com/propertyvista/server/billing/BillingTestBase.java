@@ -20,10 +20,7 @@
  */
 package com.propertyvista.server.billing;
 
-import com.pyx4j.entity.server.Persistence;
-
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.server.billing.preload.BuildingDataModel;
 import com.propertyvista.server.billing.preload.LeaseDataModel;
 import com.propertyvista.server.billing.preload.ProductItemTypesDataModel;
@@ -36,18 +33,16 @@ public class BillingTestBase extends VistaDBTestBase {
         super.setUp();
 
         ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel();
-        for (ProductItemType productItemType : productItemTypesDataModel.getProductItemTypes()) {
-            Persistence.service().persist(productItemType);
-        }
+        productItemTypesDataModel.generate(true);
 
         BuildingDataModel buildingDataModel = new BuildingDataModel(productItemTypesDataModel);
-        Persistence.service().persist(buildingDataModel.getBuilding());
+        buildingDataModel.generate(true);
 
         TenantDataModel tenantDataModel = new TenantDataModel();
-        Persistence.service().persist(tenantDataModel.getTenant());
+        tenantDataModel.generate(true);
 
         LeaseDataModel leaseDataModel = new LeaseDataModel(buildingDataModel, tenantDataModel);
-        Persistence.service().persist(leaseDataModel.getLease());
+        leaseDataModel.generate(true);
 
     }
 }

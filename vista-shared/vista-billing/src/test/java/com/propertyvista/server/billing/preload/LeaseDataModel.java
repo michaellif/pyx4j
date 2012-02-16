@@ -15,9 +15,11 @@ package com.propertyvista.server.billing.preload;
 
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -26,28 +28,41 @@ public class LeaseDataModel {
 
     private Lease lease;
 
-    private final BuildingDataModel buildingDataModel;
-
     private final TenantDataModel tenantDataModel;
 
+    private final ProductItem serviceItem;
+
     public LeaseDataModel(BuildingDataModel buildingDataModel, TenantDataModel tenantDataModel) {
-        this.buildingDataModel = buildingDataModel;
         this.tenantDataModel = tenantDataModel;
-        generate();
+        serviceItem = buildingDataModel.generateResidentialUnitServiceItem();
+
     }
 
-    public void generate() {
+    public void generate(boolean persist) {
         lease = EntityFactory.create(Lease.class);
 
-        lease.unit().set(buildingDataModel.useNextAvailableAptUnit());
+        lease.unit().set(serviceItem.element());
         lease.leaseFrom().setValue(RandomUtil.randomLogicalDate(2001, 2011));
         lease.signDate().setValue(lease.leaseFrom().getValue());
         lease.leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2014));
 
+        addTenants();
+        generateAgreement();
+
+        if (persist) {
+            Persistence.service().persist(lease);
+        }
+    }
+
+    private void generateAgreement() {
+        lease.serviceAgreement().serviceItem().item().set(serviceItem);
+    }
+
+    private void addTenants() {
         TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
         tenantInLease.tenant().set(tenantDataModel.getTenant());
-        lease.tenants().add(tenantInLease);
         tenantInLease.role().setValue(Role.Applicant);
+        lease.tenants().add(tenantInLease);
     }
 
     public IEntity getLease() {

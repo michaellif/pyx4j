@@ -131,8 +131,12 @@ class Billing {
     }
 
     private BillCharge createCharge(BillableItem serviceItem) {
+        if (serviceItem.isNull()) {
+            throw new Error("Service Item is mandatory in lease");
+        }
         BillCharge charge = EntityFactory.create(BillCharge.class);
         charge.bill().set(bill);
+        charge.billableItem().set(serviceItem);
         charge.price().setValue(serviceItem.item().price().getValue());
         if (!charge.price().isNull()) {
             charge.taxes().addAll(TaxUtils.calculateTaxes(charge.price().getValue(), serviceItem.item().type().chargeCode().taxes()));
@@ -147,12 +151,15 @@ class Billing {
     }
 
     private void addCharge(BillCharge charge) {
+
+        Persistence.service().retrieve(charge.billableItem().item().product());
+
         if (isService(charge.billableItem().item().product())) { //Service
-            bill.serviceCharge().setValue(bill.serviceCharge().getValue().add(charge.price().getValue()));
+            bill.serviceCharge().setValue(charge.price().getValue());
         } else if (isRecurringFeature(charge.billableItem().item().product())) { //Recurring Feature
             bill.totalRecurringFeatureCharges().setValue(bill.totalRecurringFeatureCharges().getValue().add(charge.price().getValue()));
         } else {
-//            bill.totalOneTimeFeatureCharges().setValue(bill.totalOneTimeFeatureCharges().getValue().add(charge.price().getValue()));
+            bill.totalOneTimeFeatureCharges().setValue(bill.totalOneTimeFeatureCharges().getValue().add(charge.price().getValue()));
         }
     }
 
@@ -190,11 +197,11 @@ class Billing {
     }
 
     private boolean isService(Product product) {
-        return product instanceof Service;
+        return product.getObjectClass().isAssignableFrom(Service.class);
     }
 
     private boolean isFeature(Product product) {
-        return product instanceof Feature;
+        return product.getObjectClass().isAssignableFrom(Feature.class);
     }
 
     private boolean isRecurringFeature(Product product) {

@@ -16,6 +16,7 @@ package com.propertyvista.server.billing.preload;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.offering.Feature;
@@ -31,10 +32,9 @@ public class ProductItemTypesDataModel {
     public ProductItemTypesDataModel() {
         serviceItemTypes = new ArrayList<ProductItemType>();
         featureItemTypes = new ArrayList<ProductItemType>();
-        generate();
     }
 
-    private void generate() {
+    public void generate(boolean persist) {
         generateChargeItemType("Regular Residential Unit", Service.Type.residentialUnit);
         generateChargeItemType("Ocean View Residential Unit", Service.Type.residentialUnit);
         generateChargeItemType("Regular Commercial Unit", Service.Type.commercialUnit);
@@ -63,6 +63,13 @@ public class ProductItemTypesDataModel {
         generateChargeItemType("Gas", Feature.Type.utility);
         generateChargeItemType("Hydro", Feature.Type.utility);
         generateChargeItemType("Booking", Feature.Type.booking);
+
+        if (persist) {
+            for (ProductItemType productItemType : getProductItemTypes()) {
+                Persistence.service().persist(productItemType);
+            }
+        }
+
     }
 
     private void generateChargeItemType(String name, Service.Type serviceType) {

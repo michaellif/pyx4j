@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.billing.preload;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -23,11 +24,14 @@ public class TenantDataModel {
     private Tenant tenant;
 
     public TenantDataModel() {
-        generate();
     }
 
-    private void generate() {
+    public void generate(boolean persist) {
         tenant = EntityFactory.create(Tenant.class);
+
+        if (persist) {
+            Persistence.service().persist(tenant);
+        }
     }
 
     public IEntity getTenant() {

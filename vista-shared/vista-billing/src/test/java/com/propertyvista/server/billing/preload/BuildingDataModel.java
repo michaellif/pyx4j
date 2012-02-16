@@ -16,12 +16,12 @@ package com.propertyvista.server.billing.preload;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -37,48 +37,64 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 public class BuildingDataModel {
 
     enum Usage {
-        notAvailable, available, used
+        available, used
     }
-
-    private static final int UNITS_PER_TYPE = 2;
 
     private Map<Service.Type, List<ProductItemType>> serviceMeta;
 
     private Map<Feature.Type, List<ProductItemType>> featureMeta;
 
-    private LinkedHashMap<AptUnit, Usage> residentialUnits;
-
     private final ProductItemTypesDataModel productItemTypesDataModel;
 
     private final Building building;
+
+    private Service standardResidentialService;
+
+    private boolean persist;
 
     public BuildingDataModel(ProductItemTypesDataModel productItemTypesDataModel) {
         this.productItemTypesDataModel = productItemTypesDataModel;
         building = EntityFactory.create(Building.class);
 
         createServiceMeta();
-
-        generate();
     }
 
     public IEntity getBuilding() {
         return building;
     }
 
-    public AptUnit useNextAvailableAptUnit() {
-        for (AptUnit unit : residentialUnits.keySet()) {
-            if (Usage.notAvailable.equals(residentialUnits.get(unit))) {
-                residentialUnits.put(unit, Usage.available);
-                return unit;
-            }
+    public AptUnit generateResidentialUnit() {
+        AptUnit unit = EntityFactory.create(AptUnit.class);
+        building._Units().add(unit);
+        if (persist) {
+            Persistence.service().persist(building);
         }
-        return null;
+        return unit;
     }
 
-    private void generate() {
-        generateResidentialUnits();
+    public ProductItem generateResidentialUnitServiceItem() {
+        ProductItem productItem = EntityFactory.create(ProductItem.class);
+        productItem.type().set(serviceMeta.get(Service.Type.residentialUnit).get(0));
+        productItem.element().set(generateResidentialUnit());
+        productItem.price().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
+
+        standardResidentialService.items().add(productItem);
+
+        if (persist) {
+            Persistence.service().persist(standardResidentialService);
+        }
+
+        return productItem;
+    }
+
+    public void generate(boolean persist) {
+        this.persist = persist;
+
         generateCatalog();
 
+        if (persist) {
+            Persistence.service().persist(building);
+        }
     }
 
     private void createServiceMeta() {
@@ -100,21 +116,6 @@ public class BuildingDataModel {
         }
     }
 
-    private void generateResidentialUnits() {
-        residentialUnits = new LinkedHashMap<AptUnit, Usage>();
-        for (ProductItemType type : serviceMeta.get(Service.Type.residentialUnit)) {
-            for (int i = 0; i < UNITS_PER_TYPE; i++) {
-                generateResidentialUnit();
-            }
-        }
-    }
-
-    private void generateResidentialUnit() {
-        AptUnit unit = EntityFactory.create(AptUnit.class);
-        building._Units().add(unit);
-        residentialUnits.put(unit, Usage.notAvailable);
-    }
-
     private void generateCatalog() {
         building.productCatalog();
         generateResidentialUnitService();
@@ -123,35 +124,15 @@ public class BuildingDataModel {
     }
 
     private void generateResidentialUnitService() {
-        Service service = EntityFactory.create(Service.class);
-        building.productCatalog().services().add(service);
+        standardResidentialService = EntityFactory.create(Service.class);
+        building.productCatalog().services().add(standardResidentialService);
 
-        service.type().setValue(Service.Type.residentialUnit);
-        service.name().setValue("Standard Residential Unit");
-        service.description().setValue("Standard Residential Unit Lease for 1 year term");
+        standardResidentialService.type().setValue(Service.Type.residentialUnit);
+        standardResidentialService.name().setValue("Standard Residential Unit");
+        standardResidentialService.description().setValue("Standard Residential Unit Lease for 1 year term");
 
-        service.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
+        standardResidentialService.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
-        for (ProductItemType type : serviceMeta.get(Service.Type.residentialUnit)) {
-            for (int i = 0; i < UNITS_PER_TYPE; i++) {
-                for (AptUnit unit : residentialUnits.keySet()) {
-                    if (Usage.notAvailable.equals(residentialUnits.get(unit))) {
-                        generateResidentialUnitServiceItem(service, type, unit);
-                        residentialUnits.put(unit, Usage.available);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    private void generateResidentialUnitServiceItem(Service service, ProductItemType type, AptUnit unit) {
-        ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.type().set(type);
-        productItem.element().set(unit);
-        productItem.price().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
-
-        service.items().add(productItem);
     }
 
     private void generateFeatures() {
