@@ -37,6 +37,7 @@ public interface AddressStructured extends IEntity {
 
     IPrimitive<String> suiteNumber();
 
+    @NotNull
     IPrimitive<String> streetNumber();
 
     IPrimitive<String> streetNumberSuffix();
