@@ -34,8 +34,10 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.rpc.services.selections.SelectTenantCrudService;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.Tenant;
@@ -110,6 +112,14 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         public TenantInLeaseEditor() {
             super(TenantInLease.class, columns());
             setViewable(true);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof Tenant && !parent.isEditable()) {
+                return new CEntityCrudHyperlink<Tenant>(MainActivityMapper.getCrudAppPlace(Tenant.class));
+            }
+            return super.create(member);
         }
 
         @Override
