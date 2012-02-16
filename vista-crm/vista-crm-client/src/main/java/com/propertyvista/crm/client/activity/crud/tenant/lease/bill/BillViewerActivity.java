@@ -23,11 +23,18 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 
-public class BillViewerActivity extends CrmViewerActivity<Bill> {
+public class BillViewerActivity extends CrmViewerActivity<Bill> implements BillViewerView.Presenter {
 
     @SuppressWarnings("unchecked")
     public BillViewerActivity(Place place) {
         super(place, TenantViewFactory.instance(BillViewerView.class), (AbstractCrudService<Bill>) GWT.create(BillCrudService.class));
+    }
+
+    @Override
+    public void setStatus(BillStatus status, String reason) {
+        // TODO Auto-generated method stub
+
     }
 }

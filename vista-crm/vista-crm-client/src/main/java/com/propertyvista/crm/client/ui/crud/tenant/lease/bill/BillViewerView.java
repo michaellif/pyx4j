@@ -19,4 +19,8 @@ import com.propertyvista.domain.financial.billing.Bill;
 
 public interface BillViewerView extends IViewerView<Bill> {
 
+    interface Presenter extends IViewerView.Presenter {
+
+        void setStatus(Bill.BillStatus status, String reason);
+    }
 }

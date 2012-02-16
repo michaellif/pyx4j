@@ -38,6 +38,7 @@ import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 
 public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<MasterApplicationDTO> implements MasterApplicationViewerView {
+
     private final static I18n i18n = I18n.get(MasterApplicationViewerViewImpl.class);
 
     private final IListerView<ApplicationDTO> applicationLister;
@@ -54,13 +55,13 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
 
     private final Button checkAction;
 
-    private static final String APPROVE = I18n.get(MasterApplicationViewerViewImpl.class).tr("Approve");
+    private static final String APPROVE = i18n.tr("Approve");
 
-    private static final String MORE_INFO = I18n.get(MasterApplicationViewerViewImpl.class).tr("More Info");
+    private static final String MORE_INFO = i18n.tr("More Info");
 
-    private static final String DECLINE = I18n.get(MasterApplicationViewerViewImpl.class).tr("Decline");
+    private static final String DECLINE = i18n.tr("Decline");
 
-    private static final String CANCEL = I18n.get(MasterApplicationViewerViewImpl.class).tr("Cancel");
+    private static final String CANCEL = i18n.tr("Cancel");
 
     public MasterApplicationViewerViewImpl() {
         super(CrmSiteMap.Tenants.MasterApplication.class, true);

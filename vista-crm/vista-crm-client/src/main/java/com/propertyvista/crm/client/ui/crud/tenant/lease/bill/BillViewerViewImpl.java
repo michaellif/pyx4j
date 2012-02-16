@@ -13,13 +13,87 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease.bill;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.forms.client.ui.CTextArea;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 
 public class BillViewerViewImpl extends CrmViewerViewImplBase<Bill> implements BillViewerView {
 
+    private final static I18n i18n = I18n.get(BillViewerViewImpl.class);
+
+    private static final String APPROVE = i18n.tr("Confirm");
+
+    private static final String DECLINE = i18n.tr("Reject");
+
+    private final Button approveAction;
+
+    private final Button declineAction;
+
     public BillViewerViewImpl() {
         super(CrmSiteMap.Tenants.Bill.class, new BillEditorForm(true), true);
+
+        // Add actions:
+        approveAction = new Button(APPROVE, new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((BillViewerView.Presenter) presenter).setStatus(BillStatus.Confirmed, null);
+            }
+        });
+        addToolbarItem(approveAction.asWidget());
+
+        declineAction = new Button(DECLINE, new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                new ActionBox(DECLINE) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((BillViewerView.Presenter) presenter).setStatus(BillStatus.Rejected, getReason());
+                        return true;
+                    }
+                }.show();
+            }
+        });
+        addToolbarItem(declineAction.asWidget());
+
+    }
+
+    private abstract class ActionBox extends OkCancelDialog {
+
+        private final CTextArea reason = new CTextArea();
+
+        public ActionBox(String title) {
+            super(title);
+            setBody(createBody());
+            setSize("350px", "100px");
+        }
+
+        protected Widget createBody() {
+            getOkButton().setEnabled(true);
+
+            VerticalPanel content = new VerticalPanel();
+            content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
+            content.add(reason);
+
+            reason.setWidth("100%");
+            content.setWidth("100%");
+            return content.asWidget();
+        }
+
+        public String getReason() {
+            return reason.getValue();
+        }
     }
 }
