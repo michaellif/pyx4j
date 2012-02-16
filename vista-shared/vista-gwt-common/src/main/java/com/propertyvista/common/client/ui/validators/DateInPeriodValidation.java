@@ -21,28 +21,39 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-public class StartEndDateValidation {
+public class DateInPeriodValidation {
 
-    private static final I18n i18n = I18n.get(StartEndDateValidation.class);
+    private static final I18n i18n = I18n.get(DateInPeriodValidation.class);
 
-    public StartEndDateValidation(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2) {
-        this(value1, value2, null);
+    /**
+     * Checks that <code>value2</code> is between value1 and value3,
+     * outputs default error message
+     */
+
+    public DateInPeriodValidation(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2, final CComponent<LogicalDate, ?> value3) {
+        this(value1, value2, value3, null);
     }
 
-    public StartEndDateValidation(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2, String message) {
+    /**
+     * Checks that <code>value2</code> is between value1 and value3,
+     * outputs provided String <code>message</code>
+     */
+
+    public DateInPeriodValidation(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2, final CComponent<LogicalDate, ?> value3,
+            String message) {
         if (message == null) {
-            message = i18n.tr("The Start Date Must Be Earlier Than The End Date");
+            message = i18n.tr("herp derp error message");
         }
         final String msg = message;
 
-        value1.addValueValidator(new EditableValueValidator<Date>() {
+        value2.addValueValidator(new EditableValueValidator<Date>() {
 
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                if (value1.getValue() == null || value2.getValue() == null) {
+                if (value2.getValue() == null || value3.getValue() == null) {
                     return null;
                 }
-                Date end = value2.getValue();
+                Date end = value3.getValue();
                 return (value != null) && !value.after(end) ? null : new ValidationFailure(msg);
             }
 
