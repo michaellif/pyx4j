@@ -97,6 +97,11 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
             }
         }
 
+        // set it to primary if just one building in complex:
+        if (in.buildings().size() == 1) {
+            in.buildings().get(0).complexPrimary().setValue(Boolean.TRUE);
+        }
+
         int count = 0;
         for (Building dto : in.buildings()) {
             dto.complex().set(dbo);

@@ -44,6 +44,8 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
 
     private final IListerView.Presenter<Bill> billLister;
 
+    private LeaseDTO currentValue;
+
     @SuppressWarnings("unchecked")
     public LeaseViewerActivity(Place place) {
         super(place, TenantViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
@@ -75,6 +77,7 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
                     public void onDeferredSuccess(DeferredProcessProgressResponse result) {
                         // Navigate to created bill
                         super.onDeferredSuccess(result);
+                        populateBills(currentValue);
                     }
                 };
                 d.show();
@@ -92,12 +95,14 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     @Override
     protected void onPopulateSuccess(LeaseDTO result) {
         super.onPopulateSuccess(result);
+        populateBills(currentValue = result);
+    }
 
+    protected void populateBills(LeaseDTO result) {
         List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
         preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Bill.class).billingAccount().id().getPath(), Operators.is, result
                 .leaseFinancial().billingAccount().getPrimaryKey()));
         billLister.setPreDefinedFilters(preDefinedFilters);
         billLister.populate();
     }
-
 }

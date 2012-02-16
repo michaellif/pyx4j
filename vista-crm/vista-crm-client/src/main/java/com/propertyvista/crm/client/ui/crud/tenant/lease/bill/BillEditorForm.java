@@ -39,18 +39,39 @@ public class BillEditorForm extends CrmEntityForm<Bill> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Cycle:"));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionDate()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().billStatus()), 10).build());
 
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingPeriod()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingDay()), 5).build());
+
+        main.setH1(++row, 0, 2, i18n.tr("Values:"));
+        int row2 = row;
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceCharge()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalRecurringFeatureCharges()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalOneTimeFeatureCharges()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalAdjustments()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalTaxes()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount()), 10).build());
 
-        row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().billStatus()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().previousBalanceAmount()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentReceivedAmount()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().pastDueAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositPaidAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().latePaymentCharges()), 10).build());
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalCurrentAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalTaxes()), 10).build());
+
+        // second column:
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().previousBalanceAmount()), 10).build());
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().paymentReceivedAmount()), 10).build());
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().totalImmediateAdjustments()), 10).build());
+
+        // Dues: 
+        main.setHR(++row, 0, 2);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().pastDueAmount()), 10).build());
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }

@@ -20,6 +20,6 @@ import com.propertyvista.domain.financial.billing.Bill;
 public class BillViewerViewImpl extends CrmViewerViewImplBase<Bill> implements BillViewerView {
 
     public BillViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Bill.class, new BillEditorForm(true));
+        super(CrmSiteMap.Tenants.Bill.class, new BillEditorForm(true), true);
     }
 }

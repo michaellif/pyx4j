@@ -114,7 +114,6 @@ import com.propertyvista.crm.client.activity.crud.tenant.application.MasterAppli
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseViewerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.lease.bill.BillEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.bill.BillViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.screening.EquifaxResultViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.screening.PersonScreeningEditorActivity;
@@ -457,9 +456,6 @@ public class MainActivityMapper implements AppActivityMapper {
 
                 } else if (place instanceof CrmSiteMap.Tenants.Bill) {
                     switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new BillEditorActivity(place);
-                        break;
                     case viewer:
                         activity = new BillViewerActivity(place);
                         break;
