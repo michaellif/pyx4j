@@ -32,7 +32,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 
 @AbstractEntity
-@ToStringFormat("{0} {1}")
+@ToStringFormat("{0}, {1}")
 public interface Equipment extends LicensedWarrantedMaintained, Notes {
 
     @Owner

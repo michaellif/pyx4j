@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@ToStringFormat("Type: {0}, Name: {1}")
+@ToStringFormat("{0}, {1}")
 @DiscriminatorValue("service")
 public interface Service extends Product {
 

@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-@ToStringFormat("{0},  {1}")
+@ToStringFormat("{0}, {1}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface PersonGuarantor extends IEntity {
 

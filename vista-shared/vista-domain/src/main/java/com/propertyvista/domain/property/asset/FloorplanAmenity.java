@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.marketing.yield.Amenity;
 
-@ToStringFormat("{0} {1}")
+@ToStringFormat("{0}, {1}")
 public interface FloorplanAmenity extends Amenity {
 
     @I18n

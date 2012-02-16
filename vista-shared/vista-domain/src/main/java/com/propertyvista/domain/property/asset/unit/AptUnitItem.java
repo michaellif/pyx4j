@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@ToStringFormat("{0} {1}")
+@ToStringFormat("{0}, {1}")
 public interface AptUnitItem extends IEntity {
 
     @I18n
