@@ -25,30 +25,28 @@ import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImp
 
 public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerService {
 
-    private static final VoidSerializable VOID = new VoidSerializable();
-
     @Override
     public void scopeOffMarket(AsyncCallback<VoidSerializable> callback, Key unitPk, OffMarketType type, LogicalDate startDate) {
         new AptUnitOccupancyManagerImpl(unitPk).scopeOffMarket(type, startDate);
-        callback.onSuccess(VOID);
+        callback.onSuccess(null);
     }
 
     @Override
     public void scopeRenovation(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate renovationEndDate) {
         new AptUnitOccupancyManagerImpl(unitPk).scopeRenovation(renovationEndDate);
-        callback.onSuccess(VOID);
+        callback.onSuccess(null);
     }
 
     @Override
     public void scopeAvailable(AsyncCallback<VoidSerializable> callback, Key unitPk) {
         new AptUnitOccupancyManagerImpl(unitPk).scopeAvailable();
-        callback.onSuccess(VOID);
+        callback.onSuccess(null);
     }
 
     @Override
     public void makeVacant(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate vacantFrom) {
         new AptUnitOccupancyManagerImpl(unitPk).makeVacant(vacantFrom);
-        callback.onSuccess(VOID);
+        callback.onSuccess(null);
     }
 
 }
