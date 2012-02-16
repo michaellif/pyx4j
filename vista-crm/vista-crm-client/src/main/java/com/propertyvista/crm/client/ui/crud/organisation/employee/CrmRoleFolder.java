@@ -44,9 +44,8 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().name(), "30em"),
-                new EntityFolderColumnDescriptor(proto().description(), "30em"),
-                new EntityFolderColumnDescriptor(proto().behaviors(), "30em")
+                new EntityFolderColumnDescriptor(proto().name(), "10em"),
+                new EntityFolderColumnDescriptor(proto().behaviors(), "40em")
         );//@formatter:on
     }
 
@@ -68,7 +67,7 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
 
         public CrmRoleSelectorDialog() {
             super(CrmRole.class, true, getValue(), i18n.tr("Select roles"));
-            setWidth("500px");
+            setWidth("700px");
         }
 
         @Override
