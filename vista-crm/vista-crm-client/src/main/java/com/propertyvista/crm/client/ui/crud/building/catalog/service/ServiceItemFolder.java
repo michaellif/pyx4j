@@ -19,16 +19,21 @@ import java.util.List;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
+import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
@@ -63,6 +68,55 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             return new ServiceItemEditor();
         }
         return super.create(member);
+    }
+
+    @Override
+    protected void addItem() {
+        EntitySelectorDialog<?> buildingElementDelectionBox = null;
+        switch (parent.getValue().type().getValue()) {
+        case residentialUnit:
+        case residentialShortTermUnit:
+        case commercialUnit:
+            List<AptUnit> alreadySelected = new ArrayList<AptUnit>(getValue().size());
+            for (ProductItem item : getValue()) {
+                alreadySelected.add((AptUnit) item.element().cast());
+            }
+            buildingElementDelectionBox = new UnitSelectorDialog(true, alreadySelected) {
+                @Override
+                protected void setFilters(List<DataTableFilterData> filters) {
+                    super.setFilters(filters);
+                    addFilter(new DataTableFilterData(EntityFactory.getEntityPrototype(AptUnit.class).belongsTo().getPath(), Operators.is, parent.getValue()
+                            .catalog().belongsTo().detach()));
+                }
+
+                @Override
+                public boolean onClickOk() {
+                    if (getSelectedItems().isEmpty()) {
+                        return false;
+                    } else {
+                        for (BuildingElement element : getSelectedItems()) {
+                            ProductItem item = EntityFactory.create(ProductItem.class);
+                            item.element().set(element);
+                            addItem(item);
+                        }
+                        return true;
+                    }
+                }
+            };
+            break;
+        case garage:
+            break;
+        case storage:
+            break;
+        case roof:
+            break;
+        }
+
+        if (buildingElementDelectionBox != null) {
+            buildingElementDelectionBox.show();
+        } else {
+            super.addItem();
+        }
     }
 
     private class ServiceItemEditor extends CEntityFolderRowEditor<ProductItem> {
