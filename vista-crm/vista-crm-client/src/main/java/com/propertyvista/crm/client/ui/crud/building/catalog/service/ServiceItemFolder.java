@@ -171,24 +171,22 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             }
 
             if (column.getObject() == proto().type()) {
-                if (comp instanceof CEntityComboBox<?>) {
-                    CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) comp;
+                if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
+                    final CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) comp;
                     combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().type()));
+//                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ProductItemType>>() {
+//                        @Override
+//                        public void onOptionsChange(OptionsChangeEvent<List<ProductItemType>> event) {
+//                            if (event.getOptions().size() == 1) {
+//                                combo.setValue(event.getOptions().get(0), false);
+//                                combo.setViewable(true);
+//                            }
+//                        }
+//                    });
                 }
             }
 
             return comp;
-        }
-
-        @Override
-        protected void onPopulate() {
-            super.onPopulate();
-
-            CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) get(proto().type());
-            if (combo.getOptions().size() == 1) {
-                combo.setValue(combo.getOptions().get(0), false);
-                combo.setViewable(true);
-            }
         }
     }
 }
