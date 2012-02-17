@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.complex;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
@@ -32,6 +34,7 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
@@ -118,5 +121,29 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
     @Override
     public void setActiveTab(int index) {
         tabPanel.selectTab(index);
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        get(proto().buildings()).addValueValidator(new EditableValueValidator<List<Building>>() {
+            @Override
+            public ValidationFailure isValid(CComponent<List<Building>, ?> component, List<Building> value) {
+                if (value != null) {
+                    boolean primaryFound = false;
+                    for (Building item : value) {
+                        if (item.complexPrimary().isBooleanTrue()) {
+                            primaryFound = true;
+                            break;
+                        }
+                    }
+                    if (!primaryFound) {
+                        return new ValidationFailure(i18n.tr("Primary building should be selected"));
+                    }
+                }
+                return null;
+            }
+        });
     }
 }
