@@ -113,6 +113,9 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     }
 
     public List<E> getOptions() {
+        if (options == null) {
+            options = createOptionsImpl();
+        }
         return options;
     }
 
