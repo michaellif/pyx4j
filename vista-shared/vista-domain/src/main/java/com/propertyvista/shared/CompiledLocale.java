@@ -40,7 +40,10 @@ public enum CompiledLocale implements Serializable {
     sp,
 
     @Translate(value = "Russian")
-    ru;
+    ru,
+
+    @Translate(value = "Chinese")
+    zh;
 
     @Override
     public String toString() {
