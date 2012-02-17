@@ -179,4 +179,15 @@ public class AvailablilityReportManagerTest extends AvailablilityReportManagerTe
                 .offMarket().x();
         expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).offMarket().x();
     }
+
+    @Test
+    public void testMakeVacant() {
+        setup().from("2013-03-02").to("2013-03-15").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2013-03-16").toTheEndOfTime().status(Status.vacant).withOffMarketType(OffMarketType.down).x();
+
+        computeAvailabilityOn("2013-03-14");
+        expectAvailability().on("2013-03-14").vacancy(Vacancy.Vacant).scoping(Scoping.Unscoped).offMarket().x();
+        expectAvailability().on("2013-03-16").vacancy(Vacancy.Vacant).scoping(Scoping.Unscoped).notrented().x();
+
+    }
 }
