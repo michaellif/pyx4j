@@ -21,6 +21,7 @@
 package com.pyx4j.commons;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,6 +38,14 @@ public abstract class ConverterUtils {
         @Override
         public String toString(String value) {
             return value;
+        }
+    }
+
+    public static class ObjectConverter<T> implements ToStringConverter<T> {
+
+        @Override
+        public String toString(T value) {
+            return String.valueOf(value);
         }
     }
 
@@ -64,6 +73,14 @@ public abstract class ConverterUtils {
 
     public static String convertStringCollection(Collection<String> stringCollection, String separator) {
         return convertCollection(stringCollection, new StringConverter(), separator);
+    }
+
+    public static <T> String convertArray(T[] objectsArray, String separator) {
+        return convertCollection(Arrays.asList(objectsArray), new ObjectConverter<T>(), separator);
+    }
+
+    public static <T> String convertCollection(Collection<T> objectsCollection, String separator) {
+        return convertCollection(objectsCollection, new ObjectConverter<T>(), separator);
     }
 
     public static <T> String convertCollection(Collection<T> collection, ToStringConverter<T> converter) {

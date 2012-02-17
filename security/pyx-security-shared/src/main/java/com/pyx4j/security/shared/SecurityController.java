@@ -26,6 +26,7 @@ import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.security.server.SecurityControllerCreator;
 
@@ -88,7 +89,7 @@ public abstract class SecurityController {
     public static void assertAnyBehavior(Behavior... behaviors) {
         if (!checkAnyBehavior(behaviors)) {
             if (ApplicationMode.isDevelopment()) {
-                throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + behaviors);
+                throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + ConverterUtils.convertArray(behaviors, "or"));
             } else {
                 throw new SecurityViolationException("Permission denied");
             }
