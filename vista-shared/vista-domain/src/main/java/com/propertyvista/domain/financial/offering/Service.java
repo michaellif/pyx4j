@@ -59,6 +59,9 @@ public interface Service extends Product {
     @MemberColumn(name = "serviceType")
     IPrimitive<Type> type();
 
+    // ----------------------------------------------------
+    // eligibility matrix:
+
     @Detached
     IList<Feature> features();
 

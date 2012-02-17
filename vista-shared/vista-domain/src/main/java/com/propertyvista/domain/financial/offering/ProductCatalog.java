@@ -41,8 +41,23 @@ public interface ProductCatalog extends IEntity {
     @Detached
     @ReadOnly
     @JoinColumn
-    //TODO Why not to name 'building'?
-    Building belongsTo();
+    Building building();
+
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+    // note, that declaration order is important!
+
+    @Owned
+    @Detached
+    IList<Concession> concessions();
+
+    @Owned
+    @Detached
+    IList<Feature> features();
+
+    @Owned
+    @Detached
+    IList<Service> services();
 
     // ----------------------------------------------------
 
@@ -51,20 +66,5 @@ public interface ProductCatalog extends IEntity {
 
     // Utilities provided by 3-d party and should be EXCLUDED from Lease Service Agreement 
     IList<ProductItemType> externalUtilities();
-
-    // ----------------------------------------------------
-    // parent <-> child relationship:
-
-    @Owned
-    @Detached
-    IList<Feature> features();
-
-    @Owned
-    @Detached
-    IList<Concession> concessions();
-
-    @Owned
-    @Detached
-    IList<Service> services();
 
 }

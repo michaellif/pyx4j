@@ -39,10 +39,10 @@ public class ProductDictionaryViewForm extends CrmEntityForm<ProductItemType> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("Service Types"));
+        main.setH1(++row, 0, 1, i18n.tr("Service Item Types"));
         main.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getServiceListerView().asWidget());
 
-        main.setH1(++row, 0, 1, i18n.tr("Feature Types"));
+        main.setH1(++row, 0, 1, i18n.tr("Feature Item Types"));
         main.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getFeatureListerView().asWidget());
 
         return new ScrollPanel(main);
