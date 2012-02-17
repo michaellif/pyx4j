@@ -23,10 +23,44 @@ package com.pyx4j.entity.test.shared;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.test.shared.domain.parametrized.ConcreteParametrizedEntity;
+import com.pyx4j.entity.test.shared.domain.parametrized.DetailParameter;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
 import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
 
 public class EntityGenericTest extends InitializerTestBase {
+
+    public void testParametrizedMembers() {
+        EntityMeta meta = EntityFactory.getEntityMeta(ConcreteParametrizedEntity.class);
+        assertEquals("Meta entities valueClass", DetailParameter.class, meta.getMemberMeta("entity").getValueClass());
+        assertEquals("Meta entities valueClass", DetailParameter.class, meta.getMemberMeta("entities").getValueClass());
+
+        ConcreteParametrizedEntity o = EntityFactory.create(ConcreteParametrizedEntity.class);
+        assertEquals("valueClass", DetailParameter.class, o.entity().getValueClass());
+        assertEquals("valueClass", DetailParameter.class, o.entities().getValueClass());
+
+        DetailParameter param1 = EntityFactory.create(DetailParameter.class);
+        param1.name().setValue("1");
+
+        o.entities().add(param1);
+
+        DetailParameter param2r = o.entities().get(0);
+        assertEquals("collection value", param1.name(), param2r.name());
+
+        DetailParameter param2 = o.entities().$();
+        assertEquals("valueClass", DetailParameter.class, param2.getValueClass());
+
+        // Test primitive
+        assertEquals("Meta entities valueClass", Long.class, meta.getMemberMeta("pvalue").getValueClass());
+        assertEquals("Meta entities valueClass", Long.class, meta.getMemberMeta("pvalues").getValueClass());
+
+        assertEquals("valueClass", Long.class, o.pvalue().getValueClass());
+        assertEquals("valueClass", Long.class, o.pvalues().getValueClass());
+
+        o.pvalue().setValue(Long.valueOf(10));
+        o.pvalues().add(Long.valueOf(11));
+
+    }
 
     public void testVersionedEntityManipulations() {
         EntityMeta itemAMeta = EntityFactory.getEntityMeta(ItemA.class);
@@ -41,6 +75,12 @@ public class EntityGenericTest extends InitializerTestBase {
 
         itemA1.version().testId().setValue("1");
         itemA1.version().name().setValue("2");
+
+        //IVersionInfo<ItemAVersion> vi = itemA1.versionsInfo().$();
+        // Will not work
+        //vi.version().name().setValue("3");
+
+        //vi.version().set(itemA1.version());
 
     }
 }

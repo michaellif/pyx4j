@@ -22,12 +22,24 @@ package com.pyx4j.entity.shared;
 
 import java.util.Date;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.ManagedColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Owner;
 
-@Transient
+// Ideally this should be parameterized type IVersionInfo<VERSIONED_ITEM extends IEntity>
+@AbstractEntity
 public interface IVersionInfo extends IEntity {
+
+    @Owner
+    @JoinColumn
+    IVersionedEntity<?> holder();
+
+    @ManagedColumn
+    @OrderColumn
+    IPrimitive<Integer> versionNumber();
 
     @ManagedColumn
     IPrimitive<Date> fromDate();
@@ -35,8 +47,8 @@ public interface IVersionInfo extends IEntity {
     @ManagedColumn
     IPrimitive<Date> toDate();
 
-    @ManagedColumn
-    @OrderColumn
-    IPrimitive<Integer> versionNumber();
+    //@ManagedColumn
+    //VERSIONED_ITEM version();
+    IPrimitive<Key> versionKey();
 
 }

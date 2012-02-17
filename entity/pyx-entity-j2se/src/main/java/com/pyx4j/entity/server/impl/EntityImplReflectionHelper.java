@@ -52,16 +52,17 @@ public class EntityImplReflectionHelper {
         }
     }
 
-    public static Class<?> primitiveValueClass(Type type) {
+    public static Class<?> primitiveValueClass(Type type, Class<?> interfaceClass) {
         if (type instanceof Class<?>) {
             return (Class<?>) type;
+        } else if (type instanceof GenericArrayType) {
+            return toClass(type);
+        } else if (type instanceof ParameterizedType) {
+            // Allow to use  our Pair<,> class
+            return (Class<?>) ((ParameterizedType) type).getRawType();
         } else {
-            if (type instanceof GenericArrayType) {
-                return toClass(type);
-            } else {
-                // e.g. generic Collection<String> 
-                return (Class<?>) ((ParameterizedType) type).getRawType();
-            }
+            // e.g. generic Collection<String> 
+            return resolveGenericType(type, interfaceClass);
         }
     }
 
@@ -88,11 +89,21 @@ public class EntityImplReflectionHelper {
         return null;
     }
 
+    public static Class<?> resolveType(Type genericType, Class<?> interfaceClass) {
+        if (genericType instanceof Class<?>) {
+            return (Class<?>) genericType;
+        } else {
+            return resolveGenericType(genericType, interfaceClass);
+        }
+    }
+
     private static class MethodInfo {
 
         Class<?> klass;
 
         Class<?> valueCalss;
+
+        //Class<?> genericValueCalss;
     }
 
     private static Map<String, MethodInfo> members = new HashMap<String, MethodInfo>();
@@ -114,9 +125,15 @@ public class EntityImplReflectionHelper {
                 ParameterizedType genericType = (ParameterizedType) method.getGenericReturnType();
                 Type paramType = genericType.getActualTypeArguments()[0];
                 if (IPrimitive.class.equals(methodInfo.klass)) {
-                    methodInfo.valueCalss = primitiveValueClass(paramType);
-                } else {
+                    methodInfo.valueCalss = primitiveValueClass(paramType, interfaceClass);
+                } else if (paramType instanceof ParameterizedType) {
+                    methodInfo.valueCalss = (Class<?>) ((ParameterizedType) paramType).getRawType();
+                } else if (paramType instanceof Class) {
                     methodInfo.valueCalss = (Class<?>) paramType;
+                } else if (paramType instanceof TypeVariable) {
+                    methodInfo.valueCalss = resolveGenericType(paramType, interfaceClass);
+                } else {
+                    throw new AssertionError("Unexpected type '" + paramType + "' for member '" + memberName + "' of " + implHandler.debugString());
                 }
             } else {
                 Class<?> genericClass = resolveGenericType(method.getGenericReturnType(), interfaceClass);

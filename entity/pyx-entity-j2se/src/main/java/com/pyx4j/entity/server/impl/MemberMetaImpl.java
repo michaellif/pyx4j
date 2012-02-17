@@ -105,7 +105,8 @@ public class MemberMetaImpl implements MemberMeta {
         this.method = method;
         objectClass = (Class<? extends IObject<?>>) method.getReturnType();
         if (IPrimitive.class.equals(objectClass)) {
-            valueClass = EntityImplReflectionHelper.primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0]);
+            valueClass = EntityImplReflectionHelper.primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0],
+                    interfaceClass);
             objectClassType = ObjectClassType.Primitive;
         } else if (IEntity.class.isAssignableFrom(objectClass)) {
             Class<?> genericClass = EntityImplReflectionHelper.resolveGenericType(method.getGenericReturnType(), interfaceClass);
@@ -116,13 +117,16 @@ public class MemberMetaImpl implements MemberMeta {
             }
             objectClassType = ObjectClassType.Entity;
         } else if (ISet.class.equals(objectClass)) {
-            valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            valueClass = EntityImplReflectionHelper
+                    .resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0], interfaceClass);
             objectClassType = ObjectClassType.EntitySet;
         } else if (IList.class.equals(objectClass)) {
-            valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            valueClass = EntityImplReflectionHelper
+                    .resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0], interfaceClass);
             objectClassType = ObjectClassType.EntityList;
         } else if (IPrimitiveSet.class.equals(objectClass)) {
-            valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            valueClass = EntityImplReflectionHelper
+                    .resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0], interfaceClass);
             objectClassType = ObjectClassType.PrimitiveSet;
         } else {
             throw new RuntimeException("Unknown member type" + objectClass);
