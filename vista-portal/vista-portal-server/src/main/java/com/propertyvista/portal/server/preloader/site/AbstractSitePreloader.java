@@ -69,7 +69,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         if (ApplicationMode.isDevelopment() && !DemoData.vistaDemo) {
             l.add(CompiledLocale.ru);
         }
-        l.add(CompiledLocale.sp);
+        l.add(CompiledLocale.es);
         l.add(CompiledLocale.zh);
         return l;
     }
@@ -299,8 +299,8 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             return ServerI18nFactory.get(AbstractSitePreloader.class, Locale.FRENCH);
         case ru:
             return ServerI18nFactory.get(AbstractSitePreloader.class, new Locale("ru", "RU"));
-        case sp:
-            return ServerI18nFactory.get(AbstractSitePreloader.class, new Locale("sp"));
+        case es:
+            return ServerI18nFactory.get(AbstractSitePreloader.class, new Locale("es"));
         case zh:
             return ServerI18nFactory.get(AbstractSitePreloader.class, Locale.CHINESE);
         default:

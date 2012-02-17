@@ -139,8 +139,8 @@ public class PMSiteWebRequest extends ServletWebRequest {
             return Locale.FRENCH;
         case ru:
             return new Locale("ru", "RU");
-        case sp:
-            return new Locale("sp");
+        case es:
+            return new Locale("es");
         case zh:
             return Locale.CHINESE;
         default:
