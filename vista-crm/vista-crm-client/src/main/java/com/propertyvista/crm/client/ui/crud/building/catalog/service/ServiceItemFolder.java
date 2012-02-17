@@ -132,12 +132,14 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            boolean isViewable = false;
             Class<? extends IEntity> buildingElementClass = null;
             switch (parent.getValue().type().getValue()) {
             case residentialUnit:
             case residentialShortTermUnit:
             case commercialUnit:
                 buildingElementClass = AptUnit.class;
+                isViewable = true;
                 break;
             case garage:
                 buildingElementClass = Parking.class;
@@ -157,6 +159,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                         CEntityComboBox<BuildingElement> combo = new CEntityComboBox(buildingElementClass);
                         combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().belongsTo().detach()));
                         comp = inject(column.getObject(), combo);
+                        comp.setViewable(isViewable);
                     } else {
                         comp = inject(column.getObject(), new CEntityCrudHyperlink<BuildingElement>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
                     }
