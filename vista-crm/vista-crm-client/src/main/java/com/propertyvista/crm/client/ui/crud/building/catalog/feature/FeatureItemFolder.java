@@ -23,16 +23,23 @@ import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.property.asset.BuildingElement;
+import com.propertyvista.domain.property.asset.LockerArea;
+import com.propertyvista.domain.property.asset.Parking;
 
 class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
@@ -51,7 +58,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
         columns.add(new EntityFolderColumnDescriptor(proto().type(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
         columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
-//            columns.add(new EntityFolderColumnDescriptor(proto().element(), "15em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().element(), "15em"));
         return columns;
     }
 
@@ -71,7 +78,33 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp = super.createCell(column);
+            Class<? extends IEntity> buildingElementClass = null;
+            switch (parent.getValue().type().getValue()) {
+            case parking:
+                buildingElementClass = Parking.class;
+                break;
+            case locker:
+                buildingElementClass = LockerArea.class;
+                break;
+            }
+
+            CComponent<?, ?> comp;
+            if (column.getObject() == proto().element()) {
+                if (buildingElementClass != null) {
+                    if (parent.isEditable()) {
+                        CEntityComboBox<BuildingElement> combo = new CEntityComboBox(buildingElementClass);
+                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().building().detach()));
+                        comp = inject(column.getObject(), combo);
+                    } else {
+                        comp = inject(column.getObject(), new CEntityCrudHyperlink<BuildingElement>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
+                    }
+                } else {
+                    comp = new CLabel(""); // there is no building element for this item!
+                }
+            } else {
+                comp = super.createCell(column);
+            }
+
             if (column.getObject() == proto().type()) {
                 if (comp instanceof CEntityComboBox<?>) {
                     @SuppressWarnings("unchecked")

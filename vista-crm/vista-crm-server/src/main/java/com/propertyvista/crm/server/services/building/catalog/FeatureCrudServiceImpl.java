@@ -22,6 +22,7 @@ import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
+import com.propertyvista.domain.financial.offering.ProductItem;
 
 public class FeatureCrudServiceImpl extends GenericCrudServiceImpl<Feature> implements FeatureCrudService {
 
@@ -31,8 +32,15 @@ public class FeatureCrudServiceImpl extends GenericCrudServiceImpl<Feature> impl
 
     @Override
     protected void enhanceRetrieved(Feature entity, boolean fromList) {
-        Persistence.service().retrieve(entity.catalog());
-        Persistence.service().retrieve(entity.items());
+        if (!fromList) {
+            Persistence.service().retrieve(entity.catalog());
+            Persistence.service().retrieve(entity.items());
+
+            // next level:
+            for (ProductItem item : entity.items()) {
+                Persistence.service().retrieve(item.element());
+            }
+        }
     }
 
     @Override

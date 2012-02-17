@@ -179,5 +179,16 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
 
             return comp;
         }
+
+        @Override
+        protected void onPopulate() {
+            super.onPopulate();
+
+            CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) get(proto().type());
+            if (combo.getOptions().size() == 1) {
+                combo.setValue(combo.getOptions().get(0), false);
+                combo.setViewable(true);
+            }
+        }
     }
 }

@@ -18,8 +18,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceCrudServiceImpl extends GenericCrudServiceImpl<Service> implements ServiceCrudService {
 
@@ -43,6 +43,9 @@ public class ServiceCrudServiceImpl extends GenericCrudServiceImpl<Service> impl
             }
             for (Feature feature : entity.features()) {
                 Persistence.service().retrieve(feature.items());
+                for (ProductItem item : feature.items()) {
+                    Persistence.service().retrieve(item.element());
+                }
             }
         }
     }

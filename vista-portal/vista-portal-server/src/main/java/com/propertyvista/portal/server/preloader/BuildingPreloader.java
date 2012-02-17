@@ -310,6 +310,23 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 }
             }
 
+            for (Feature feature : building.productCatalog().features()) {
+                switch (feature.type().getValue()) {
+                case parking:
+                    for (ProductItem item : feature.items()) {
+                        item.element().set(RandomUtil.random(buildingParkings));
+                        Persistence.service().persist(item);
+                    }
+                    break;
+                case locker:
+                    for (ProductItem item : feature.items()) {
+                        item.element().set(RandomUtil.random(buildingockers));
+                        Persistence.service().persist(item);
+                    }
+                    break;
+                }
+            }
+
             Persistence.service().merge(building.productCatalog());
 
             //Do not publish until data is clean-up
