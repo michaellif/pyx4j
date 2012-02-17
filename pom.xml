@@ -171,6 +171,8 @@
 
     <properties>
         <appGWTModuleSufix></appGWTModuleSufix>
+        <gwtEnableAssertions>false</gwtEnableAssertions>
+
         <scm.revision></scm.revision>
         <axis2Version>1.5.4</axis2Version>
         <wicket.version>1.5.0</wicket.version>
@@ -404,6 +406,16 @@
             <properties>
                 <gwtDraftCompile>true</gwtDraftCompile>
                 <appGWTModuleSufix>Developer</appGWTModuleSufix>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>build-qa</id>
+            <properties>
+                <gwt.compiler.force>true</gwt.compiler.force>
+                <gwtDraftCompile>false</gwtDraftCompile>
+                <appGWTModuleSufix>Qa</appGWTModuleSufix>
+                <gwtEnableAssertions>true</gwtEnableAssertions>
             </properties>
         </profile>
 

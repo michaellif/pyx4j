@@ -81,6 +81,7 @@
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
                             <compileReport>${gwtCompileReport}</compileReport>
+                            <enableAssertions>${gwtEnableAssertions}</enableAssertions>
                             <!-- disableCastChecking>true</disableCastChecking -->
                             <!-- disableClassMetadata>true</disableClassMetadata -->
                         </configuration>
