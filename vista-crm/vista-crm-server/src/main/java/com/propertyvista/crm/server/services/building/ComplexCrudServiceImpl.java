@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -59,6 +59,7 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
 
     @Override
     protected void enhanceRetrieved(Complex entity, ComplexDTO dto) {
+        // set the dashboard
         if (!entity.dashboard().isNull()) {
             Persistence.service().retrieve(entity.dashboard());
             dto.dashboard().set(entity.dashboard());
@@ -81,6 +82,18 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
             for (Building building : Persistence.service().query(criteria)) {
                 dto.buildings().add(new BuildingBinder().createDTO(building));
             }
+        }
+    }
+
+    @Override
+    protected void enhanceListRetrieved(Complex entity, ComplexDTO dto) {
+        super.enhanceListRetrieved(entity, dto);
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().complex(), entity));
+        criteria.add(PropertyCriterion.eq(criteria.proto().complexPrimary(), true));
+        Building b = Persistence.secureRetrieve(criteria);
+        if (b != null) {
+            dto.primaryBuilding().setValue(b.getStringView());
         }
     }
 
