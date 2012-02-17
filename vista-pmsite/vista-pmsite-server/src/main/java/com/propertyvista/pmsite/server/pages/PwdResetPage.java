@@ -33,11 +33,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.server.LocalService;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
@@ -125,7 +127,13 @@ public final class PwdResetPage extends BasePage {
                 @Override
                 public void onFailure(Throwable caught) {
                     // show error message
-                    error(caught.getMessage());
+                    if (caught instanceof UserRuntimeException) {
+                        error(caught.getMessage());
+                    } else if (ApplicationMode.isDevelopment()) {
+                        error(caught.getMessage());
+                    } else {
+                        error(i18n.tr("Action failed. Please try again later."));
+                    }
                 }
             }, request);
         }

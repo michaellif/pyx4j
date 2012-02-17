@@ -166,6 +166,8 @@ public class SignInPanel extends Panel {
                     captchaRequired = true;
                 } else if (caught instanceof UserRuntimeException) {
                     error(caught.getMessage());
+                } else if (ApplicationMode.isDevelopment()) {
+                    error(caught.getMessage());
                 } else {
                     error(i18n.tr("Action failed. Please try again later."));
                 }
@@ -244,7 +246,6 @@ public class SignInPanel extends Panel {
                 }
             } else {
                 strategy.remove();
-                error(i18n.tr("Sign in failed"));
             }
         }
     }

@@ -13,14 +13,15 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.pages.PwdChangePage;
 import com.propertyvista.pmsite.server.pages.SignInPage;
 
 public class AuthenticationPanel extends Panel {
@@ -32,8 +33,7 @@ public class AuthenticationPanel extends Panel {
     public AuthenticationPanel(String id) {
         super(id);
 
-        StatelessLink<Void> link = new StatelessLink<Void>("authAction") {
-
+        StatelessLink<Void> auth = new StatelessLink<Void>("authAction") {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -47,15 +47,24 @@ public class AuthenticationPanel extends Panel {
             }
         };
 
-        add(link);
+        StatelessLink<Void> greet = new StatelessLink<Void>("greeting") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick() {
+                setResponsePage(PwdChangePage.class, null);
+            }
+        };
 
         if (((PMSiteSession) getSession()).isSignedIn()) {
-            this.add(new Label("greetings", i18n.tr("Welcome {0}", Context.getVisit().getUserVisit().getName())));
-            link.add(new Label("caption", i18n.tr("LogOut")));
+            greet.setBody(new Model<String>(i18n.tr("Welcome {0}", Context.getVisit().getUserVisit().getName())));
+            auth.setBody(new Model<String>(i18n.tr("LogOut")));
         } else {
-            this.add(new Label("greetings", ""));
-            link.add(new Label("caption", i18n.tr("Login")));
+            greet.setVisible(false);
+            auth.setBody(new Model<String>(i18n.tr("LogIn")));
         }
 
+        add(auth);
+        add(greet);
     }
 }

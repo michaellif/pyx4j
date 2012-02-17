@@ -41,6 +41,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
@@ -206,6 +207,8 @@ public final class PwdChangePage extends BasePage {
         if (caught instanceof ChallengeVerificationRequired) {
             captchaRequired = true;
         } else if (caught instanceof UserRuntimeException) {
+            error(caught.getMessage());
+        } else if (ApplicationMode.isDevelopment()) {
             error(caught.getMessage());
         } else {
             error(i18n.tr("Action failed. Please try again later."));
