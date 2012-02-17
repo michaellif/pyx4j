@@ -128,7 +128,7 @@ public class RateIt extends FocusPanel implements HasValueChangeHandlers<Integer
 
     protected void showRating(int rating) {
         ratingStars.setWidth(rating * starWidth + "px");
-        ratingBar.setTitle(rating + i18n.tr(" out of ") + maxRating);
+        ratingBar.setTitle(i18n.tr("{0} out of {1}", rating, maxRating));
     }
 
     @Override

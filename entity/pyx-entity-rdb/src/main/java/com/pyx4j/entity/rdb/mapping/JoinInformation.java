@@ -108,7 +108,7 @@ abstract class JoinInformation {
                     ownerMemberMeta = jmemberMeta;
                 } else {
                     throw new AssertionError("Invalid type @Owner member '" + jmemberName + "' in table " + childEntityMeta.getEntityClass().getName()
-                            + " for " + memberMeta.getFieldName() + " of type " + entityMeta.getEntityClass().getName() + ",\n expected "
+                            + " for '" + memberMeta.getFieldName() + "' of type " + entityMeta.getEntityClass().getName() + ",\n expected "
                             + rootEntityClass.getName() + ", got " + entityClass.getName());
                 }
             }
