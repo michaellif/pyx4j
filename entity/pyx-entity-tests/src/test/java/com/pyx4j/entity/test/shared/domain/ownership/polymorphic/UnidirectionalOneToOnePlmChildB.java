@@ -20,16 +20,13 @@
  */
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Inheritance
-@AbstractEntity
-public interface UnidirectionalOneToOneChild extends IEntity {
+@DiscriminatorValue("childb")
+@Table(prefix = "test")
+public interface UnidirectionalOneToOnePlmChildB extends UnidirectionalOneToOnePlmChild {
 
-    IPrimitive<String> testId();
-
-    IPrimitive<String> name();
+    IPrimitive<String> propB();
 }

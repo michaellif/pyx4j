@@ -24,9 +24,9 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@DiscriminatorValue("childb")
+@DiscriminatorValue("childa")
 @Table(prefix = "test")
-public interface UnidirectionalOneToOneChildB extends UnidirectionalOneToOneChild {
+public interface UnidirectionalOneToOnePlmChildA extends UnidirectionalOneToOnePlmChild {
 
     IPrimitive<String> propA();
 }

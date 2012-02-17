@@ -26,10 +26,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
-public interface UnidirectionalOneToOneParent extends IEntity {
+public interface UnidirectionalOneToOnePlmParent extends IEntity {
 
     @Owned
-    UnidirectionalOneToOneChild child();
+    UnidirectionalOneToOnePlmChild child();
 
     IPrimitive<String> testId();
 

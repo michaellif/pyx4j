@@ -28,10 +28,10 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOneChild;
-import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOneChildA;
-import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOneChildB;
-import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOneParent;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChild;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChildA;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChildB;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmParent;
 
 public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingTestCase {
 
@@ -45,11 +45,11 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
     public void testUnidirectionalOneToOneSave(TestCaseMethod testCaseMethod) {
         String testId = uniqueString();
-        UnidirectionalOneToOneParent o = EntityFactory.create(UnidirectionalOneToOneParent.class);
+        UnidirectionalOneToOnePlmParent o = EntityFactory.create(UnidirectionalOneToOnePlmParent.class);
         o.testId().setValue(testId);
         o.name().setValue(uniqueString());
 
-        UnidirectionalOneToOneChildA a = EntityFactory.create(UnidirectionalOneToOneChildA.class);
+        UnidirectionalOneToOnePlmChildA a = EntityFactory.create(UnidirectionalOneToOnePlmChildA.class);
         a.testId().setValue(testId);
         a.name().setValue(uniqueString());
 
@@ -62,7 +62,7 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
         // Get Parent and see that Child is retrieved, then verify values
         {
-            UnidirectionalOneToOneParent parent = srv.retrieve(UnidirectionalOneToOneParent.class, o.getPrimaryKey());
+            UnidirectionalOneToOnePlmParent parent = srv.retrieve(UnidirectionalOneToOnePlmParent.class, o.getPrimaryKey());
             Assert.assertNotNull("data retrieved ", parent);
             Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
             Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
@@ -70,7 +70,7 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
         // Get Child and see that child is retrieved, then verify values
         {
-            UnidirectionalOneToOneChild child = srv.retrieve(UnidirectionalOneToOneChildA.class, o.child().getPrimaryKey());
+            UnidirectionalOneToOnePlmChild child = srv.retrieve(UnidirectionalOneToOnePlmChildA.class, o.child().getPrimaryKey());
             Assert.assertNotNull("data retrieved ", child);
             Assert.assertEquals("correct data retrieved", o.child().name(), child.name());
         }
@@ -82,7 +82,7 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
         // Get Parent and see that Child is retrieved, then verify values
         {
-            UnidirectionalOneToOneParent parent = srv.retrieve(UnidirectionalOneToOneParent.class, o.getPrimaryKey());
+            UnidirectionalOneToOnePlmParent parent = srv.retrieve(UnidirectionalOneToOnePlmParent.class, o.getPrimaryKey());
             Assert.assertNotNull("data retrieved ", parent);
             Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
             Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
@@ -90,20 +90,20 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
         // Get Child and see that child is retrieved, then verify values
         {
-            UnidirectionalOneToOneChild child = srv.retrieve(UnidirectionalOneToOneChildA.class, o.child().getPrimaryKey());
+            UnidirectionalOneToOnePlmChild child = srv.retrieve(UnidirectionalOneToOnePlmChildA.class, o.child().getPrimaryKey());
             Assert.assertNotNull("data retrieved ", child);
             Assert.assertEquals("correct data retrieved", o.child().name(), child.name());
         }
 
         // Query Parent By Child
         {
-            EntityQueryCriteria<UnidirectionalOneToOneParent> criteria = EntityQueryCriteria.create(UnidirectionalOneToOneParent.class);
+            EntityQueryCriteria<UnidirectionalOneToOnePlmParent> criteria = EntityQueryCriteria.create(UnidirectionalOneToOnePlmParent.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.eq(criteria.proto().child(), UnidirectionalOneToOneChildA.class));
+            criteria.add(PropertyCriterion.eq(criteria.proto().child(), UnidirectionalOneToOnePlmChildA.class));
             criteria.add(PropertyCriterion.eq(criteria.proto().child().name(), o.child().name()));
 
             if (POLYMORPHIC_TODO) {
-                List<UnidirectionalOneToOneParent> parents = srv.query(criteria);
+                List<UnidirectionalOneToOnePlmParent> parents = srv.query(criteria);
                 Assert.assertEquals("result set size", 1, parents.size());
                 Assert.assertEquals("correct data retrieved", o.child().name(), parents.get(0).child().name());
             }
@@ -111,29 +111,29 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
         // Get Child, change and save independently
         {
-            UnidirectionalOneToOneChild child = srv.retrieve(UnidirectionalOneToOneChildA.class, o.child().getPrimaryKey());
+            UnidirectionalOneToOnePlmChild child = srv.retrieve(UnidirectionalOneToOnePlmChildA.class, o.child().getPrimaryKey());
             child.name().setValue(child.name().getValue() + "#");
             srvSave(child, testCaseMethod);
 
-            child = srv.retrieve(UnidirectionalOneToOneChildA.class, o.child().getPrimaryKey());
+            child = srv.retrieve(UnidirectionalOneToOnePlmChildA.class, o.child().getPrimaryKey());
             Assert.assertTrue("child update", child.name().getValue().endsWith("#"));
 
-            UnidirectionalOneToOneParent parent = srv.retrieve(UnidirectionalOneToOneParent.class, o.getPrimaryKey());
+            UnidirectionalOneToOnePlmParent parent = srv.retrieve(UnidirectionalOneToOnePlmParent.class, o.getPrimaryKey());
             Assert.assertTrue("child update", parent.child().name().getValue().endsWith("#"));
 
         }
 
         // Change child to other type
         {
-            UnidirectionalOneToOneParent parent = srv.retrieve(UnidirectionalOneToOneParent.class, o.getPrimaryKey());
-            UnidirectionalOneToOneChildB child = EntityFactory.create(UnidirectionalOneToOneChildB.class);
+            UnidirectionalOneToOnePlmParent parent = srv.retrieve(UnidirectionalOneToOnePlmParent.class, o.getPrimaryKey());
+            UnidirectionalOneToOnePlmChildB child = EntityFactory.create(UnidirectionalOneToOnePlmChildB.class);
             child.testId().setValue(testId);
             child.name().setValue(uniqueString());
             parent.child().set(child);
             if (POLYMORPHIC_TODO) {
                 srvSave(parent, testCaseMethod);
 
-                parent = srv.retrieve(UnidirectionalOneToOneParent.class, o.getPrimaryKey());
+                parent = srv.retrieve(UnidirectionalOneToOnePlmParent.class, o.getPrimaryKey());
                 Assert.assertEquals("correct data retrieved", parent.child().name(), child.name());
             }
 
