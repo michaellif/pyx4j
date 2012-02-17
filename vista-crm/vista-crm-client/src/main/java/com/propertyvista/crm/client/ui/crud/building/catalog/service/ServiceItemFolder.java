@@ -91,16 +91,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
 
                 @Override
                 public boolean onClickOk() {
-                    if (getSelectedItems().isEmpty()) {
-                        return false;
-                    } else {
-                        for (BuildingElement element : getSelectedItems()) {
-                            ProductItem item = EntityFactory.create(ProductItem.class);
-                            item.element().set(element);
-                            addItem(item);
-                        }
-                        return true;
-                    }
+                    return processSelectedItems(getSelectedItems());
                 }
             };
             break;
@@ -116,6 +107,19 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             buildingElementDelectionBox.show();
         } else {
             super.addItem();
+        }
+    }
+
+    private boolean processSelectedItems(List<? extends BuildingElement> selectedItems) {
+        if (selectedItems.isEmpty()) {
+            return false;
+        } else {
+            for (BuildingElement element : selectedItems) {
+                ProductItem item = EntityFactory.create(ProductItem.class);
+                item.element().set(element);
+                addItem(item);
+            }
+            return true;
         }
     }
 
