@@ -17,9 +17,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadinessStatus;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadiness;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.VacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
 
 public interface MockupExpectedAvailabliltiyStatus extends IEntity {
 
@@ -27,9 +27,9 @@ public interface MockupExpectedAvailabliltiyStatus extends IEntity {
 
     IPrimitive<LogicalDate> statusDate();
 
-    IPrimitive<VacancyStatus> vacancyStatus();
+    IPrimitive<Vacancy> vacancyStatus();
 
-    IPrimitive<RentReadinessStatus> rentReadinessStatus();
+    IPrimitive<RentReadiness> rentReadinessStatus();
 
     IPrimitive<Boolean> isScoped();
 

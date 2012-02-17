@@ -13,141 +13,170 @@
  */
 package com.propertyvista.crm.server.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.server.csv.EntityCSVReciver;
-import com.pyx4j.gwt.server.IOUtils;
-
-import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadiness;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Scoping;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+// TODO market rent, unit rent (and the deltas)
+// TODO add tenant's name and contact information to the status
 @Ignore
-public class AvailablilityReportManagerTest {
+public class AvailablilityReportManagerTest extends AvailablilityReportManagerTestBase {
 
-    private static AptUnit unit;
+    @Test
+    public void testAvailable() {
+        setup().fromTheBeginning().toTheEndOfTime().status(Status.available);
 
-    @Before
-    public void setUp() {
-        VistaTestDBSetup.init();
+        computeAvailabilityOn("2012-02-17");
 
-        unit = EntityFactory.create(AptUnit.class);
+        expectAvailability().on("2012-02-17").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).notrented().x();
     }
 
     @Test
-    public void testComputeUnitAvailabliltiy() throws ParseException {
-        LinkedList<AptUnitOccupancyEventEffect> mockupOccupancies = partitionToEvents(new LinkedList<MockupOccupancyStatus>(EntityCSVReciver.create(
-                MockupOccupancyStatus.class).loadFile(IOUtils.resourceFileName("mockup-occupancy.csv", AvailablilityReportManagerTest.class))));
+    public void testVacant() {
+        setup().fromTheBeginning().toTheEndOfTime().status(Status.vacant);
 
-        LinkedList<MockupExpectedAvailabliltiyStatus> expected = new LinkedList<MockupExpectedAvailabliltiyStatus>(EntityCSVReciver.create(
-                MockupExpectedAvailabliltiyStatus.class).loadFile(IOUtils.resourceFileName("expected-availability.csv", AvailablilityReportManagerTest.class)));
+        computeAvailabilityOn("2012-02-17");
 
-        assertTrue(!mockupOccupancies.isEmpty());
-
-        AptUnitOccupancyEventEffect mockupOccupancy = null;
-        while (!expected.isEmpty()) {
-            MockupExpectedAvailabliltiyStatus expectedStatus = expected.pop();
-
-            while (!mockupOccupancies.isEmpty() && (mockupOccupancies.peek().eventTimestamp.compareTo(expectedStatus.statusDate().getValue()) <= 0)) {
-                mockupOccupancy = mockupOccupancies.poll();
-            }
-            UnitAvailabilityStatus status = AvailabilityReportManager.computeUnitAvailabilityStatus(expectedStatus.statusDate().getValue(),
-                    mockupOccupancy.occupancy);
-            assertIsOk(expectedStatus, status);
-        }
+        expectAvailability().on("2012-02-17").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).notrented().x();
     }
 
-    private void assertIsOk(MockupExpectedAvailabliltiyStatus expectedStatus, UnitAvailabilityStatus status) {
-        String msg = "test case #" + expectedStatus.testCaseNumber().getValue() + " failed for property: ";
-        assertEquals(msg + status.statusDate().getPath().toString(), expectedStatus.statusDate().getValue(), status.statusDate().getValue());
-        assertEquals(msg + status.vacancyStatus().getPath().toString(), expectedStatus.vacancyStatus().getValue(), status.vacancyStatus().getValue());
-        assertEquals(msg + status.rentReadinessStatus().getPath().toString(), expectedStatus.rentReadinessStatus().getValue(), status.rentReadinessStatus()
-                .getValue());
-        assertEquals(msg + status.isScoped().getPath().toString(), expectedStatus.isScoped().getValue(), status.isScoped().getValue());
-        assertEquals(msg + status.rentedStatus().getPath().toString(), expectedStatus.rentedStatus().getValue(), status.rentedStatus().getValue());
-        assertEquals(msg + status.moveInDay().getPath().toString(), expectedStatus.moveInDay().getValue(), status.moveInDay().getValue());
-        assertEquals(msg + status.moveOutDay().getPath().toString(), expectedStatus.moveOutDay().getValue(), status.moveOutDay().getValue());
+    @Test
+    public void testLeased() {
+        Lease lease = createLease("2012-02-20", "2013-02-30");
+        setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
+        setup().from("2012-02-18").to("2012-02-19").status(Status.reserved).withLease(lease).x();
+        setup().from("2012-02-20").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+
+        computeAvailabilityOn("2012-02-18");
+
+        expectAvailability().on("2012-02-18").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).rented()
+                .rentStartsOn("2012-12-20").x();
+        expectAvailability().on("2012-02-20").occupied().x();
     }
 
-    private final AptUnitOccupancySegment convert(MockupOccupancyStatus mockup) {
-        AptUnitOccupancySegment status = EntityFactory.create(AptUnitOccupancySegment.class);
-        status.unit().set(unit);
-        status.status().set(mockup.status());
-        status.dateFrom().set(mockup.dateFrom());
-        status.dateTo().set(mockup.dateTo());
+    @Test
+    public void testLeasedNoReservedSegment() {
+        Lease lease = createLease("2012-02-20", "2013-03-01");
 
-        if (Status.available.equals(mockup.status().getValue())) {
+        setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
+        setup().from("2012-02-20").toTheEndOfTime().status(Status.leased).withLease(lease).x();
 
-        } else if (Status.leased.equals(mockup.status().getValue())) {
-            Lease lease = EntityFactory.create(Lease.class);
-            lease.leaseFrom().setValue(status.dateFrom().getValue());
-            lease.expectedMoveIn().setValue(status.dateFrom().getValue());
-            lease.leaseTo().setValue(status.dateFrom().getValue());
-            lease.expectedMoveOut().setValue(status.dateTo().getValue());
-            status.lease().set(lease);
-        } else if (Status.offMarket.equals(mockup.status().getValue())) {
-            status.offMarket().setValue(mockup.offMarket().getValue());
-        }
+        computeAvailabilityOn("2012-02-20");
 
-        return status;
+        expectAvailability().on("2012-02-20").occupied().x();
     }
 
-    private class AptUnitOccupancyEventEffect {
+    @Test
+    public void testReserved() {
+        Lease lease = createLease("2012-02-20", "2013-02-30");
+        setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
+        setup().from("2012-02-18").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
-        private final LogicalDate eventTimestamp;
+        computeAvailabilityOn("2012-02-18");
 
-        private final List<AptUnitOccupancySegment> occupancy;
-
-        public AptUnitOccupancyEventEffect(LogicalDate eventTimestamp, List<MockupOccupancyStatus> mockup) {
-            assert eventTimestamp != null : "timestamp must not be null";
-            assert mockup != null : "mockup occupancy must not be null";
-            assert !mockup.isEmpty() : "mockup occupancy must not be empty";
-
-            this.eventTimestamp = eventTimestamp;
-            this.occupancy = new ArrayList<AptUnitOccupancySegment>();
-            for (MockupOccupancyStatus mockupStatus : mockup) {
-                this.occupancy.add(convert(mockupStatus));
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "(" + eventTimestamp.toString() + ": " + occupancy.toString() + ")";
-        }
+        expectAvailability().on("2012-02-18").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).rented()
+                .rentStartsOn("2012-12-20").x();
     }
 
-    private LinkedList<AptUnitOccupancyEventEffect> partitionToEvents(LinkedList<MockupOccupancyStatus> mockup) {
-        LinkedList<AptUnitOccupancyEventEffect> states = new LinkedList<AptUnitOccupancyEventEffect>();
-        LogicalDate lastTimestamp = null;
-        while (!mockup.isEmpty()) {
-            if (lastTimestamp == null || !lastTimestamp.equals(mockup.peek().statusDate().getValue())) {
-                lastTimestamp = mockup.peek().statusDate().getValue();
-            }
-            List<MockupOccupancyStatus> mockupState = new ArrayList<MockupOccupancyStatus>();
-            while (!mockup.isEmpty() && lastTimestamp.equals(mockup.peek().statusDate().getValue())) {
-                MockupOccupancyStatus temp = mockup.pop();
-                temp.statusDate().setValue(temp.statusDate().getValue());
-                temp.dateFrom().setValue(temp.dateFrom().getValue());
-                temp.dateTo().setValue(temp.dateTo().getValue());
-                mockupState.add(temp);
-            }
-            states.add(new AptUnitOccupancyEventEffect(lastTimestamp, mockupState));
-        }
-        return states;
+    @Test
+    public void testEndLeaseNotScoped() {
+        Lease lease = createLease("2012-02-20", "2013-03-01");
+        setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
+        setup().from("2012-02-20").to("2013-03-01").status(Status.leased).withLease(lease).x();
+        setup().from("2013-03-02").toTheEndOfTime().status(Status.vacant).x();
+
+        computeAvailabilityOn("2013-02-01");
+
+        expectAvailability().on("2013-03-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Unscoped).notrented().x();
+        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Unscoped).notrented().x();
+    }
+
+    @Test
+    public void testEndLeaseScopedAvailable() {
+        Lease lease = createLease("2012-02-20", "2013-03-01");
+        setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
+        setup().from("2012-02-20").to("2013-03-01").status(Status.leased).withLease(lease).x();
+        setup().from("2013-03-02").toTheEndOfTime().status(Status.available).x();
+
+        computeAvailabilityOn("2013-02-01");
+
+        expectAvailability().on("2013-02-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Scoped).readiness(RentReadiness.RentReady)
+                .notrented().x();
+        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).notrented().x();
+    }
+
+    @Test
+    public void testEndLeaseScopedAvailableThenLeasedAgain() {
+
+        Lease lease = createLease("2012-02-20", "2013-03-01");
+        Lease lease2 = createLease("2012-04-01", "2014-04-01");
+        setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
+        setup().from("2012-02-20").to("2013-03-01").status(Status.leased).withLease(lease).x();
+        setup().from("2013-03-02").to("2013-03-31").status(Status.reserved).withLease(lease2).x();
+        setup().from("2013-04-01").toTheEndOfTime().status(Status.leased).withLease(lease2).x();
+
+        computeAvailabilityOn("2013-02-01");
+
+        expectAvailability().on("2013-02-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Scoped).readiness(RentReadiness.RentReady)
+                .rented().rentStartsOn("2013-02-01").x();
+        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).rented()
+                .rentStartsOn("2013-02-01").x();
+        expectAvailability().on("2013-04-01").occupied().x();
+    }
+
+    @Test
+    public void testEndLeaseScopedRenovationNeeded() {
+        Lease lease = createLease("2012-02-20", "2013-03-01");
+        setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
+        setup().from("2012-02-20").to("2013-03-01").status(Status.leased).withLease(lease).x();
+        setup().from("2013-03-02").to("2013-03-10").status(Status.renovation).x();
+        setup().from("2013-03-11").toTheEndOfTime().status(Status.available).x();
+
+        computeAvailabilityOn("2013-02-01");
+
+        expectAvailability().on("2013-02-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Scoped).readiness(RentReadiness.NeedsRepairs)
+                .notrented().x();
+        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RenoInProgress).notrented().x();
+    }
+
+    @Test
+    public void testEndLeaseScopedRenovationNeededThenLeasedAgain() {
+        Lease lease1 = createLease("2012-02-20", "2013-03-01");
+        Lease lease2 = createLease("2012-03-21", "2015-03-01");
+        setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
+        setup().from("2012-02-20").to("2013-03-01").status(Status.leased).withLease(lease1).x();
+        setup().from("2013-03-02").to("2013-03-10").status(Status.renovation).x();
+        setup().from("2013-03-15").to("2013-03-20").status(Status.reserved).withLease(lease2).x();
+        setup().from("2013-03-21").toTheEndOfTime().status(Status.leased).withLease(lease2).x();
+
+        computeAvailabilityOn("2013-02-01");
+
+        expectAvailability().on("2013-02-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Scoped).readiness(RentReadiness.NeedsRepairs)
+                .rented().rentStartsOn("2013-03-21").x();
+        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RenoInProgress).rented()
+                .rentStartsOn("2013-03-21").x();
+        expectAvailability().on("2013-03-15").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).rented()
+                .rentStartsOn("2013-03-21").x();
+        expectAvailability().on("2013-03-15").occupied();
+    }
+
+    @Test
+    public void testEndLeaseScopedOffMarket() {
+        Lease lease1 = createLease("2012-02-20", "2013-03-01");
+        setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
+        setup().from("2012-02-20").to("2013-03-01").status(Status.leased).withLease(lease1).x();
+        setup().from("2013-03-02").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+
+        computeAvailabilityOn("2013-02-01");
+
+        expectAvailability().on("2013-02-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Scoped).readiness(RentReadiness.RentReady)
+                .offMarket().x();
+        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).offMarket().x();
     }
 }

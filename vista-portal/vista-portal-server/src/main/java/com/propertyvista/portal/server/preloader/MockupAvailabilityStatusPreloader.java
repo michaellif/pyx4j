@@ -30,9 +30,10 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadinessStatus;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadiness;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.VacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Scoping;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -145,11 +146,11 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                     if (status.vacancyStatus().isNull()) {
                         notice(status);
 
-                    } else if (status.vacancyStatus().getValue().equals(VacancyStatus.Notice)) {
-                        if (status.isScoped().isBooleanTrue()) {
+                    } else if (status.vacancyStatus().getValue().equals(Vacancy.Notice)) {
+                        if (status.scoping().isBooleanTrue()) {
                             // throw a 'fair' coin in order to decide if someone is going to rent the unit or move out will take place
                             if ((RND.nextInt(2) == 0)
-                                    & (!RentedStatus.Rented.equals(status.rentedStatus().getValue()) & RentReadinessStatus.RentReady.equals(status
+                                    & (!RentedStatus.Rented.equals(status.rentedStatus().getValue()) & RentReadiness.RentReady.equals(status
                                             .rentReadinessStatus().getValue()))) {
                                 rented(status);
                             } else {
@@ -164,14 +165,14 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                             }
                         }
                     } else { /* Vacant */
-                        if (status.isScoped().isBooleanTrue()) {
+                        if (status.scoping().isBooleanTrue()) {
                             if (RentedStatus.Rented.equals(status.rentedStatus().getValue())) {
                                 moveIn(status);
-                            } else if (RentReadinessStatus.RentReady.equals(status.rentReadinessStatus().getValue())) {
+                            } else if (RentReadiness.RentReady.equals(status.rentReadinessStatus().getValue())) {
                                 rented(status);
-                            } else if (RentReadinessStatus.NeedsRepairs.equals(status.rentReadinessStatus().getValue())) {
+                            } else if (RentReadiness.NeedsRepairs.equals(status.rentReadinessStatus().getValue())) {
                                 renoInProgress(status);
-                            } else if (RentReadinessStatus.RenoInProgress.equals(status.rentReadinessStatus().getValue())) {
+                            } else if (RentReadiness.RenoInProgress.equals(status.rentReadinessStatus().getValue())) {
                                 renoFinished(status);
                             }
                         } else {
@@ -196,19 +197,19 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
             status.vacancyStatus().setValue(null);
             statuses.add(status.duplicate());
 
-            status.vacancyStatus().setValue(VacancyStatus.Vacant);
+            status.vacancyStatus().setValue(Vacancy.Vacant);
             statuses.add(status.duplicate());
 
             status.vacancyStatus().setValue(null);
             statuses.add(status.duplicate());
 
-            status.vacancyStatus().setValue(VacancyStatus.Vacant);
+            status.vacancyStatus().setValue(Vacancy.Vacant);
             statuses.add(status.duplicate());
 
             status.vacancyStatus().setValue(null);
             statuses.add(status.duplicate());
 
-            status.vacancyStatus().setValue(VacancyStatus.Vacant);
+            status.vacancyStatus().setValue(Vacancy.Vacant);
             statuses.add(status.duplicate());
 
             status.vacancyStatus().setValue(null);
@@ -222,9 +223,9 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
     private static void notice(UnitAvailabilityStatus status) {
         LogicalDate eventDate = new LogicalDate(status.statusDate().getValue().getTime() + rand(MIN_RESIDENCY_TIME, MAX_RESIDENCY_TIME));
         status.statusDate().setValue(eventDate);
-        status.vacancyStatus().setValue(VacancyStatus.Notice);
+        status.vacancyStatus().setValue(Vacancy.Notice);
         status.rentedStatus().setValue(RentedStatus.Unrented);
-        status.isScoped().setValue(false);
+        status.scoping().setValue(Scoping.Unscoped);
         status.moveOutDay().setValue(new LogicalDate(eventDate.getTime() + rand(MIN_STAY_AFTER_NOTICE, MAX_STAY_AFTER_NOTICE)));
     }
 
@@ -233,13 +234,13 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         status.unitRent().setValue(null);
         status.rentDeltaAbsolute().setValue(null);
         status.rentDeltaRelative().setValue(null);
-        status.vacancyStatus().setValue(VacancyStatus.Vacant);
+        status.vacancyStatus().setValue(Vacancy.Vacant);
     }
 
     private static void moveIn(UnitAvailabilityStatus status) {
         status.statusDate().setValue(status.moveInDay().getValue());
         status.vacancyStatus().setValue(null);
-        status.isScoped().setValue(null);
+        status.scoping().setValue(null);
         status.rentReadinessStatus().setValue(null);
         status.rentedStatus().setValue(null);
         status.rentedFromDate().setValue(null);
@@ -251,7 +252,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
     private static void scoped(UnitAvailabilityStatus status) {
         long minScopingTime;
         long maxScopingTime;
-        if (status.vacancyStatus().equals(VacancyStatus.Notice)) {
+        if (status.vacancyStatus().equals(Vacancy.Notice)) {
             minScopingTime = status.statusDate().getValue().getTime() + MIN_EVENT_DELTA;
             maxScopingTime = status.moveOutDay().getValue().getTime() - MIN_EVENT_DELTA;
         } else { // Vacant
@@ -261,8 +262,8 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         if (minScopingTime < maxScopingTime) {
             LogicalDate eventDate = new LogicalDate(rand(minScopingTime, maxScopingTime));
             status.statusDate().setValue(eventDate);
-            status.rentReadinessStatus().setValue(RND.nextInt(5) > 1 ? RentReadinessStatus.RentReady : RentReadinessStatus.NeedsRepairs);
-            status.isScoped().setValue(true);
+            status.rentReadinessStatus().setValue(RND.nextInt(5) > 1 ? RentReadiness.RentReady : RentReadiness.NeedsRepairs);
+            status.scoping().setValue(Scoping.Scoped);
         }
     }
 
@@ -270,7 +271,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         long minRentedTime;
         long maxRentedTime;
         LogicalDate moveInDay = null;
-        if (VacancyStatus.Notice.equals(status.vacancyStatus().getValue())) {
+        if (Vacancy.Notice.equals(status.vacancyStatus().getValue())) {
             minRentedTime = status.statusDate().getValue().getTime() + MIN_EVENT_DELTA;
             maxRentedTime = status.moveOutDay().getValue().getTime() - MIN_EVENT_DELTA;
 
@@ -302,14 +303,14 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
     private static void renoInProgress(UnitAvailabilityStatus status) {
         status.statusDate().setValue(new LogicalDate(rand(status.statusDate().getValue().getTime() + MIN_EVENT_DELTA, MAX_WAIT_UNTIL_RENO_STARTS)));
-        status.rentReadinessStatus().setValue(RentReadinessStatus.RenoInProgress);
+        status.rentReadinessStatus().setValue(RentReadiness.RenoInProgress);
     }
 
     private static void renoFinished(UnitAvailabilityStatus status) {
         status.statusDate().setValue(new LogicalDate(rand(status.statusDate().getValue().getTime() + MIN_EVENT_DELTA, MAX_WAIT_UNTIL_RENO_ENDS)));
-        status.rentReadinessStatus().setValue(RentReadinessStatus.RentReady);
+        status.rentReadinessStatus().setValue(RentReadiness.RentReady);
         status.rentedStatus().setValue(RentedStatus.Unrented);
-        status.vacancyStatus().setValue(VacancyStatus.Vacant);
+        status.vacancyStatus().setValue(Vacancy.Vacant);
     }
 
     private static BigDecimal randomUnitRent(UnitAvailabilityStatus status) {

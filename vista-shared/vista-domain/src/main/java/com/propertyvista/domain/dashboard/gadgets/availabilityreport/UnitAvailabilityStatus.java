@@ -38,7 +38,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 // TODO probably also must include Tenant Name/Contact Information
 public interface UnitAvailabilityStatus extends IEntity {
 
-    public enum VacancyStatus {
+    public enum Vacancy {
         Vacant,
 
         Notice;
@@ -57,8 +57,17 @@ public interface UnitAvailabilityStatus extends IEntity {
         }
     }
 
-    public enum RentReadinessStatus {
+    public enum RentReadiness {
         RentReady, RenoInProgress, NeedsRepairs;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    public enum Scoping {
+        Scoped, Unscoped;
 
         @Override
         public String toString() {
@@ -113,19 +122,18 @@ public interface UnitAvailabilityStatus extends IEntity {
 
     @Caption(name = "Vacant/Notice")
     @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<VacancyStatus> vacancyStatus();
+    IPrimitive<Vacancy> vacancyStatus();
 
     @Caption(name = "Rented/Unrented/OffMarket")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<RentedStatus> rentedStatus();
 
-    @Caption(name = "Scoping")
     @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<Boolean> isScoped();
+    IPrimitive<Scoping> scoping();
 
     @Caption(name = "Physical Condition")
     @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<RentReadinessStatus> rentReadinessStatus();
+    IPrimitive<RentReadiness> rentReadinessStatus();
 
     @Format("#0.00")
     @Editor(type = EditorType.money_new)

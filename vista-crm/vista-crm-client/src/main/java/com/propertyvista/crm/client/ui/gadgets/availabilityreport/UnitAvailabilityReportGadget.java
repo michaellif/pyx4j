@@ -208,7 +208,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                     new MemberColumnDescriptor.Builder(proto().floorplanMarketingName()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().vacancyStatus()).build(),
                     new MemberColumnDescriptor.Builder(proto().rentedStatus()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().isScoped()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().scoping()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().rentReadinessStatus()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().unitRent()).build(),
                     new MemberColumnDescriptor.Builder(proto().marketRent()).build(),

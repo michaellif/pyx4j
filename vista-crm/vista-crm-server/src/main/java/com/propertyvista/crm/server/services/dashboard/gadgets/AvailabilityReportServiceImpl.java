@@ -41,7 +41,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportSe
 import com.propertyvista.crm.server.util.SortingFactory;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.VacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO;
@@ -139,12 +139,12 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 	private static boolean isAcceptable(UnitAvailabilityStatusDTO unit, boolean displayOccupied, boolean displayVacant, boolean displayNotice,
             boolean displayRented, boolean displayNotRented) {
 
-        VacancyStatus vacancyStatus = unit.vacancyStatus().getValue();
+        Vacancy vacancyStatus = unit.vacancyStatus().getValue();
         RentedStatus rentedStatus = unit.rentedStatus().getValue();
 
         return (displayOccupied & vacancyStatus == null) //XS
-                | ((displayVacant & vacancyStatus == VacancyStatus.Vacant) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented))) //
-                | ((displayNotice & vacancyStatus == VacancyStatus.Notice) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented)));
+                | ((displayVacant & vacancyStatus == Vacancy.Vacant) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented))) //
+                | ((displayNotice & vacancyStatus == Vacancy.Notice) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented)));
     }
 
     @Override
@@ -192,16 +192,16 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
                 ++total;
 
                 // check that we have vacancy status, and don't waste the cpu cycles if we don't have it
-                VacancyStatus vacancyStatus = unitStatus.vacancyStatus().getValue();
+                Vacancy vacancyStatus = unitStatus.vacancyStatus().getValue();
                 if (vacancyStatus == null) {
                     continue;
 
-                } else if (VacancyStatus.Vacant.equals(vacancyStatus)) {
+                } else if (Vacancy.Vacant.equals(vacancyStatus)) {
                     ++vacant;
                     if (RentedStatus.Rented.equals(unitStatus.rentedStatus().getValue())) {
                         ++vacantRented;
                     }
-                } else if (VacancyStatus.Notice.equals(vacancyStatus)) {
+                } else if (Vacancy.Notice.equals(vacancyStatus)) {
                     ++notice;
                     if (RentedStatus.Rented.equals(unitStatus.rentedStatus().getValue())) {
                         ++noticeRented;
@@ -273,14 +273,14 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         int totalForUnit = 0;
 
         Key unitPK = null;
-        VacancyStatus prevVacancy = null;
+        Vacancy prevVacancy = null;
         boolean skipFirstEmptyRange = fromDate != null ? false : true;
 
         Iterator<UnitAvailabilityStatus> i = statuses.iterator();
         while (i.hasNext()) {
             UnitAvailabilityStatus status = i.next();
             Key thisUnitPK = status.unit().getPrimaryKey();
-            VacancyStatus vacancy = status.vacancyStatus().getValue();
+            Vacancy vacancy = status.vacancyStatus().getValue();
             long statusTime = status.statusDate().getValue().getTime();
 
             if (!thisUnitPK.equals(unitPK)) {
@@ -376,7 +376,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
     private static boolean isRevenueLost(final UnitAvailabilityStatusDTO unit) {
         // TODO review: why the check "(moveOutDay != null)" is performed here? isn't VACANT status a sufficient condition for it? 
-        return VacancyStatus.Vacant.equals(unit.vacancyStatus().getValue()) & unit.moveOutDay().getValue() != null;
+        return Vacancy.Vacant.equals(unit.vacancyStatus().getValue()) & unit.moveOutDay().getValue() != null;
     }
 
     /**
