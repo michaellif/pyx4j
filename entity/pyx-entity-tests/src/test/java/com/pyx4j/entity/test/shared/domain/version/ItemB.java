@@ -39,6 +39,7 @@ public interface ItemB extends IVersionedEntity<ItemBVersion> {
         IPrimitive<String> name();
 
         @Versioned
+        // Is this Owned ?
         ItemA itemA();
     }
 

@@ -125,6 +125,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         CacheService.shutdown();
     }
 
+    //TODO implement thread locale
+    void setTimeNow(Date date) {
+
+    }
+
     public boolean isTableExists(Class<? extends IEntity> entityClass) {
         TableModel tm = new TableModel(connectionProvider.getDialect(), mappings, EntityFactory.getEntityMeta(entityClass));
         try {

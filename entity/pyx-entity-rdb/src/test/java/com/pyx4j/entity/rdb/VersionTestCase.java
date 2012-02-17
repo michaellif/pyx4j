@@ -20,13 +20,35 @@
  */
 package com.pyx4j.entity.rdb;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
+import com.pyx4j.entity.test.shared.domain.version.RefToCurrent;
+import com.pyx4j.entity.test.shared.domain.version.RefToVersioned;
+import com.pyx4j.gwt.server.DateUtils;
 
 public abstract class VersionTestCase extends DatastoreTestBase {
 
-    public void testVersionPrototype() {
+    /**
+     * Emulate Database current time
+     */
+    private void setDBTime(String dateStr) {
+        EntityPersistenceServiceRDB service = ((EntityPersistenceServiceRDB) srv);
+        service.setTimeNow(DateUtils.detectDateformat(dateStr));
+    }
+
+    private void srv_finalize(IEntity entity) {
+        // TODO create function in  PersistenceService
+    }
+
+    public <T extends IEntity> T srv_retrieveDraft(Class<T> entityClass, Key primaryKey) {
+        // TODO create function in  PersistenceService
+        return null;
+    }
+
+    public void testVersionedSingleEntity() {
         String testId = uniqueString();
         if (true) {
             return;
@@ -40,55 +62,69 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.version().name().setValue(origName);
         itemA1.version().testId().setValue(testId);
 
-//        srv_persist(itemA1);
+        //Save Draft
+        srv.persist(itemA1);
 
-//        srv_finalize(itemA1);
-//
-//        RefToCurrent refToCurrent1 = EntityFactory.create(RefToCurrent.class);
-//        refToCurrent1.name().setValue(uniqueString());
-//        refToCurrent1.testId().setValue(testId);
-//        refToCurrent1.itemA().set(itemA1);
-//        srv.persist(refToCurrent1);
-//
-//        RefToVersioned refToVersioned1 = EntityFactory.create(RefToVersioned.class);
-//        refToVersioned1.name().setValue(uniqueString());
-//        refToVersioned1.testId().setValue(testId);
-//        refToVersioned1.itemA().set(itemA1.current());
-//        srv.persist(refToVersioned1);
-//
-//        // Make new version
-//        makeNewVersion(itemA1);
-//        final String newName = "V2" + uniqueString();
-//        itemA1.current().name().setValue(newName);
-//        srv.persist(itemA1.current());
-//
-//        // Retrieve original reference
-//        RefToCurrent refToCurrent1r1 = srv.retrieve(RefToCurrent.class, refToCurrent1.getPrimaryKey());
-//        assertEquals("ref updated", newName, refToCurrent1r1.itemA().current().name().getValue());
-//
-//        // Retrieve new version
-//        RefToVersioned refToVersioned1r1 = srv.retrieve(RefToVersioned.class, refToVersioned1.getPrimaryKey());
-//        assertEquals("ref not updated", origName, refToVersioned1r1.itemA().name().getValue());
-//    }
-//
-//    private void srv_finalize(IVersionedEntity<IEntity> itemA1) {
-//        // TODO Auto-generated method stub
-//
-//    }
-//
-//    private void srv_persist(ItemA itemA1) {
-//        // TODO Auto-generated method stub
-//
-//    }
-//
-//    private void makeNewVersion(ItemA itemA1) {
-//        ItemAVersion newVersion = itemA1.current().duplicate();
-//        newVersion.setPrimaryKey(null);
-//        newVersion.version().setValue(itemA1.current().version().getValue() + 1);
-//        srv.persist(newVersion);
-//
-//        itemA1.current().set(newVersion);
-//        srv.persist(itemA1);
+        // Finalize as of (current) date
+        setDBTime("2011-01-01");
+        srv_finalize(itemA1);
 
+        setDBTime("2011-01-02");
+
+        RefToCurrent refToCurrent1 = EntityFactory.create(RefToCurrent.class);
+        refToCurrent1.name().setValue(uniqueString());
+        refToCurrent1.testId().setValue(testId);
+        refToCurrent1.itemA().set(itemA1);
+
+        srv.persist(refToCurrent1);
+
+        RefToVersioned refToVersioned1 = EntityFactory.create(RefToVersioned.class);
+        refToVersioned1.name().setValue(uniqueString());
+        refToVersioned1.testId().setValue(testId);
+        refToVersioned1.itemA().set(itemA1);
+        srv.persist(refToVersioned1);
+
+        // Make new version
+        // Finalize as of (current) date
+        setDBTime("2011-02-01");
+        final String newName = "V2" + uniqueString();
+        itemA1.version().name().setValue(newName);
+        srv_finalize(itemA1);
+
+        //Save another Draft
+        final String draftName = "D1" + uniqueString();
+        itemA1.version().name().setValue(draftName);
+        srv.persist(itemA1);
+
+        // Verify values, Current has the value of last  finalize
+        {
+            RefToCurrent refToCurrent1r1 = srv.retrieve(RefToCurrent.class, refToCurrent1.getPrimaryKey());
+            assertEquals("ref updated", newName, refToCurrent1r1.itemA().version().name().getValue());
+            assertEquals("date as of now", DateUtils.detectDateformat("2011-02-01"), refToCurrent1r1.itemA().forDate().getValue());
+        }
+
+        // Versioned has value of the time when it was saved
+        {
+            // Retrieve new version
+            RefToVersioned refToVersioned1r1 = srv.retrieve(RefToVersioned.class, refToVersioned1.getPrimaryKey());
+            assertEquals("ref not updated", origName, refToVersioned1r1.itemA().name().getValue());
+            assertEquals("date as of time of save", DateUtils.detectDateformat("2011-01-02"), refToVersioned1r1.itemA().forDate().getValue());
+        }
+
+        // Retrieval of item itself, by default returns current
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey());
+            assertEquals("current", newName, itemA1r.version().name().getValue());
+        }
+
+        // Access to draft version for editing
+        {
+            ItemA itemA1r = srv_retrieveDraft(ItemA.class, itemA1.getPrimaryKey());
+            assertEquals("draft", draftName, itemA1r.version().name().getValue());
+        }
     }
+
+    public void testVersionedGraph() {
+    }
+
 }
