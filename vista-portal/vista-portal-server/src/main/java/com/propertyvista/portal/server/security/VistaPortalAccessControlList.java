@@ -47,6 +47,7 @@ import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
 import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
+import com.propertyvista.portal.rpc.portal.services.TenantPasswordChangeUserService;
 import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
@@ -87,6 +88,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired, new IServiceExecutePermission(PtPasswordResetService.class));
         grant(VistaBasicBehavior.TenantPortalPasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));
+        grant(VistaBasicBehavior.TenantPortal, new IServiceExecutePermission(TenantPasswordChangeUserService.class));
 
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
