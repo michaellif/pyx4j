@@ -13,9 +13,18 @@
  */
 package com.propertyvista.server.config;
 
+import javax.servlet.ServletContext;
+
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.server.ThrottleConfig;
 
 public class VistaServerSideConfigurationDemo extends VistaServerSideConfiguration {
+
+    @Override
+    public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
+        // Disable environment selection.  All defined in tomcatX.wrapper.conf -Dcom.pyx4j.appConfig=
+        return this;
+    }
 
     @Override
     public boolean openIdrequired() {
