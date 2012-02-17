@@ -50,6 +50,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.server.LocalService;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
@@ -156,24 +157,29 @@ public class SignInPanel extends Panel {
         request.password().setValue(password);
         request.captcha().setValue(captcha);
 
+        final boolean[] rc = { false };
         // This does the actual authentication; will throw an exception in case of failure
         LocalService.create(PortalAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
-
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof ChallengeVerificationRequired) {
                     captchaRequired = true;
+                } else if (caught instanceof UserRuntimeException) {
+                    error(caught.getMessage());
+                } else {
+                    error(i18n.tr("Action failed. Please try again later."));
                 }
+                rc[0] = false;
             }
 
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 // Our wicket session authentication simply returns true, so this call will just create wicket session
-                AuthenticatedWebSession.get().signIn(username, password);
+                rc[0] = AuthenticatedWebSession.get().signIn(username, password);
             }
         }, new ClientSystemInfo(), request);
 
-        return true;
+        return rc[0];
     }
 
     private boolean isSignedIn() {

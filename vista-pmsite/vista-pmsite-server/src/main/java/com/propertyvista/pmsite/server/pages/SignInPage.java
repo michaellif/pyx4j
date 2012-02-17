@@ -29,6 +29,8 @@ public final class SignInPage extends BasePage {
 
     private static final I18n i18n = I18n.get(SignInPage.class);
 
+    public static final String SigninOnResetParam = "reset";
+
     public SignInPage() {
         this(null);
     }
@@ -36,6 +38,10 @@ public final class SignInPage extends BasePage {
     public SignInPage(final PageParameters parameters) {
         super(parameters);
         add(new SignInPanel("signInPanel"));
+
+        if (!parameters.get(SigninOnResetParam).isNull()) {
+            info(i18n.tr("A link to the password reset page was sent to your email address"));
+        }
     }
 
     @Override

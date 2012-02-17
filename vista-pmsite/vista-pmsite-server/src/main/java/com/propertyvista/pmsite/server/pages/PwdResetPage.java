@@ -17,6 +17,7 @@ import net.tanesha.recaptcha.ReCaptcha;
 import net.tanesha.recaptcha.ReCaptchaFactory;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -36,13 +37,14 @@ import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.server.LocalService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
-import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
+import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 
 public final class PwdResetPage extends BasePage {
     private static final long serialVersionUID = 1L;
@@ -113,11 +115,11 @@ public final class PwdResetPage extends BasePage {
             PasswordRetrievalRequest request = getModelObject().getEntityValue();
             request.captcha().setValue(captchaResponse);
 
-            new PortalAuthenticationServiceImpl().requestPasswordReset(new AsyncCallback<VoidSerializable>() {
+            LocalService.create(PortalAuthenticationService.class).requestPasswordReset(new AsyncCallback<VoidSerializable>() {
                 @Override
                 public void onSuccess(VoidSerializable result) {
-                    // show success message
-                    info(i18n.tr("A link to the password reset page was sent to your email address"));
+                    // redirect to login with success parameter
+                    throw new RestartResponseException(SignInPage.class, new PageParameters().add(SignInPage.SigninOnResetParam, ""));
                 }
 
                 @Override

@@ -44,6 +44,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.server.LocalService;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -54,8 +55,8 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
-import com.propertyvista.portal.server.portal.services.PortalPasswordResetServiceImpl;
-import com.propertyvista.portal.server.portal.services.TenantPasswordChangeUserServiceImpl;
+import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
+import com.propertyvista.portal.rpc.portal.services.TenantPasswordChangeUserService;
 
 @AuthorizeInstantiation({ Roles.USER, PMSiteSession.PasswordChangeRequiredRole })
 public final class PwdChangePage extends BasePage {
@@ -170,43 +171,44 @@ public final class PwdChangePage extends BasePage {
             request.currentPassword().setValue(getOldPassword());
             request.newPassword().setValue(getNewPassword());
             request.captcha().setValue(captchaResponse);
-            try {
-                if (pwdReset) {
-                    new PortalPasswordResetServiceImpl().resetPassword(new AsyncCallback<AuthenticationResponse>() {
-                        @Override
-                        public void onSuccess(AuthenticationResponse result) {
-                            // success - restart wicket session and redirect to target
-                            PMSiteSession.get().signIn(null, null);
-                            redirectToTarget();
-                        }
+            if (pwdReset) {
+                LocalService.create(PortalPasswordResetService.class).resetPassword(new AsyncCallback<AuthenticationResponse>() {
+                    @Override
+                    public void onSuccess(AuthenticationResponse result) {
+                        // success - restart wicket session and redirect to target
+                        PMSiteSession.get().signIn(null, null);
+                        redirectToTarget();
+                    }
 
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            // show error message
-                            error(caught.getMessage());
-                        }
-                    }, request);
-                } else {
-                    new TenantPasswordChangeUserServiceImpl().changePassword(new AsyncCallback<VoidSerializable>() {
-                        @Override
-                        public void onSuccess(VoidSerializable result) {
-                            // success - redirect to target
-                            redirectToTarget();
-                        }
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        onCallbackFailure(caught);
+                    }
+                }, request);
+            } else {
+                LocalService.create(TenantPasswordChangeUserService.class).changePassword(new AsyncCallback<VoidSerializable>() {
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        // success - redirect to target
+                        redirectToTarget();
+                    }
 
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            // show error message
-                            error(caught.getMessage());
-                        }
-                    }, request);
-                }
-            } catch (ChallengeVerificationRequired e) {
-                captchaRequired = true;
-                error(e.getMessage());
-            } catch (UserRuntimeException e) {
-                error(e.getMessage());
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        onCallbackFailure(caught);
+                    }
+                }, request);
             }
+        }
+    }
+
+    private void onCallbackFailure(Throwable caught) {
+        if (caught instanceof ChallengeVerificationRequired) {
+            captchaRequired = true;
+        } else if (caught instanceof UserRuntimeException) {
+            error(caught.getMessage());
+        } else {
+            error(i18n.tr("Action failed. Please try again later."));
         }
     }
 
