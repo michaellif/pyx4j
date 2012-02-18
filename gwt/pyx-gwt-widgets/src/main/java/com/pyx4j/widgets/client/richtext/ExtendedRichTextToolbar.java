@@ -15,6 +15,9 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -24,14 +27,17 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.CustomButton;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageFactory;
@@ -68,6 +74,17 @@ public class ExtendedRichTextToolbar extends Composite {
             } else if (sender == fontSizes) {
                 formatter.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
                 fontSizes.setSelectedIndex(0);
+            } else if (customControls.containsKey(sender)) {
+                RichTextAction action = customControls.get(sender);
+                if (action != null) {
+                    inOperation = true;
+                    action.perform(formatter, new Command() {
+                        @Override
+                        public void execute() {
+                            inOperation = false;
+                        }
+                    });
+                }
             }
         }
 
@@ -131,6 +148,17 @@ public class ExtendedRichTextToolbar extends Composite {
                 // This will catch any cases where the user moves the cursur using the
                 // keyboard, or uses one of the browser's built-in keyboard shortcuts.
                 updateStatus();
+            } else if (customControls.containsKey(sender)) {
+                RichTextAction action = customControls.get(sender);
+                if (action != null) {
+                    inOperation = true;
+                    action.perform(formatter, new Command() {
+                        @Override
+                        public void execute() {
+                            inOperation = false;
+                        }
+                    });
+                }
             }
         }
 
@@ -150,6 +178,10 @@ public class ExtendedRichTextToolbar extends Composite {
         }
     }
 
+    public interface RichTextAction {
+        void perform(RichTextArea.Formatter formatter, Command onComplete);
+    }
+
     private static final RichTextArea.FontSize[] fontSizesConstants = new RichTextArea.FontSize[] { RichTextArea.FontSize.XX_SMALL,
             RichTextArea.FontSize.X_SMALL, RichTextArea.FontSize.SMALL, RichTextArea.FontSize.MEDIUM, RichTextArea.FontSize.LARGE,
             RichTextArea.FontSize.X_LARGE, RichTextArea.FontSize.XX_LARGE };
@@ -167,6 +199,10 @@ public class ExtendedRichTextToolbar extends Composite {
     private final HorizontalPanel buttonBarTop = new HorizontalPanel();
 
     private final HorizontalPanel buttonBarBottom = new HorizontalPanel();
+
+    private final HorizontalPanel buttonBarCustom = new HorizontalPanel();
+
+    private final Map<Widget, RichTextAction> customControls = new HashMap<Widget, RichTextAction>();
 
     private ToggleButton bold;
 
@@ -232,6 +268,7 @@ public class ExtendedRichTextToolbar extends Composite {
         this.richText = richText;
         this.formatter = richText.getFormatter();
 
+        toolBar.add(buttonBarCustom);
         toolBar.add(buttonBarTop);
         toolBar.add(buttonBarBottom);
 
@@ -381,4 +418,17 @@ public class ExtendedRichTextToolbar extends Composite {
         return inOperation;
     }
 
+    public void addCustomButton(CustomButton button, RichTextAction action) {
+        button.addBlurHandler(handler);
+        button.addClickHandler(handler);
+        buttonBarCustom.add(button);
+        customControls.put(button, action);
+    }
+
+    public void addCustomList(ListBox list, RichTextAction action) {
+        list.addBlurHandler(handler);
+        list.addChangeHandler(handler);
+        buttonBarCustom.add(list);
+        customControls.put(list, action);
+    }
 }

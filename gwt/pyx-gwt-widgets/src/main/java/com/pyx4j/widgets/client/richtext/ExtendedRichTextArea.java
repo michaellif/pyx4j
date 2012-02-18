@@ -32,12 +32,15 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.CustomButton;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ToggleButton;
 
 import com.pyx4j.widgets.client.ITextWidget;
+import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.RichTextArea;
+import com.pyx4j.widgets.client.richtext.ExtendedRichTextToolbar.RichTextAction;
 
 public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
     private final RichTextArea richTextArea;
@@ -137,6 +140,14 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
         }
         html = b.toString();
         return html.replaceAll("<br>", "<br />");
+    }
+
+    public void addCustomButton(CustomButton button, RichTextAction action) {
+        toolbar.addCustomButton(button, action);
+    }
+
+    public void addCustomList(ListBox list, RichTextAction action) {
+        toolbar.addCustomList(list, action);
     }
 
     public void setImageProvider(RichTextImageProvider provider) {
