@@ -44,7 +44,6 @@ public class LocalePanel extends Panel {
                 String lang = cl.name();
                 String label = cl.getNativeDisplayName();
                 String title = cl.toString();
-                System.out.println("lang = " + lang + "; label = " + label + "; title = " + title);
                 LocalizedPageLink link = new LocalizedPageLink("langLink", getPage().getClass(), getPage().getPageParameters(), lang);
                 link.setText(label);
                 link.add(AttributeModifier.replace("title", title));
