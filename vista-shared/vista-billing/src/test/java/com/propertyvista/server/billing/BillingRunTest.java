@@ -33,14 +33,34 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class BillingRunTest extends BillingTestBase {
 
     public void testSequentialBillingRun() {
-        runBilling(1, true);
-        runBilling(2, true);
-        runBilling(3, false);
-        runBilling(4, true);
-        runBilling(5, true);
+        Bill bill = runBilling(1, true);
+        assertEquals("Number of charges", 4, bill.charges().size());
+        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        bill = runBilling(2, true);
+        assertEquals("Number of charges", 4, bill.charges().size());
+        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        bill = runBilling(3, false);
+        assertEquals("Number of charges", 4, bill.charges().size());
+        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        bill = runBilling(4, true);
+        assertEquals("Number of charges", 4, bill.charges().size());
+        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        bill = runBilling(5, true);
+        assertEquals("Number of charges", 4, bill.charges().size());
+        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
     }
 
-    private void runBilling(int billNumber, boolean confirm) {
+    private Bill runBilling(int billNumber, boolean confirm) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         Lease lease = Persistence.service().query(criteria).get(0);
         BillingFacade.runBilling(lease);
@@ -51,6 +71,11 @@ public class BillingRunTest extends BillingTestBase {
         } else {
             BillingFacade.rejectBill(bill);
         }
+
+        Persistence.service().retrieve(bill.charges());
+        Persistence.service().retrieve(bill.chargeAdjustments());
+        Persistence.service().retrieve(bill.leaseAdjustments());
+
         DataDump.dump("bill", bill);
         DataDump.dump("lease", lease);
 
@@ -59,5 +84,7 @@ public class BillingRunTest extends BillingTestBase {
 
         assertEquals("ServiceCharge", new BigDecimal("930.30"), bill.serviceCharge().getValue());
         assertEquals("RecurringFeatureCharges", new BigDecimal("78.38"), bill.recurringFeatureCharges().getValue());
+
+        return bill;
     }
 }

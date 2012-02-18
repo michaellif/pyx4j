@@ -70,7 +70,7 @@ public interface Bill extends IEntity {
     @Detached
     @Owned
     @OrderBy(BillChargeAdjustment.OrderId.class)
-    IList<BillChargeAdjustment> productAdjustments();
+    IList<BillChargeAdjustment> chargeAdjustments();
 
     @Detached
     @Owned

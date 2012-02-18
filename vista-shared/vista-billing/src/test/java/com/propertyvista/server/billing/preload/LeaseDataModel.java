@@ -112,7 +112,7 @@ public class LeaseDataModel {
                     billableItem.adjustments().add(adjustment);
                 }
 
-                //Full term adjustment(discount) on locker
+                //Full term adjustment(discount) on locker (%)
                 if (Type.pet.equals(feature.type().getValue())) {
                     BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
                     adjustment.billingRunNumber().setValue(1);

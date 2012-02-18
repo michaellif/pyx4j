@@ -96,7 +96,7 @@ class Billing {
         createPayments();
         createCharges();
         createLeaseAdjustments();
-        createProductAdjustments();
+        createChargeAdjustments();
 
         calculateTotals();
 
@@ -167,30 +167,30 @@ class Billing {
 
     private void createLeaseAdjustments() {
         for (LeaseAdjustment item : bill.billingAccount().leaseFinancial().adjustments()) {
-            createeLeaseAdjustment(item);
+            createLeaseAdjustment(item);
         }
     }
 
-    private void createeLeaseAdjustment(LeaseAdjustment item) {
+    private void createLeaseAdjustment(LeaseAdjustment item) {
         BillLeaseAdjustment adjustment = EntityFactory.create(BillLeaseAdjustment.class);
         bill.leaseAdjustments().add(adjustment);
         bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.value().getValue()));
     }
 
-    private void createProductAdjustments() {
-        createProductAdjustments(bill.billingAccount().leaseFinancial().lease().serviceAgreement().serviceItem());
+    private void createChargeAdjustments() {
+        createChargeAdjustments(bill.billingAccount().leaseFinancial().lease().serviceAgreement().serviceItem());
         for (BillableItem item : bill.billingAccount().leaseFinancial().lease().serviceAgreement().featureItems()) {
-            createProductAdjustments(item);
+            createChargeAdjustments(item);
         }
     }
 
-    private void createProductAdjustments(BillableItem item) {
+    private void createChargeAdjustments(BillableItem item) {
         for (BillableItemAdjustment adjustment : item.adjustments()) {
-            createProductAdjustment(adjustment);
+            createChargeAdjustment(adjustment);
         }
     }
 
-    private void createProductAdjustment(BillableItemAdjustment itemAdjustment) {
+    private void createChargeAdjustment(BillableItemAdjustment itemAdjustment) {
 
         BillChargeAdjustment adjustment = EntityFactory.create(BillChargeAdjustment.class);
         adjustment.bill().set(bill);
@@ -204,7 +204,7 @@ class Billing {
             adjustment.value().setValue(itemAdjustment.billableItem().item().price().getValue().multiply(new BigDecimal(-1)));
         }
 
-        bill.productAdjustments().add(adjustment);
+        bill.chargeAdjustments().add(adjustment);
         bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.value().getValue()));
     }
 
