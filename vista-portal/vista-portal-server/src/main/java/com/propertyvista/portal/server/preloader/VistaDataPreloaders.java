@@ -62,8 +62,6 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
 
             add(new DevelopmentSecurityPreloader());
 
-            add(new PreloadPolicies());
-
             // DEMO - temporary!!!
             // Availability Report Gadgets related
             add(new MockupAvailabilityStatusPreloader());
@@ -73,6 +71,8 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
 
             // Taxes preloader
             add(new ChargeCodePreloader());
+
+            add(new PreloadPolicies());
         }
 
         //DEMO Different data for different PMC

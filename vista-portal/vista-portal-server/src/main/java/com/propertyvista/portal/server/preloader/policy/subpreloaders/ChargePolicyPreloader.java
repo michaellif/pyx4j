@@ -59,7 +59,8 @@ public class ChargePolicyPreloader extends AbstractPolicyPreloader<ChargePolicy>
             policy.chargePolicyItems().add(item);
 
             Persistence.service().persist(policy);
-        }
+        } else
+            throw new Error("unable to persist ChargePolicy");
 
         return policy;
     }
