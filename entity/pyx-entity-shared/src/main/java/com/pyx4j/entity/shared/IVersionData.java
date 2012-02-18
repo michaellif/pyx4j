@@ -28,10 +28,11 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.ManagedColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.i18n.annotations.I18n;
 
-// Ideally this should be parameterized type IVersionInfo<VERSIONED_ITEM extends IEntity>
-@AbstractEntity
-public interface IVersionInfo extends IEntity {
+@AbstractEntity(generateMetadata = false)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface IVersionData extends IEntity {
 
     @Owner
     @JoinColumn
@@ -47,8 +48,6 @@ public interface IVersionInfo extends IEntity {
     @ManagedColumn
     IPrimitive<Date> toDate();
 
-    //@ManagedColumn
-    //VERSIONED_ITEM version();
-    IPrimitive<Key> versionKey();
+    IPrimitive<Key> createdByUserKey();
 
 }

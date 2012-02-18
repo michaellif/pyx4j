@@ -31,7 +31,7 @@ public interface RefToVersioned extends IEntity {
     IPrimitive<String> name();
 
     @Versioned
-    ItemA itemA();
+    ItemA itemA(); //-> item.id and item.forDate
 
     @Versioned
     ItemB itemB();

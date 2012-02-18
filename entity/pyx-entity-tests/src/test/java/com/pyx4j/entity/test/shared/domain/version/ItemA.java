@@ -20,22 +20,30 @@
  */
 package com.pyx4j.entity.test.shared.domain.version;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
 
+@ToStringFormat("{0} - {1}")
 public interface ItemA extends IVersionedEntity<ItemAVersion> {
 
     IPrimitive<String> testId();
 
+    @ToString(index = 0)
     IPrimitive<String> name();
 
-    public interface ItemAVersion extends IEntity {
+    public interface ItemAVersion extends IVersionData {
 
         IPrimitive<String> testId();
 
+        @ToString(index = 1)
         IPrimitive<String> name();
     }
 
+//    
+//    @Override
+//    ItemAVersion version();
 }

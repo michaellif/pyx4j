@@ -22,7 +22,7 @@ package com.pyx4j.entity.rdb;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
 import com.pyx4j.entity.test.shared.domain.version.RefToCurrent;
@@ -39,14 +39,20 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         service.setTimeNow(DateUtils.detectDateformat(dateStr));
     }
 
-    private void srv_finalize(IEntity entity) {
+    private void srv_finalize(IVersionedEntity<?> entity) {
         // TODO create function in  PersistenceService
     }
 
-    public <T extends IEntity> T srv_retrieveDraft(Class<T> entityClass, Key primaryKey) {
+    public <T extends IVersionedEntity<?>> T srv_retrieveDraft(Class<T> entityClass, Key primaryKey) {
         // TODO create function in  PersistenceService
         return null;
     }
+
+//    TODO in future
+//    public <T extends IVersionedEntity<?>> T srv_retrieveVersion(IVersionData versionInfo) {
+//        // TODO create function in  PersistenceService
+//        return null;
+//    }
 
     public void testVersionedSingleEntity() {
         String testId = uniqueString();
@@ -56,7 +62,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
         // Initial item
         ItemA itemA1 = EntityFactory.create(ItemA.class);
-        srv.persist(itemA1);
 
         final String origName = "V1" + uniqueString();
         itemA1.version().name().setValue(origName);
@@ -124,7 +129,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         }
     }
 
-    public void testVersionedGraph() {
+    public void TODO_testVersionedGraph() {
     }
 
 }
