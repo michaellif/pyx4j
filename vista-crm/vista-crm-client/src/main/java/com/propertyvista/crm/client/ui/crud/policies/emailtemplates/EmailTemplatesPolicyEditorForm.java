@@ -14,23 +14,40 @@
 package com.propertyvista.crm.client.ui.crud.policies.emailtemplates;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.RichTextArea.Formatter;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.richtext.ExtendedRichTextToolbar.RichTextAction;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
+import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
+import com.propertyvista.domain.policy.policies.emailtemplates.EmailTemplateTypeDTO;
+import com.propertyvista.domain.policy.policies.emailtemplates.EmailTemplateTypesDTO;
 
 public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<EmailTemplatesPolicyDTO> {
 
@@ -67,9 +84,26 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
     }
 
     private static class EmailTemplateEditorFolder extends VistaBoxFolder<EmailTemplate> {
+        private static final Map<EmailTemplateType, Set<String>> templateObjects = new HashMap<EmailTemplateType, Set<String>>();
 
         public EmailTemplateEditorFolder() {
             super(EmailTemplate.class);
+
+            // get the template object list
+            EmailTemplateManagerService service = GWT.create(EmailTemplateManagerService.class);
+            service.getTemplateDataObjects(new AsyncCallback<EmailTemplateTypesDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    MessageDialog.error(i18n.tr("Server Error"), i18n.tr("Data not available.") + " " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(EmailTemplateTypesDTO result) {
+                    for (EmailTemplateTypeDTO tplType : result.types()) {
+                        templateObjects.put(tplType.type().getValue(), tplType.objectNames().getValue());
+                    }
+                }
+            });
         }
 
         @Override
@@ -96,7 +130,27 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type())).build());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).build());
                 if (isEditable()) {
-                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content())).build());
+                    final ListBox tplObjectList = new ListBox();
+                    CRichTextArea editor = new CRichTextArea();
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor)).build());
+                    // create variable dropdown
+                    editor.getWidget().getEditor().addCustomList(tplObjectList, new RichTextAction() {
+                        @Override
+                        public void perform(Formatter formatter, Command onComplete) {
+                            formatter.insertHTML(tplObjectList.getItemText(tplObjectList.getSelectedIndex()));
+                            onComplete.execute();
+                        }
+                    });
+                    // change template object list when template type selection changes
+                    get(proto().type()).addValueChangeHandler(new ValueChangeHandler<EmailTemplateType>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<EmailTemplateType> event) {
+                            tplObjectList.clear();
+                            for (String objName : templateObjects.get(event.getValue())) {
+                                tplObjectList.addItem(objName);
+                            }
+                        }
+                    });
                 } else {
                     CLabel body = new CLabel();
                     body.setAllowHtml(true);

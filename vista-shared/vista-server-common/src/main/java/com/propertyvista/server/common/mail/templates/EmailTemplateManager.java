@@ -15,9 +15,9 @@ package com.propertyvista.server.common.mail.templates;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.GWTJava5Helper;
@@ -84,8 +84,7 @@ public class EmailTemplateManager {
 
     public static void main(String[] args) {
         System.out.println("EmailTemplateManager started...");
-        Map<String, String> selection = getTemplateDataObjectSelection(EmailTemplateType.ApplicationCreatedApplicant);
-        for (String path : selection.keySet()) {
+        for (String path : getTemplateDataObjectSelection(EmailTemplateType.ApplicationCreatedApplicant)) {
             System.out.println("===> " + path);
         }
 
@@ -127,12 +126,12 @@ public class EmailTemplateManager {
     /**
      * Used for template editing
      */
-    public static LinkedHashMap<String, String> getTemplateDataObjectSelection(EmailTemplateType template) {
+    public static Set<String> getTemplateDataObjectSelection(EmailTemplateType template) {
         List<IEntity> dataObjects = getTemplateDataObjects(template);
-        LinkedHashMap<String, String> selection = new LinkedHashMap<String, String>();
+        Set<String> selection = new HashSet<String>();
         for (IEntity obj : dataObjects) {
             for (Path path : getTemplateEntityMemberGraph(obj, new ArrayList<Path>())) {
-                selection.put(path.toString(), path.toString());
+                selection.add(pathToVarname(path.toString()));
             }
         }
         return selection;
@@ -186,7 +185,7 @@ public class EmailTemplateManager {
     }
 
     private static String getVarValue(String varName, Collection<IEntity> data) {
-        Path fromPath = new Path(varName);
+        Path fromPath = new Path(varnameToPath(varName));
         for (IEntity obj : data) {
             // first, compare obj name against the root object of the given Path
             String objClassName = GWTJava5Helper.getSimpleName(obj.getObjectClass());
@@ -223,9 +222,33 @@ public class EmailTemplateManager {
             } else if (memberMeta.isEntity()) {
                 getTemplateEntityMemberGraph((IEntity) member, graph);
             } else {
-                throw new Error("Template Entity must not contain collections.");
+                throw new Error("Template Entity must not contain collections: " + member.getPath().toString());
             }
         }
         return graph;
+    }
+
+    private static String pathToVarname(String path) {
+        // convert from path with "/"-delimiter to varName with dotted notation encolsed into ${}
+        // and remove ending T from the Root Object name
+        String varName = path.replace("/", ".");
+        if (varName.endsWith(".")) {
+            varName = varName.substring(0, varName.length() - 1);
+        }
+        varName = varName.replaceFirst("T\\.", ".");
+        return "${" + varName + "}";
+    }
+
+    private static String varnameToPath(String varName) {
+        // convert from varName with dotted notation encolsed into ${} to path with "/"-delimiter
+        // and add T-ending to the Root Object names
+        String path = varName.replaceFirst("\\.", "T.").replace(".", "/");
+        if (path.startsWith("${")) {
+            path = path.substring(2);
+        }
+        if (path.endsWith("}")) {
+            path = path.substring(0, path.length() - 1);
+        }
+        return path + "/";
     }
 }

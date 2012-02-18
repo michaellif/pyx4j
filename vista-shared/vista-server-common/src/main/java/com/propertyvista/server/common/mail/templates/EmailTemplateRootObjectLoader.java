@@ -83,7 +83,14 @@ public class EmailTemplateRootObjectLoader {
             CompanyT t = (CompanyT) tObj;
             Company com = getCompany(context);
             t.name().set(com.name());
-            t.address().set(com.addresses().get(0));
+            AddressStructured as = com.addresses().get(0);
+            t.address().suiteNumber().set(as.suiteNumber());
+            t.address().streetNumber().set(as.streetNumber());
+            t.address().streetName().set(as.streetName());
+            t.address().city().set(as.city());
+            t.address().province().set(as.province().name());
+            t.address().country().set(as.county());
+            t.address().postalCode().set(as.postalCode());
             t.phone().set(com.phones().get(0).phone());
             t.website().set(com.website());
             t.email().set(com.emails().get(0).email());

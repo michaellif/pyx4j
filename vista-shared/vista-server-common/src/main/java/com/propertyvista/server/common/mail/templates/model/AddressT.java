@@ -20,17 +20,19 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CompanyT extends IEntity {
+public interface AddressT extends IEntity {
 
-    IPrimitive<String> name();
+    IPrimitive<String> suiteNumber();
 
-    IPrimitive<String> website();
+    IPrimitive<String> streetNumber();
 
-    IPrimitive<String> phone();
+    IPrimitive<String> streetName();
 
-    IPrimitive<String> email();
+    IPrimitive<String> city();
 
-    AddressT address();
+    IPrimitive<String> province();
 
-    CompanyContactsT contacts();
+    IPrimitive<String> country();
+
+    IPrimitive<String> postalCode();
 }
