@@ -175,28 +175,6 @@ select {
 .navigation .active a:hover {
 }
 
-.locale {
-	float: right;
-}
-
-.langItem {
-	border-left: 1px solid ${foreground_100};
-	padding: 0 3px;
-	text-align: center;
-}
-
-.langItem:first-child {
-	border-left: 0;
-}
-
-.langItem a {
-	color: ${foreground_100};
-}
-
-.langItem a:hover {
-	color: ${contrast2_100};
-}
-
 .auth {
 	float: right;
 	padding: 0 10px;
@@ -278,6 +256,26 @@ ul.footer_locations li {
 
 .footer_link a:hover {
 	color: ${contrast2_100};
+}
+
+.locale {
+	margin-top:40px;
+	text-align:center;
+	white-space: nowrap;
+}
+
+.langItem {
+	margin-left: 10px;
+	padding: 0 3px;
+	text-align: center;
+}
+
+.langItem:first-child {
+	margin-left: 0;
+}
+
+.langItem a {
+	color: inherit;
 }
 
 .footer_legal {

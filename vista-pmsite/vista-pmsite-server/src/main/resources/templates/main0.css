@@ -192,29 +192,6 @@ select {
 	color: #191B22;
 }
 
-.locale {
-	float: right;
-	white-space: nowrap;
-}
-
-.langItem {
-	border-left: 1px solid #339900;
-	padding: 0 3px;
-	text-align: center;
-}
-
-.langItem:first-child {
-	border-left: 0;
-}
-
-.langItem a {
-	color: #339900;
-}
-
-.langItem a:hover {
-	color: #B5E329;
-}
-
 .auth {
 	float: right;
 	padding: 0 10px;
@@ -294,6 +271,26 @@ ul.footer_locations li {
 
 .footer_link a:hover {
 	color: #B5E329;
+}
+
+.locale {
+	margin-top:40px;
+	text-align:center;
+	white-space: nowrap;
+}
+
+.langItem {
+	margin-left: 10px;
+	padding: 0 3px;
+	text-align: center;
+}
+
+.langItem:first-child {
+	margin-left: 0;
+}
+
+.langItem a {
+	color: inherit;
 }
 
 .footer_legal {

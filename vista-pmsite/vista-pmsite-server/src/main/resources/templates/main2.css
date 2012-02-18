@@ -168,30 +168,6 @@ select {
 
 
 
-.locale {
-	float:right;
-	display:inline;
-	padding-right:10px;
-}
-
-.langItem {
-	border-left: 1px solid  ${object1_20};
-	padding: 0 3px;
-	text-align: center;
-}
-
-.langItem:first-child {
-	border-left: 0;
-}
-
-.langItem a {
-	color: ${object1_20};
-}
-
-.langItem a:hover {
-	color: ${object1_20};
-}
-
 .auth {
 	float: right;
 	padding-right: 10px;
@@ -275,10 +251,30 @@ ul.footer_locations li {
 	color: ${object1_20};
 }
 
+.locale {
+	margin-top:40px;
+	text-align:center;
+	white-space: nowrap;
+}
+
+.langItem {
+	margin-left: 10px;
+	padding: 0 3px;
+	text-align: center;
+}
+
+.langItem:first-child {
+	margin-left: 0;
+}
+
+.langItem a {
+	color: ${object1_20};
+}
+
 .footer_legal {
 	text-align: center;
 	line-height: 60px;
-	color:  ${object1_20};
+	color: ${object1_20};
 }
 .footer_social {
 	display:inline-block;

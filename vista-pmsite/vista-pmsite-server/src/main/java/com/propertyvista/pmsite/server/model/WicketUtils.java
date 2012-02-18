@@ -308,7 +308,7 @@ public class WicketUtils {
         }
     }
 
-    public static class LocalizedPageLink extends BookmarkablePageLink<Void> {
+    public static class LocalizedPageLink extends PageLink {
         private static final long serialVersionUID = 1L;
 
         public LocalizedPageLink(final String wicketId, final Class<? extends Page> pageClass, final PageParameters params, final String lang) {

@@ -15,7 +15,7 @@ package com.propertyvista.pmsite.server.panels;
 
 import java.util.ArrayList;
 
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.LocalizedPageLink;
+import com.propertyvista.shared.CompiledLocale;
 
 public class LocalePanel extends Panel {
 
@@ -31,20 +32,24 @@ public class LocalePanel extends Panel {
     public LocalePanel(String id) {
         super(id);
 
-        ListView<AvailableLocale> listView = new ListView<AvailableLocale>("langItem", new ArrayList<AvailableLocale>(((PMSiteWebRequest) getRequest())
-                .getContentManager().getAllAvailableLocale())) {
+        add(new ListView<AvailableLocale>("langItem", new ArrayList<AvailableLocale>(((PMSiteWebRequest) getRequest()).getContentManager()
+                .getAllAvailableLocale())) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(ListItem<AvailableLocale> item) {
 
-                final AvailableLocale locale = item.getModelObject();
-                final String lang = locale.lang().getValue().name();
-
-                LocalizedPageLink link = new LocalizedPageLink("langSelector", getPage().getClass(), getPage().getPageParameters(), lang);
-                item.add(link.add(new Label("caption", lang)));
+                AvailableLocale locale = item.getModelObject();
+                CompiledLocale cl = locale.lang().getValue();
+                String lang = cl.name();
+                String label = cl.getNativeDisplayName();
+                String title = cl.toString();
+                System.out.println("lang = " + lang + "; label = " + label + "; title = " + title);
+                LocalizedPageLink link = new LocalizedPageLink("langLink", getPage().getClass(), getPage().getPageParameters(), lang);
+                link.setText(label);
+                link.add(AttributeModifier.replace("title", title));
+                item.add(link);
             }
-        };
-        add(listView);
+        });
     }
 }

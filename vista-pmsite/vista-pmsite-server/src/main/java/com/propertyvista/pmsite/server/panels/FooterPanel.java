@@ -84,6 +84,8 @@ public class FooterPanel extends Panel {
             }
         });
 
+        add(new LocalePanel("locale"));
+
         Label copy = new Label("footer_legal", ((PMSiteWebRequest) getRequest()).getContentManager().getCopyrightInfo(
                 ((PMSiteWebRequest) getRequest()).getSiteLocale()));
         if (ApplicationMode.isDevelopment()) {

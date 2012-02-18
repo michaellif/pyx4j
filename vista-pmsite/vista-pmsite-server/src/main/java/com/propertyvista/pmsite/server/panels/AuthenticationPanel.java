@@ -21,6 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.model.WicketUtils.PageLink;
 import com.propertyvista.pmsite.server.pages.PwdChangePage;
 import com.propertyvista.pmsite.server.pages.SignInPage;
 
@@ -47,17 +48,10 @@ public class AuthenticationPanel extends Panel {
             }
         };
 
-        StatelessLink<Void> greet = new StatelessLink<Void>("greeting") {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick() {
-                setResponsePage(PwdChangePage.class, null);
-            }
-        };
+        PageLink greet = new PageLink("greeting", PwdChangePage.class);
 
         if (((PMSiteSession) getSession()).isSignedIn()) {
-            greet.setBody(new Model<String>(i18n.tr("Welcome {0}", Context.getVisit().getUserVisit().getName())));
+            greet.setText(i18n.tr("Welcome {0}", Context.getVisit().getUserVisit().getName()));
             auth.setBody(new Model<String>(i18n.tr("LogOut")));
         } else {
             greet.setVisible(false);
