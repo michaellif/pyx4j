@@ -18,8 +18,12 @@ import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
@@ -70,6 +74,16 @@ public interface BillableItemAdjustment extends IEntity {
         }
     }
 
+    @Owner
+    @JoinColumn
+    BillableItem billableItem();
+
+    interface OrderId extends ColumnId {
+    }
+
+    @OrderColumn(OrderId.class)
+    IPrimitive<Integer> orderInParent();
+
     @NotNull
     @ToString(index = 0)
     IPrimitive<AdjustmentType> adjustmentType();
@@ -95,8 +109,7 @@ public interface BillableItemAdjustment extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> effectiveDate();
 
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> exparationDate();
+    IPrimitive<Integer> billingRunNumber();
 
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createdWhen();

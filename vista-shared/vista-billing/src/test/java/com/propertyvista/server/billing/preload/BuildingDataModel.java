@@ -189,6 +189,11 @@ public class BuildingDataModel {
                 }
             }
             break;
+        case pet:
+            for (ProductItemType type : featureMeta.get(Feature.Type.pet)) {
+                generatePetFeatureItem(feature, type);
+            }
+            break;
 
         default:
             break;
@@ -209,6 +214,13 @@ public class BuildingDataModel {
         productItem.type().set(type);
         productItem.element().set(lockerArea);
         productItem.price().setValue(new BigDecimal("23.88"));
+        feature.items().add(productItem);
+    }
+
+    private void generatePetFeatureItem(Feature feature, ProductItemType type) {
+        ProductItem productItem = EntityFactory.create(ProductItem.class);
+        productItem.type().set(type);
+        productItem.price().setValue(new BigDecimal("10.00"));
         feature.items().add(productItem);
     }
 

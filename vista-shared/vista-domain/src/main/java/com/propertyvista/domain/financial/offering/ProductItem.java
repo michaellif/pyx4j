@@ -42,7 +42,7 @@ public interface ProductItem extends IEntity {
     Product product();
 
     @OrderColumn
-    IPrimitive<Integer> orderInProduct();
+    IPrimitive<Integer> _orderColumn();
 
     @NotNull
     @ToString(index = 0)

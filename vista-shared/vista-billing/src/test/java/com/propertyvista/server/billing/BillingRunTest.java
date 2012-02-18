@@ -58,6 +58,6 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("Bill Confirmation Status", confirm ? BillStatus.Confirmed : BillStatus.Rejected, bill.billStatus().getValue());
 
         assertEquals("ServiceCharge", new BigDecimal("930.30"), bill.serviceCharge().getValue());
-        assertEquals("RecurringFeatureCharges", new BigDecimal("68.38"), bill.recurringFeatureCharges().getValue());
+        assertEquals("RecurringFeatureCharges", new BigDecimal("78.38"), bill.recurringFeatureCharges().getValue());
     }
 }

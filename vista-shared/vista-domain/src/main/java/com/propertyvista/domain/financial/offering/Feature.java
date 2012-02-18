@@ -62,22 +62,10 @@ public interface Feature extends Product {
         }
     }
 
-    @I18n
-    enum PriceType {
-        percentageFromServicePrice, fixed;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
     @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "featureType")
     IPrimitive<Type> type();
-
-    IPrimitive<PriceType> priceType();
 
     IPrimitive<Boolean> isRecurring();
 

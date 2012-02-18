@@ -90,6 +90,7 @@ class Billing {
         bill.immediateAdjustments().setValue(new BigDecimal(0));
         bill.latePaymentCharges().setValue(new BigDecimal(0));
         bill.taxes().setValue(new BigDecimal(0));
+        bill.depositPaidAmount().setValue(new BigDecimal(0));
 
         getPreviousTotals();
         createPayments();
@@ -97,12 +98,16 @@ class Billing {
         createLeaseAdjustments();
         createProductAdjustments();
 
+        calculateTotals();
+
     }
 
     private void getPreviousTotals() {
         Bill lastBill = BillingUtils.getLatestBill(bill.billingAccount());
         if (lastBill != null) {
             bill.previousBalanceAmount().setValue(lastBill.totalDueAmount().getValue());
+        } else {
+            bill.previousBalanceAmount().setValue(new BigDecimal(0));
         }
     }
 
@@ -115,12 +120,11 @@ class Billing {
         }
     }
 
-    private BillPayment createPayment(Payment payment) {
+    private void createPayment(Payment payment) {
         BillPayment billPayment = EntityFactory.create(BillPayment.class);
         billPayment.payment().set(payment);
         billPayment.bill().set(bill);
         bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue().add(billPayment.payment().amount().getValue()));
-        return billPayment;
     }
 
     private void createCharges() {
@@ -130,16 +134,16 @@ class Billing {
         }
     }
 
-    private BillCharge createCharge(BillableItem serviceItem) {
+    private void createCharge(BillableItem serviceItem) {
         if (serviceItem.isNull()) {
             throw new Error("Service Item is mandatory in lease");
         }
         BillCharge charge = EntityFactory.create(BillCharge.class);
         charge.bill().set(bill);
         charge.billableItem().set(serviceItem);
-        charge.price().setValue(serviceItem.item().price().getValue());
-        if (!charge.price().isNull()) {
-            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.price().getValue(), serviceItem.item().type().chargeCode().taxes()));
+        charge.value().setValue(serviceItem.item().price().getValue());
+        if (!charge.value().isNull()) {
+            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.value().getValue(), serviceItem.item().type().chargeCode().taxes()));
         }
         charge.taxTotal().setValue(new BigDecimal(0));
         for (BillChargeTax chargeTax : charge.taxes()) {
@@ -147,20 +151,18 @@ class Billing {
         }
 
         addCharge(charge);
-        return charge;
     }
 
     private void addCharge(BillCharge charge) {
-
         Persistence.service().retrieve(charge.billableItem().item().product());
-
         if (isService(charge.billableItem().item().product())) { //Service
-            bill.serviceCharge().setValue(charge.price().getValue());
+            bill.serviceCharge().setValue(charge.value().getValue());
         } else if (isRecurringFeature(charge.billableItem().item().product())) { //Recurring Feature
-            bill.recurringFeatureCharges().setValue(bill.recurringFeatureCharges().getValue().add(charge.price().getValue()));
+            bill.recurringFeatureCharges().setValue(bill.recurringFeatureCharges().getValue().add(charge.value().getValue()));
         } else {
-            bill.oneTimeFeatureCharges().setValue(bill.oneTimeFeatureCharges().getValue().add(charge.price().getValue()));
+            bill.oneTimeFeatureCharges().setValue(bill.oneTimeFeatureCharges().getValue().add(charge.value().getValue()));
         }
+        bill.charges().add(charge);
     }
 
     private void createLeaseAdjustments() {
@@ -169,15 +171,14 @@ class Billing {
         }
     }
 
-    private BillLeaseAdjustment createeLeaseAdjustment(LeaseAdjustment item) {
+    private void createeLeaseAdjustment(LeaseAdjustment item) {
         BillLeaseAdjustment adjustment = EntityFactory.create(BillLeaseAdjustment.class);
-        adjustment.bill().set(bill);
-        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.price().getValue()));
-        return adjustment;
+        bill.leaseAdjustments().add(adjustment);
+        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.value().getValue()));
     }
 
     private void createProductAdjustments() {
-        createCharge(bill.billingAccount().leaseFinancial().lease().serviceAgreement().serviceItem());
+        createProductAdjustments(bill.billingAccount().leaseFinancial().lease().serviceAgreement().serviceItem());
         for (BillableItem item : bill.billingAccount().leaseFinancial().lease().serviceAgreement().featureItems()) {
             createProductAdjustments(item);
         }
@@ -189,11 +190,35 @@ class Billing {
         }
     }
 
-    private BillChargeAdjustment createProductAdjustment(BillableItemAdjustment itemAdjustment) {
+    private void createProductAdjustment(BillableItemAdjustment itemAdjustment) {
+
         BillChargeAdjustment adjustment = EntityFactory.create(BillChargeAdjustment.class);
         adjustment.bill().set(bill);
-        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.price().getValue()));
-        return adjustment;
+        adjustment.billableItemAdjustment().set(itemAdjustment);
+
+        if (BillableItemAdjustment.AdjustmentType.percentage.equals(itemAdjustment.adjustmentType().getValue())) {
+            adjustment.value().setValue(itemAdjustment.billableItem().item().price().getValue().multiply(itemAdjustment.value().getValue()));
+        } else if (BillableItemAdjustment.AdjustmentType.monetary.equals(itemAdjustment.adjustmentType().getValue())) {
+            adjustment.value().setValue(itemAdjustment.value().getValue());
+        } else if (BillableItemAdjustment.AdjustmentType.free.equals(itemAdjustment.adjustmentType().getValue())) {
+            adjustment.value().setValue(itemAdjustment.billableItem().item().price().getValue().multiply(new BigDecimal(-1)));
+        }
+
+        bill.productAdjustments().add(adjustment);
+        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.value().getValue()));
+    }
+
+    private void calculateTotals() {
+
+        bill.pastDueAmount().setValue(
+                bill.previousBalanceAmount().getValue().subtract(bill.paymentReceivedAmount().getValue()).subtract(bill.immediateAdjustments().getValue()));
+
+        bill.currentAmount().setValue(
+                bill.pastDueAmount().getValue().add(bill.serviceCharge().getValue()).add(bill.recurringFeatureCharges().getValue())
+                        .add(bill.oneTimeFeatureCharges().getValue()).add(bill.totalAdjustments().getValue()).subtract(bill.depositPaidAmount().getValue())
+                        .add(bill.latePaymentCharges().getValue()));
+
+        bill.totalDueAmount().setValue(bill.currentAmount().getValue().add(bill.taxes().getValue()));
     }
 
     private boolean isService(Product product) {

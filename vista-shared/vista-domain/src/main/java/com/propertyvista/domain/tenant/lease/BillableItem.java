@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -35,6 +36,7 @@ public interface BillableItem extends IEntity {
     ProductItem item();
 
     @Owned
+    @OrderBy(BillableItemAdjustment.OrderId.class)
     IList<BillableItemAdjustment> adjustments();
 
     BillableItemExtraData extraData();
@@ -42,8 +44,7 @@ public interface BillableItem extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> effectiveDate();
 
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> expirationDate();
+    IPrimitive<Integer> billingRunNumber();
 
     /**
      * Current price: contractual price value (ProductItem.price + adjustments),

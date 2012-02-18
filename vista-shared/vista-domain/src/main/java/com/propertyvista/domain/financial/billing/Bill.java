@@ -70,7 +70,12 @@ public interface Bill extends IEntity {
     @Detached
     @Owned
     @OrderBy(BillChargeAdjustment.OrderId.class)
-    IList<BillChargeAdjustment> adjustments();
+    IList<BillChargeAdjustment> productAdjustments();
+
+    @Detached
+    @Owned
+    @OrderBy(BillLeaseAdjustment.OrderId.class)
+    IList<BillLeaseAdjustment> leaseAdjustments();
 
     //TODO BillLeaseAdjustment
 
@@ -87,7 +92,7 @@ public interface Bill extends IEntity {
     IPrimitive<BigDecimal> immediateAdjustments();
 
     /**
-     * pastDueAmount = previousBalanceAmount - paymentReceivedAmount - totalImmidiateAdjustments
+     * pastDueAmount = previousBalanceAmount - paymentReceivedAmount - immediateAdjustments
      */
     IPrimitive<BigDecimal> pastDueAmount();
 
@@ -109,15 +114,15 @@ public interface Bill extends IEntity {
     IPrimitive<BigDecimal> latePaymentCharges();
 
     /**
-     * totalDueAmount = pastDueAmount + serviceCharge + totalRecurringFeatureCharges + totalOneTimeFeatureCharges + totalAdjustments - depositPaidAmount +
-     * latePaimantCharges
+     * currentAmount = pastDueAmount + serviceCharge + recurringFeatureCharges + oneTimeFeatureCharges + totalAdjustments - depositPaidAmount +
+     * latePaymentCharges
      */
     IPrimitive<BigDecimal> currentAmount();
 
     IPrimitive<BigDecimal> taxes();
 
     /**
-     * totalDueAmount = totalCurrentAmount + totalTaxes
+     * totalDueAmount = currentAmount + taxes
      */
     IPrimitive<BigDecimal> totalDueAmount();
 

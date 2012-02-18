@@ -52,7 +52,6 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().priceType()), 18).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositType()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().isRecurring()), 4).build());
 

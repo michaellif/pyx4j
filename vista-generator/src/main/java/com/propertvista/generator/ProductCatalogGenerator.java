@@ -176,7 +176,6 @@ public class ProductCatalogGenerator {
         item.name().setValue(RandomUtil.randomLetters(6));
         item.description().setValue("Feature description");
 
-        item.priceType().setValue(RandomUtil.randomEnum(Feature.PriceType.class));
         item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
         item.isRecurring().setValue(RandomUtil.randomBoolean());

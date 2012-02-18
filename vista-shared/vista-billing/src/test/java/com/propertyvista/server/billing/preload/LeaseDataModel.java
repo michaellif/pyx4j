@@ -13,6 +13,8 @@
  */
 package com.propertyvista.server.billing.preload;
 
+import java.math.BigDecimal;
+
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.server.Persistence;
@@ -20,11 +22,16 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ChargeType;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeaseDataModel {
@@ -70,6 +77,51 @@ public class LeaseDataModel {
             if (feature.type().getValue().isInAgreement() && feature.items().size() > 0) {
                 BillableItem billableItem = EntityFactory.create(BillableItem.class);
                 billableItem.item().set(feature.items().get(0));
+                billableItem.billingRunNumber().setValue(1);
+
+                //One time adjustment(discount) on parking for second billing run
+                if (Type.parking.equals(feature.type().getValue())) {
+                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
+                    adjustment.billingRunNumber().setValue(2);
+                    adjustment.value().setValue(new BigDecimal("-10.00"));
+                    adjustment.adjustmentType().setValue(AdjustmentType.monetary);
+                    adjustment.chargeType().setValue(ChargeType.discount);
+                    adjustment.termType().setValue(TermType.oneTime);
+                    billableItem.adjustments().add(adjustment);
+                }
+
+                //Full term adjustment(discount) on parking
+                if (Type.parking.equals(feature.type().getValue())) {
+                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
+                    adjustment.billingRunNumber().setValue(1);
+                    adjustment.value().setValue(new BigDecimal("-5.00"));
+                    adjustment.adjustmentType().setValue(AdjustmentType.monetary);
+                    adjustment.chargeType().setValue(ChargeType.discount);
+                    adjustment.termType().setValue(TermType.inLease);
+                    billableItem.adjustments().add(adjustment);
+                }
+
+                //Full term adjustment(discount) on locker
+                if (Type.locker.equals(feature.type().getValue())) {
+                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
+                    adjustment.billingRunNumber().setValue(1);
+                    adjustment.value().setValue(new BigDecimal("-0.05"));
+                    adjustment.adjustmentType().setValue(AdjustmentType.percentage);
+                    adjustment.chargeType().setValue(ChargeType.discount);
+                    adjustment.termType().setValue(TermType.inLease);
+                    billableItem.adjustments().add(adjustment);
+                }
+
+                //Full term adjustment(discount) on locker
+                if (Type.pet.equals(feature.type().getValue())) {
+                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
+                    adjustment.billingRunNumber().setValue(1);
+                    adjustment.adjustmentType().setValue(AdjustmentType.free);
+                    adjustment.chargeType().setValue(ChargeType.discount);
+                    adjustment.termType().setValue(TermType.inLease);
+                    billableItem.adjustments().add(adjustment);
+                }
+
                 lease.serviceAgreement().featureItems().add(billableItem);
             }
         }

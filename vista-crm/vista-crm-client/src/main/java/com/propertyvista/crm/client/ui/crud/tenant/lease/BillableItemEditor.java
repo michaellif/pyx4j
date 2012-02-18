@@ -64,7 +64,6 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         get(proto().item().price()).setViewable(true);
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().expirationDate()), 9).build());
 
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);

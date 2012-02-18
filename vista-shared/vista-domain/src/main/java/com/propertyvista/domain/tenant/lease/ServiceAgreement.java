@@ -24,7 +24,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 @EmbeddedEntity
 public interface ServiceAgreement extends IEntity {
 
-    @EmbeddedEntity
+    @Owned
     BillableItem serviceItem();
 
     @Owned
