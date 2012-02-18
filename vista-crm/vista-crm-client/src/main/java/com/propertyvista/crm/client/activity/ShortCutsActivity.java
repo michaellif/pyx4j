@@ -62,7 +62,7 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
     private List<NavigFolder> createFolders() {
         List<NavigFolder> navigfolders = new ArrayList<NavigFolder>();
 
-        navigfolders.add(new NavigFolder(Type.Shortcuts, i18n.tr(Type.Shortcuts.name())));
+        navigfolders.add(new NavigFolder(Type.Shortcuts, i18n.tr("Shortcuts")));
 
         return navigfolders;
     }

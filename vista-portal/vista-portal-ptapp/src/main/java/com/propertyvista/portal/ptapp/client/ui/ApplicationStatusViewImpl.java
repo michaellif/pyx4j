@@ -54,7 +54,7 @@ public class ApplicationStatusViewImpl extends FlowPanel implements ApplicationS
         summaryForm.setVisible(false);
         summaryForm.initContent();
 
-        summaryAction = new Anchor(i18n.tr(showSummary));
+        summaryAction = new Anchor(showSummary);
         summaryAction.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         summaryAction.getElement().getStyle().setProperty("lineHeight", "2em");
         summaryAction.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
