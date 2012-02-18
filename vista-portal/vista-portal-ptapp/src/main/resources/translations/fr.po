@@ -7,17 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-17 18:06-0500\n"
+"POT-Creation-Date: 2012-02-17 23:46-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: com/pyx4j/widgets/client/RateIt.java:131
-msgid " out of "
-msgstr "sur"
 
 #. java-format
 #: com/propertyvista/domain/property/asset/LockerArea.java:2
@@ -178,7 +174,7 @@ msgstr "Type de compte"
 msgid "Acknowledged"
 msgstr "Reconnu"
 
-#: com/pyx4j/widgets/client/richtext/ExtendedRichTextToolbar.java:105
+#: com/pyx4j/widgets/client/richtext/ExtendedRichTextToolbar.java:122
 msgid "Action Failed"
 msgstr "Action a échoué"
 
@@ -257,7 +253,6 @@ msgstr "Adresses"
 msgid "Adjustment Type"
 msgstr "Type d'ajustement"
 
-#: com/propertyvista/domain/financial/billing/Bill.java:2
 #: com/propertyvista/domain/tenant/lease/BillableItem.java:2
 msgid "Adjustments"
 msgstr "Ajustements"
@@ -845,6 +840,7 @@ msgstr "Statut du projet de loi"
 
 #: com/propertyvista/domain/financial/billing/BillCharge.java:2
 #: com/propertyvista/domain/tenant/lease/BillableItem.java:0
+#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
 msgid "Billable Item"
 msgstr "Point facturable"
 
@@ -900,6 +896,12 @@ msgstr "Date de début de facturation Période"
 #: com/propertyvista/domain/financial/billing/BillingRun.java:0
 msgid "Billing Run"
 msgstr "Run de facturation"
+
+#: com/propertyvista/domain/tenant/lease/BillableItem.java:2
+#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
+#: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:2
+msgid "Billing Run Number"
+msgstr "Nombre Run facturation"
 
 #: com/propertyvista/portal/domain/dto/BillListDTO.java:2
 msgid "Bills"
@@ -1067,7 +1069,7 @@ msgstr ""
 " nom d'utilisateur et mots de passe individuels sera automatiquement envoyée"
 " à tous les locataires et les garants"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:93
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:92
 msgid ""
 "By removing the selected item you will lose the agreed price and "
 "adjustment(s)! Are you sure you want to remove it?"
@@ -1204,6 +1206,10 @@ msgstr "Changements à {0} ''{1}'' n'ont pas été sauvegardés"
 msgid "Changes to {0} were not saved"
 msgstr "Changements à {0} n'ont pas été sauvegardés"
 
+#: com/propertyvista/domain/financial/billing/Bill.java:2
+msgid "Charge Adjustments"
+msgstr "Ajustements de charge"
+
 #: com/propertyvista/domain/financial/offering/ChargeCode.java:0
 #: com/propertyvista/domain/financial/offering/ProductItemType.java:2
 #: com/propertyvista/domain/policy/policies/LeaseAdjustmentPolicy.java:2
@@ -1277,8 +1283,12 @@ msgid "Child Pages"
 msgstr "Pages enfant"
 
 #: com/propertyvista/shared/CompiledLocale.java:1
-msgid "Chinese"
-msgstr "Chinois"
+msgid "Chinese (Simplified)"
+msgstr "Chinois (simplifié)"
+
+#: com/propertyvista/shared/CompiledLocale.java:1
+msgid "Chinese (Traditional)"
+msgstr "Chinois (Traditionnel)"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -1429,7 +1439,7 @@ msgstr "Remplie"
 #: com/propertyvista/domain/financial/billing/BillingRun.java:1
 #: com/pyx4j/essentials/client/DeferredProcessDialog.java:111
 msgid "Completed"
-msgstr "Terminé"
+msgstr "Rempli/remplie"
 
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Completion"
@@ -1703,10 +1713,6 @@ msgstr "Créé"
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:2
 msgid "Created By"
 msgstr "Créé par"
-
-#: com/pyx4j/entity/shared/IVersionData.java:2
-msgid "Created By User Key"
-msgstr "Créé par clé utilisateur"
 
 #: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:2
@@ -2170,6 +2176,14 @@ msgstr "Courriel"
 msgid "Email Template"
 msgstr "Modèle de courrier électronique"
 
+#: com/propertyvista/domain/policy/policies/emailtemplates/EmailTemplateTypeDTO.java:0
+msgid "Email Template Type"
+msgstr "Type de modèle e-mail"
+
+#: com/propertyvista/domain/policy/policies/emailtemplates/EmailTemplateTypesDTO.java:0
+msgid "Email Template Types"
+msgstr "Types de modèles Email"
+
 #: com/propertyvista/domain/policy/dto/EmailTemplatesPolicyDTO.java:0
 #: com/propertyvista/domain/policy/policies/EmailTemplatesPolicy.java:0
 msgid "Email Templates Policy"
@@ -2310,11 +2324,6 @@ msgstr "Date d'exécution"
 msgid "Expand"
 msgstr "Développer"
 
-#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
-#: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:2
-msgid "Exparation Date"
-msgstr "Date de Exparation"
-
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 msgid "Expected Move In"
 msgstr "Emménagement prévu"
@@ -2328,7 +2337,6 @@ msgid "Expiration"
 msgstr "Expiration"
 
 #: com/propertyvista/domain/financial/offering/Concession.java:2
-#: com/propertyvista/domain/tenant/lease/BillableItem.java:2
 msgid "Expiration Date"
 msgstr "Date d'expiration"
 
@@ -2454,7 +2462,7 @@ msgstr "Filtre Ids"
 #: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:129
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Financial"
-msgstr "Financier"
+msgstr "Financier/financière"
 
 #. Portal Page Type
 #: com/propertyvista/domain/site/PageDescriptor.java:1
@@ -2504,7 +2512,6 @@ msgid "Five"
 msgstr "Cinq"
 
 #: com/propertyvista/domain/financial/offering/DepositType.java:1
-#: com/propertyvista/domain/financial/offering/Feature.java:1
 msgid "Fixed"
 msgstr "Fixe"
 
@@ -2583,10 +2590,6 @@ msgstr "Plans d'étage"
 msgid "Floorplans Property"
 msgstr "Plans d'étage propriété"
 
-#: com/pyx4j/entity/shared/IVersionedEntity.java:2
-msgid "For Date"
-msgstr "Pour Date de"
-
 #: com/propertyvista/domain/site/SitePalette.java:2
 msgid "Foreground"
 msgstr "Avant-plan"
@@ -2637,7 +2640,6 @@ msgstr "Ami/amie"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
-#: com/pyx4j/entity/shared/IVersionData.java:2
 msgid "From Date"
 msgstr "À partir du"
 
@@ -2935,10 +2937,6 @@ msgstr "Immeuble en hauteur"
 msgid "Highway"
 msgstr "Autoroute"
 
-#: com/pyx4j/entity/shared/IVersionData.java:2
-msgid "Holder"
-msgstr "Titulaire"
-
 #: com/propertyvista/domain/contact/Email.java:1
 #: com/propertyvista/domain/contact/Phone.java:1
 msgid "Home"
@@ -2990,14 +2988,6 @@ msgstr "ID ou Documentations qui ont accepté que pièces d'identité valides"
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 msgid "IP Address"
 msgstr "Adresse IP"
-
-#: com/pyx4j/entity/shared/IVersionData.java:0
-msgid "IVersion Data"
-msgstr "Données IVersion"
-
-#: com/pyx4j/entity/shared/IVersionedEntity.java:0
-msgid "IVersioned Entity"
-msgstr "Entité IVersioned"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 #: com/pyx4j/entity/client/impl/ClientEntityMetaImpl.java:140
@@ -3434,6 +3424,7 @@ msgstr "Bail Politique sur le réaménagement"
 msgid "Lease Adjustment Reason"
 msgstr "Bail Raison d'ajustement"
 
+#: com/propertyvista/domain/financial/billing/Bill.java:2
 #: com/propertyvista/domain/tenant/lease/LeaseFinancial.java:2
 msgid "Lease Adjustments"
 msgstr "Bail ajustements"
@@ -4231,7 +4222,7 @@ msgid "New Ticket"
 msgstr "Nouvelle carte"
 
 #. java-format
-#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:122
+#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:123
 #, java-format
 msgid "New {0}"
 msgstr ""
@@ -4402,6 +4393,10 @@ msgstr "Objet 1"
 msgid "Object 2"
 msgstr "Objet 2"
 
+#: com/propertyvista/domain/policy/policies/emailtemplates/EmailTemplateTypeDTO.java:2
+msgid "Object Names"
+msgstr "Les noms d'objets"
+
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Occupancy"
 msgstr "Occupation"
@@ -4487,6 +4482,10 @@ msgstr "Programme ontarien de soutien aux personnes handicapées (POSPH)"
 msgid "Options"
 msgstr "Options"
 
+#: com/propertyvista/domain/financial/offering/ProductItem.java:2
+msgid "Order Column"
+msgstr "Colonne des ordonnances"
+
 #: com/propertyvista/domain/financial/billing/BillEntry.java:2
 msgid "Order Id"
 msgstr "N ° de commande"
@@ -4517,9 +4516,9 @@ msgstr "Ordre dans le bail"
 msgid "Order In Owner"
 msgstr "Ordre Dans propriétaire"
 
-#: com/propertyvista/domain/financial/offering/ProductItem.java:2
-msgid "Order In Product"
-msgstr "Ordre Dans produit"
+#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
+msgid "Order In Parent"
+msgstr "Commandez En Parent"
 
 #. java-format
 #: com/propertyvista/domain/policy/framework/OrganizationPoliciesNode.java:0
@@ -4858,10 +4857,6 @@ msgstr "Pourcentage"
 msgid "Percentage From Price"
 msgstr "Pourcentage du prix"
 
-#: com/propertyvista/domain/financial/offering/Feature.java:1
-msgid "Percentage From Service Price"
-msgstr "Pourcentage du prix de service"
-
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
 msgid "Percentage Of Units Turned Over"
 msgstr "Pourcentage d'unités remises"
@@ -5146,7 +5141,6 @@ msgstr "Adresse précédente"
 msgid "Previous Balance Amount"
 msgstr "Montant Solde précédent"
 
-#: com/propertyvista/domain/financial/billing/BillEntry.java:2
 #: com/propertyvista/domain/financial/offering/ProductItem.java:2
 #: com/propertyvista/domain/tenant/lease/BillableItem.java:2
 #: com/propertyvista/portal/domain/dto/FloorplanPropertyDTO.java:2
@@ -5161,10 +5155,6 @@ msgstr "Correction Prix"
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "Price Range"
 msgstr "Gamme de prix"
-
-#: com/propertyvista/domain/financial/offering/Feature.java:2
-msgid "Price Type"
-msgstr "Type de prix"
 
 #: com/propertyvista/domain/financial/Pricing.java:0
 msgid "Pricing"
@@ -5766,7 +5756,7 @@ msgstr "Calendrier"
 
 #: com/propertyvista/domain/financial/billing/BillingRun.java:1
 msgid "Scheduled"
-msgstr "Prévu"
+msgstr "Prévu/prévue"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
 msgctxt "Maintenance Request"
@@ -5889,7 +5879,7 @@ msgid "Services"
 msgstr "Services"
 
 #. java-format
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:82
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:83
 #, java-format
 msgid "Session Duration {0}, Inactive For {1}"
 msgstr "Durée de session {0}, inactif pour {1}"
@@ -5934,7 +5924,7 @@ msgstr "Doit être un chiffre entier"
 
 #: com/propertyvista/portal/ptapp/client/ui/ApplicationStatusViewImpl.java:34
 msgid "Show Summary"
-msgstr "Voir sommaire"
+msgstr "Afficher le résumé"
 
 #: com/propertyvista/domain/tenant/lead/Showing.java:0
 msgid "Showing"
@@ -6047,7 +6037,7 @@ msgstr ""
 msgid "Son"
 msgstr "Fils"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureExFolder.java:101
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureExFolder.java:100
 msgid "Sorry"
 msgstr "Désolé/désolée"
 
@@ -6609,7 +6599,6 @@ msgstr "Titre"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
-#: com/pyx4j/entity/shared/IVersionData.java:2
 msgid "To Date"
 msgstr "À ce jour"
 
@@ -6717,6 +6706,7 @@ msgstr "Deux"
 #: com/propertyvista/domain/maintenance/IssueElement.java:2
 #: com/propertyvista/domain/media/Media.java:2
 #: com/propertyvista/domain/policy/policies/domain/EmailTemplate.java:2
+#: com/propertyvista/domain/policy/policies/emailtemplates/EmailTemplateTypeDTO.java:2
 #: com/propertyvista/domain/property/PropertyPhone.java:2
 #: com/propertyvista/domain/property/asset/Equipment.java:2
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:2
@@ -6742,6 +6732,10 @@ msgstr "Type"
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 msgid "Type Your Full Name"
 msgstr "Taper votre nom complet"
+
+#: com/propertyvista/domain/policy/policies/emailtemplates/EmailTemplateTypesDTO.java:2
+msgid "Types"
+msgstr "Types"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "U-shape"
@@ -6888,6 +6882,7 @@ msgstr "Vacant loué"
 msgid "Vacant/Notice"
 msgstr "Libre/Avis"
 
+#: com/propertyvista/domain/financial/billing/BillEntry.java:2
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 #: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
 msgid "Value"
@@ -6908,18 +6903,6 @@ msgstr "Données du véhicule"
 #: com/propertyvista/domain/property/vendor/Vendor.java:0
 msgid "Vendor"
 msgstr "Vendeur"
-
-#: com/pyx4j/entity/shared/IVersionedEntity.java:2
-msgid "Version"
-msgstr "Version"
-
-#: com/pyx4j/entity/shared/IVersionData.java:2
-msgid "Version Number"
-msgstr "Numéro de version"
-
-#: com/pyx4j/entity/shared/IVersionedEntity.java:2
-msgid "Versions"
-msgstr "Versions"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -6983,7 +6966,7 @@ msgstr "Couleur des murs"
 msgid "Warning"
 msgstr "Avertissement"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:92
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:91
 msgid "Warning!"
 msgstr "Attention!"
 
@@ -7046,7 +7029,7 @@ msgid "We're Sorry"
 msgstr "Nous sommes désolés"
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:67
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:134
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:135
 msgid ""
 "We're Sorry But Your Requests Look Similar To Automated Requests Initiated "
 "By Computer Virus Or Spyware Applications. To Protect Our Users, We Can't "
@@ -7176,8 +7159,8 @@ msgid "You Must Agree To The Terms And Conditions To Continue"
 msgstr "Vous devez accepter les conditions pour poursuivre"
 
 #. java-format
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureExFolder.java:101
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureExFolder.java:114
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureExFolder.java:100
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureExFolder.java:113
 #, java-format
 msgid "You cannot add more than {0} items here!"
 msgstr ""
@@ -7311,6 +7294,12 @@ msgstr ""
 #, java-format
 msgid "{0} Should Be In The Range Between {1} And {2}"
 msgstr "{0} devrait être comprise entre {1} et {2}"
+
+#. java-format
+#: com/pyx4j/widgets/client/RateIt.java:131
+#, java-format
+msgid "{0} out of {1}"
+msgstr ""
 
 #. java-format
 #: com/propertyvista/domain/File.java:0

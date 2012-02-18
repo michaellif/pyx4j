@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-17 17:51-0500\n"
+"POT-Creation-Date: 2012-02-17 23:47-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,9 +15,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: com/pyx4j/widgets/client/RateIt.java:131
-msgid " out of "
-msgstr "出"
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:339
+msgid "#"
+msgstr "＃"
 
 #. java-format
 #: com/propertyvista/domain/property/asset/LockerArea.java:2
@@ -89,6 +89,10 @@ msgstr ""
 msgid "${0}, {1}"
 msgstr ""
 
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:335
+msgid "%"
+msgstr "％"
+
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:2
 msgid "% Ownership"
 msgstr "％所有权"
@@ -155,6 +159,18 @@ msgstr "6个月"
 msgid "60- 90 Days"
 msgstr "60  -  90天"
 
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsYOYAnalysisChartGadget.java:209
+msgid ""
+"A graph that visually demonstrates the arrear balance each month over the "
+"course of multiple years"
+msgstr "一个图，直观地演示了多几年的过程中拖欠余额每月"
+
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:409
+msgid ""
+"A graph that visually demonstrates the turnover rate in either percentage or"
+" quantity over the course of multiple years"
+msgstr "一个图，直观地展示在成交率超过多岁的过程中无论是百分比或数量"
+
 #: com/propertyvista/common/client/ui/components/login/AbstractPasswordResetRequestActivity.java:91
 msgid "A link to the password reset page was sent to your email"
 msgstr "密码重置页面链接发送到您的电子邮件"
@@ -162,6 +178,19 @@ msgstr "密码重置页面链接发送到您的电子邮件"
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
 msgid "AR Balance"
 msgstr "受体平衡"
+
+#: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:2
+msgid "Access All Buildings"
+msgstr "访问所有的建筑物"
+
+#: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:105
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Account"
+msgstr "帐户"
+
+#: com/propertyvista/crm/rpc/AccountCreationRequest.java:0
+msgid "Account Creation Request"
+msgstr "帐户创建请求"
 
 #: com/propertyvista/domain/payment/EcheckInfo.java:2
 #: com/propertyvista/domain/payment/InteracInfo.java:2
@@ -176,13 +205,18 @@ msgstr "帐户类型"
 msgid "Acknowledged"
 msgstr "承认"
 
-#: com/pyx4j/widgets/client/richtext/ExtendedRichTextToolbar.java:105
+#: com/propertyvista/crm/client/ui/crud/settings/content/site/PortalImageResourceFolder.java:78
+#: com/pyx4j/widgets/client/richtext/ExtendedRichTextToolbar.java:122
 msgid "Action Failed"
 msgstr "行动失败"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "Active"
 msgstr "活跃"
+
+#: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:2
+msgid "Active Employee"
+msgstr "积极的员工"
 
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 msgid "Actual Lease To"
@@ -195,6 +229,32 @@ msgstr "实际移动"
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 msgid "Actual Move Out"
 msgstr "实际离场"
+
+#: com/propertyvista/crm/rpc/dto/UpdateUploadDTO.java:2
+msgid "Adapter Type"
+msgstr "适配器类型"
+
+#: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:132
+msgid "Add Buildings..."
+msgstr "新增建筑..."
+
+#: com/propertyvista/crm/client/ui/crud/settings/content/page/PageViewerImpl.java:35
+#: com/propertyvista/crm/client/ui/crud/settings/content/site/SiteViewerImpl.java:35
+msgid "Add Child Page"
+msgstr "添加子页"
+
+#: com/propertyvista/crm/client/ui/dashboard/DashboardPanel.java:167
+#: com/propertyvista/crm/client/ui/report/ReportPanel.java:84
+msgid "Add Gadget..."
+msgstr "新增小工具..."
+
+#: com/propertyvista/crm/client/ui/crud/settings/content/site/PortalImageResourceFolder.java:92
+msgid "Add Image"
+msgstr "新增图片"
+
+#: com/propertyvista/crm/client/ui/gadgets/addgadgetdialog/GadgetDirectoryDialog.java:232
+msgid "Add Selected"
+msgstr "添加所选"
 
 #: com/pyx4j/entity/client/ui/datatable/filter/DataTableFilterPanel.java:136
 msgid "Add filter..."
@@ -209,6 +269,10 @@ msgstr ""
 
 #: com/propertyvista/domain/financial/offering/Feature.java:1
 msgid "Add-On"
+msgstr "附加"
+
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:102
+msgid "Add-Ons"
 msgstr "附加"
 
 #: com/propertyvista/portal/rpc/portal/dto/MaintenanceRequestDTO.java:2
@@ -242,6 +306,7 @@ msgstr "地址1"
 msgid "Address 2"
 msgstr "地址2"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/PersonScreeningEditorForm.java:83
 #: com/propertyvista/domain/company/Company.java:2
 msgid "Addresses"
 msgstr "地址"
@@ -250,10 +315,16 @@ msgstr "地址"
 msgid "Adjustment Type"
 msgstr "调整型"
 
-#: com/propertyvista/domain/financial/billing/Bill.java:2
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/BillableItemEditor.java:77
 #: com/propertyvista/domain/tenant/lease/BillableItem.java:2
 msgid "Adjustments"
 msgstr "调整"
+
+#: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:115
+#: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:194
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Administration"
+msgstr "管理"
 
 #: com/propertyvista/domain/marketing/AdvertisingBlurb.java:0
 msgid "Advertising Blurb"
@@ -271,6 +342,14 @@ msgstr "年龄不能大于150年"
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Agent"
 msgstr "代理人"
+
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/AppointmentEditorForm.java:78
+msgid "Agent Email"
+msgstr "发送电​​子邮件"
+
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/AppointmentEditorForm.java:77
+msgid "Agent Phone"
+msgstr "代理电话"
 
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Agreed Other"
@@ -308,6 +387,15 @@ msgstr "冷气机"
 msgid "Alarm"
 msgstr "报警"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Alert"
+msgstr "警惕"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Alerts"
+msgstr "快讯"
+
+#: com/propertyvista/crm/client/ui/gadgets/addgadgetdialog/GadgetCategoryTreeViewModel.java:50
 #: com/propertyvista/domain/dashboard/gadgets/type/UnitAvailability.java:1
 msgid "All"
 msgstr "所有"
@@ -386,6 +474,11 @@ msgstr "公寓单位"
 msgid "Applicant"
 msgstr "申请人"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationLister.java:39
+msgid "Applicants"
+msgstr "申请人"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/IBoundToApplication.java:2
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
 #: com/propertyvista/domain/tenant/ptapp/Application.java:0
@@ -427,6 +520,10 @@ msgstr "申请文件"
 msgid "Application Document Upload"
 msgstr "申请文件上传"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Application Documentation"
+msgstr "应用程序的文档"
+
 #: com/propertyvista/domain/policy/dto/ApplicationDocumentationPolicyDTO.java:0
 #: com/propertyvista/domain/policy/policies/ApplicationDocumentationPolicy.java:0
 msgid "Application Documentation Policy"
@@ -453,6 +550,7 @@ msgstr "应用现状概述"
 msgid "Application Updated"
 msgstr "应用程序的更新"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 msgid "Applications"
 msgstr "应用"
@@ -461,10 +559,16 @@ msgstr "应用"
 msgid "Applied To"
 msgstr "适用于"
 
+#: com/propertyvista/crm/client/ui/crud/policies/common/PolicyDTOTabPanelBasedEditorForm.java:127
+msgid "Applied to"
+msgstr "适用于"
+
+#: com/propertyvista/crm/client/ui/crud/CrmEditorViewImplBase.java:55
 #: com/pyx4j/entity/client/ui/datatable/filter/DataTableFilterPanel.java:95
 msgid "Apply"
 msgstr "申请"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/lead/Appointment.java:0
 #: com/propertyvista/domain/tenant/lead/Showing.java:2
 msgid "Appointment"
@@ -486,6 +590,8 @@ msgstr "预约时间1"
 msgid "Appointment Time 2"
 msgstr "预约时间2"
 
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadEditorForm.java:66
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Appointments"
 msgstr "约会"
@@ -495,6 +601,11 @@ msgstr "约会"
 msgid "Approach"
 msgstr "途径"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationEditorForm.java:67
+msgid "Approval"
+msgstr "批准"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:58
 #: com/propertyvista/misc/EquifaxApproval.java:1
 msgid "Approve"
 msgstr "批准"
@@ -555,6 +666,21 @@ msgstr "公寓单位出租分部"
 msgid "Arcade"
 msgstr "拱廊"
 
+#: com/propertyvista/crm/client/ui/crud/policies/common/PolicyListerBase.java:89
+msgid "Are you sure it's ok to remove the policy for the whole company?"
+msgstr "你确定它确定删除整个公司的政策吗？"
+
+#. java-format
+#: com/propertyvista/crm/client/CrmSiteAppPlaceDispatcher.java:64
+#, java-format
+msgid ""
+"Are you sure you want to navigate away from this page?\n"
+"\n"
+"{0}\n"
+"\n"
+"Press Yes to continue, or No to stay on the current page."
+msgstr ""
+
 #: com/propertyvista/domain/property/asset/unit/AptUnitInfo.java:2
 #: com/propertyvista/portal/domain/dto/FloorplanDTO.java:2
 msgid "Area"
@@ -568,6 +694,11 @@ msgstr "区半径（公里）"
 msgid "Area Units"
 msgstr "面积单位"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Arrear"
+msgstr "拖欠"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:0
 msgid "Arrears"
 msgstr "欠款"
@@ -593,10 +724,24 @@ msgstr "拖欠同比分析"
 msgid "Asset Type"
 msgstr "资产类型"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/PersonScreeningEditorForm.java:86
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 #: com/propertyvista/dto/TenantFinancialDTO.java:2
 msgid "Assets"
 msgstr "资产"
+
+#: com/propertyvista/crm/client/ui/crud/organisation/portfolio/PortfolioEditorForm.java:57
+msgid "Assigned Buildings"
+msgstr "分配建筑物"
+
+#: com/propertyvista/crm/client/ui/crud/policies/applicationdocumentation/ApplicationDocumentationPolicyEditorForm.java:67
+msgid "At least one ID is required"
+msgstr "至少需要一个ID"
+
+#: com/propertyvista/crm/client/ui/crud/policies/leaseterms/LegalTermsContentFolder.java:60
+#: com/propertyvista/crm/client/ui/crud/settings/content/page/PageContentFolder.java:65
+msgid "At least one content item is necessary"
+msgstr "至少有一个内容项目是必要的"
 
 #: com/propertyvista/common/client/ui/components/editors/dto/FinancialViewForm.java:101
 msgid "At least one source of income or one asset is required"
@@ -626,6 +771,7 @@ msgstr "作者"
 msgid "Authority"
 msgstr "权威"
 
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:414
 #: com/propertyvista/domain/property/asset/unit/AptUnit.java:2
 msgid "Availability"
 msgstr "可用性"
@@ -677,6 +823,10 @@ msgstr "可用存储空间"
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Available Utilities"
 msgstr "可用实用程序"
+
+#: com/propertyvista/crm/client/ui/crud/unit/dialogs/ScopeDialog.java:81
+msgid "Availalble"
+msgstr "availalble"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -779,6 +929,7 @@ msgstr "行为"
 msgid "Belongs To"
 msgstr "属于"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/billing/Bill.java:0
 #: com/propertyvista/domain/financial/billing/BillEntry.java:2
 #: com/propertyvista/domain/financial/billing/BillPayment.java:2
@@ -834,6 +985,7 @@ msgstr "条例草案状态"
 
 #: com/propertyvista/domain/financial/billing/BillCharge.java:2
 #: com/propertyvista/domain/tenant/lease/BillableItem.java:0
+#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
 msgid "Billable Item"
 msgstr "计费项目"
 
@@ -864,6 +1016,7 @@ msgstr "帐单地址"
 msgid "Billing Cycle"
 msgstr "结算周期"
 
+#: com/propertyvista/crm/rpc/services/billing/StartBuildingBillingDTO.java:2
 #: com/propertyvista/domain/financial/billing/BillingCycle.java:2
 msgid "Billing Day"
 msgstr "结算日"
@@ -872,10 +1025,12 @@ msgstr "结算日"
 msgid "Billing History"
 msgstr "帐单历史纪录"
 
+#: com/propertyvista/crm/rpc/services/billing/StartBuildingBillingDTO.java:2
 #: com/propertyvista/domain/financial/billing/BillingCycle.java:2
 msgid "Billing Period"
 msgstr "计费周期"
 
+#: com/propertyvista/crm/rpc/services/billing/StartBuildingBillingDTO.java:2
 #: com/propertyvista/domain/financial/billing/BillingRun.java:2
 msgid "Billing Period Start Date"
 msgstr "计费周期开始日期"
@@ -885,6 +1040,14 @@ msgstr "计费周期开始日期"
 msgid "Billing Run"
 msgstr "帐单运行"
 
+#: com/propertyvista/domain/tenant/lease/BillableItem.java:2
+#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
+#: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:2
+msgid "Billing Run Number"
+msgstr "帐单运行数"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:73
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/portal/domain/dto/BillListDTO.java:2
 msgid "Bills"
 msgstr "票据"
@@ -899,11 +1062,14 @@ msgstr "出生日期"
 msgid "Block"
 msgstr "阻止"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/Boiler.java:0
 #: com/propertyvista/dto/BoilerDTO.java:0
 msgid "Boiler"
 msgstr "锅炉"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:91
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Boilers"
 msgstr "锅炉"
@@ -920,6 +1086,14 @@ msgstr "预定时间表"
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Boulevard"
 msgstr "林荫大道"
+
+#: com/propertyvista/crm/rpc/dto/BreadcrumbTrailDTO.java:0
+msgid "Breadcrumb Trail"
+msgstr "面包屑"
+
+#: com/propertyvista/crm/rpc/dto/BreadcrumbTrailDTO.java:2
+msgid "Breadcrumbs"
+msgstr "面包"
 
 #: com/propertyvista/domain/tenant/lease/extradata/Pet.java:2
 msgid "Breed"
@@ -940,10 +1114,20 @@ msgstr "破"
 msgid "Brow"
 msgstr "眉"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Budget"
+msgstr "预算"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Budgets"
+msgstr "财政预算案"
+
 #: com/propertyvista/domain/property/asset/Equipment.java:2
 msgid "Build"
 msgstr "建立"
 
+#: com/propertyvista/crm/client/ui/components/boxes/UnitSelectorDialog.java:63
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:1
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
@@ -987,6 +1171,10 @@ msgstr "建筑元素"
 msgid "Building Financial"
 msgstr "建设金融"
 
+#: com/propertyvista/crm/rpc/services/billing/StartBuildingBillingDTO.java:2
+msgid "Building Id"
+msgstr "建筑标识"
+
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:0
 msgid "Building Info"
 msgstr "大厦资料"
@@ -994,6 +1182,10 @@ msgstr "大厦资料"
 #: com/propertyvista/domain/dashboard/gadgets/type/BuildingLister.java:0
 msgid "Building Lister"
 msgstr "大厦制表"
+
+#: com/propertyvista/crm/client/ui/components/boxes/UnitSelectorDialog.java:95
+msgid "Building Marketing Name"
+msgstr "建筑市场名称"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
@@ -1004,6 +1196,12 @@ msgstr "大厦名称"
 msgid "Building Policy"
 msgstr "建设政策"
 
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadEditorForm.java:174
+msgid "Building/Floorplan Selection"
+msgstr "大厦/平面图选择"
+
+#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:59
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/company/Portfolio.java:2
 #: com/propertyvista/domain/property/asset/Complex.java:2
 msgid "Buildings"
@@ -1041,14 +1239,6 @@ msgstr ""
 msgid "Bypass"
 msgstr "绕行"
 
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:82
-msgid "COMMUNICATION"
-msgstr "通信"
-
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:101
-msgid "CURRENT BILL"
-msgstr "本条例草案"
-
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:2
 msgid "Cabinets Install Date"
 msgstr "橱柜安装日期"
@@ -1069,22 +1259,20 @@ msgstr "电缆"
 msgid "Campaign"
 msgstr "运动"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:155
-#: com/propertyvista/portal/client/ui/residents/EditPaymentMethodViewImpl.java:68
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:105
-#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:74
+#: com/propertyvista/crm/client/ui/crud/CrmEditorViewImplBase.java:79
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:64
 #: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:302
 #: com/pyx4j/widgets/client/dialog/Dialog.java:318
 msgid "Cancel"
 msgstr "取消"
 
-#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
-msgctxt "Application"
+#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "Maintenance Request"
 msgid "Cancelled"
 msgstr "取消"
 
-#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "Maintenance Request"
+#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Cancelled"
 msgstr "取消"
 
@@ -1151,13 +1339,23 @@ msgstr "中央空调"
 msgid "Central Heat"
 msgstr "集中供热"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:127
-msgid "Change"
-msgstr "改变"
+#: com/propertyvista/crm/client/ui/crud/settings/content/site/PortalImageResourceFolder.java:94
+msgid "Change Image"
+msgstr "改变形象"
+
+#: com/propertyvista/crm/client/ui/crud/organisation/employee/EmployeeViewerViewImpl.java:36
+#: com/propertyvista/crm/client/ui/crud/tenant/TenantViewerViewImpl.java:46
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Change Password"
+msgstr "更改密码"
 
 #: com/propertyvista/dto/TenantInLeaseDTO.java:2
 msgid "Change Status"
 msgstr "改变现状"
+
+#: com/propertyvista/crm/client/ui/components/boxes/NewPasswordBox.java:37
+msgid "Change password"
+msgstr "更改密码"
 
 #. java-format
 #: com/propertyvista/common/client/ui/components/security/PasswordChangeViewImpl.java:97
@@ -1177,11 +1375,20 @@ msgstr ""
 msgid "Changes to {0} were not saved"
 msgstr ""
 
+#: com/propertyvista/domain/financial/billing/Bill.java:2
+msgid "Charge Adjustments"
+msgstr "收费调整"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/ChargeCode.java:0
 #: com/propertyvista/domain/financial/offering/ProductItemType.java:2
 #: com/propertyvista/domain/policy/policies/LeaseAdjustmentPolicy.java:2
 #: com/propertyvista/domain/policy/policies/domain/ChargePolicyItem.java:2
 msgid "Charge Code"
+msgstr "收费代码"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Charge Codes"
 msgstr "收费代码"
 
 #: com/propertyvista/domain/tenant/lease/ServiceAgreement.java:2
@@ -1217,6 +1424,7 @@ msgstr "收费政策项目"
 msgid "Charge Type"
 msgstr "充电式"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/charges/ChargeLineList.java:2
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
@@ -1227,6 +1435,10 @@ msgstr "充电式"
 #: com/propertyvista/portal/rpc/ptapp/dto/SummaryDTO.java:2
 msgid "Charges"
 msgstr "收费"
+
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:414
+msgid "Chart"
+msgstr "图表"
 
 #: com/propertyvista/misc/EquifaxApproval.java:2
 msgid "Check Result Details"
@@ -1250,8 +1462,12 @@ msgid "Child Pages"
 msgstr "子页面"
 
 #: com/propertyvista/shared/CompiledLocale.java:1
-msgid "Chinese"
-msgstr "中国的"
+msgid "Chinese (Simplified)"
+msgstr "中文（简体）"
+
+#: com/propertyvista/shared/CompiledLocale.java:1
+msgid "Chinese (Traditional)"
+msgstr "中文（繁体）"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -1277,6 +1493,14 @@ msgstr "马戏团"
 msgid "City"
 msgstr "城市"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "City Order"
+msgstr "城市的秩序"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "City Orders"
+msgstr "城市的订单"
+
 #: com/propertyvista/domain/maintenance/IssueSubjectDetails.java:2
 msgid "Classifications"
 msgstr "分类"
@@ -1284,6 +1508,10 @@ msgstr "分类"
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
 msgid "Clean"
 msgstr "清洁"
+
+#: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:125
+msgid "Clear Selected"
+msgstr "清除选定"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -1384,11 +1612,6 @@ msgstr "公司名称"
 msgid "Complete"
 msgstr "完成"
 
-#: com/propertyvista/domain/financial/billing/BillingRun.java:1
-#: com/pyx4j/essentials/client/DeferredProcessDialog.java:111
-msgid "Completed"
-msgstr "完成"
-
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
 msgctxt "Lease Status"
 msgid "Completed"
@@ -1404,10 +1627,16 @@ msgctxt "Reservation"
 msgid "Completed"
 msgstr "完成"
 
+#: com/propertyvista/domain/financial/billing/BillingRun.java:1
+#: com/pyx4j/essentials/client/DeferredProcessDialog.java:111
+msgid "Completed"
+msgstr "完成"
+
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Completion"
 msgstr "完成"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 #: com/propertyvista/domain/property/asset/Complex.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
@@ -1420,6 +1649,10 @@ msgstr "复杂"
 msgid "Complex Name"
 msgstr "复杂的名字"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Complexes"
+msgstr "配合"
+
 #: com/propertyvista/domain/financial/offering/Concession.java:1
 msgctxt "Concession Condition"
 msgid "Compliance"
@@ -1429,10 +1662,14 @@ msgstr "遵守"
 msgid "Compound"
 msgstr "复合"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/Concession.java:0
 msgid "Concession"
 msgstr "让步"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:112
+#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorForm.java:93
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/ProductCatalog.java:2
 #: com/propertyvista/domain/financial/offering/Service.java:2
 #: com/propertyvista/domain/tenant/lease/ServiceAgreement.java:2
@@ -1462,9 +1699,22 @@ msgstr "有条件"
 msgid "Condo"
 msgstr "公寓"
 
+#: com/propertyvista/crm/client/CrmSiteAppPlaceDispatcher.java:64
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/bill/BillViewerViewImpl.java:36
+msgid "Confirm"
+msgstr "确认"
+
 #: com/pyx4j/security/rpc/PasswordChangeRequest.java:2
 msgid "Confirm New Password"
 msgstr "确认新密码"
+
+#: com/propertyvista/crm/client/ui/components/boxes/NewPasswordBox.java:56
+msgid "Confirm new password:"
+msgstr "确认新密码："
+
+#: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:2
+msgid "Confirm password"
+msgstr "确认密码"
 
 #: com/propertyvista/domain/financial/billing/Bill.java:1
 msgid "Confirmed"
@@ -1487,7 +1737,6 @@ msgid "Contact"
 msgstr "联系"
 
 #: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:92
-#: com/propertyvista/portal/client/ui/residents/PersonalInfoForm.java:46
 msgid "Contact Details"
 msgstr "联系方式"
 
@@ -1516,6 +1765,7 @@ msgstr "联系邮政"
 msgid "Contact Role"
 msgstr "联系中的作用"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:116
 #: com/propertyvista/domain/company/Company.java:2
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/domain/property/asset/building/BuildingContactInfo.java:2
@@ -1523,6 +1773,7 @@ msgstr "联系中的作用"
 msgid "Contacts"
 msgstr "往来"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/marketing/AdvertisingBlurb.java:2
 #: com/propertyvista/domain/policy/policies/domain/EmailTemplate.java:2
 #: com/propertyvista/domain/policy/policies/domain/LegalTermsContent.java:2
@@ -1572,6 +1823,18 @@ msgstr "对比2"
 msgid "Controlled Access"
 msgstr "受控访问"
 
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadViewerViewImpl.java:75
+msgid "Conversion is failed!"
+msgstr "转换失败！"
+
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadViewerViewImpl.java:66
+msgid "Conversion is succeeded!"
+msgstr "转换成功了！"
+
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadViewerViewImpl.java:43
+msgid "Convert to Lease"
+msgstr "转换租赁"
+
 #: com/propertyvista/common/client/ui/components/editors/GeoLocationEditor.java:108
 msgid "Coordinate Format error"
 msgstr "坐标格式错误"
@@ -1594,6 +1857,14 @@ msgstr "角落"
 msgid "Cost"
 msgstr "成本"
 
+#: com/propertyvista/crm/client/ui/components/cms/SiteImageResourceProvider.java:163
+msgid "Could not get images."
+msgstr "无法获取图像。"
+
+#: com/propertyvista/crm/client/ui/components/cms/SiteImageResourceProvider.java:95
+msgid "Could not remove image."
+msgstr "无法删除图像。"
+
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:2
 msgid "Counter Top Install Date"
 msgstr "柜台上方安装日期"
@@ -1606,6 +1877,7 @@ msgstr "台面型"
 msgid "Counter Top Value"
 msgstr "计数器的TOP值"
 
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsStatusGadget.java:130
 #: com/propertyvista/domain/contact/AddressSimple.java:2
 #: com/propertyvista/domain/contact/AddressStructured.java:2
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
@@ -1647,6 +1919,10 @@ msgstr "覆盖地段"
 msgid "Covered Parking"
 msgstr "有盖停车场"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseViewerViewImpl.java:49
+msgid "Create Application"
+msgstr "创建应用程序"
+
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
@@ -1663,10 +1939,6 @@ msgstr "创建"
 msgid "Created By"
 msgstr "创建"
 
-#: com/pyx4j/entity/shared/IVersionData.java:2
-msgid "Created By User Key"
-msgstr "创建用户密钥"
-
 #: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:2
 msgid "Created When"
@@ -1675,6 +1947,10 @@ msgstr "创建时"
 #: com/propertyvista/domain/payment/PaymentMethod.java:2
 msgid "Credit Card"
 msgstr "信用卡"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:148
+msgid "Credit Check"
+msgstr "信用检查"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -1694,6 +1970,10 @@ msgstr "CRM头"
 #: com/propertyvista/domain/property/asset/building/BuildingFinancial.java:2
 msgid "Currency"
 msgstr "货币"
+
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:270
+msgid "Currency Name"
+msgstr "货币名称"
 
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 msgid "Current Address"
@@ -1734,12 +2014,28 @@ msgstr "当前值"
 msgid "DNS name"
 msgstr "DNS名称"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:78
+#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:57
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:0
 #: com/propertyvista/domain/property/asset/Complex.java:2
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "Dashboard"
 msgstr "仪表盘"
+
+#: com/propertyvista/crm/client/activity/NavigActivity.java:118
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Dashboards"
+msgstr "仪表板"
+
+#: com/propertyvista/crm/client/ui/crud/policies/emailtemplates/EmailTemplatesPolicyEditorForm.java:97
+msgid "Data not available."
+msgstr "数据不详。"
+
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsYOYAnalysisChartGadget.java:159
+msgid "Data unavailable"
+msgstr "数据不可用"
 
 #: com/propertyvista/domain/settings/YardiConnection.java:2
 msgid "Database"
@@ -1749,7 +2045,6 @@ msgstr "数据库"
 #: com/propertyvista/domain/reservation/ReservationSchedule.java:2
 #: com/propertyvista/domain/site/News.java:2
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:143
 #: com/propertyvista/portal/rpc/portal/dto/MaintananceDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/MessageDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
@@ -1788,21 +2083,23 @@ msgstr "决定"
 msgid "Decision Date"
 msgstr "决定日期"
 
+#: com/propertyvista/crm/rpc/dto/MasterApplicationActionDTO.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 msgid "Decision Reason"
 msgstr "决定的原因"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:62
 #: com/propertyvista/misc/EquifaxApproval.java:1
 msgid "Decline"
 msgstr "下降"
 
-#: com/propertyvista/domain/tenant/lease/Lease.java:1
-msgctxt "Lease Status"
+#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Declined"
 msgstr "下降"
 
-#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
-msgctxt "Application"
+#: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgctxt "Lease Status"
 msgid "Declined"
 msgstr "下降"
 
@@ -1822,6 +2119,21 @@ msgstr "延迟"
 msgid "Delete"
 msgstr "删除"
 
+#: com/propertyvista/crm/client/ui/crud/settings/dictionary/FeatureTypeLister.java:36
+#: com/propertyvista/crm/client/ui/crud/settings/dictionary/ServiceTypeLister.java:36
+#: com/propertyvista/crm/client/ui/crud/settings/tax/ChargeCodeLister.java:36
+#: com/propertyvista/crm/client/ui/crud/settings/tax/GlCodeLister.java:36
+#: com/propertyvista/crm/client/ui/crud/settings/tax/LeaseAdjustmentReasonLister.java:36
+#: com/propertyvista/crm/client/ui/crud/settings/tax/TaxLister.java:36
+#: com/propertyvista/crm/client/ui/dashboard/DashboardLister.java:36
+#: com/propertyvista/crm/client/ui/report/ReportLister.java:36
+msgid "Delete Checked"
+msgstr "删除选中的"
+
+#: com/propertyvista/crm/client/ui/crud/policies/common/PolicyListerBase.java:48
+msgid "Delete Checked Items"
+msgstr "删除选中的项目"
+
 #: com/pyx4j/entity/client/ui/folder/ItemActionsBar.java:67
 msgid "Delete Item"
 msgstr "删除项目"
@@ -1837,6 +2149,26 @@ msgstr "三角洲，在％"
 #: com/propertyvista/domain/dashboard/gadgets/type/demo/Demo.java:0
 msgid "Demo"
 msgstr "演示"
+
+#: com/propertyvista/crm/client/ui/gadgets/demo/LineChartGadget.java:138
+msgid "Demo of a Line Chart gadget."
+msgstr "演示的线路图“小工具。"
+
+#: com/propertyvista/crm/client/ui/gadgets/demo/DemoGadget.java:134
+msgid "Demo of a gadget"
+msgstr "演示小工具"
+
+#: com/propertyvista/crm/client/ui/gadgets/demo/PieChart2DGadget.java:118
+msgid "Demo of a pie chart based gadget."
+msgstr "演示饼图基于小工具。"
+
+#: com/propertyvista/crm/client/ui/gadgets/demo/GaugeGadget.java:104
+msgid "Demo of gauge based gadget."
+msgstr "演示片式小工具。"
+
+#: com/propertyvista/crm/client/ui/gadgets/demo/BarChart2DGadget.java:136
+msgid "Demo that displays a 2D Bar Chart"
+msgstr "演示显示一个二维条形图"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Den"
@@ -1920,8 +2252,16 @@ msgstr "描述"
 msgid "Designation"
 msgstr "指定"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:81
+#: com/propertyvista/crm/client/ui/crud/building/lockers/LockerAreaEditorForm.java:50
+#: com/propertyvista/crm/client/ui/crud/building/parking/ParkingEditorForm.java:50
+#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:149
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationEditorForm.java:63
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:70
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/guarantor/GuarantorEditorForm.java:50
+#: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:69
+#: com/propertyvista/crm/client/ui/crud/unit/UnitItemEditorForm.java:49
 #: com/propertyvista/domain/maintenance/IssueRepairSubject.java:2
-#: com/propertyvista/portal/client/ui/maps/PropertyMarker.java:154
 msgid "Details"
 msgstr "详情"
 
@@ -2000,13 +2340,13 @@ msgstr "向下"
 msgid "Dr."
 msgstr "博士"
 
-#: com/propertyvista/domain/tenant/lease/Lease.java:1
-msgctxt "Lease Status"
+#: com/propertyvista/domain/financial/offering/Concession.java:1
+msgctxt "Concession Status"
 msgid "Draft"
 msgstr "草案"
 
-#: com/propertyvista/domain/financial/offering/Concession.java:1
-msgctxt "Concession Status"
+#: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgctxt "Lease Status"
 msgid "Draft"
 msgstr "草案"
 
@@ -2023,13 +2363,13 @@ msgstr "驾驶执照"
 msgid "Dryer"
 msgstr "烘干机"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:92
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/BillInfoDTO.java:2
 msgid "Due Date"
 msgstr "截止日期"
 
 #: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:244
+#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:136
 msgid "Duplicate contacts specified"
 msgstr "重复的联系人指定"
 
@@ -2054,9 +2394,10 @@ msgstr "经济状况"
 msgid "Economic Status Description"
 msgstr "经济状况描述"
 
-#: com/propertyvista/portal/client/ui/residents/EditPaymentMethodForm.java:42
-msgid "Edit Payment Information"
-msgstr "编辑付款信息"
+#: com/propertyvista/crm/client/ui/crud/CrmViewerViewImplBase.java:48
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Edit"
+msgstr "编辑"
 
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "Edit Payment Method"
@@ -2086,6 +2427,7 @@ msgid "Element"
 msgstr "元素"
 
 #. Building Amenity Type
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/PropertyPhone.java:1
 #: com/propertyvista/domain/property/asset/Elevator.java:0
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -2093,10 +2435,18 @@ msgstr "元素"
 msgid "Elevator"
 msgstr "电梯"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:89
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Elevators"
 msgstr "电梯"
 
+#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorForm.java:47
+msgid "Eligibility"
+msgstr "合格"
+
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadEditorForm.java:216
+#: com/propertyvista/crm/rpc/AccountCreationRequest.java:2
 #: com/propertyvista/domain/communication/ContactEmail.java:2
 #: com/propertyvista/domain/company/CompanyEmail.java:2
 #: com/propertyvista/domain/contact/Email.java:0
@@ -2110,8 +2460,24 @@ msgstr "电梯"
 msgid "Email"
 msgstr "电子邮件"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:290
+msgid "Email Address"
+msgstr "电邮地址"
+
 #: com/propertyvista/domain/policy/policies/domain/EmailTemplate.java:0
 msgid "Email Template"
+msgstr "电子邮件模板"
+
+#: com/propertyvista/domain/policy/policies/emailtemplates/EmailTemplateTypeDTO.java:0
+msgid "Email Template Type"
+msgstr "电子邮件模板类型"
+
+#: com/propertyvista/domain/policy/policies/emailtemplates/EmailTemplateTypesDTO.java:0
+msgid "Email Template Types"
+msgstr "电子邮件模板类型"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Email Templates"
 msgstr "电子邮件模板"
 
 #: com/propertyvista/domain/policy/dto/EmailTemplatesPolicyDTO.java:0
@@ -2141,11 +2507,15 @@ msgstr "紧急联络"
 msgid "Employed for (years)"
 msgstr "雇用（年）"
 
+#: com/propertyvista/crm/client/ui/crud/organisation/employee/EmployeeEditorForm.java:120
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+#: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:0
 #: com/propertyvista/domain/company/Employee.java:0
 #: com/propertyvista/domain/property/asset/unit/occupancy/AptUnitOccupancySegment.java:1
 msgid "Employee"
 msgstr "雇员"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/company/Employee.java:2
 msgid "Employees"
 msgstr "员工"
@@ -2188,10 +2558,19 @@ msgstr "英语（加拿大）"
 msgid "English (United States)"
 msgstr "英语（美国）"
 
+#: com/propertyvista/crm/rpc/AccountCreationRequest.java:2
 #: com/propertyvista/portal/rpc/corp/PmcAccountCreationRequest.java:2
 #: com/propertyvista/portal/rpc/ptapp/AccountCreationRequest.java:2
 msgid "Enter The Code"
 msgstr "输入代码"
+
+#: com/propertyvista/crm/client/ui/components/boxes/NewPasswordBox.java:53
+msgid "Enter new password:"
+msgstr "输入新密码："
+
+#: com/propertyvista/crm/client/ui/components/boxes/NewPasswordBox.java:49
+msgid "Enter old password:"
+msgstr "输入旧密码："
 
 #: com/pyx4j/security/rpc/AuthenticationRequest.java:2
 #: com/pyx4j/security/rpc/PasswordChangeRequest.java:2
@@ -2211,9 +2590,14 @@ msgstr "的Equifax"
 msgid "Equifax Approval"
 msgstr "的Equifax审批"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/misc/EquifaxResult.java:0
 msgid "Equifax Result"
 msgstr "的Equifax结果"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationEditorForm.java:129
+msgid "Equifax check results"
+msgstr "的Equifax检查结果"
 
 #: com/propertyvista/domain/property/asset/Equipment.java:0
 msgid "Equipment"
@@ -2224,6 +2608,9 @@ msgstr "设备"
 msgid "Erred"
 msgstr "出错"
 
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadViewerViewImpl.java:73
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadViewerViewImpl.java:75
+#: com/propertyvista/crm/client/ui/gadgets/common/GadgetInstanceBase.java:91
 #: com/pyx4j/essentials/client/DefaultErrorHandlerDialog.java:57
 msgid "Error"
 msgstr "错误"
@@ -2241,6 +2628,10 @@ msgstr "黄昏"
 msgid "Eviction Letter Served"
 msgstr "驱逐信服"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:276
+msgid "Excluded Utilities/Add-ons"
+msgstr "排除实用程序/附加组件"
+
 #: com/propertyvista/domain/financial/billing/BillingRun.java:2
 msgid "Execution Date"
 msgstr "执行日期"
@@ -2248,11 +2639,6 @@ msgstr "执行日期"
 #: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:337
 msgid "Expand"
 msgstr "扩大"
-
-#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
-#: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:2
-msgid "Exparation Date"
-msgstr "exparation日期"
 
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 msgid "Expected Move In"
@@ -2267,7 +2653,6 @@ msgid "Expiration"
 msgstr "过期"
 
 #: com/propertyvista/domain/financial/offering/Concession.java:2
-#: com/propertyvista/domain/tenant/lease/BillableItem.java:2
 msgid "Expiration Date"
 msgstr "截止日期"
 
@@ -2306,6 +2691,10 @@ msgstr "外部工具"
 msgid "Extra Data"
 msgstr "额外的数据"
 
+#: com/propertyvista/crm/client/activity/security/PasswordChangeActivity.java:106
+msgid "Failed to change the password"
+msgstr "无法更改密码"
+
 #: com/propertyvista/common/client/ui/components/login/RetrievePasswordForm.java:44
 msgid ""
 "Failed to reset password. Check that email and chaptcha you provided are "
@@ -2332,15 +2721,26 @@ msgstr "传真首页"
 msgid "Fax Work"
 msgstr "传真工作"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/Feature.java:0
 #: com/propertyvista/domain/financial/offering/ProductItemType.java:1
 msgid "Feature"
 msgstr "特征"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Feature Item Type"
+msgstr "特征项类型"
+
+#: com/propertyvista/crm/client/ui/crud/settings/dictionary/ProductDictionaryViewForm.java:45
+msgid "Feature Item Types"
+msgstr "功能项目类型"
+
 #: com/propertyvista/domain/financial/offering/ProductItemType.java:2
 msgid "Feature Type"
 msgstr "功能类型"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:110
+#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorForm.java:90
 #: com/propertyvista/domain/financial/offering/ProductCatalog.java:2
 #: com/propertyvista/domain/financial/offering/Service.java:2
 msgid "Features"
@@ -2382,6 +2782,15 @@ msgstr "过滤"
 msgid "Filter Ids"
 msgstr "过滤IDS"
 
+#: com/propertyvista/crm/client/activity/NavigActivity.java:100
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Finance"
+msgstr "金融"
+
+#: com/propertyvista/crm/client/activity/NavigSettingsActivity.java:60
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:104
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationEditorForm.java:66
+#: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:73
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnit.java:2
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
@@ -2436,7 +2845,6 @@ msgid "Five"
 msgstr "五"
 
 #: com/propertyvista/domain/financial/offering/DepositType.java:1
-#: com/propertyvista/domain/financial/offering/Feature.java:1
 msgid "Fixed"
 msgstr "修正"
 
@@ -2469,6 +2877,8 @@ msgstr "地板类型"
 msgid "Flooring Value"
 msgstr "地板的价值"
 
+#: com/propertyvista/crm/client/ui/components/boxes/UnitSelectorDialog.java:103
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 #: com/propertyvista/domain/property/asset/Floorplan.java:0
 #: com/propertyvista/domain/property/asset/unit/AptUnit.java:2
@@ -2493,10 +2903,12 @@ msgstr "平面图市容"
 msgid "Floorplan Details"
 msgstr "平面图详细"
 
+#: com/propertyvista/crm/client/ui/crud/unit/UnitLister.java:37
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Floorplan Marketing Name"
 msgstr "平面图市场名称"
 
+#: com/propertyvista/crm/client/ui/crud/unit/UnitLister.java:36
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 #: com/propertyvista/portal/rpc/portal/dto/TenantGeneralInfoDTO.java:2
 msgid "Floorplan Name"
@@ -2506,6 +2918,7 @@ msgstr "平面图名"
 msgid "Floorplan Property"
 msgstr "平面图物业"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:84
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/portal/domain/dto/PropertyDetailsDTO.java:2
 msgid "Floorplans"
@@ -2514,10 +2927,6 @@ msgstr "平面图"
 #: com/propertyvista/portal/domain/dto/PropertyDTO.java:2
 msgid "Floorplans Property"
 msgstr "房型物业"
-
-#: com/pyx4j/entity/shared/IVersionedEntity.java:2
-msgid "For Date"
-msgstr "为日期"
 
 #: com/propertyvista/domain/site/SitePalette.java:2
 msgid "Foreground"
@@ -2569,7 +2978,6 @@ msgstr "朋友"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
-#: com/pyx4j/entity/shared/IVersionData.java:2
 msgid "From Date"
 msgstr "从日期"
 
@@ -2597,6 +3005,10 @@ msgstr "布置"
 #: com/propertyvista/common/client/ui/validators/BirthdayDateValidator.java:32
 msgid "Future birthday date"
 msgstr "未来的生日日期"
+
+#: com/propertyvista/crm/client/ui/gadgets/addgadgetdialog/GadgetDirectoryDialog.java:75
+msgid "Gadget Directory"
+msgstr "小工具目录"
 
 #: com/propertyvista/domain/dashboard/GadgetDockingMeta.java:0
 msgid "Gadget Docking Meta"
@@ -2636,6 +3048,15 @@ msgstr "门"
 msgid "Gauge"
 msgstr "估计"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:80
+#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorForm.java:46
+#: com/propertyvista/crm/client/ui/crud/building/mech/MechBaseEditorForm.java:48
+#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:58
+#: com/propertyvista/crm/client/ui/crud/maintenance/MaintenanceRequestEditorForm.java:65
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/AppointmentEditorForm.java:48
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadEditorForm.java:65
+#: com/propertyvista/crm/client/ui/crud/settings/content/site/SiteEditorForm.java:59
+#: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:66
 #: com/propertyvista/portal/rpc/portal/dto/TenantDashboardDTO.java:2
 msgid "General"
 msgstr "一般"
@@ -2673,6 +3094,10 @@ msgstr "获取可视化挑战"
 msgid "Get An Audio Challenge"
 msgstr "得到音频的挑战"
 
+#: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:152
+msgid "Get Satisfaction"
+msgstr "得到满意"
+
 #: com/propertyvista/domain/financial/GlCodeCategory.java:2
 msgid "Gl Category Id"
 msgstr "GL类别ID"
@@ -2691,6 +3116,14 @@ msgstr "GL代码分类"
 #: com/propertyvista/domain/financial/GlCode.java:2
 msgid "Gl Id"
 msgstr "GL标识"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "GlCode"
+msgstr "GlCode"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "GlCodes"
+msgstr "GlCodes"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -2750,6 +3183,8 @@ msgid "Guarantee"
 msgstr "保证"
 
 #: com/propertyvista/common/client/ui/components/editors/PersonGuarantorEditor.java:66
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/guarantor/GuarantorEditorForm.java:80
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/Guarantor.java:0
 #: com/propertyvista/domain/tenant/PersonGuarantor.java:2
 #: com/propertyvista/dto/ApplicationStatusDTO.java:1
@@ -2761,6 +3196,9 @@ msgstr "担保人"
 msgid "Guarantor Should Be At Least 18 Years Old"
 msgstr "担保人应是年满18岁"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationLister.java:40
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/PersonScreeningEditorForm.java:113
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 #: com/propertyvista/dto/TenantFinancialDTO.java:2
 msgid "Guarantors"
@@ -2776,10 +3214,6 @@ msgstr "客房"
 #, java-format
 msgid "HH:mm"
 msgstr ""
-
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:134
-msgid "HISTORY"
-msgstr "历史"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
 msgid "HVAC"
@@ -2857,10 +3291,7 @@ msgstr "高层"
 msgid "Highway"
 msgstr "高速公路"
 
-#: com/pyx4j/entity/shared/IVersionData.java:2
-msgid "Holder"
-msgstr "持有人"
-
+#: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:191
 #: com/propertyvista/domain/contact/Email.java:1
 #: com/propertyvista/domain/contact/Phone.java:1
 msgid "Home"
@@ -2913,14 +3344,6 @@ msgstr "IDS /单证，接受有效身份证件"
 msgid "IP Address"
 msgstr "IP地址"
 
-#: com/pyx4j/entity/shared/IVersionData.java:0
-msgid "IVersion Data"
-msgstr "IVersion数据"
-
-#: com/pyx4j/entity/shared/IVersionedEntity.java:0
-msgid "IVersioned Entity"
-msgstr "IVersioned实体"
-
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 #: com/pyx4j/entity/client/impl/ClientEntityMetaImpl.java:140
 msgid "Id"
@@ -2942,6 +3365,10 @@ msgstr "图像"
 msgid "Image Resource"
 msgstr "图片资源"
 
+#: com/propertyvista/crm/rpc/dto/site/SiteImageResourceCollectionDTO.java:2
+msgid "Images"
+msgstr "图片"
+
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Immediate Adjustments"
 msgstr "立即调整"
@@ -2962,6 +3389,10 @@ msgstr "在租赁"
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Included Utilities"
 msgstr "包括公用事业"
+
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:272
+msgid "Included Utilities/Add-ons"
+msgstr "包括公用事业/附加组件"
 
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 msgid "Income"
@@ -3000,6 +3431,7 @@ msgstr "收入信息学生收入"
 msgid "Income Source"
 msgstr "收入来源"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/PersonScreeningEditorForm.java:85
 #: com/propertyvista/dto/TenantFinancialDTO.java:2
 msgid "Incomes"
 msgstr "收入"
@@ -3025,6 +3457,8 @@ msgstr "独立温控器"
 msgid "Industrial"
 msgstr "产业"
 
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadViewerViewImpl.java:66
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationEditorForm.java:65
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnit.java:2
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
@@ -3048,6 +3482,10 @@ msgstr "继承"
 #: com/propertyvista/domain/policy/policies/MiscPolicy.java:2
 msgid "Initial payment includes one or two-month deposit (two month default)"
 msgstr "首期付款包括一个或两个月的押金（2个月的默认）"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Inquiry"
+msgstr "查询"
 
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:1
 msgid "Insurance Policies"
@@ -3170,6 +3608,9 @@ msgstr "问题修复主题"
 msgid "Issue Subject Details"
 msgstr "标题详细信息"
 
+#: com/propertyvista/crm/client/ui/crud/building/catalog/feature/FeatureEditorForm.java:49
+#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorForm.java:73
+#: com/propertyvista/crm/client/ui/crud/policies/charges/ChargePolicyEditorForm.java:56
 #: com/propertyvista/domain/financial/offering/Product.java:2
 #: com/propertyvista/portal/domain/dto/MainNavigDTO.java:2
 msgid "Items"
@@ -3268,12 +3709,12 @@ msgstr "最后评价日"
 msgid "Last Appraisal Value"
 msgstr "最后评估价值"
 
-#: com/propertyvista/portal/domain/dto/BillListDTO.java:1
+#: com/propertyvista/domain/financial/offering/Concession.java:1
+msgctxt "Concession Term"
 msgid "Last Month"
 msgstr "上个月"
 
-#: com/propertyvista/domain/financial/offering/Concession.java:1
-msgctxt "Concession Term"
+#: com/propertyvista/portal/domain/dto/BillListDTO.java:1
 msgid "Last Month"
 msgstr "上个月"
 
@@ -3322,11 +3763,18 @@ msgid "Layout Type"
 msgstr "布局类型"
 
 #. Potential customer
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
 #: com/propertyvista/domain/tenant/lead/Lead.java:0
 msgid "Lead"
 msgstr "带领"
 
+#. Potential customer
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Leads"
+msgstr "信息"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/unit/occupancy/AptUnitOccupancySegment.java:2
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
@@ -3347,11 +3795,13 @@ msgstr "租赁调整"
 msgid "Lease Adjustment Policy"
 msgstr "租赁调整政策"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/policy/policies/LeaseAdjustmentPolicy.java:2
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustmentReason.java:0
 msgid "Lease Adjustment Reason"
 msgstr "租赁调整原因"
 
+#: com/propertyvista/domain/financial/billing/Bill.java:2
 #: com/propertyvista/domain/tenant/lease/LeaseFinancial.java:2
 msgid "Lease Adjustments"
 msgstr "租赁调整"
@@ -3375,6 +3825,7 @@ msgstr "租赁编号"
 msgid "Lease Length"
 msgstr "租期的长度;"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/portal/domain/ptapp/LeaseTerms.java:0
 #: com/propertyvista/portal/rpc/ptapp/dto/SummaryDTO.java:2
 msgid "Lease Terms"
@@ -3393,6 +3844,18 @@ msgstr "以租赁方式"
 #: com/propertyvista/domain/property/asset/unit/occupancy/AptUnitOccupancySegment.java:1
 msgid "Leased"
 msgstr "租赁"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Leases"
+msgstr "租赁"
+
+#: com/propertyvista/crm/client/activity/NavigActivity.java:95
+msgid "Legal & Collections"
+msgstr "法律及收藏"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Legal And Collections"
+msgstr "法律和集合"
 
 #: com/propertyvista/domain/property/asset/Complex.java:2
 msgid "Legal Name"
@@ -3457,6 +3920,10 @@ msgstr "表"
 msgid "Living Room"
 msgstr "客厅"
 
+#: com/propertyvista/crm/client/ui/gadgets/common/GadgetInstanceBase.java:84
+msgid "Loading"
+msgstr "载入中"
+
 #: com/pyx4j/rpc/client/ServiceExecutionInfo.java:41
 msgid "Loading..."
 msgstr "载入中..."
@@ -3482,7 +3949,6 @@ msgstr "本地化内容"
 
 #: com/propertyvista/domain/contact/AddressStructured.java:2
 #: com/propertyvista/domain/ref/City.java:2
-#: com/propertyvista/portal/client/ui/maps/MapDialog.java:27
 #: com/propertyvista/portal/domain/dto/PropertyDTO.java:2
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 #: com/pyx4j/entity/rpc/GeoCriteria.java:2
@@ -3493,33 +3959,53 @@ msgstr "位置"
 msgid "Locator Services"
 msgstr "定位服务"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/Feature.java:1
 #: com/propertyvista/domain/property/asset/Locker.java:0
 msgid "Locker"
 msgstr "更衣室"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/LockerArea.java:0
 #: com/propertyvista/dto/LockerAreaDTO.java:0
 msgid "Locker Area"
 msgstr "更衣室面积"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:100
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Locker Areas"
 msgstr "更衣室地区"
 
+#: com/propertyvista/crm/client/ui/crud/building/lockers/LockerAreaEditorForm.java:52
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/LockerArea.java:2
 msgid "Lockers"
 msgstr "保险箱"
 
+#: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:95
+msgid "Log In"
+msgstr "登录"
+
+#: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:84
+msgid "LogOut"
+msgstr "登出"
+
 #: com/propertyvista/common/client/ui/components/login/LoginForm.java:107
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "Login"
 msgstr "登录"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Login With Token"
 msgstr "使用令牌登录"
+
+#: com/propertyvista/crm/client/ui/login/LoginViewImpl.java:30
+msgid "Login to Your Account"
+msgstr "登录到您的帐户"
 
 #: com/propertyvista/domain/company/Company.java:2
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
@@ -3542,6 +4028,10 @@ msgstr "经度类型"
 msgid "Longitude may be in range [0-180] degree"
 msgstr "经度范围内的可能[0-180]学位"
 
+#: com/propertyvista/crm/client/ui/crud/settings/content/site/SiteEditorForm.java:73
+msgid "Look And Feel"
+msgstr "外观和感觉"
+
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Loop"
@@ -3550,10 +4040,6 @@ msgstr "循环"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Low-Rise"
 msgstr "低层"
-
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:112
-msgid "MAINTENANCE"
-msgstr "维护"
 
 #. java-format
 #: com/propertyvista/domain/PriorAddress.java:2
@@ -3631,6 +4117,7 @@ msgstr "maintanance"
 msgid "Maintanances"
 msgstr "maintanances"
 
+#: com/propertyvista/crm/client/ui/crud/building/mech/MechBaseEditorForm.java:50
 #: com/propertyvista/domain/property/vendor/Maintenance.java:0
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
@@ -3641,11 +4128,13 @@ msgstr "保养"
 msgid "Maintenance Contract"
 msgstr "维护合同"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:0
 #: com/propertyvista/dto/MaintenanceRequestDTO.java:0
 msgid "Maintenance Request"
 msgstr "维护要求"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/Tenant.java:2
 msgid "Maintenance Requests"
 msgstr "维护请求"
@@ -3655,6 +4144,11 @@ msgstr "维护请求"
 msgid "Make"
 msgstr "使"
 
+#: com/propertyvista/crm/client/ui/crud/unit/UnitViewerViewImpl.java:95
+#: com/propertyvista/crm/client/ui/crud/unit/dialogs/MakeVacantDialog.java:32
+msgid "Make Vacant..."
+msgstr "使空置..."
+
 #: com/propertyvista/domain/person/Person.java:1
 msgid "Male"
 msgstr "男"
@@ -3663,6 +4157,14 @@ msgstr "男"
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Mall"
 msgstr "购物中心"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Manage Dashboards"
+msgstr "管理仪表板"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Manage Reports"
+msgstr "管理报告"
 
 #: com/propertyvista/domain/company/Employee.java:2
 msgid "Manager"
@@ -3694,12 +4196,18 @@ msgstr "市场价格"
 msgid "Market Rent"
 msgstr "市场租金"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:105
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/marketing/Marketing.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnit.java:2
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Marketing"
 msgstr "市场营销"
+
+#: com/propertyvista/crm/client/activity/NavigActivity.java:88
+msgid "Marketing & Leasing"
+msgstr "销售及租赁"
 
 #: com/propertyvista/domain/marketing/Marketing.java:2
 msgid "Marketing Blurb"
@@ -3709,6 +4217,10 @@ msgstr "营销的Blurb"
 msgid "Marketing Media"
 msgstr "市场营销媒体"
 
+#: com/propertyvista/crm/client/ui/components/boxes/BuildingSelectorDialog.java:94
+#: com/propertyvista/crm/client/ui/crud/building/BuildingLister.java:67
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadEditorForm.java:198
+#: com/propertyvista/crm/client/ui/gadgets/other/BuildingListerGadget.java:98
 #: com/propertyvista/domain/property/asset/Floorplan.java:2
 msgid "Marketing Name"
 msgstr "市场名称"
@@ -3794,10 +4306,13 @@ msgstr "每只宠物的最大允许重量"
 msgid "Meal Service"
 msgstr "膳食服务"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:95
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Mechanicals"
 msgstr "小动物"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:308
+#: com/propertyvista/crm/client/ui/crud/floorplan/FloorplanEditorForm.java:61
 #: com/propertyvista/domain/communication/Campaign.java:2
 #: com/propertyvista/domain/media/Media.java:0
 #: com/propertyvista/domain/property/asset/Floorplan.java:2
@@ -3813,10 +4328,19 @@ msgstr "媒体"
 msgid "Media Type"
 msgstr "媒体类型"
 
+#: com/propertyvista/crm/rpc/dto/MediaUploadDTO.java:0
+msgid "Media Upload"
+msgstr "媒体上传"
+
+#: com/propertyvista/crm/client/ui/components/media/MediaItemValidator.java:44
+msgid "Media source cannot be empty!"
+msgstr "媒体源不能为空！"
+
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Melamine"
 msgstr "三聚氰胺"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/communication/Campaign.java:2
 #: com/propertyvista/domain/communication/Message.java:0
 #: com/propertyvista/portal/rpc/portal/dto/BillInfoDTO.java:2
@@ -3827,6 +4351,10 @@ msgstr "讯息"
 #: com/pyx4j/essentials/rpc/admin/SystemMaintenanceState.java:2
 msgid "Message to Users"
 msgstr "向用户发送消息"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Messages"
+msgstr "消息"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Metal"
@@ -3873,10 +4401,18 @@ msgstr "至少价格"
 msgid "Minimize"
 msgstr "最小化"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Misc"
+msgstr "杂项"
+
 #: com/propertyvista/domain/policy/dto/MiscPolicyDTO.java:0
 #: com/propertyvista/domain/policy/policies/MiscPolicy.java:0
 msgid "Misc Policy"
 msgstr "其他政策"
+
+#: com/propertyvista/crm/client/ui/crud/policies/misc/MiscPolicyEditorForm.java:41
+msgid "Misc Settings"
+msgstr "杂项设置"
 
 #: com/propertyvista/domain/person/Name.java:1
 msgid "Miss"
@@ -3960,6 +4496,10 @@ msgstr "月薪"
 msgid "Monthly Salary/Dividend"
 msgstr "月薪/股息"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:60
+msgid "More Info"
+msgstr "更多信息"
+
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "Morning"
 msgstr "早晨"
@@ -3977,6 +4517,10 @@ msgstr "移动"
 msgid "Move In Date"
 msgstr "移动日期"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/PersonScreeningEditorForm.java:157
+msgid "Move In Date must be less then Move Out Date"
+msgstr "移动日期一定要少，然后将日期"
+
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupTenant.java:2
 msgid "Move Out"
 msgstr "迁出"
@@ -3984,6 +4528,10 @@ msgstr "迁出"
 #: com/propertyvista/domain/PriorAddress.java:2
 msgid "Move Out Date"
 msgstr "迁出日期"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/PersonScreeningEditorForm.java:177
+msgid "Move Out Date must be greater then Move In Date"
+msgstr "迁出日期必须是更大的，然后将日期"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Move Out Day"
@@ -4020,10 +4568,6 @@ msgstr "女士"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Municipal"
 msgstr "市"
-
-#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestForm.java:55
-msgid "NEW TICKET"
-msgstr "北京LED显示屏。"
 
 #: com/propertyvista/domain/company/Company.java:2
 #: com/propertyvista/domain/company/CompanyRole.java:2
@@ -4125,6 +4669,10 @@ msgstr "网络仿真"
 msgid "Never"
 msgstr "从来没有"
 
+#: com/propertyvista/crm/client/ui/crud/CrmEditorViewImplBase.java:111
+msgid "New Item..."
+msgstr "新建项目..."
+
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 msgid "New Lease Terms"
 msgstr "新的租赁条款"
@@ -4137,18 +4685,17 @@ msgstr "新密码"
 msgid "New Payment Method"
 msgstr "新的付款方式"
 
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:104
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:72
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "New Ticket"
 msgstr "新机票"
 
 #. java-format
-#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:122
+#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:123
 #, java-format
 msgid "New {0}"
 msgstr ""
 
+#: com/propertyvista/crm/client/ui/crud/settings/content/site/SiteEditorForm.java:61
 #: com/propertyvista/domain/site/News.java:0
 #: com/propertyvista/dto/SiteDescriptorDTO.java:2
 msgid "News"
@@ -4175,10 +4722,9 @@ msgstr "夜间巡逻"
 msgid "No"
 msgstr "没有"
 
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:54
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:37
-msgid "No Records Found"
-msgstr "没有找到记录"
+#: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:101
+msgid "No Dashboard"
+msgstr "没有仪表板"
 
 #: com/propertyvista/domain/tenant/lead/Appointment.java:1
 msgid "No Show"
@@ -4193,13 +4739,13 @@ msgstr "节点"
 msgid "Non Mixable"
 msgstr "非混用"
 
-#: com/propertyvista/domain/property/asset/Parking.java:1
-msgctxt "Parking Type"
+#: com/propertyvista/domain/financial/offering/Concession.java:1
+msgctxt "Concession Condition"
 msgid "None"
 msgstr "没有"
 
-#: com/propertyvista/domain/financial/offering/Concession.java:1
-msgctxt "Concession Condition"
+#: com/propertyvista/domain/property/asset/Parking.java:1
+msgctxt "Parking Type"
 msgid "None"
 msgstr "没有"
 
@@ -4229,11 +4775,26 @@ msgstr "不感兴趣"
 msgid "Not resident of Canada"
 msgstr "不居于加拿大"
 
+#: com/propertyvista/crm/client/ui/crud/settings/content/site/PortalImageResourceFolder.java:122
+msgid "Not set"
+msgstr "没有设置"
+
+#: com/propertyvista/crm/client/ui/crud/building/catalog/feature/FeatureItemFolder.java:118
+msgid "Note"
+msgstr "注意"
+
 #: com/propertyvista/domain/Notes.java:0
 #: com/propertyvista/domain/Notes.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 msgid "Notes"
 msgstr "笔记"
+
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:117
+#: com/propertyvista/crm/client/ui/crud/building/lockers/LockerAreaEditorForm.java:53
+#: com/propertyvista/crm/client/ui/crud/building/parking/ParkingEditorForm.java:52
+#: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:76
+msgid "Notes & Attachments"
+msgstr "注意事项及附件"
 
 #: com/propertyvista/domain/dashboard/gadgets/type/UnitAvailability.java:1
 msgid "Notice"
@@ -4310,10 +4871,6 @@ msgstr "数字"
 msgid "OK"
 msgstr "确定"
 
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:81
-msgid "OPEN TICKETS"
-msgstr "开放的票证"
-
 #: com/propertyvista/domain/site/SitePalette.java:2
 msgid "Object 1"
 msgstr "对象1"
@@ -4322,6 +4879,11 @@ msgstr "对象1"
 msgid "Object 2"
 msgstr "对象2"
 
+#: com/propertyvista/domain/policy/policies/emailtemplates/EmailTemplateTypeDTO.java:2
+msgid "Object Names"
+msgstr "对象名称"
+
+#: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:71
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Occupancy"
 msgstr "占用"
@@ -4333,6 +4895,10 @@ msgstr "出租＃"
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Occupancy %"
 msgstr "占用％"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationLister.java:38
+msgid "Occupants"
+msgstr "平房"
 
 #: com/propertyvista/domain/policy/policies/MiscPolicy.java:2
 msgid "Occupants over 18 are Applicants"
@@ -4348,6 +4914,7 @@ msgstr "平房每间卧室"
 msgid "Odr"
 msgstr "ODR"
 
+#: com/propertyvista/crm/client/ui/crud/unit/dialogs/ScopeDialog.java:85
 #: com/propertyvista/domain/property/asset/unit/AptUnitInfo.java:1
 #: com/propertyvista/domain/property/asset/unit/occupancy/AptUnitOccupancySegment.java:1
 #: com/propertyvista/domain/property/asset/unit/occupancy/AptUnitOccupancySegment.java:2
@@ -4403,13 +4970,13 @@ msgstr "一次性付款条款"
 msgid "Ontario Disability Support Program (ODSP)"
 msgstr "安大略省残疾支援计划（ODSP）"
 
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:90
-msgid "Open Tickets"
-msgstr "开放门票"
-
 #: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:212
 msgid "Options"
 msgstr "选项"
+
+#: com/propertyvista/domain/financial/offering/ProductItem.java:2
+msgid "Order Column"
+msgstr "顺序列"
 
 #: com/propertyvista/domain/financial/billing/BillEntry.java:2
 msgid "Order Id"
@@ -4441,15 +5008,14 @@ msgstr "在租赁顺序"
 msgid "Order In Owner"
 msgstr "业主订购"
 
-#: com/propertyvista/domain/financial/offering/ProductItem.java:2
-msgid "Order In Product"
-msgstr "产品订购"
-
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:115
-msgid "Order Service"
-msgstr "订购服务"
+#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
+msgid "Order In Parent"
+msgstr "家长订购"
 
 #. java-format
+#: com/propertyvista/crm/client/activity/NavigActivity.java:104
+#: com/propertyvista/crm/client/ui/crud/settings/policymanagement/OrganizationBrowser.java:121
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/policy/framework/OrganizationPoliciesNode.java:0
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 #, java-format
@@ -4525,6 +5091,8 @@ msgstr "拥有"
 msgid "Owned/Rented"
 msgstr "拥有/租出"
 
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsStatusGadget.java:134
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/UnitAvailabilityReportGadget.java:203
 #: com/propertyvista/domain/dashboard/gadgets/CommonGadgetColumns.java:2
 #: com/propertyvista/domain/media/ApplicationDocument.java:2
 #: com/propertyvista/domain/property/asset/Owner.java:0
@@ -4548,6 +5116,10 @@ msgstr "包接收"
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Packet"
 msgstr "包"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Page"
+msgstr "页"
 
 #: com/propertyvista/domain/site/PageCaption.java:0
 msgid "Page Caption"
@@ -4607,6 +5179,7 @@ msgid "Park"
 msgstr "公园"
 
 #. Building Amenity Type
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/Feature.java:1
 #: com/propertyvista/domain/property/asset/Parking.java:0
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -4622,10 +5195,12 @@ msgstr "停车费欠款"
 msgid "Parking Price"
 msgstr "停车收费价格"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/ParkingSpot.java:0
 msgid "Parking Spot"
 msgstr "停车位"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/Parking.java:2
 msgid "Parking Spots"
 msgstr "停车点"
@@ -4634,6 +5209,8 @@ msgstr "停车点"
 msgid "Parking/Storage"
 msgstr "停车/仓储"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:98
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Parkings"
 msgstr "停车场"
@@ -4663,6 +5240,8 @@ msgstr "部分"
 msgid "Parts And Labor"
 msgstr "部件和人工"
 
+#: com/propertyvista/crm/rpc/AccountCreationRequest.java:2
+#: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:2
 #: com/propertyvista/domain/settings/YardiConnection.java:2
 #: com/propertyvista/portal/rpc/corp/PmcAccountCreationRequest.java:2
 #: com/propertyvista/portal/rpc/ptapp/AccountCreationRequest.java:2
@@ -4678,6 +5257,7 @@ msgstr "更改密码"
 msgid "Password Reset"
 msgstr "密码重置"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "Password Reset Request"
 msgstr "密码重置请求"
@@ -4690,6 +5270,10 @@ msgstr "密码检索CRM"
 msgid "Password Retrieval Tenant"
 msgstr "密码检索租客"
 
+#: com/propertyvista/crm/client/activity/security/PasswordChangeActivity.java:100
+msgid "Password was changed successfully"
+msgstr "密码已成功更改"
+
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Past Due Amount"
 msgstr "逾期金额"
@@ -4697,11 +5281,6 @@ msgstr "逾期金额"
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Patio"
 msgstr "天井"
-
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:189
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:239
-msgid "Pay Now"
-msgstr "立即付款"
 
 #: com/propertyvista/domain/financial/billing/BillPayment.java:2
 #: com/propertyvista/domain/financial/billing/Payment.java:0
@@ -4720,8 +5299,6 @@ msgid "Payment Information"
 msgstr "付款信息"
 
 #: com/propertyvista/domain/payment/PaymentMethod.java:0
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:115
-#: com/propertyvista/portal/client/ui/residents/PaymentMethodsForm.java:65
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 #: com/propertyvista/portal/domain/dto/PaymentMethodDTO.java:0
 #: com/propertyvista/portal/domain/ptapp/PaymentInformation.java:2
@@ -4757,13 +5334,13 @@ msgstr "付款方式"
 msgid "Pending"
 msgstr "有待"
 
-#: com/propertyvista/domain/tenant/lease/Lease.java:1
-msgctxt "Lease Status"
+#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Pending Decision"
 msgstr "待决定"
 
-#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
-msgctxt "Application"
+#: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgctxt "Lease Status"
 msgid "Pending Decision"
 msgstr "待决定"
 
@@ -4780,10 +5357,6 @@ msgstr "百分比"
 #: com/propertyvista/domain/financial/offering/DepositType.java:1
 msgid "Percentage From Price"
 msgstr "从价格的百分比"
-
-#: com/propertyvista/domain/financial/offering/Feature.java:1
-msgid "Percentage From Service Price"
-msgstr "服务价格的百分比"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
 msgid "Percentage Of Units Turned Over"
@@ -4805,6 +5378,7 @@ msgstr "权限"
 #: com/propertyvista/common/client/ui/components/editors/EmergencyContactEditor.java:58
 #: com/propertyvista/common/client/ui/components/editors/dto/FinancialViewForm.java:68
 #: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:99
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadEditorForm.java:93
 #: com/propertyvista/domain/company/OrganizationContact.java:2
 #: com/propertyvista/domain/person/Person.java:0
 #: com/propertyvista/domain/property/asset/Owner.java:2
@@ -4836,6 +5410,7 @@ msgstr "个人资产（S）"
 msgid "Personal Income"
 msgstr "个人所得税"
 
+#: com/propertyvista/crm/client/ui/crud/organisation/employee/EmployeeEditorForm.java:57
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "Personal Information"
 msgstr "个人信息"
@@ -4854,6 +5429,11 @@ msgstr "宠物约束"
 msgid "Pet Data"
 msgstr "PET数据"
 
+#: com/propertyvista/crm/client/ui/crud/policies/pet/PetPolicyEditorForm.java:41
+msgid "Pet Limits"
+msgstr "宠物的限制"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/policy/dto/PetPolicyDTO.java:0
 #: com/propertyvista/domain/policy/policies/PetPolicy.java:0
 msgid "Pet Policy"
@@ -4940,9 +5520,20 @@ msgid ""
 "Active"
 msgstr "如果你想保持多个会话活动，请打开另一个浏览器窗口"
 
+#: com/propertyvista/crm/client/ui/crud/maintenance/MaintenanceRequestEditorForm.java:109
+#: com/propertyvista/crm/client/ui/crud/maintenance/MaintenanceRequestEditorForm.java:119
+#: com/propertyvista/crm/client/ui/crud/maintenance/MaintenanceRequestEditorForm.java:128
+msgid "Please Select"
+msgstr "请选择"
+
 #: com/pyx4j/essentials/client/SessionInactiveDialog.java:77
 msgid "Please Sign In To Continue."
 msgstr "请登录以继续。"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:207
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/bill/BillViewerViewImpl.java:94
+msgid "Please fill the reason"
+msgstr "请填写原因"
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:73
 msgid "Please make sure you are connected to Internet"
@@ -4955,6 +5546,15 @@ msgid ""
 "describing the steps taken prior to the error.\n"
 msgstr "请技术支持报告事件，描述错误之前采取的步骤。"
 
+#: com/propertyvista/crm/client/ui/components/media/CrmMediaFolder.java:193
+msgid "Please save this first"
+msgstr "请妥善保存这第一"
+
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:230
+#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:80
+msgid "Please use proper URL format, e.g. www.propertyvista.com"
+msgstr "请使用正确的URL格式，例如www.propertyvista.com"
+
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
 msgid "Plumbing"
 msgstr "水暖"
@@ -4963,6 +5563,8 @@ msgstr "水暖"
 msgid "Point Of Sale"
 msgstr "销售点"
 
+#: com/propertyvista/crm/client/activity/NavigSettingsActivity.java:76
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/policy/framework/EffectivePoliciesDTO.java:2
 msgid "Policies"
 msgstr "政策"
@@ -4981,9 +5583,17 @@ msgstr "在节点的政策"
 msgid "Policy DTOBase"
 msgstr "政策DTOBase"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Policy Management"
+msgstr "策略管理"
+
 #: com/propertyvista/domain/policy/framework/PolicyNode.java:0
 msgid "Policy Node"
 msgstr "政策节点"
+
+#: com/propertyvista/crm/client/ui/crud/policies/common/PolicyListerBase.java:89
+msgid "Policy Removal Confirmation"
+msgstr "策略删除确认"
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/PropertyPhone.java:1
@@ -4995,6 +5605,10 @@ msgstr "水池"
 msgid "Popup window blocked"
 msgstr "弹出窗口被挡"
 
+#: com/propertyvista/crm/client/activity/NavigSettingsActivity.java:67
+msgid "Portal"
+msgstr "门户网站"
+
 #: com/propertyvista/domain/site/PortalImageResource.java:0
 msgid "Portal Image Resource"
 msgstr "门户网站图片资源"
@@ -5003,11 +5617,15 @@ msgstr "门户网站图片资源"
 msgid "Portal Preferences"
 msgstr "门户偏好"
 
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsStatusGadget.java:136
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/company/Portfolio.java:0
 #: com/propertyvista/domain/dashboard/gadgets/CommonGadgetColumns.java:2
 msgid "Portfolio"
 msgstr "投资组合"
 
+#: com/propertyvista/crm/client/ui/crud/organisation/employee/EmployeeEditorForm.java:166
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/company/Employee.java:2
 msgid "Portfolios"
 msgstr "投资组合"
@@ -5035,10 +5653,6 @@ msgstr "潜在租户"
 msgid "Pre Authorized"
 msgstr "预授权"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:147
-msgid "Pre-Authorized Monthly Payment Plan"
-msgstr "预授权的每月付款计划"
-
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
 msgid "Prepayments"
 msgstr "预付款项"
@@ -5059,7 +5673,6 @@ msgstr "以前的地址"
 msgid "Previous Balance Amount"
 msgstr "以前的余额"
 
-#: com/propertyvista/domain/financial/billing/BillEntry.java:2
 #: com/propertyvista/domain/financial/offering/ProductItem.java:2
 #: com/propertyvista/domain/tenant/lease/BillableItem.java:2
 #: com/propertyvista/portal/domain/dto/FloorplanPropertyDTO.java:2
@@ -5074,14 +5687,6 @@ msgstr "价格修正"
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "Price Range"
 msgstr "价格范围"
-
-#: com/propertyvista/domain/financial/offering/Feature.java:2
-msgid "Price Type"
-msgstr "价格类型"
-
-#: com/propertyvista/portal/client/ui/maps/PropertyMarker.java:185
-msgid "Price not available"
-msgstr "价格不详"
 
 #: com/propertyvista/domain/financial/Pricing.java:0
 msgid "Pricing"
@@ -5099,6 +5704,10 @@ msgstr "初步建立"
 #: com/propertyvista/domain/dashboard/gadgets/type/ListerGadgetBaseMetadata.java:2
 msgid "Primary Sort Column"
 msgstr "主要排序栏"
+
+#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:142
+msgid "Primary building should be selected"
+msgstr "主要建设应选择"
 
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Primary in Complex"
@@ -5128,15 +5737,24 @@ msgstr "私人庭院"
 msgid "Private Well"
 msgstr "私人水井"
 
+#: com/propertyvista/crm/client/ui/crud/organisation/employee/EmployeeEditorForm.java:58
+msgid "Privileges"
+msgstr "特权"
+
 #: com/propertyvista/domain/financial/offering/ProductItem.java:2
 msgid "Product"
 msgstr "产品"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:114
 #: com/propertyvista/domain/financial/offering/ProductCatalog.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Product Catalog"
 msgstr "产品目录"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Product Dictionary"
+msgstr "产品词典"
 
 #: com/propertyvista/domain/financial/offering/ProductItem.java:0
 #: com/propertyvista/domain/tenant/lease/BillableItem.java:2
@@ -5191,6 +5809,8 @@ msgstr "促销/折扣"
 msgid "Proof Of Employment"
 msgstr "就业证明"
 
+#: com/propertyvista/crm/client/activity/NavigActivity.java:72
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/portal/domain/dto/PropertyListDTO.java:2
 msgid "Properties"
 msgstr "属性"
@@ -5223,6 +5843,8 @@ msgstr "财产清单"
 msgid "Property Management"
 msgstr "物业管理"
 
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsStatusGadget.java:133
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/UnitAvailabilityReportGadget.java:204
 #: com/propertyvista/domain/property/PropertyManager.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Property Manager"
@@ -5260,6 +5882,7 @@ msgstr "展望门户网站标题"
 msgid "Provider"
 msgstr "提供者"
 
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsStatusGadget.java:129
 #: com/propertyvista/domain/contact/AddressStructured.java:2
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 #: com/propertyvista/domain/ref/Province.java:0
@@ -5285,6 +5908,14 @@ msgstr "省"
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
 msgid "Public"
 msgstr "公众"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Purchase Order"
+msgstr "采购订单"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Purchase Orders"
+msgstr "采购订单"
 
 #: com/propertyvista/domain/property/asset/building/BuildingFinancial.java:2
 msgid "Purchase Price"
@@ -5318,10 +5949,6 @@ msgstr "范围集团"
 #: com/propertyvista/domain/financial/tax/Tax.java:2
 msgid "Rate"
 msgstr "率"
-
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:147
-msgid "Rate Service"
-msgstr "一流服务"
 
 #: com/propertyvista/domain/maintenance/SurveyResponse.java:2
 #: com/propertyvista/portal/rpc/portal/dto/SatisfactionSurveyResponceDTO.java:2
@@ -5406,6 +6033,10 @@ msgstr "定期保养"
 msgid "Regular Spaces"
 msgstr "经常空间"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/bill/BillViewerViewImpl.java:38
+msgid "Reject"
+msgstr "拒绝"
+
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Reject Reason"
 msgstr "拒绝的原因"
@@ -5423,9 +6054,17 @@ msgstr "关系"
 msgid "Remember my ID"
 msgstr "记住我的ID"
 
+#: com/propertyvista/crm/client/ui/gadgets/addgadgetdialog/SelectedGadgetCell.java:99
+msgid "Remove"
+msgstr "清除"
+
 #: com/pyx4j/entity/client/ui/datatable/filter/DataTableFilterItem.java:89
 msgid "Remove Filter"
 msgstr "移动过滤器"
+
+#: com/propertyvista/crm/client/ui/components/cms/SiteImageResourceProvider.java:89
+msgid "Remove Image"
+msgstr "删除图片"
 
 #. java-format
 #: com/propertyvista/common/client/ui/decorations/VistaBoxFolderItemDecorator.java:35
@@ -5443,9 +6082,15 @@ msgctxt "Lease Status"
 msgid "Renewed"
 msgstr "续约"
 
+#: com/propertyvista/crm/client/ui/crud/unit/dialogs/ScopeDialog.java:83
 #: com/propertyvista/domain/property/asset/unit/occupancy/AptUnitOccupancySegment.java:1
 msgid "Renovation"
 msgstr "装修"
+
+#: com/propertyvista/crm/client/ui/crud/unit/dialogs/ScopeDialog.java:89
+#: com/propertyvista/crm/client/ui/crud/unit/dialogs/ScopeDialog.java:95
+msgid "Renovation ends"
+msgstr "装修结束"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 msgid "Rent Arrears"
@@ -5477,6 +6122,12 @@ msgstr "租用日期"
 msgid "Rented/Unrented/OffMarket"
 msgstr "租用/ Unrented的/ OffMarket"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Report"
+msgstr "报告"
+
+#: com/propertyvista/crm/client/activity/NavigActivity.java:111
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Reports"
 msgstr "报告"
@@ -5485,6 +6136,7 @@ msgstr "报告"
 msgid "Request for Guarantor or further information"
 msgstr "担保人或进一步信息的请求"
 
+#: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:2
 #: com/pyx4j/security/rpc/PasswordChangeRequest.java:2
 msgid "Require to change password on next sign in"
 msgstr "要求更改在下次登录密码"
@@ -5516,6 +6168,7 @@ msgstr "重置"
 
 #: com/propertyvista/common/client/ui/components/login/LoginForm.java:124
 #: com/propertyvista/common/client/ui/components/login/RetrievePasswordForm.java:61
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Reset Password"
 msgstr "重设密码"
 
@@ -5556,6 +6209,10 @@ msgstr "住宅单位"
 #: com/propertyvista/domain/site/PageDescriptor.java:1
 msgid "Residents"
 msgstr "居民"
+
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:324
+msgid "Resolution"
+msgstr "决议"
 
 #: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:66
 msgid "Restore"
@@ -5598,10 +6255,13 @@ msgstr "道路"
 msgid "Role"
 msgstr "角色"
 
+#: com/propertyvista/crm/client/ui/crud/organisation/employee/EmployeeEditorForm.java:163
+#: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:2
 #: com/propertyvista/domain/security/CrmRole.java:2
 msgid "Roles"
 msgstr "角色"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/Service.java:1
 #: com/propertyvista/domain/property/asset/Roof.java:0
 #: com/propertyvista/dto/RoofDTO.java:0
@@ -5616,6 +6276,8 @@ msgstr "屋顶分部"
 msgid "Roof Segments"
 msgstr "屋顶分部"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:93
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Roofs"
 msgstr "屋顶"
@@ -5629,6 +6291,11 @@ msgstr "路由号码"
 msgid "Row"
 msgstr "行"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingViewerViewImpl.java:99
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseViewerViewImpl.java:58
+msgid "Run Bill"
+msgstr "运行条例草案"
+
 #: com/propertyvista/domain/financial/billing/Bill.java:1
 #: com/propertyvista/domain/financial/billing/BillingRun.java:1
 msgid "Running"
@@ -5637,10 +6304,6 @@ msgstr "运行"
 #: com/propertyvista/shared/CompiledLocale.java:1
 msgid "Russian"
 msgstr "俄"
-
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:116
-msgid "SERVICES"
-msgstr "服务"
 
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 msgid "SIN"
@@ -5667,15 +6330,17 @@ msgstr "满意度调查"
 msgid "Sauna"
 msgstr "桑拿"
 
-#: com/propertyvista/portal/client/ui/residents/EditPaymentMethodViewImpl.java:45
-#: com/propertyvista/portal/client/ui/residents/NewPaymentMethodViewImpl.java:52
-#: com/propertyvista/portal/client/ui/residents/PersonalInfoViewImpl.java:45
+#: com/propertyvista/crm/client/ui/crud/CrmEditorViewImplBase.java:67
 msgid "Save"
 msgstr "保存"
 
 #: com/propertyvista/domain/payment/EcheckInfo.java:1
 msgid "Saving"
 msgstr "节省"
+
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:349
+msgid "Scale"
+msgstr "规模"
 
 #: com/propertyvista/common/client/ui/components/editors/MaintenanceEditor.java:43
 #: com/propertyvista/domain/communication/Campaign.java:2
@@ -5695,21 +6360,41 @@ msgstr "预定"
 msgid "School"
 msgstr "学校"
 
+#: com/propertyvista/crm/client/ui/crud/policies/common/PolicyDTOTabPanelBasedEditorForm.java:126
+#: com/propertyvista/crm/client/ui/crud/policies/common/PolicyDTOTabPanelBasedEditorForm.java:77
 #: com/propertyvista/domain/policy/framework/PolicyDTOBase.java:2
 msgid "Scope"
 msgstr "范围"
+
+#: com/propertyvista/crm/client/ui/crud/unit/UnitViewerViewImpl.java:69
+msgid "Scope..."
+msgstr "范围......"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Scoping"
 msgstr "作用域"
 
+#: com/propertyvista/crm/client/ui/crud/unit/dialogs/ScopeDialog.java:59
+msgid "Scoping Result"
+msgstr "概略结果"
+
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 msgid "Screene"
 msgstr "screene"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:150
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/guarantor/GuarantorEditorForm.java:51
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Screening"
+msgstr "筛选"
+
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Screening Data"
 msgstr "筛选数据"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Screenings"
+msgstr "放映"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "Search By"
@@ -5729,6 +6414,7 @@ msgid "Secondary Caption"
 msgstr "二级标题"
 
 #: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:111
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/PersonScreeningEditorForm.java:82
 msgid "Secure Information"
 msgstr "安全信息"
 
@@ -5736,9 +6422,106 @@ msgstr "安全信息"
 msgid "Seen"
 msgstr "看到"
 
-#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestForm.java:40
+#: com/propertyvista/crm/client/ui/crud/maintenance/MaintenanceRequestEditorForm.java:49
+#: com/propertyvista/crm/client/ui/gadgets/addgadgetdialog/GadgetAdditionCell.java:87
 msgid "Select"
 msgstr "选择"
+
+#: com/propertyvista/crm/client/ui/components/boxes/BuildingSelectorDialog.java:48
+msgid "Select Buildings"
+msgstr "选择建筑物"
+
+#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceConcessionFolder.java:75
+msgid "Select Concession"
+msgstr "选择特许经营"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:63
+msgid "Select Concessions"
+msgstr "选择优惠"
+
+#: com/propertyvista/crm/client/ui/dashboard/DashboardEditorImpl.java:38
+msgid "Select Dashboard Type"
+msgstr "选择仪表板类型"
+
+#: com/propertyvista/crm/client/ui/crud/organisation/employee/EmployeeFolder.java:119
+msgid "Select Employee"
+msgstr "选择员工"
+
+#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceFeatureFolder.java:74
+msgid "Select Feature"
+msgstr "选择要素"
+
+#: com/propertyvista/crm/client/ui/crud/building/catalog/feature/FeatureEditorViewImpl.java:37
+msgid "Select Feature Type"
+msgstr "选择功能类型"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/BillableItemFolder.java:46
+msgid "Select Features"
+msgstr "选择功能"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/PersonGuarantorFolder.java:114
+msgid "Select Guarantor"
+msgstr "选择担保人"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorViewImpl.java:39
+msgid "Select Lease Type"
+msgstr "选择租赁类型"
+
+#: com/propertyvista/crm/client/ui/crud/settings/role/CrmRoleEditorForm.java:106
+msgid "Select Permissions"
+msgstr "选择权限"
+
+#: com/propertyvista/crm/client/ui/crud/organisation/employee/PortfolioFolder.java:108
+msgid "Select Portfolio"
+msgstr "选择投资组合"
+
+#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorViewImpl.java:40
+msgid "Select Service Type"
+msgstr "选择服务类型"
+
+#: com/propertyvista/crm/client/ui/crud/settings/tax/ChargeCodeTaxFolder.java:84
+#: com/propertyvista/crm/client/ui/crud/settings/tax/LeaseAdjustmentReasonTaxFolder.java:84
+msgid "Select Tax"
+msgstr "选择税"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/TenantInLeaseFolder.java:175
+msgid "Select Tenant"
+msgstr "选择租客"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorViewImpl.java:37
+msgid "Select Tenant Type"
+msgstr "选择租客类型"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:92
+msgid "Select Tenants To Acqure info"
+msgstr "选择租户Acqure信息中"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:151
+msgid "Select Tenants To Check"
+msgstr "选择要检查的住户"
+
+#: com/propertyvista/crm/client/ui/components/boxes/UnitSelectorDialog.java:44
+#: com/propertyvista/crm/client/ui/components/boxes/UnitSelectorDialog.java:48
+msgid "Select Unit"
+msgstr "选择单位"
+
+#: com/propertyvista/crm/client/ui/crud/building/UtilityFolder.java:68
+msgid "Select Utilities"
+msgstr "选择实用程序"
+
+#: com/propertyvista/crm/client/ui/crud/organisation/employee/CrmRoleFolder.java:69
+msgid "Select roles"
+msgstr "选择角色"
+
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadEditorForm.java:124
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/ShowingEditorForm.java:58
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:133
+msgid "Select..."
+msgstr "选择..."
+
+#: com/propertyvista/crm/client/ui/gadgets/addgadgetdialog/GadgetDirectoryDialog.java:109
+msgid "Selected"
+msgstr "选"
 
 #: com/propertyvista/dto/LeaseDTO.java:2
 msgid "Selected Building"
@@ -5774,16 +6557,23 @@ msgstr "选定的实用物品"
 msgid "Self Employed"
 msgstr "自雇人士"
 
+#: com/propertyvista/crm/client/ui/components/cms/SiteImageResourceProvider.java:163
+#: com/propertyvista/crm/client/ui/components/cms/SiteImageResourceProvider.java:95
+#: com/propertyvista/crm/client/ui/crud/policies/emailtemplates/EmailTemplatesPolicyEditorForm.java:97
+msgid "Server Error"
+msgstr "服务器错误"
+
 #: com/propertyvista/domain/settings/YardiConnection.java:2
 msgid "Server Name"
 msgstr "服务器名称"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/ProductItemType.java:1
 #: com/propertyvista/domain/financial/offering/Service.java:0
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:306
 msgid "Service"
 msgstr "服务"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:72
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 #: com/propertyvista/domain/tenant/lease/ServiceAgreement.java:0
 msgid "Service Agreement"
@@ -5797,16 +6587,30 @@ msgstr "服务费"
 msgid "Service Item"
 msgstr "服务项目"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:217
+msgid "Service Item Selection"
+msgstr "服务项目的选择"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Service Item Type"
+msgstr "服务项目类型"
+
+#: com/propertyvista/crm/client/ui/crud/settings/dictionary/ProductDictionaryViewForm.java:42
+msgid "Service Item Types"
+msgstr "服务项目类型"
+
 #: com/propertyvista/domain/financial/offering/ProductItemType.java:2
 msgid "Service Type"
 msgstr "服务类型"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:108
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/ProductCatalog.java:2
 msgid "Services"
 msgstr "服务"
 
 #. java-format
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:82
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:83
 #, java-format
 msgid "Session Duration {0}, Inactive For {1}"
 msgstr ""
@@ -5814,6 +6618,12 @@ msgstr ""
 #: com/pyx4j/essentials/client/SessionInactiveDialog.java:72
 msgid "Session Inactive"
 msgstr "会议无效"
+
+#: com/propertyvista/crm/client/activity/NavigSettingsActivity.java:55
+#: com/propertyvista/crm/client/ui/crud/policies/applicationdocumentation/ApplicationDocumentationPolicyEditorForm.java:55
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Settings"
+msgstr "设置"
 
 #: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:346
 msgid "Setup"
@@ -5849,13 +6659,35 @@ msgstr "应该是一个数值"
 msgid "Should Be An Integer"
 msgstr "应该是一个整数"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/lead/Showing.java:0
 msgid "Showing"
 msgstr "显示"
 
+#: com/propertyvista/crm/client/ui/crud/marketing/lead/AppointmentEditorForm.java:49
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
 msgid "Showings"
 msgstr "看房"
+
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:111
+msgid "Shows a short summary of the total arrears"
+msgstr "显示了欠款总额的简短摘要"
+
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/AvailabilitySummaryGadget.java:159
+msgid ""
+"Shows a summary of information about all units, including the total number "
+"of units, vacancy, notice and net exposure information in both percentages "
+"and quantity"
+msgstr "显示了一个信息有关的所有单位，包括单位的总人数，职位空缺，通知和净风险比例和数量信息摘要"
+
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsStatusGadget.java:228
+msgid ""
+"Shows the information about tenant arrears, including how long it is "
+"overdue, total balance, legal status information etc. This gadget can either"
+" show total arrears or arrears of specific type (i.e. rent, parking or "
+"other)"
+msgstr "显示的信息有关租户的欠款，包括逾期多久，总量平衡，法律状态信息等，这个小工具可以显示特定类型的欠款总额或拖欠（即租金，停车场或其他）"
 
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 msgid "Sign Date"
@@ -5869,6 +6701,7 @@ msgstr "签名"
 msgid "Signed"
 msgstr "签名"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Signing Out"
 msgstr "登出"
@@ -5881,6 +6714,10 @@ msgstr "网站描述"
 #: com/propertyvista/domain/site/SiteImageResource.java:0
 msgid "Site Image Resource"
 msgstr "现场图像资源"
+
+#: com/propertyvista/crm/rpc/dto/site/SiteImageResourceCollectionDTO.java:0
+msgid "Site Image Resource Collection"
+msgstr "网站图片资源集合"
 
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
 #: com/propertyvista/domain/site/SitePalette.java:0
@@ -5986,6 +6823,10 @@ msgstr "温泉"
 msgid "Spanish"
 msgstr "西班牙人"
 
+#: com/propertyvista/crm/client/ui/crud/building/parking/ParkingEditorForm.java:51
+msgid "Spots"
+msgstr "斑点"
+
 #: com/propertyvista/domain/tenant/PersonRelationship.java:1
 msgid "Spouse"
 msgstr "配偶"
@@ -6009,6 +6850,10 @@ msgstr "平方米。米"
 msgid "Square"
 msgstr "广场"
 
+#: com/propertyvista/crm/rpc/services/billing/StartBuildingBillingDTO.java:0
+msgid "Start Building Billing"
+msgstr "启动建设帐单"
+
 #: com/propertyvista/domain/property/asset/Owner.java:2
 #: com/propertyvista/domain/property/vendor/Contract.java:2
 #: com/propertyvista/domain/tenant/income/IIncomeInfo.java:2
@@ -6020,7 +6865,7 @@ msgstr "开始日期"
 msgid "Start Time"
 msgstr "开始时间"
 
-#: com/propertyvista/portal/client/ui/maps/PropertyMarker.java:189
+#: com/propertyvista/crm/client/ui/crud/unit/dialogs/MakeVacantDialog.java:39
 msgid "Starting From"
 msgstr "起价"
 
@@ -6029,6 +6874,8 @@ msgstr "起价"
 msgid "Static Content"
 msgstr "静态内容"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/bill/BillEditorForm.java:43
+#: com/propertyvista/crm/rpc/dto/MasterApplicationActionDTO.java:2
 #: com/propertyvista/domain/financial/billing/BillingRun.java:2
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
@@ -6039,10 +6886,6 @@ msgstr "静态内容"
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 #: com/propertyvista/domain/tenant/ptapp/Application.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:263
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:308
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:146
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:93
 #: com/propertyvista/portal/rpc/portal/dto/MaintananceDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApplicationStatusSummaryDTO.java:2
@@ -6053,10 +6896,18 @@ msgstr "状态"
 msgid "Status Date"
 msgstr "状态日期"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationEditorForm.java:68
+msgid "Status Details"
+msgstr "状态详细信息"
+
 #: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsSummary.java:2
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 msgid "Status Timestamp"
 msgstr "状态时间戳"
+
+#: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:81
+msgid "Status for All Buildings"
+msgstr "所有建筑物的状态"
 
 #: com/propertyvista/domain/tenant/ptapp/Application.java:2
 msgid "Steps"
@@ -6075,13 +6926,13 @@ msgstr "存储"
 msgid "Storage Space"
 msgstr "存储空间"
 
-#: com/propertyvista/domain/property/asset/Parking.java:1
-msgctxt "Parking Type"
+#. Street Type
+#: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Street"
 msgstr "街头"
 
-#. Street Type
-#: com/propertyvista/domain/contact/AddressStructured.java:1
+#: com/propertyvista/domain/property/asset/Parking.java:1
+msgctxt "Parking Type"
 msgid "Street"
 msgstr "街头"
 
@@ -6140,7 +6991,6 @@ msgstr "学生收入"
 #: com/propertyvista/domain/communication/Message.java:2
 #: com/propertyvista/domain/maintenance/IssueSubjectDetails.java:2
 #: com/propertyvista/domain/policy/policies/domain/EmailTemplate.java:2
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:142
 msgid "Subject"
 msgstr "主题"
 
@@ -6154,7 +7004,7 @@ msgstr "主题"
 
 #: com/propertyvista/common/client/ui/components/security/PasswordChangeViewImpl.java:61
 #: com/propertyvista/common/client/ui/components/security/PasswordResetViewImpl.java:42
-#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:55
+#: com/propertyvista/crm/client/ui/components/cms/SiteImageResourceProvider.java:136
 msgid "Submit"
 msgstr "提交"
 
@@ -6176,6 +7026,10 @@ msgstr "提交"
 msgctxt "Maintenance Request"
 msgid "Submitted"
 msgstr "提交"
+
+#: com/propertyvista/crm/client/ui/crud/organisation/employee/EmployeeEditorForm.java:170
+msgid "Subordinates"
+msgstr "下属"
 
 #: com/propertyvista/misc/EquifaxApproval.java:2
 #: com/propertyvista/misc/EquifaxResult.java:2
@@ -6243,6 +7097,14 @@ msgstr "表面地段"
 msgid "Survey Response"
 msgstr "调查的回应"
 
+#: com/propertyvista/crm/client/ui/dashboard/DashboardPanel.java:108
+#: com/propertyvista/crm/client/ui/dashboard/DashboardPanel.java:117
+#: com/propertyvista/crm/client/ui/dashboard/DashboardPanel.java:126
+#: com/propertyvista/crm/client/ui/dashboard/DashboardPanel.java:135
+#: com/propertyvista/crm/client/ui/dashboard/DashboardPanel.java:144
+msgid "Switch Layout"
+msgstr "开关布局"
+
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:1
 msgid "System"
 msgstr "系统"
@@ -6264,15 +7126,26 @@ msgstr "电视"
 msgid "TV Lounge"
 msgstr "电视休息室"
 
+#: com/propertyvista/crm/client/ui/gadgets/other/BuildingListerGadget.java:121
+msgid ""
+"Table-list-like gadget which displays building data according to prefered "
+"rules. Query and display data can be set up"
+msgstr "表列表类似的小工具，这显示建筑数据，更喜欢的规则。可以设置查询和显示数据"
+
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
 msgid "Take Ownership"
 msgstr "采取所有权"
+
+#: com/propertyvista/crm/rpc/dto/MediaUploadDTO.java:2
+msgid "Target"
+msgstr "目标"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Tarn"
 msgstr "塔恩"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/billing/BillChargeTax.java:2
 #: com/propertyvista/domain/financial/tax/Tax.java:0
 msgid "Tax"
@@ -6282,6 +7155,7 @@ msgstr "税"
 msgid "Tax Total"
 msgstr "税务总"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 #: com/propertyvista/domain/financial/billing/BillEntry.java:2
 #: com/propertyvista/domain/financial/offering/ChargeCode.java:2
@@ -6289,10 +7163,13 @@ msgstr "税务总"
 msgid "Taxes"
 msgstr "税"
 
+#: com/propertyvista/crm/client/ui/crud/policies/emailtemplates/EmailTemplatesPolicyEditorForm.java:67
 #: com/propertyvista/domain/policy/policies/EmailTemplatesPolicy.java:2
 msgid "Templates"
 msgstr "模板"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:78
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/communication/ContactInternal.java:2
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
@@ -6359,11 +7236,23 @@ msgstr "租户名单"
 msgid "Tenant Name"
 msgstr "租客名称"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Tenant On Lease"
+msgstr "承租人在租赁"
+
+#: com/propertyvista/crm/client/activity/NavigActivity.java:81
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationEditorForm.java:64
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:71
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Tenants"
 msgstr "租户"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Tenants On Lease"
+msgstr "租户承租"
 
 #: com/propertyvista/portal/rpc/ptapp/dto/SummaryDTO.java:2
 msgid "Tenants With Info"
@@ -6396,6 +7285,7 @@ msgstr "阳台"
 msgid "Testimonial"
 msgstr "邻人"
 
+#: com/propertyvista/crm/client/ui/crud/settings/content/site/SiteEditorForm.java:60
 #: com/propertyvista/dto/SiteDescriptorDTO.java:2
 msgid "Testimonials"
 msgstr "见证"
@@ -6413,6 +7303,15 @@ msgstr "该日期必须早于今天的日期"
 msgid "The Date Must Be Later Than Today's Date"
 msgstr "今天的日期必须晚于日期"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:270
+msgid "The Date Should Be Before The End Of Lease"
+msgstr "日期应该在租赁期结束之前"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:272
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:274
+msgid "The Date Should Be Within The Lease Period"
+msgstr "日期应当在租赁期内"
+
 #: com/pyx4j/essentials/client/upload/UploadPanel.java:180
 msgid "The File Name Cannot Be Empty"
 msgstr "文件名不能为空"
@@ -6423,20 +7322,26 @@ msgid ""
 "Following Formats: 123-4567 OR 123-456-7890 (Dashes Optional)"
 msgstr "您所输入的号码是不是一个有效的电话号码。请使用以下格式：123-4567或123-456-7890（虚线可选）"
 
+#: com/propertyvista/crm/client/ui/crud/building/catalog/feature/FeatureItemFolder.java:118
+msgid "The Selected Utility Type Is Included In The Price"
+msgstr "选择实用型是包含在房价"
+
 #: com/propertyvista/common/client/ui/validators/StartEndDateValidation.java:34
 msgid "The Start Date Must Be Earlier Than The End Date"
 msgstr "起始日期必须早于结束日期"
+
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:243
+#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:93
+msgid "The URL is not in proper format"
+msgstr "URL是不正确的格式"
 
 #: com/propertyvista/common/client/ui/components/login/AbstractLoginWithTokenActivity.java:71
 msgid "The URL you have used is either incorrect or expired."
 msgstr "您所使用的URL是不正确或过期。"
 
-#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:65
-#: com/propertyvista/portal/client/ui/residents/PersonalInfoViewImpl.java:55
-msgid ""
-"The form was completed with errors outlined below. Please review and try "
-"again."
-msgstr "下面列出的错误的形式完成了。请检查并再次尝试。"
+#: com/propertyvista/crm/client/ui/crud/policies/applicationdocumentation/ApplicationDocumentationPolicyEditorForm.java:69
+msgid "The number of required IDs must not exceed the number of allowed IDs"
+msgstr "所需的ID的数量不能超过允许的ID号码"
 
 #: com/propertyvista/domain/policy/policies/ApplicationDocumentationPolicy.java:2
 msgid "The number of the IDs that is required for an application"
@@ -6446,9 +7351,17 @@ msgstr "应用程序所需的ID号码，"
 msgid "The passwords don't match."
 msgstr "密码不匹配。"
 
+#: com/propertyvista/crm/client/ui/crud/organisation/employee/EmployeeEditorForm.java:190
+msgid "The passwords don't match. Please retype the passwords."
+msgstr "密码不匹配。请重新输入密码。"
+
 #: com/propertyvista/common/client/ui/components/dialogs/SelectDialog.java:180
 msgid "There are no available items"
 msgstr "有没有可用的项目"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/EquifaxResultEditorForm.java:78
+msgid "There are no check results available yet."
+msgstr "有没有检查结果。"
 
 #: com/propertyvista/common/client/ui/validators/YouTubeVideoIdValidator.java:38
 msgid "This Is Not A Valid YouTube Video ID"
@@ -6485,11 +7398,6 @@ msgstr "thoroughfaree"
 msgid "Three"
 msgstr "三"
 
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:261
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:143
-msgid "Ticket"
-msgstr "票"
-
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Tile"
@@ -6514,7 +7422,6 @@ msgstr "标题"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
-#: com/pyx4j/entity/shared/IVersionData.java:2
 msgid "To Date"
 msgstr "到日期"
 
@@ -6540,6 +7447,22 @@ msgstr "参加应用"
 #: com/propertyvista/portal/domain/ptapp/TenantChargeList.java:2
 msgid "Total"
 msgstr "总"
+
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:64
+msgid "Total 0-30"
+msgstr "共有0-30"
+
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:65
+msgid "Total 30-60"
+msgstr "共有30-60"
+
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:66
+msgid "Total 60-90"
+msgstr "共有60-90"
+
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:68
+msgid "Total AR Balance"
+msgstr "总的AR平衡"
 
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Total Adjustments"
@@ -6572,6 +7495,14 @@ msgstr "总层数"
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Total Units"
 msgstr "单位总数"
+
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:67
+msgid "Total over 90"
+msgstr "超过90总计"
+
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:63
+msgid "Total this month"
+msgstr "本月总计"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Townhouse"
@@ -6622,6 +7553,7 @@ msgstr "二"
 #: com/propertyvista/domain/maintenance/IssueElement.java:2
 #: com/propertyvista/domain/media/Media.java:2
 #: com/propertyvista/domain/policy/policies/domain/EmailTemplate.java:2
+#: com/propertyvista/domain/policy/policies/emailtemplates/EmailTemplateTypeDTO.java:2
 #: com/propertyvista/domain/property/PropertyPhone.java:2
 #: com/propertyvista/domain/property/asset/Equipment.java:2
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:2
@@ -6648,6 +7580,10 @@ msgstr "类型"
 msgid "Type Your Full Name"
 msgstr "键入您的姓名"
 
+#: com/propertyvista/domain/policy/policies/emailtemplates/EmailTemplateTypesDTO.java:2
+msgid "Types"
+msgstr "类型"
+
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "U-shape"
 msgstr "U形"
@@ -6672,6 +7608,7 @@ msgstr "失业"
 msgid "Unexpected system error in upload"
 msgstr "上传意外的系统错误"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupTenant.java:2
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
@@ -6689,6 +7626,14 @@ msgstr "单位可用性"
 msgid "Unit Availability Status"
 msgstr "单位可用性状态"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Unit Item"
+msgstr "单位项目"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Unit Items"
+msgstr "单位项目"
+
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Unit Name"
 msgstr "单位名称"
@@ -6696,6 +7641,14 @@ msgstr "单位名称"
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupTenant.java:2
 msgid "Unit Number"
 msgstr "单位数目"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Unit Occupancies"
+msgstr "单位占用"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Unit Occupancy"
+msgstr "单位占用"
 
 #: com/propertyvista/domain/policy/framework/UnitPolicy.java:0
 msgid "Unit Policy"
@@ -6720,6 +7673,8 @@ msgstr "单位职位空缺报告摘要"
 msgid "Unit Vacancy Report Turnover Analysis"
 msgstr "单位职位空缺报告营业额分析"
 
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:86
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/domain/tenant/lease/extradata/Pet.java:2
 msgid "Units"
@@ -6735,22 +7690,47 @@ msgstr ""
 msgid "Update Date"
 msgstr "更新日期"
 
+#: com/propertyvista/crm/rpc/dto/UpdateUploadDTO.java:0
+msgid "Update Upload"
+msgstr "更新上传"
+
 #: com/propertyvista/domain/security/AbstractUser.java:2
 #: com/propertyvista/domain/site/SiteDescriptorChanges.java:2
 msgid "Updated"
 msgstr "更新"
 
 #: com/propertyvista/common/client/ui/components/ApplicationDocumentUploaderDialog.java:100
+#: com/propertyvista/crm/client/ui/components/SiteImageUploadDialog.java:91
+#: com/propertyvista/crm/client/ui/components/cms/FileUploadDialog.java:89
+#: com/propertyvista/crm/client/ui/components/media/MediaUploadDialog.java:101
+#: com/propertyvista/crm/client/ui/crud/UpdateUploadDialog.java:118
 msgid "Upload"
 msgstr "上载"
+
+#: com/propertyvista/crm/client/ui/crud/UpdateUploadDialog.java:75
+msgid "Upload Complete"
+msgstr "上传完成"
 
 #: com/propertyvista/common/client/ui/components/ApplicationDocumentUploaderFolder.java:88
 msgid "Upload Document File"
 msgstr "上传文件档案"
 
+#: com/propertyvista/crm/client/ui/components/media/CrmMediaFolder.java:193
 #: com/pyx4j/essentials/client/upload/UploadPanel.java:192
 msgid "Upload Error"
 msgstr "上传错误"
+
+#: com/propertyvista/crm/client/ui/components/SiteImageUploadDialog.java:44
+#: com/propertyvista/crm/client/ui/components/cms/FileUploadDialog.java:42
+#: com/propertyvista/crm/client/ui/components/cms/FileUploadHyperlink.java:64
+#: com/propertyvista/crm/client/ui/components/media/MediaUploadDialog.java:45
+msgid "Upload Image File"
+msgstr "上传的图像文件"
+
+#: com/propertyvista/crm/client/ui/crud/UpdateUploadDialog.java:52
+#: com/propertyvista/crm/client/ui/crud/building/BuildingListerViewImpl.java:37
+msgid "Upload Update"
+msgstr "上传更新"
 
 #: com/propertyvista/domain/ISharedUserEntity.java:2
 #: com/propertyvista/domain/IUserEntity.java:2
@@ -6766,6 +7746,18 @@ msgstr "用户"
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "User Access"
 msgstr "用户访问"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "User Account"
+msgstr "用户帐户"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "User Role"
+msgstr "用户角色"
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "User Roles"
+msgstr "用户角色"
 
 #: com/propertyvista/domain/financial/offering/Feature.java:1
 msgid "Utility"
@@ -6793,6 +7785,7 @@ msgstr "空置出租"
 msgid "Vacant/Notice"
 msgstr "空置/公告"
 
+#: com/propertyvista/domain/financial/billing/BillEntry.java:2
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 #: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
 msgid "Value"
@@ -6801,6 +7794,10 @@ msgstr "值"
 #: com/propertyvista/common/client/ui/components/folders/PersonalAssetFolder.java:70
 msgid "Value Should Be In Range Of 0-100%"
 msgstr "值应在0-100％范围内"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/bill/BillEditorForm.java:53
+msgid "Values"
+msgstr "值"
 
 #: com/propertyvista/domain/tenant/lease/extradata/Vehicle.java:0
 msgid "Vehicle"
@@ -6814,27 +7811,12 @@ msgstr "车辆数据"
 msgid "Vendor"
 msgstr "供应商"
 
-#: com/pyx4j/entity/shared/IVersionedEntity.java:2
-msgid "Version"
-msgstr "版本"
-
-#: com/pyx4j/entity/shared/IVersionData.java:2
-msgid "Version Number"
-msgstr "版本号"
-
-#: com/pyx4j/entity/shared/IVersionedEntity.java:2
-msgid "Versions"
-msgstr "版本"
-
 #. Street Type
+#: com/propertyvista/crm/client/ui/crud/tenant/application/TenantApprovalFolder.java:51
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "View"
 msgstr "视图"
-
-#: com/propertyvista/portal/client/ui/residents/DashboardForm.java:235
-msgid "View Bill"
-msgstr "检视条例草案"
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -6861,6 +7843,10 @@ msgstr "visiblily"
 msgid "Vista"
 msgstr "远景"
 
+#: com/propertyvista/crm/client/CrmSite.java:107
+msgid "Vista CRM"
+msgstr "Vista中的CRM"
+
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "Volleyball Court"
@@ -6884,6 +7870,9 @@ msgstr "走道"
 msgid "Wall Color"
 msgstr "墙面颜色"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/BillableItemFolder.java:44
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:215
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:60
 #: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:129
 msgid "Warning"
 msgstr "警告"
@@ -6892,6 +7881,7 @@ msgstr "警告"
 msgid "Warranted Items"
 msgstr "保证项目"
 
+#: com/propertyvista/crm/client/ui/crud/building/mech/MechBaseEditorForm.java:49
 #: com/propertyvista/domain/property/vendor/LicensedWarrantedMaintained.java:2
 #: com/propertyvista/domain/property/vendor/Warranty.java:0
 msgid "Warranty"
@@ -6941,7 +7931,7 @@ msgid "We're Sorry"
 msgstr "我们很抱歉"
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:67
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:134
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:135
 msgid ""
 "We're Sorry But Your Requests Look Similar To Automated Requests Initiated "
 "By Computer Virus Or Spyware Applications. To Protect Our Users, We Can't "
@@ -6969,6 +7959,12 @@ msgstr "网站"
 #: com/propertyvista/domain/tenant/lease/extradata/Pet.java:2
 msgid "Weight"
 msgstr "重量"
+
+#. java-format
+#: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:222
+#, java-format
+msgid "Welcome &nbsp;{0}"
+msgstr ""
 
 #: com/propertyvista/domain/GeoLocation.java:1
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -7018,6 +8014,10 @@ msgstr "工作"
 msgid "Work Phone"
 msgstr "工作电话"
 
+#: com/propertyvista/crm/client/ui/components/cms/SiteImageResourceProvider.java:89
+msgid "Would you like to remove this image?"
+msgstr "你想删除此图像？"
+
 #: com/propertyvista/domain/policy/framework/EffectivePoliciesDTO.java:2
 #: com/propertyvista/domain/policy/framework/OrganizationPoliciesNode.java:2
 #: com/propertyvista/domain/policy/policies/PetPolicy.java:2
@@ -7054,13 +8054,18 @@ msgstr "年接收"
 msgid "Yes"
 msgstr "是"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:174
-msgid "Yes! I Want To Take Advantage Of The Pre-Authorization."
-msgstr "没错！我想借此优势的预授权。"
-
 #: com/propertyvista/portal/domain/ptapp/PaymentInformation.java:2
 msgid "Yes, Please Enroll Me"
 msgstr "是的，请报名参加我"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/BillableItemFolder.java:44
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:60
+msgid "You Must Select A Service Item First"
+msgstr "首先你必须选择一个服务项目"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:215
+msgid "You Must Select Building/Unit First"
+msgstr "你必须选择建筑/单元的第一"
 
 #: com/propertyvista/common/client/ui/components/folders/PersonalIncomeFolder.java:55
 msgid "You need to enter previous employment information"
@@ -7079,10 +8084,6 @@ msgid ""
 "Your Browser Prevented This Application From Opening A Popup Window\n"
 "Please Disable Your Popup Blocker For The Application To Fucntion Properly"
 msgstr "您的浏览器打开一个弹出窗口阻止该应用程序，请禁用应用程序的弹出式窗口拦截器Fucntion正确"
-
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:146
-msgid "Your Current Arrangement"
-msgstr "您目前的安排"
 
 #: com/pyx4j/security/rpc/PasswordRetrievalRequest.java:2
 msgid "Your Email"
@@ -7122,6 +8123,10 @@ msgstr ""
 #: com/propertyvista/common/client/ui/validators/DateInPeriodValidation.java:45
 msgid "herp derp error message"
 msgstr "HERP DERP错误消息"
+
+#: com/propertyvista/crm/client/ui/crud/settings/policymanagement/PolicyFolder.java:74
+msgid "inherited"
+msgstr "遗传"
 
 #: com/pyx4j/forms/client/ui/CBigDecimalField.java:41
 #: com/pyx4j/forms/client/ui/CIntegerField.java:39
@@ -7177,6 +8182,12 @@ msgid "{0} Should Be In The Range Between {1} And {2}"
 msgstr ""
 
 #. java-format
+#: com/pyx4j/widgets/client/RateIt.java:131
+#, java-format
+msgid "{0} out of {1}"
+msgstr ""
+
+#. java-format
 #: com/propertyvista/domain/File.java:0
 #, java-format
 msgid "{0} {1,size}"
@@ -7215,6 +8226,12 @@ msgstr ""
 #: com/pyx4j/entity/client/ui/datatable/PageNavigBar.java:208
 #, java-format
 msgid "{0}-{1} of {2}"
+msgstr ""
+
+#. java-format
+#: com/propertyvista/crm/client/ui/components/cms/FileUploadHyperlink.java:66
+#, java-format
+msgid "{0}; Upload new file"
 msgstr ""
 
 #. java-format

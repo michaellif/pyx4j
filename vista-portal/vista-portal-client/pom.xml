@@ -150,7 +150,8 @@
                                 <translate>ru</translate>
                                 <translate>fr</translate>
                                 <translate>es</translate>
-                                <translate>zh</translate>
+                                <translate>zh_CN</translate>
+                                <translate>zh_TW</translate>
                             </translates>
                         </configuration>
                     </plugin>

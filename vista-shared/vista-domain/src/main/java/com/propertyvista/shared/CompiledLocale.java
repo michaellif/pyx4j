@@ -42,8 +42,11 @@ public enum CompiledLocale implements Serializable {
     @Translate(value = "Russian")
     ru,
 
-    @Translate(value = "Chinese")
-    zh;
+    @Translate(value = "Chinese (Simplified)")
+    zh_CN,
+
+    @Translate(value = "Chinese (Traditional)")
+    zh_TW;
 
     @Override
     public String toString() {

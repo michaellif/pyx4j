@@ -70,7 +70,8 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             l.add(CompiledLocale.ru);
         }
         l.add(CompiledLocale.es);
-        l.add(CompiledLocale.zh);
+        l.add(CompiledLocale.zh_CN);
+        l.add(CompiledLocale.zh_TW);
         return l;
     }
 
@@ -301,8 +302,10 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             return ServerI18nFactory.get(AbstractSitePreloader.class, new Locale("ru", "RU"));
         case es:
             return ServerI18nFactory.get(AbstractSitePreloader.class, new Locale("es"));
-        case zh:
-            return ServerI18nFactory.get(AbstractSitePreloader.class, Locale.CHINESE);
+        case zh_CN:
+            return ServerI18nFactory.get(AbstractSitePreloader.class, Locale.SIMPLIFIED_CHINESE);
+        case zh_TW:
+            return ServerI18nFactory.get(AbstractSitePreloader.class, Locale.TRADITIONAL_CHINESE);
         default:
             throw new IllegalArgumentException(cl.toString());
         }
