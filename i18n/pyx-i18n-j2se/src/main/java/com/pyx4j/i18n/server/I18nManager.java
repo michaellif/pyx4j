@@ -20,6 +20,7 @@
  */
 package com.pyx4j.i18n.server;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
@@ -59,7 +60,11 @@ public class I18nManager {
                 try {
                     t = new POCatalog(locale);
                 } catch (IOException e) {
-                    //log.error("translation for locale {} not available", locale, e);
+                    if (e instanceof FileNotFoundException) {
+                        log.info("translation for locale {} not available", locale);
+                    } else {
+                        log.error("translation for locale {} not available", locale, e);
+                    }
                     t = new EmptyTranslator();
                 }
             }
