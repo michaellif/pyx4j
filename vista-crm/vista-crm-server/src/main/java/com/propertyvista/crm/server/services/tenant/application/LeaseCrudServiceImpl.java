@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -106,18 +105,18 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     private void updateAdjustments(Lease lease) {
         // ServiceItem Adjustments:
-        updateAdjustments(lease.serviceAgreement().serviceItem(), lease.leaseTo().getValue());
+        updateAdjustments(lease.serviceAgreement().serviceItem());
 
         // BillableItem Adjustments:
         for (BillableItem ci : lease.serviceAgreement().featureItems()) {
-            updateAdjustments(ci, lease.leaseTo().getValue());
+            updateAdjustments(ci);
         }
 
         // Lease Financial Adjustments:
         updateAdjustments(lease.leaseFinancial());
     }
 
-    private void updateAdjustments(BillableItem item, LogicalDate leaseEndDate) {
+    private void updateAdjustments(BillableItem item) {
         for (BillableItemAdjustment adj : item.adjustments()) {
             // set creator:
             if (adj.createdWhen().isNull()) {
