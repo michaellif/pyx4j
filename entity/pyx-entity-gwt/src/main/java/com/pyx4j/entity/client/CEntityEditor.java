@@ -395,22 +395,25 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
                 Path memberPath = binding.get(event.getSource());
                 if ((memberPath != null) && (getValue() != null)) {
                     Object value = event.getValue();
-                    if (value instanceof Date) {
-                        Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
-                        if (cls.equals(LogicalDate.class)) {
-                            value = new LogicalDate((Date) value);
-                        } else if (cls.equals(java.sql.Date.class)) {
-                            value = new java.sql.Date(((Date) value).getTime());
+                    if (value instanceof IEntity) {
+                        // Process on the object level to avoid Polymorphic problems
+                        ((IEntity) getValue().getMember(memberPath)).set((IEntity) value);
+                    } else {
+                        if (value instanceof Date) {
+                            // Synchronize the value in Editor with model
+                            Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
+                            if (cls.equals(LogicalDate.class)) {
+                                value = new LogicalDate((Date) value);
+                            } else if (cls.equals(java.sql.Date.class)) {
+                                value = new java.sql.Date(((Date) value).getTime());
+                            }
                         }
-                    } else if (value instanceof IEntity) {
-                        value = ((IEntity) value).getValue();
+                        getValue().setValue(memberPath, value);
                     }
-                    getValue().setValue(memberPath, value);
                     log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
                 }
             }
         }
-
     }
 
 }
