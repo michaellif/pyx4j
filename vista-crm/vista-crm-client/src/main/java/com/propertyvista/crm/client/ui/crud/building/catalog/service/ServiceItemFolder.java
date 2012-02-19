@@ -72,7 +72,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
 
     @Override
     protected void addItem() {
-        EntitySelectorDialog<?> buildingElementDelectionBox = null;
+        EntitySelectorDialog<?> buildingElementSelectionBox = null;
         switch (parent.getValue().type().getValue()) {
         case residentialUnit:
         case residentialShortTermUnit:
@@ -81,7 +81,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             for (ProductItem item : getValue()) {
                 alreadySelected.add((AptUnit) item.element().cast());
             }
-            buildingElementDelectionBox = new UnitSelectorDialog(true, alreadySelected) {
+            buildingElementSelectionBox = new UnitSelectorDialog(true, alreadySelected) {
                 @Override
                 protected void setFilters(List<DataTableFilterData> filters) {
                     super.setFilters(filters);
@@ -103,8 +103,8 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             break;
         }
 
-        if (buildingElementDelectionBox != null) {
-            buildingElementDelectionBox.show();
+        if (buildingElementSelectionBox != null) {
+            buildingElementSelectionBox.show();
         } else {
             super.addItem();
         }

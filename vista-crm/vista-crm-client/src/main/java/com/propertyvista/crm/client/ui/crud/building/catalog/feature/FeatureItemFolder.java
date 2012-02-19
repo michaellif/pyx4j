@@ -76,6 +76,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
             super(ProductItem.class, columns());
         }
 
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             Class<? extends IEntity> buildingElementClass = null;

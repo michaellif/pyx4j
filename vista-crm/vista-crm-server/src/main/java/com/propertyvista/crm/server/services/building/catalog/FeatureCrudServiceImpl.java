@@ -35,7 +35,6 @@ public class FeatureCrudServiceImpl extends GenericCrudServiceImpl<Feature> impl
         if (!fromList) {
             Persistence.service().retrieve(entity.catalog());
             Persistence.service().retrieve(entity.items());
-
             // next level:
             for (ProductItem item : entity.items()) {
                 Persistence.service().retrieve(item.element());

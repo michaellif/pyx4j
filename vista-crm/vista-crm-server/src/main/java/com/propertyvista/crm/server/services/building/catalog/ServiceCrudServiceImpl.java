@@ -43,6 +43,7 @@ public class ServiceCrudServiceImpl extends GenericCrudServiceImpl<Service> impl
             }
             for (Feature feature : entity.features()) {
                 Persistence.service().retrieve(feature.items());
+                // next level:
                 for (ProductItem item : feature.items()) {
                     Persistence.service().retrieve(item.element());
                 }
