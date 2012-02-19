@@ -65,14 +65,13 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 public class EntityMetaWriter {
 
     static String metaImplClassName(String interfaceSimpleClassName) {
-        return SharedEntityHandler.implClassName(interfaceSimpleClassName + "_Meta");
+        return EntityHandlerWriter.implClassName(interfaceSimpleClassName + "_Meta");
     }
 
     static int createEntityMetaImpl(TreeLogger logger, ContextHelper contextHelper, JClassType interfaceType) throws UnableToCompleteException {

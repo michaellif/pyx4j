@@ -293,7 +293,11 @@ public class EntityImplGenerator {
     }
 
     public static String implClassName(Class<?> interfaceClass) {
-        return interfaceClass.getPackage().getName() + "." + SharedEntityHandler.implClassName(GWTJava5Helper.getSimpleName(interfaceClass));
+        return interfaceClass.getPackage().getName() + "." + implClassName(GWTJava5Helper.getSimpleName(interfaceClass));
+    }
+
+    private static String implClassName(String interfaceSimpleClassName) {
+        return interfaceSimpleClassName.replace('$', '_') + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
     }
 
     @SuppressWarnings("unchecked")

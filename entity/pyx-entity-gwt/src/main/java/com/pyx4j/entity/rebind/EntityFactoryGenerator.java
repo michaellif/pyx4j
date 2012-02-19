@@ -40,7 +40,6 @@ import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class EntityFactoryGenerator extends Generator {
@@ -56,7 +55,7 @@ public class EntityFactoryGenerator extends Generator {
         try {
             JClassType interfaceType = oracle.getType(typeName);
             String packageName = interfaceType.getPackage().getName();
-            String simpleName = SharedEntityHandler.implClassName(interfaceType.getName());
+            String simpleName = EntityHandlerWriter.implClassName(interfaceType.getName());
             ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
 
             composer.setSuperclass(AbstractClientEntityFactoryImpl.class.getName());
@@ -140,7 +139,7 @@ public class EntityFactoryGenerator extends Generator {
             writer.print("return (T)new ");
             writer.print(interfaceType.getPackage().getName());
             writer.print(".");
-            writer.print(SharedEntityHandler.implClassName(interfaceType.getName()));
+            writer.print(EntityHandlerWriter.implClassName(interfaceType.getName()));
             writer.println("(parent, fieldName);");
             writer.outdent();
 

@@ -53,11 +53,15 @@ public class EntityHandlerWriter {
      */
     final static boolean cacheEntityMeta = false;
 
+    public static String implClassName(String interfaceSimpleClassName) {
+        return interfaceSimpleClassName.replace('.', '_').replace('$', '_') + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
+    }
+
     static void createEntityHandlerImpl(TreeLogger logger, ContextHelper contextHelper, JClassType interfaceType) throws UnableToCompleteException {
         TreeLogger implLogger = logger.branch(TreeLogger.DEBUG, "Creating implementation for " + interfaceType.getName());
 
         String packageName = interfaceType.getPackage().getName();
-        String simpleName = SharedEntityHandler.implClassName(interfaceType.getName());
+        String simpleName = implClassName(interfaceType.getName());
         ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
 
         composer.addImport(interfaceType.getQualifiedSourceName());
