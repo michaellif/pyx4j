@@ -71,18 +71,22 @@ public class LeaseDataModel {
 
     private void generateAgreement() {
         lease.serviceAgreement().serviceItem().item().set(serviceItem);
+        lease.serviceAgreement().serviceItem().billingPeriodNumber().setValue(1);
+
         Service service = serviceItem.product().cast();
 
         for (Feature feature : service.features()) {
             if (feature.type().getValue().isInAgreement() && feature.items().size() > 0) {
                 BillableItem billableItem = EntityFactory.create(BillableItem.class);
+                billableItem.billingPeriodNumber().setValue(1);
+
                 billableItem.item().set(feature.items().get(0));
-                billableItem.billingRunNumber().setValue(1);
+                billableItem.billingPeriodNumber().setValue(1);
 
                 //One time adjustment(discount) on parking for second billing run
                 if (Type.parking.equals(feature.type().getValue())) {
                     BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    adjustment.billingRunNumber().setValue(2);
+                    adjustment.billingPeriodNumber().setValue(2);
                     adjustment.value().setValue(new BigDecimal("-10.00"));
                     adjustment.adjustmentType().setValue(AdjustmentType.monetary);
                     adjustment.chargeType().setValue(ChargeType.discount);
@@ -93,7 +97,7 @@ public class LeaseDataModel {
                 //Full term adjustment(discount) on parking
                 if (Type.parking.equals(feature.type().getValue())) {
                     BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    adjustment.billingRunNumber().setValue(1);
+                    adjustment.billingPeriodNumber().setValue(1);
                     adjustment.value().setValue(new BigDecimal("-5.00"));
                     adjustment.adjustmentType().setValue(AdjustmentType.monetary);
                     adjustment.chargeType().setValue(ChargeType.discount);
@@ -104,7 +108,7 @@ public class LeaseDataModel {
                 //Full term adjustment(discount) on locker
                 if (Type.locker.equals(feature.type().getValue())) {
                     BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    adjustment.billingRunNumber().setValue(1);
+                    adjustment.billingPeriodNumber().setValue(1);
                     adjustment.value().setValue(new BigDecimal("-0.05"));
                     adjustment.adjustmentType().setValue(AdjustmentType.percentage);
                     adjustment.chargeType().setValue(ChargeType.discount);
@@ -115,7 +119,7 @@ public class LeaseDataModel {
                 //Full term adjustment(discount) on locker (%)
                 if (Type.pet.equals(feature.type().getValue())) {
                     BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    adjustment.billingRunNumber().setValue(1);
+                    adjustment.billingPeriodNumber().setValue(1);
                     adjustment.adjustmentType().setValue(AdjustmentType.free);
                     adjustment.chargeType().setValue(ChargeType.discount);
                     adjustment.termType().setValue(TermType.inLease);

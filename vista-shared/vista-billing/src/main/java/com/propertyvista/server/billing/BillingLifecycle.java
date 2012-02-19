@@ -106,6 +106,11 @@ public class BillingLifecycle {
 
             bill.billingAccount().currentBillingRun().setValue(null);
             bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
+
+            if (BillStatus.Confirmed.equals(billStatus)) {
+                bill.billingAccount().billingPeriodCounter().setValue(bill.billingAccount().billingPeriodCounter().getValue() + 1);
+            }
+
             Persistence.service().persist(bill.billingAccount());
         } else {
             throw new Error("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");

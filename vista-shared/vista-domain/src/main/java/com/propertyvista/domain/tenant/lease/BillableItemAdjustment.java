@@ -109,7 +109,7 @@ public interface BillableItemAdjustment extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> effectiveDate();
 
-    IPrimitive<Integer> billingRunNumber();
+    IPrimitive<Integer> billingPeriodNumber();
 
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createdWhen();

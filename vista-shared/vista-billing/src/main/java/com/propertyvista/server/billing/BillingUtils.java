@@ -35,6 +35,8 @@ import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingCycle.BillingFrequency;
 import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
@@ -81,6 +83,7 @@ public class BillingUtils {
         leaseFinancial.billingAccount().billingCycle().set(ensureBillingCycle());
         leaseFinancial.billingAccount().leaseFinancial().set(leaseFinancial);
         leaseFinancial.billingAccount().billCounter().setValue(1);
+        leaseFinancial.billingAccount().billingPeriodCounter().setValue(1);
         Persistence.service().persist(lease);
 
         return leaseFinancial.billingAccount();
@@ -119,4 +122,28 @@ public class BillingUtils {
         return Persistence.service().retrieve(criteria);
     }
 
+    static boolean isBillableItemApplicable(BillableItem item, Bill bill) {
+        if (item.billingPeriodNumber().isNull()) {
+            throw new Error("billingPeriodNumber should not be null");
+        }
+        if (bill.billingPeriodNumber().getValue() >= item.billingPeriodNumber().getValue()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static boolean isBillableItemAdjustmentApplicable(BillableItemAdjustment adjustment, Bill bill) {
+        if (BillableItemAdjustment.TermType.postLease.equals(adjustment.termType().getValue())) {
+            return false;
+        } else if (BillableItemAdjustment.TermType.oneTime.equals(adjustment.termType().getValue())
+                && bill.billingPeriodNumber().getValue() == adjustment.billingPeriodNumber().getValue()) {
+            return true;
+        } else if (BillableItemAdjustment.TermType.inLease.equals(adjustment.termType().getValue())
+                && bill.billingPeriodNumber().getValue() >= adjustment.billingPeriodNumber().getValue()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

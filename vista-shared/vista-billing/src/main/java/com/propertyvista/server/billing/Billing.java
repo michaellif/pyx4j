@@ -63,7 +63,9 @@ class Billing {
         Bill bill = EntityFactory.create(Bill.class);
         bill.billStatus().setValue(BillStatus.Running);
         bill.billingAccount().set(billingAccount);
-        bill.billSequenceNumber().setValue(bill.billingAccount().billCounter().getValue());
+
+        bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
+        bill.billingPeriodNumber().setValue(billingAccount.billingPeriodCounter().getValue());
 
         bill.billingRun().set(billingRun);
         Persistence.service().persist(bill);
@@ -134,16 +136,21 @@ class Billing {
         }
     }
 
-    private void createCharge(BillableItem serviceItem) {
-        if (serviceItem.isNull()) {
+    private void createCharge(BillableItem billableItem) {
+        if (billableItem.isNull()) {
             throw new Error("Service Item is mandatory in lease");
         }
+
+        if (!BillingUtils.isBillableItemApplicable(billableItem, bill)) {
+            return;
+        }
+
         BillCharge charge = EntityFactory.create(BillCharge.class);
         charge.bill().set(bill);
-        charge.billableItem().set(serviceItem);
-        charge.amount().setValue(serviceItem.item().price().getValue());
+        charge.billableItem().set(billableItem);
+        charge.amount().setValue(billableItem.item().price().getValue());
         if (!charge.amount().isNull()) {
-            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), serviceItem.item().type().chargeCode().taxes()));
+            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), billableItem.item().type().chargeCode().taxes()));
         }
         charge.taxTotal().setValue(new BigDecimal(0));
         for (BillChargeTax chargeTax : charge.taxes()) {
@@ -191,6 +198,10 @@ class Billing {
     }
 
     private void createChargeAdjustment(BillableItemAdjustment itemAdjustment) {
+
+        if (!BillingUtils.isBillableItemAdjustmentApplicable(itemAdjustment, bill)) {
+            return;
+        }
 
         BillChargeAdjustment adjustment = EntityFactory.create(BillChargeAdjustment.class);
         adjustment.bill().set(bill);

@@ -33,30 +33,81 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class BillingRunTest extends BillingTestBase {
 
     public void testSequentialBillingRun() {
+
+        //==================== RUN 1 ======================//
+
         Bill bill = runBilling(1, true);
         assertEquals("Number of charges", 4, bill.charges().size());
-        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        assertEquals("Billing period", 1, (int) bill.billingPeriodNumber().getValue());
+
+        //==================== RUN 2 ======================//
 
         bill = runBilling(2, true);
         assertEquals("Number of charges", 4, bill.charges().size());
         assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
 
+        assertEquals("Billing period", 2, (int) bill.billingPeriodNumber().getValue());
+
+        //==================== RUN 3 ======================//
+
         bill = runBilling(3, false);
         assertEquals("Number of charges", 4, bill.charges().size());
-        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        assertEquals("Billing period", 3, (int) bill.billingPeriodNumber().getValue());
 
         bill = runBilling(4, true);
         assertEquals("Number of charges", 4, bill.charges().size());
-        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        assertEquals("Billing period", 3, (int) bill.billingPeriodNumber().getValue());
+
+        //==================== RUN 4 ======================//
 
         bill = runBilling(5, true);
         assertEquals("Number of charges", 4, bill.charges().size());
-        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        assertEquals("Billing period", 4, (int) bill.billingPeriodNumber().getValue());
+
+        //==================== RUN 5 ======================//
+
+        bill = runBilling(6, false);
+        assertEquals("Number of charges", 4, bill.charges().size());
+        assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        assertEquals("Billing period", 5, (int) bill.billingPeriodNumber().getValue());
+
+        bill = runBilling(7, false);
+        assertEquals("Number of charges", 4, bill.charges().size());
+        assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        assertEquals("Billing period", 5, (int) bill.billingPeriodNumber().getValue());
+
+        bill = runBilling(8, true);
+        assertEquals("Number of charges", 4, bill.charges().size());
+        assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        assertEquals("Billing period", 5, (int) bill.billingPeriodNumber().getValue());
+
+        //==================== RUN 6 ======================//
+
+        bill = runBilling(9, true);
+        assertEquals("Number of charges", 4, bill.charges().size());
+        assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        assertEquals("Billing period", 6, (int) bill.billingPeriodNumber().getValue());
 
     }
 

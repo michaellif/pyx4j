@@ -54,6 +54,8 @@ public interface Bill extends IEntity {
 
     IPrimitive<Integer> billSequenceNumber();
 
+    IPrimitive<Integer> billingPeriodNumber();
+
     IPrimitive<String> rejectReason();
 
     @ReadOnly

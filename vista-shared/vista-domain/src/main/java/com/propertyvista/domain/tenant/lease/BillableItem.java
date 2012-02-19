@@ -44,7 +44,7 @@ public interface BillableItem extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> effectiveDate();
 
-    IPrimitive<Integer> billingRunNumber();
+    IPrimitive<Integer> billingPeriodNumber();
 
     /**
      * Current price: contractual price value (ProductItem.price + adjustments),
