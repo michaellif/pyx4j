@@ -14,7 +14,6 @@
 package com.propertyvista.server.common.security;
 
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -28,8 +27,8 @@ public class SharedUserEntityInstanceAccess implements InstanceAccess {
     public boolean allow(IEntity entity) {
 
         return (entity instanceof ISharedUserEntity)
-                && ((Key.DORMANT_KEY.equals(((ISharedUserEntity) entity).user().getPrimaryKey())) || EqualsHelper.equals(((ISharedUserEntity) entity).user()
-                        .getPrimaryKey(), VistaContext.getCurrentUserPrimaryKey()));
+                && ((((ISharedUserEntity) entity).user().getPrimaryKey() == null) || EqualsHelper.equals(((ISharedUserEntity) entity).user().getPrimaryKey(),
+                        VistaContext.getCurrentUserPrimaryKey()));
 
     }
 }

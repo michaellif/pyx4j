@@ -31,6 +31,7 @@ import com.pyx4j.geo.GeoBox;
 import com.pyx4j.geo.GeoCircle;
 import com.pyx4j.geo.GeoPoint;
 
+import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -101,7 +102,7 @@ public class PropertyFinder {
             }
             // filter buildings with filter 1
             if (bldFilter1.size() == 0) {
-                bldFilter1.add(Key.DORMANT_KEY);
+                bldFilter1.add(ISharedUserEntity.DORMANT_KEY);
             }
             dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter1));
         }
@@ -127,7 +128,7 @@ public class PropertyFinder {
         }
         // add floorplan unit criteria
         if (fpSet1.size() == 0) {
-            fpSet1.add(Key.DORMANT_KEY);
+            fpSet1.add(ISharedUserEntity.DORMANT_KEY);
         }
         fpCriteria.add(PropertyCriterion.in(fpCriteria.proto().id(), fpSet1));
         // 2.2 filter floorplans by other search criteria
@@ -156,7 +157,7 @@ public class PropertyFinder {
         }
         // filter buildings with filter 2
         if (bldFilter2.size() == 0) {
-            bldFilter2.add(Key.DORMANT_KEY);
+            bldFilter2.add(ISharedUserEntity.DORMANT_KEY);
         }
         dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter2));
 

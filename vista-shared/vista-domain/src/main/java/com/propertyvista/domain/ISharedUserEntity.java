@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -27,6 +28,8 @@ import com.propertyvista.domain.security.CrmUser;
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface ISharedUserEntity extends IEntity {
+
+    public static final Key DORMANT_KEY = null;
 
     /*
      * To make it public set user.key to Key.DORMANT_KEY

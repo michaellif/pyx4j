@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataService;
+import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.security.CrmUser;
@@ -43,7 +44,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
         // Load shared dashboards:
         CrmUser anyUser = EntityFactory.create(CrmUser.class);
-        anyUser.setPrimaryKey(Key.DORMANT_KEY);
+        anyUser.setPrimaryKey(ISharedUserEntity.DORMANT_KEY);
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), anyUser));
         addTypeCriteria(criteria);
@@ -81,7 +82,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
             Persistence.secureRetrieve(DashboardMetadata.class, dm.getPrimaryKey());
         }
 
-        if (!Key.DORMANT_KEY.equals(dm.user().getPrimaryKey())) {
+        if (dm.user().getPrimaryKey() != ISharedUserEntity.DORMANT_KEY) {
             dm.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
         }
 
@@ -115,7 +116,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     }
 
     private void persistGadgetMetadata(GadgetMetadata gadgetMetadata) {
-        if (!Key.DORMANT_KEY.equals(gadgetMetadata.user().getPrimaryKey())) {
+        if (gadgetMetadata.user().getPrimaryKey() != ISharedUserEntity.DORMANT_KEY) {
             gadgetMetadata.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
         }
         Persistence.secureSave(gadgetMetadata);

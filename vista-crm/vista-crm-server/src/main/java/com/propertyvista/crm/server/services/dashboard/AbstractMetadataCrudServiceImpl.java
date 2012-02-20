@@ -15,13 +15,13 @@ package com.propertyvista.crm.server.services.dashboard;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.server.common.security.VistaContext;
 
@@ -47,11 +47,11 @@ abstract class AbstractMetadataCrudServiceImpl extends GenericCrudServiceImpl<Da
         entity.setPrimaryKey(null);
 
         // TODO  add proper management of secure adapters
-        if (!Key.DORMANT_KEY.equals(entity.user().getPrimaryKey())) {
+        if (entity.user().getPrimaryKey() != ISharedUserEntity.DORMANT_KEY) {
             entity.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
         }
         if (entity.isShared().isBooleanTrue()) {
-            entity.user().setPrimaryKey(Key.DORMANT_KEY);
+            entity.user().setPrimaryKey(ISharedUserEntity.DORMANT_KEY);
         }
         super.create(callback, entity);
     }
@@ -63,12 +63,12 @@ abstract class AbstractMetadataCrudServiceImpl extends GenericCrudServiceImpl<Da
 
         // TODO  add proper management of secure adapters
 
-        if (!Key.DORMANT_KEY.equals(entity.user().getPrimaryKey())) {
+        if (entity.user().getPrimaryKey() != ISharedUserEntity.DORMANT_KEY) {
             entity.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
         }
 
         if (entity.isShared().isBooleanTrue()) {
-            entity.user().setPrimaryKey(Key.DORMANT_KEY);
+            entity.user().setPrimaryKey(ISharedUserEntity.DORMANT_KEY);
         }
 
         super.save(callback, entity);

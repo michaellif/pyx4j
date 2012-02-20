@@ -13,10 +13,10 @@
  */
 package com.propertvista.generator;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
@@ -26,7 +26,7 @@ public class ReportGenerator {
 
     static public DashboardMetadata DefaultSystem1() {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+        dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.system);
         dmd.isShared().setValue(true);
         dmd.name().setValue(i18n.tr("System Report"));
@@ -38,7 +38,7 @@ public class ReportGenerator {
 
     static public DashboardMetadata DefaultSystem2() {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+        dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.system);
         dmd.isShared().setValue(true);
         dmd.name().setValue(i18n.tr("Demo Report"));

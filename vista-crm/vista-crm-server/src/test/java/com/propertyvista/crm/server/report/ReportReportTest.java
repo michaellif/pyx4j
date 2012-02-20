@@ -20,7 +20,6 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Test;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.report.test.ReportsTestBase;
 import com.pyx4j.entity.server.Persistence;
@@ -33,6 +32,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
+import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
@@ -62,7 +62,7 @@ public class ReportReportTest extends ReportsTestBase {
 
     private static DashboardMetadata retreiveData() {
         CrmUser anyUser = EntityFactory.create(CrmUser.class);
-        anyUser.setPrimaryKey(Key.DORMANT_KEY);
+        anyUser.setPrimaryKey(ISharedUserEntity.DORMANT_KEY);
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), anyUser));
         criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.EQUAL, DashboardMetadata.LayoutType.Report));
