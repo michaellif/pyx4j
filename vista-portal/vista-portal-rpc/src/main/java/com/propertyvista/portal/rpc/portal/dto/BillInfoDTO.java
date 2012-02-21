@@ -41,11 +41,11 @@ public interface BillInfoDTO extends IEntity {
 
     @Caption(name = "Current Balance")
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> ammount();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> lastPayment();
 
 }

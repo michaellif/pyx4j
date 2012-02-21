@@ -136,18 +136,18 @@ public interface UnitAvailabilityStatus extends IEntity {
     IPrimitive<RentReadiness> rentReadinessStatus();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> unitRent();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> marketRent();
 
     /** <code>{@link #unitRent()} - {@link #unitMarketRent()} </code> */
     @Caption(name = "Delta, in $")
     @Format("#0.00")
     @CustomComparator(clazz = ComparableComparator.class)
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> rentDeltaAbsolute();
 
     /** <code>({@link #unitRent()} - {@link #unitMarketRent()})/{@link #unitMarketRent()}</code> */

@@ -38,7 +38,7 @@ public interface Contract extends IEntity {
 
     @MemberColumn(name = "vendorCost")
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> cost();
 
     @Caption(name = "Start Date")

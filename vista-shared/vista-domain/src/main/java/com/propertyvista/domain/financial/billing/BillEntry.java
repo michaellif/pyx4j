@@ -34,13 +34,13 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface BillEntry extends IEntity {
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
     IList<BillChargeTax> taxes();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> taxTotal();
 
     interface OrderId extends ColumnId {

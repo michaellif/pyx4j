@@ -74,6 +74,6 @@ public interface PersonalAsset extends IEntity {
     @NotNull
     @Format("#0.00")
     @Caption(name = "Current Value")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> assetValue();
 }

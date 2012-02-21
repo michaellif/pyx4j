@@ -30,18 +30,18 @@ public interface BuildingFinancial extends IEntity {
     IPrimitive<LogicalDate> dateAcquired();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> purchasePrice();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> marketPrice();
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> lastAppraisalDate();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> lastAppraisalValue();
 
     /*

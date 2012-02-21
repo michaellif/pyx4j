@@ -29,6 +29,6 @@ public interface ChargeLineList extends IEntity {
     IList<ChargeLine> charges();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> total();
 }

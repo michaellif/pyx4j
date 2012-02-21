@@ -42,7 +42,7 @@ public interface Payment extends IEntity {
     BillingAccount billingAccount();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
     @JoinTable(value = BillPayment.class, cascade = false)

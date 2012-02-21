@@ -103,7 +103,7 @@ public interface MockupArrearsState extends IEntity {
 
     @Caption(name = "LMR/Unit Rent, in $")
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> lmrUnitRentDifference();
 
     // FIXME all the following fields should be just references, but we keep them here for the performance improvements, but this is not RIGHT!

@@ -61,6 +61,6 @@ public interface IEmploymentInfo extends IIncomeInfo {
     @Caption(name = "Monthly Salary")
     @NotNull
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyAmount();
 }

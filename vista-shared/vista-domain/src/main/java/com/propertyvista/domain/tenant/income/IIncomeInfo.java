@@ -40,7 +40,7 @@ public interface IIncomeInfo extends IEntity {
 
     @NotNull
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyAmount();
 
     /**

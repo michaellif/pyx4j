@@ -27,6 +27,6 @@ public interface Charge_OLD extends IEntity {
 
     @ToString(index = 0)
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 }

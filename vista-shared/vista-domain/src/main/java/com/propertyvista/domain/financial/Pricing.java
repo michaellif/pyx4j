@@ -30,7 +30,7 @@ public interface Pricing extends IEntity {
     IPrimitive<PaymentTerm> paymentTerm();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
 }

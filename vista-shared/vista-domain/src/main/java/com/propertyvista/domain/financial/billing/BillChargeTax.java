@@ -28,7 +28,7 @@ public interface BillChargeTax extends IEntity {
     Tax tax();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
 }

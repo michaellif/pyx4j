@@ -49,14 +49,14 @@ public interface IncomeInfoSelfEmployed extends IEmploymentInfo {
 
     @Caption(name = "Monthly Revenue")
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyRevenue();
 
     @Override
     @Caption(name = "Monthly Salary/Dividend")
     @NotNull
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyAmount();
 
     @Caption(name = "Number Of Employees")

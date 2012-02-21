@@ -55,7 +55,7 @@ public interface PriorAddress extends AddressStructured {
 
     @Caption(name = "Monthly Payment")
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> payment();
 
     @Editor(type = EditorType.phone)

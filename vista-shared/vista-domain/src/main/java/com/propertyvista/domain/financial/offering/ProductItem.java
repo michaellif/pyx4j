@@ -51,7 +51,7 @@ public interface ProductItem extends IEntity {
 
     @ToString(index = 1)
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     @NotNull
     IPrimitive<BigDecimal> price();
 

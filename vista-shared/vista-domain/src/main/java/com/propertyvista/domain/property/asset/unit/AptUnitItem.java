@@ -166,7 +166,7 @@ public interface AptUnitItem extends IEntity {
     IPrimitive<LogicalDate> flooringInstallDate();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> flooringValue();
 
     IPrimitive<CounterTopType> counterTopType();
@@ -175,7 +175,7 @@ public interface AptUnitItem extends IEntity {
     IPrimitive<LogicalDate> counterTopInstallDate();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> counterTopValue();
 
     IPrimitive<CabinetsType> cabinetsType();
@@ -184,6 +184,6 @@ public interface AptUnitItem extends IEntity {
     IPrimitive<LogicalDate> cabinetsInstallDate();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> cabinetsValue();
 }

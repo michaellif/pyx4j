@@ -36,6 +36,6 @@ public interface UnitAvailabilityStatusDTO extends UnitAvailabilityStatus {
     @Caption(name = "Revenue Lost ($)")
     @Format("#0.00")
     @CustomComparator(clazz = ComparableComparator.class)
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> revenueLost();
 }

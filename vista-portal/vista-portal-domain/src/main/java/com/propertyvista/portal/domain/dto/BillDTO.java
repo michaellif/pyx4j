@@ -59,7 +59,7 @@ public interface BillDTO extends IEntity {
     IPrimitive<LogicalDate> prevPaymentDate();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> prevTotal();
 
     PaymentMethodDTO paymentMethod();
@@ -69,6 +69,6 @@ public interface BillDTO extends IEntity {
     IPrimitive<String> transactionID();
 
     @Format("#0.00")
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> total();
 }
