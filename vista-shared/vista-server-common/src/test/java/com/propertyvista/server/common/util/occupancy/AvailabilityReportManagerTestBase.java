@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util;
+package com.propertyvista.server.common.util.occupancy;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,9 +46,10 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
+import com.propertyvista.server.common.util.occupancy.AvailabilityReportManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
 
-public class AvailablilityReportManagerTestBase {
+public class AvailabilityReportManagerTestBase {
 
     private LogicalDate now = null;
 
@@ -103,7 +104,7 @@ public class AvailablilityReportManagerTestBase {
             manager = new AptUnitOccupancyManagerImpl(unit, new NowSource() {
                 @Override
                 public LogicalDate getNow() {
-                    return AvailablilityReportManagerTestBase.this.now;
+                    return AvailabilityReportManagerTestBase.this.now;
                 }
             });
         }

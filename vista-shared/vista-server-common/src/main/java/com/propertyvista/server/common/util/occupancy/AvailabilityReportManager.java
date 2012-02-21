@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util;
+package com.propertyvista.server.common.util.occupancy;
 
 import java.util.Collections;
 import java.util.Iterator;

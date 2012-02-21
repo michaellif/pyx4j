@@ -34,6 +34,7 @@ import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -41,9 +42,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
 
 public class AptUnitOccupancyManagerTestBase {
@@ -71,6 +69,7 @@ public class AptUnitOccupancyManagerTestBase {
         now = null;
         manager = null;
 
+        Persistence.service().delete(new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class));
         Persistence.service().delete(new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class));
         Persistence.service().delete(new EntityQueryCriteria<Lease>(Lease.class));
         Persistence.service().delete(new EntityQueryCriteria<AptUnit>(AptUnit.class));

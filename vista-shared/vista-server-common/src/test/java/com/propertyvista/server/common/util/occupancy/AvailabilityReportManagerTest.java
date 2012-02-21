@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util;
+package com.propertyvista.server.common.util.occupancy;
 
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 // TODO market rent, unit rent (and the deltas)
 // TODO add tenant's name and contact information to the status
 // TODO test if 'future' availability statuses get replaced by other 'future' statuses on status recalculation.
-public class AvailablilityReportManagerTest extends AvailablilityReportManagerTestBase {
+public class AvailabilityReportManagerTest extends AvailabilityReportManagerTestBase {
 
     @Test
     public void testAvailable() {

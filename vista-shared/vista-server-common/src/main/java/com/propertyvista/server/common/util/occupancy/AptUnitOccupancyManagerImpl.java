@@ -43,6 +43,12 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     private final AptUnit unit;
 
+    private final AvailabilityReportManager availabilityManager;
+
+    public AptUnitOccupancyManagerImpl(Key unitPk) {
+        this(Persistence.secureRetrieve(AptUnit.class, unitPk));
+    }
+
     public AptUnitOccupancyManagerImpl(AptUnit unit) {
         this(unit, new NowSource() {
             @Override
@@ -52,27 +58,25 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         });
     }
 
-    public AptUnitOccupancyManagerImpl(Key unitPk) {
-        this(Persistence.secureRetrieve(AptUnit.class, unitPk));
-    }
-
     public AptUnitOccupancyManagerImpl(AptUnit unit, NowSource nowProvider) {
         this.nowProvider = nowProvider;
         this.unit = unit;
-
         if (unit == null) {
             throw new IllegalArgumentException("unit cannot be null");
         }
+        this.availabilityManager = new AvailabilityReportManager(unit);
     }
 
     @Override
     public void scopeAvailable() {
         List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unit, nowProvider.getNow());
         Iterator<AptUnitOccupancySegment> i = occupancy.iterator();
+        LogicalDate now = nowProvider.getNow();
+        boolean isSucceeded = false;
+
         while (i.hasNext()) {
             AptUnitOccupancySegment segment = i.next();
             if (segment.status().getValue() == AptUnitOccupancySegment.Status.vacant) {
-                LogicalDate now = nowProvider.getNow();
 
                 // if we got segment that starts in the past then split it
                 if (segment.dateFrom().getValue().before(now)) {
@@ -88,10 +92,15 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                 segment.lease().setValue(null);
 
                 Persistence.service().merge(segment);
-                return;
+                isSucceeded = true;
+                break;
             }
         }
-        throw new IllegalStateException("" + AptUnitOccupancySegment.Status.vacant + " segment was not found 'scope available' operation is impossible!!!!");
+        if (isSucceeded) {
+            availabilityManager.generateUnitAvailablity(now);
+        } else {
+            throw new IllegalStateException("" + AptUnitOccupancySegment.Status.vacant + " segment was not found 'scope available' operation is impossible!!!!");
+        }
     }
 
     @Override
@@ -111,6 +120,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                 segment.lease().setValue(null);
             }
         });
+        availabilityManager.generateUnitAvailablity(nowProvider.getNow());
     }
 
     @Override
@@ -170,6 +180,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         if (availableSegment == null) {
             throw new IllegalStateException("failed to create 'available' segment");
         }
+        availabilityManager.generateUnitAvailablity(now);
     }
 
     @Override
@@ -197,6 +208,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                 segment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
             }
         });
+        availabilityManager.generateUnitAvailablity(nowProvider.getNow());
     }
 
     @Override
@@ -221,6 +233,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                 segment.lease().set(lease);
             }
         });
+        availabilityManager.generateUnitAvailablity(now);
     }
 
     @Override
@@ -254,6 +267,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
             }
         });
 
+        availabilityManager.generateUnitAvailablity(now);
     }
 
     @Override
@@ -297,6 +311,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                 segment.lease().setValue(null);
             }
         });
+        availabilityManager.generateUnitAvailablity(now);
     }
 
     public interface NowSource {
