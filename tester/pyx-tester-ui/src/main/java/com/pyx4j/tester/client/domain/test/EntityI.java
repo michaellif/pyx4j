@@ -85,7 +85,7 @@ public interface EntityI extends IEntity {
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 
-    @Editor(type = EditorType.money_new)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> money();
 
     IPrimitive<Double> mandatoryMoney();

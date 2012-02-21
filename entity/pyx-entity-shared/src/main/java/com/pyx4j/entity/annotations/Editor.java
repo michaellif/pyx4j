@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 public @interface Editor {
 
     public static enum EditorType {
-        text, password, passwordCreator, textarea, richtextarea, combo, suggest, captcha, monthyearpicker, yearpicker, timepicker, email, phone, money, money_new, //refactor with new name
+        text, password, passwordCreator, textarea, richtextarea, combo, suggest, captcha, monthyearpicker, yearpicker, timepicker, email, phone, money, //refactor with new name
         radiogroup, entityselector, label
     }
 
