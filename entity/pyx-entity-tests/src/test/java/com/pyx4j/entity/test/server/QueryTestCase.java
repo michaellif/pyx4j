@@ -81,6 +81,8 @@ public abstract class QueryTestCase extends DatastoreTestBase {
         emp.setMemberValue(member.getFieldName(), value);
 
         srv.persist(emp);
+        Assert.assertNotNull("PK assigned", emp.getPrimaryKey());
+        Assert.assertNotNull("retrieved  by PK", srv.retrieve(Employee.class, emp.getPrimaryKey()));
 
         EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
         criteria1.add(PropertyCriterion.eq(member, value));
