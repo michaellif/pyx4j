@@ -19,7 +19,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public class DashboardPreloader extends AbstractDataPreloader {
 
@@ -34,10 +33,9 @@ public class DashboardPreloader extends AbstractDataPreloader {
         return sb.toString();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public String delete() {
-        return deleteAll(DashboardMetadata.class, GadgetMetadata.class);
+        return deleteAll(DashboardMetadata.class);
     }
 
 }

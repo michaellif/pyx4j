@@ -13,10 +13,10 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -25,9 +25,10 @@ import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.GadgetDockingMeta;
 
 @Inheritance
-@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.AUTO)
+@AbstractEntity
 @DiscriminatorValue("GadgetMetadata")
 public interface GadgetMetadata extends ISharedUserEntity {
+
     public enum RefreshInterval {
 
         @Translate("Never")
