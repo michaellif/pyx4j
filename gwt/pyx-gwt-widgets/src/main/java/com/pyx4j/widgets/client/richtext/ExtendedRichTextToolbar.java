@@ -15,9 +15,6 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -31,13 +28,11 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.CustomButton;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageFactory;
@@ -74,17 +69,6 @@ public class ExtendedRichTextToolbar extends Composite {
             } else if (sender == fontSizes) {
                 formatter.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
                 fontSizes.setSelectedIndex(0);
-            } else if (customControls.containsKey(sender)) {
-                RichTextAction action = customControls.get(sender);
-                if (action != null) {
-                    inOperation = true;
-                    action.perform(formatter, new Command() {
-                        @Override
-                        public void execute() {
-                            inOperation = false;
-                        }
-                    });
-                }
             }
         }
 
@@ -148,8 +132,8 @@ public class ExtendedRichTextToolbar extends Composite {
                 // This will catch any cases where the user moves the cursur using the
                 // keyboard, or uses one of the browser's built-in keyboard shortcuts.
                 updateStatus();
-            } else if (customControls.containsKey(sender)) {
-                RichTextAction action = customControls.get(sender);
+            } else if (sender == customButton) {
+                RichTextAction action = getCustomAction();
                 if (action != null) {
                     inOperation = true;
                     action.perform(formatter, new Command() {
@@ -200,10 +184,6 @@ public class ExtendedRichTextToolbar extends Composite {
 
     private final HorizontalPanel buttonBarBottom = new HorizontalPanel();
 
-    private final HorizontalPanel buttonBarCustom = new HorizontalPanel();
-
-    private final Map<Widget, RichTextAction> customControls = new HashMap<Widget, RichTextAction>();
-
     private ToggleButton bold;
 
     private ToggleButton italic;
@@ -250,6 +230,10 @@ public class ExtendedRichTextToolbar extends Composite {
 
     private RichTextImageProvider provider;
 
+    private final PushButton customButton = new PushButton();
+
+    private RichTextAction customAction;
+
     /*
      * This is needed to help handling richTextArea onBlur events. When toolbar is inOperation state
      * it may open other dialogs that may have focusable components. This should not fire onBlur for
@@ -268,7 +252,6 @@ public class ExtendedRichTextToolbar extends Composite {
         this.richText = richText;
         this.formatter = richText.getFormatter();
 
-        toolBar.add(buttonBarCustom);
         toolBar.add(buttonBarTop);
         toolBar.add(buttonBarBottom);
 
@@ -300,6 +283,7 @@ public class ExtendedRichTextToolbar extends Composite {
 
         buttonBarTop.add(insertImage = createPushButton(images.insertImage(), "insertImage"));
         buttonBarTop.add(createLink = createPushButton(images.createLink(), "createLink"));
+        buttonBarTop.add(customButton);
         buttonBarTop.add(removeLink = createPushButton(images.removeLink(), "removeLink"));
         buttonBarTop.add(removeFormat = createPushButton(images.removeFormat(), "removeFormat"));
 
@@ -307,6 +291,10 @@ public class ExtendedRichTextToolbar extends Composite {
         buttonBarBottom.add(foreColors = createColorList("Foreground"));
         buttonBarBottom.add(fonts = createFontList());
         buttonBarBottom.add(fontSizes = createFontSizes());
+
+        customButton.addBlurHandler(handler);
+        customButton.addClickHandler(handler);
+        customButton.setVisible(false);
 
         // We only use these listeners for updating status, so don't hook them up
         // unless at least basic editing is supported.
@@ -418,17 +406,16 @@ public class ExtendedRichTextToolbar extends Composite {
         return inOperation;
     }
 
-    public void addCustomButton(CustomButton button, RichTextAction action) {
-        button.addBlurHandler(handler);
-        button.addClickHandler(handler);
-        buttonBarCustom.add(button);
-        customControls.put(button, action);
+    public PushButton getCustomButton() {
+        // use this to setup button look
+        return customButton;
     }
 
-    public void addCustomList(ListBox list, RichTextAction action) {
-        list.addBlurHandler(handler);
-        list.addChangeHandler(handler);
-        buttonBarCustom.add(list);
-        customControls.put(list, action);
+    public void setCustomAction(RichTextAction action) {
+        customAction = action;
+    }
+
+    private RichTextAction getCustomAction() {
+        return customAction;
     }
 }
