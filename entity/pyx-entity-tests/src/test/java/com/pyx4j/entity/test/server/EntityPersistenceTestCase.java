@@ -60,6 +60,7 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
         srv.persist(emp1);
         Key pk = emp1.getPrimaryKey();
         Employee emp1r = srv.retrieve(Employee.class, pk);
+        Assert.assertNotNull("retrieved by PK", emp1r);
         Assert.assertEquals("holidays saved", emp1.holidays().getValue(), emp1r.holidays().getValue());
 
         Employee emp2 = EntityFactory.create(Employee.class);
