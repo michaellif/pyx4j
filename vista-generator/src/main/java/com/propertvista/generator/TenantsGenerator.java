@@ -87,8 +87,19 @@ public class TenantsGenerator {
         summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2010, 2011));
         summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2014));
         summary.lease().expectedMoveIn().setValue(summary.lease().leaseFrom().getValue());
+        summary.lease().actualMoveIn().setValue(summary.lease().expectedMoveIn().getValue());
         summary.lease().signDate().setValue(summary.lease().leaseFrom().getValue());
         summary.lease().createDate().setValue(RandomUtil.randomLogicalDate(2010, 2010));
+
+        if (RandomUtil.randomBoolean()) {
+            LogicalDate date = new LogicalDate(summary.lease().leaseTo().getValue());
+            date.setTime(date.getTime() - 31 * 24 * 60 * 60 * 1000);
+            summary.lease().moveOutNotice().setValue(date);
+
+            date = new LogicalDate(summary.lease().leaseTo().getValue());
+            date.setTime(date.getTime() - 3 * 24 * 60 * 60 * 1000);
+            summary.lease().expectedMoveOut().setValue(date);
+        }
 
         TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);
         summary.tenants().add(tenantSummary);
