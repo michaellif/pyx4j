@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,6 +22,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
@@ -29,6 +30,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.GeoLocation;
+import com.propertyvista.domain.GeoLocation.LatitudeType;
+import com.propertyvista.domain.GeoLocation.LongitudeType;
 
 public class GeoLocationEditor extends CEntityDecoratableEditor<GeoLocation> {
 
@@ -71,6 +74,30 @@ public class GeoLocationEditor extends CEntityDecoratableEditor<GeoLocation> {
             }
 
         });
+
+        get(proto().latitudeType()).addValueValidator(new EditableValueValidator<LatitudeType>() {
+
+            @Override
+            public ValidationFailure isValid(CComponent<LatitudeType, ?> component, LatitudeType value) {
+                CComponent<Double, ?> latitude = get(proto().latitude());
+                return (value != null || latitude.getValue() == null) ? null : new ValidationFailure(i18n.tr("This field is Mandatory"));
+            }
+
+        });
+
+        get(proto().longitudeType()).addValueValidator(new EditableValueValidator<LongitudeType>() {
+
+            @Override
+            public ValidationFailure isValid(CComponent<LongitudeType, ?> component, LongitudeType value) {
+                CComponent<Double, ?> longitude = get(proto().longitude());
+                return (value != null || longitude.getValue() == null) ? null : new ValidationFailure(i18n.tr("This field is Mandatory"));
+            }
+
+        });
+
+        get(proto().longitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().longitudeType())));
+        get(proto().latitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().latitudeType())));
+
         ((CTextFieldBase) get(proto().latitude())).setFormat(new GeoNumberFormat());
         ((CTextFieldBase) get(proto().longitude())).setFormat(new GeoNumberFormat());
 
