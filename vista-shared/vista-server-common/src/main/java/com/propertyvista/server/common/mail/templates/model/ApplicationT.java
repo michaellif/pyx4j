@@ -18,12 +18,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.person.Name;
-
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ApplicationT extends IEntity {
-    Name applicant();
+    IPrimitive<String> applicant();
 
     IPrimitive<String> refNumber();
 }

@@ -30,7 +30,11 @@ public interface CompanyT extends IEntity {
 
     IPrimitive<String> email();
 
-    AddressT address();
+    IPrimitive<String> address();
 
-    CompanyContactsT contacts();
+    CompanyContactT mainOffice();
+
+    CompanyContactT administrator();
+
+    CompanyContactT superintendent();
 }

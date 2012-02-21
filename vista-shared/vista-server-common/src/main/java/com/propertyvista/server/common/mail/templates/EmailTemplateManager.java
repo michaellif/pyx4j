@@ -21,8 +21,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.GWTJava5Helper;
-import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -33,75 +31,11 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.server.common.mail.templates.model.ApplicationT;
 import com.propertyvista.server.common.mail.templates.model.CompanyT;
 import com.propertyvista.server.common.mail.templates.model.NewPasswordT;
 
 public class EmailTemplateManager {
-
-    /*
-     * PasswordRetrievalCrm
-     * - {userName}
-     * - {passwordResetUrl}
-     * PasswordRetrievalTenant
-     * ApplicationCreatedApplicant
-     * - {applicant.firstname}
-     * - {application.reference}
-     * - {pmc.prospectportalsite.com}
-     * - {PMC COMPANY NAME}
-     * - {PMC CHOSEN CONTACT PERSON... could be the Superintendent, the office, the admin, etc}
-     * ApplicationCreatedCoApplicant
-     * - {co-applicant.firstname}
-     * - {application.reference}
-     * - {pmc.prospecportalsite.com}
-     * - {PMC CHOSEN Phone NUMBER}
-     * - {PMC COMPANY NAME}
-     * - {PMC CHOSEN CONTACT PERSON... could be the Superintendent, the office, the admin, etc}
-     * ApplicationCreatedGuarantor
-     * - {guarantor.firstname}
-     * - {application.reference}
-     * - {pmc.prospecportalsite.com}
-     * - {PMC CHOSEN Phone NUMBER}
-     * - {PMC COMPANY NAME}
-     * - {PMC CHOSEN CONTACT PERSON... could be the Superintendent, the office, the admin, etc}
-     * ApplicationApproved
-     * - {applicant.firstName}
-     * - {lease.startDateWeekday}
-     * - {lease.startDate}
-     * - {pmc.website}
-     * - {pmc.tenantportalsite.com}
-     * - {pmc.companyName}
-     * - {pmc.contanctPerson}
-     */
-
-    private static final String template1 = "Building Information:\n" + "Property Code: ${BuildingT/propertyCode/}\n" + "Website: ${BuildingT/website/}\n"
-            + "E-mail Address: ${BuildingT/email/}\n";
-
-    private static final String template2 = "Congratulations ${ApplicationT/applicant/firstName/}!\n"
-            + "The Application Reference Number is: ${ApplicationT/refNumber/}\n" + "Sincerely,\n" + "${CompanyT/name/} Team\n"
-            + "${CompanyT/contacts/administrator/name/firstName/} ${CompanyT/contacts/administrator/name/lastName/}\n";
-
-    public static void main(String[] args) {
-        System.out.println("EmailTemplateManager started...");
-        for (String path : getTemplateDataObjectSelection(EmailTemplateType.ApplicationCreatedApplicant)) {
-            System.out.println("===> " + path);
-        }
-
-        // TODO load tenant object
-        TenantInLease til = EntityFactory.create(TenantInLease.class);
-        til.tenant().user().name().setValue("Donald Duck");
-        til.tenant().person().name().firstName().setValue("Donald");
-        til.application().belongsTo().setPrimaryKey(new Key(123));
-        til.lease().leaseFrom().setValue(new LogicalDate());
-
-        ArrayList<IEntity> data = new ArrayList<IEntity>();
-        for (IEntity tObj : getTemplateDataObjects(EmailTemplateType.ApplicationCreatedApplicant)) {
-            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, til));
-        }
-        System.out.println(parseTemplate(template2, data));
-    }
-
     public static List<IEntity> getTemplateDataObjects(EmailTemplateType template) {
         List<IEntity> values = new Vector<IEntity>();
         switch (template) {
@@ -154,7 +88,7 @@ public class EmailTemplateManager {
             final int varStart = start + 2;
             final int varEnd = htmlTemplate.indexOf('}', varStart);
             if (varEnd != -1) {
-                final String varName = htmlTemplate.substring(varStart, varEnd);
+                final String varName = htmlTemplate.substring(varStart + 2, varEnd - 1);
                 final String value = getVarValue(varName, data);
                 if (value == null) {
                     throw new IllegalArgumentException("Missing value of ${" + varName + "}");
@@ -229,26 +163,20 @@ public class EmailTemplateManager {
     }
 
     private static String pathToVarname(String path) {
-        // convert from path with "/"-delimiter to varName with dotted notation encolsed into ${}
+        // convert from path with "/"-delimiter to varName with dotted notation
         // and remove ending T from the Root Object name
         String varName = path.replace("/", ".");
         if (varName.endsWith(".")) {
             varName = varName.substring(0, varName.length() - 1);
         }
         varName = varName.replaceFirst("T\\.", ".");
-        return "${" + varName + "}";
+        return varName;
     }
 
     private static String varnameToPath(String varName) {
-        // convert from varName with dotted notation encolsed into ${} to path with "/"-delimiter
+        // convert from varName with dotted notation to path with "/"-delimiter
         // and add T-ending to the Root Object names
         String path = varName.replaceFirst("\\.", "T.").replace(".", "/");
-        if (path.startsWith("${")) {
-            path = path.substring(2);
-        }
-        if (path.endsWith("}")) {
-            path = path.substring(0, path.length() - 1);
-        }
         return path + "/";
     }
 }

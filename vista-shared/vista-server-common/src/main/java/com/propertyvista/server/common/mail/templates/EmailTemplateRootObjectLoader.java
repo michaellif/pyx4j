@@ -15,6 +15,7 @@ package com.propertyvista.server.common.mail.templates;
 
 import java.text.SimpleDateFormat;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -26,6 +27,7 @@ import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.company.OrganizationContacts;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -58,7 +60,7 @@ public class EmailTemplateRootObjectLoader {
         TenantInLease til = context;
         if (tObj instanceof TenantT) {
             TenantT t = (TenantT) tObj;
-            t.name().set(til.tenant().person().name());
+            t.name().setValue(Formatter.fullName(til.tenant().person().name()));
         } else if (tObj instanceof NewPasswordT) {
             NewPasswordT t = (NewPasswordT) tObj;
             t.requestorName().set(til.tenant().user().name());
@@ -72,11 +74,11 @@ public class EmailTemplateRootObjectLoader {
             t.email().set(bld.contacts().email());
         } else if (tObj instanceof ApplicationT) {
             ApplicationT t = (ApplicationT) tObj;
-            t.applicant().set(til.tenant().person().name());
+            t.applicant().setValue(Formatter.fullName(til.tenant().person().name()));
             t.refNumber().setValue(til.application().belongsTo().getPrimaryKey().toString());
         } else if (tObj instanceof LeaseT) {
             LeaseT t = (LeaseT) tObj;
-            t.applicant().set(til.tenant().person().name());
+            t.applicant().setValue(Formatter.fullName(til.tenant().person().name()));
             t.startDate().setValue(til.lease().leaseFrom().getStringView());
             t.startDateWeekday().setValue(new SimpleDateFormat("EEEE").format(til.lease().leaseFrom().getValue()));
         } else if (tObj instanceof CompanyT) {
@@ -84,30 +86,24 @@ public class EmailTemplateRootObjectLoader {
             Company com = getCompany(context);
             t.name().set(com.name());
             AddressStructured as = com.addresses().get(0);
-            t.address().suiteNumber().set(as.suiteNumber());
-            t.address().streetNumber().set(as.streetNumber());
-            t.address().streetName().set(as.streetName());
-            t.address().city().set(as.city());
-            t.address().province().set(as.province().name());
-            t.address().country().set(as.county());
-            t.address().postalCode().set(as.postalCode());
+            t.address().setValue(Formatter.addressShort(as));
             t.phone().set(com.phones().get(0).phone());
             t.website().set(com.website());
             t.email().set(com.emails().get(0).email());
             // set contact info
             for (OrganizationContacts cont : com.contacts()) {
                 if (cont.companyRole().name().getValue().equalsIgnoreCase("administrator")) {
-                    t.contacts().administrator().name().set(cont.contactList().get(0).person().name());
-                    t.contacts().administrator().phone().set(cont.contactList().get(0).person().workPhone());
-                    t.contacts().administrator().email().set(cont.contactList().get(0).person().email());
+                    t.administrator().name().setValue(Formatter.fullName(cont.contactList().get(0).person().name()));
+                    t.administrator().phone().set(cont.contactList().get(0).person().workPhone());
+                    t.administrator().email().set(cont.contactList().get(0).person().email());
                 } else if (cont.companyRole().name().getValue().equalsIgnoreCase("superintendent")) {
-                    t.contacts().superintendent().name().set(cont.contactList().get(0).person().name());
-                    t.contacts().superintendent().phone().set(cont.contactList().get(0).person().workPhone());
-                    t.contacts().superintendent().email().set(cont.contactList().get(0).person().email());
+                    t.superintendent().name().setValue(Formatter.fullName(cont.contactList().get(0).person().name()));
+                    t.superintendent().phone().set(cont.contactList().get(0).person().workPhone());
+                    t.superintendent().email().set(cont.contactList().get(0).person().email());
                 } else if (cont.companyRole().name().getValue().equalsIgnoreCase("office")) {
-                    t.contacts().office().name().set(cont.contactList().get(0).person().name());
-                    t.contacts().office().phone().set(cont.contactList().get(0).person().workPhone());
-                    t.contacts().office().email().set(cont.contactList().get(0).person().email());
+                    t.mainOffice().name().setValue(Formatter.fullName(cont.contactList().get(0).person().name()));
+                    t.mainOffice().phone().set(cont.contactList().get(0).person().workPhone());
+                    t.mainOffice().email().set(cont.contactList().get(0).person().email());
                 }
             }
         }
@@ -158,5 +154,21 @@ public class EmailTemplateRootObjectLoader {
         conts.contactList().add(cont);
         com.contacts().add(conts);
         return com;
+    }
+
+    static class Formatter {
+        public static String addressShort(AddressStructured addr) {
+            // {123} {Main} {St}, {City}, {PR} {A1B 2C3} 
+            String fmt = "{0} {1} {2}, {3}, {4} {5}";
+            return SimpleMessageFormat.format(fmt, addr.streetNumber().getStringView(), addr.streetName().getStringView(), addr.streetType().getStringView(),
+                    addr.city().getStringView(), addr.province().code().getStringView(), addr.postalCode().getStringView());
+        }
+
+        public static String fullName(Name name) {
+            // Mr John D Smith Junior
+            String fmt = "{0} {1} {2} {3} {4}";
+            return SimpleMessageFormat.format(fmt, name.namePrefix().getStringView(), name.firstName().getStringView(), name.middleName().getStringView(), name
+                    .lastName().getStringView(), name.nameSuffix().getStringView());
+        }
     }
 }

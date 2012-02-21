@@ -15,12 +15,11 @@ package com.propertyvista.server.common.mail.templates.model;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-
-import com.propertyvista.domain.person.Name;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface EmployeeT extends IEntity {
-    Name name();
+    IPrimitive<String> name();
 }
