@@ -27,6 +27,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Tenant;
@@ -71,8 +72,12 @@ public class AccessRulesTest extends VistaDBTestBase {
     public void testTenantDatasetExistingEntityAccess() {
         String setId = uniqueString();
 
-        Key userPk = new Key(uniqueLong());
-        TestLifecycle.testSession(new UserVisit(userPk, "bob"), VistaBasicBehavior.CRM);
+        TestLifecycle.setNamespace();
+        CrmUser user = EntityFactory.create(CrmUser.class);
+        user.name().setValue(uniqueString());
+        Persistence.service().persist(user);
+
+        TestLifecycle.testSession(new UserVisit(user.getPrimaryKey(), "bob"), VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
         Tenant t1 = EntityFactory.create(Tenant.class);
@@ -97,7 +102,7 @@ public class AccessRulesTest extends VistaDBTestBase {
 
         // Create access rule record
         CrmUserBuildings arr = EntityFactory.create(CrmUserBuildings.class);
-        arr.user().setPrimaryKey(userPk);
+        arr.user().setPrimaryKey(user.getPrimaryKey());
         arr.building().set(building);
         Persistence.service().persist(arr);
 
