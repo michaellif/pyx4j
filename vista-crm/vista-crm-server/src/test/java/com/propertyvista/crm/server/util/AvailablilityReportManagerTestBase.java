@@ -15,9 +15,6 @@ package com.propertyvista.crm.server.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -29,10 +26,12 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadiness;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Scoping;
@@ -51,10 +50,6 @@ import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImp
 
 public class AvailablilityReportManagerTestBase {
 
-    protected static final String MAX_DATE = "MAX_DATE";
-
-    protected static final String MIN_DATE = "MIN_DATE";
-
     private LogicalDate now = null;
 
     private AptUnitOccupancyManager manager = null;
@@ -62,8 +57,6 @@ public class AvailablilityReportManagerTestBase {
     private AptUnit unit = null;
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-
-    List<AptUnitOccupancySegment> expectedTimeline = null;
 
     @Before
     public void setUp() {
@@ -74,6 +67,7 @@ public class AvailablilityReportManagerTestBase {
         now = null;
         manager = null;
 
+        Persistence.service().delete(new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class));
         Persistence.service().delete(new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class));
         Persistence.service().delete(new EntityQueryCriteria<Lease>(Lease.class));
         Persistence.service().delete(new EntityQueryCriteria<AptUnit>(AptUnit.class));
@@ -81,8 +75,6 @@ public class AvailablilityReportManagerTestBase {
         unit = EntityFactory.create(AptUnit.class);
         unit.info().number().setValue("1");
         Persistence.service().merge(unit);
-
-        expectedTimeline = new LinkedList<AptUnitOccupancySegment>();
     }
 
     @After
@@ -93,6 +85,14 @@ public class AvailablilityReportManagerTestBase {
     protected void now(String nowDate) {
         manager = null;
         now = asDate(nowDate);
+    }
+
+    protected void computeAvailabilityOn(String dateRepr) {
+        new AvailabilityReportManager(unit).generateUnitAvailablity(asDate(dateRepr));
+    }
+
+    protected AvailabilityStatusBuilder expectAvailability() {
+        return new AvailabilityStatusBuilder();
     }
 
     protected AptUnitOccupancyManager getUOM() {
@@ -131,28 +131,6 @@ public class AvailablilityReportManagerTestBase {
         return new SetupBuilder();
     }
 
-    /**
-     * Check that the occupancy timeline that is the DB is the same as was defined by calls to {@link #expect()}.<br/>
-     * The actual use case of this function is to run it after series of {@link #expect()} assertions in order to check that the timeline does contain only
-     * the expected segments (and nothing more).
-     */
-    protected void assertExpectedTimeline() {
-        EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
-        criteria.asc(criteria.proto().dateFrom());
-        List<AptUnitOccupancySegment> actualTimeline = Persistence.service().query(criteria);
-        Assert.assertEquals("expected and actual timelines' number of segments don't match", expectedTimeline.size(), actualTimeline.size());
-
-        Iterator<AptUnitOccupancySegment> a = actualTimeline.iterator();
-        Iterator<AptUnitOccupancySegment> e = expectedTimeline.iterator();
-
-        while (a.hasNext()) {
-            AptUnitOccupancySegment actual = a.next();
-            AptUnitOccupancySegment expected = e.next();
-            assertEqualSegments(expected, actual);
-        }
-
-    }
-
     public static LogicalDate asDate(String dateRepr) {
         if ("MAX_DATE".equals(dateRepr)) {
             return new LogicalDate(AptUnitOccupancyManagerHelper.MAX_DATE);
@@ -164,20 +142,6 @@ public class AvailablilityReportManagerTestBase {
             } catch (ParseException e) {
                 throw new Error("Invalid date format " + dateRepr);
             }
-        }
-    }
-
-    protected static void assertEqualSegments(AptUnitOccupancySegment expected, AptUnitOccupancySegment actual) {
-        String msg = "The actual and expected segments equality does not hold";
-        Assert.assertEquals(msg, expected.unit().getPrimaryKey(), actual.unit().getPrimaryKey());
-        Assert.assertEquals(msg, expected.status().getValue(), actual.status().getValue());
-        Assert.assertEquals(msg, expected.dateFrom().getValue(), actual.dateFrom().getValue());
-        Assert.assertEquals(msg, expected.dateTo().getValue(), actual.dateTo().getValue());
-        Assert.assertEquals(msg, expected.offMarket().getValue(), actual.offMarket().getValue());
-        if (expected.lease().isNull()) {
-            Assert.assertEquals(msg, expected.lease().isNull(), actual.lease().isNull());
-        } else {
-            Assert.assertEquals(msg, expected.lease().getPrimaryKey(), actual.lease().getPrimaryKey());
         }
     }
 
@@ -272,14 +236,6 @@ public class AvailablilityReportManagerTestBase {
         }
     }
 
-    protected void computeAvailabilityOn(String dateRepr) {
-
-    }
-
-    protected AvailabilityStatusBuilder expectAvailability() {
-        return new AvailabilityStatusBuilder();
-    }
-
     protected class AvailabilityStatusBuilder {
 
         private LogicalDate statusDate = null;
@@ -305,33 +261,31 @@ public class AvailablilityReportManagerTestBase {
             return this;
         }
 
-        public AvailabilityStatusBuilder vacancy(Vacancy vacancy) {
-            this.vacancy = vacancy;
+        public AvailabilityStatusBuilder vacant() {
+            this.vacancy = Vacancy.Vacant;
             return this;
         }
 
-        public AvailabilityStatusBuilder rentEndsOn(String dateRepr) {
-            this.rentEndsOn = asDate(dateRepr);
+        public AvailabilityStatusBuilder notice(String rentEndsOn) {
+            this.vacancy = Vacancy.Notice;
+            this.rentEndsOn = asDate(rentEndsOn);
             return this;
         }
 
-        public AvailabilityStatusBuilder rentStartsOn(String dateRepr) {
-            this.rentStartsOn = asDate(dateRepr);
+        public AvailabilityStatusBuilder scoped(RentReadiness status) {
+            this.scoping = Scoping.Scoped;
+            this.readiness = status;
             return this;
         }
 
-        public AvailabilityStatusBuilder scoping(Scoping scoping) {
-            this.scoping = scoping;
+        public AvailabilityStatusBuilder unscoped() {
+            this.scoping = Scoping.Unscoped;
             return this;
         }
 
-        public AvailabilityStatusBuilder readiness(RentReadiness readiness) {
-            this.readiness = readiness;
-            return this;
-        }
-
-        public AvailabilityStatusBuilder rented() {
+        public AvailabilityStatusBuilder rented(String rentStartsOn) {
             this.rented = RentedStatus.Rented;
+            this.rentStartsOn = asDate(rentStartsOn);
             return this;
         }
 
@@ -347,11 +301,31 @@ public class AvailablilityReportManagerTestBase {
 
         public void x() {
             assertValid();
+
+            UnitAvailabilityStatus expected = EntityFactory.create(UnitAvailabilityStatus.class);
+            expected.statusDate().setValue(statusDate);
+            expected.vacancyStatus().setValue(vacancy);
+            expected.moveOutDay().setValue(rentEndsOn);
+            expected.scoping().setValue(scoping);
+            expected.rentReadinessStatus().setValue(readiness);
+            expected.rentedStatus().setValue(rented);
+            expected.rentedFromDate().setValue(rentStartsOn);
+
+            EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().statusDate(), statusDate));
+            criteria.add(PropertyCriterion.eq(criteria.proto().vacancyStatus(), vacancy));
+            criteria.add(PropertyCriterion.eq(criteria.proto().moveOutDay(), rentEndsOn));
+            criteria.add(PropertyCriterion.eq(criteria.proto().scoping(), scoping));
+            criteria.add(PropertyCriterion.eq(criteria.proto().rentReadinessStatus(), readiness));
+            criteria.add(PropertyCriterion.eq(criteria.proto().rentedStatus(), rented));
+            criteria.add(PropertyCriterion.eq(criteria.proto().rentedFromDate(), rentStartsOn));
+
+            UnitAvailabilityStatus actual = Persistence.service().retrieve(criteria);
+            Assert.assertNotNull("Expected status " + expected.toString() + " was not found in the DB", actual);
         }
 
         private void assertValid() {
-            // TODO Auto-generated method stub
-
+            // TODO i think i'm too lazy for this right now
         }
 
     }

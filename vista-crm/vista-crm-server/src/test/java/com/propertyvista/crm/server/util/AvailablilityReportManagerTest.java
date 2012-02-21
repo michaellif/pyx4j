@@ -13,41 +13,38 @@
  */
 package com.propertyvista.crm.server.util;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadiness;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Scoping;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 // TODO market rent, unit rent (and the deltas)
 // TODO add tenant's name and contact information to the status
-@Ignore
+// TODO test if 'future' availability statuses get replaced by other 'future' statuses on status recalculation.
 public class AvailablilityReportManagerTest extends AvailablilityReportManagerTestBase {
 
     @Test
     public void testAvailable() {
-        setup().fromTheBeginning().toTheEndOfTime().status(Status.available);
+        setup().fromTheBeginning().toTheEndOfTime().status(Status.available).x();
 
         computeAvailabilityOn("2012-02-17");
 
-        expectAvailability().on("2012-02-17").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).notrented().x();
+        expectAvailability().on("2012-02-17").vacant().scoped(RentReadiness.RentReady).notrented().x();
     }
 
     @Test
     public void testVacant() {
-        setup().fromTheBeginning().toTheEndOfTime().status(Status.vacant);
+        setup().fromTheBeginning().toTheEndOfTime().status(Status.vacant).x();
 
         computeAvailabilityOn("2012-02-17");
 
-        expectAvailability().on("2012-02-17").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).notrented().x();
+        expectAvailability().on("2012-02-17").vacant().unscoped().notrented().x();
     }
 
     @Test
-    public void testLeased() {
+    public void testApproveLease() {
         Lease lease = createLease("2012-02-20", "2013-02-30");
         setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
         setup().from("2012-02-18").to("2012-02-19").status(Status.reserved).withLease(lease).x();
@@ -55,13 +52,12 @@ public class AvailablilityReportManagerTest extends AvailablilityReportManagerTe
 
         computeAvailabilityOn("2012-02-18");
 
-        expectAvailability().on("2012-02-18").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).rented()
-                .rentStartsOn("2012-12-20").x();
+        expectAvailability().on("2012-02-18").vacant().scoped(RentReadiness.RentReady).rented("2012-02-20").x();
         expectAvailability().on("2012-02-20").occupied().x();
     }
 
     @Test
-    public void testLeasedNoReservedSegment() {
+    public void testApproveLeaseNoReservedSegment() {
         Lease lease = createLease("2012-02-20", "2013-03-01");
 
         setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
@@ -73,15 +69,14 @@ public class AvailablilityReportManagerTest extends AvailablilityReportManagerTe
     }
 
     @Test
-    public void testReserved() {
+    public void testReserve() {
         Lease lease = createLease("2012-02-20", "2013-02-30");
         setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
         setup().from("2012-02-18").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
         computeAvailabilityOn("2012-02-18");
 
-        expectAvailability().on("2012-02-18").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).rented()
-                .rentStartsOn("2012-12-20").x();
+        expectAvailability().on("2012-02-18").vacant().scoped(RentReadiness.RentReady).rented("2012-02-20").x();
     }
 
     @Test
@@ -93,8 +88,8 @@ public class AvailablilityReportManagerTest extends AvailablilityReportManagerTe
 
         computeAvailabilityOn("2013-02-01");
 
-        expectAvailability().on("2013-03-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Unscoped).notrented().x();
-        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Unscoped).notrented().x();
+        expectAvailability().on("2013-02-01").notice("2013-03-01").unscoped().notrented().x();
+        expectAvailability().on("2013-03-02").vacant().unscoped().notrented().x();
     }
 
     @Test
@@ -106,16 +101,15 @@ public class AvailablilityReportManagerTest extends AvailablilityReportManagerTe
 
         computeAvailabilityOn("2013-02-01");
 
-        expectAvailability().on("2013-02-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Scoped).readiness(RentReadiness.RentReady)
-                .notrented().x();
-        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).notrented().x();
+        expectAvailability().on("2013-02-01").notice("2013-03-01").scoped(RentReadiness.RentReady).notrented().x();
+        expectAvailability().on("2013-03-02").vacant().scoped(RentReadiness.RentReady).notrented().x();
     }
 
     @Test
     public void testEndLeaseScopedAvailableThenLeasedAgain() {
 
         Lease lease = createLease("2012-02-20", "2013-03-01");
-        Lease lease2 = createLease("2012-04-01", "2014-04-01");
+        Lease lease2 = createLease("2013-04-01", "2014-04-01");
         setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
         setup().from("2012-02-20").to("2013-03-01").status(Status.leased).withLease(lease).x();
         setup().from("2013-03-02").to("2013-03-31").status(Status.reserved).withLease(lease2).x();
@@ -123,10 +117,8 @@ public class AvailablilityReportManagerTest extends AvailablilityReportManagerTe
 
         computeAvailabilityOn("2013-02-01");
 
-        expectAvailability().on("2013-02-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Scoped).readiness(RentReadiness.RentReady)
-                .rented().rentStartsOn("2013-02-01").x();
-        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).rented()
-                .rentStartsOn("2013-02-01").x();
+        expectAvailability().on("2013-02-01").notice("2013-03-01").scoped(RentReadiness.RentReady).rented("2013-04-01").x();
+        expectAvailability().on("2013-03-02").vacant().scoped(RentReadiness.RentReady).rented("2013-04-01").x();
         expectAvailability().on("2013-04-01").occupied().x();
     }
 
@@ -140,15 +132,15 @@ public class AvailablilityReportManagerTest extends AvailablilityReportManagerTe
 
         computeAvailabilityOn("2013-02-01");
 
-        expectAvailability().on("2013-02-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Scoped).readiness(RentReadiness.NeedsRepairs)
-                .notrented().x();
-        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RenoInProgress).notrented().x();
+        expectAvailability().on("2013-02-01").notice("2013-03-01").scoped(RentReadiness.NeedsRepairs).notrented().x();
+        expectAvailability().on("2013-03-02").vacant().scoped(RentReadiness.RenoInProgress).notrented().x();
+        expectAvailability().on("2013-03-11").vacant().scoped(RentReadiness.RentReady).notrented().x();
     }
 
     @Test
     public void testEndLeaseScopedRenovationNeededThenLeasedAgain() {
         Lease lease1 = createLease("2012-02-20", "2013-03-01");
-        Lease lease2 = createLease("2012-03-21", "2015-03-01");
+        Lease lease2 = createLease("2013-03-21", "2015-03-01");
         setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
         setup().from("2012-02-20").to("2013-03-01").status(Status.leased).withLease(lease1).x();
         setup().from("2013-03-02").to("2013-03-10").status(Status.renovation).x();
@@ -157,12 +149,9 @@ public class AvailablilityReportManagerTest extends AvailablilityReportManagerTe
 
         computeAvailabilityOn("2013-02-01");
 
-        expectAvailability().on("2013-02-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Scoped).readiness(RentReadiness.NeedsRepairs)
-                .rented().rentStartsOn("2013-03-21").x();
-        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RenoInProgress).rented()
-                .rentStartsOn("2013-03-21").x();
-        expectAvailability().on("2013-03-15").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).rented()
-                .rentStartsOn("2013-03-21").x();
+        expectAvailability().on("2013-02-01").notice("2013-03-01").scoped(RentReadiness.NeedsRepairs).rented("2013-03-21").x();
+        expectAvailability().on("2013-03-02").vacant().scoped(RentReadiness.RenoInProgress).rented("2013-03-21").x();
+        expectAvailability().on("2013-03-15").vacant().scoped(RentReadiness.RentReady).rented("2013-03-21").x();
         expectAvailability().on("2013-03-15").occupied();
     }
 
@@ -175,19 +164,19 @@ public class AvailablilityReportManagerTest extends AvailablilityReportManagerTe
 
         computeAvailabilityOn("2013-02-01");
 
-        expectAvailability().on("2013-02-01").vacancy(Vacancy.Notice).rentEndsOn("2012-03-02").scoping(Scoping.Scoped).readiness(RentReadiness.RentReady)
-                .offMarket().x();
-        expectAvailability().on("2013-03-02").vacancy(Vacancy.Vacant).scoping(Scoping.Scoped).readiness(RentReadiness.RentReady).offMarket().x();
+        expectAvailability().on("2013-02-01").notice("2013-03-01").scoped(null).offMarket().x();
+        expectAvailability().on("2013-03-02").vacant().scoped(null).offMarket().x();
     }
 
     @Test
     public void testMakeVacant() {
         setup().from("2013-03-02").to("2013-03-15").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2013-03-16").toTheEndOfTime().status(Status.vacant).withOffMarketType(OffMarketType.down).x();
+        setup().from("2013-03-16").toTheEndOfTime().status(Status.vacant).x();
 
         computeAvailabilityOn("2013-03-14");
-        expectAvailability().on("2013-03-14").vacancy(Vacancy.Vacant).scoping(Scoping.Unscoped).offMarket().x();
-        expectAvailability().on("2013-03-16").vacancy(Vacancy.Vacant).scoping(Scoping.Unscoped).notrented().x();
 
+        expectAvailability().on("2013-03-14").vacant().scoped(null).offMarket().x();
+        expectAvailability().on("2013-03-16").vacant().unscoped().notrented().x();
     }
+
 }

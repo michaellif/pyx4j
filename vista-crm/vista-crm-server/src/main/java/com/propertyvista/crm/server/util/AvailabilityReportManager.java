@@ -13,340 +13,255 @@
  */
 package com.propertyvista.crm.server.util;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadiness;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Scoping;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 
 public class AvailabilityReportManager {
 
-//    /**
-//     * Refresh the series of availability statuses based on occupancy: remove the old statuses from the DB, and create new ones.
-//     * 
-//     * @param startAt
-//     *            Start the computation of statuses on this date.
-//     * @param unit
-//     *            The unit we are interested in.
-//     * 
-//     */
-//    public void computeUnitAvailability(LogicalDate startAt, AptUnit unit) {
-//
-//        EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-//        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
-//        criteria.add(PropertyCriterion.ge(criteria.proto().statusDate(), startAt));
-//        Persistence.service().delete(criteria);
-//
-//        List<AptUnitOccupancySegment> occupancy = queryOccupancy(unit);
-//        List<UnitAvailabilityStatus> availability = computeUnitAvaialbility(startAt, occupancy);
-//
-//        for (UnitAvailabilityStatus status : availability) {
-//            Persistence.service().merge(status);
-//        }
-//    }
-//
-//    /**
-//     * Compute unit availability states based on given occupancy.
-//     * 
-//     * @param startTime
-//     *            starting point of computation
-//     * @param occupancy
-//     *            non empty list of occupancy state interval that cover the whole time, don't overlap, and ordered in ascending order by
-//     *            {@link AptUnitOccupancySegment#dateFrom()}.
-//     * @return
-//     */
-//    protected List<UnitAvailabilityStatus> computeUnitAvaialbility(LogicalDate startTime, List<AptUnitOccupancySegment> occupancy) {
-//        List<UnitAvailabilityStatus> result = new ArrayList<UnitAvailabilityStatus>();
-//
-//        ListIterator<AptUnitOccupancySegment> i = getOccupancyStatusCursorAt(startTime, occupancy);
-//        do {
-//            result.add(computeUnitAvailabilityStatus(startTime, occupancy));
-//            startTime = i.next().dateFrom().getValue();
-//        } while (i.hasNext());
-//
-//        return result;
-//    }
-//
-//    /**
-//     * @param occupancy
-//     *            sorted (in the ascending order by {@link AptUnitOccupancySegment#dateFrom()}) non empty list of occupancy intervals covering the whole
-//     *            possible
-//     *            time
-//     * @return
-//     */
-//    protected UnitAvailabilityStatus computeUnitAvailabilityStatus(LogicalDate when, List<AptUnitOccupancySegment> occupancy) {
-//
-//        // TODO currently use OffMarketType "other" to denote units that have not been scoped yet, i.e. "Unrented" and loosing money
-//
-//        UnitAvailabilityStatus status = null;
-//
-//        ListIterator<AptUnitOccupancySegment> i = getOccupancyStatusCursorAt(when, occupancy);
-//        AptUnitOccupancySegment occupancyStatusAtRequestedTime = i.next();
-//
-//        switch (occupancyStatusAtRequestedTime.status().getValue()) {
-//        case available:
-//            status = available(i);
-//            break;
-//        case leased:
-//            status = leased(occupancyStatusAtRequestedTime.lease(), i);
-//            break;
-//        case offMarket:
-//            status = offMarket(occupancyStatusAtRequestedTime.offMarket().getValue(), i);
-//            break;
-//        case reserved:
-//            reserved(i);
-//            break;
-//        case vacant:
-//            vacant(i);
-//            break;
-//        default:
-//            throw new Error("got unknown occupancy status: '" + occupancyStatusAtRequestedTime.status().getValue() + "'");
-//        }
-//        status.statusDate().setValue(when);
-//
-//        return status;
-//    }
-//
-//    private static UnitAvailabilityStatus available(ListIterator<AptUnitOccupancySegment> i) {
-//        final UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
-//
-//        // if the unit is available it means it's ready for rent, hence it's been scoped
-//        // if we have lease in the future we set it as: "Rented"
-//        status.vacancyStatus().setValue(VacancyStatus.Vacant);
-//
-//        status.isScoped().setValue(true);
-//        status.rentReadinessStatus().setValue(RentReadinessStatus.RentReady);
-//        status.rentedStatus().setValue(RentedStatus.Unrented);
-//
-//        boolean doLoop = true;
-//        while (doLoop & i.hasNext()) {
-//            AptUnitOccupancySegment occupancyStatus = i.next();
-//            switch (occupancyStatus.status().getValue()) {
-//            case leased:
-//                status.rentedStatus().setValue(RentedStatus.Rented);
-//                status.moveInDay().setValue(getMoveInDate(occupancyStatus.lease()));
-//                status.unitRent().setValue(getUnitRent(occupancyStatus.lease()));
-//
-//                doLoop = false;
-//                break;
-//            }
-//        }
-//
-//        return status;
-//    }
-//
-//    private static UnitAvailabilityStatus leased(Lease lease, ListIterator<AptUnitOccupancySegment> i) {
-//
-//        final UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
-//        // we have to deduce if the unit has Notice, and if it is we have to do the following:
-//        //     * set the move out date
-//        //     * check whether the unit is scoped, and if it is, set the relevant rent readiness status
-//        //     * check whether the unit is rented, and set the move in date. to check the "Rented" status we use the following logic:
-//        //            * if lease in the future exists, then 'Rented',
-//        //            * else if rentReady then 'Unrented'
-//        //            * else 'OffMarket'
-//
-//        // if we have other statuses, we know that this lease will end eventually,
-//        // then we know that the vacancy status is NOTICE
-//        if (i.hasNext()) {
-//            status.vacancyStatus().setValue(VacancyStatus.Notice);
-//            status.moveOutDay().setValue(getMoveOutDate(lease));
-//            status.rentedStatus().setValue(RentedStatus.Unrented);
-//            AptUnitOccupancySegment occupancyStatus = i.next();
-//
-//            // continue to check statuses until we reach the end or find out that the unit is rented
-//            do {
-//                switch (occupancyStatus.status().getValue()) {
-//                case vacant:
-//                    // TODO i'm not sure how to handle vacant status
-//                    break;
-//                case reserved:
-//                    break;
-//                case available:
-//                    if (status.isScoped().isNull()) {
-//                        status.isScoped().setValue(true);
-//                        status.rentReadinessStatus().setValue(RentReadinessStatus.RentReady);
-//                    }
-//                    break;
-//                case offMarket:
-//                    if (status.isScoped().isNull()) {
-//                        if (OffMarketType.construction.equals(occupancyStatus.offMarket().getValue())) {
-//                            status.isScoped().setValue(true);
-//                            status.rentReadinessStatus().setValue(RentReadinessStatus.NeedsRepairs);
-//                        } else {
-//                            // TODO not sure about 'offMarket' types other than construction (just ignore for now)
-//                        }
-//                    }
-//                    break;
-//                case leased:
-//                    // assume that if it's rented, it means it's already been scoped, and ready for rent
-//                    status.isScoped().setValue(true);
-//                    if (status.rentReadinessStatus().isNull()) {
-//                        status.rentReadinessStatus().setValue(RentReadinessStatus.RentReady);
-//                    }
-//                    status.rentedStatus().setValue(RentedStatus.Rented);
-//                    status.moveInDay().setValue(getMoveInDate(occupancyStatus.lease()));
-//                    status.unitRent().setValue(getUnitRent(occupancyStatus.lease()));
-//                }
-//            } while (RentedStatus.Rented.equals(status.rentedStatus().getValue()) & i.hasNext());
-//
-//            if (status.isScoped().isNull()) {
-//                status.isScoped().setValue(false);
-//            } else if (status.rentedStatus().getValue().equals(RentedStatus.Unrented)
-//                    & !RentReadinessStatus.RentReady.equals(status.rentReadinessStatus().getValue())) {
-//                status.rentedStatus().setValue(RentedStatus.OffMarket);
-//            }
-//        }
-//
-//        return status;
-//    }
-//
-//    private static UnitAvailabilityStatus offMarket(OffMarketType type, ListIterator<AptUnitOccupancySegment> other) {
-//
-//        final UnitAvailabilityStatus availablilityStatus = EntityFactory.create(UnitAvailabilityStatus.class);
-//
-//        if (type.equals(OffMarketType.construction)) {
-//            availablilityStatus.rentReadinessStatus().setValue(RentReadinessStatus.RenoInProgress);
-//            availablilityStatus.vacancyStatus().setValue(VacancyStatus.Vacant);
-//            availablilityStatus.isScoped().setValue(true);
-//        } else {
-//            // TODO not sure what about "off market" which is not construction, i.e. if the unit is vacant/scoped or not (for now assume that it is vacant)
-//            availablilityStatus.vacancyStatus().setValue(VacancyStatus.Vacant);
-//            availablilityStatus.isScoped().setValue(false);
-//        }
-//        // now we what is left is to understand if its rented or not 
-//        // if the unit is not rented, it means it is off market for good (for the logic see comments for leased() handler)
-//        boolean doLoop = true;
-//        while (doLoop & other.hasNext()) {
-//            AptUnitOccupancySegment occupancyStatus = other.next();
-//            switch (occupancyStatus.status().getValue()) {
-//            case leased:
-//                availablilityStatus.rentedStatus().setValue(RentedStatus.Rented);
-//                availablilityStatus.moveInDay().setValue(getMoveInDate(occupancyStatus.lease()));
-//                availablilityStatus.unitRent().setValue(getUnitRent(occupancyStatus.lease()));
-//                doLoop = false;
-//                break;
-//            case available:
-//                if (availablilityStatus.rentedStatus().isNull()) {
-//                    availablilityStatus.isScoped().setValue(true);
-//                    availablilityStatus.rentedStatus().setValue(RentedStatus.Unrented);
-//                }
-//                break;
-//            case offMarket:
-//                if (OffMarketType.construction.equals(occupancyStatus.offMarket().getValue())) {
-//                    availablilityStatus.isScoped().setValue(true);
-//                    availablilityStatus.rentReadinessStatus().setValue(RentReadinessStatus.NeedsRepairs);
-//                }
-//                break;
-//            default:
-//                break;
-//            }
-//        }
-//        if (availablilityStatus.rentedStatus().isNull()) {
-//            if (type.equals(OffMarketType.other)) {
-//                availablilityStatus.rentedStatus().setValue(RentedStatus.Unrented);
-//            } else {
-//                availablilityStatus.rentedStatus().setValue(RentedStatus.OffMarket);
-//            }
-//        }
-//        return availablilityStatus;
-//    }
-//
-//    private static UnitAvailabilityStatus reserved(ListIterator<AptUnitOccupancySegment> other) {
-//        // TODO: reserved status handler
-//        throw new Error("occupancy status handler for 'reserved' has not yet been implemented");
-//    }
-//
-//    private static UnitAvailabilityStatus vacant(ListIterator<AptUnitOccupancySegment> other) {
-//        // TODO: vacant status handler
-//        throw new Error("occupancy status handler for 'vacant' has not yet been implemented");
-//    }
-//
-//    public static ListIterator<AptUnitOccupancySegment> getOccupancyStatusCursorAt(LogicalDate when, List<AptUnitOccupancySegment> occupancy) {
-//        AptUnitOccupancySegment key = EntityFactory.create(AptUnitOccupancySegment.class);
-//        key.dateFrom().setValue(when);
-//
-//        int index = Collections.binarySearch(occupancy, key, new Comparator<AptUnitOccupancySegment>() {
-//            @Override
-//            public int compare(AptUnitOccupancySegment paramT1, AptUnitOccupancySegment paramT2) {
-//                return paramT1.dateFrom().compareTo(paramT2.dateFrom());
-//            }
-//        });
-//        if (index < 0) {
-//            index = (-index) - 2;
-//        }
-//        return occupancy.listIterator(index);
-//    }
-//
-//    private static LogicalDate getMoveOutDate(Lease lease) {
-//        if (!lease.actualMoveOut().isNull()) {
-//            return lease.actualMoveOut().getValue();
-//        } else if (!lease.expectedMoveOut().isNull()) {
-//            return lease.expectedMoveOut().getValue();
-//        } else {
-//            return null;
-//        }
-//    }
-//
-//    private static LogicalDate getMoveInDate(Lease lease) {
-//        if (!lease.actualMoveIn().isNull()) {
-//            return lease.actualMoveIn().getValue();
-//        } else if (!lease.expectedMoveIn().isNull()) {
-//            return lease.expectedMoveIn().getValue();
-//        } else {
-//            return null;
-//        }
-//    }
-//
-//    private static BigDecimal getUnitRent(Lease lease) {
-//        // TODO get unit rent from lease
-//        return new BigDecimal(0);
-//    }
-//
-//    public static interface ReferencedValuesInitializer {
-//
-//        void setReferencedValues(UnitAvailabilityStatus status);
-//
-//    }
-//
-//    private List<AptUnitOccupancySegment> queryOccupancy(AptUnit unit) {
-//        Persistence.service().retrieve(unit._AptUnitOccupancySegment());
-//        return new LinkedList<AptUnitOccupancySegment>(unit._AptUnitOccupancySegment());
-//    }
-//
-//    /**
-//     * This is for dependency injection and making {@link AvailabilityReportManager} testable.
-//     */
-//    public static interface ReferencedValuesInitializerFactory {
-//
-//        ReferencedValuesInitializer create();
-//
-//    }
-//
-//    public static class PersistenceReferencedValuesInitializer implements ReferencedValuesInitializer {
-//
-//        public final Building building;
-//
-//        public final Floorplan floorplan;
-//
-//        public final AptUnit unit;
-//
-//        public final Complex complex;
-//
-//        public final BigDecimal marketRent;
-//
-//        public PersistenceReferencedValuesInitializer(AptUnit unit) {
-//            this.unit = unit;
-//            this.building = Persistence.service().retrieve(Building.class, unit.belongsTo().getPrimaryKey());
-//            this.floorplan = Persistence.service().retrieve(Floorplan.class, unit.floorplan().getPrimaryKey());
-//            this.complex = building.complex().isNull() ? null : Persistence.service().retrieve(Complex.class, building.complex().getPrimaryKey());
-//
-//            // FIXME market rent should be fetched from SeriveCatalog
-//            this.marketRent = new BigDecimal(100);
-//        }
-//
-//        @Override
-//        public void setReferencedValues(UnitAvailabilityStatus status) {
-//            status.complex().set(complex);
-//            status.building().set(building);
-//            status.floorplan().set(floorplan);
-//            status.unit().set(unit);
-//            status.marketRent().setValue(marketRent);
-//        }
-//    }
+    private final AptUnit unit;
+
+    public AvailabilityReportManager(AptUnit unit) {
+        this.unit = unit;
+    }
+
+    /**
+     * Refresh the series of availability statuses based on occupancy: remove the old statuses from the DB, and create new ones.
+     * 
+     * @param startingOn
+     *            Start the computation of statuses on this date.
+     * @param unit
+     *            The unit we are interested in.
+     * 
+     */
+    public void generateUnitAvailablity(LogicalDate startingOn) {
+        removeStatuses(startingOn);
+        generateStatuses(occcpancy(startingOn));
+    }
+
+    private List<AptUnitOccupancySegment> occcpancy(LogicalDate startingOn) {
+        EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
+        criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), startingOn));
+        criteria.asc(criteria.proto().dateFrom());
+
+        List<AptUnitOccupancySegment> occupancy = Persistence.secureQuery(criteria);
+        if (occupancy.isEmpty()) {
+            throw new IllegalStateException("failed to retreive occupancy for unit pk = " + unit.getPrimaryKey());
+        }
+
+        // adjust value to generate correct dates for statuses
+        occupancy.get(0).dateFrom().setValue(startingOn);
+
+        return occupancy;
+
+    }
+
+    private void generateStatuses(List<AptUnitOccupancySegment> occupancy) {
+        if (occupancy.isEmpty()) {
+            return;
+        } else {
+            AptUnitOccupancySegment current = first(occupancy);
+            List<AptUnitOccupancySegment> future = rest(occupancy);
+
+            UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
+            status.statusDate().setValue(current.dateFrom().getValue());
+
+            switch (current.status().getValue()) {
+            case vacant:
+                vacant(status);
+                break;
+            case available:
+                available(status, future);
+                break;
+            case reserved:
+                reserved(status, current);
+                break;
+            case leased:
+                leased(status, current, future);
+                break;
+            case renovation:
+                renovation(status, future);
+                break;
+            case offMarket:
+                offMarket(status);
+                break;
+            }
+
+            setReferences(status);
+
+            Persistence.service().persist(status);
+
+            generateStatuses(future);
+        }
+    }
+
+    private void vacant(UnitAvailabilityStatus status) {
+        status.vacancyStatus().setValue(Vacancy.Vacant);
+        // implicit: status.moveOutDay().setValue(null);
+
+        status.scoping().setValue(Scoping.Unscoped);
+        // implicit: status.rentReadinessStatus().setValue(null);
+
+        status.rentedStatus().setValue(RentedStatus.Unrented);
+        // implicit: status.rentedFromDate().setValue(null);
+    }
+
+    private void available(UnitAvailabilityStatus status, List<AptUnitOccupancySegment> future) {
+        status.vacancyStatus().setValue(Vacancy.Vacant);
+        // implicit: status.moveOutDay().setValue(null);
+
+        status.scoping().setValue(Scoping.Scoped);
+        status.rentReadinessStatus().setValue(RentReadiness.RentReady);
+
+        status.rentedStatus().setValue(RentedStatus.Unrented);
+        // implicit: status.rentedFromDate().setValue(null);
+
+        for (AptUnitOccupancySegment segment : future) {
+            if (segment.status().getValue() == Status.leased | segment.status().getValue() == Status.reserved) {
+                status.rentedStatus().setValue(RentedStatus.Rented);
+                status.rentedFromDate().setValue(segment.lease().leaseFrom().getValue());
+                break;
+            }
+        }
+    }
+
+    private void reserved(UnitAvailabilityStatus status, AptUnitOccupancySegment current) {
+        status.vacancyStatus().setValue(Vacancy.Vacant);
+        // implicit: status.moveOutDay().setValue(null)
+
+        status.scoping().setValue(Scoping.Scoped);
+        status.rentReadinessStatus().setValue(RentReadiness.RentReady);
+
+        status.rentedStatus().setValue(RentedStatus.Rented);
+        status.rentedFromDate().setValue(current.lease().leaseFrom().getValue());
+    }
+
+    private void leased(UnitAvailabilityStatus status, AptUnitOccupancySegment current, List<AptUnitOccupancySegment> future) {
+
+        Iterator<AptUnitOccupancySegment> segments = future.iterator();
+        AptUnitOccupancySegment segment = null;
+
+        if (segments.hasNext()) {
+            segment = segments.next();
+
+            status.vacancyStatus().setValue(Vacancy.Notice);
+            status.moveOutDay().setValue(current.dateTo().getValue());
+
+            status.rentedStatus().setValue(RentedStatus.Unrented);
+            // implicit: status.rentedFromDate().setValue(null);
+        }
+
+        while (segment != null) {
+            switch (segment.status().getValue()) {
+            case vacant:
+                status.scoping().setValue(Scoping.Unscoped);
+                // implicit status.rentReadinessStatus().setValue(null);
+                break;
+            case available:
+                if (status.scoping().getValue() == null) {
+                    status.scoping().setValue(Scoping.Scoped);
+                    status.rentReadinessStatus().setValue(RentReadiness.RentReady);
+                }
+                break;
+            case renovation:
+                if (status.scoping().getValue() == null) {
+                    status.scoping().setValue(Scoping.Scoped);
+                    status.rentReadinessStatus().setValue(RentReadiness.NeedsRepairs);
+                }
+                break;
+            case offMarket:
+                if (status.rentedStatus() != null) {
+                    status.scoping().setValue(Scoping.Scoped);
+                    status.rentedStatus().setValue(RentedStatus.OffMarket);
+                }
+                break;
+            case reserved:
+            case leased:
+                if (status.rentedStatus() != null) {
+                    if (status.scoping().getValue() == null) {
+                        status.scoping().setValue(Scoping.Scoped);
+                        status.rentReadinessStatus().setValue(RentReadiness.RentReady);
+                    }
+                    status.rentedStatus().setValue(RentedStatus.Rented);
+                    status.rentedFromDate().setValue(segment.lease().leaseFrom().getValue());
+                }
+                break;
+            default:
+                // do nothing
+            }
+
+            segment = segments.hasNext() ? segments.next() : null;
+        }
+
+    }
+
+    private void renovation(UnitAvailabilityStatus status, List<AptUnitOccupancySegment> future) {
+        status.vacancyStatus().setValue(Vacancy.Vacant);
+
+        status.scoping().setValue(Scoping.Scoped);
+        status.rentReadinessStatus().setValue(RentReadiness.RenoInProgress);
+
+        status.rentedStatus().setValue(RentedStatus.Unrented);
+        // implicit: status.rentedFromDate().setValue(null);
+
+        for (AptUnitOccupancySegment segment : future) {
+            if (segment.status().getValue() == Status.leased | segment.status().getValue() == Status.reserved) {
+                status.rentedStatus().setValue(RentedStatus.Rented);
+                status.rentedFromDate().setValue(segment.lease().leaseFrom().getValue());
+                break;
+            }
+        }
+    }
+
+    private void offMarket(UnitAvailabilityStatus status) {
+        status.vacancyStatus().setValue(Vacancy.Vacant);
+
+        status.scoping().setValue(Scoping.Scoped);
+        // implicit: status.rentReadinessStatus().setValue(null);
+
+        status.rentedStatus().setValue(RentedStatus.OffMarket);
+        // implicit: status.rentedFromDate().setValue(null);
+    }
+
+    private void setReferences(UnitAvailabilityStatus status) {
+        status.unit().set(unit);
+
+        // TODO set the rest of stuff
+    }
+
+    private AptUnitOccupancySegment first(List<AptUnitOccupancySegment> occupancy) {
+        return occupancy.get(0);
+    }
+
+    private List<AptUnitOccupancySegment> rest(List<AptUnitOccupancySegment> occupancy) {
+        int length = occupancy.size();
+        if (length == 1) {
+            return Collections.emptyList();
+        } else {
+            return occupancy.subList(1, length);
+        }
+    }
+
+    private void removeStatuses(LogicalDate startingOn) {
+        EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
+        criteria.add(PropertyCriterion.ge(criteria.proto().statusDate(), startingOn));
+        Persistence.service().delete(criteria);
+    }
 }

@@ -161,7 +161,12 @@ public interface UnitAvailabilityStatus extends IEntity {
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> moveOutDay();
 
-    /** Applicable only for rented */
+    /**
+     * Applicable only for rented
+     * 
+     * @deprecated use {@link #rentedFromDate()} instead
+     */
+    @Deprecated
     @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     @Caption(name = "Move In Date")

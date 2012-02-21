@@ -44,9 +44,9 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
         // Load shared dashboards:
         CrmUser anyUser = EntityFactory.create(CrmUser.class);
-        anyUser.setPrimaryKey(ISharedUserEntity.DORMANT_KEY);
+        //anyUser.setPrimaryKey(ISharedUserEntity.DORMANT_KEY);
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), anyUser));
+        //criteria.add(PropertyCriterion.eq(criteria.proto().user(), anyUser));
         addTypeCriteria(criteria);
         Vector<DashboardMetadata> vdm = Persistence.secureQuery(criteria);
 
