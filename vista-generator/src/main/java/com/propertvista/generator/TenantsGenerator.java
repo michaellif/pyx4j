@@ -93,11 +93,11 @@ public class TenantsGenerator {
 
         if (RandomUtil.randomBoolean()) {
             LogicalDate date = new LogicalDate(summary.lease().leaseTo().getValue());
-            date.setTime(date.getTime() - 31 * 24 * 60 * 60 * 1000);
+            date.setTime(date.getTime() - 31 * 24 * 60 * 60 * 1000L);
             summary.lease().moveOutNotice().setValue(date);
 
             date = new LogicalDate(summary.lease().leaseTo().getValue());
-            date.setTime(date.getTime() - 3 * 24 * 60 * 60 * 1000);
+            date.setTime(date.getTime() - 3 * 24 * 60 * 60 * 1000L);
             summary.lease().expectedMoveOut().setValue(date);
         }
 
