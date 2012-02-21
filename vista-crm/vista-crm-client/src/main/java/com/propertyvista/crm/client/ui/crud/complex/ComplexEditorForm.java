@@ -74,11 +74,14 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
 
                 @Override
                 public ValidationFailure isValid(CComponent<String, ?> component, String url) {
-                    if (url != null && ValidationUtils.isSimpleUrl(url)) {
-                        return null;
-                    } else {
-                        return new ValidationFailure(i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
+                    if (url != null) {
+                        if (ValidationUtils.isSimpleUrl(url)) {
+                            return null;
+                        } else {
+                            return new ValidationFailure(i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
+                        }
                     }
+                    return null;
                 }
             });
         } else {
