@@ -36,7 +36,6 @@ import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep.Status;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.WizardStepPlace;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 
 public class PtAppWizardManager {
@@ -112,11 +111,7 @@ public class PtAppWizardManager {
 
     public void isPlaceNavigable(final AppPlace targetPlace, final AsyncCallback<Boolean> callback) {
         if (application != null) {
-            if (targetPlace instanceof WizardStepPlace) {
-                callback.onSuccess(isStepNavigable(targetPlace));
-            } else {
-                callback.onSuccess(true);
-            }
+            callback.onSuccess(isStepNavigable(targetPlace));
         } else {
             applicationService.getApplication(new DefaultAsyncCallback<Application>() {
                 @Override

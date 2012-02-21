@@ -36,7 +36,11 @@ public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
-        PtAppSite.getWizardManager().isPlaceNavigable(targetPlace, callback);
+        if (targetPlace instanceof PtSiteMap.PasswordChange) {
+            callback.onSuccess(Boolean.TRUE);
+        } else {
+            PtAppSite.getWizardManager().isPlaceNavigable(targetPlace, callback);
+        }
     }
 
     @Override
