@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -27,6 +28,7 @@ import com.propertyvista.domain.financial.Currency;
 public interface BuildingFinancial extends IEntity {
 
     @Format("MM/dd/yyyy")
+    @NotNull
     IPrimitive<LogicalDate> dateAcquired();
 
     @Format("#0.00")
@@ -38,6 +40,7 @@ public interface BuildingFinancial extends IEntity {
     IPrimitive<BigDecimal> marketPrice();
 
     @Format("MM/dd/yyyy")
+    @NotNull
     IPrimitive<LogicalDate> lastAppraisalDate();
 
     @Format("#0.00")
