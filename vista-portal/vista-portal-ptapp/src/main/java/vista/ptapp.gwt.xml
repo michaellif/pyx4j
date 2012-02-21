@@ -9,7 +9,6 @@
     <extend-property name="locale" values="ru"/>
     <extend-property name="locale" values="fr"/>
     <extend-property name="locale" values="es"/>
-    <extend-property name="locale" values="zh"/>
     <extend-property name="locale" values="zh_CN"/>
     <extend-property name="locale" values="zh_TW"/>
     
