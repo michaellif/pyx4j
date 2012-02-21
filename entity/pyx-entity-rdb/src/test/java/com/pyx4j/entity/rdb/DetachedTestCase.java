@@ -110,6 +110,7 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         srv.persist(main);
 
         MainHolderEnity mainR = srv.retrieve(MainHolderEnity.class, main.getPrimaryKey());
+        Assert.assertNotNull("retrieved by PK", mainR);
 
         Assert.assertTrue("is detached", mainR.ownedEntity().detachedEntity().isValueDetached());
         Assert.assertTrue("is detached value null", mainR.ownedEntity().detachedEntity().name().isNull());

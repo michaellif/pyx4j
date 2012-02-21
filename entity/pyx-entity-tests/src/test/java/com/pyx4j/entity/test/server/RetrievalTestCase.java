@@ -340,7 +340,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         Key primaryKey = emp.getPrimaryKey();
         Employee emp2 = srv.retrieve(Employee.class, primaryKey);
-        Assert.assertNotNull("retrieve", emp2);
+        Assert.assertNotNull("retrieved  by PK", emp2);
 
         Assert.assertEquals("address.streetName Value", streetName, emp2.workAddress().streetName().getValue());
         //System.out.println(((IFullDebug) emp2).debugString());
