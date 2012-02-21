@@ -48,9 +48,10 @@ public class VehicleDataEditor extends CEntityDecoratableEditor<Vehicle> {
         int row = -1;
         panel.setH3(++row, 0, 2, i18n.tr("Vehicle Data"));
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().year()), 5).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().model()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().color()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().year()), 5).build());
 
         row = 0; // skip header
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().plateNumber()), 10).build());

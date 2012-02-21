@@ -39,15 +39,17 @@ public interface Vehicle extends BillableItemExtraData {
     @BusinessEqualValue
     IPrimitive<String> plateNumber();
 
+    IPrimitive<String> make();
+
+    IPrimitive<String> model();
+
+    IPrimitive<String> color();
+
     @NotNull
     @Format("yyyy")
     @Editor(type = EditorType.yearpicker)
     @MemberColumn(name = "year_made")
     IPrimitive<LogicalDate> year();
-
-    IPrimitive<String> make();
-
-    IPrimitive<String> model();
 
     @NotNull
     @Caption(name = "Province/State")
