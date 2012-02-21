@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.inherit;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -34,6 +35,7 @@ public interface ReferenceEntity extends IEntity {
     IPrimitive<String> name();
 
     @Owned
+    @MemberColumn(name = "rf")
     Base1Entity reference();
 
     @Owned

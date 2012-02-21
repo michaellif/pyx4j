@@ -70,8 +70,8 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("EMPLOYEE", "EMP");
         shortWords.add("DEPARTMENT", "DEPT");
         shortWords.add("DEPARTMENTS", "DEPTS");
-        shortWords.add("REFERENCE", "REF");
-        shortWords.add("REFERENCES", "REFS");
+        shortWords.add("REFERENCE", "RF");
+        shortWords.add("REFERENCES", "RFS");
         shortWords.add("ARCHIVE", "ARC");
         shortWords.add("ENTITY", "ENT");
         shortWords.add("ENTITIES", "ENTS");

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.inherit;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -32,6 +33,7 @@ public interface ReferenceNotOwnerEntity extends IEntity {
 
     IPrimitive<String> name();
 
+    @MemberColumn(name = "rf")
     Base1Entity reference();
 
     IList<Base1Entity> references();
