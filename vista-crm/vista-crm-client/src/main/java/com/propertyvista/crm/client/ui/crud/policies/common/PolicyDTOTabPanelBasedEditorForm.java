@@ -114,7 +114,11 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                     Class<? extends PolicyNode> selectedNodeType = event.getValue().getType();
                     boolean isOrganizationPoliciesNodeSelected = selectedNodeType.equals(OrganizationPoliciesNode.class);
                     get(proto().node()).setVisible(!isOrganizationPoliciesNodeSelected);
-                    if (isOrganizationPoliciesNodeSelected | !selectedNodeType.equals(getValue().node().getInstanceValueClass())) {
+
+                    // if selected node was changed, populate the polymorphic node editor with the empty node of the correct type
+                    if (isOrganizationPoliciesNodeSelected) {
+                        getValue().node().set(EntityFactory.create(OrganizationPoliciesNode.class));
+                    } else if (!selectedNodeType.equals(getValue().node().getInstanceValueClass())) {
                         get(proto().node()).populate(EntityFactory.create(selectedNodeType));
                     }
                 } else {
