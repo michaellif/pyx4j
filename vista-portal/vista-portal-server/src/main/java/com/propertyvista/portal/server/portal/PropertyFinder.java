@@ -31,7 +31,6 @@ import com.pyx4j.geo.GeoBox;
 import com.pyx4j.geo.GeoCircle;
 import com.pyx4j.geo.GeoPoint;
 
-import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -53,7 +52,8 @@ public class PropertyFinder {
         return PublicVisibilityType.global.equals(bld.marketing().visibility().getValue());
     }
 
-    private static void addSearchCriteria(EntityQueryCriteria<Building> dbCriteria, PropertySearchCriteria searchCriteria) {
+    // returns false if no results are expected based on the search criteria
+    private static boolean addSearchCriteria(EntityQueryCriteria<Building> dbCriteria, PropertySearchCriteria searchCriteria) {
         // add search criteria
         if (SearchType.city.equals(searchCriteria.searchType().getValue())) {
             String prov = searchCriteria.province().getValue();
@@ -102,7 +102,8 @@ public class PropertyFinder {
             }
             // filter buildings with filter 1
             if (bldFilter1.size() == 0) {
-                bldFilter1.add(ISharedUserEntity.DORMANT_KEY);
+                // empty set here means no match was found, so we can quit early
+                return false;
             }
             dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter1));
         }
@@ -128,7 +129,8 @@ public class PropertyFinder {
         }
         // add floorplan unit criteria
         if (fpSet1.size() == 0) {
-            fpSet1.add(ISharedUserEntity.DORMANT_KEY);
+            // quit early
+            return false;
         }
         fpCriteria.add(PropertyCriterion.in(fpCriteria.proto().id(), fpSet1));
         // 2.2 filter floorplans by other search criteria
@@ -157,16 +159,19 @@ public class PropertyFinder {
         }
         // filter buildings with filter 2
         if (bldFilter2.size() == 0) {
-            bldFilter2.add(ISharedUserEntity.DORMANT_KEY);
+            // quit early
+            return false;
         }
         dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter2));
 
+        return true;
     }
 
     public static List<Building> getPropertyList(PropertySearchCriteria searchCriteria) {
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
-        if (searchCriteria != null) {
-            addSearchCriteria(dbCriteria, searchCriteria);
+        if (searchCriteria != null && !addSearchCriteria(dbCriteria, searchCriteria)) {
+            // if search criteria returns nothing, quit now!
+            return null;
         }
 
         // get buildings

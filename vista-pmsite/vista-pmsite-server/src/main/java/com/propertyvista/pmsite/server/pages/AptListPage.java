@@ -129,7 +129,7 @@ public class AptListPage extends BasePage {
         }
         ViewMode viewMode = ViewMode.map;
         List<Building> searchResult = PropertyFinder.getPropertyList(criteria);
-        if (searchResult.size() > 0) {
+        if (searchResult != null && searchResult.size() > 0) {
             if (SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
                 // check view mode - Map/List
                 if (PMSiteClientPreferences.getClientPref("aptListMode") == null) {
@@ -161,7 +161,7 @@ public class AptListPage extends BasePage {
             } else {
                 viewMode = ViewMode.list;
                 add(new Label("aptListModeSwitch").setVisible(false));
-                add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PropertyFinder.getPropertyList(criteria)), viewMode));
+                add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(searchResult), viewMode));
                 add(new Label("jsAptListModeInfo").setVisible(false));
             }
         } else {

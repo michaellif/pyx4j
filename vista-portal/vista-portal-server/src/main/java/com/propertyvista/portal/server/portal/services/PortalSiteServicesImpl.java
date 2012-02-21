@@ -47,15 +47,20 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
         // get entire list
         List<Building> buildings = PropertyFinder.getPropertyList(null);
-        for (Building building : buildings) {
-            Map<Floorplan, List<AptUnit>> fpMap = PropertyFinder.getBuildingFloorplans(building);
-            PropertyDTO prop = Converter.convert(building, new ArrayList<Floorplan>(fpMap.keySet()));
-            ret.properties().add(prop);
-        }
-        // search by criteria
-        if (search != null) {
-            for (Building found : PropertyFinder.getPropertyList(search)) {
-                ret.filterIds().add(found.getPrimaryKey().asLong());
+        if (buildings != null && buildings.size() > 0) {
+            for (Building building : buildings) {
+                Map<Floorplan, List<AptUnit>> fpMap = PropertyFinder.getBuildingFloorplans(building);
+                PropertyDTO prop = Converter.convert(building, new ArrayList<Floorplan>(fpMap.keySet()));
+                ret.properties().add(prop);
+            }
+            // search by criteria
+            if (search != null) {
+                List<Building> result = PropertyFinder.getPropertyList(search);
+                if (result != null && result.size() > 0) {
+                    for (Building found : result) {
+                        ret.filterIds().add(found.getPrimaryKey().asLong());
+                    }
+                }
             }
         }
         callback.onSuccess(ret);
