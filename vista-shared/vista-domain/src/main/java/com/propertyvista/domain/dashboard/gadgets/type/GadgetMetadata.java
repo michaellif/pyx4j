@@ -14,7 +14,6 @@
 package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,7 +25,6 @@ import com.propertyvista.domain.dashboard.GadgetDockingMeta;
 
 @Inheritance
 @AbstractEntity
-@DiscriminatorValue("GadgetMetadata")
 public interface GadgetMetadata extends ISharedUserEntity {
 
     public enum RefreshInterval {
