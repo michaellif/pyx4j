@@ -82,11 +82,11 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria);
+    public <T extends IEntity> ICursorIterator<T> query(String encodedCursorReference, EntityQueryCriteria<T> criteria);
 
     public <T extends IEntity> List<Key> queryKeys(EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> ICursorIterator<Key> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria);
+    public <T extends IEntity> ICursorIterator<Key> queryKeys(String encodedCursorReference, EntityQueryCriteria<T> criteria);
 
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria);
 

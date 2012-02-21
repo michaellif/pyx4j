@@ -35,7 +35,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
-import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
 
 public class EntityEqualsTest extends InitializerTestBase {
 
@@ -152,7 +152,7 @@ public class EntityEqualsTest extends InitializerTestBase {
         ent1.setPrimaryKey(new Key(1));
 
         Concrete1Entity ent11 = EntityFactory.create(Concrete1Entity.class);
-        ent1.refference().set(ent11);
+        ent1.reference().set(ent11);
         ent11.setPrimaryKey(new Key(11));
         ent11.nameB1().setValue("B1.1");
         ent11.nameC1().setValue("C1.1");
@@ -161,7 +161,7 @@ public class EntityEqualsTest extends InitializerTestBase {
         ent2.setPrimaryKey(new Key(1));
 
         Concrete1Entity ent21 = EntityFactory.create(Concrete1Entity.class);
-        ent2.refference().set(ent21);
+        ent2.reference().set(ent21);
         ent21.setPrimaryKey(new Key(11));
         ent21.nameB1().setValue("B1.1");
         ent21.nameC1().setValue("C1.1");
@@ -197,29 +197,29 @@ public class EntityEqualsTest extends InitializerTestBase {
     }
 
     public void testIsEmptyAbstractSetMember() {
-        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+        ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
         Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
-        ent.refferences().add(ent1);
+        ent.references().add(ent1);
 
         assertTrue("should be Empty", ent1.isEmpty());
         assertFalse("Collection -> should NOT be Empty", ent.isEmpty());
 
         Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
         ent2.setPrimaryKey(new Key(22));
-        ent1.refference().set(ent2);
+        ent1.reference().set(ent2);
         assertTrue("should be still Empty", ent1.isEmpty());
     }
 
     public void testEqualAbstractSetMember() {
-        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+        ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
         Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
         ent1.setPrimaryKey(new Key(11));
-        ent.refferences().add(ent1);
+        ent.references().add(ent1);
 
         Concrete2Entity ent1dup = EntityFactory.create(Concrete2Entity.class);
         ent1dup.setPrimaryKey(new Key(11));
 
-        assertTrue("should be Equals", ent1dup.equals(ent.refferences().get(0)));
+        assertTrue("should be Equals", ent1dup.equals(ent.references().get(0)));
     }
 
 }

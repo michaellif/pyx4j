@@ -957,11 +957,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> ICursorIterator<T> query(final String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> ICursorIterator<T> query(final String encodedCursorReference, EntityQueryCriteria<T> criteria) {
         final Connection connection = connectionProvider.getConnection(ConnectionTarget.forRead);
         final TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
-        if (encodedCursorRefference != null) {
-            log.info("Received encodedCursorReference:" + encodedCursorRefference + ", will use it");
+        if (encodedCursorReference != null) {
+            log.info("Received encodedCursorReference:" + encodedCursorReference + ", will use it");
             // TODO
         }
         try {
@@ -987,7 +987,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 @Override
                 public String encodedCursorReference() {
                     // TODO proper encoded cursor reference has to be passed, this is just temporary
-                    return "" + encodedCursorRefference + "a";
+                    return "" + encodedCursorReference + "a";
                 }
 
                 @Override
@@ -1023,11 +1023,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> ICursorIterator<Key> queryKeys(final String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> ICursorIterator<Key> queryKeys(final String encodedCursorReference, EntityQueryCriteria<T> criteria) {
         final Connection connection = connectionProvider.getConnection(ConnectionTarget.forRead);
         final TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
-        if (encodedCursorRefference != null) {
-            log.info("Received encodedCursorReference:" + encodedCursorRefference + ", will use it");
+        if (encodedCursorReference != null) {
+            log.info("Received encodedCursorReference:" + encodedCursorReference + ", will use it");
             // TODO
         }
         try {
@@ -1053,7 +1053,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 @Override
                 public String encodedCursorReference() {
                     // TODO proper encoded cursor reference has to be passed, this is just temporary
-                    return "" + encodedCursorRefference + "a";
+                    return "" + encodedCursorReference + "a";
                 }
 
                 @Override

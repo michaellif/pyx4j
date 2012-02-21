@@ -68,14 +68,16 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("TEST", "T");
         shortWords.add("ORGANIZATION", "ORG");
         shortWords.add("EMPLOYEE", "EMP");
+        shortWords.add("DEPARTMENT", "DEPT");
         shortWords.add("DEPARTMENTS", "DEPTS");
-        shortWords.add("REFFERENCE", "REF");
-        shortWords.add("REFFERENCES", "REFS");
+        shortWords.add("REFERENCE", "REF");
+        shortWords.add("REFERENCES", "REFS");
         shortWords.add("ARCHIVE", "ARC");
         shortWords.add("ENTITY", "ENT");
         shortWords.add("ENTITIES", "ENTS");
         shortWords.add("SORTED", "SRT");
         shortWords.add("DETACHED", "DET");
+        shortWords.add("READ", "R");
         shortWords.add("OWNED", "OW");
         shortWords.add("OWNER", "OR");
         shortWords.add("MAIN", "M");
@@ -93,6 +95,8 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("AUTO", "A");
         shortWords.add("INVERSED", "R");
         shortWords.add("MANY", "M");
+        shortWords.add("LIST", "LST");
+        shortWords.add("VALUE", "VL");
         return new NamingConventionOracle(30, shortWords);
     }
 

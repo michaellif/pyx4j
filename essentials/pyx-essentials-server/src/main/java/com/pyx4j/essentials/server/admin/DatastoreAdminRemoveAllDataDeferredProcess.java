@@ -49,7 +49,7 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
 
     private LinkedList<Class<? extends IEntity>> queue;
 
-    private String encodedCursorRefference;
+    private String encodedCursorReference;
 
     private Class<? extends IEntity> entityClass;
 
@@ -78,7 +78,7 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
                 entityCount = 0;
             }
             EntityQueryCriteria criteria = EntityQueryCriteria.create(entityClass);
-            ICursorIterator<Key> ci = PersistenceServicesFactory.getPersistenceService().queryKeys(encodedCursorRefference, criteria);
+            ICursorIterator<Key> ci = PersistenceServicesFactory.getPersistenceService().queryKeys(encodedCursorReference, criteria);
             List<Key> primaryKeys = new Vector<Key>();
             while (ci.hasNext()) {
                 primaryKeys.add(ci.next());
@@ -89,7 +89,7 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
                     primaryKeys.clear();
                 }
                 if (quotaExceeded) {
-                    encodedCursorRefference = ci.encodedCursorReference();
+                    encodedCursorReference = ci.encodedCursorReference();
                     return;
                 }
             }
@@ -102,7 +102,7 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
 
             queue.poll();
             entityCount = 0;
-            encodedCursorRefference = null;
+            encodedCursorReference = null;
             entityClass = null;
         }
         compleate = true;

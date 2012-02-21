@@ -33,8 +33,8 @@ import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete3AssignedPKEntity;
-import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
-import com.pyx4j.entity.test.shared.domain.inherit.RefferenceNotOwnerEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.ReferenceNotOwnerEntity;
 
 public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
@@ -48,22 +48,22 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     private void testMemeber(TestCaseMethod testCaseMethod) {
 
-        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+        ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
         Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
         ent2.nameC2().setValue("c2:" + uniqueString());
         ent2.nameB1().setValue("b1:" + uniqueString());
         ent2.nameB2().setValue("b2:" + uniqueString());
-        ent.refference().set(ent2);
+        ent.reference().set(ent2);
 
         srvSave(ent, testCaseMethod);
 
-        RefferenceEntity entr = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
+        ReferenceEntity entr = srv.retrieve(ReferenceEntity.class, ent.getPrimaryKey());
 
-        Assert.assertFalse("Value retrieved", entr.refference().isValueDetached());
+        Assert.assertFalse("Value retrieved", entr.reference().isValueDetached());
 
-        Assert.assertEquals("Proper instance", Concrete2Entity.class, entr.refference().getInstanceValueClass());
+        Assert.assertEquals("Proper instance", Concrete2Entity.class, entr.reference().getInstanceValueClass());
 
-        Concrete2Entity ent2r = entr.refference().cast();
+        Concrete2Entity ent2r = entr.reference().cast();
 
         Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r.nameB1().getValue());
         Assert.assertEquals("Proper value", ent2.nameB2().getValue(), ent2r.nameB2().getValue());
@@ -86,7 +86,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Concrete1Entity ent2 = EntityFactory.create(Concrete1Entity.class);
         ent2.nameC1().setValue("c1:" + uniqueString());
         ent2.nameB1().setValue("n1:" + uniqueString());
-        ent.refference().set(ent2);
+        ent.reference().set(ent2);
 
         srv.persist(ent2);
 
@@ -95,13 +95,13 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Concrete2Entity entr = srv.retrieve(Concrete2Entity.class, ent.getPrimaryKey());
 
         Assert.assertEquals("Proper value", ent.nameC2().getValue(), entr.nameC2().getValue());
-        Assert.assertTrue("Value retrieved", entr.refference().isValueDetached());
-        Assert.assertEquals("Proper instance", Concrete1Entity.class, entr.refference().getInstanceValueClass());
+        Assert.assertTrue("Value retrieved", entr.reference().isValueDetached());
+        Assert.assertEquals("Proper instance", Concrete1Entity.class, entr.reference().getInstanceValueClass());
 
-        Concrete1Entity ent2r = entr.refference().cast();
+        Concrete1Entity ent2r = entr.reference().cast();
         Assert.assertEquals("Proper PK value", ent2.getPrimaryKey(), ent2r.getPrimaryKey());
 
-        srv.retrieve(entr.refference());
+        srv.retrieve(entr.reference());
         Assert.assertEquals("Proper PK value", ent2.id(), ent2r.id());
         Assert.assertEquals("Proper value", ent2.nameC1().getValue(), ent2r.nameC1().getValue());
         Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r.nameB1().getValue());
@@ -117,36 +117,36 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
     }
 
     private void testMemeberDetachedL2(TestCaseMethod testCaseMethod) {
-        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+        ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
         ent.name().setValue("r:" + uniqueString());
 
         Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
         ent1.nameC2().setValue("c2:" + uniqueString());
         ent1.nameB1().setValue("b1:" + uniqueString());
         ent1.nameB2().setValue("b2:" + uniqueString());
-        ent.refference().set(ent1);
+        ent.reference().set(ent1);
 
         Concrete1Entity ent2 = EntityFactory.create(Concrete1Entity.class);
         ent2.nameC1().setValue("c1:" + uniqueString());
         ent2.nameB1().setValue("n1:" + uniqueString());
-        ent1.refference().set(ent2);
+        ent1.reference().set(ent2);
 
         srv.persist(ent2);
 
         srvSave(ent, testCaseMethod);
 
-        RefferenceEntity entr = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
+        ReferenceEntity entr = srv.retrieve(ReferenceEntity.class, ent.getPrimaryKey());
 
         Assert.assertEquals("Proper value", ent.name().getValue(), entr.name().getValue());
 
-        Concrete2Entity ent1r = entr.refference().cast();
-        Assert.assertEquals("Proper instance", Concrete1Entity.class, ent1r.refference().getInstanceValueClass());
+        Concrete2Entity ent1r = entr.reference().cast();
+        Assert.assertEquals("Proper instance", Concrete1Entity.class, ent1r.reference().getInstanceValueClass());
 
-        Concrete1Entity ent2r = ent1r.refference().cast();
+        Concrete1Entity ent2r = ent1r.reference().cast();
         Assert.assertTrue("Value retrived", ent2r.isValueDetached());
         Assert.assertEquals("Proper PK value", ent2.getPrimaryKey(), ent2r.getPrimaryKey());
 
-        srv.retrieve(ent1r.refference());
+        srv.retrieve(ent1r.reference());
         Assert.assertEquals("Proper PK value", ent2.id(), ent2r.id());
         Assert.assertEquals("Proper value", ent2.nameC1().getValue(), ent2r.nameC1().getValue());
         Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r.nameB1().getValue());
@@ -163,29 +163,29 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     private void testListMemeber(TestCaseMethod testCaseMethod) {
 
-        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+        ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
 
         Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
         ent1.nameC1().setValue("c1:" + uniqueString());
         ent1.nameB1().setValue("n1:" + uniqueString());
-        ent.refferences().add(ent1);
+        ent.references().add(ent1);
 
         Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
         ent2.nameC2().setValue("c2:" + uniqueString());
         ent2.nameB1().setValue("b1:" + uniqueString());
         ent2.nameB2().setValue("b2:" + uniqueString());
-        ent.refferences().add(ent2);
+        ent.references().add(ent2);
 
         srvSave(ent, testCaseMethod);
-        Assert.assertEquals("Proper size", 2, ent.refferences().size());
+        Assert.assertEquals("Proper size", 2, ent.references().size());
 
         // Save with no changes
         srvSave(ent, testCaseMethod);
 
-        RefferenceEntity entr1 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
-        Assert.assertEquals("Proper size", 2, entr1.refferences().size());
+        ReferenceEntity entr1 = srv.retrieve(ReferenceEntity.class, ent.getPrimaryKey());
+        Assert.assertEquals("Proper size", 2, entr1.references().size());
 
-        Base1Entity ent1br1 = entr1.refferences().get(0);
+        Base1Entity ent1br1 = entr1.references().get(0);
 
         Assert.assertEquals("Proper instance", Concrete1Entity.class, ent1br1.getInstanceValueClass());
         Concrete1Entity ent1r1 = ent1br1.cast();
@@ -193,7 +193,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Assert.assertEquals("Proper value", ent1.nameC1().getValue(), ent1r1.nameC1().getValue());
         Assert.assertEquals("Proper value", ent1.nameB1().getValue(), ent1r1.nameB1().getValue());
 
-        Base1Entity ent2br1 = entr1.refferences().get(1);
+        Base1Entity ent2br1 = entr1.references().get(1);
 
         Assert.assertEquals("Proper instance", Concrete2Entity.class, ent2br1.getInstanceValueClass());
         Concrete2Entity ent2r1 = ent2br1.cast();
@@ -205,16 +205,16 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         assertFalse("Items of different type are different", ent1br1.equals(ent2br1));
 
         // test change order
-        entr1.refferences().remove(ent1r1);
-        Assert.assertEquals("Item was removed", 1, entr1.refferences().size());
+        entr1.references().remove(ent1r1);
+        Assert.assertEquals("Item was removed", 1, entr1.references().size());
 
-        entr1.refferences().add(ent1r1);
+        entr1.references().add(ent1r1);
         srvSave(entr1, testCaseMethod);
 
-        RefferenceEntity entr2 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
-        Assert.assertEquals("Proper size", 2, entr2.refferences().size());
+        ReferenceEntity entr2 = srv.retrieve(ReferenceEntity.class, ent.getPrimaryKey());
+        Assert.assertEquals("Proper size", 2, entr2.references().size());
 
-        Base1Entity ent1br2 = entr2.refferences().get(1);
+        Base1Entity ent1br2 = entr2.references().get(1);
 
         Assert.assertEquals("Proper instance", Concrete1Entity.class, ent1br2.getInstanceValueClass());
         Concrete1Entity ent1r2 = ent1br2.cast();
@@ -222,7 +222,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Assert.assertEquals("Proper value", ent1.nameC1().getValue(), ent1r2.nameC1().getValue());
         Assert.assertEquals("Proper value", ent1.nameB1().getValue(), ent1r2.nameB1().getValue());
 
-        Base1Entity ent2r2b = entr2.refferences().get(0);
+        Base1Entity ent2r2b = entr2.references().get(0);
 
         Assert.assertEquals("Proper instance", Concrete2Entity.class, ent2r2b.getInstanceValueClass());
         Concrete2Entity ent2r2 = ent2r2b.cast();
@@ -243,12 +243,12 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     public void testOwnedListUpdate(TestCaseMethod testCaseMethod) {
 
-        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+        ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
 
         Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
         ent1.nameC1().setValue("c1:" + uniqueString());
         ent1.nameB1().setValue("n1:" + uniqueString());
-        ent.refference().set(ent1);
+        ent.reference().set(ent1);
 
         Task task11 = EntityFactory.create(Task.class);
         task11.description().setValue("Do Nothing");
@@ -260,8 +260,8 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
         srv.persist(ent);
 
-        RefferenceEntity entr1 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
-        Base1Entity ent1br1 = entr1.refference();
+        ReferenceEntity entr1 = srv.retrieve(ReferenceEntity.class, ent.getPrimaryKey());
+        Base1Entity ent1br1 = entr1.reference();
         Concrete1Entity ent1r1 = ent1br1.cast();
 
         Assert.assertEquals("retrieved List size", 2, ent1r1.tasksSorted().size());
@@ -276,8 +276,8 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
         srvSave(entr1, testCaseMethod);
 
-        RefferenceEntity entr2 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
-        Base1Entity ent1br2 = entr2.refference();
+        ReferenceEntity entr2 = srv.retrieve(ReferenceEntity.class, ent.getPrimaryKey());
+        Base1Entity ent1br2 = entr2.reference();
         Concrete1Entity ent1r2 = ent1br2.cast();
 
         Assert.assertEquals("retrieved List size", 1, ent1r2.tasksSorted().size());
@@ -299,12 +299,12 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     public void testInListOwnedListUpdate(TestCaseMethod testCaseMethod) {
 
-        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+        ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
 
         Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
         ent1.nameC1().setValue("c1:" + uniqueString());
         ent1.nameB1().setValue("n1:" + uniqueString());
-        ent.refferences().add(ent1);
+        ent.references().add(ent1);
 
         Task task11 = EntityFactory.create(Task.class);
         task11.description().setValue("Do Nothing");
@@ -316,8 +316,8 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
         srv.persist(ent);
 
-        RefferenceEntity entr1 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
-        Base1Entity ent1br1 = entr1.refferences().get(0);
+        ReferenceEntity entr1 = srv.retrieve(ReferenceEntity.class, ent.getPrimaryKey());
+        Base1Entity ent1br1 = entr1.references().get(0);
         Concrete1Entity ent1r1 = ent1br1.cast();
 
         Assert.assertEquals("retrieved List size", 2, ent1r1.tasksSorted().size());
@@ -332,8 +332,8 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
         srvSave(entr1, testCaseMethod);
 
-        RefferenceEntity entr2 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
-        Base1Entity ent1br2 = entr2.refferences().get(0);
+        ReferenceEntity entr2 = srv.retrieve(ReferenceEntity.class, ent.getPrimaryKey());
+        Base1Entity ent1br2 = entr2.references().get(0);
         Concrete1Entity ent1r2 = ent1br2.cast();
 
         Assert.assertEquals("retrieved List size", 1, ent1r2.tasksSorted().size());
@@ -353,7 +353,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         ent1.testId().setValue(testId);
         Concrete1Entity ent11 = EntityFactory.create(Concrete1Entity.class);
         ent11.nameC1().setValue("c1:" + uniqueString());
-        ent1.refference().set(ent11);
+        ent1.reference().set(ent11);
         srv.persist(ent11);
         srv.persist(ent1);
 
@@ -363,7 +363,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Concrete3AssignedPKEntity ent21 = EntityFactory.create(Concrete3AssignedPKEntity.class);
         ent21.setPrimaryKey(ent11.getPrimaryKey());
         ent21.nameC3().setValue("c3:" + uniqueString());
-        ent2.refference().set(ent21);
+        ent2.reference().set(ent21);
         srv.persist(ent21);
         srv.persist(ent2);
 
@@ -371,29 +371,29 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         {
             EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.eq(criteria.proto().refference(), ent21));
+            criteria.add(PropertyCriterion.eq(criteria.proto().reference(), ent21));
             List<Concrete2Entity> found = srv.query(criteria);
             Assert.assertEquals("retrieved size", 1, found.size());
-            Assert.assertEquals(ent21, found.get(0).refference());
+            Assert.assertEquals(ent21, found.get(0).reference());
         }
 
         {
             EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.eq(criteria.proto().refference(), ent11));
+            criteria.add(PropertyCriterion.eq(criteria.proto().reference(), ent11));
             Concrete2Entity found = srv.retrieve(criteria);
             Assert.assertEquals(ent1, found);
-            Assert.assertEquals(ent11, found.refference());
+            Assert.assertEquals(ent11, found.reference());
         }
 
         //Query by Class
         {
             EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.eq(criteria.proto().refference(), Concrete1Entity.class));
+            criteria.add(PropertyCriterion.eq(criteria.proto().reference(), Concrete1Entity.class));
             Concrete2Entity found = srv.retrieve(criteria);
             Assert.assertEquals(ent1, found);
-            Assert.assertEquals(ent11, found.refference());
+            Assert.assertEquals(ent11, found.reference());
         }
     }
 
@@ -401,41 +401,41 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         String testId = uniqueString();
 
         // Prepare data
-        RefferenceNotOwnerEntity ent1 = EntityFactory.create(RefferenceNotOwnerEntity.class);
+        ReferenceNotOwnerEntity ent1 = EntityFactory.create(ReferenceNotOwnerEntity.class);
         ent1.testId().setValue(testId);
         Concrete1Entity ent11 = EntityFactory.create(Concrete1Entity.class);
         ent11.nameC1().setValue("c1:" + uniqueString());
-        ent1.refferences().add(ent11);
+        ent1.references().add(ent11);
         srv.persist(ent11);
         srv.persist(ent1);
 
-        RefferenceNotOwnerEntity ent2 = EntityFactory.create(RefferenceNotOwnerEntity.class);
+        ReferenceNotOwnerEntity ent2 = EntityFactory.create(ReferenceNotOwnerEntity.class);
         ent2.testId().setValue(testId);
         // Force creation of second entity of different type with the same key
         Concrete3AssignedPKEntity ent21 = EntityFactory.create(Concrete3AssignedPKEntity.class);
         ent21.setPrimaryKey(ent11.getPrimaryKey());
         ent21.nameC3().setValue("c3:" + uniqueString());
-        ent2.refferences().add(ent21);
+        ent2.references().add(ent21);
         srv.persist(ent21);
         srv.persist(ent2);
 
         {
-            EntityQueryCriteria<RefferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(RefferenceNotOwnerEntity.class);
+            EntityQueryCriteria<ReferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(ReferenceNotOwnerEntity.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.eq(criteria.proto().refferences(), ent21));
-            List<RefferenceNotOwnerEntity> found = srv.query(criteria);
+            criteria.add(PropertyCriterion.eq(criteria.proto().references(), ent21));
+            List<ReferenceNotOwnerEntity> found = srv.query(criteria);
             Assert.assertEquals("retrieved size", 1, found.size());
-            Assert.assertEquals(ent21, found.get(0).refferences().get(0));
+            Assert.assertEquals(ent21, found.get(0).references().get(0));
         }
 
         //Query by Class
         {
-            EntityQueryCriteria<RefferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(RefferenceNotOwnerEntity.class);
+            EntityQueryCriteria<ReferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(ReferenceNotOwnerEntity.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.eq(criteria.proto().refferences(), Concrete1Entity.class));
-            RefferenceNotOwnerEntity found = srv.retrieve(criteria);
+            criteria.add(PropertyCriterion.eq(criteria.proto().references(), Concrete1Entity.class));
+            ReferenceNotOwnerEntity found = srv.retrieve(criteria);
             Assert.assertEquals(ent1, found);
-            Assert.assertEquals(ent11, found.refferences().get(0));
+            Assert.assertEquals(ent11, found.references().get(0));
         }
     }
 }

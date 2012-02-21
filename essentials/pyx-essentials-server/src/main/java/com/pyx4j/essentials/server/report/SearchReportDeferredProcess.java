@@ -54,7 +54,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
 
     private final ReportRequest request;
 
-    private String encodedCursorRefference;
+    private String encodedCursorReference;
 
     protected final Class<? extends IEntity> entityClass;
 
@@ -101,7 +101,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
 
                 }
                 @SuppressWarnings("unchecked")
-                ICursorIterator<E> it = (ICursorIterator<E>) Persistence.service().query(encodedCursorRefference, request.getCriteria());
+                ICursorIterator<E> it = (ICursorIterator<E>) Persistence.service().query(encodedCursorReference, request.getCriteria());
                 try {
                     int currentFetchCount = 0;
                     while (it.hasNext()) {
@@ -114,7 +114,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
                             if ((System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) || (currentFetchCount > 200)) {
                                 log.warn("Executions time quota exceeded {}; rows {}", currentFetchCount, System.currentTimeMillis() - start);
                                 log.debug("fetch will continue rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
-                                encodedCursorRefference = it.encodedCursorReference();
+                                encodedCursorReference = it.encodedCursorReference();
                                 return;
                             }
                         }

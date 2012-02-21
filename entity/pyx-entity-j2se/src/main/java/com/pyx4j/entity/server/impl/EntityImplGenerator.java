@@ -436,20 +436,20 @@ public class EntityImplGenerator {
             return;
         }
         CtClass ownerType = method.getReturnType();
-        boolean ownedRefferenceFound = false;
+        boolean ownedReferenceFound = false;
         for (CtMethod ownerMethod : getAllMethodsSortedByDeclaration(ownerType)) {
             if (ownerMethod.getReturnType().equals(interfaceCtClass)) {
                 Owned owned = (Owned) ownerMethod.getAnnotation(Owned.class);
                 if (owned == null) {
                     throw new AssertionError("Missing @Owned annotation on member '" + ownerMethod.getName() + "' in " + ownerType.getName());
                 }
-                ownedRefferenceFound = true;
+                ownedReferenceFound = true;
             } else {
                 //TODO Polymorphic case
             }
 
         }
-        if (!ownedRefferenceFound) {
+        if (!ownedReferenceFound) {
             //throw new AssertionError("Missing @Owned member of type " + interfaceCtClass.getName() + " in " + ownerType.getName());
         }
 

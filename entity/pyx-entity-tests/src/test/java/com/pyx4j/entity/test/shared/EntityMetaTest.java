@@ -128,41 +128,41 @@ public class EntityMetaTest extends InitializerTestBase {
 
         Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
 
-        Base1Entity memberEmpty = ent2.refference();
+        Base1Entity memberEmpty = ent2.reference();
         assertFalse("Right class " + memberEmpty.getClass(), memberEmpty instanceof Concrete2Entity);
         assertEquals("No cast required", true, memberEmpty.isObjectClassSameAsDef());
 
-        assertTrue("Has member nameB1", ent2.refference().getEntityMeta().getMemberNames().contains("nameB1"));
-        assertFalse("Has member nameB2", ent2.refference().getEntityMeta().getMemberNames().contains("nameB2"));
-        assertFalse("Has member nameC2", ent2.refference().getEntityMeta().getMemberNames().contains("nameC2"));
+        assertTrue("Has member nameB1", ent2.reference().getEntityMeta().getMemberNames().contains("nameB1"));
+        assertFalse("Has member nameB2", ent2.reference().getEntityMeta().getMemberNames().contains("nameB2"));
+        assertFalse("Has member nameC2", ent2.reference().getEntityMeta().getMemberNames().contains("nameC2"));
 
-        ent2.refference().set(ent1);
+        ent2.reference().set(ent1);
 
-        Base1Entity member = ent2.refference();
+        Base1Entity member = ent2.reference();
         assertTrue("Right class " + member.getClass(), member instanceof Base1Entity);
         assertFalse("Right class " + member.getClass(), member instanceof Concrete2Entity);
         assertEquals("Cast required", false, member.isObjectClassSameAsDef());
 
         // New member did not appeared, even so the value is Concrete2Entity
-        assertFalse("Has member nameB2", ent2.refference().getEntityMeta().getMemberNames().contains("nameB2"));
-        assertFalse("Has member nameC2", ent2.refference().getEntityMeta().getMemberNames().contains("nameC2"));
+        assertFalse("Has member nameB2", ent2.reference().getEntityMeta().getMemberNames().contains("nameB2"));
+        assertFalse("Has member nameC2", ent2.reference().getEntityMeta().getMemberNames().contains("nameC2"));
 
         Concrete2Entity ent1x;
         try {
             // This will not work.
-            ent1x = (Concrete2Entity) ent2.refference();
+            ent1x = (Concrete2Entity) ent2.reference();
             fail("the member should stay the same");
         } catch (ClassCastException ok) {
         }
 
-        ent1x = ent2.refference().cast();
+        ent1x = ent2.reference().cast();
 
         assertEquals("value of name1", "v-name1", ent1x.nameB1().getValue());
         assertEquals("value of name2", "v-name2", ent1x.nameB2().getValue());
         assertEquals("value of name", "v-name", ent1x.nameC2().getValue());
 
         ent1x.nameB1().setValue("v-name1-mod");
-        assertEquals("value of name1 change", "v-name1-mod", ent2.refference().nameB1().getValue());
+        assertEquals("value of name1 change", "v-name1-mod", ent2.reference().nameB1().getValue());
     }
 
     public void testDownCast() {
@@ -205,9 +205,9 @@ public class EntityMetaTest extends InitializerTestBase {
         Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
         ent1.setPrimaryKey(new Key(11));
 
-        root.refference().set(ent1);
+        root.reference().set(ent1);
 
-        assertTrue("Abstract member equals", ent1.equals(root.refference()));
+        assertTrue("Abstract member equals", ent1.equals(root.reference()));
     }
 
 }

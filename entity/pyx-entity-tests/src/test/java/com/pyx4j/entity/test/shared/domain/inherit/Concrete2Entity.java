@@ -33,6 +33,6 @@ public interface Concrete2Entity extends Base2Entity {
 
     // Reference of undefined type.
     @Detached
-    Base1Entity refference();
+    Base1Entity reference();
 
 }

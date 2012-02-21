@@ -71,8 +71,8 @@ public abstract class AbstractBackupReceiver implements BackupReceiver {
                 consumer.save(responce.getRecords());
             }
             thisCount += responce.size();
-            request.setEncodedCursorRefference(responce.getEncodedCursorRefference());
-        } while (responce.getEncodedCursorRefference() != null);
+            request.setEncodedCursorReference(responce.getEncodedCursorReference());
+        } while (responce.getEncodedCursorReference() != null);
 
         log.info("Got {} of {}", thisCount, persistenceName);
         stats.put(persistenceName, thisCount);

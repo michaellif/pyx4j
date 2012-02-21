@@ -32,7 +32,7 @@ import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
-import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
 
 public class CollectionsImplementationTest extends InitializerTestBase {
 
@@ -90,7 +90,7 @@ public class CollectionsImplementationTest extends InitializerTestBase {
         assertTrue("contains 3", emp.tasksSorted().contains(task1));
     }
 
-    public void testSetMemberRefference() {
+    public void testSetMemberReference() {
         Employee emp = EntityFactory.create(Employee.class);
 
         Task task1 = EntityFactory.create(Task.class);
@@ -108,17 +108,17 @@ public class CollectionsImplementationTest extends InitializerTestBase {
     public void testAbstractSetMember() {
         Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
 
-        RefferenceEntity ent2 = EntityFactory.create(RefferenceEntity.class);
+        ReferenceEntity ent2 = EntityFactory.create(ReferenceEntity.class);
 
-        ent2.refferences().add(ent1);
+        ent2.references().add(ent1);
 
-        assertEquals("collection size", 1, ent2.refferences().size());
-        Base1Entity item = ent2.refferences().iterator().next();
+        assertEquals("collection size", 1, ent2.references().size());
+        Base1Entity item = ent2.references().iterator().next();
 
         assertTrue("item data type " + item.getClass(), item instanceof Concrete2Entity);
 
-        ent2.refferences().remove(ent1);
-        assertEquals("empty collection size", 0, ent2.refferences().size());
+        ent2.references().remove(ent1);
+        assertEquals("empty collection size", 0, ent2.references().size());
     }
 
     public void testPolymorphicRemoval() {
@@ -130,18 +130,18 @@ public class CollectionsImplementationTest extends InitializerTestBase {
         Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
         ent2.setPrimaryKey(new Key(1));
 
-        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
-        ent.refferences().add(ent1);
-        ent.refferences().add(ent2);
-        Assert.assertEquals("Item was added", 2, ent.refferences().size());
+        ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
+        ent.references().add(ent1);
+        ent.references().add(ent2);
+        Assert.assertEquals("Item was added", 2, ent.references().size());
 
         Concrete1Entity ent1x = EntityFactory.create(Concrete1Entity.class);
         ent1x.setPrimaryKey(new Key(1));
 
-        ent.refferences().remove(ent1x);
-        Assert.assertEquals("Item was removed", 1, ent.refferences().size());
+        ent.references().remove(ent1x);
+        Assert.assertEquals("Item was removed", 1, ent.references().size());
 
-        Assert.assertEquals("Proper item reamins", ent2, ent.refferences().get(0));
+        Assert.assertEquals("Proper item reamins", ent2, ent.references().get(0));
 
     }
 }

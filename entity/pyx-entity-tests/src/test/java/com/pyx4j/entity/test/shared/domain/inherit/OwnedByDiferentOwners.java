@@ -33,7 +33,7 @@ public interface OwnedByDiferentOwners extends IEntity {
 
     @Owner
     @JoinColumn
-    Base1Entity ownerRefference();
+    Base1Entity ownerReference();
 
     public interface OrderInOwner extends ColumnId {
 

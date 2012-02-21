@@ -88,7 +88,7 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         Assert.assertEquals("address.streetName Value", emp1.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
     }
 
-    public void testUpdateRefference() {
+    public void testUpdateReference() {
         Employee emp1 = EntityFactory.create(Employee.class);
 
         emp1.workAddress().setPrimaryKey(new Key(11));

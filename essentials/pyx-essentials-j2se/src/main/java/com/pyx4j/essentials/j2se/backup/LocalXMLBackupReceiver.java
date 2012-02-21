@@ -180,8 +180,8 @@ public class LocalXMLBackupReceiver extends AbstractBackupReceiver {
         }
 
         ListIterator<HashMap<String, BackupEntityProperty>> iterator;
-        if (request.getEncodedCursorRefference() != null) {
-            iterator = entityList.listIterator(Integer.valueOf(request.getEncodedCursorRefference()));
+        if (request.getEncodedCursorReference() != null) {
+            iterator = entityList.listIterator(Integer.valueOf(request.getEncodedCursorReference()));
         } else {
             iterator = entityList.listIterator();
         }
@@ -189,7 +189,7 @@ public class LocalXMLBackupReceiver extends AbstractBackupReceiver {
             HashMap<String, BackupEntityProperty> entityRecord = iterator.next();
             response.addRecord(entityRecord);
             if (response.size() >= request.getResponceSize()) {
-                response.setEncodedCursorRefference(String.valueOf(iterator.nextIndex()));
+                response.setEncodedCursorReference(String.valueOf(iterator.nextIndex()));
                 break;
             }
         }

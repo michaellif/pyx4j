@@ -1418,7 +1418,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> ICursorIterator<T> query(String encodedCursorReference, EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
         final Class<T> entityClass = criteria.getEntityClass();
@@ -1433,8 +1433,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         final RetrieveRequestsAggregator aggregator = new RetrieveRequestsAggregator(this);
 
         final QueryResultIterable<Entity> iterable;
-        if (encodedCursorRefference != null) {
-            iterable = pq.asQueryResultIterable(FetchOptions.Builder.withStartCursor(Cursor.fromWebSafeString(encodedCursorRefference)).prefetchSize(40));
+        if (encodedCursorReference != null) {
+            iterable = pq.asQueryResultIterable(FetchOptions.Builder.withStartCursor(Cursor.fromWebSafeString(encodedCursorReference)).prefetchSize(40));
         } else {
             iterable = pq.asQueryResultIterable(FetchOptions.Builder.withPrefetchSize(40));
         }
@@ -1511,7 +1511,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> ICursorIterator<com.pyx4j.commons.Key> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> ICursorIterator<com.pyx4j.commons.Key> queryKeys(String encodedCursorReference, EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
         final Class<T> entityClass = criteria.getEntityClass();
@@ -1525,8 +1525,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         PreparedQuery pq = datastore.prepare(query);
 
         final QueryResultIterable<Entity> iterable;
-        if (encodedCursorRefference != null) {
-            iterable = pq.asQueryResultIterable(FetchOptions.Builder.withStartCursor(Cursor.fromWebSafeString(encodedCursorRefference)));
+        if (encodedCursorReference != null) {
+            iterable = pq.asQueryResultIterable(FetchOptions.Builder.withStartCursor(Cursor.fromWebSafeString(encodedCursorReference)));
         } else {
             iterable = pq.asQueryResultIterable();
         }

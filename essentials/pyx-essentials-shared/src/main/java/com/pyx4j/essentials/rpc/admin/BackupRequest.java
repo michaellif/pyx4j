@@ -30,7 +30,7 @@ public class BackupRequest implements Serializable {
 
     private String entityKind;
 
-    private String encodedCursorRefference;
+    private String encodedCursorReference;
 
     private int responceSize = DEFAULT_BATCH_SIZE;
 
@@ -46,12 +46,12 @@ public class BackupRequest implements Serializable {
         this.entityKind = entityKind;
     }
 
-    public String getEncodedCursorRefference() {
-        return encodedCursorRefference;
+    public String getEncodedCursorReference() {
+        return encodedCursorReference;
     }
 
-    public void setEncodedCursorRefference(String encodedCursorRefference) {
-        this.encodedCursorRefference = encodedCursorRefference;
+    public void setEncodedCursorReference(String encodedCursorReference) {
+        this.encodedCursorReference = encodedCursorReference;
     }
 
     public int getResponceSize() {

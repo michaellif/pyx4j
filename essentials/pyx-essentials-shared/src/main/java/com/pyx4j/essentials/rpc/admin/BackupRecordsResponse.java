@@ -30,7 +30,7 @@ public class BackupRecordsResponse implements Serializable {
 
     private final Vector<HashMap<String, BackupEntityProperty>> records;
 
-    private String encodedCursorRefference;
+    private String encodedCursorReference;
 
     public BackupRecordsResponse() {
         records = new Vector<HashMap<String, BackupEntityProperty>>();
@@ -48,11 +48,11 @@ public class BackupRecordsResponse implements Serializable {
         this.records.add(record);
     }
 
-    public String getEncodedCursorRefference() {
-        return encodedCursorRefference;
+    public String getEncodedCursorReference() {
+        return encodedCursorReference;
     }
 
-    public void setEncodedCursorRefference(String encodedCursorRefference) {
-        this.encodedCursorRefference = encodedCursorRefference;
+    public void setEncodedCursorReference(String encodedCursorReference) {
+        this.encodedCursorReference = encodedCursorReference;
     }
 }

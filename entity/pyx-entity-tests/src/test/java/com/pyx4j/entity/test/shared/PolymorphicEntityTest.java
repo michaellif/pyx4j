@@ -30,26 +30,26 @@ import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.OwnedByDiferentOwners;
-import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
-import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntityDTO;
+import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntityDTO;
 
 public class PolymorphicEntityTest extends InitializerTestBase {
 
     public void testAssignments() {
 
-        RefferenceEntityDTO entDTO = EntityFactory.create(RefferenceEntityDTO.class);
+        ReferenceEntityDTO entDTO = EntityFactory.create(ReferenceEntityDTO.class);
         Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
         ent2.nameC2().setValue("c2");
         ent2.nameB1().setValue("b1");
         ent2.nameB2().setValue("b2");
-        entDTO.refference().set(ent2);
+        entDTO.reference().set(ent2);
 
-        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+        ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
         ent.setValue(entDTO.getValue());
 
-        Assert.assertEquals("Proper instance", Concrete2Entity.class, ent.refference().getInstanceValueClass());
+        Assert.assertEquals("Proper instance", Concrete2Entity.class, ent.reference().getInstanceValueClass());
 
-        Concrete2Entity ent2r = ent.refference().cast();
+        Concrete2Entity ent2r = ent.reference().cast();
 
         Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r.nameB1().getValue());
         Assert.assertEquals("Proper value", ent2.nameB2().getValue(), ent2r.nameB2().getValue());
@@ -57,22 +57,22 @@ public class PolymorphicEntityTest extends InitializerTestBase {
     }
 
     public void testIsAssignableFrom() {
-        RefferenceEntityDTO entDTO = EntityFactory.create(RefferenceEntityDTO.class);
+        ReferenceEntityDTO entDTO = EntityFactory.create(ReferenceEntityDTO.class);
 
-        assertTrue("Member isAssignableFrom ConcreteEntity", entDTO.refference().isAssignableFrom(Concrete2Entity.class));
-        assertTrue("Member isAssignableFrom Base2Entity its base", entDTO.refference().isAssignableFrom(Base2Entity.class));
-        assertTrue("Member isAssignableFrom Base1Entity its base", entDTO.refference().isAssignableFrom(Base1Entity.class));
+        assertTrue("Member isAssignableFrom ConcreteEntity", entDTO.reference().isAssignableFrom(Concrete2Entity.class));
+        assertTrue("Member isAssignableFrom Base2Entity its base", entDTO.reference().isAssignableFrom(Base2Entity.class));
+        assertTrue("Member isAssignableFrom Base1Entity its base", entDTO.reference().isAssignableFrom(Base1Entity.class));
 
         Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
-        entDTO.refference().set(ent2);
+        entDTO.reference().set(ent2);
 
-        assertTrue("Member isAssignableFrom ConcreteEntity", entDTO.refference().isAssignableFrom(Concrete2Entity.class));
-        assertTrue("Member isAssignableFrom Base2Entity its base", entDTO.refference().isAssignableFrom(Base2Entity.class));
-        assertTrue("Member isAssignableFrom Base1Entity its base", entDTO.refference().isAssignableFrom(Base1Entity.class));
+        assertTrue("Member isAssignableFrom ConcreteEntity", entDTO.reference().isAssignableFrom(Concrete2Entity.class));
+        assertTrue("Member isAssignableFrom Base2Entity its base", entDTO.reference().isAssignableFrom(Base2Entity.class));
+        assertTrue("Member isAssignableFrom Base1Entity its base", entDTO.reference().isAssignableFrom(Base1Entity.class));
 
-        assertTrue("Member instanceOf ConcreteEntity", entDTO.refference().isInstanceOf(Concrete2Entity.class));
-        assertTrue("Member instanceOf Base2Entity its base", entDTO.refference().isInstanceOf(Base2Entity.class));
-        assertTrue("Member instanceOf Base1Entity its base", entDTO.refference().isInstanceOf(Base1Entity.class));
+        assertTrue("Member instanceOf ConcreteEntity", entDTO.reference().isInstanceOf(Concrete2Entity.class));
+        assertTrue("Member instanceOf Base2Entity its base", entDTO.reference().isInstanceOf(Base2Entity.class));
+        assertTrue("Member instanceOf Base1Entity its base", entDTO.reference().isInstanceOf(Base1Entity.class));
     }
 
     public void testOwnerAssignment() {
@@ -81,16 +81,16 @@ public class PolymorphicEntityTest extends InitializerTestBase {
 
             OwnedByDiferentOwners child = EntityFactory.create(OwnedByDiferentOwners.class);
             master.ownedItem().set(child);
-            Assert.assertEquals("owner is abstract class", Base1Entity.class, child.ownerRefference().getValueClass());
-            Assert.assertEquals("Proper class", Concrete2Entity.class, child.ownerRefference().getInstanceValueClass());
+            Assert.assertEquals("owner is abstract class", Base1Entity.class, child.ownerReference().getValueClass());
+            Assert.assertEquals("Proper class", Concrete2Entity.class, child.ownerReference().getInstanceValueClass());
         }
 
         {
             Concrete2Entity master = EntityFactory.create(Concrete2Entity.class);
             OwnedByDiferentOwners child = EntityFactory.create(OwnedByDiferentOwners.class);
             master.ownedItems().add(child);
-            Assert.assertEquals("owner is abstract class", Base1Entity.class, child.ownerRefference().getValueClass());
-            Assert.assertEquals("Proper class", Concrete2Entity.class, child.ownerRefference().getInstanceValueClass());
+            Assert.assertEquals("owner is abstract class", Base1Entity.class, child.ownerReference().getValueClass());
+            Assert.assertEquals("Proper class", Concrete2Entity.class, child.ownerReference().getInstanceValueClass());
         }
 
         {
@@ -99,8 +99,8 @@ public class PolymorphicEntityTest extends InitializerTestBase {
             List<OwnedByDiferentOwners> childern = new Vector<OwnedByDiferentOwners>();
             childern.add(child);
             master.ownedItems().addAll(childern);
-            Assert.assertEquals("owner is abstract class", Base1Entity.class, child.ownerRefference().getValueClass());
-            Assert.assertEquals("Proper class", Concrete2Entity.class, child.ownerRefference().getInstanceValueClass());
+            Assert.assertEquals("owner is abstract class", Base1Entity.class, child.ownerReference().getValueClass());
+            Assert.assertEquals("Proper class", Concrete2Entity.class, child.ownerReference().getInstanceValueClass());
         }
     }
 }

@@ -107,9 +107,9 @@ public class BackupServicesImpl implements BackupServices {
 
             PreparedQuery preparedQuery = datastore.prepare(query);
             QueryResultIterable<Entity> iterable;
-            if (request.getEncodedCursorRefference() != null) {
+            if (request.getEncodedCursorReference() != null) {
                 iterable = preparedQuery.asQueryResultIterable(FetchOptions.Builder.withStartCursor(Cursor.fromWebSafeString(request
-                        .getEncodedCursorRefference())));
+                        .getEncodedCursorReference())));
             } else {
                 iterable = preparedQuery.asQueryResultIterable();
             }
@@ -126,7 +126,7 @@ public class BackupServicesImpl implements BackupServices {
                 response.addRecord(record);
                 boolean quotaExceeded = System.currentTimeMillis() - start > Consts.SEC2MSEC * TIME_QUOTA_SEC;
                 if ((response.size() >= request.getResponceSize()) || (quotaExceeded)) {
-                    response.setEncodedCursorRefference(iterator.getCursor().toWebSafeString());
+                    response.setEncodedCursorReference(iterator.getCursor().toWebSafeString());
                     log.debug("Executions time quota exceeded {}", System.currentTimeMillis() - start);
                     break;
                 }

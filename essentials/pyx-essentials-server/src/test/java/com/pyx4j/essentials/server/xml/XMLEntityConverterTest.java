@@ -43,7 +43,7 @@ import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
-import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
 
 public class XMLEntityConverterTest extends TestCase {
 
@@ -126,7 +126,7 @@ public class XMLEntityConverterTest extends TestCase {
         ent11.nameB1().setValue("B1.1");
         ent11.nameC1().setValue("C1.1");
 
-        ent1.refference().set(ent11);
+        ent1.reference().set(ent11);
 
         String xml = getXML(ent1);
         System.out.println(xml);
@@ -138,26 +138,26 @@ public class XMLEntityConverterTest extends TestCase {
     }
 
     public void testAbstractSetMember() throws Exception {
-        RefferenceEntity rootEntity = EntityFactory.create(RefferenceEntity.class);
+        ReferenceEntity rootEntity = EntityFactory.create(ReferenceEntity.class);
         rootEntity.setPrimaryKey(new Key(7));
 
         Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
         ent1.setPrimaryKey(new Key(1));
         ent1.nameB1().setValue("1");
         ent1.nameC2().setValue("1.00");
-        rootEntity.refferences().add(ent1);
+        rootEntity.references().add(ent1);
 
         Concrete1Entity ent2 = EntityFactory.create(Concrete1Entity.class);
         ent2.setPrimaryKey(new Key(2));
         ent2.nameB1().setValue("2");
         ent2.nameC1().setValue("2.11");
-        rootEntity.refferences().add(ent2);
+        rootEntity.references().add(ent2);
 
         String xml = getXML(rootEntity);
         //System.out.println(xml);
-        RefferenceEntity rootEntity2 = (RefferenceEntity) XMLEntityConverter.parse(getDom(xml).getDocumentElement());
+        ReferenceEntity rootEntity2 = (ReferenceEntity) XMLEntityConverter.parse(getDom(xml).getDocumentElement());
 
-        Iterator<Base1Entity> it = rootEntity2.refferences().iterator();
+        Iterator<Base1Entity> it = rootEntity2.references().iterator();
 
         Base1Entity item1 = it.next();
         Base1Entity item2 = it.next();

@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,25 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-01-04
+ * Created on Oct 4, 2011
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.inherit;
 
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Table(prefix = "test")
-public interface RefferenceNotOwnerEntity extends IEntity {
+@Transient
+public interface ReferenceEntityDTO extends ReferenceEntity {
 
-    IPrimitive<String> testId();
+    IPrimitive<String> dtoStuff();
 
-    IPrimitive<String> name();
-
-    Base1Entity refference();
-
-    IList<Base1Entity> refferences();
 }

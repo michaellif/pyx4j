@@ -56,7 +56,7 @@ public class XMLEntityParser {
 
     private final XMLEntityFactory factory;
 
-    private static class EntityRefferences {
+    private static class EntityReferences {
 
         Map<String, IEntity> map = new HashMap<String, IEntity>();
 
@@ -82,9 +82,9 @@ public class XMLEntityParser {
         }
     }
 
-    private final EntityRefferences processed = new EntityRefferences();
+    private final EntityReferences processed = new EntityReferences();
 
-    private final EntityRefferences references = new EntityRefferences();
+    private final EntityReferences references = new EntityReferences();
 
     public XMLEntityParser() {
         this(new XMLEntityFactoryDefault());

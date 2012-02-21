@@ -45,7 +45,7 @@ public class DBMaintenanceDeferredProcess implements IDeferredProcess {
 
     private IDBMaintenanceProcessor processor;
 
-    private String encodedCursorRefference;
+    private String encodedCursorReference;
 
     protected final Class<? extends IEntity> entityClass;
 
@@ -85,7 +85,7 @@ public class DBMaintenanceDeferredProcess implements IDeferredProcess {
         long start = System.currentTimeMillis();
         IndexedEntitySearch search = new IndexedEntitySearch(request.getCriteria());
         search.buildQueryCriteria();
-        SearchResultIterator<IEntity> it = search.getResult(encodedCursorRefference);
+        SearchResultIterator<IEntity> it = search.getResult(encodedCursorReference);
         int currentFetchCount = 0;
         while (it.hasNext()) {
             IEntity ent = it.next();
@@ -101,7 +101,7 @@ public class DBMaintenanceDeferredProcess implements IDeferredProcess {
             if ((System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) || (currentFetchCount > request.getBatchSize())) {
                 log.warn("Executions time quota exceeded {}; rows {}", currentFetchCount, System.currentTimeMillis() - start);
                 log.debug("fetch will continue rows {}", fetchCount);
-                encodedCursorRefference = it.encodedCursorReference();
+                encodedCursorReference = it.encodedCursorReference();
                 return;
             }
             if (canceled) {
