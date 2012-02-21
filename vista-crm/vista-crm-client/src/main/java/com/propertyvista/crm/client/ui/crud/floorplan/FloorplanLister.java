@@ -24,24 +24,15 @@ public class FloorplanLister extends ListerBase<FloorplanDTO> {
     public FloorplanLister() {
         super(FloorplanDTO.class, CrmSiteMap.Properties.Floorplan.class, false, true);
 
-        setColumnDescriptors(
-
-        new MemberColumnDescriptor.Builder(proto().name()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().marketingName()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().floorCount()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().bedrooms()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().dens()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().bathrooms()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().counters()._unitCount()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().counters()._marketingUnitCount(), false).build()
-
-        );
+        setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().name()).build(),
+            new MemberColumnDescriptor.Builder(proto().marketingName()).build(),
+            new MemberColumnDescriptor.Builder(proto().floorCount()).build(),
+            new MemberColumnDescriptor.Builder(proto().bedrooms()).build(),
+            new MemberColumnDescriptor.Builder(proto().dens()).build(),
+            new MemberColumnDescriptor.Builder(proto().bathrooms()).build(),
+            new MemberColumnDescriptor.Builder(proto().counters()._unitCount()).build(),
+            new MemberColumnDescriptor.Builder(proto().counters()._marketingUnitCount(), false).build()
+        );//@formatter:on
     }
 }

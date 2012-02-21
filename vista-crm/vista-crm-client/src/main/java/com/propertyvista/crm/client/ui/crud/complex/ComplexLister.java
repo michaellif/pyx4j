@@ -24,6 +24,9 @@ public class ComplexLister extends ListerBase<ComplexDTO> {
     public ComplexLister() {
         super(ComplexDTO.class, CrmSiteMap.Properties.Complex.class, false, true);
 
-        setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().name()).build(), new MemberColumnDescriptor.Builder(proto().primaryBuilding()).build());
+        setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().name()).build(), 
+            new MemberColumnDescriptor.Builder(proto().primaryBuilding()).build()
+        );//@formatter:on
     }
 }

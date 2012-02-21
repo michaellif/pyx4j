@@ -109,18 +109,12 @@ public class PTGenerator {
 
         // This is actually update during save to match real unit data
         summary.lease().type().setValue(Service.Type.residentialUnit);
-
-//        summary.lease().type().setValue(RandomUtil.randomEnum(Service.Type.class));
         summary.lease().status().setValue(Lease.Status.Draft);
         summary.lease().unit().set(selectedUnit);
         summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2012, 2012));
         summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2013, 2015));
-        summary.lease().expectedMoveIn().setValue(RandomUtil.randomLogicalDate(2012, 2012));
-        summary.lease().actualMoveIn().setValue(RandomUtil.randomLogicalDate(2012, 2012));
-        summary.lease().expectedMoveOut().setValue(RandomUtil.randomLogicalDate(2013, 2013));
-        summary.lease().signDate().setValue(RandomUtil.randomLogicalDate(2012, 2012));
-
-        summary.lease().createDate().setValue(RandomUtil.randomLogicalDate(2010, 2012));
+        summary.lease().expectedMoveIn().setValue(summary.lease().leaseFrom().getValue());
+        summary.lease().createDate().setValue(RandomUtil.randomLogicalDate(2011, 2011));
 
         //summary.charges().set(createCharges(summary, selectedUnit));
 

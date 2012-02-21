@@ -25,16 +25,11 @@ public class FeatureLister extends ListerBase<Feature> {
         super(Feature.class, CrmSiteMap.Properties.Feature.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        setColumnDescriptors(
-
-        new MemberColumnDescriptor.Builder(proto().type(), true).build(),
-
-        new MemberColumnDescriptor.Builder(proto().name(), true).build(),
-
-        new MemberColumnDescriptor.Builder(proto().isMandatory(), true).build(),
-
-        new MemberColumnDescriptor.Builder(proto().isRecurring(), true).build());
-
+        setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().type(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().name(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().isMandatory(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().isRecurring(), true).build()
+        );//@formatter:on
     }
-
 }

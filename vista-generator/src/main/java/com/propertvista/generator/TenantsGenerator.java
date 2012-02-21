@@ -82,12 +82,13 @@ public class TenantsGenerator {
 
         // This is actually updated during save to match real unit data
         summary.lease().type().setValue(Service.Type.residentialUnit);
-
         summary.lease().status().setValue(Lease.Status.Approved);
         summary.lease().unit().set(selectedUnit);
-        summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2001, 2011));
-        summary.lease().signDate().setValue(summary.lease().leaseFrom().getValue());
+        summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2010, 2011));
         summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2014));
+        summary.lease().expectedMoveIn().setValue(summary.lease().leaseFrom().getValue());
+        summary.lease().signDate().setValue(summary.lease().leaseFrom().getValue());
+        summary.lease().createDate().setValue(RandomUtil.randomLogicalDate(2010, 2010));
 
         TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);
         summary.tenants().add(tenantSummary);

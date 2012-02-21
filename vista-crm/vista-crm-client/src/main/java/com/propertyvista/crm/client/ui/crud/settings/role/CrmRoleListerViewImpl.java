@@ -31,13 +31,11 @@ public class CrmRoleListerViewImpl extends CrmListerViewImplBase<CrmRole> implem
 
         public CrmRoleLister() {
             super(CrmRole.class, CrmSiteMap.Settings.UserRole.class, false, true);
-            setColumnDescriptors(
-
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
-
-            new MemberColumnDescriptor.Builder(proto().description()).build(),
-
-            new MemberColumnDescriptor.Builder(proto().behaviors()).build());
+            setColumnDescriptors(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().name()).build(),
+                new MemberColumnDescriptor.Builder(proto().description()).build(),
+                new MemberColumnDescriptor.Builder(proto().behaviors()).build()
+            );//@formatter:on
         }
     }
 }

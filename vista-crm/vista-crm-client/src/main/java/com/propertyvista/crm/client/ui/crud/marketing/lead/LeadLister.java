@@ -25,20 +25,14 @@ public class LeadLister extends ListerBase<Lead> {
     public LeadLister() {
         super(Lead.class, Marketing.Lead.class, false, true);
 
-        setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().id(), true).build(),
-
-        new MemberColumnDescriptor.Builder(proto().person(), true).sortable(!VistaTODO.entityAsStringQueryCriteria).build(),
-
-        new MemberColumnDescriptor.Builder(proto().moveInDate(), true).build(),
-
-        new MemberColumnDescriptor.Builder(proto().leaseTerm(), true).build(),
-
-        new MemberColumnDescriptor.Builder(proto().floorplan(), true).build(),
-
-        new MemberColumnDescriptor.Builder(proto().createDate(), true).build(),
-
-        new MemberColumnDescriptor.Builder(proto().status(), true).build()
-
-        );
+        setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().id(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().person(), true).sortable(!VistaTODO.entityAsStringQueryCriteria).build(),
+            new MemberColumnDescriptor.Builder(proto().moveInDate(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().leaseTerm(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().floorplan(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().createDate(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().status(), true).build()
+        );//@formatter:on
     }
 }

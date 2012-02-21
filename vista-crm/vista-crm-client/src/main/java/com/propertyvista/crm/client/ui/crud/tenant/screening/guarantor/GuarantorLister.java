@@ -28,22 +28,15 @@ public class GuarantorLister extends ListerBase<GuarantorDTO> {
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().displayName()));
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type()));
 
-        setColumnDescriptors(new Builder(proto().id()).build(),
-
-        new Builder(proto().person().name()).sortable(false).build(),
-
-        new Builder(proto().person().sex()).build(),
-
-        new Builder(proto().person().birthDate()).build(),
-
-        new Builder(proto().person().homePhone()).sortable(false).build(),
-
-        new Builder(proto().person().mobilePhone()).sortable(false).build(),
-
-        new Builder(proto().person().workPhone()).sortable(false).build(),
-
-        new Builder(proto().person().email()).title("E-mail address").build()
-
-        );
+        setColumnDescriptors(//@formatter:off
+            new Builder(proto().id()).build(),
+            new Builder(proto().person().name()).sortable(false).build(),
+            new Builder(proto().person().sex()).build(),
+            new Builder(proto().person().birthDate()).build(),
+            new Builder(proto().person().homePhone()).sortable(false).build(),
+            new Builder(proto().person().mobilePhone()).sortable(false).build(),
+            new Builder(proto().person().workPhone()).sortable(false).build(),
+            new Builder(proto().person().email()).title("E-mail address").build()
+        );//@formatter:on
     }
 }

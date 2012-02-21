@@ -31,5 +31,4 @@ public class EmployeeLister extends ListerBase<EmployeeDTO> {
             new MemberColumnDescriptor.Builder(proto().email(), false).build()
         );//@formatter:on
     }
-
 }

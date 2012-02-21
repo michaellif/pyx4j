@@ -32,5 +32,4 @@ public class BoilerLister extends ListerBase<BoilerDTO> {
             new MemberColumnDescriptor.Builder(proto().build()).build()
         );//@formatter:on
     }
-
 }

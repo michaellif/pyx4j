@@ -24,34 +24,21 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
     public LeaseLister() {
         super(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class, false, true);
 
-        setColumnDescriptors(
-
-        new Builder(proto().unit().belongsTo().propertyCode()).build(),
-
-        new Builder(proto().unit()).build(),
-
-        new Builder(proto().leaseID()).build(),
-
-        new Builder(proto().type()).build(),
-
-        new Builder(proto().leaseFrom()).build(),
-
-        new Builder(proto().leaseTo()).build(),
-
-        new Builder(proto().expectedMoveIn()).build(),
-
-        new Builder(proto().expectedMoveOut()).build(),
-
-        new Builder(proto().actualMoveIn()).build(),
-
-        new Builder(proto().actualMoveOut()).build(),
-
-        new Builder(proto().moveOutNotice()).build(),
-
-        new Builder(proto().status()).build(),
-
-        new Builder(proto().signDate()).build());
-
+        setColumnDescriptors(//@formatter:off
+            new Builder(proto().unit().belongsTo().propertyCode()).build(),
+            new Builder(proto().unit()).build(),
+            new Builder(proto().leaseID()).build(),
+            new Builder(proto().type()).build(),
+            new Builder(proto().leaseFrom()).build(),
+            new Builder(proto().leaseTo()).build(),
+            new Builder(proto().expectedMoveIn()).build(),
+            new Builder(proto().expectedMoveOut(), false).build(),
+            new Builder(proto().actualMoveIn(), false).build(),
+            new Builder(proto().actualMoveOut(), false).build(),
+            new Builder(proto().moveOutNotice()).build(),
+            new Builder(proto().status()).build(),
+            new Builder(proto().signDate()).build(),
+            new Builder(proto().createDate()).build()
+        );//@formatter:on
     }
-
 }
