@@ -88,7 +88,7 @@ public abstract class QueryTestCase extends DatastoreTestBase {
             criteria1.add(PropertyCriterion.eq(criteria1.proto().firstName(), empName));
         }
         Employee emp1 = srv.retrieve(criteria1);
-        Assert.assertNotNull("retrieve by " + member.getFieldName() + " " + member.getValueClass(), emp1);
+        Assert.assertNotNull("retrieved by " + member.getFieldName() + " " + member.getValueClass(), emp1);
         Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
         Assert.assertEquals("Search Value Class", member.getValueClass(), emp1.getMemberValue(member.getFieldName()).getClass());
         assertValueEquals("Search Value", value, emp1.getMemberValue(member.getFieldName()));
