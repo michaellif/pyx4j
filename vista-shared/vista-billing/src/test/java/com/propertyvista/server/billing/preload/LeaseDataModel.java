@@ -76,6 +76,7 @@ public class LeaseDataModel {
         Service service = serviceItem.product().cast();
 
         for (Feature feature : service.features()) {
+            System.out.println("++++++++++++++" + feature.name() + " " + feature.items().size());
             if (feature.type().getValue().isInAgreement() && feature.items().size() > 0) {
                 BillableItem billableItem = EntityFactory.create(BillableItem.class);
                 billableItem.billingPeriodNumber().setValue(1);

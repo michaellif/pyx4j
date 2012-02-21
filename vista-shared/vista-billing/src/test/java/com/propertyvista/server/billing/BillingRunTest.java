@@ -43,6 +43,8 @@ public class BillingRunTest extends BillingTestBase {
 
         assertEquals("Billing period", 1, (int) bill.billingPeriodNumber().getValue());
 
+        assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
+
         //==================== RUN 2 ======================//
 
         bill = runBilling(2, true);
@@ -51,6 +53,8 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
 
         assertEquals("Billing period", 2, (int) bill.billingPeriodNumber().getValue());
+
+        assertEquals("Total adjustments", new BigDecimal("-26.19"), bill.totalAdjustments().getValue());
 
         //==================== RUN 3 ======================//
 
@@ -61,12 +65,16 @@ public class BillingRunTest extends BillingTestBase {
 
         assertEquals("Billing period", 3, (int) bill.billingPeriodNumber().getValue());
 
+        assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
+
         bill = runBilling(4, true);
         assertEquals("Number of charges", 4, bill.charges().size());
         assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
 
         assertEquals("Billing period", 3, (int) bill.billingPeriodNumber().getValue());
+
+        assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
 
         //==================== RUN 4 ======================//
 
@@ -76,6 +84,8 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
 
         assertEquals("Billing period", 4, (int) bill.billingPeriodNumber().getValue());
+
+        assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
 
         //==================== RUN 5 ======================//
 
@@ -100,6 +110,8 @@ public class BillingRunTest extends BillingTestBase {
 
         assertEquals("Billing period", 5, (int) bill.billingPeriodNumber().getValue());
 
+        assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
+
         //==================== RUN 6 ======================//
 
         bill = runBilling(9, true);
@@ -108,6 +120,8 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
 
         assertEquals("Billing period", 6, (int) bill.billingPeriodNumber().getValue());
+
+        assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
 
     }
 
