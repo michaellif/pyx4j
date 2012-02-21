@@ -78,7 +78,7 @@ public class JoinOwnerInformation extends JoinInformation {
             if (!jmemberMeta.isTransient() && (jmemberMeta.getAnnotation(Owned.class) != null)) {
                 if ((jmemberMeta.getValueClass().equals(rootEntityMeta.getEntityClass())) || (jmemberMeta.getValueClass().equals(rootEntityClass))) {
                     if (ownerMemberMeta != null) {
-                        throw new AssertionError("Duplicate @Owned member in join table '" + ownerEntityMeta.getEntityClass().getName() + "' for "
+                        throw new AssertionError("Duplicate @Owned member in table '" + ownerEntityMeta.getEntityClass().getName() + "' for "
                                 + memberMeta.getFieldName() + " of type " + entityMeta.getEntityClass().getName());
                     }
                     ownerMemberMeta = jmemberMeta;
@@ -86,8 +86,8 @@ public class JoinOwnerInformation extends JoinInformation {
             }
         }
         if (ownerMemberMeta == null) {
-            throw new AssertionError("Unmapped @Owned member in join table '" + ownerEntityMeta.getEntityClass().getName() + "' for "
-                    + memberMeta.getFieldName() + " of type " + entityMeta.getEntityClass().getName());
+            throw new AssertionError("Unmapped @Owned member in table '" + ownerEntityMeta.getEntityClass().getName() + "' for " + memberMeta.getFieldName()
+                    + " of type " + entityMeta.getEntityClass().getName());
         } else {
             return ownerMemberMeta;
         }

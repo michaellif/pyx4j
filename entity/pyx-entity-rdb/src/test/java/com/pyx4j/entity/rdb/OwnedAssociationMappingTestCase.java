@@ -255,6 +255,8 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     //================================================ Bidirectional One-to-One Inversed =========================================================//
 
     public void testBidirectionalOneToOneInversedTable() {
+        resetTables(BidirectionalOneToOneInversedChild.class, BidirectionalOneToOneInversedParent.class);
+
         Assert.assertTrue(
                 "BidirectionalOneToOneParent table should exist",
                 testColumnExists(BidirectionalOneToOneInversedParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToOneInversedParent.class).name()
@@ -476,6 +478,8 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
     //================================================ Bidirectional One-to-Many =========================================================//
 
     public void testBidirectionalOneToManyTable() {
+        resetTables(BidirectionalOneToManyChild.class, BidirectionalOneToManyParent.class);
+
         Assert.assertTrue(
                 BidirectionalOneToManyParent.class.getName() + " table should exist",
                 testColumnExists(BidirectionalOneToManyParent.class, EntityFactory.getEntityPrototype(BidirectionalOneToManyParent.class).name().getFieldName()));
@@ -489,6 +493,7 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         Assert.assertTrue(
                 "Parent column should exist",
                 testColumnExists(BidirectionalOneToManyChild.class, EntityFactory.getEntityPrototype(BidirectionalOneToManyChild.class).parent().getFieldName()));
+
     }
 
     public void testBidirectionalOneToManyPersist() {

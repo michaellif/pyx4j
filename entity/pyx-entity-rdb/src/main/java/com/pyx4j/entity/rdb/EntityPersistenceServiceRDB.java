@@ -1155,18 +1155,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
 
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
-                    continue;
-                }
-                if ((cascadedeleteDataEntity != null) && member.getMemberMeta().isOwnedRelationships()
-                        && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
-                    for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(cascadedeleteDataEntity)) {
-                        cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                if (member.getMemberMeta().isOwnedRelationships()) {
+                    // remove join table data
+                    TableModelCollections.delete(connection, connectionProvider.getDialect(), primaryKey, member);
+
+                    if ((cascadedeleteDataEntity != null) && member.getMemberMeta().isOwnedRelationships()
+                            && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
+                        for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(cascadedeleteDataEntity)) {
+                            cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                        }
                     }
                 }
-
-                // remove join table data
-                TableModelCollections.delete(connection, connectionProvider.getDialect(), primaryKey, member);
             }
 
             if (!tm.delete(connection, primaryKey)) {
@@ -1205,23 +1204,30 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 try {
                     // remove data from join tables first, No cascade delete
                     for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                        if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
-                            continue;
-                        }
-                        //CollectionsTableModel.delete(connection, member, qb, tm.getTableName());
-                        if (member.getMemberMeta().isOwnedRelationships() && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
-                            if (trace) {
-                                log.info(Trace.id() + "delete owned member [{}]", member.getMemberName());
-                            }
-                            // TODO optimize
-                            for (T entity : entities) {
-                                for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(entity)) {
-                                    cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                        if (member.getMemberMeta().isOwnedRelationships()) {
+                            //CollectionsTableModel.delete(connection, member, qb, tm.getTableName());
+                            TableModelCollections.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
+
+                            if (member.getMemberMeta().isOwnedRelationships() && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
+                                if (trace) {
+                                    log.info(Trace.id() + "delete owned member [{}]", member.getMemberName());
+                                }
+                                // TODO optimize
+                                for (T entity : entities) {
+                                    @SuppressWarnings("unchecked")
+                                    ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                                    if (member.getMember(entity).getAttachLevel() == AttachLevel.Detached) {
+                                        TableModel memberTableModel = tableModel(connection, collectionMember.getOwner().getEntityMeta());
+                                        //TODO collectionMember.setAttachLevel(AttachLevel.IdOnly);
+                                        collectionMember.setAttachLevel(AttachLevel.Attached);
+                                        memberTableModel.retrieveMember(connection, collectionMember.getOwner(), collectionMember);
+                                    }
+                                    for (IEntity childEntity : collectionMember) {
+                                        cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                                    }
                                 }
                             }
                         }
-
-                        TableModelCollections.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
                     }
 
                     count = tm.delete(connection, primaryKeys);
@@ -1247,7 +1253,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
             TableModel tm = tableModel(connection, entityMeta);
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                if (member.getMemberMeta().getAttachLevel() != AttachLevel.Detached) {
+                if (member.getMemberMeta().isOwnedRelationships()) {
+                    if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
+                        @SuppressWarnings("unchecked")
+                        Class<? extends IEntity> ownedEntityClass = (Class<IEntity>) member.getMemberMeta().getValueClass();
+                        // TODO cascase delete
+                    }
                     TableModelCollections.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
                 }
             }
@@ -1265,7 +1276,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
             TableModel tm = tableModel(connection, entityMeta);
             for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                if (member.getMemberMeta().getAttachLevel() != AttachLevel.Detached) {
+                if (member.getMemberMeta().isOwnedRelationships()) {
+                    if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
+                        @SuppressWarnings("unchecked")
+                        Class<? extends IEntity> ownedEntityClass = (Class<IEntity>) member.getMemberMeta().getValueClass();
+                        // TODO use the same connection
+                        truncate(ownedEntityClass);
+                    }
+
                     TableModelCollections.truncate(connection, member);
                 }
             }

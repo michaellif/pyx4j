@@ -130,4 +130,13 @@ public class NamingConventionModern implements NamingConvention {
         return sql.toString();
     }
 
+    @Override
+    public String sqlForeignKeyName(String tableFrom, String indexColName, String tableTo) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(tableFrom);
+        sql.append('_');
+        sql.append(indexColName);
+        sql.append("_Fk");
+        return sql.toString();
+    }
 }

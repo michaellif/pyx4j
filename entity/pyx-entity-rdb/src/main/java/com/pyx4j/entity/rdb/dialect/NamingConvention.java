@@ -55,4 +55,6 @@ public interface NamingConvention {
 
     public String sqlTableIndexName(String tableName, List<String> columns);
 
+    public String sqlForeignKeyName(String tableFrom, String indexColName, String tableTo);
+
 }

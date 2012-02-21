@@ -34,13 +34,19 @@ public abstract class AssociationMappingTestCase extends DatastoreTestBase {
     // TODO POLYMORPHIC
     public static boolean POLYMORPHIC_TODO = false;
 
+    protected void resetTables(Class<? extends IEntity>... types) {
+        EntityPersistenceServiceRDB service = ((EntityPersistenceServiceRDB) srv);
+        for (Class<? extends IEntity> type : types) {
+            if (service.isTableExists(type)) {
+                service.dropTable(type);
+            }
+        }
+    }
+
     public boolean testColumnExists(Class<? extends IEntity> type, String columnName) {
         EntityPersistenceServiceRDB service = ((EntityPersistenceServiceRDB) srv);
         Connection connection = service.getConnection();
         try {
-            if (service.isTableExists(type)) {
-                service.dropTable(type);
-            }
             TableModel tableModel = service.tableModel(connection, EntityFactory.getEntityMeta(type));
 
             TableMetadata tableMetadata = TableMetadata.getTableMetadata(connection, tableModel.getTableName());

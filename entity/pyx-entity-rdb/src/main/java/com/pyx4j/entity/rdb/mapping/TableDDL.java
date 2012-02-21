@@ -67,6 +67,8 @@ class TableDDL {
 
     protected static int itentityOffset = 0;
 
+    private static final boolean NS_PART_OF_PK = true;
+
     static List<String> sqlCreate(Dialect dialect, TableModel tableModel) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
@@ -79,7 +81,9 @@ class TableDDL {
         }
         if (dialect.isMultitenant()) {
             sql.append(", ");
-            sql.append(" ns ").append(dialect.getSqlType(String.class)).append('(').append(200).append(')');
+            sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(' ').append(dialect.getSqlType(String.class));
+            sql.append('(').append(64).append(')');
+            sql.append(" NOT NULL ");
         }
 
         List<IndexDef> indexes = new Vector<IndexDef>();
@@ -94,11 +98,6 @@ class TableDDL {
                     addIndexDef(indexes, member, sqlName, member.getMemberMeta().getAnnotation(Indexed.class));
                 }
             }
-
-            // TODO create FK
-//            MemberMeta memberMeta = member.getMemberMeta();
-//            if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-//            }
         }
 
         for (MemberOperationsMeta member : tableModel.operationsMeta().getIndexMembers()) {
@@ -106,7 +105,13 @@ class TableDDL {
             sql.append(indexSqlType(dialect, member));
         }
 
-        sql.append(", CONSTRAINT ").append(dialect.getNamingConvention().sqlTablePKName(tableModel.tableName)).append(" PRIMARY KEY (id)");
+        sql.append(", CONSTRAINT ").append(dialect.getNamingConvention().sqlTablePKName(tableModel.tableName));
+        sql.append(" PRIMARY KEY (id");
+        if (dialect.isMultitenant() && NS_PART_OF_PK) {
+            sql.append(", ");
+            sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
+        }
+        sql.append(")");
 
         sql.append(')');
         sqls.add(sql.toString());
@@ -130,6 +135,29 @@ class TableDDL {
             sqls.add(sqlAlterIdentity(dialect, tableModel.tableName));
         }
         return sqls;
+    }
+
+    static String sqlCreateForeignKey(Dialect dialect, String tableFrom, String indexColName, String tableTo) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("ALTER TABLE ").append(tableFrom);
+        sql.append(" ADD CONSTRAINT ");
+        sql.append(dialect.getNamingConvention().sqlForeignKeyName(tableFrom, indexColName, tableTo));
+        sql.append(" FOREIGN KEY ");
+        sql.append(" (");
+        sql.append(indexColName);
+        if (dialect.isMultitenant() && NS_PART_OF_PK) {
+            sql.append(", ");
+            sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
+        }
+        sql.append(") REFERENCES ");
+        sql.append(tableTo);
+        sql.append("(").append("id");
+        if (dialect.isMultitenant() && NS_PART_OF_PK) {
+            sql.append(", ");
+            sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
+        }
+        sql.append(")");
+        return sql.toString();
     }
 
     private static void addIndexDef(List<IndexDef> indexes, MemberOperationsMeta member, String sqlName, Indexed indexedAnnotation) {

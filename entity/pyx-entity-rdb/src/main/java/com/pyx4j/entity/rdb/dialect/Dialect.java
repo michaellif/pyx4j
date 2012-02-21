@@ -205,6 +205,8 @@ public abstract class Dialect {
         throw new Error("Dialect does not support sequences");
     }
 
+    public abstract String sqlDropForeignKey(String tableName, String constraintName);
+
     public String applyLimitCriteria(String sql) {
         throw new Error("Dialect does not support limit");
     }
@@ -216,4 +218,5 @@ public abstract class Dialect {
     public String sqlSortNulls(boolean descending) {
         return "";
     }
+
 }

@@ -63,6 +63,11 @@ public class MySQLDialect extends Dialect {
     }
 
     @Override
+    public String sqlDropForeignKey(String tableName, String constraintName) {
+        return "ALTER TABLE " + tableName + " DROP FOREIGN KEY " + constraintName;
+    }
+
+    @Override
     public String applyLimitCriteria(String sql) {
         return sql + " LIMIT ? OFFSET ?";
     }

@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.AbstractEntity;
@@ -122,6 +123,7 @@ public class RDBUtils implements Closeable {
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         int countTotal = 0;
+        long start = System.currentTimeMillis();
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
@@ -134,7 +136,7 @@ public class RDBUtils implements Closeable {
                 countTotal++;
             }
         }
-        log.info("Total of {} tables dropped", countTotal);
+        log.info("Total of {} tables dropped in {}", countTotal, TimeUtils.secSince(start));
     }
 
     public static void initAllEntityTables() {

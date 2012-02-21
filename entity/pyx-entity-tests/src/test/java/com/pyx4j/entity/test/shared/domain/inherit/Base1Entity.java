@@ -22,6 +22,7 @@ package com.pyx4j.entity.test.shared.domain.inherit;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -36,6 +37,7 @@ public interface Base1Entity extends IEntity {
     IPrimitive<String> nameB1();
 
     @Owned
+    @OrderBy(OwnedByDiferentOwners.OrderInOwner.class)
     IList<OwnedByDiferentOwners> ownedItems();
 
     @Owned

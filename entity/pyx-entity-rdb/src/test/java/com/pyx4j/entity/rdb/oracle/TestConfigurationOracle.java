@@ -84,6 +84,15 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("CONCRETE2", "C2");
         shortWords.add("CONCRETE3", "C3");
         shortWords.add("ASSIGNED", "ASN");
+        shortWords.add("PRINCIPAL", "PRNP");
+        shortWords.add("UNIDIRECTIONAL", "UD");
+        shortWords.add("BIDIRECTIONAL", "BD");
+        shortWords.add("PARENT", "PA");
+        shortWords.add("CHILD", "CLD");
+        shortWords.add("CHILDREN", "CLDN");
+        shortWords.add("AUTO", "A");
+        shortWords.add("INVERSED", "R");
+        shortWords.add("MANY", "M");
         return new NamingConventionOracle(30, shortWords);
     }
 

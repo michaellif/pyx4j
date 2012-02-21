@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.test.shared.domain.inherit;
 
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -29,6 +32,14 @@ public interface OwnedByDiferentOwners extends IEntity {
     IPrimitive<String> nameO();
 
     @Owner
+    @JoinColumn
     Base1Entity ownerRefference();
+
+    public interface OrderInOwner extends ColumnId {
+
+    }
+
+    @OrderColumn(OrderInOwner.class)
+    IPrimitive<Integer> orderInParent();
 
 }

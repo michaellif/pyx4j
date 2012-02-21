@@ -384,7 +384,7 @@ public class EntityMetaWriter {
             Owned aOwned = method.getAnnotation(Owned.class);
 
             data.embedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
-            data.ownedRelationships = (aOwned != null) || (data.embedded);
+            data.ownedRelationships = (aOwned != null) || (data.embedded) || (data.objectClassType == ObjectClassType.PrimitiveSet);
 
             data.owner = (method.getAnnotation(Owner.class) != null);
             assert (!(data.owner == true && data.ownedRelationships == true));

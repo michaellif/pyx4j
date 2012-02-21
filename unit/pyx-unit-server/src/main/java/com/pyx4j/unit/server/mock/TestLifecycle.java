@@ -67,6 +67,10 @@ public class TestLifecycle {
         testContext.namespace = namespace;
     }
 
+    public static void setNamespace() {
+        NamespaceManager.setNamespace(threadLocalContext.get().namespace);
+    }
+
     public static void beginRequest() {
         MockHttpServletRequest httprequest = new MockHttpServletRequest();
         HttpServletResponse httpresponse = new MockHttpServletResponse();

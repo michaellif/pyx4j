@@ -199,4 +199,14 @@ public class NamingConventionOracle implements NamingConvention {
         return makeName(sql.toString());
     }
 
+    @Override
+    public String sqlForeignKeyName(String tableFrom, String indexColName, String tableTo) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(makeName(tableFrom));
+        sql.append('_');
+        sql.append(makeName(indexColName));
+        sql.append("_Fk");
+        return makeName(sql.toString());
+    }
+
 }

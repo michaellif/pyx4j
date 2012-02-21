@@ -24,7 +24,10 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -44,6 +47,10 @@ public class TableMetadata {
     private final String name;
 
     private final Map<String, ColumnMetadata> columnsMetadata = new HashMap<String, ColumnMetadata>();
+
+    private final List<String> foreignKeys = new ArrayList<String>();
+
+    private final Map<String, String> foreignKeysReference = new HashMap<String, String>();
 
     public static TableMetadata getTableMetadata(Connection connection, String name) throws SQLException {
         ResultSet rs = null;
@@ -78,14 +85,64 @@ public class TableMetadata {
 
         log.debug("table {} @ {} ", name, schema);
         log.debug("columns {} " + columnsMetadata);
+
+        // read Foreign Keys on this table
+        ResultSet krs = null;
+        try {
+            krs = dbMeta.getImportedKeys(catalog, schema, name);
+            while (krs.next()) {
+                String constraintName = krs.getString("FK_NAME");
+                //TODO investigate: I have no idea why they may appear twice
+                if (!this.foreignKeys.contains(constraintName)) {
+                    this.foreignKeys.add(constraintName);
+                }
+            }
+        } finally {
+            SQLUtils.closeQuietly(krs);
+        }
+
+        // read Foreign Keys to this table
+        try {
+            krs = dbMeta.getExportedKeys(catalog, schema, name);
+            while (krs.next()) {
+                String constraintName = krs.getString("FK_NAME");
+                // Ignore self References
+                if (!this.foreignKeys.contains(constraintName)) {
+                    foreignKeysReference.put(constraintName, krs.getString("FKTABLE_NAME"));
+                }
+            }
+        } finally {
+            SQLUtils.closeQuietly(krs);
+        }
+    }
+
+    String getTableName() {
+        return name;
     }
 
     public ColumnMetadata getColumn(String name) {
         return columnsMetadata.get(name.toUpperCase(Locale.ENGLISH));
     }
 
-    String getTableName() {
-        return name;
+    public Collection<String> getForeignKeyNames() {
+        return foreignKeys;
+    }
+
+    public boolean hasForeignKey(String constraintName) {
+        if (foreignKeys.contains(constraintName)) {
+            return true;
+        } else {
+            for (String fk : foreignKeys) {
+                if (fk.equalsIgnoreCase(constraintName)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public Map<String, String> getForeignKeysReference() {
+        return foreignKeysReference;
     }
 
     public static class ColumnMetadata {

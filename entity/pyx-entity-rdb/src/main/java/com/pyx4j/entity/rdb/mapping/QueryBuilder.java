@@ -367,8 +367,9 @@ public class QueryBuilder<T extends IEntity> {
             if (memberOper instanceof MemberExternalOperationsMeta) {
                 memberJoin.sqlTableName = memberOper.sqlName();
             } else {
-                memberJoin.sqlTableName = TableModel.getTableName(dialect,
-                        EntityFactory.getEntityMeta((Class<? extends IEntity>) memberOper.getMemberMeta().getObjectClass()));
+                @SuppressWarnings("unchecked")
+                Class<? extends IEntity> entityClass = (Class<IEntity>) memberOper.getMemberMeta().getValueClass();
+                memberJoin.sqlTableName = TableModel.getTableName(dialect, EntityFactory.getEntityMeta(entityClass));
             }
 
             putMemberJoin(memberOper.getMemberPath(), leftJoin, memberJoin);

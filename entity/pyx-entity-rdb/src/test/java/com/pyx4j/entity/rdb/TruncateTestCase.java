@@ -73,7 +73,8 @@ public abstract class TruncateTestCase extends DatastoreTestBase {
         ISet<SimpleTrunk> items();
     }
 
-    public void testTruncateComplexTable() {
+    //This can't be done because FK exists from child table to parent
+    public void OFF_testTruncateComplexTable() {
         ComplexTrunk item1 = EntityFactory.create(ComplexTrunk.class);
         String name = uniqueString();
         item1.name().setValue(name);

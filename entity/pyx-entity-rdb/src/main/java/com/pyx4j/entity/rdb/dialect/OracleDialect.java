@@ -115,6 +115,11 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
+    public String sqlDropForeignKey(String tableName, String constraintName) {
+        return "ALTER TABLE " + tableName + " DROP CONSTRAINT " + constraintName;
+    }
+
+    @Override
     public String applyLimitCriteria(String sql) {
         StringBuffer msql = new StringBuffer(sql.length() + 128);
         msql.append("SELECT * FROM ( SELECT p_row_.*, rownum p_rownum_ FROM ( ");

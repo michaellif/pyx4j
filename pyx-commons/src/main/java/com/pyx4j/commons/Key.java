@@ -31,8 +31,6 @@ public class Key implements java.io.Serializable {
 
     private transient long longValue;
 
-    public static final Key DORMANT_KEY = new Key(-1);
-
     protected Key() {
 
     }

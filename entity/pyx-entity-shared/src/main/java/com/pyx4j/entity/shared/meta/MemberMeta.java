@@ -82,6 +82,8 @@ public interface MemberMeta {
      * @see com.pyx4j.entity.annotations.Owned
      * 
      * @see com.pyx4j.entity.annotations.EmbeddedEntity
+     * 
+     *      or IPrimitiveSet
      */
     public boolean isOwnedRelationships();
 
