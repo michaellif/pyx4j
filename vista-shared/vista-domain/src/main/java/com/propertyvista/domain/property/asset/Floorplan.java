@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -27,7 +28,6 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.media.Media;
@@ -68,14 +68,17 @@ public interface Floorplan extends PolicyNode {
     IPrimitive<Integer> halfBath();
 
     @Detached
+    @Owned
     IList<Media> media();
 
+    @Owned
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     FloorplanCounters counters();
 
     // ----------------------------------------------------
     // parent <-> child relationship:
     @Owned
+    @OrderBy(FloorplanAmenity.OrderId.class)
     @Detached(level = AttachLevel.Detached)
-    ISet<FloorplanAmenity> _FloorplanAmenities();
+    IList<FloorplanAmenity> amenities();
 }

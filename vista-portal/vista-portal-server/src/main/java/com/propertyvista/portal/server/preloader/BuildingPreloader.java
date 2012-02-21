@@ -23,7 +23,6 @@ import com.propertvista.generator.Dashboards;
 import com.propertvista.generator.MediaGenerator;
 import com.propertvista.generator.PreloadData;
 import com.propertvista.generator.ProductCatalogGenerator;
-import com.propertvista.generator.gdo.AptUnitGDO;
 import com.propertvista.generator.gdo.ProductItemTypesGDO;
 import com.propertvista.generator.util.RandomUtil;
 
@@ -50,7 +49,6 @@ import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Locker;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
@@ -60,9 +58,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
-import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
-import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
@@ -79,8 +75,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Amenity.class,
-                    LeaseTerms.class, Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class,
-                    Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, PropertyManager.class, ProductCatalog.class);
+                    Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, Media.class,
+                    ThumbnailBlob.class, FileBlob.class, Feature.class, PropertyManager.class, ProductCatalog.class);
         } else {
             return "This is production";
         }
@@ -102,9 +98,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         }
 
         ProductCatalogGenerator productCatalogGenerator = new ProductCatalogGenerator(productItemTypes);
-
-        LeaseTerms leaseTerms = generator.createLeaseTerms();
-        Persistence.service().persist(leaseTerms);
 
         Dashboards availableDashboards = new Dashboards();
         {
@@ -170,25 +163,19 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             // Service Catalog:
             productCatalogGenerator.createProductCatalog(building.productCatalog());
 
-            Persistence.service().persist(building);
-
             //Media
             if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {
                 MediaGenerator.generatedBuildingMedia(building);
-                Persistence.service().persist(building.media());
             }
 
 // TODO : let's leave dashboard empty - in runtime the first Building dashboard will be used by default!
 //            building.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
-
-            Persistence.service().merge(building);
 
             // Elevators
             List<Elevator> elevators = generator.createElevators(building, config().numElevators);
             for (Elevator elevator : elevators) {
                 Persistence.service().persist(elevator.warranty().contract().contractor());
                 Persistence.service().persist(elevator.maintenance().contract().contractor());
-                Persistence.service().persist(elevator);
             }
 
             // Boilers
@@ -196,7 +183,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             for (Boiler boiler : boilers) {
                 Persistence.service().persist(boiler.warranty().contract().contractor());
                 Persistence.service().persist(boiler.maintenance().contract().contractor());
-                Persistence.service().persist(boiler);
             }
 
             // Roofs
@@ -204,74 +190,39 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             for (Roof roof : roofs) {
                 Persistence.service().persist(roof.warranty().contract().contractor());
                 Persistence.service().persist(roof.maintenance().contract().contractor());
-                Persistence.service().persist(roof);
             }
 
             // Parking:
             List<Parking> parkings = generator.createParkings(building, config().numParkings);
             for (Parking parking : parkings) {
-                Persistence.service().persist(parking);
-
-                List<ParkingSpot> spots = generator.createParkingSpots(parking, config().numParkingSpots);
-                for (ParkingSpot spot : spots) {
-                    Persistence.service().persist(spot);
-                }
+                generator.createParkingSpots(parking, config().numParkingSpots);
             }
 
             // Lockers:
             List<LockerArea> lockerAreas = generator.createLockerAreas(building, config().numLockerAreas);
             for (LockerArea item : lockerAreas) {
-                Persistence.service().persist(item);
-
-                List<Locker> lockers = generator.createLockers(item, config().numLockers);
-                for (Locker locker : lockers) {
-                    Persistence.service().persist(locker);
-                }
+                generator.createLockers(item, config().numLockers);
             }
 
             // Amenities:
-            Persistence.service().persist(generator.createBuildingAmenities(building, 1 + RandomUtil.randomInt(5)));
+            generator.createBuildingAmenities(building, 1 + RandomUtil.randomInt(5));
 
             // Floorplans:
-            List<FloorplanDTO> floorplans = generator.createFloorplans(building, config().numFloorplans);
-            for (FloorplanDTO floorplanDTO : floorplans) {
+            List<Floorplan> floorplans = generator.createFloorplans(building, config().numFloorplans);
+            for (Floorplan floorplan : floorplans) {
 
                 if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {
-                    MediaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
+                    MediaGenerator.attachGeneratedFloorplanMedia(floorplan);
                 }
 
-                Floorplan floorplan = floorplanDTO.duplicate(Floorplan.class);
-                Persistence.service().persist(floorplan.counters());
-                Persistence.service().persist(floorplan); // persist real Object here, not DTO!..
-                floorplanDTO.setPrimaryKey(floorplan.getPrimaryKey());
-
-                for (FloorplanAmenity amenity : floorplanDTO.amenities()) {
-                    amenity.belongsTo().set(floorplan);
-                    Persistence.service().persist(amenity);
-                }
             }
 
             // Units:
-            List<AptUnitGDO> units = generator.createUnits(building, floorplans, config().numFloors, config().numUnitsPerFloor);
+            List<AptUnit> units = generator.createUnits(building, floorplans, config().numFloors, config().numUnitsPerFloor);
             unitCount += units.size();
-            for (AptUnitGDO unitData : units) {
-
-                List<ProductItem> serviceItems = productCatalogGenerator.createAptUnitServices(building.productCatalog(), unitData.unit());
-
-                // persist plain internal lists:
-
-                Persistence.service().merge(unitData.unit());
-
-                // persist internal lists and with belongness:
-                //TODO fix this model
-                //Persistence.service().persist(unitData.occupancies());
-
-                Persistence.service().persist(unitData.details());
-                Persistence.service().persist(serviceItems);
+            for (AptUnit unitData : units) {
+                productCatalogGenerator.createAptUnitServices(building.productCatalog(), unitData);
             }
-
-            // Save the ServiceItem references
-            Persistence.service().persist(building.productCatalog().services());
 
             // fill Service Catalog with building elements:
 
@@ -292,19 +243,16 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 case garage:
                     for (ProductItem item : service.items()) {
                         item.element().set(RandomUtil.random(buildingParkings));
-                        Persistence.service().persist(item);
                     }
                     break;
                 case storage:
                     for (ProductItem item : service.items()) {
                         item.element().set(RandomUtil.random(buildingockers));
-                        Persistence.service().persist(item);
                     }
                     break;
                 case roof:
                     for (ProductItem item : service.items()) {
                         item.element().set(RandomUtil.random(buildingRoofs));
-                        Persistence.service().persist(item);
                     }
                     break;
                 }
@@ -315,24 +263,26 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 case parking:
                     for (ProductItem item : feature.items()) {
                         item.element().set(RandomUtil.random(buildingParkings));
-                        Persistence.service().persist(item);
                     }
                     break;
                 case locker:
                     for (ProductItem item : feature.items()) {
                         item.element().set(RandomUtil.random(buildingockers));
-                        Persistence.service().persist(item);
                     }
                     break;
                 }
             }
 
-            Persistence.service().merge(building.productCatalog());
+            Persistence.service().persist(building);
+
+            // Service Catalog Eligibility Matrix:
+            productCatalogGenerator.createProductCatalog(building.productCatalog());
 
             //Do not publish until data is clean-up
             if (true) {
                 PublicDataUpdater.updateIndexData(building);
             }
+
         }
         SharedGeoLocator.save();
         if (noGeoCount > 0) {

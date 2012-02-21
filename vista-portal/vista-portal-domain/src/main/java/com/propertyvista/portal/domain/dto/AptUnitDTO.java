@@ -28,8 +28,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
-import com.propertyvista.portal.domain.ptapp.LeaseTerms;
-
 @Transient
 @Deprecated
 public interface AptUnitDTO extends IEntity {
@@ -77,9 +75,6 @@ public interface AptUnitDTO extends IEntity {
     @Format("MM/dd/yyyy")
     @Caption(name = "Available")
     IPrimitive<LogicalDate> availableForRent();
-
-    @Detached
-    LeaseTerms newLeaseTerms();
 
     /**
      * Object used as part of a marketing campaign to demonstrate the design, structure,

@@ -154,7 +154,6 @@ public class MediaGenerator {
                 m.setPrimaryKey(null);
             }
 
-            Persistence.service().persist(m);
             floorplan.media().add(m);
         }
         if (newData && blob_mimize_Preload_Data_Size) {

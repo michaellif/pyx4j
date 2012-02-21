@@ -13,21 +13,18 @@
  */
 package com.propertvista.generator;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.propertvista.generator.gdo.AptUnitGDO;
 import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.CompanyVendor;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
-import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -53,8 +50,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.dto.FloorplanDTO;
-import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 
 public class BuildingsGenerator {
@@ -153,7 +148,7 @@ public class BuildingsGenerator {
         List<Elevator> items = new ArrayList<Elevator>();
         for (int i = 0; i < num; i++) {
             Elevator item = EntityFactory.create(Elevator.class);
-            item.belongsTo().set(owner);
+            owner._Elevators().add(item);
 
             item.type().setValue("Elevator");
             item.make().setValue("Bosh");
@@ -180,7 +175,7 @@ public class BuildingsGenerator {
         List<Boiler> items = new ArrayList<Boiler>();
         for (int i = 0; i < num; i++) {
             Boiler item = EntityFactory.create(Boiler.class);
-            item.belongsTo().set(owner);
+            owner._Boilers().add(item);
 
             item.type().setValue("Boiler");
             item.make().setValue("Electra");
@@ -215,7 +210,7 @@ public class BuildingsGenerator {
         List<Roof> items = new ArrayList<Roof>();
         for (int i = 0; i < num; i++) {
             Roof item = EntityFactory.create(Roof.class);
-            item.belongsTo().set(owner);
+            owner._Roofs().add(item);
 
             item.type().setValue(RandomUtil.randomEnum(RoofType.class).toString());
             item.year().setValue(RandomUtil.randomLogicalDate());
@@ -240,7 +235,7 @@ public class BuildingsGenerator {
 
     private LockerArea createLockerArea(Building owner, int index) {
         LockerArea lockerArea = EntityFactory.create(LockerArea.class);
-        lockerArea.belongsTo().set(owner);
+        owner._LockerAreas().add(lockerArea);
 
         lockerArea.name().setValue("LockerArea" + index);
         lockerArea.isPrivate().setValue(RandomUtil.randomBoolean());
@@ -269,7 +264,7 @@ public class BuildingsGenerator {
 
     private Locker createLocker(LockerArea owner, int index) {
         Locker locker = EntityFactory.create(Locker.class);
-        locker.belongsTo().set(owner);
+        owner._Lockers().add(locker);
 
         locker.name().setValue("Locker" + index);
         locker.type().setValue(RandomUtil.random(Locker.Type.values()));
@@ -287,7 +282,7 @@ public class BuildingsGenerator {
 
     private Parking createParking(Building building, int index) {
         Parking parking = EntityFactory.create(Parking.class);
-        parking.belongsTo().set(building);
+        building._Parkings().add(parking);
 
         int levels = 1 + RandomUtil.randomInt(5);
         parking.name().setValue("Parking" + index);
@@ -320,7 +315,7 @@ public class BuildingsGenerator {
 
     private ParkingSpot createParkingSpot(Parking owner, int index) {
         ParkingSpot spot = EntityFactory.create(ParkingSpot.class);
-        spot.belongsTo().set(owner);
+        owner._ParkingSpots().add(spot);
 
         spot.name().setValue("Spot" + index);
         spot.type().setValue(RandomUtil.random(ParkingSpot.Type.values()));
@@ -339,7 +334,7 @@ public class BuildingsGenerator {
 
     public BuildingAmenity createBuildingAmenity(Building building) {
         BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
-        amenity.belongsTo().set(building);
+        building._BuildingAmenities().add(amenity);
 
         amenity.type().setValue(RandomUtil.randomEnum(BuildingAmenity.Type.class));
 
@@ -350,8 +345,8 @@ public class BuildingsGenerator {
     }
 
 // Floorplans:
-    public List<FloorplanDTO> createFloorplans(Building building, int num) {
-        List<FloorplanDTO> floorplans = new ArrayList<FloorplanDTO>();
+    public List<Floorplan> createFloorplans(Building building, int num) {
+        List<Floorplan> floorplans = new ArrayList<Floorplan>();
         Set<String> uniqueFloorplanNames = new HashSet<String>();
 
         for (int i = 0; i < num; i++) {
@@ -361,7 +356,7 @@ public class BuildingsGenerator {
  * floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
  * }
  */
-            FloorplanDTO floorplan;
+            Floorplan floorplan;
             //produces limited number of names, for large amounts of data could go into infinite loop
             int attemptCounter = 0;
             do {
@@ -373,15 +368,16 @@ public class BuildingsGenerator {
             } while (uniqueFloorplanNames.contains(floorplan.name().getValue()));
 
             uniqueFloorplanNames.add(floorplan.name().getValue());
-            floorplan.building().set(building);
+            building._Floorplans().add(floorplan);
+
             floorplans.add(floorplan);
 
         }
         return floorplans;
     }
 
-    public FloorplanDTO createFloorplan() {
-        FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
+    public Floorplan createFloorplan() {
+        Floorplan floorplan = EntityFactory.create(Floorplan.class);
 
         floorplan.description().setValue(CommonsGenerator.lipsum());
 
@@ -396,7 +392,6 @@ public class BuildingsGenerator {
 
         for (int i = 0; i < 2 + DataGenerator.randomInt(6); i++) {
             FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity();
-            amenity.belongsTo().set(floorplan);
             floorplan.amenities().add(amenity);
         }
 
@@ -435,8 +430,8 @@ public class BuildingsGenerator {
     }
 
 // Units:
-    public List<AptUnitGDO> createUnits(Building building, List<FloorplanDTO> floorplans, int numFloors, int numUnitsPerFloor) {
-        List<AptUnitGDO> units = new ArrayList<AptUnitGDO>();
+    public List<AptUnit> createUnits(Building building, List<Floorplan> floorplans, int numFloors, int numUnitsPerFloor) {
+        List<AptUnit> units = new ArrayList<AptUnit>();
         // now create units for the building
         for (int floor = 1; floor < numFloors + 1; floor++) {
             // for each floor we want to create the same number of units
@@ -448,17 +443,16 @@ public class BuildingsGenerator {
                     throw new IllegalStateException("No floorplan");
                 }
                 double uarea = CommonsGenerator.randomFromRange(CommonsGenerator.createRange(1200d, 2600d));
-                AptUnitGDO unit = createUnit(building, suiteNumber, floor, uarea, floorplan);
+                AptUnit unit = createUnit(building, suiteNumber, floor, uarea, floorplan);
                 units.add(unit);
             }
         }
         return units;
     }
 
-    private AptUnitGDO createUnit(Building building, String suiteNumber, int floor, double area, Floorplan floorplan) {
-        AptUnitGDO data = EntityFactory.create(AptUnitGDO.class);
-        AptUnit unit = data.unit();
-        unit.belongsTo().set(building);
+    private AptUnit createUnit(Building building, String suiteNumber, int floor, double area, Floorplan floorplan) {
+        AptUnit unit = EntityFactory.create(AptUnit.class);
+        building._Units().add(unit);
 
         unit.info().economicStatus().setValue(RandomUtil.random(AptUnitInfo.EconomicStatus.values()));
         unit.info().economicStatusDescription().setValue(RandomUtil.randomLetters(35).toLowerCase());
@@ -478,23 +472,23 @@ public class BuildingsGenerator {
 
         // info items
         if (RandomUtil.randomBoolean()) {
-            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         } else {
-            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
-        for (AptUnitItem detail : data.details()) {
+        for (AptUnitItem detail : unit.details()) {
             detail.belongsTo().set(unit);
         }
 
@@ -508,7 +502,7 @@ public class BuildingsGenerator {
         occupancySegment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
         occupancySegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
         occupancySegment.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
-        data.unit()._AptUnitOccupancySegment().add(occupancySegment);
+        unit._AptUnitOccupancySegment().add(occupancySegment);
 
         unit.floorplan().set(floorplan);
 
@@ -519,7 +513,7 @@ public class BuildingsGenerator {
             unit.marketing().adBlurbs().add(item);
         }
 
-        return data;
+        return unit;
     }
 
     public static AptUnitItem createUnitDetailItem(AptUnitItem.Type type) {
@@ -560,13 +554,4 @@ public class BuildingsGenerator {
         return pmc;
     }
 
-    public LeaseTerms createLeaseTerms() {
-        LeaseTerms leaseTerms = EntityFactory.create(LeaseTerms.class);
-        try {
-            leaseTerms.text().setValue(IOUtils.getTextResource("leaseTerms.html", BuildingsGenerator.class));
-        } catch (IOException e) {
-            throw new Error(e);
-        }
-        return leaseTerms;
-    }
 }

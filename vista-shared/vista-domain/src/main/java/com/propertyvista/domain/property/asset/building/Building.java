@@ -99,6 +99,7 @@ public interface Building extends PolicyNode {
     Marketing marketing();
 
     @Detached
+    @Owned
     IList<Media> media();
 
     @Owned

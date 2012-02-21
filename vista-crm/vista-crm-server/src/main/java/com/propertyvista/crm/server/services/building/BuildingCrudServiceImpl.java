@@ -29,7 +29,6 @@ import com.propertyvista.domain.GeoLocation.LongitudeType;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
@@ -99,10 +98,6 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
 
     @Override
     protected void persistDBO(Building dbo, BuildingDTO in) {
-        for (Media item : dbo.media()) {
-            Persistence.service().merge(item);
-        }
-
         // Geotagging:
         if (!in.geoLocation().isNull()) {
             Double lat = in.geoLocation().latitude().getValue();

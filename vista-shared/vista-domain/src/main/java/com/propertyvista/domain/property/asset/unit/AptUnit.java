@@ -80,7 +80,7 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     // parent <-> child relationship:
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<AptUnitItem> _AptUnitItems();
+    ISet<AptUnitItem> details();
 
     @Owned
     @Detached(level = AttachLevel.Detached)
