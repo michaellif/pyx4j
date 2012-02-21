@@ -14,7 +14,6 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -23,22 +22,13 @@ import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadiness;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Scoping;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.server.preloader.util.AbstractMockupPreloader;
-import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
 public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
@@ -86,138 +76,139 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
     @SuppressWarnings("deprecation")
     private String generateRandom() {
-        int unitCounter = 0;
-        final LogicalDate start = new LogicalDate();
-        start.setYear(106);
-        start.setMonth(0);
-        start.setDate(1);
-        final LogicalDate end = new LogicalDate();
-        end.setTime(end.getTime() - MIN_EVENT_DELTA);
-        ArrayList<IEntity> statuses = new ArrayList<IEntity>();
-        AptUnit lastUnit = null;
-        UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
-        for (Building building : Persistence.service().query(new EntityQueryCriteria<Building>(Building.class))) {
-            if (++unitCounter > MAX_NUMBER_OF_UNITS) {
-                break;
-            }
-            Persistence.service().retrieve(building.complex());
-
-            EntityQueryCriteria<AptUnit> unitCriteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-            unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().belongsTo(), building));
-
-            for (AptUnit unit : Persistence.service().query(unitCriteria)) {
-                if (++unitCounter > MAX_NUMBER_OF_UNITS) {
-                    break;
-                }
-                lastUnit = unit;
-                status.set(null);
-                status.statusDate().setValue(start);
-                status.unit().setPrimaryKey(unit.getPrimaryKey());
-
-                status.unitName().setValue(unit.info().number().getValue());
-
-                EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
-                leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit(), unit));
-                Lease lease = Persistence.service().retrieve(leaseCriteria);
-                if (lease != null && !lease.serviceAgreement().isNull() && !lease.serviceAgreement().serviceItem().isNull()) {
-                    PriceCalculationHelpers.calculateChargeItemAdjustments(lease.serviceAgreement().serviceItem());
-                    unit.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem()._currentPrice().getValue());
-                }
-
-                BigDecimal marketRent = unit.financial()._marketRent().isNull() ? new BigDecimal(0) : unit.financial()._marketRent().getValue();
-                status.marketRent().setValue(marketRent);
-                // TODO get unit rent from the correct place and remove the random generation in moveIn()
-                Persistence.service().retrieve(unit.floorplan());
-                status.floorplanName().setValue(unit.floorplan().name().getValue());
-                status.floorplanMarketingName().setValue(unit.floorplan().marketingName().getValue());
-
-                status.building().setPrimaryKey(building.getPrimaryKey());
-                status.buildingName().setValue(building.info().name().getValue());
-                status.propertyCode().setValue(building.propertyCode().getValue());
-                status.complexName().setValue(building.complex().name().getValue());
-
-                status.common().propertyManger().set(building.propertyManager());
-                status.common().region().setValue(randomRegion());
-                // TODO fill common().owner() and commmon().portfolio() 
-
-                while (status.statusDate().getValue().before(end)) {
-                    statuses.add(status.duplicate());
-
-                    if (status.vacancyStatus().isNull()) {
-                        notice(status);
-
-                    } else if (status.vacancyStatus().getValue().equals(Vacancy.Notice)) {
-                        if (status.scoping().isBooleanTrue()) {
-                            // throw a 'fair' coin in order to decide if someone is going to rent the unit or move out will take place
-                            if ((RND.nextInt(2) == 0)
-                                    & (!RentedStatus.Rented.equals(status.rentedStatus().getValue()) & RentReadiness.RentReady.equals(status
-                                            .rentReadinessStatus().getValue()))) {
-                                rented(status);
-                            } else {
-                                moveOut(status);
-                            }
-                        } else { /* notice, but not scoped */
-                            // throw a 'fair' coin in order to decide if someone is going to move out or scoping is going to happen
-                            if ((RND.nextInt(2) == 0)) {
-                                scoped(status);
-                            } else {
-                                moveOut(status);
-                            }
-                        }
-                    } else { /* Vacant */
-                        if (status.scoping().isBooleanTrue()) {
-                            if (RentedStatus.Rented.equals(status.rentedStatus().getValue())) {
-                                moveIn(status);
-                            } else if (RentReadiness.RentReady.equals(status.rentReadinessStatus().getValue())) {
-                                rented(status);
-                            } else if (RentReadiness.NeedsRepairs.equals(status.rentReadinessStatus().getValue())) {
-                                renoInProgress(status);
-                            } else if (RentReadiness.RenoInProgress.equals(status.rentReadinessStatus().getValue())) {
-                                renoFinished(status);
-                            }
-                        } else {
-                            scoped(status);
-                        }
-                    }
-
-                    if (!status.moveOutDay().isNull()) {
-                        // TODO actually should be equal to unit.availableForRent();
-                        LogicalDate availableFromDay = new LogicalDate(status.moveOutDay().getValue());
-                        availableFromDay.setTime(availableFromDay.getTime() + 24l * 60l * 60l * 1000l);
-                        status.availableFromDay().setValue(availableFromDay);
-                    }
-                } // end of unit status creation loop
-            } // end of unit iteration loop
-        } // end of building iteration loop
-        if (!statuses.isEmpty()) {
-            // add 1 turnover at the end
-            UnitAvailabilityStatus s = (UnitAvailabilityStatus) statuses.get(statuses.size() - 1);
-            status.unit().set(lastUnit);
-            status.statusDate().setValue(new LogicalDate(end.getTime() + MIN_EVENT_DELTA));
-            status.vacancyStatus().setValue(null);
-            statuses.add(status.duplicate());
-
-            status.vacancyStatus().setValue(Vacancy.Vacant);
-            statuses.add(status.duplicate());
-
-            status.vacancyStatus().setValue(null);
-            statuses.add(status.duplicate());
-
-            status.vacancyStatus().setValue(Vacancy.Vacant);
-            statuses.add(status.duplicate());
-
-            status.vacancyStatus().setValue(null);
-            statuses.add(status.duplicate());
-
-            status.vacancyStatus().setValue(Vacancy.Vacant);
-            statuses.add(status.duplicate());
-
-            status.vacancyStatus().setValue(null);
-            statuses.add(status.duplicate());
-
-        }
-        persistArray(statuses);
-        return "Created " + statuses.size() + " mockup unit statuses for Availability Gadgets";
+//        int unitCounter = 0;
+//        final LogicalDate start = new LogicalDate();
+//        start.setYear(106);
+//        start.setMonth(0);
+//        start.setDate(1);
+//        final LogicalDate end = new LogicalDate();
+//        end.setTime(end.getTime() - MIN_EVENT_DELTA);
+//        ArrayList<IEntity> statuses = new ArrayList<IEntity>();
+//        AptUnit lastUnit = null;
+//        UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
+//        for (Building building : Persistence.service().query(new EntityQueryCriteria<Building>(Building.class))) {
+//            if (++unitCounter > MAX_NUMBER_OF_UNITS) {
+//                break;
+//            }
+//            Persistence.service().retrieve(building.complex());
+//
+//            EntityQueryCriteria<AptUnit> unitCriteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+//            unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().belongsTo(), building));
+//
+//            for (AptUnit unit : Persistence.service().query(unitCriteria)) {
+//                if (++unitCounter > MAX_NUMBER_OF_UNITS) {
+//                    break;
+//                }
+//                lastUnit = unit;
+//                status.set(null);
+//                status.statusDate().setValue(start);
+//                status.unit().setPrimaryKey(unit.getPrimaryKey());
+//
+//                status.unitName().setValue(unit.info().number().getValue());
+//
+//                EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
+//                leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit(), unit));
+//                Lease lease = Persistence.service().retrieve(leaseCriteria);
+//                if (lease != null && !lease.serviceAgreement().isNull() && !lease.serviceAgreement().serviceItem().isNull()) {
+//                    PriceCalculationHelpers.calculateChargeItemAdjustments(lease.serviceAgreement().serviceItem());
+//                    unit.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem()._currentPrice().getValue());
+//                }
+//
+//                BigDecimal marketRent = unit.financial()._marketRent().isNull() ? new BigDecimal(0) : unit.financial()._marketRent().getValue();
+//                status.marketRent().setValue(marketRent);
+//                // TODO get unit rent from the correct place and remove the random generation in moveIn()
+//                Persistence.service().retrieve(unit.floorplan());
+//                status.floorplanName().setValue(unit.floorplan().name().getValue());
+//                status.floorplanMarketingName().setValue(unit.floorplan().marketingName().getValue());
+//
+//                status.building().setPrimaryKey(building.getPrimaryKey());
+//                status.buildingName().setValue(building.info().name().getValue());
+//                status.propertyCode().setValue(building.propertyCode().getValue());
+//                status.complexName().setValue(building.complex().name().getValue());
+//
+//                status.common().propertyManger().set(building.propertyManager());
+//                status.common().region().setValue(randomRegion());
+//                // TODO fill common().owner() and commmon().portfolio() 
+//
+//                while (status.statusDate().getValue().before(end)) {
+//                    statuses.add(status.duplicate());
+//
+//                    if (status.vacancyStatus().isNull()) {
+//                        notice(status);
+//
+//                    } else if (status.vacancyStatus().getValue().equals(Vacancy.Notice)) {
+//                        if (status.scoping().isBooleanTrue()) {
+//                            // throw a 'fair' coin in order to decide if someone is going to rent the unit or move out will take place
+//                            if ((RND.nextInt(2) == 0)
+//                                    & (!RentedStatus.Rented.equals(status.rentedStatus().getValue()) & RentReadiness.RentReady.equals(status
+//                                            .rentReadinessStatus().getValue()))) {
+//                                rented(status);
+//                            } else {
+//                                moveOut(status);
+//                            }
+//                        } else { /* notice, but not scoped */
+//                            // throw a 'fair' coin in order to decide if someone is going to move out or scoping is going to happen
+//                            if ((RND.nextInt(2) == 0)) {
+//                                scoped(status);
+//                            } else {
+//                                moveOut(status);
+//                            }
+//                        }
+//                    } else { /* Vacant */
+//                        if (status.scoping().isBooleanTrue()) {
+//                            if (RentedStatus.Rented.equals(status.rentedStatus().getValue())) {
+//                                moveIn(status);
+//                            } else if (RentReadiness.RentReady.equals(status.rentReadinessStatus().getValue())) {
+//                                rented(status);
+//                            } else if (RentReadiness.NeedsRepairs.equals(status.rentReadinessStatus().getValue())) {
+//                                renoInProgress(status);
+//                            } else if (RentReadiness.RenoInProgress.equals(status.rentReadinessStatus().getValue())) {
+//                                renoFinished(status);
+//                            }
+//                        } else {
+//                            scoped(status);
+//                        }
+//                    }
+//
+//                    if (!status.moveOutDay().isNull()) {
+//                        // TODO actually should be equal to unit.availableForRent();
+//                        LogicalDate availableFromDay = new LogicalDate(status.moveOutDay().getValue());
+//                        availableFromDay.setTime(availableFromDay.getTime() + 24l * 60l * 60l * 1000l);
+//                        status.availableFromDay().setValue(availableFromDay);
+//                    }
+//                } // end of unit status creation loop
+//            } // end of unit iteration loop
+//        } // end of building iteration loop
+//        if (!statuses.isEmpty()) {
+//            // add 1 turnover at the end
+//            UnitAvailabilityStatus s = (UnitAvailabilityStatus) statuses.get(statuses.size() - 1);
+//            status.unit().set(lastUnit);
+//            status.statusDate().setValue(new LogicalDate(end.getTime() + MIN_EVENT_DELTA));
+//            status.vacancyStatus().setValue(null);
+//            statuses.add(status.duplicate());
+//
+//            status.vacancyStatus().setValue(Vacancy.Vacant);
+//            statuses.add(status.duplicate());
+//
+//            status.vacancyStatus().setValue(null);
+//            statuses.add(status.duplicate());
+//
+//            status.vacancyStatus().setValue(Vacancy.Vacant);
+//            statuses.add(status.duplicate());
+//
+//            status.vacancyStatus().setValue(null);
+//            statuses.add(status.duplicate());
+//
+//            status.vacancyStatus().setValue(Vacancy.Vacant);
+//            statuses.add(status.duplicate());
+//
+//            status.vacancyStatus().setValue(null);
+//            statuses.add(status.duplicate());
+//
+//        }
+//        persistArray(statuses);
+//        return "Created " + statuses.size() + " mockup unit statuses for Availability Gadgets";
+        return "Created 0 mockup unit statuses for Availability Gadgets";
     }
 
     private static void notice(UnitAvailabilityStatus status) {
