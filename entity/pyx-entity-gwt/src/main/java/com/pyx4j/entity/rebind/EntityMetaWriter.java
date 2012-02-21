@@ -367,7 +367,7 @@ public class EntityMetaWriter {
 
             data.persistenceTransient = (method.getAnnotation(Transient.class) != null);
             if ((!data.persistenceTransient) && (contextHelper.validateReservedKeywordsMembers)) {
-                if (!ReservedWords.validate(logger, interfaceType, method)) {
+                if (!ReservedWords.validate(logger, interfaceType, method, data.objectClassType)) {
                     validationErrors++;
                 }
             }

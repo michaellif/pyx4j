@@ -34,13 +34,18 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.ObjectClassType;
 
 public class ReservedWords {
 
     private static Set<String> keywords;
 
-    public static boolean validate(TreeLogger logger, JClassType interfaceType, JMethod memberMethod) throws UnableToCompleteException {
+    public static boolean validate(TreeLogger logger, JClassType interfaceType, JMethod memberMethod, ObjectClassType objectClassType)
+            throws UnableToCompleteException {
         if (interfaceType.getAnnotation(Transient.class) != null) {
+            return true;
+        }
+        if ((objectClassType != ObjectClassType.Entity) || (objectClassType != ObjectClassType.Primitive)) {
             return true;
         }
         // Ignore members that are managed as additional tables
