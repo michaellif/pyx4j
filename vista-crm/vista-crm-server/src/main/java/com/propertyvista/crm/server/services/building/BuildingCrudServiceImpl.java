@@ -33,6 +33,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
+import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
 public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building, BuildingDTO> implements BuildingCrudService {
 
@@ -112,7 +113,11 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
                 dbo.info().address().location().setValue(new GeoPoint(lat, lng));
             }
         } else {
-            dbo.info().address().location().set(null);
+            if (in.info().address().location().isNull()) {
+                SharedGeoLocator.populateGeo(in.info().address());
+            } else {
+                dbo.info().address().location().set(null);
+            }
         }
 
         boolean isCreate = dbo.id().isNull();

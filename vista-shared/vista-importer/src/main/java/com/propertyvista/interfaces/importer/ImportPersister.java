@@ -101,7 +101,6 @@ class ImportPersister {
                     throw new UserRuntimeException(i18n.tr("Building ''{0}'' media error {1}", buildingIO.propertyCode().getValue(), e.getMessage()));
                 }
             }
-            Persistence.service().persist(building.media());
         }
 
         Persistence.service().persist(building);
@@ -161,7 +160,6 @@ class ImportPersister {
                             floorplanIO.name().getValue(), e.getMessage()));
                 }
             }
-            Persistence.service().persist(floorplan.media());
         }
 
         Persistence.service().persist(floorplan);
