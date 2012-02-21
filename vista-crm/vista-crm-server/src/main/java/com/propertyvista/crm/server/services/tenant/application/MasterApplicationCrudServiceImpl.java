@@ -30,6 +30,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -134,6 +135,22 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         dbo.decisionDate().setValue(new LogicalDate());
 
         Persistence.service().merge(dbo);
+
+        // Update lease status if necessary:
+        Persistence.service().retrieve(dbo.lease());
+        switch (actionDTO.status().getValue()) {
+        case Approved:
+            dbo.lease().status().setValue(Status.Approved);
+            break;
+        case Declined:
+            dbo.lease().status().setValue(Status.Declined);
+            break;
+        case Cancelled:
+            dbo.lease().status().setValue(Status.ApplicationCancelled);
+            break;
+        }
+
+        Persistence.service().merge(dbo.lease());
 
         MasterApplicationDTO dto2 = GenericConverter.convertDBO2DTO(dbo, dtoClass);
         enhanceDTO(dbo, dto2, false);

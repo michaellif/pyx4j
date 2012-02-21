@@ -25,7 +25,7 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
@@ -67,8 +67,12 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     @Override
     public void populate(LeaseDTO value) {
-        createApplicationAction.setVisible(!value.id().isNull() && Lease.Status.Draft.equals(value.status().getValue()));
         super.populate(value);
+
+        // set buttons state:
+        Status status = value.status().getValue();
+        createApplicationAction.setVisible(status == Status.Draft);
+        runBillAction.setVisible(status == Status.Approved || status == Status.Renewed || status == Status.Transferred);
     }
 
     @Override

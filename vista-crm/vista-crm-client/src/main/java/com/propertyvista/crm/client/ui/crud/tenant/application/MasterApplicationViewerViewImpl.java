@@ -181,6 +181,19 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
     }
 
     @Override
+    public void populate(MasterApplicationDTO value) {
+        super.populate(value);
+
+        // set buttons state:
+        Status status = value.status().getValue();
+        approveAction.setVisible(status != Status.Approved && status != Status.Declined && status != Status.Cancelled);
+        moreInfoAction.setVisible(status != Status.Declined && status != Status.Cancelled);
+        declineAction.setVisible(status != Status.Approved && status != Status.Declined && status != Status.Cancelled);
+        cancelAction.setVisible(status != Status.Cancelled);
+        checkAction.setVisible(status != Status.Declined && status != Status.Cancelled);
+    }
+
+    @Override
     public IListerView<ApplicationDTO> getApplicationsView() {
         return applicationLister;
     }

@@ -80,7 +80,6 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         //Tenants
         folder = new NavigFolder(i18n.tr("Tenants"), CrmImages.INSTANCE.tenantsNormal(), CrmImages.INSTANCE.tenantsHover(), CrmImages.INSTANCE.tenantsActive());
         folder.addNavigItem(new CrmSiteMap.Tenants.Tenant());
-        folder.addNavigItem(new CrmSiteMap.Tenants.Lease());
         folder.addNavigItem(new CrmSiteMap.Tenants.Guarantor());
         list.add(folder);
 
@@ -89,6 +88,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
                 CrmImages.INSTANCE.marketingActive());
         folder.addNavigItem(new Marketing.Lead());
         folder.addNavigItem(new CrmSiteMap.Tenants.MasterApplication());
+        folder.addNavigItem(new CrmSiteMap.Tenants.Lease());
         list.add(folder);
 
         //LegalAndCollections
