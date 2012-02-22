@@ -422,7 +422,11 @@ public class TableModel {
                 parameterIndex++;
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());
             }
-            return (stmt.executeUpdate() == 1);
+            boolean updated = (stmt.executeUpdate() == 1);
+            if (EntityPersistenceServiceRDB.traceWarnings) {
+                SQLUtils.logAndClearWarnings(connection);
+            }
+            return updated;
         } catch (SQLException e) {
             log.error("{} SQL {}", tableName, sql);
             log.error("{} SQL update error", tableName, e);

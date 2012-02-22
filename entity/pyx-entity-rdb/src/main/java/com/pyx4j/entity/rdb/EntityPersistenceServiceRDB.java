@@ -93,6 +93,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     public static final boolean traceSql = false;
 
+    public static final boolean traceWarnings = false;
+
     public EntityPersistenceServiceRDB() {
         this(RDBUtils.getRDBConfiguration());
     }

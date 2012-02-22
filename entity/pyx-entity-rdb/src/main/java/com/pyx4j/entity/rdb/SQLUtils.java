@@ -23,12 +23,15 @@ package com.pyx4j.entity.rdb;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.pyx4j.config.server.Trace;
 
 public class SQLUtils {
 
@@ -59,6 +62,19 @@ public class SQLUtils {
             }
         } catch (Throwable e) {
         }
+    }
+
+    public static void logAndClearWarnings(Connection connection) throws SQLException {
+        boolean warns = false;
+        for (SQLWarning w = connection.getWarnings(); w != null; w = w.getNextWarning()) {
+            log.warn(w.getMessage(), w);
+            warns = true;
+        }
+        if (warns) {
+            log.info("Called from {}", Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            connection.clearWarnings();
+        }
+
     }
 
     public static void execute(Connection connection, String sql) throws SQLException {

@@ -21,12 +21,24 @@
 package com.pyx4j.entity.rdb.hsql;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.dialect.NamingConvention;
+import com.pyx4j.entity.rdb.dialect.NamingConventionModern;
 
 public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.ConfigurationHSQL {
 
     @Override
     public String dbName() {
         return "tst_entity";
+    }
+
+    @Override
+    public String connectionUrl() {
+        boolean hsqlFiles = false;
+        if (hsqlFiles) {
+            return "jdbc:hsqldb:file:./target/hsqldb/" + dbName();
+        } else {
+            return super.connectionUrl();
+        }
     }
 
     @Override
@@ -60,6 +72,18 @@ public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.Configuratio
             return 0;
         } else {
             return super.unreturnedConnectionTimeout();
+        }
+    }
+
+    @Override
+    public NamingConvention namingConvention() {
+        //TODO testDiferentNamingConvention
+        boolean testDiferentNamingConvention = false;
+        if (testDiferentNamingConvention) {
+            return new NamingConventionModern(64, "_");
+        } else {
+            // Use default
+            return null;
         }
     }
 }

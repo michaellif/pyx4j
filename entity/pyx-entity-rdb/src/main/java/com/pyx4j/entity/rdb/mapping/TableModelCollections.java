@@ -37,6 +37,7 @@ import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.rdb.dialect.HSQLDialect;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -210,20 +211,20 @@ public class TableModelCollections {
                 }
                 sql.append(name);
             }
-            if (isList) {
-                sql.append(", ").append(member.sqlOrderColumnName());
-            }
             if (dialect.isMultitenant()) {
                 sql.append(", ns");
+            }
+            if (isList) {
+                sql.append(", ").append(member.sqlOrderColumnName());
             }
             sql.append(" FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
-                log.debug(Trace.id() + " {} ", sql);
+                log.debug(Trace.id() + " {}", sql);
             }
-            stmt = connection.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            stmt = connection.prepareStatement(sql.toString(), ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
             stmt.setLong(1, entity.getPrimaryKey().asLong());
             if (dialect.isMultitenant()) {
                 stmt.setString(2, NamespaceManager.getNamespace());
@@ -253,6 +254,12 @@ public class TableModelCollections {
                         cascadeRemove.add((IEntity) value);
                     }
                 }
+            }
+            if (EntityPersistenceServiceRDB.traceWarnings) {
+                SQLUtils.logAndClearWarnings(connection);
+            } else if (dialect instanceof HSQLDialect) {
+                // https://sourceforge.net/tracker/?func=detail&aid=3490661&group_id=23316&atid=378131
+                connection.clearWarnings();
             }
         } catch (SQLException e) {
             log.error("{} SQL {}", member.sqlName(), sql);
