@@ -69,7 +69,7 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
         if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
             return true;
         } else {
-            return false;
+            return Boolean.valueOf(System.getProperty("com.pyx4j.mysql.trace", "false")).booleanValue();
         }
     }
 
