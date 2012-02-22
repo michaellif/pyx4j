@@ -47,5 +47,4 @@ public interface Payment extends IEntity {
 
     @JoinTable(value = BillPayment.class, cascade = false)
     BillPayment billPayment();
-
 }

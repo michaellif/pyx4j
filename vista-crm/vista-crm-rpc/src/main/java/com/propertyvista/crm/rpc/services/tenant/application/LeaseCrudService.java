@@ -29,10 +29,17 @@ public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
 
     void setSelectededUnit(AsyncCallback<AptUnit> callback, Key unitId);
 
-    void removeTenat(AsyncCallback<Boolean> callback, Key entityId);
+    void removeTenat(AsyncCallback<Boolean> callback, Key tenantId);
 
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 
     void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 
+    void notice(AsyncCallback<LeaseDTO> callback, Key entityId);
+
+    void cancelNotice(AsyncCallback<LeaseDTO> callback, Key entityId);
+
+    void evict(AsyncCallback<LeaseDTO> callback, Key entityId);
+
+    void cancelEvict(AsyncCallback<LeaseDTO> callback, Key entityId);
 }

@@ -222,8 +222,6 @@ public class ApplicationManager {
         }
 
         if (allApplicationsSubmited) {
-            lease.status().setValue(Lease.Status.PendingDecision);
-            Persistence.service().persist(lease);
             ma.status().setValue(MasterApplication.Status.PendingDecision);
             Persistence.service().persist(ma);
             for (Application app : ma.applications()) {

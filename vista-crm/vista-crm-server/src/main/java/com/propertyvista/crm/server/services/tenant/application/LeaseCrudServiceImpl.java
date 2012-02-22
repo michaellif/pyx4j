@@ -35,6 +35,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
@@ -143,9 +144,9 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    public void removeTenat(AsyncCallback<Boolean> callback, Key entityId) {
+    public void removeTenat(AsyncCallback<Boolean> callback, Key tenantId) {
         // TODO if should physically remove it here or just break relation to Lease (TenantInLease.lease().set(null))? 
-        Persistence.service().delete(Persistence.service().retrieve(TenantInLease.class, entityId));
+        Persistence.service().delete(Persistence.service().retrieve(TenantInLease.class, tenantId));
         callback.onSuccess(true);
     }
 
@@ -200,5 +201,37 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         MasterApplication ma = ApplicationManager.createMasterApplication(lease);
         ApplicationManager.sendMasterApplicationEmail(ma);
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void notice(AsyncCallback<LeaseDTO> callback, Key entityId) {
+        Lease lease = Persistence.secureRetrieve(dboClass, entityId);
+        lease.status().setValue(Status.OnNotice);
+        Persistence.secureSave(lease);
+        retrieve(callback, entityId);
+    }
+
+    @Override
+    public void cancelNotice(AsyncCallback<LeaseDTO> callback, Key entityId) {
+        Lease lease = Persistence.secureRetrieve(dboClass, entityId);
+        lease.status().setValue(Status.Active);
+        Persistence.secureSave(lease);
+        retrieve(callback, entityId);
+    }
+
+    @Override
+    public void evict(AsyncCallback<LeaseDTO> callback, Key entityId) {
+        Lease lease = Persistence.secureRetrieve(dboClass, entityId);
+        lease.status().setValue(Status.Broken);
+        Persistence.secureSave(lease);
+        retrieve(callback, entityId);
+    }
+
+    @Override
+    public void cancelEvict(AsyncCallback<LeaseDTO> callback, Key entityId) {
+        Lease lease = Persistence.secureRetrieve(dboClass, entityId);
+        lease.status().setValue(Status.Active);
+        Persistence.secureSave(lease);
+        retrieve(callback, entityId);
     }
 }

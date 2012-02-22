@@ -55,14 +55,33 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     }
 
     @Override
+    public Presenter<Bill> getBillListerPresenter() {
+        return billLister;
+    }
+
+    @Override
+    protected void onPopulateSuccess(LeaseDTO result) {
+        super.onPopulateSuccess(result);
+        populateBills(currentValue = result);
+    }
+
+    protected void populateBills(LeaseDTO result) {
+        List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
+        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Bill.class).billingAccount().leaseFinancial().id().getPath(),
+                Operators.is, result.leaseFinancial().getPrimaryKey()));
+        billLister.setPreDefinedFilters(preDefinedFilters);
+        billLister.populate();
+    }
+
+    // Actions:
+
+    @Override
     public void createMasterApplication() {
         ((LeaseCrudService) service).createMasterApplication(new DefaultAsyncCallback<VoidSerializable>() {
-
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-
         }, entityId);
     }
 
@@ -88,21 +107,42 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     }
 
     @Override
-    public Presenter<Bill> getBillListerPresenter() {
-        return billLister;
+    public void notice() {
+        ((LeaseCrudService) service).notice(new DefaultAsyncCallback<LeaseDTO>() {
+            @Override
+            public void onSuccess(LeaseDTO result) {
+                view.populate(result);
+            }
+        }, entityId);
     }
 
     @Override
-    protected void onPopulateSuccess(LeaseDTO result) {
-        super.onPopulateSuccess(result);
-        populateBills(currentValue = result);
+    public void cancelNotice() {
+        ((LeaseCrudService) service).cancelNotice(new DefaultAsyncCallback<LeaseDTO>() {
+            @Override
+            public void onSuccess(LeaseDTO result) {
+                view.populate(result);
+            }
+        }, entityId);
     }
 
-    protected void populateBills(LeaseDTO result) {
-        List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
-        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Bill.class).billingAccount().leaseFinancial().id().getPath(),
-                Operators.is, result.leaseFinancial().getPrimaryKey()));
-        billLister.setPreDefinedFilters(preDefinedFilters);
-        billLister.populate();
+    @Override
+    public void evict() {
+        ((LeaseCrudService) service).evict(new DefaultAsyncCallback<LeaseDTO>() {
+            @Override
+            public void onSuccess(LeaseDTO result) {
+                view.populate(result);
+            }
+        }, entityId);
+    }
+
+    @Override
+    public void cancelEvict() {
+        ((LeaseCrudService) service).cancelEvict(new DefaultAsyncCallback<LeaseDTO>() {
+            @Override
+            public void onSuccess(LeaseDTO result) {
+                view.populate(result);
+            }
+        }, entityId);
     }
 }

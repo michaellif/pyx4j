@@ -38,6 +38,14 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     private final Button runBillAction;
 
+    private final Button notice;
+
+    private final Button cancelNotice;
+
+    private final Button evict;
+
+    private final Button cancelEvict;
+
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
 
@@ -63,6 +71,42 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             }
         });
         addToolbarItem(runBillAction.asWidget());
+
+        notice = new Button(i18n.tr("Notice"), new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((LeaseViewerView.Presenter) presenter).notice();
+            }
+        });
+        addToolbarItem(notice.asWidget());
+
+        cancelNotice = new Button(i18n.tr("Cancel Notice"), new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((LeaseViewerView.Presenter) presenter).cancelNotice();
+            }
+        });
+        addToolbarItem(cancelNotice.asWidget());
+
+        evict = new Button(i18n.tr("Evict"), new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((LeaseViewerView.Presenter) presenter).evict();
+            }
+        });
+        addToolbarItem(notice.asWidget());
+
+        cancelEvict = new Button(i18n.tr("Cancel Evict"), new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((LeaseViewerView.Presenter) presenter).cancelEvict();
+            }
+        });
+        addToolbarItem(cancelNotice.asWidget());
     }
 
     @Override
@@ -72,7 +116,11 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         // set buttons state:
         Status status = value.status().getValue();
         createApplicationAction.setVisible(status == Status.Draft);
-        runBillAction.setVisible(status == Status.Approved || status == Status.Renewed || status == Status.Transferred);
+        runBillAction.setVisible(status == Status.Active);
+        notice.setVisible(status == Status.Active);
+        cancelNotice.setVisible(status == Status.OnNotice);
+        evict.setVisible(status == Status.Active);
+        cancelEvict.setVisible(status == Status.Broken);
     }
 
     @Override

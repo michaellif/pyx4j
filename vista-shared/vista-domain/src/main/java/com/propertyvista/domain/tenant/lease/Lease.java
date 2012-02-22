@@ -49,21 +49,53 @@ public interface Lease extends IEntity {
 
         ApplicationInProgress,
 
-        PendingDecision,
-
         Approved, // Application
 
         Declined, // Application
 
         ApplicationCancelled, // Application
 
+        Active,
+
         Completed,
+
+        OnNotice,
 
         Broken,
 
         Renewed,
 
         Transferred;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @I18n(context = "Lease Term")
+    @XmlType(name = "LeaseTerm")
+    public enum Term {
+
+        fixed,
+
+        periodic,
+
+        indefinite;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @I18n(context = "Lease Period")
+    @XmlType(name = "LeasePeriod")
+    public enum Period {
+
+        annual,
+
+        monthly;
 
         @Override
         public String toString() {
@@ -92,12 +124,19 @@ public interface Lease extends IEntity {
     @OrderBy(TenantInLease.OrderInLeaseId.class)
     IList<TenantInLease> tenants();
 
-    // Dates:
+    // Duration by:
+    IPrimitive<Period> leasePeriod();
+
+    IPrimitive<Integer> numberOfPeriods();
+
+    // or by dates:
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseFrom();
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseTo();
+
+    // other dates:
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> actualLeaseTo();

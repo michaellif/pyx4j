@@ -29,6 +29,13 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
         void startBilling();
 
+        void notice();
+
+        void cancelNotice();
+
+        void evict();
+
+        void cancelEvict();
     }
 
     IListerView<Bill> getBillListerView();
