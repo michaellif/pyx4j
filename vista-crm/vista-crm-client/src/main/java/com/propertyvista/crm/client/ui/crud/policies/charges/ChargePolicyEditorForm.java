@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -33,6 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
+import com.propertyvista.domain.financial.offering.ChargeCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
@@ -42,12 +42,18 @@ import com.propertyvista.domain.policy.policies.domain.ChargePolicyItem;
 public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<ChargePolicyDTO> {
     private final static I18n i18n = I18n.get(ChargePolicyEditorForm.class);
 
+    private boolean viewMode;
+
     public ChargePolicyEditorForm() {
         this(false);
+
+        viewMode = false;
     }
 
     public ChargePolicyEditorForm(boolean viewMode) {
         super(ChargePolicyDTO.class, viewMode);
+
+        this.viewMode = viewMode;
     }
 
     @Override
@@ -62,7 +68,7 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
         
         int row = -1;
         
-        panel.setWidget(++row, 0, inject(proto().chargePolicyItems(), new ChargePolicyEditorFolder()));
+        panel.setWidget(++row, 0, inject(proto().chargePolicyItems(), new ChargePolicyEditorFolder(viewMode)));
 
         return panel;
     }
@@ -70,29 +76,44 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
     
     private static class ChargePolicyEditorFolder extends VistaBoxFolder<ChargePolicyItem> {
 
-        public ChargePolicyEditorFolder() {
+        private final boolean viewMode;
+        
+        public ChargePolicyEditorFolder(boolean viewMode) {
             super(ChargePolicyItem.class);
+            
+            this.viewMode = viewMode;
         }
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof ChargePolicyItem) {
-                return new ChargePolicyItemEditor();
+                return new ChargePolicyItemEditor(viewMode);
             } else {
                 return super.create(member);
             }
         }
 
         private static class ChargePolicyItemEditor extends CEntityDecoratableEditor<ChargePolicyItem> {
-            private CComponent itemTypeCb;
-            private CComponent serviceTypesCb;
-            private CComponent featureTypeCb;
-            private CEntityComboBox<ProductItemType> productItemTypeCb;
-            private CComponent chargeCodeCb;
+            
+            private final static I18n i18n = I18n.get(ChargePolicyItemEditor.class);
+            
+            //private CComponent<?,?> itemTypeCb;
+            //private CComponent<?,?> serviceTypesCb;
+            //private CComponent<?,?> featureTypeCb;
+            //private CEntityComboBox<ProductItemType> productItemTypeCb;
+            //private CComponent<?,?> chargeCodeCb;
+            
+            private Widget serviceType;
+
+            private Widget featureType;
+            
+            private final boolean viewMode;
             
             
-            public ChargePolicyItemEditor() {
+            public ChargePolicyItemEditor(boolean viewMode) {
                 super(ChargePolicyItem.class);
+                
+                this.viewMode = viewMode;
             }
 
             @Override
@@ -100,96 +121,127 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
                 FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
                 
-                if (isEditable()) {
-                    WidgetDecorator wd = new DecoratorBuilder(inject(proto().productItemType().type())).build();
-                    itemTypeCb = wd.getComnponent();
-                    ((CComboBox<ProductItemType.Type>)itemTypeCb).addValueChangeHandler(new ValueChangeHandler<ProductItemType.Type>() {
+                if (!viewMode) {               
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType().type())).build());
+                    get(proto().productItemType().type()).addValueChangeHandler(new ValueChangeHandler<ProductItemType.Type>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<ProductItemType.Type> event) {
-                            productItemTypeCb.resetCriteria();
+                            ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).resetCriteria();
                             
                             if (event.getValue() == ProductItemType.Type.service)
                             {
-                                productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().type(), ProductItemType.Type.service));
-                                productItemTypeCb.setValue(null);
-                                serviceTypesCb.setVisible(true);
-                                featureTypeCb.setVisible(false);
+                                ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).
+                                    addCriterion(PropertyCriterion.eq(((CEntityComboBox<ProductItemType>)get(proto().productItemType())).proto().type(), ProductItemType.Type.service));
+                                ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).setValue(null);
+                                get(proto().productItemType().serviceType()).setVisible(true);
+                                get(proto().productItemType().featureType()).setVisible(false);
                             }else {
-                                productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().type(), ProductItemType.Type.feature));
-                                productItemTypeCb.setValue(null);
-                                serviceTypesCb.setVisible(false);
-                                featureTypeCb.setVisible(true);
+                                ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).
+                                    addCriterion(PropertyCriterion.eq(((CEntityComboBox<ProductItemType>)get(proto().productItemType())).proto().type(), ProductItemType.Type.feature));
+                                ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).setValue(null);
+                                get(proto().productItemType().serviceType()).setVisible(false);
+                                get(proto().productItemType().featureType()).setVisible(true);
                             }
                         }
                     });
-                    content.setWidget(++row, 0, wd);
                     
-                    
-                    wd = new DecoratorBuilder(inject(proto().productItemType().serviceType())).build();
-                    serviceTypesCb = wd.getComnponent();
-                    ((CComboBox<Service.Type>)serviceTypesCb).addValueChangeHandler(new ValueChangeHandler<Service.Type>() {
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType().serviceType())).build());
+                    get(proto().productItemType().serviceType()).addValueChangeHandler(new ValueChangeHandler<Service.Type>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<Service.Type> event) {
-                            productItemTypeCb.resetCriteria();
-                            productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().type(), ((CComboBox<ProductItemType.Type>)itemTypeCb).getValue()));
+                            ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).resetCriteria();
+                            ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).
+                                addCriterion(PropertyCriterion.eq(((CEntityComboBox<ProductItemType>)get(proto().productItemType())).proto().type(), get(proto().productItemType().type()).getValue()));
                             
                             if (event.getValue() != null) {
-                                productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().serviceType(), event.getValue()));
+                                ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).
+                                    addCriterion(PropertyCriterion.eq(((CEntityComboBox<ProductItemType>)get(proto().productItemType())).proto().serviceType(), event.getValue()));
                             }
                             
-                            productItemTypeCb.setValue(null);
+                            ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).setValue(null);
                         }
                     });
-                    serviceTypesCb.setVisible(false);
-                    content.setWidget(++row, 0, wd); 
+                    get(proto().productItemType().serviceType()).setVisible(false);
                     
-                    wd = new DecoratorBuilder(inject(proto().productItemType().featureType())).build();
-                    featureTypeCb = wd.getComnponent();
-                    ((CComboBox<Feature.Type>)featureTypeCb).addValueChangeHandler(new ValueChangeHandler<Feature.Type>() {
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType().featureType())).build());
+                    get(proto().productItemType().featureType()).addValueChangeHandler(new ValueChangeHandler<Feature.Type>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<Feature.Type> event) {
-                            productItemTypeCb.resetCriteria();
-                            productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().type(), ((CComboBox<ProductItemType.Type>)itemTypeCb).getValue()));
+                            ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).resetCriteria();
+                            ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).
+                                addCriterion(PropertyCriterion.eq(((CEntityComboBox<ProductItemType>)get(proto().productItemType())).proto().type(), get(proto().productItemType().type()).getValue()));
                             
                             if (event.getValue() != null) {
-                                productItemTypeCb.addCriterion(PropertyCriterion.eq(productItemTypeCb.proto().featureType(), event.getValue()));
+                                ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).
+                                    addCriterion(PropertyCriterion.eq(((CEntityComboBox<ProductItemType>)get(proto().productItemType())).proto().featureType(), event.getValue()));
                             }
                             
-                            productItemTypeCb.setValue(null);
+                            ((CEntityComboBox<ProductItemType>)get(proto().productItemType())).setValue(null);
                         }
                     });
-                    featureTypeCb.setVisible(false);
-                    content.setWidget(++row, 0, wd); 
+                    get(proto().productItemType().featureType()).setVisible(false);
                     
-                    productItemTypeCb = (CEntityComboBox<ProductItemType> )inject(proto().productItemType());
-                    wd = new DecoratorBuilder(productItemTypeCb).build();
-                    productItemTypeCb.addValueChangeHandler(new ValueChangeHandler<ProductItemType>() {
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType())).build());
+                    get(proto().productItemType()).addValueChangeHandler(new ValueChangeHandler<ProductItemType>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<ProductItemType> event) {
                             ProductItemType pt = event.getValue();
                             
                             if (pt != null) {
                                 if (pt.type().getValue() == ProductItemType.Type.service) {
-                                    ((CComboBox<Service.Type>)serviceTypesCb).setValue(pt.serviceType().getValue());
+                                    get(proto().productItemType().serviceType()).setValue(pt.serviceType().getValue());
                                 } else{
-                                    ((CComboBox<Feature.Type>)featureTypeCb).setValue(pt.featureType().getValue());
+                                    get(proto().productItemType().featureType()).setValue(pt.featureType().getValue());
                                 }
                                 
-                                ((CComboBox<ProductItemType.Type>)itemTypeCb).setValue(pt.type().getValue());
+                                get(proto().productItemType().type()).setValue(pt.type().getValue());
                             }
                         }
                     });
                     
-                    content.setWidget(++row, 0, wd);
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeCode())).build());             
+                    get(proto().chargeCode()).addValueChangeHandler(new ValueChangeHandler<ChargeCode>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<ChargeCode> event) {
+                            //proto().productItemType().chargeCode().set(event.getValue());
+                            
+                        }
+                    });
                     
-                    wd = new DecoratorBuilder(inject(proto().chargeCode())).build();
-                    chargeCodeCb = wd.getComnponent();
+                }
+                else {
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType().name())).build());
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType().type())).build());
+                    
+                    content.setWidget(++row, 0, serviceType = new DecoratorBuilder(inject(proto().productItemType().serviceType())).build());
+                    content.setWidget(++row, 0, featureType = new DecoratorBuilder(inject(proto().productItemType().featureType())).build());
+                    
+                    WidgetDecorator wd = new DecoratorBuilder(inject(proto().chargeCode().name())).build();
+                    wd.getLabel().setText(i18n.tr("Charge Code"));
                     content.setWidget(++row, 0, wd);
                 }
 
-    
-  
                 return content;
+            }
+            
+            @Override
+            protected void onPopulate() {
+                super.onPopulate();
+                if (viewMode)
+                {
+                    serviceType.setVisible(false);
+                    featureType.setVisible(false);
+    
+                    switch (getValue().productItemType().type().getValue()) {
+                    case service:
+                        serviceType.setVisible(true);
+                        break;
+    
+                    case feature:
+                        featureType.setVisible(true);
+                        break;
+                    }
+                }
             }
         }
 

@@ -22,7 +22,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.ChargeCode;
 import com.propertyvista.domain.financial.offering.ProductItemType;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.policy.policies.ChargePolicy;
 import com.propertyvista.domain.policy.policies.domain.ChargePolicyItem;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
@@ -40,27 +39,29 @@ public class ChargePolicyPreloader extends AbstractPolicyPreloader<ChargePolicy>
         ChargePolicy policy = EntityFactory.create(ChargePolicy.class);
 
         ChargePolicyItem item = EntityFactory.create(ChargePolicyItem.class);
-        item.productItemType().type().setValue(ProductItemType.Type.service);
-        item.productItemType().name().setValue(i18n.tr("Service Item Tyoe 1"));
-        item.productItemType().serviceType().setValue(Service.Type.garage);
 
-        EntityQueryCriteria<ChargeCode> criteria = EntityQueryCriteria.create(ChargeCode.class);
-        //       Ê Ê Ê Ê Ê Ê//criteria.add(PropertyCriterion.eq(criteria.proto().name(), testId));
+        EntityQueryCriteria<ProductItemType> pitc = EntityQueryCriteria.create(ProductItemType.class);
+        List<ProductItemType> pitlist = Persistence.service().query(pitc);
 
-        List<ChargeCode> chargeCodes = Persistence.service().query(criteria);
-        if (chargeCodes.size() > 0) {
-            ChargeCode cc = chargeCodes.get(0);
-            item.productItemType().chargeCode().taxes().setValue(cc.taxes().getValue());
-            item.productItemType().chargeCode().name().setValue(cc.name().getValue());
-            item.productItemType().chargeCode().glCode().glId().setValue(cc.glCode().glId().getValue());
-            item.productItemType().chargeCode().glCode().description().setValue(cc.glCode().description().getValue());
-            item.productItemType().chargeCode().glCode().glCodeCategory().glCategoryId().setValue(cc.glCode().glCodeCategory().glCategoryId().getValue());
+        if (pitlist.size() > 0) {
+            item.productItemType().set(pitlist.get(0));
 
-            policy.chargePolicyItems().add(item);
+            EntityQueryCriteria<ChargeCode> criteria = EntityQueryCriteria.create(ChargeCode.class);
 
-            Persistence.service().persist(policy);
+            List<ChargeCode> chargeCodes = Persistence.service().query(criteria);
+            if (chargeCodes.size() > 0) {
+                ChargeCode cc = chargeCodes.get(0);
+
+                item.productItemType().chargeCode().set(cc);
+                item.chargeCode().set(cc);
+
+                policy.chargePolicyItems().add(item);
+
+                Persistence.service().persist(policy);
+            } else
+                throw new Error("unable to persist ChargePolicy: no charge codes");
         } else
-            throw new Error("unable to persist ChargePolicy");
+            throw new Error("unable to persist ChargePolicy: no product item types");
 
         return policy;
     }

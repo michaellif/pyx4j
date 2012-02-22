@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.financial.offering.ChargeCode;
@@ -21,10 +20,7 @@ import com.propertyvista.domain.financial.offering.ProductItemType;
 
 public interface ChargePolicyItem extends IEntity {
 
-    @Owned
     ProductItemType productItemType();
 
-    @Owned
     ChargeCode chargeCode();
-
 }
