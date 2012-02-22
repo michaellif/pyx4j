@@ -92,9 +92,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         super.onPopulate();
 
         // disable some editing on signed lease:
-        get(proto().signDate()).setEditable(getValue().signDate().isNull());
-        get(proto().leaseFrom()).setEditable(getValue().signDate().isNull());
-        get(proto().leaseTo()).setEditable(getValue().signDate().isNull());
+        get(proto().approvalDate()).setEditable(getValue().approvalDate().isNull());
+        get(proto().leaseFrom()).setEditable(getValue().approvalDate().isNull());
+        get(proto().leaseTo()).setEditable(getValue().approvalDate().isNull());
     }
 
     private Widget createDetailsTab() {
@@ -178,7 +178,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, leaseDates);
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().signDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
 
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());

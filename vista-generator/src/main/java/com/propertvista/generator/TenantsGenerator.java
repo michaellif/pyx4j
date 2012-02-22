@@ -88,7 +88,7 @@ public class TenantsGenerator {
         summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2014));
         summary.lease().expectedMoveIn().setValue(summary.lease().leaseFrom().getValue());
         summary.lease().actualMoveIn().setValue(summary.lease().expectedMoveIn().getValue());
-        summary.lease().signDate().setValue(summary.lease().leaseFrom().getValue());
+        summary.lease().approvalDate().setValue(summary.lease().leaseFrom().getValue());
         summary.lease().createDate().setValue(RandomUtil.randomLogicalDate(2010, 2010));
 
         if (RandomUtil.randomBoolean()) {

@@ -58,7 +58,7 @@ public class LeaseDataModel {
 
         lease.unit().set(serviceItem.element());
         lease.leaseFrom().setValue(RandomUtil.randomLogicalDate(2001, 2011));
-        lease.signDate().setValue(lease.leaseFrom().getValue());
+        lease.approvalDate().setValue(lease.leaseFrom().getValue());
         lease.leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2014));
 
         addTenants();

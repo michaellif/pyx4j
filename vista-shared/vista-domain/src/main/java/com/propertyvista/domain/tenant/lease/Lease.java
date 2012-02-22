@@ -95,7 +95,9 @@ public interface Lease extends IEntity {
 
         annual,
 
-        monthly;
+        monthly,
+        
+        biWeekly;
 
         @Override
         public String toString() {
@@ -157,7 +159,7 @@ public interface Lease extends IEntity {
     IPrimitive<LogicalDate> moveOutNotice();
 
     @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> signDate();
+    IPrimitive<LogicalDate> approvalDate();
 
     @Owned
     LeaseFinancial leaseFinancial();
