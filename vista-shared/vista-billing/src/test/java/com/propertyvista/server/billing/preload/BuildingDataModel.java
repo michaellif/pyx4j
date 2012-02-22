@@ -163,41 +163,44 @@ public class BuildingDataModel {
         feature.description().setValue("Feature - " + type.name());
 
         feature.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
-        feature.isRecurring().setValue(true);
 
-        generateFeatureItems(feature);
-
-        building.productCatalog().features().add(feature);
-
-        standardResidentialService.features().add(feature);
-
-    }
-
-    private void generateFeatureItems(Feature feature) {
         switch (feature.type().getValue()) {
         case parking:
+            feature.isRecurring().setValue(true);
             for (Parking parking : building._Parkings()) {
-                for (ProductItemType type : featureMeta.get(Feature.Type.parking)) {
-                    generateParkingFeatureItem(feature, parking, type);
+                for (ProductItemType productItemType : featureMeta.get(Feature.Type.parking)) {
+                    generateParkingFeatureItem(feature, parking, productItemType);
                 }
             }
             break;
         case locker:
+            feature.isRecurring().setValue(true);
             for (LockerArea lockerArea : building._LockerAreas()) {
-                for (ProductItemType type : featureMeta.get(Feature.Type.locker)) {
-                    generateLockerAreaFeatureItem(feature, lockerArea, type);
+                for (ProductItemType productItemType : featureMeta.get(Feature.Type.locker)) {
+                    generateLockerAreaFeatureItem(feature, lockerArea, productItemType);
                 }
             }
             break;
         case pet:
-            for (ProductItemType type : featureMeta.get(Feature.Type.pet)) {
-                generatePetFeatureItem(feature, type);
+            feature.isRecurring().setValue(true);
+            for (ProductItemType productItemType : featureMeta.get(Feature.Type.pet)) {
+                generatePetFeatureItem(feature, productItemType);
+            }
+            break;
+        case addOn:
+            feature.isRecurring().setValue(false);
+            for (ProductItemType productItemType : featureMeta.get(Feature.Type.addOn)) {
+                generateAddOnFeatureItem(feature, productItemType);
             }
             break;
 
         default:
             break;
         }
+
+        building.productCatalog().features().add(feature);
+
+        standardResidentialService.features().add(feature);
 
     }
 
@@ -221,6 +224,13 @@ public class BuildingDataModel {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(type);
         productItem.price().setValue(new BigDecimal("10.00"));
+        feature.items().add(productItem);
+    }
+
+    private void generateAddOnFeatureItem(Feature feature, ProductItemType type) {
+        ProductItem productItem = EntityFactory.create(ProductItem.class);
+        productItem.type().set(type);
+        productItem.price().setValue(new BigDecimal("40.00"));
         feature.items().add(productItem);
     }
 

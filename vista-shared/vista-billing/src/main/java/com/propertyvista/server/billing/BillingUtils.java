@@ -35,6 +35,7 @@ import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingCycle.BillingFrequency;
 import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -125,9 +126,12 @@ public class BillingUtils {
     static boolean isBillableItemApplicable(BillableItem item, Bill bill) {
         if (item.billingPeriodNumber().isNull()) {
             throw new Error("billingPeriodNumber should not be null");
-        }
-        if (bill.billingPeriodNumber().getValue() >= item.billingPeriodNumber().getValue()) {
-            return true;
+        } else if (bill.billingPeriodNumber().getValue() >= item.billingPeriodNumber().getValue()) {
+            if (Feature.class.equals(item.item().product().cast().getObjectClass()) && !((Feature) item.item().product().cast()).isRecurring().getValue()) {
+                return bill.billingPeriodNumber().getValue() == item.billingPeriodNumber().getValue();
+            } else {
+                return true;
+            }
         } else {
             return false;
         }

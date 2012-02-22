@@ -44,6 +44,7 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("Billing period", 1, (int) bill.billingPeriodNumber().getValue());
 
         assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
+        assertEquals("One-time feature charges", new BigDecimal("0.00"), bill.oneTimeFeatureCharges().getValue());
 
         //==================== RUN 2 ======================//
 
@@ -55,6 +56,7 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("Billing period", 2, (int) bill.billingPeriodNumber().getValue());
 
         assertEquals("Total adjustments", new BigDecimal("-26.19"), bill.totalAdjustments().getValue());
+        assertEquals("One-time feature charges", new BigDecimal("0.00"), bill.oneTimeFeatureCharges().getValue());
 
         //==================== RUN 3 ======================//
 
@@ -66,6 +68,7 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("Billing period", 3, (int) bill.billingPeriodNumber().getValue());
 
         assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
+        assertEquals("One-time feature charges", new BigDecimal("0.00"), bill.oneTimeFeatureCharges().getValue());
 
         bill = runBilling(4, true);
         assertEquals("Number of charges", 4, bill.charges().size());
@@ -75,17 +78,19 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("Billing period", 3, (int) bill.billingPeriodNumber().getValue());
 
         assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
+        assertEquals("One-time feature charges", new BigDecimal("0.00"), bill.oneTimeFeatureCharges().getValue());
 
         //==================== RUN 4 ======================//
 
         bill = runBilling(5, true);
-        assertEquals("Number of charges", 4, bill.charges().size());
+        assertEquals("Number of charges", 5, bill.charges().size());
         assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
 
         assertEquals("Billing period", 4, (int) bill.billingPeriodNumber().getValue());
 
         assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
+        assertEquals("One-time feature charges", new BigDecimal("40.00"), bill.oneTimeFeatureCharges().getValue());
 
         //==================== RUN 5 ======================//
 
@@ -103,6 +108,9 @@ public class BillingRunTest extends BillingTestBase {
 
         assertEquals("Billing period", 5, (int) bill.billingPeriodNumber().getValue());
 
+        assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
+        assertEquals("One-time feature charges", new BigDecimal("0.00"), bill.oneTimeFeatureCharges().getValue());
+
         bill = runBilling(8, true);
         assertEquals("Number of charges", 4, bill.charges().size());
         assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
@@ -111,6 +119,7 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("Billing period", 5, (int) bill.billingPeriodNumber().getValue());
 
         assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
+        assertEquals("One-time feature charges", new BigDecimal("0.00"), bill.oneTimeFeatureCharges().getValue());
 
         //==================== RUN 6 ======================//
 
@@ -122,6 +131,7 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("Billing period", 6, (int) bill.billingPeriodNumber().getValue());
 
         assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
+        assertEquals("One-time feature charges", new BigDecimal("0.00"), bill.oneTimeFeatureCharges().getValue());
 
     }
 
@@ -148,7 +158,7 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("Bill Confirmation Status", confirm ? BillStatus.Confirmed : BillStatus.Rejected, bill.billStatus().getValue());
 
         assertEquals("ServiceCharge", new BigDecimal("930.30"), bill.serviceCharge().getValue());
-        assertEquals("RecurringFeatureCharges", new BigDecimal("78.38"), bill.recurringFeatureCharges().getValue());
+        assertEquals("Recurring feature charges", new BigDecimal("78.38"), bill.recurringFeatureCharges().getValue());
 
         return bill;
     }

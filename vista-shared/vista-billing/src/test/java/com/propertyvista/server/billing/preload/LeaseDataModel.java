@@ -76,13 +76,16 @@ public class LeaseDataModel {
         Service service = serviceItem.product().cast();
 
         for (Feature feature : service.features()) {
-            System.out.println("++++++++++++++" + feature.name() + " " + feature.items().size());
-            if (feature.type().getValue().isInAgreement() && feature.items().size() > 0) {
+            if (Type.addOn.equals(feature.type().getValue()) && feature.items().size() > 0) {
+                BillableItem billableItem = EntityFactory.create(BillableItem.class);
+                billableItem.billingPeriodNumber().setValue(4);
+                billableItem.item().set(feature.items().get(0));
+                lease.serviceAgreement().featureItems().add(billableItem);
+
+            } else if (feature.type().getValue().isInAgreement() && feature.items().size() > 0) {
                 BillableItem billableItem = EntityFactory.create(BillableItem.class);
                 billableItem.billingPeriodNumber().setValue(1);
-
                 billableItem.item().set(feature.items().get(0));
-                billableItem.billingPeriodNumber().setValue(1);
 
                 //One time adjustment(discount) on parking for second billing run
                 if (Type.parking.equals(feature.type().getValue())) {

@@ -141,6 +141,8 @@ class Billing {
             throw new Error("Service Item is mandatory in lease");
         }
 
+        Persistence.service().retrieve(billableItem.item().product());
+
         if (!BillingUtils.isBillableItemApplicable(billableItem, bill)) {
             return;
         }
@@ -161,7 +163,6 @@ class Billing {
     }
 
     private void addCharge(BillCharge charge) {
-        Persistence.service().retrieve(charge.billableItem().item().product());
         if (isService(charge.billableItem().item().product())) { //Service
             bill.serviceCharge().setValue(charge.amount().getValue());
         } else if (isRecurringFeature(charge.billableItem().item().product())) { //Recurring Feature
