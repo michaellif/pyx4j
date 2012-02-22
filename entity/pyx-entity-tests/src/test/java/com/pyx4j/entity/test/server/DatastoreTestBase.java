@@ -92,6 +92,7 @@ public abstract class DatastoreTestBase extends TestCase {
         if (persistenceEnvironment != null) {
             persistenceEnvironment.teardownDatastore(srv);
         }
+        log.debug("ended test {}.{}", this.getClass().getName(), this.getName());
     }
 
     static public void assertValueEquals(String message, Object expected, Object actual) {
