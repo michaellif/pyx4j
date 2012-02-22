@@ -28,7 +28,6 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -47,6 +46,9 @@ import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -156,8 +158,14 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }));
             main.setWidget(++row, 0, unitPanel);
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding()), 20).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit()), 20).build());
+            main.setWidget(
+                    ++row,
+                    0,
+                    new DecoratorBuilder(inject(proto().selectedBuilding(),
+                            new CEntityCrudHyperlink<Building>(MainActivityMapper.getCrudAppPlace(Building.class))), 20).build());
+            main.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(AptUnit.class))), 20)
+                            .build());
         }
 
         main.setBR(++row, 0, 1);
@@ -178,13 +186,16 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, leaseDates);
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
-
-        main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
+        get(proto().moveOutNotice()).setViewable(true);
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate(), new CDateLabel()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
+        get(proto().approvalDate()).setViewable(true);
+
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
+        get(proto().createDate()).setViewable(true);
 
         return new CrmScrollPanel(main);
     }
@@ -241,7 +252,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }));
             select.getElement().getStyle().setMarginLeft(4, Unit.EM);
         } else {
-            serviceItemPanel.add(new DecoratorBuilder(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel()), 50).build());
+            serviceItemPanel.add(new DecoratorBuilder(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel<BillableItem>()), 50).build());
         }
 
         int row = -1;

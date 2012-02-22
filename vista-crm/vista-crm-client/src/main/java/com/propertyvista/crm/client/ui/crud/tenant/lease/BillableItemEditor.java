@@ -20,6 +20,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
@@ -143,6 +144,14 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
             columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
             return columns;
+        }
+
+        @Override
+        protected void addItem(BillableItemAdjustment newEntity) {
+            if (newEntity.isEmpty()) {
+                newEntity.effectiveDate().setValue(new LogicalDate());
+            }
+            super.addItem(newEntity);
         }
     }
 }

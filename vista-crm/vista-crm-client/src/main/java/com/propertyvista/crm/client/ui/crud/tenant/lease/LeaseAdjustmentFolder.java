@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -35,5 +36,13 @@ public class LeaseAdjustmentFolder extends VistaTableFolder<LeaseAdjustment> {
         columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
         return columns;
+    }
+
+    @Override
+    protected void addItem(LeaseAdjustment newEntity) {
+        if (newEntity.isEmpty()) {
+            newEntity.effectiveDate().setValue(new LogicalDate());
+        }
+        super.addItem(newEntity);
     }
 }
