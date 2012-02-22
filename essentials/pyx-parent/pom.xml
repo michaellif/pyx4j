@@ -39,7 +39,8 @@
     <distributionManagement>
         <site>
             <id>test-pyx4j-site</id>
-            <url>${scp-apache-site-snapshot-base}/pyx/pyx-parent</url>
+            <!--url>${scp-apache-site-snapshot-base}/pyx/pyx-parent</url-->
+            <url>file:///data/apache/pyx/pyx-parent</url>
         </site>
         <repository>
             <id>pyx4j.com-file-release</id>
