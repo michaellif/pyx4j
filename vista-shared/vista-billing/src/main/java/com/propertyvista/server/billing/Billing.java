@@ -42,9 +42,6 @@ import com.propertyvista.domain.financial.billing.BillLeaseAdjustment;
 import com.propertyvista.domain.financial.billing.BillPayment;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.Payment;
-import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Product;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -163,9 +160,9 @@ class Billing {
     }
 
     private void addCharge(BillCharge charge) {
-        if (isService(charge.billableItem().item().product())) { //Service
+        if (BillingUtils.isService(charge.billableItem().item().product())) { //Service
             bill.serviceCharge().setValue(charge.amount().getValue());
-        } else if (isRecurringFeature(charge.billableItem().item().product())) { //Recurring Feature
+        } else if (BillingUtils.isRecurringFeature(charge.billableItem().item().product())) { //Recurring Feature
             bill.recurringFeatureCharges().setValue(bill.recurringFeatureCharges().getValue().add(charge.amount().getValue()));
         } else {
             bill.oneTimeFeatureCharges().setValue(bill.oneTimeFeatureCharges().getValue().add(charge.amount().getValue()));
@@ -231,18 +228,6 @@ class Billing {
                         .add(bill.latePaymentCharges().getValue()));
 
         bill.totalDueAmount().setValue(bill.currentAmount().getValue().add(bill.taxes().getValue()));
-    }
-
-    private boolean isService(Product product) {
-        return product.cast().isAssignableFrom(Service.class);
-    }
-
-    private boolean isFeature(Product product) {
-        return product.cast().isAssignableFrom(Feature.class);
-    }
-
-    private boolean isRecurringFeature(Product product) {
-        return isFeature(product) && ((Feature) product.cast()).isRecurring().getValue();
     }
 
 }

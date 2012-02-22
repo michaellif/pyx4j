@@ -36,6 +36,8 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingCycle.BillingFrequency;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Product;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -127,7 +129,7 @@ public class BillingUtils {
         if (item.billingPeriodNumber().isNull()) {
             throw new Error("billingPeriodNumber should not be null");
         } else if (bill.billingPeriodNumber().getValue() >= item.billingPeriodNumber().getValue()) {
-            if (Feature.class.equals(item.item().product().cast().getObjectClass()) && !((Feature) item.item().product().cast()).isRecurring().getValue()) {
+            if (isFeature(item.item().product()) && !isRecurringFeature(item.item().product())) {
                 return bill.billingPeriodNumber().getValue() == item.billingPeriodNumber().getValue();
             } else {
                 return true;
@@ -149,5 +151,17 @@ public class BillingUtils {
         } else {
             return false;
         }
+    }
+
+    static boolean isService(Product product) {
+        return product.cast().isAssignableFrom(Service.class);
+    }
+
+    static boolean isFeature(Product product) {
+        return product.cast().isAssignableFrom(Feature.class);
+    }
+
+    static boolean isRecurringFeature(Product product) {
+        return isFeature(product) && ((Feature) product.cast()).isRecurring().getValue();
     }
 }
