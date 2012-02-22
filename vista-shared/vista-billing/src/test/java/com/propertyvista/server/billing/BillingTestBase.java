@@ -28,6 +28,8 @@ import com.propertyvista.server.billing.preload.TenantDataModel;
 
 public class BillingTestBase extends VistaDBTestBase {
 
+    LeaseDataModel leaseDataModel;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -41,7 +43,7 @@ public class BillingTestBase extends VistaDBTestBase {
         TenantDataModel tenantDataModel = new TenantDataModel();
         tenantDataModel.generate(true);
 
-        LeaseDataModel leaseDataModel = new LeaseDataModel(buildingDataModel, tenantDataModel);
+        leaseDataModel = new LeaseDataModel(buildingDataModel, tenantDataModel);
         leaseDataModel.generate(true);
 
     }

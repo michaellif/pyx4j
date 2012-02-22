@@ -13,36 +13,25 @@
  */
 package com.propertyvista.server.billing.preload;
 
-import java.math.BigDecimal;
-
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
-import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ChargeType;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeaseDataModel {
 
     private Lease lease;
 
+    private ProductItem serviceItem;
+
     private final TenantDataModel tenantDataModel;
 
     private final BuildingDataModel buildingDataModel;
-
-    private ProductItem serviceItem;
 
     public LeaseDataModel(BuildingDataModel buildingDataModel, TenantDataModel tenantDataModel) {
         this.buildingDataModel = buildingDataModel;
@@ -62,78 +51,10 @@ public class LeaseDataModel {
         lease.leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2014));
 
         addTenants();
-        generateAgreement();
 
         if (persist) {
             Persistence.service().persist(lease);
         }
-    }
-
-    private void generateAgreement() {
-        lease.serviceAgreement().serviceItem().item().set(serviceItem);
-        lease.serviceAgreement().serviceItem().billingPeriodNumber().setValue(1);
-
-        Service service = serviceItem.product().cast();
-
-        for (Feature feature : service.features()) {
-            if (Type.addOn.equals(feature.type().getValue()) && feature.items().size() > 0) {
-                BillableItem billableItem = EntityFactory.create(BillableItem.class);
-                billableItem.billingPeriodNumber().setValue(4);
-                billableItem.item().set(feature.items().get(0));
-                lease.serviceAgreement().featureItems().add(billableItem);
-
-            } else if (feature.type().getValue().isInAgreement() && feature.items().size() > 0) {
-                BillableItem billableItem = EntityFactory.create(BillableItem.class);
-                billableItem.billingPeriodNumber().setValue(1);
-                billableItem.item().set(feature.items().get(0));
-
-                //One time adjustment(discount) on parking for second billing run
-                if (Type.parking.equals(feature.type().getValue())) {
-                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    adjustment.billingPeriodNumber().setValue(2);
-                    adjustment.value().setValue(new BigDecimal("-10.00"));
-                    adjustment.adjustmentType().setValue(AdjustmentType.monetary);
-                    adjustment.chargeType().setValue(ChargeType.discount);
-                    adjustment.termType().setValue(TermType.oneTime);
-                    billableItem.adjustments().add(adjustment);
-                }
-
-                //Full term adjustment(discount) on parking
-                if (Type.parking.equals(feature.type().getValue())) {
-                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    adjustment.billingPeriodNumber().setValue(1);
-                    adjustment.value().setValue(new BigDecimal("-5.00"));
-                    adjustment.adjustmentType().setValue(AdjustmentType.monetary);
-                    adjustment.chargeType().setValue(ChargeType.discount);
-                    adjustment.termType().setValue(TermType.inLease);
-                    billableItem.adjustments().add(adjustment);
-                }
-
-                //Full term adjustment(discount) on locker
-                if (Type.locker.equals(feature.type().getValue())) {
-                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    adjustment.billingPeriodNumber().setValue(1);
-                    adjustment.value().setValue(new BigDecimal("-0.05"));
-                    adjustment.adjustmentType().setValue(AdjustmentType.percentage);
-                    adjustment.chargeType().setValue(ChargeType.discount);
-                    adjustment.termType().setValue(TermType.inLease);
-                    billableItem.adjustments().add(adjustment);
-                }
-
-                //Full term adjustment(discount) on locker (%)
-                if (Type.pet.equals(feature.type().getValue())) {
-                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    adjustment.billingPeriodNumber().setValue(1);
-                    adjustment.adjustmentType().setValue(AdjustmentType.free);
-                    adjustment.chargeType().setValue(ChargeType.discount);
-                    adjustment.termType().setValue(TermType.inLease);
-                    billableItem.adjustments().add(adjustment);
-                }
-
-                lease.serviceAgreement().featureItems().add(billableItem);
-            }
-        }
-
     }
 
     private void addTenants() {
@@ -143,7 +64,11 @@ public class LeaseDataModel {
         lease.tenants().add(tenantInLease);
     }
 
-    public IEntity getLease() {
+    public ProductItem getServiceItem() {
+        return serviceItem;
+    }
+
+    public Lease getLease() {
         return lease;
     }
 
