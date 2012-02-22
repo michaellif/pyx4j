@@ -40,7 +40,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.crm.client.ui.board.BoardBase.DebugIds;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -50,8 +49,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
@@ -61,31 +59,31 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
     private static final I18n i18n = I18n.get(UnitAvailabilityReportGadget.class);
 
-    public static class UnitAvailabilityReportGadgetInstance extends ListerGadgetInstanceBase<UnitAvailabilityStatusDTO, UnitAvailability> implements
+    public static class UnitAvailabilityReportGadgetInstance extends ListerGadgetInstanceBase<UnitAvailabilityStatus, UnitAvailability> implements
             IBuildingBoardGadgetInstance {
-    	
-    	public static enum DebugIds implements IDebugId {
-    		
-    		allFilter, vacantFilter, noticeFilter, vacantAndNoticeFilter, rentedFilter, netExposureFilter;
 
-			@Override
-			public String debugId() {				
-				return this.name();
-			} 
-    	}
-    	
+        public static enum DebugIds implements IDebugId {
+
+            allFilter, vacantFilter, noticeFilter, vacantAndNoticeFilter, rentedFilter, netExposureFilter;
+
+            @Override
+            public String debugId() {
+                return this.name();
+            }
+        }
+
         private VerticalPanel gadgetPanel;
-    
+
         private FlexTable controlsPanel;
-    
+
         private List<FilterButton> filteringButtons;
-    
-        private FilterButtonClickHanlder filterButtonClickHandler;
-        
+
+        private final FilterButtonClickHanlder filterButtonClickHandler;
+
         private final AvailabilityReportService service;
 
         public UnitAvailabilityReportGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, UnitAvailabilityStatusDTO.class, UnitAvailability.class);
+            super(gmd, UnitAvailabilityStatus.class, UnitAvailability.class);
             service = GWT.create(AvailabilityReportService.class);
             filterButtonClickHandler = new FilterButtonClickHanlder();
         }
@@ -111,20 +109,20 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         @Override
         public void populatePage(int pageNumber) {
             if (containerBoard.getSelectedBuildings() == null) {
-                setPageData(new Vector<UnitAvailabilityStatusDTO>(), 0, 0, false);
+                setPageData(new Vector<UnitAvailabilityStatus>(), 0, 0, false);
                 populateSucceded();
                 return;
             }
 
-            final int page = pageNumber;            
+            final int page = pageNumber;
             final Vector<Key> buildingPks = new Vector<Key>(containerBoard.getSelectedBuildings().size());
             for (Building b : containerBoard.getSelectedBuildings()) {
                 buildingPks.add(b.getPrimaryKey());
             }
 
-            service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>>() {
+            service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
                 @Override
-                public void onSuccess(EntitySearchResult<UnitAvailabilityStatusDTO> result) {
+                public void onSuccess(EntitySearchResult<UnitAvailabilityStatus> result) {
                     setPageData(result.getData(), page, result.getTotalRows(), result.hasMoreData());
                     populateSucceded();
                 }
@@ -133,13 +131,12 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 public void onFailure(Throwable caught) {
                     populateFailed(caught);
                 }
-            }, buildingPks, getMetadata().defaultFilteringPreset().getValue(), getStatusDate(), new Vector<Sort>(getSorting()),
-                    pageNumber, getPageSize());
+            }, buildingPks, getMetadata().defaultFilteringPreset().getValue(), getStatusDate(), new Vector<Sort>(getSorting()), pageNumber, getPageSize());
         }
 
         @Override
         public Widget initContentPanel() {
-        	
+
             gadgetPanel = new VerticalPanel();
             gadgetPanel.add(initFilteringConrolsPanel());
             gadgetPanel.add(initListerWidget());
@@ -148,11 +145,11 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
             return gadgetPanel;
         }
-        
+
         private Widget initFilteringConrolsPanel() {
-        	
+
             controlsPanel = new FlexTable();
-            
+
             filteringButtons = Arrays.asList(//@formatter:off
             		new FilterButton(FilterPreset.All, DebugIds.allFilter),
             		new FilterButton(FilterPreset.Vacant, DebugIds.vacantFilter),
@@ -167,7 +164,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 controlsPanel.setWidget(0, ++col, button);
             }
 
-        	return controlsPanel;
+            return controlsPanel;
         }
 
         @Override
@@ -181,7 +178,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
          */
         private void setupFilteringButtons() {
             for (FilterButton button : filteringButtons) {
-                if (button.filterPreset ==  getMetadata().defaultFilteringPreset().getValue()) {
+                if (button.filterPreset == getMetadata().defaultFilteringPreset().getValue()) {
                     button.setValue(true, false);
                 } else {
                     button.setValue(false, false);
@@ -200,8 +197,8 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                     new MemberColumnDescriptor.Builder(proto().propertyCode()).build(),
                     new MemberColumnDescriptor.Builder(proto().buildingName()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().address()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().common().owner().company().name()).title(i18n.tr("Owner")).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().common().propertyManger().name()).title(i18n.tr("Property Manager")).build(),                
+//                    new MemberColumnDescriptor.Builder(proto().common().owner().company().name()).title(i18n.tr("Owner")).visible(false).build(),
+//                    new MemberColumnDescriptor.Builder(proto().common().propertyManger().name()).title(i18n.tr("Property Manager")).build(),                
                     new MemberColumnDescriptor.Builder(proto().complexName()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().unitName()).build(),
                     new MemberColumnDescriptor.Builder(proto().floorplanName()).visible(false).build(),
@@ -236,26 +233,26 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 }
             });
         }
-        
+
         private class FilterButton extends ToggleButton {
-        	
-        	public final UnitAvailability.FilterPreset filterPreset;
-        	        	
-        	public FilterButton(FilterPreset filterPreset, IDebugId debugId) {        		
-        		super(new SafeHtmlBuilder().appendEscaped(filterPreset.toString()).toSafeHtml().asString());
-        		this.filterPreset = filterPreset;
-        		this.ensureDebugId(debugId.toString());
-        		this.addClickHandler(filterButtonClickHandler);        		
-        	}
-        	
+
+            public final UnitAvailability.FilterPreset filterPreset;
+
+            public FilterButton(FilterPreset filterPreset, IDebugId debugId) {
+                super(new SafeHtmlBuilder().appendEscaped(filterPreset.toString()).toSafeHtml().asString());
+                this.filterPreset = filterPreset;
+                this.ensureDebugId(debugId.toString());
+                this.addClickHandler(filterButtonClickHandler);
+            }
+
         }
 
         private class FilterButtonClickHanlder implements ClickHandler {
-        	
+
             @Override
             public void onClick(ClickEvent event) {
                 for (FilterButton button : filteringButtons) {
-                    if (event.getSource().equals(button)) {                    	
+                    if (event.getSource().equals(button)) {
                         button.setDown(true);
                         getMetadata().defaultFilteringPreset().setValue(button.filterPreset);
                     } else {

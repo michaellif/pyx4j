@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
@@ -35,8 +34,8 @@ public interface AvailabilityReportService extends IService {
     public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<Key> buidlings, LogicalDate fromDate,
             LogicalDate toDate, AnalysisResolution resolution);
 
-    void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>> callback, Vector<Key> buildings, UnitAvailability.FilterPreset filterPreset, LogicalDate to, Vector<Sort> sortingCriteria,
-            int pageNumber, int pageSize);
+    void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>> callback, Vector<Key> buildings, UnitAvailability.FilterPreset filterPreset,
+            LogicalDate when, Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
 
     void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, Vector<Key> buildings, LogicalDate toDate);
 

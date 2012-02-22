@@ -242,6 +242,8 @@ public class AvailabilityReportManager {
     private void setReferences(UnitAvailabilityStatus status) {
         status.unit().set(unit);
 
+        status.building().set(unit.belongsTo());
+
         // TODO set the rest of stuff
     }
 

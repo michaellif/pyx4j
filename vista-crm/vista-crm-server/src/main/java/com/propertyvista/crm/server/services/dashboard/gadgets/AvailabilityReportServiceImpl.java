@@ -42,7 +42,6 @@ import com.propertyvista.crm.server.util.SortingFactory;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
@@ -50,101 +49,133 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
-    private static SortingFactory<UnitAvailabilityStatusDTO> SORTING_FACTORY = new SortingFactory<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
+
+    private static SortingFactory<UnitAvailabilityStatus> SORTING_FACTORY = new SortingFactory<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
 
     @Override
-    public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>> callback, Vector<Key> buildings, UnitAvailability.FilterPreset filterPreset, LogicalDate to, Vector<Sort> sortingCriteria,
-            int pageNumber, int pageSize) {
-        try {
-            EntityListCriteria<UnitAvailabilityStatus> criteria = new EntityListCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
+    public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>> callback, Vector<Key> buildings,
+            UnitAvailability.FilterPreset filterPreset, LogicalDate on, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
 
-            ArrayList<UnitAvailabilityStatusDTO> allUnitStatuses = new ArrayList<UnitAvailabilityStatusDTO>();
-            if (!buildings.isEmpty()) {
-                criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
-            }
-            if (to == null) {
-                to = new LogicalDate();
-            }
-            criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, to));
+        EntityListCriteria<UnitAvailabilityStatus> criteria = new EntityListCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
 
-            // use descending order of the status date in order to select the most recent statuses first
-            // use unit pk sorting in order to make tacking of already added unit statuses
-            criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusDate().getPath()
-                    .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
-            List<UnitAvailabilityStatus> unfiltered = Persistence.service().query(criteria);
+        ArrayList<UnitAvailabilityStatus> allUnitStatuses = new ArrayList<UnitAvailabilityStatus>();
 
-            Key pervUnitPK = null;
-            for (UnitAvailabilityStatus unitStatus : unfiltered) {
-                Key thisUnitPK = unitStatus.unit().getPrimaryKey();
-                if (!thisUnitPK.equals(pervUnitPK)) {
-                    allUnitStatuses.add(computeTransientFields(unitStatus, to));
-                    pervUnitPK = thisUnitPK;
-                }
-            }
-
-            if (!sortingCriteria.isEmpty()) {
-                Collections.sort(allUnitStatuses, SORTING_FACTORY.createDtoComparator(sortingCriteria));
-            }
-
-            int currentPage = 0;
-            int currentPagePosition = 0;
-            int totalRows = 0;
-            boolean hasMoreRows = false;
-            Vector<UnitAvailabilityStatusDTO> unitsStatusPage = new Vector<UnitAvailabilityStatusDTO>();
-
-            Iterator<UnitAvailabilityStatusDTO> i = allUnitStatuses.iterator();
-            while (i.hasNext()) {
-                UnitAvailabilityStatusDTO unitStatus = i.next();
-                if (isAcceptable(unitStatus, filterPreset)) {
-                    ++currentPagePosition;
-                    ++totalRows;
-                    if (currentPagePosition > pageSize) {
-                        ++currentPage;
-                        currentPagePosition = 1;
-                    }
-                    if (currentPage < pageNumber) {
-                        continue;
-                    } else if (currentPage == pageNumber) {
-                        unitsStatusPage.add(unitStatus);
-                    } else {
-                        hasMoreRows = true;
-                        break;
-                    }
-                }
-            }
-            while (i.hasNext()) {
-                UnitAvailabilityStatusDTO unitStatus = i.next();
-                if (isAcceptable(unitStatus, filterPreset)) {
-                    ++totalRows;
-                }
-            }
-
-            EntitySearchResult<UnitAvailabilityStatusDTO> result = new EntitySearchResult<UnitAvailabilityStatusDTO>();
-            result.setData(unitsStatusPage);
-            result.setTotalRows(totalRows);
-            result.hasMoreData(hasMoreRows);
-
-            callback.onSuccess(result);
-        } catch (Throwable error) {
-            callback.onFailure(new Error(error));
+        if (!buildings.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
         }
+        if (on == null) {
+            throw new IllegalArgumentException("the report date cannot be null");
+        }
+        criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, on));
+
+        // use descending order of the status date in order to select the most recent statuses first
+        // use unit pk sorting in order to make tacking of already added unit statuses
+        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusDate().getPath()
+                .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
+        List<UnitAvailabilityStatus> unfiltered = Persistence.service().query(criteria);
+
+        Key pervUnitPK = null;
+        for (UnitAvailabilityStatus unitStatus : unfiltered) {
+            Key thisUnitPK = unitStatus.unit().getPrimaryKey();
+            if (!thisUnitPK.equals(pervUnitPK)) {
+                allUnitStatuses.add(computeTransientFields(unitStatus, on));
+                pervUnitPK = thisUnitPK;
+            }
+        }
+
+        if (!sortingCriteria.isEmpty()) {
+            Collections.sort(allUnitStatuses, SORTING_FACTORY.createDtoComparator(sortingCriteria));
+        }
+
+        int currentPage = 0;
+        int currentPagePosition = 0;
+        int totalRows = 0;
+        boolean hasMoreRows = false;
+        Vector<UnitAvailabilityStatus> unitsStatusPage = new Vector<UnitAvailabilityStatus>();
+
+        Iterator<UnitAvailabilityStatus> i = allUnitStatuses.iterator();
+        StatusFilter filter = filterFor(filterPreset);
+
+        while (i.hasNext()) {
+            UnitAvailabilityStatus unitStatus = i.next();
+            if (filter.isAcceptable(unitStatus)) {
+                ++currentPagePosition;
+                ++totalRows;
+                if (currentPagePosition > pageSize) {
+                    ++currentPage;
+                    currentPagePosition = 1;
+                }
+                if (currentPage < pageNumber) {
+                    continue;
+                } else if (currentPage == pageNumber) {
+                    unitsStatusPage.add(unitStatus);
+                } else {
+                    hasMoreRows = true;
+                    break;
+                }
+            }
+        }
+        while (i.hasNext()) {
+            if (filter.isAcceptable(i.next())) {
+                ++totalRows;
+            }
+        }
+
+        EntitySearchResult<UnitAvailabilityStatus> result = new EntitySearchResult<UnitAvailabilityStatus>();
+        result.setData(unitsStatusPage);
+        result.setTotalRows(totalRows);
+        result.hasMoreData(hasMoreRows);
+
+        callback.onSuccess(result);
     }
 
-    private boolean isAcceptable(UnitAvailabilityStatusDTO unitStatus,
-			FilterPreset filterPreset) {
-    	// TODO implement this
-		return false;
-	}
-
-	private static boolean isAcceptable(UnitAvailabilityStatusDTO unit, boolean displayOccupied, boolean displayVacant, boolean displayNotice,
-            boolean displayRented, boolean displayNotRented) {
-
-        Vacancy vacancyStatus = unit.vacancyStatus().getValue();
-        RentedStatus rentedStatus = unit.rentedStatus().getValue();
-
-        return (displayOccupied & vacancyStatus == null) //XS
-                | ((displayVacant & vacancyStatus == Vacancy.Vacant) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented))) //
-                | ((displayNotice & vacancyStatus == Vacancy.Notice) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented)));
+    private StatusFilter filterFor(FilterPreset filterPreset) {
+        switch (filterPreset) {
+        case All:
+            return new StatusFilter() {
+                @Override
+                public boolean isAcceptable(UnitAvailabilityStatus status) {
+                    return true;
+                }
+            };
+        case NetExposure:
+            return new StatusFilter() {
+                @Override
+                public boolean isAcceptable(UnitAvailabilityStatus status) {
+                    return (status.vacancyStatus().getValue() != null) & (status.rentedStatus().getValue() != RentedStatus.Rented);
+                }
+            };
+        case Notice:
+            return new StatusFilter() {
+                @Override
+                public boolean isAcceptable(UnitAvailabilityStatus status) {
+                    return status.vacancyStatus().getValue() == Vacancy.Notice;
+                }
+            };
+        case Rented:
+            return new StatusFilter() {
+                @Override
+                public boolean isAcceptable(UnitAvailabilityStatus status) {
+                    return status.rentedStatus().getValue() == RentedStatus.Rented;
+                }
+            };
+        case Vacant:
+            return new StatusFilter() {
+                @Override
+                public boolean isAcceptable(UnitAvailabilityStatus status) {
+                    return status.vacancyStatus().getValue() == Vacancy.Vacant;
+                }
+            };
+        case VacantAndNotice:
+            return new StatusFilter() {
+                @Override
+                public boolean isAcceptable(UnitAvailabilityStatus status) {
+                    return status.vacancyStatus().getValue() != null;
+                }
+            };
+        default:
+            throw new IllegalStateException("unknown filter preset: " + filterPreset);
+        }
     }
 
     @Override
@@ -366,15 +397,14 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         callback.onSuccess(results);
     }
 
-    private static UnitAvailabilityStatusDTO computeTransientFields(final UnitAvailabilityStatus unitStatus, final LogicalDate toDate) {
-        UnitAvailabilityStatusDTO unitDTO = unitStatus.duplicate(UnitAvailabilityStatusDTO.class);
-        if (isRevenueLost(unitDTO)) {
-            computeDaysVacantAndRevenueLost(unitDTO, toDate.getTime());
-        }
-        return unitDTO;
+    private static UnitAvailabilityStatus computeTransientFields(final UnitAvailabilityStatus unitStatus, final LogicalDate toDate) {
+//        if (isRevenueLost(unitStatus)) {
+//            computeDaysVacantAndRevenueLost(unitStatus, toDate.getTime());
+//        }
+        return unitStatus;
     }
 
-    private static boolean isRevenueLost(final UnitAvailabilityStatusDTO unit) {
+    private static boolean isRevenueLost(final UnitAvailabilityStatus unit) {
         // TODO review: why the check "(moveOutDay != null)" is performed here? isn't VACANT status a sufficient condition for it? 
         return Vacancy.Vacant.equals(unit.vacancyStatus().getValue()) & unit.moveOutDay().getValue() != null;
     }
@@ -383,15 +413,27 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
      * Due to performance considerations this method does the both things together to avoid unnecessary invocation of
      * {@link UnitAvailabilityStatusDTO#daysVacant()}.
      */
-    private static void computeDaysVacantAndRevenueLost(final UnitAvailabilityStatusDTO unit, final long reportTime) {
-        long millisecondsVacant = reportTime - unit.availableFromDay().getValue().getTime();
+    private static void computeDaysVacantAndRevenueLost(final UnitAvailabilityStatus unit, final long reportTime) {
 
-        int daysVacant = (int) (millisecondsVacant / (1000 * 60 * 60 * 24)); // some really heavy math :)            
+        final long MILLIS_IN_DAY = 1000L * 60L * 60L * 24L;
+        final long avaialbleFrom = unit.moveOutDay().getValue().getTime() + MILLIS_IN_DAY;
+        final long millisecondsVacant = reportTime - avaialbleFrom;
+
+        int daysVacant = (int) (millisecondsVacant / MILLIS_IN_DAY);
         unit.daysVacant().setValue(daysVacant);
 
         BigDecimal marketRent = unit.marketRent().getValue();
-        BigDecimal revenueLost = marketRent.multiply(new BigDecimal(daysVacant).divide(new BigDecimal(30)));
-        unit.revenueLost().setValue(revenueLost);
+
+        if (marketRent != null) {
+            BigDecimal revenueLost = marketRent.multiply(new BigDecimal(daysVacant).divide(new BigDecimal(30)));
+            unit.revenueLost().setValue(revenueLost);
+        }
+    }
+
+    private static interface StatusFilter {
+
+        boolean isAcceptable(UnitAvailabilityStatus status);
+
     }
 
     private static void updateIntervalStats(Map<Long, TurnoverStats> statsMap, long intervalStart, long intervalEnd, int turnovers) {

@@ -130,7 +130,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
      * containing dashboard.
      */
     public LogicalDate getStatusDate() {
-        return null;
+        return this.containerBoard.getDashboardDate();
     }
 
     /**

@@ -237,7 +237,6 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         status.rentedFromDate().setValue(null);
         status.moveOutDay().setValue(null);
         status.moveInDay().setValue(null);
-        status.availableFromDay().setValue(null);
     }
 
     private static void scoped(UnitAvailabilityStatus status) {
