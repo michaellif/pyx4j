@@ -461,6 +461,12 @@ public class TableModelCollections {
             }
 
             stmt.executeBatch();
+
+            if (EntityPersistenceServiceRDB.traceWarnings) {
+                SQLUtils.logAndClearWarnings(connection);
+            } else if (dialect instanceof HSQLDialect) {
+                connection.clearWarnings();
+            }
         } catch (SQLException e) {
             log.error("{} SQL delete error", member.sqlName(), e);
             throw new RuntimeException(e);
