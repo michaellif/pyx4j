@@ -227,7 +227,7 @@ public class TenantsGenerator {
         int daySpan = 120;
         int curDay = cal.get(Calendar.DAY_OF_YEAR);
         cal.set(Calendar.DAY_OF_YEAR, curDay + (RandomUtil.randomInt(daySpan) - daySpan / 2));
-        req.submited().setValue(new LogicalDate(cal.getTime()));
+        req.submitted().setValue(new LogicalDate(cal.getTime()));
         // add 10 min to 10 days
         cal.setTimeInMillis(cal.getTimeInMillis() + 600000 * (1 + RandomUtil.randomInt(24 * 60)));
         req.updated().setValue(new LogicalDate(cal.getTime()));

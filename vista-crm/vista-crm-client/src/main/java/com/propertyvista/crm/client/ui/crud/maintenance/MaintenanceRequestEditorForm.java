@@ -144,7 +144,7 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().tenant()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().submited(), new CDateLabel()), 10).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
         row++;

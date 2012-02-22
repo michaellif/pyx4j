@@ -168,7 +168,7 @@ public class Converter {
         MaintananceDTO to = EntityFactory.create(MaintananceDTO.class);
         to.id().set(from.id());
         to.description().set(from.description());
-        to.date().set(from.submited());
+        to.date().set(from.submitted());
         to.status().set(from.status());
         to.satisfactionSurvey().set(from.surveyResponse());
         return to;

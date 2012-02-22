@@ -48,7 +48,7 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Scheduled, MaintenanceRequestStatus.Submitted));
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), getOwner()));
-        for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submited()))) {
+        for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
             dto.add(Converter.convert(mr));
         }
         callback.onSuccess(dto);
@@ -60,7 +60,7 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Completed));
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), getOwner()));
-        for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submited()))) {
+        for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
             dto.add(Converter.convert(mr));
         }
         callback.onSuccess(dto);
@@ -73,7 +73,7 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
         req.issueClassification().set(dto.issueClassification());
         req.description().set(dto.description());
         req.status().setValue(MaintenanceRequestStatus.Submitted);
-        req.submited().setValue(new LogicalDate());
+        req.submitted().setValue(new LogicalDate());
         Persistence.service().persist(req);
 
         callback.onSuccess(null);
