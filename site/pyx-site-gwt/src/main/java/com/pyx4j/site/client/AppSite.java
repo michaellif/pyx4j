@@ -61,6 +61,8 @@ public abstract class AppSite implements EntryPoint {
 
     private final AppPlaceContorller placeController;
 
+    public final long applicationStartTime = System.currentTimeMillis();
+
     public AppSite(Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
         ClientEntityFactory.ensureIEntityImplementations();
         instance = this;
@@ -130,6 +132,7 @@ public abstract class AppSite implements EntryPoint {
             if (Window.Location.getParameter("usec") != null) {
                 ClientSecurityController.setUnsecure();
             }
+            AppDevStartTimeMonitor.start();
         }
         log.debug("{}", BrowserType.getCompiledType());
         onSiteLoad();
