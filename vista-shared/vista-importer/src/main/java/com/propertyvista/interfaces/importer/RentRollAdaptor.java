@@ -124,8 +124,9 @@ public class RentRollAdaptor implements ImportAdapter {
         }
 
         BuildingIO building = EntityFactory.create(BuildingIO.class); //create initial building
-
+        boolean voidData = false;
         for (RentRollCSV line : csv.getEntities()) {
+
             if (line.resident().getStringView().equals("Total") && line.name().getStringView().equals("All Properties")) { // check if the end of file
                 return;
             }
@@ -133,7 +134,8 @@ public class RentRollAdaptor implements ImportAdapter {
             AptUnitIO unit = EntityFactory.create(AptUnitIO.class);
             String unitNumber = line.unit().getValue();
 
-            if (unitNumber != null && !strings.contains(unitNumber.toLowerCase().trim()) && !line.resident().getStringView().equals("Total")) {
+            if (unitNumber != null && !strings.contains(unitNumber.toLowerCase().trim()) && !line.resident().getStringView().equals("Total")
+                    && !line.resident().getStringView().equals("Future Residents/Applicants") && !voidData) {
 
                 unit.number().setValue(unitNumber);
                 BigDecimal marketRent;
@@ -148,7 +150,11 @@ public class RentRollAdaptor implements ImportAdapter {
                 }
 
                 building.units().add(unit);
+
+            } else if (line.resident().getStringView().equals("Future Residents/Applicants")) {
+                voidData = true;
             } else if (line.resident().getStringView().equals("Total")) { //building address is in this line
+                voidData = false;
                 String externalId = line.name().getValue();
                 Collection<BuildingIO> verifiedBuildings = new LinkedList<BuildingIO>();
                 building.externalId().setValue(externalId);
