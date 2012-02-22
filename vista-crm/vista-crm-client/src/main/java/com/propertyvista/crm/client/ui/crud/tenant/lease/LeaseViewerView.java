@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
@@ -29,11 +30,11 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
         void startBilling();
 
-        void notice();
+        void notice(LogicalDate date, LogicalDate moveOut);
 
         void cancelNotice();
 
-        void evict();
+        void evict(LogicalDate date, LogicalDate moveOut);
 
         void cancelEvict();
     }

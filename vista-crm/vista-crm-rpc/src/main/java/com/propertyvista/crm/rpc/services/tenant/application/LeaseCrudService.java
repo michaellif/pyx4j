@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -35,11 +36,11 @@ public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
 
     void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 
-    void notice(AsyncCallback<LeaseDTO> callback, Key entityId);
+    void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut);
 
-    void cancelNotice(AsyncCallback<LeaseDTO> callback, Key entityId);
+    void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId);
 
-    void evict(AsyncCallback<LeaseDTO> callback, Key entityId);
+    void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut);
 
-    void cancelEvict(AsyncCallback<LeaseDTO> callback, Key entityId);
+    void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId);
 }

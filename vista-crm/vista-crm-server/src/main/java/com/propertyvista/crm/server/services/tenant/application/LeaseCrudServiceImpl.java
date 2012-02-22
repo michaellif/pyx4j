@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -204,34 +205,42 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    public void notice(AsyncCallback<LeaseDTO> callback, Key entityId) {
+    public void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
         Lease lease = Persistence.secureRetrieve(dboClass, entityId);
         lease.status().setValue(Status.OnNotice);
+        lease.moveOutNotice().setValue(date);
+        lease.expectedMoveOut().setValue(moveOut);
         Persistence.secureSave(lease);
-        retrieve(callback, entityId);
+        callback.onSuccess(null);
     }
 
     @Override
-    public void cancelNotice(AsyncCallback<LeaseDTO> callback, Key entityId) {
+    public void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.secureRetrieve(dboClass, entityId);
         lease.status().setValue(Status.Active);
+        lease.moveOutNotice().setValue(null);
+        lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);
-        retrieve(callback, entityId);
+        callback.onSuccess(null);
     }
 
     @Override
-    public void evict(AsyncCallback<LeaseDTO> callback, Key entityId) {
+    public void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
         Lease lease = Persistence.secureRetrieve(dboClass, entityId);
         lease.status().setValue(Status.Broken);
+        lease.moveOutNotice().setValue(date);
+        lease.expectedMoveOut().setValue(moveOut);
         Persistence.secureSave(lease);
-        retrieve(callback, entityId);
+        callback.onSuccess(null);
     }
 
     @Override
-    public void cancelEvict(AsyncCallback<LeaseDTO> callback, Key entityId) {
+    public void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.secureRetrieve(dboClass, entityId);
         lease.status().setValue(Status.Active);
+        lease.moveOutNotice().setValue(null);
+        lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);
-        retrieve(callback, entityId);
+        callback.onSuccess(null);
     }
 }

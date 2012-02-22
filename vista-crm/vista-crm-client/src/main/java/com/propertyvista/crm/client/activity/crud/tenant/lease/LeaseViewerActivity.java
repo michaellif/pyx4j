@@ -19,12 +19,14 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.DeferredProcessDialog;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
@@ -41,6 +43,8 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements LeaseViewerView.Presenter {
+
+    private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
 
     private final IListerView.Presenter<Bill> billLister;
 
@@ -91,7 +95,7 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
 
             @Override
             public void onSuccess(String deferredCorrelationId) {
-                DeferredProcessDialog d = new DeferredProcessDialog("Billing", "Running Billing..", false) {
+                DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Billing"), i18n.tr("Running Billing.."), false) {
                     @Override
                     public void onDeferredSuccess(DeferredProcessProgressResponse result) {
                         // Navigate to created bill
@@ -107,41 +111,41 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     }
 
     @Override
-    public void notice() {
-        ((LeaseCrudService) service).notice(new DefaultAsyncCallback<LeaseDTO>() {
+    public void notice(LogicalDate date, LogicalDate moveOut) {
+        ((LeaseCrudService) service).notice(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
-            public void onSuccess(LeaseDTO result) {
-                view.populate(result);
+            public void onSuccess(VoidSerializable result) {
+                populate();
             }
-        }, entityId);
+        }, entityId, date, moveOut);
     }
 
     @Override
     public void cancelNotice() {
-        ((LeaseCrudService) service).cancelNotice(new DefaultAsyncCallback<LeaseDTO>() {
+        ((LeaseCrudService) service).cancelNotice(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
-            public void onSuccess(LeaseDTO result) {
-                view.populate(result);
+            public void onSuccess(VoidSerializable result) {
+                populate();
             }
         }, entityId);
     }
 
     @Override
-    public void evict() {
-        ((LeaseCrudService) service).evict(new DefaultAsyncCallback<LeaseDTO>() {
+    public void evict(LogicalDate date, LogicalDate moveOut) {
+        ((LeaseCrudService) service).evict(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
-            public void onSuccess(LeaseDTO result) {
-                view.populate(result);
+            public void onSuccess(VoidSerializable result) {
+                populate();
             }
-        }, entityId);
+        }, entityId, date, moveOut);
     }
 
     @Override
     public void cancelEvict() {
-        ((LeaseCrudService) service).cancelEvict(new DefaultAsyncCallback<LeaseDTO>() {
+        ((LeaseCrudService) service).cancelEvict(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
-            public void onSuccess(LeaseDTO result) {
-                view.populate(result);
+            public void onSuccess(VoidSerializable result) {
+                populate();
             }
         }, entityId);
     }
