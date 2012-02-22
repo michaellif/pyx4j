@@ -110,6 +110,18 @@
             </releases>
         </pluginRepository>
 
+        <!-- lifecycle-mapping -->
+        <pluginRepository>
+            <id>pyx4j-internal</id>
+            <url>http://repository.pyx4j.com/internal/maven2-internal</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+
         <pluginRepository>
             <id>gettext-commons-site</id>
             <url>http://gettext-commons.googlecode.com/svn/maven-repository</url>
