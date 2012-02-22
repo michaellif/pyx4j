@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit.dialogs;
 
+import java.util.EnumSet;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -20,11 +22,13 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 
 public abstract class ScopeDialog extends OkCancelDialog {
@@ -55,6 +59,10 @@ public abstract class ScopeDialog extends OkCancelDialog {
 
     private CDatePicker offMarketStartDate;
 
+    private Label offMarketTypeLabel;
+
+    private CComboBox<OffMarketType> offMarketType;
+
     public ScopeDialog() {
         super(i18n.tr("Scoping Result"));
 
@@ -70,10 +78,16 @@ public abstract class ScopeDialog extends OkCancelDialog {
                 } else if (offMarketChoice.getValue()) {
                     scopingResult = ScopingResult.offMarket;
                 }
-                renovationEndLabel.setVisible(scopingResult == ScopingResult.renovation);
-                renovationEndDate.setVisible(scopingResult == ScopingResult.renovation);
-                offMarketStartLabel.setVisible(scopingResult == ScopingResult.offMarket);
-                offMarketStartDate.setVisible(scopingResult == ScopingResult.offMarket);
+                boolean displayRenovationDate = scopingResult == ScopingResult.renovation;
+                renovationEndLabel.setVisible(displayRenovationDate);
+                renovationEndDate.setVisible(displayRenovationDate);
+
+                boolean displayOffMarket = scopingResult == ScopingResult.offMarket;
+                offMarketStartLabel.setVisible(displayOffMarket);
+                offMarketStartDate.setVisible(displayOffMarket);
+
+                offMarketTypeLabel.setVisible(displayOffMarket);
+                offMarketType.setVisible(displayOffMarket);
             }
         };
 
@@ -85,20 +99,26 @@ public abstract class ScopeDialog extends OkCancelDialog {
         panel.setWidget(++row, 0, offMarketChoice = new RadioButton(SCOPING_RESULT, new SafeHtmlBuilder().appendEscaped(i18n.tr("Off Market")).toSafeHtml()));
         offMarketChoice.addValueChangeHandler(handler);
 
-        panel.setWidget(++row, 0,
-                renovationEndLabel = new Label(new SafeHtmlBuilder().appendEscaped(i18n.tr("Renovation ends") + ": ").toSafeHtml().asString()));
+        panel.setWidget(++row, 0, renovationEndLabel = new Label(new SafeHtmlBuilder().appendEscaped(i18n.tr("Renovation Ends On") + ": ").toSafeHtml()
+                .asString()));
         renovationEndLabel.setVisible(false);
         panel.setWidget(row, 1, renovationEndDate = new CDatePicker());
         renovationEndDate.setVisible(false);
         renovationEndDate.setValue(new LogicalDate());
 
-        panel.setWidget(++row, 0, offMarketStartLabel = new Label(new SafeHtmlBuilder().appendEscaped(i18n.tr("Renovation ends") + ": ").toSafeHtml()
+        panel.setWidget(++row, 0, offMarketStartLabel = new Label(new SafeHtmlBuilder().appendEscaped(i18n.tr("Off Market Begins On") + ": ").toSafeHtml()
                 .asString()));
         offMarketStartLabel.setVisible(false);
         panel.setWidget(row, 1, offMarketStartDate = new CDatePicker());
         offMarketStartDate.setVisible(false);
         offMarketStartDate.setValue(new LogicalDate());
 
+        panel.setWidget(++row, 0,
+                offMarketTypeLabel = new Label(new SafeHtmlBuilder().appendEscaped(i18n.tr("Off Market Type") + ": ").toSafeHtml().asString()));
+        offMarketTypeLabel.setVisible(false);
+        panel.setWidget(row, 1, offMarketType = new CComboBox<AptUnitOccupancySegment.OffMarketType>());
+        offMarketType.setVisible(false);
+        offMarketType.setOptions(EnumSet.allOf(OffMarketType.class));
         setBody(panel);
     }
 
@@ -116,7 +136,7 @@ public abstract class ScopeDialog extends OkCancelDialog {
 
     protected OffMarketType getOffMarketType() {
         if (getResult() == ScopingResult.offMarket) {
-            return OffMarketType.down;
+            return offMarketType.getValue();
         } else {
             throw new IllegalStateException("can't produce off market type when not off market");
         }
