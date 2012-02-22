@@ -54,7 +54,7 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
 
     public DatePickerDropDownPanel(final NDatePicker nativeDatePicker) {
         this.nativeDatePicker = nativeDatePicker;
-        this.getElement().getStyle().setProperty("zIndex", "2");
+        this.getElement().getStyle().setProperty("zIndex", "100");
 
         focusPanel = new FocusPanel();
         focusPanel.getElement().getStyle().setProperty("outline", "0");
