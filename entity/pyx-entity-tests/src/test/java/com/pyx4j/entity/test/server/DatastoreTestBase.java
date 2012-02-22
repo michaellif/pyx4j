@@ -30,6 +30,9 @@ import java.util.Vector;
 
 import junit.framework.TestCase;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -43,6 +46,8 @@ import com.pyx4j.entity.test.env.ConfigureTestsEnv;
  * PersistenceEnvironment implementation.
  */
 public abstract class DatastoreTestBase extends TestCase {
+
+    private static final Logger log = LoggerFactory.getLogger(DatastoreTestBase.class);
 
     protected IEntityPersistenceService srv;
 
@@ -74,6 +79,7 @@ public abstract class DatastoreTestBase extends TestCase {
         if (srv == null) {
             srv = PersistenceServicesFactory.getPersistenceService();
         }
+        log.debug("start test {}.{}", this.getClass().getName(), this.getName());
     }
 
     protected ApplicationBackendType getBackendType() {
