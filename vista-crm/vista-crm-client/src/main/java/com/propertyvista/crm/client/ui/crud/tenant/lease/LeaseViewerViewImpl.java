@@ -79,7 +79,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         });
         addToolbarItem(runBill.asWidget());
 
-        notice = new Button(i18n.tr("Notice"), new ClickHandler() {
+        notice = new Button(i18n.tr("Notice..."), new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
@@ -103,7 +103,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         });
         addToolbarItem(cancelNotice.asWidget());
 
-        evict = new Button(i18n.tr("Evict"), new ClickHandler() {
+        evict = new Button(i18n.tr("Evict..."), new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
