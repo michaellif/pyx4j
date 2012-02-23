@@ -13,141 +13,87 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit.dialogs;
 
-import java.util.EnumSet;
+import java.util.ArrayList;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter;
+import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopingResultDTO.ScopingResult;
+import com.propertyvista.domain.occupancy.operations.OpScopeAvailable;
+import com.propertyvista.domain.occupancy.operations.OpScopeOffMarket;
+import com.propertyvista.domain.occupancy.operations.OpScopeRenovation;
 
-public abstract class ScopeDialog extends OkCancelDialog {
+public class ScopeDialog extends OkCancelDialog {
 
     private final static I18n i18n = I18n.get(ScopeDialog.class);
 
-    public enum ScopingResult {
+    private CEntityDecoratableEditor<ScopingResultDTO> form;
 
-        available, renovation, offMarket
+    private Presenter presenter;
 
-    }
-
-    private ScopingResult scopingResult;
-
-    private final String SCOPING_RESULT = "scoping_result";
-
-    private RadioButton availableChoice;
-
-    private RadioButton renovationChoice;
-
-    private CDatePicker renovationEndDate;
-
-    private Label renovationEndLabel;
-
-    private RadioButton offMarketChoice;
-
-    private Label offMarketStartLabel;
-
-    private CDatePicker offMarketStartDate;
-
-    private Label offMarketTypeLabel;
-
-    private CComboBox<OffMarketType> offMarketType;
-
-    public ScopeDialog() {
+    public ScopeDialog(Presenter presenter, final OpScopeAvailable opScopeAvailable, final OpScopeOffMarket opScopeOffMarket,
+            final OpScopeRenovation opScopeRenovation) {
         super(i18n.tr("Scoping Result"));
+        this.presenter = presenter;
 
-        FormFlexPanel panel = new FormFlexPanel();
-
-        ValueChangeHandler<Boolean> handler = new ValueChangeHandler<Boolean>() {
+        form = new CEntityDecoratableEditor<ScopingResultDTO>(ScopingResultDTO.class) {
             @Override
-            public void onValueChange(ValueChangeEvent<Boolean> event) {
-                if (availableChoice.getValue()) {
-                    scopingResult = ScopingResult.available;
-                } else if (renovationChoice.getValue()) {
-                    scopingResult = ScopingResult.renovation;
-                } else if (offMarketChoice.getValue()) {
-                    scopingResult = ScopingResult.offMarket;
+            public IsWidget createContent() {
+                FormFlexPanel content = new FormFlexPanel();
+                int row = -1;
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().scopingResult())).build());
+                get(proto().scopingResult()).addValueChangeHandler(new ValueChangeHandler<ScopingResultDTO.ScopingResult>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<ScopingResult> event) {
+                        get(proto().renovationEndsOn()).setVisible(event.getValue() == ScopingResult.renovation);
+
+                        get(proto().offMarketType()).setVisible(event.getValue() == ScopingResult.offMarket);
+                    }
+                });
+                CComboBox<ScopingResult> combo = (CComboBox<ScopingResult>) get(proto().scopingResult());
+                ArrayList<ScopingResult> options = new ArrayList<ScopingResultDTO.ScopingResult>();
+                if (opScopeAvailable != null) {
+                    options.add(ScopingResult.available);
                 }
-                boolean displayRenovationDate = scopingResult == ScopingResult.renovation;
-                renovationEndLabel.setVisible(displayRenovationDate);
-                renovationEndDate.setVisible(displayRenovationDate);
+                if (opScopeRenovation != null) {
+                    options.add(ScopingResult.renovation);
+                }
+                if (opScopeOffMarket != null) {
+                    options.add(ScopingResult.offMarket);
+                }
+                combo.setOptions(options);
 
-                boolean displayOffMarket = scopingResult == ScopingResult.offMarket;
-                offMarketStartLabel.setVisible(displayOffMarket);
-                offMarketStartDate.setVisible(displayOffMarket);
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().renovationEndsOn())).build());
+                get(proto().renovationEndsOn()).setVisible(false);
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offMarketType())).build());
+                get(proto().offMarketType()).setVisible(false);
 
-                offMarketTypeLabel.setVisible(displayOffMarket);
-                offMarketType.setVisible(displayOffMarket);
+                return content;
             }
         };
-
-        int row = -1;
-        panel.setWidget(++row, 0, availableChoice = new RadioButton(SCOPING_RESULT, new SafeHtmlBuilder().appendEscaped(i18n.tr("Availalble")).toSafeHtml()));
-        availableChoice.addValueChangeHandler(handler);
-        panel.setWidget(++row, 0, renovationChoice = new RadioButton(SCOPING_RESULT, new SafeHtmlBuilder().appendEscaped(i18n.tr("Renovation")).toSafeHtml()));
-        renovationChoice.addValueChangeHandler(handler);
-        panel.setWidget(++row, 0, offMarketChoice = new RadioButton(SCOPING_RESULT, new SafeHtmlBuilder().appendEscaped(i18n.tr("Off Market")).toSafeHtml()));
-        offMarketChoice.addValueChangeHandler(handler);
-
-        panel.setWidget(++row, 0, renovationEndLabel = new Label(new SafeHtmlBuilder().appendEscaped(i18n.tr("Renovation Ends On") + ": ").toSafeHtml()
-                .asString()));
-        renovationEndLabel.setVisible(false);
-        panel.setWidget(row, 1, renovationEndDate = new CDatePicker());
-        renovationEndDate.setVisible(false);
-        renovationEndDate.setValue(new LogicalDate());
-
-        panel.setWidget(++row, 0, offMarketStartLabel = new Label(new SafeHtmlBuilder().appendEscaped(i18n.tr("Off Market Begins On") + ": ").toSafeHtml()
-                .asString()));
-        offMarketStartLabel.setVisible(false);
-        panel.setWidget(row, 1, offMarketStartDate = new CDatePicker());
-        offMarketStartDate.setVisible(false);
-        offMarketStartDate.setValue(new LogicalDate());
-
-        panel.setWidget(++row, 0,
-                offMarketTypeLabel = new Label(new SafeHtmlBuilder().appendEscaped(i18n.tr("Off Market Type") + ": ").toSafeHtml().asString()));
-        offMarketTypeLabel.setVisible(false);
-        panel.setWidget(row, 1, offMarketType = new CComboBox<AptUnitOccupancySegment.OffMarketType>());
-        offMarketType.setVisible(false);
-        offMarketType.setOptions(EnumSet.allOf(OffMarketType.class));
-        setBody(panel);
+        form.initContent();
+        form.asWidget().setSize("100%", "100%");
+        setBody(form);
     }
 
-    protected ScopingResult getResult() {
-        return scopingResult;
+    protected ScopingResultDTO getResult() {
+        return form.getValue();
     }
 
-    protected LogicalDate getOffMarketStartDate() {
-        if (getResult() == ScopingResult.offMarket) {
-            return new LogicalDate(offMarketStartDate.getValue());
+    @Override
+    public boolean onClickOk() {
+        if (!form.isValid()) {
+            return false;
         } else {
-            throw new IllegalStateException("can't produce off market start date when not off market");
+            return true;
         }
     }
-
-    protected OffMarketType getOffMarketType() {
-        if (getResult() == ScopingResult.offMarket) {
-            return offMarketType.getValue();
-        } else {
-            throw new IllegalStateException("can't produce off market type when not off market");
-        }
-    }
-
-    protected LogicalDate getRenovationEndDate() {
-        if (getResult() == ScopingResult.renovation) {
-            return new LogicalDate(renovationEndDate.getValue());
-        } else {
-            throw new IllegalStateException("can't produce renovation end date when the selected scoping result is not renovation");
-        }
-    }
-
 }

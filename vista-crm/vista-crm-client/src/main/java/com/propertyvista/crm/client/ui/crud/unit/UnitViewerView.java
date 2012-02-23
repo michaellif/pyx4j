@@ -17,12 +17,13 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
+import com.propertyvista.domain.occupancy.IAptUnitOccupancyOperationSelector;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.dto.AptUnitDTO;
 
-public interface UnitViewerView extends IViewerView<AptUnitDTO> {
+public interface UnitViewerView extends IViewerView<AptUnitDTO>, IAptUnitOccupancyOperationSelector {
 
     interface Presenter extends IViewerView.Presenter {
 

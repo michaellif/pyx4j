@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
@@ -26,6 +28,10 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.MakeVacantDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopeDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.occupancy.IAptUnitOccupancyOperation;
+import com.propertyvista.domain.occupancy.operations.OpScopeAvailable;
+import com.propertyvista.domain.occupancy.operations.OpScopeOffMarket;
+import com.propertyvista.domain.occupancy.operations.OpScopeRenovation;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.dto.AptUnitDTO;
@@ -41,6 +47,12 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     private Button scopeAction;
 
     private Button makeVacantAction;
+
+    private OpScopeAvailable opScopeAvaialable;
+
+    private OpScopeOffMarket opScopeOffMarket;
+
+    private OpScopeRenovation opScopeRenovation;
 
     public enum DebugIds implements IDebugId {
 
@@ -69,23 +81,11 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         scopeAction = new Button(i18n.tr("Scope..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new ScopeDialog() {
+                final OpScopeAvailable ava = opScopeAvaialable;
+                final OpScopeOffMarket off = opScopeOffMarket;
+                final OpScopeRenovation reno = opScopeRenovation;
 
-                    @Override
-                    public boolean onClickOk() {
-                        switch (getResult()) {
-                        case available:
-                            ((UnitViewerView.Presenter) presenter).scopeAvailable();
-                            break;
-                        case renovation:
-                            ((UnitViewerView.Presenter) presenter).scopeRenovation(getRenovationEndDate());
-                            break;
-                        case offMarket:
-                            ((UnitViewerView.Presenter) presenter).scopeOffMarket(getOffMarketType(), getOffMarketStartDate());
-                            break;
-                        }
-                        return true;
-                    }
+                new ScopeDialog((UnitViewerView.Presenter) presenter, ava, off, reno) {
                 }.show();
             }
         });
@@ -117,5 +117,38 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     @Override
     public IListerView<AptUnitOccupancySegment> getOccupanciesListerView() {
         return OccupanciesLister;
+    }
+
+    @Override
+    public void populate(List<IAptUnitOccupancyOperation> operations) {
+        scopeAction.setVisible(false);
+        makeVacantAction.setVisible(false);
+
+        for (IAptUnitOccupancyOperation op : operations) {
+            populate(op);
+        }
+    }
+
+    @Override
+    public void populate(IAptUnitOccupancyOperation operation) {
+        operation.populateSelector(this);
+    }
+
+    @Override
+    public void populateOpScopeAvaialble(OpScopeAvailable op) {
+        opScopeAvaialable = op;
+        scopeAction.setVisible(true);
+    }
+
+    @Override
+    public void populateOpScopeOffMarket(OpScopeOffMarket op) {
+        opScopeOffMarket = op;
+        scopeAction.setVisible(true);
+    }
+
+    @Override
+    public void populateOpScopeRenovation(OpScopeRenovation op) {
+        opScopeRenovation = op;
+        scopeAction.setVisible(true);
     }
 }

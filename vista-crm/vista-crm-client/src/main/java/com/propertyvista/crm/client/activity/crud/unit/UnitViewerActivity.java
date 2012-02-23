@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.crud.unit;
 
+import java.util.Vector;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -33,6 +35,7 @@ import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
+import com.propertyvista.domain.occupancy.IAptUnitOccupancyOperation;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -80,6 +83,15 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
         OccupanciesLister.setParent(result.getPrimaryKey());
         OccupanciesLister.populate();
+
+        occupancyManagerService.getAvailableOperations(new DefaultAsyncCallback<Vector<IAptUnitOccupancyOperation>>() {
+
+            @Override
+            public void onSuccess(Vector<IAptUnitOccupancyOperation> result) {
+                ((UnitViewerView) view).populate(result);
+            }
+
+        }, entityId, new LogicalDate());
     }
 
     @Override
