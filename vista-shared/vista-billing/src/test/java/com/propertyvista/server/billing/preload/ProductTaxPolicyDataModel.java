@@ -13,33 +13,19 @@
  */
 package com.propertyvista.server.billing.preload;
 
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.policy.policies.ChargePolicy;
-
-public class ChargePolicyDataModel {
-
-    private final ChargeCodesDataModel chargeCodesDataModel;
+public class ProductTaxPolicyDataModel {
 
     private final ProductItemTypesDataModel productItemTypesDataModel;
 
-    private ChargePolicy chargePolicy;
+    private final TaxesDataModel taxesDataModel;
 
-    public ChargePolicyDataModel(ChargeCodesDataModel chargeCodesDataModel, ProductItemTypesDataModel productItemTypesDataModel) {
-        this.chargeCodesDataModel = chargeCodesDataModel;
+    public ProductTaxPolicyDataModel(ProductItemTypesDataModel productItemTypesDataModel, TaxesDataModel taxesDataModel) {
         this.productItemTypesDataModel = productItemTypesDataModel;
+        this.taxesDataModel = taxesDataModel;
     }
 
     public void generate(boolean persist) {
-        ChargePolicy chargePolicy = EntityFactory.create(ChargePolicy.class);
-//        chargePolicy.chargePolicyItems()
-
-        Persistence.service().persist(chargePolicy);
-    }
-
-    public ChargePolicy getChargePolicy() {
-        return chargePolicy;
     }
 
 }

@@ -22,11 +22,10 @@ package com.propertyvista.server.billing;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.server.billing.preload.BuildingDataModel;
-import com.propertyvista.server.billing.preload.ChargeCodesDataModel;
-import com.propertyvista.server.billing.preload.ChargePolicyDataModel;
 import com.propertyvista.server.billing.preload.LeaseDataModel;
 import com.propertyvista.server.billing.preload.LocationsDataModel;
 import com.propertyvista.server.billing.preload.ProductItemTypesDataModel;
+import com.propertyvista.server.billing.preload.ProductTaxPolicyDataModel;
 import com.propertyvista.server.billing.preload.TaxesDataModel;
 import com.propertyvista.server.billing.preload.TenantDataModel;
 
@@ -44,14 +43,11 @@ public class BillingTestBase extends VistaDBTestBase {
         TaxesDataModel taxesDataModel = new TaxesDataModel(locationsDataModel);
         taxesDataModel.generate(true);
 
-        ChargeCodesDataModel chargeCodesDataModel = new ChargeCodesDataModel(taxesDataModel);
-        chargeCodesDataModel.generate(true);
-
         ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel();
         productItemTypesDataModel.generate(true);
 
-        ChargePolicyDataModel chargePolicyDataModel = new ChargePolicyDataModel(chargeCodesDataModel, productItemTypesDataModel);
-        chargeCodesDataModel.generate(true);
+        ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(productItemTypesDataModel, taxesDataModel);
+        productTaxPolicyDataModel.generate(true);
 
         BuildingDataModel buildingDataModel = new BuildingDataModel(productItemTypesDataModel);
         buildingDataModel.generate(true);
