@@ -58,6 +58,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
+    private Widget unitSelector, serviceselector;
+
     public LeaseEditorForm() {
         this(false);
     }
@@ -95,9 +97,15 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         super.onPopulate();
 
         // disable some editing on signed lease:
-        get(proto().approvalDate()).setEditable(getValue().approvalDate().isNull());
-        get(proto().leaseFrom()).setEditable(getValue().approvalDate().isNull());
-        get(proto().leaseTo()).setEditable(getValue().approvalDate().isNull());
+        if (isEditable()) {
+            boolean isLeaseSigned = !getValue().approvalDate().isNull();
+
+            get(proto().leaseFrom()).setEditable(!isLeaseSigned);
+            get(proto().leaseTo()).setEditable(!isLeaseSigned);
+
+            unitSelector.setVisible(!isLeaseSigned);
+            serviceselector.setVisible(!isLeaseSigned);
+        }
     }
 
     private Widget createDetailsTab() {
@@ -118,22 +126,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         main.setBR(++row, 0, 1);
-        FormFlexPanel leaseDates = new FormFlexPanel();
-        leaseDates.setWidget(0, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
-        leaseDates.setWidget(0, 1, new DecoratorBuilder(inject(proto().leaseTo()), 9).labelWidth(10).build());
-        leaseDates.setWidget(1, 1, new DecoratorBuilder(inject(proto().actualLeaseTo()), 9).labelWidth(10).build());
-
-        leaseDates.getColumnFormatter().setWidth(0, "35%");
-        leaseDates.getColumnFormatter().setWidth(1, "65%");
-        main.setWidget(++row, 0, leaseDates);
-
-        main.setBR(++row, 0, 1);
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding(), new CEntityLabel()), 20).build());
 
             HorizontalPanel unitPanel = new HorizontalPanel();
             unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 20).build());
-            unitPanel.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
+            unitPanel.add(unitSelector = new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     new UnitSelectorDialog() {
@@ -170,33 +168,38 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         main.setBR(++row, 0, 1);
-        leaseDates = new FormFlexPanel();
-        leaseDates.setWidget(0, 0, new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
-        leaseDates.setWidget(0, 1, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).labelWidth(10).build());
+        FormFlexPanel leaseDates = new FormFlexPanel();
+        int datesRow = -1;
 
-        leaseDates.getColumnFormatter().setWidth(0, "35%");
-        leaseDates.getColumnFormatter().setWidth(1, "65%");
-        main.setWidget(++row, 0, leaseDates);
+        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
+        leaseDates.setBR(++datesRow, 0, 1);
+        leaseDates.setBR(++datesRow, 0, 1);
+        leaseDates.setBR(++datesRow, 0, 1);
+        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
+        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
 
-        leaseDates = new FormFlexPanel();
-        leaseDates.setWidget(0, 0, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
-        leaseDates.setWidget(0, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).labelWidth(10).build());
+        datesRow = -1;
+        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().leaseTo()), 9).labelWidth(10).build());
+        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualLeaseTo()), 9).labelWidth(10).build());
+        leaseDates.setBR(++datesRow, 1, 1);
+        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).labelWidth(10).build());
+        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).labelWidth(10).build());
+        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).labelWidth(10).build());
 
-        leaseDates.getColumnFormatter().setWidth(0, "35%");
-        leaseDates.getColumnFormatter().setWidth(1, "65%");
-        main.setWidget(++row, 0, leaseDates);
-
-        main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
+        get(proto().actualLeaseTo()).setViewable(true);
         get(proto().moveOutNotice()).setViewable(true);
+        get(proto().expectedMoveOut()).setViewable(true);
+
+        leaseDates.getColumnFormatter().setWidth(0, "35%");
+        leaseDates.getColumnFormatter().setWidth(1, "65%");
+        main.setWidget(++row, 0, leaseDates);
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
-        get(proto().approvalDate()).setViewable(true);
-
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
         get(proto().createDate()).setViewable(true);
+        get(proto().approvalDate()).setViewable(true);
 
         return new CrmScrollPanel(main);
     }
@@ -218,9 +221,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
         if (isEditable()) {
-            Widget select;
             serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new BillableItemEditor()));
-            serviceItemPanel.add(select = new AnchorButton("Select...", new ClickHandler() {
+            serviceItemPanel.add(serviceselector = new AnchorButton("Select...", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
@@ -251,7 +253,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 }
             }));
-            select.getElement().getStyle().setMarginLeft(4, Unit.EM);
+            serviceselector.getElement().getStyle().setMarginLeft(4, Unit.EM);
         } else {
             serviceItemPanel.add(new DecoratorBuilder(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel<BillableItem>()), 50).build());
         }
