@@ -55,7 +55,9 @@ public interface ProductItemType extends IEntity {
 
     GlCode glCode();
 
-    //TODO get from Charge Tax Policy
+    /**
+     * Fill in Service from @link ProductTaxPolicy
+     */
     @Transient
     IList<Tax> taxes();
 }

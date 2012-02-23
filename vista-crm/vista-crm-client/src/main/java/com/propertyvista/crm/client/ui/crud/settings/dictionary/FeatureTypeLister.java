@@ -48,5 +48,4 @@ public class FeatureTypeLister extends ListerBase<ProductItemType> {
             new MemberColumnDescriptor.Builder(proto().glCode()).build()
         );//@formatter:on
     }
-
 }

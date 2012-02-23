@@ -22,23 +22,23 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.ChargeCode;
 import com.propertyvista.domain.financial.offering.ProductItemType;
-import com.propertyvista.domain.policy.policies.ChargePolicy;
-import com.propertyvista.domain.policy.policies.domain.ChargePolicyItem;
+import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
+import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
-public class ChargePolicyPreloader extends AbstractPolicyPreloader<ChargePolicy> {
+public class ChargePolicyPreloader extends AbstractPolicyPreloader<ProductTaxPolicy> {
 
     public ChargePolicyPreloader() {
-        super(ChargePolicy.class);
+        super(ProductTaxPolicy.class);
     }
 
     private final static I18n i18n = I18n.get(ChargePolicyPreloader.class);
 
     @Override
-    protected ChargePolicy createPolicy(StringBuilder log) {
-        ChargePolicy policy = EntityFactory.create(ChargePolicy.class);
+    protected ProductTaxPolicy createPolicy(StringBuilder log) {
+        ProductTaxPolicy policy = EntityFactory.create(ProductTaxPolicy.class);
 
-        ChargePolicyItem item = EntityFactory.create(ChargePolicyItem.class);
+        ProductTaxPolicyItem item = EntityFactory.create(ProductTaxPolicyItem.class);
 
         EntityQueryCriteria<ProductItemType> pitc = EntityQueryCriteria.create(ProductItemType.class);
         List<ProductItemType> pitlist = Persistence.service().query(pitc);
@@ -56,7 +56,7 @@ public class ChargePolicyPreloader extends AbstractPolicyPreloader<ChargePolicy>
                 //  item.productItemType().chargeCode().set(cc);
                 item.chargeCode().set(cc);
 
-                policy.chargePolicyItems().add(item);
+                policy.policyItems().add(item);
 
                 Persistence.service().persist(policy);
             } else

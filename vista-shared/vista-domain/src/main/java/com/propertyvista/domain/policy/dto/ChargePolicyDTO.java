@@ -16,9 +16,9 @@ package com.propertyvista.domain.policy.dto;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
-import com.propertyvista.domain.policy.policies.ChargePolicy;
+import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 
 @Transient
-public interface ChargePolicyDTO extends PolicyDTOBase, ChargePolicy {
+public interface ChargePolicyDTO extends PolicyDTOBase, ProductTaxPolicy {
 
 }

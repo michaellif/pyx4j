@@ -7,20 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 2, 2012
- * @author michaellif
+ * Created on 2011-05-24
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies.domain;
+package com.propertyvista.crm.rpc.services.building.catalog;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.financial.offering.ChargeCode;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public interface ChargePolicyItem extends IEntity {
-
-    ProductItemType productItemType();
-
-    ChargeCode chargeCode();
+public interface ProductItemTypeCrudService extends AbstractCrudService<ProductItemType> {
 }

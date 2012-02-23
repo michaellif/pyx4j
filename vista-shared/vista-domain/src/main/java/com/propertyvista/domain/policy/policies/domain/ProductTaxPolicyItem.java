@@ -7,29 +7,36 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 25, 2012
+ * Created on Feb 2, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies;
+package com.propertyvista.domain.policy.policies.domain;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.financial.offering.ChargeCode;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.tax.Tax;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 
-/**
- * Reason code
- * 
- * @author michaellif
- * 
- */
-public interface LeaseAdjustmentPolicy extends IEntity {
+public interface ProductTaxPolicyItem extends IEntity {
 
-    LeaseAdjustmentReason leaseAdjustmentReason();
+    @Owner
+    @Detached
+    @ReadOnly
+    ProductTaxPolicy taxPolicy();
+
+    ProductItemType productItemType();
 
     @Owned
     IList<Tax> taxes();
+
+    @Deprecated
+    ChargeCode chargeCode();
 }

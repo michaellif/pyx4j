@@ -7,29 +7,31 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 25, 2012
- * @author michaellif
+ * Created on Feb 23, 2012
+ * @author vladlouk
  * @version $Id$
  */
 package com.propertyvista.domain.policy.policies;
 
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.tax.Tax;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 
-/**
- * Reason code
- * 
- * @author michaellif
- * 
- */
-public interface LeaseAdjustmentPolicy extends IEntity {
+public interface ProductTaxPolicyJT extends IEntity {
 
-    LeaseAdjustmentReason leaseAdjustmentReason();
+    @JoinColumn
+    ProductTaxPolicy parent();
 
-    @Owned
-    IList<Tax> taxes();
+    @JoinColumn
+    ProductTaxPolicyItem child();
+
+    @OrderColumn(OrderId.class)
+    IPrimitive<Integer> orderInParent();
+
+    interface OrderId extends ColumnId {
+    }
 }

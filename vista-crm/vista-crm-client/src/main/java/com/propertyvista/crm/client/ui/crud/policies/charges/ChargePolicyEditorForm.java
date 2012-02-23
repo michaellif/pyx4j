@@ -37,7 +37,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.policy.dto.ChargePolicyDTO;
-import com.propertyvista.domain.policy.policies.domain.ChargePolicyItem;
+import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 
 public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<ChargePolicyDTO> {
     private final static I18n i18n = I18n.get(ChargePolicyEditorForm.class);
@@ -68,32 +68,32 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
         
         int row = -1;
         
-        panel.setWidget(++row, 0, inject(proto().chargePolicyItems(), new ChargePolicyEditorFolder(viewMode)));
+        panel.setWidget(++row, 0, inject(proto().policyItems(), new ChargePolicyEditorFolder(viewMode)));
 
         return panel;
     }
     
     
-    private static class ChargePolicyEditorFolder extends VistaBoxFolder<ChargePolicyItem> {
+    private static class ChargePolicyEditorFolder extends VistaBoxFolder<ProductTaxPolicyItem> {
 
         private final boolean viewMode;
         
         public ChargePolicyEditorFolder(boolean viewMode) {
-            super(ChargePolicyItem.class);
+            super(ProductTaxPolicyItem.class);
             
             this.viewMode = viewMode;
         }
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof ChargePolicyItem) {
+            if (member instanceof ProductTaxPolicyItem) {
                 return new ChargePolicyItemEditor(viewMode);
             } else {
                 return super.create(member);
             }
         }
 
-        private static class ChargePolicyItemEditor extends CEntityDecoratableEditor<ChargePolicyItem> {
+        private static class ChargePolicyItemEditor extends CEntityDecoratableEditor<ProductTaxPolicyItem> {
             
             private final static I18n i18n = I18n.get(ChargePolicyItemEditor.class);
             
@@ -111,7 +111,7 @@ public class ChargePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<Cha
             
             
             public ChargePolicyItemEditor(boolean viewMode) {
-                super(ChargePolicyItem.class);
+                super(ProductTaxPolicyItem.class);
                 
                 this.viewMode = viewMode;
             }

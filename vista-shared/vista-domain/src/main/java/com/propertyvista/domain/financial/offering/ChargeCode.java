@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.tax.Tax;
 
+@Deprecated
 public interface ChargeCode extends IEntity {
 
     @ToString
@@ -29,5 +30,4 @@ public interface ChargeCode extends IEntity {
     GlCode glCode();
 
     IList<Tax> taxes();
-
 }
