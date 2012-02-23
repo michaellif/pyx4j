@@ -44,7 +44,8 @@ public class FeatureTypeLister extends ListerBase<ProductItemType> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().featureType()).build()
+            new MemberColumnDescriptor.Builder(proto().featureType()).build(),
+            new MemberColumnDescriptor.Builder(proto().glCode()).build()
         );//@formatter:on
     }
 

@@ -20,9 +20,13 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
+
+import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.domain.financial.tax.Tax;
 
 public interface ProductItemType extends IEntity {
 
@@ -49,8 +53,9 @@ public interface ProductItemType extends IEntity {
 
     IPrimitive<Feature.Type> featureType();
 
-    //TODO get from Charge Policy
-    @Transient
-    ChargeCode chargeCode();
+    GlCode glCode();
 
+    //TODO get from Charge Tax Policy
+    @Transient
+    IList<Tax> taxes();
 }

@@ -33,6 +33,7 @@ public class ChargePolicyDataModel {
 
     public void generate(boolean persist) {
         ChargePolicy chargePolicy = EntityFactory.create(ChargePolicy.class);
+//        chargePolicy.chargePolicyItems()
 
         Persistence.service().persist(chargePolicy);
     }

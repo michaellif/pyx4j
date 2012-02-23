@@ -52,7 +52,8 @@ public class ChargePolicyPreloader extends AbstractPolicyPreloader<ChargePolicy>
             if (chargeCodes.size() > 0) {
                 ChargeCode cc = chargeCodes.get(0);
 
-                item.productItemType().chargeCode().set(cc);
+                //TODO set taxes
+                //  item.productItemType().chargeCode().set(cc);
                 item.chargeCode().set(cc);
 
                 policy.chargePolicyItems().add(item);

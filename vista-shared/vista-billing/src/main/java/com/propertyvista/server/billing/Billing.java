@@ -149,7 +149,7 @@ class Billing {
         charge.billableItem().set(billableItem);
         charge.amount().setValue(billableItem.item().price().getValue());
         if (!charge.amount().isNull()) {
-            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), billableItem.item().type().chargeCode().taxes()));
+            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), billableItem.item().type().taxes()));
         }
         charge.taxTotal().setValue(new BigDecimal(0));
         for (BillChargeTax chargeTax : charge.taxes()) {
