@@ -600,7 +600,7 @@
         </profile>
 
         <profile>
-            <id>build-ci</id>
+            <id>rpc-history</id>
             <properties>
                 <ciSiteDirectory>${scp-apache-site-snapshot-base}/vista</ciSiteDirectory>
             </properties>
