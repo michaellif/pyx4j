@@ -20,6 +20,6 @@ import com.propertyvista.domain.financial.offering.ChargeCode;
 public class ChargeCodeViewerViewImpl extends CrmViewerViewImplBase<ChargeCode> implements ChargeCodeViewerView {
 
     public ChargeCodeViewerViewImpl() {
-        super(CrmSiteMap.Settings.ServiceItemType.class, new ChargeCodeEditorForm(true));
+        super(CrmSiteMap.Settings.ChargeCode.class, new ChargeCodeEditorForm(true));
     }
 }

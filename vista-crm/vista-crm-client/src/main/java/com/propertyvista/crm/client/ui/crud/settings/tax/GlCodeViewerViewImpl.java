@@ -20,6 +20,6 @@ import com.propertyvista.domain.financial.GlCode;
 public class GlCodeViewerViewImpl extends CrmViewerViewImplBase<GlCode> implements GlCodeViewerView {
 
     public GlCodeViewerViewImpl() {
-        super(CrmSiteMap.Settings.ServiceItemType.class, new GlCodeEditorForm(true));
+        super(CrmSiteMap.Settings.GlCode.class, new GlCodeEditorForm(true));
     }
 }
