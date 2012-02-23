@@ -172,26 +172,26 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         int datesRow = -1;
 
         leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
-        leaseDates.setBR(++datesRow, 0, 1);
-        leaseDates.setBR(++datesRow, 0, 1);
+        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseTo()), 9).build());
         leaseDates.setBR(++datesRow, 0, 1);
         leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
-        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
+        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
+        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
 
         datesRow = -1;
-        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().leaseTo()), 9).labelWidth(10).build());
-        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualLeaseTo()), 9).labelWidth(10).build());
         leaseDates.setBR(++datesRow, 1, 1);
-        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).labelWidth(10).build());
-        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).labelWidth(10).build());
-        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).labelWidth(10).build());
+        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualLeaseTo()), 9).build());
+        leaseDates.setBR(++datesRow, 1, 1);
+        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
+        leaseDates.setBR(++datesRow, 1, 1);
+        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).build());
 
         get(proto().actualLeaseTo()).setViewable(true);
         get(proto().moveOutNotice()).setViewable(true);
         get(proto().expectedMoveOut()).setViewable(true);
 
-        leaseDates.getColumnFormatter().setWidth(0, "35%");
-        leaseDates.getColumnFormatter().setWidth(1, "65%");
+        leaseDates.getColumnFormatter().setWidth(0, "40%");
+        leaseDates.getColumnFormatter().setWidth(1, "60%");
         main.setWidget(++row, 0, leaseDates);
 
         main.setBR(++row, 0, 1);
