@@ -70,6 +70,8 @@ public class TableModel {
 
     private final Dialect dialect;
 
+    private final Mappings mappings;
+
     private final EntityMeta entityMeta;
 
     private final EntityOperationsMeta entityOperationsMeta;
@@ -82,6 +84,7 @@ public class TableModel {
 
     public TableModel(Dialect dialect, Mappings mappings, EntityMeta entityMeta) {
         this.dialect = dialect;
+        this.mappings = mappings;
         this.entityMeta = entityMeta;
         if (entityMeta.getEntityClass().getAnnotation(AbstractEntity.class) != null) {
             throw new Error("Persistence of @AbstractEntity " + entityMeta.getEntityClass().getName() + " is not permitted");
@@ -94,7 +97,7 @@ public class TableModel {
             primaryKeyStrategy = Table.PrimaryKeyStrategy.AUTO;
         }
         tableName = getTableName(dialect, entityMeta);
-        entityOperationsMeta = new EntityOperationsMeta(dialect, mappings, entityMeta);
+        entityOperationsMeta = new EntityOperationsMeta(dialect, entityMeta);
 
         if (dialect.isSequencesBaseIdentity()) {
             for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
@@ -559,7 +562,7 @@ public class TableModel {
         ResultSet rs = null;
         String sql = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+            QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, mappings, "m1", entityOperationsMeta, criteria);
             sql = "SELECT m1.* FROM " + qb.getSQL(tableName);
             //log.info("query {}", sql);
             int offset = 0;
@@ -625,7 +628,7 @@ public class TableModel {
 
     public <T extends IEntity> ResultSetIterator<T> queryIterable(final Connection connection, EntityQueryCriteria<T> criteria) {
         String sql = null;
-        QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+        QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, mappings, "m1", entityOperationsMeta, criteria);
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -735,7 +738,7 @@ public class TableModel {
         ResultSet rs = null;
         String sql = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+            QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, mappings, "m1", entityOperationsMeta, criteria);
             sql = "SELECT m1.id FROM " + qb.getSQL(tableName);
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {} ", sql);
@@ -768,7 +771,7 @@ public class TableModel {
 
     public <T extends IEntity> ResultSetIterator<Key> queryKeysIterable(final Connection connection, EntityQueryCriteria<T> criteria) {
         String sql = null;
-        QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+        QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, mappings, "m1", entityOperationsMeta, criteria);
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -831,7 +834,7 @@ public class TableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+            QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, mappings, "m1", entityOperationsMeta, criteria);
             stmt = connection.prepareStatement("SELECT " + dialect.sqlFunction(func, args) + " FROM " + qb.getSQL(tableName));
             // Just in case, used for pooled connections 
             stmt.setMaxRows(1);

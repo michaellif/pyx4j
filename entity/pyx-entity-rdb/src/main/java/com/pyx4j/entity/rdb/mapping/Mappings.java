@@ -77,6 +77,10 @@ public class Mappings {
         return ensureTable(connection, connectionProvider.getDialect(), EntityFactory.getEntityMeta(entityClass));
     }
 
+    public EntityOperationsMeta getEntityOperationsMeta(Connection connection, Class<? extends IEntity> entityClass) {
+        return getTableModel(connection, entityClass).operationsMeta();
+    }
+
     public TableModel ensureTable(Connection connection, Dialect dialect, EntityMeta entityMeta) {
         TableModel model = tables.get(entityMeta.getEntityClass());
         if (model != null) {

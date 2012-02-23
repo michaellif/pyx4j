@@ -178,6 +178,15 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("PK Value", empsSortedAsc.get(0).getPrimaryKey(), emp1.getPrimaryKey());
         }
 
+        if (false) { // Verify join using auto-generated table
+            EntityQueryCriteria<Department> criteria = EntityQueryCriteria.create(Department.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().organization().name(), org2.name()));
+
+            List<Department> list = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, list.size());
+            Assert.assertEquals("PK Value", list.get(0).getPrimaryKey(), department2.getPrimaryKey());
+        }
+
         //TODO fix query 
         if (false) {
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);

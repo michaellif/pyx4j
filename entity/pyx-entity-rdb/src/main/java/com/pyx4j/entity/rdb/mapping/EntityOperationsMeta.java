@@ -21,7 +21,6 @@
 package com.pyx4j.entity.rdb.mapping;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -80,17 +79,14 @@ public class EntityOperationsMeta {
 
     private final List<MemberOperationsMeta> indexMembers = new Vector<MemberOperationsMeta>();
 
-    private final Mappings mappings;
-
     private MemberOperationsMeta updatedTimestampMember;
 
     private MemberOperationsMeta createdTimestampMember;
 
-    EntityOperationsMeta(Dialect dialect, Mappings mappings, EntityMeta entityMeta) {
+    EntityOperationsMeta(Dialect dialect, EntityMeta entityMeta) {
         mainEntityMeta = entityMeta;
         String path = GWTJava5Helper.getSimpleName(entityMeta.getEntityClass());
         build(dialect, dialect.getNamingConvention(), entityMeta, path, null, null, entityMeta);
-        this.mappings = mappings;
 
         // Create meta for PK
         {
@@ -104,10 +100,6 @@ public class EntityOperationsMeta {
 
     public EntityMeta entityMeta() {
         return mainEntityMeta;
-    }
-
-    public EntityOperationsMeta getMappedOperationsMeta(Connection connection, Class<? extends IEntity> entityClass) {
-        return mappings.getTableModel(connection, entityClass).operationsMeta();
     }
 
     static String memberPersistenceName(MemberMeta memberMeta) {
