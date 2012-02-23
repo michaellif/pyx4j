@@ -23,7 +23,9 @@ package com.propertyvista.server.billing;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.server.billing.preload.BuildingDataModel;
 import com.propertyvista.server.billing.preload.LeaseDataModel;
+import com.propertyvista.server.billing.preload.LocationsDataModel;
 import com.propertyvista.server.billing.preload.ProductItemTypesDataModel;
+import com.propertyvista.server.billing.preload.TaxesDataModel;
 import com.propertyvista.server.billing.preload.TenantDataModel;
 
 public class BillingTestBase extends VistaDBTestBase {
@@ -33,6 +35,12 @@ public class BillingTestBase extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+
+        LocationsDataModel locationsDataModel = new LocationsDataModel();
+        locationsDataModel.generate(true);
+
+        TaxesDataModel taxesDataModel = new TaxesDataModel(locationsDataModel);
+        taxesDataModel.generate(true);
 
         ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel();
         productItemTypesDataModel.generate(true);

@@ -64,11 +64,7 @@ public class ProductItemTypesDataModel {
         generateChargeItemType("Hydro", Feature.Type.utility);
         generateChargeItemType("Booking", Feature.Type.booking);
 
-        if (persist) {
-            for (ProductItemType productItemType : getProductItemTypes()) {
-                Persistence.service().persist(productItemType);
-            }
-        }
+        Persistence.service().persist(getProductItemTypes());
 
     }
 

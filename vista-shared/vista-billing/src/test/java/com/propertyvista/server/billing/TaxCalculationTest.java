@@ -32,13 +32,13 @@ public class TaxCalculationTest extends TestCase {
         List<Tax> taxes = new ArrayList<Tax>();
 
         Tax tax = EntityFactory.create(Tax.class);
-        tax.rate().setValue(0.07);
+        tax.rate().setValue(new BigDecimal("0.07"));
         tax.name().setValue("GST");
         tax.compound().setValue(false);
         taxes.add(tax);
 
         tax = EntityFactory.create(Tax.class);
-        tax.rate().setValue(0.05);
+        tax.rate().setValue(new BigDecimal("0.05"));
         tax.name().setValue("PST");
         tax.compound().setValue(false);
         taxes.add(tax);
@@ -54,12 +54,12 @@ public class TaxCalculationTest extends TestCase {
         List<Tax> taxes2 = new ArrayList<Tax>();
 
         Tax gst = EntityFactory.create(Tax.class);
-        gst.rate().setValue(0.1);
+        gst.rate().setValue(new BigDecimal("0.1"));
         gst.name().setValue("GST");
         gst.compound().setValue(false);
 
         Tax pst = EntityFactory.create(Tax.class);
-        pst.rate().setValue(0.05);
+        pst.rate().setValue(new BigDecimal("0.05"));
         pst.name().setValue("PST");
         pst.compound().setValue(true);
 

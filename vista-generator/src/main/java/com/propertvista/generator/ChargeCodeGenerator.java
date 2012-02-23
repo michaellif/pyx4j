@@ -13,6 +13,7 @@
  */
 package com.propertvista.generator;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
@@ -51,7 +52,7 @@ public class ChargeCodeGenerator {
 
         tax.authority().setValue("Authority #" + i);
         tax.name().setValue("Tax #" + i);
-        tax.rate().setValue(Double.valueOf(format.format(randomGenerator.nextDouble() * 10)));
+        tax.rate().setValue(new BigDecimal(randomGenerator.nextDouble() * 10));
         tax.compound().setValue(randomGenerator.nextBoolean());
 
         return tax;

@@ -32,7 +32,7 @@ public class TaxUtils {
             if (!tax.compound().getValue()) {
                 BillChargeTax chargeTax = EntityFactory.create(BillChargeTax.class);
                 chargeTax.tax().set(tax);
-                chargeTax.amount().setValue(baseAmount.multiply(new BigDecimal(tax.rate().getValue())).setScale(2, RoundingMode.HALF_UP));
+                chargeTax.amount().setValue(baseAmount.multiply(tax.rate().getValue()).setScale(2, RoundingMode.HALF_UP));
                 chargeTaxes.add(chargeTax);
                 interimAmount = interimAmount.add(chargeTax.amount().getValue());
             }
@@ -41,7 +41,7 @@ public class TaxUtils {
             if (tax.compound().getValue()) {
                 BillChargeTax chargeTax = EntityFactory.create(BillChargeTax.class);
                 chargeTax.tax().set(tax);
-                chargeTax.amount().setValue(interimAmount.multiply(new BigDecimal(tax.rate().getValue())).setScale(2, RoundingMode.HALF_UP));
+                chargeTax.amount().setValue(interimAmount.multiply(tax.rate().getValue()).setScale(2, RoundingMode.HALF_UP));
                 chargeTaxes.add(chargeTax);
                 interimAmount = interimAmount.add(chargeTax.amount().getValue());
             }
