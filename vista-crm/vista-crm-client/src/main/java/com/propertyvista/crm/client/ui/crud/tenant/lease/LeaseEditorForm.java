@@ -103,6 +103,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             get(proto().leaseFrom()).setEditable(!isLeaseSigned);
             get(proto().leaseTo()).setEditable(!isLeaseSigned);
 
+            // set one-time editing:
+            get(proto().expectedMoveIn()).setEditable(getValue().expectedMoveIn().isNull());
+            get(proto().actualMoveIn()).setEditable(getValue().actualMoveIn().isNull());
+            get(proto().actualMoveOut()).setEditable(getValue().actualMoveOut().isNull());
+
             unitSelector.setVisible(!isLeaseSigned);
             serviceselector.setVisible(!isLeaseSigned);
         }
@@ -167,10 +172,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                             .build());
         }
 
+        // Lease dates:
         main.setBR(++row, 0, 1);
         FormFlexPanel leaseDates = new FormFlexPanel();
-        int datesRow = -1;
 
+        int datesRow = -1; // first column:
         leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
         leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseTo()), 9).build());
         leaseDates.setBR(++datesRow, 0, 1);
@@ -178,7 +184,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
         leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
 
-        datesRow = -1;
+        datesRow = -1; // second column:
         leaseDates.setBR(++datesRow, 1, 1);
         leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualLeaseTo()), 9).build());
         leaseDates.setBR(++datesRow, 1, 1);
@@ -194,10 +200,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         leaseDates.getColumnFormatter().setWidth(1, "60%");
         main.setWidget(++row, 0, leaseDates);
 
+        // other dates:
         main.setBR(++row, 0, 1);
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
+
         get(proto().createDate()).setViewable(true);
         get(proto().approvalDate()).setViewable(true);
 
