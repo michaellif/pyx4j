@@ -18,6 +18,7 @@ import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseViewerView extends IViewerView<LeaseDTO> {
@@ -25,6 +26,8 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
     interface Presenter extends IViewerView.Presenter {
 
         IListerView.Presenter<Bill> getBillListerPresenter();
+
+        IListerView.Presenter<Payment> getPaymentListerPresenter();
 
         void createMasterApplication();
 
@@ -40,4 +43,6 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
     }
 
     IListerView<Bill> getBillListerView();
+
+    IListerView<Payment> getPaymentListerView();
 }

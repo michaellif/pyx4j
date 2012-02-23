@@ -30,8 +30,10 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillLister;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -40,6 +42,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
 
     private final IListerView<Bill> billLister;
+
+    private final IListerView<Payment> paymentLister;
 
     private final Button createApplication;
 
@@ -57,6 +61,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         super(CrmSiteMap.Tenants.Lease.class);
 
         billLister = new ListerInternalViewImplBase<Bill>(new BillLister());
+
+        paymentLister = new ListerInternalViewImplBase<Payment>(new PaymentLister());
 
         //set main form here:
         setForm(new LeaseEditorForm(true));
@@ -145,6 +151,11 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     @Override
     public IListerView<Bill> getBillListerView() {
         return billLister;
+    }
+
+    @Override
+    public IListerView<Payment> getPaymentListerView() {
+        return paymentLister;
     }
 
     private abstract class ActionBox extends OkCancelDialog {

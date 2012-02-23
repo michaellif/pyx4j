@@ -38,8 +38,10 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
+import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements LeaseViewerView.Presenter {
@@ -47,6 +49,8 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
 
     private final IListerView.Presenter<Bill> billLister;
+
+    private final IListerView.Presenter<Payment> paymentLister;
 
     private LeaseDTO currentValue;
 
@@ -56,6 +60,9 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
 
         billLister = new ListerActivityBase<Bill>(place, ((LeaseViewerView) view).getBillListerView(),
                 (AbstractCrudService<Bill>) GWT.create(BillCrudService.class), Bill.class);
+
+        paymentLister = new ListerActivityBase<Payment>(place, ((LeaseViewerView) view).getPaymentListerView(),
+                (AbstractCrudService<Payment>) GWT.create(PaymentCrudService.class), Payment.class);
     }
 
     @Override
@@ -64,9 +71,16 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     }
 
     @Override
+    public Presenter<Payment> getPaymentListerPresenter() {
+        return paymentLister;
+    }
+
+    @Override
     protected void onPopulateSuccess(LeaseDTO result) {
         super.onPopulateSuccess(result);
+
         populateBills(currentValue = result);
+        populatePayments(result);
     }
 
     protected void populateBills(LeaseDTO result) {
@@ -75,6 +89,14 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
                 Operators.is, result.leaseFinancial().getPrimaryKey()));
         billLister.setPreDefinedFilters(preDefinedFilters);
         billLister.populate();
+    }
+
+    protected void populatePayments(LeaseDTO result) {
+        List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
+        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Payment.class).billingAccount().leaseFinancial().id().getPath(),
+                Operators.is, result.leaseFinancial().getPrimaryKey()));
+        paymentLister.setPreDefinedFilters(preDefinedFilters);
+        paymentLister.populate();
     }
 
     // Actions:
