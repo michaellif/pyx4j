@@ -36,6 +36,8 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
@@ -143,11 +145,11 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
                     pb.setText("TVars");
                     pb.getElement().getStyle().setColor("black");
                     pb.setVisible(true);
-                    final TemplateVarMenu vm = new TemplateVarMenu();
+                    final TemplateVarSelector vm = new TemplateVarSelector();
                     editor.getWidget().getEditor().setCustomAction(new RichTextAction() {
                         @Override
                         public void perform(final Formatter formatter, final Command onComplete) {
-                            vm.setMenuHandler(new Command() {
+                            vm.setSelectionHandler(new Command() {
                                 @Override
                                 public void execute() {
                                     formatter.insertHTML(vm.getSelectedValue());
@@ -158,10 +160,19 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
                         }
                     });
                     // change template object list when template type selection changes
-                    get(proto().type()).addValueChangeHandler(new ValueChangeHandler<EmailTemplateType>() {
+                    final CComponent<EmailTemplateType, ?> comp = get(proto().type());
+                    comp.addValueChangeHandler(new ValueChangeHandler<EmailTemplateType>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<EmailTemplateType> event) {
                             vm.setItems(templateObjects.get(event.getValue()));
+                        }
+                    });
+                    comp.addPropertyChangeHandler(new PropertyChangeHandler() {
+                        @Override
+                        public void onPropertyChange(PropertyChangeEvent event) {
+                            if (event.isEventOfType(PropertyChangeEvent.PropertyName.repopulated)) {
+                                vm.setItems(templateObjects.get(comp.getValue()));
+                            }
                         }
                     });
                 } else {
@@ -172,47 +183,49 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
                 return content;
             }
 
-            static class TemplateVarMenu extends MenuBar {
-                private static String selectedValue;
+            static class TemplateVarSelector extends PopupPanel {
+                private String selectedValue;
 
-                private static Command menuHandler;
+                private Command selectionHandler;
 
-                private static PopupPanel panel = new PopupPanel(true);
+                private final TemplateVarMenu menu = new TemplateVarMenu();
 
-                public TemplateVarMenu() {
+                public TemplateVarSelector() {
                     super(true);
-                    setAutoOpen(true);
-                    setAnimationEnabled(true);
+                }
+
+                public void setSelectionHandler(Command handler) {
+                    selectionHandler = handler;
+                }
+
+                public String getSelectedValue() {
+                    return selectedValue != null ? "${" + selectedValue + "}" : "";
                 }
 
                 public void showBelow(UIObject target) {
                     selectedValue = null;
-                    if (panel.getWidget() == null) {
-                        panel.addCloseHandler(new CloseHandler<PopupPanel>() {
+                    if (getWidget() == null) {
+                        addCloseHandler(new CloseHandler<PopupPanel>() {
                             @Override
                             public void onClose(CloseEvent<PopupPanel> event) {
-                                if (menuHandler != null) {
-                                    menuHandler.execute();
+                                if (selectionHandler != null) {
+                                    selectionHandler.execute();
                                 }
                             }
                         });
 
-                        panel.add(this);
+                        add(menu);
                     }
-                    panel.showRelativeTo(target);
-                }
-
-                public void setMenuHandler(Command handler) {
-                    menuHandler = handler;
+                    showRelativeTo(target);
                 }
 
                 public void setItems(Set<String> items) {
                     if (items == null) {
                         return;
                     }
-                    clearItems();
+                    menu.clearItems();
                     for (final String item : items) {
-                        TemplateVarMenu parent = this;
+                        TemplateVarMenu parent = menu;
                         String[] segments = item.split("\\.");
                         for (int i = 0; i < segments.length; i++) {
                             String segment = segments[i];
@@ -226,7 +239,7 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
                                         @Override
                                         public void execute() {
                                             selectedValue = menuItem.getTitle();
-                                            panel.hide();
+                                            hide();
                                         }
                                     });
                                 } else {
@@ -240,17 +253,21 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
                     }
                 }
 
-                public MenuItem findItem(String text) {
-                    for (MenuItem item : getItems()) {
-                        if (text.equals(item.getText())) {
-                            return item;
-                        }
+                static class TemplateVarMenu extends MenuBar {
+                    public TemplateVarMenu() {
+                        super(true);
+                        setAutoOpen(true);
+                        setAnimationEnabled(true);
                     }
-                    return null;
-                }
 
-                public String getSelectedValue() {
-                    return selectedValue != null ? "${" + selectedValue + "}" : "";
+                    public MenuItem findItem(String text) {
+                        for (MenuItem item : getItems()) {
+                            if (text.equals(item.getText())) {
+                                return item;
+                            }
+                        }
+                        return null;
+                    }
                 }
             }
         }
