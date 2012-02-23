@@ -24,7 +24,7 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
-import com.propertyvista.crm.client.ui.crud.settings.dictionary.ProductDictionaryView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ProductDictionaryView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureItemTypeCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceItemTypeCrudService;

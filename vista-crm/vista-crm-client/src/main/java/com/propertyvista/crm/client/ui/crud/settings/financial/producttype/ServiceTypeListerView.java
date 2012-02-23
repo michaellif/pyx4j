@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.dictionary;
+package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public interface ServiceTypeViewerView extends IViewerView<ProductItemType> {
+public interface ServiceTypeListerView extends IListerView<ProductItemType> {
 
 }

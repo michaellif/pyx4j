@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.dictionary;
+package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -24,12 +24,12 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceTypeLister extends ListerBase<ProductItemType> {
+public class FeatureTypeLister extends ListerBase<ProductItemType> {
 
-    private static final I18n i18n = I18n.get(ServiceTypeLister.class);
+    private static final I18n i18n = I18n.get(FeatureTypeLister.class);
 
-    public ServiceTypeLister() {
-        super(ProductItemType.class, CrmSiteMap.Settings.ServiceItemType.class, false, true);
+    public FeatureTypeLister() {
+        super(ProductItemType.class, CrmSiteMap.Settings.FeatureItemType.class, false, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 
@@ -44,10 +44,8 @@ public class ServiceTypeLister extends ListerBase<ProductItemType> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().serviceType()).build(),
+            new MemberColumnDescriptor.Builder(proto().featureType()).build(),
             new MemberColumnDescriptor.Builder(proto().glCode()).build()
-
         );//@formatter:on
     }
-
 }

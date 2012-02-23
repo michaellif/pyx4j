@@ -7,20 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.dictionary;
+package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
+
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceTypeListerViewImpl extends CrmListerViewImplBase<ProductItemType> implements ServiceTypeListerView {
+public interface ServiceTypeViewerView extends IViewerView<ProductItemType> {
 
-    public ServiceTypeListerViewImpl() {
-        super(CrmSiteMap.Settings.ProductDictionary.class);
-        setLister(new ServiceTypeLister());
-    }
 }
