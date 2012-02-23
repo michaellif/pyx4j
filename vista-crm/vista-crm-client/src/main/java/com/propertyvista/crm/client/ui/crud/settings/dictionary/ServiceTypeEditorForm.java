@@ -16,10 +16,12 @@ package com.propertyvista.crm.client.ui.crud.settings.dictionary;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
 public class ServiceTypeEditorForm extends CrmEntityForm<ProductItemType> {
@@ -44,6 +46,7 @@ public class ServiceTypeEditorForm extends CrmEntityForm<ProductItemType> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
         main.setWidget(++row, 0, serviceType = new DecoratorBuilder(inject(proto().serviceType()), 25).build());
         main.setWidget(++row, 0, featureType = new DecoratorBuilder(inject(proto().featureType()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntityComboBox<GlCode>(GlCode.class)), 10).build());
 
         return new CrmScrollPanel(main);
     }

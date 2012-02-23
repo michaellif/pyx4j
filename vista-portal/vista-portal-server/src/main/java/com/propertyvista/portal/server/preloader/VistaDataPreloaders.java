@@ -69,9 +69,6 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             // Arrears Report Gadgets related
             add(new MockupTenantPreloader());
 
-            // Taxes preloader
-            add(new ChargeCodePreloader());
-
             add(new PreloadPolicies());
         }
 

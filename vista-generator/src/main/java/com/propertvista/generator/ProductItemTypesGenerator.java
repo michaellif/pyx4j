@@ -16,9 +16,11 @@ package com.propertvista.generator;
 import java.util.List;
 
 import com.propertvista.generator.gdo.ProductItemTypesGDO;
+import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
@@ -27,8 +29,10 @@ public class ProductItemTypesGenerator {
 
     private final ProductItemTypesGDO gdo;
 
-    public ProductItemTypesGenerator() {
+    private final List<GlCode> glCodes;
 
+    public ProductItemTypesGenerator(List<GlCode> glCodes) {
+        this.glCodes = glCodes;
         gdo = new ProductItemTypesGDO();
 
         // preload types:
@@ -74,6 +78,8 @@ public class ProductItemTypesGenerator {
         type.name().setValue(name);
         type.type().setValue(ProductItemType.Type.service);
         type.serviceType().setValue(serviceType);
+        type.glCode().set(RandomUtil.random(glCodes));
+
         gdo.serviceItemTypes.add(type);
     }
 
@@ -82,6 +88,8 @@ public class ProductItemTypesGenerator {
         type.name().setValue(name);
         type.type().setValue(ProductItemType.Type.feature);
         type.featureType().setValue(featureType);
+        type.glCode().set(RandomUtil.random(glCodes));
+
         gdo.featureItemTypes.add(type);
     }
 
