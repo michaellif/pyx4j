@@ -60,6 +60,12 @@ import com.propertyvista.crm.client.ui.crud.settings.tax.TaxListerView;
 import com.propertyvista.crm.client.ui.crud.settings.tax.TaxListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.tax.TaxViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.tax.TaxViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentViewerViewImpl;
 
 public class SettingsViewFactory extends ViewFactoryBase {
 
@@ -116,6 +122,12 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new LeaseAdjustmentReasonEditorViewImpl());
             } else if (LeaseAdjustmentReasonViewerView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentReasonViewerViewImpl());
+            } else if (PaymentListerView.class.equals(type)) {
+                map.put(type, new PaymentListerViewImpl());
+            } else if (PaymentEditorView.class.equals(type)) {
+                map.put(type, new PaymentEditorViewImpl());
+            } else if (PaymentViewerView.class.equals(type)) {
+                map.put(type, new PaymentViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

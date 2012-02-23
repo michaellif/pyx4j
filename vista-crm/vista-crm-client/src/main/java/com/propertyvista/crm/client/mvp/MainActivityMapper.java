@@ -29,6 +29,9 @@ import com.propertyvista.crm.client.activity.AccountEditorActivity;
 import com.propertyvista.crm.client.activity.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
+import com.propertyvista.crm.client.activity.crud.billing.PaymentEditorActivity;
+import com.propertyvista.crm.client.activity.crud.billing.PaymentListerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.PaymentViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.BuildingEditorActivity;
@@ -456,6 +459,19 @@ public class MainActivityMapper implements AppActivityMapper {
                     switch (((CrudAppPlace) place).getType()) {
                     case viewer:
                         activity = new BillViewerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Tenants.Payment) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new PaymentEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new PaymentViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new PaymentListerActivity(place);
                         break;
                     }
 
