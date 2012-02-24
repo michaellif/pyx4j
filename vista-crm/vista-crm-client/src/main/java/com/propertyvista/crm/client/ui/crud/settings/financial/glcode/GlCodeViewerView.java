@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.tax;
+package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 

@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.tax;
+package com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
-public interface LeaseAdjustmentReasonListerView extends IListerView<LeaseAdjustmentReason> {
+public interface LeaseAdjustmentReasonViewerView extends IViewerView<LeaseAdjustmentReason> {
 
 }

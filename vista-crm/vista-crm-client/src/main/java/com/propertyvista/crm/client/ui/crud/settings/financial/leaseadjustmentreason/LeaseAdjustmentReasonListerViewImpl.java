@@ -7,18 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.tax;
+package com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
-public class LeaseAdjustmentReasonEditorViewImpl extends CrmEditorViewImplBase<LeaseAdjustmentReason> implements LeaseAdjustmentReasonEditorView {
-    public LeaseAdjustmentReasonEditorViewImpl() {
-        super(CrmSiteMap.Settings.LeaseAdjustmentReason.class, new LeaseAdjustmentReasonEditorForm());
+public class LeaseAdjustmentReasonListerViewImpl extends CrmListerViewImplBase<LeaseAdjustmentReason> implements LeaseAdjustmentReasonListerView {
+
+    public LeaseAdjustmentReasonListerViewImpl() {
+        super(CrmSiteMap.Settings.LeaseAdjustmentReason.class);
+        setLister(new LeaseAdjustmentReasonLister());
     }
 }

@@ -7,19 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.tax;
+package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 
-import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.domain.financial.GlCode;
 
-public class LeaseAdjustmentReasonViewerViewImpl extends CrmViewerViewImplBase<LeaseAdjustmentReason> implements LeaseAdjustmentReasonViewerView {
-
-    public LeaseAdjustmentReasonViewerViewImpl() {
-        super(CrmSiteMap.Settings.LeaseAdjustmentReason.class, new LeaseAdjustmentReasonEditorForm(true));
+public class GlCodeEditorViewImpl extends CrmEditorViewImplBase<GlCode> implements GlCodeEditorView {
+    public GlCodeEditorViewImpl() {
+        super(CrmSiteMap.Settings.GlCode.class, new GlCodeEditorForm());
     }
 }

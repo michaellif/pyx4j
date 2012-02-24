@@ -7,20 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.tax;
+package com.propertyvista.crm.client.ui.crud.settings.financial.tax;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.domain.financial.tax.Tax;
 
-public class GlCodeListerViewImpl extends CrmListerViewImplBase<GlCode> implements GlCodeListerView {
+public class TaxViewerViewImpl extends CrmViewerViewImplBase<Tax> implements TaxViewerView {
 
-    public GlCodeListerViewImpl() {
-        super(CrmSiteMap.Settings.GlCode.class);
-        setLister(new GlCodeLister());
+    public TaxViewerViewImpl() {
+        super(CrmSiteMap.Settings.Tax.class, new TaxEditorForm(true));
     }
 }

@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCrudService;
 import com.propertyvista.domain.financial.GlCode;

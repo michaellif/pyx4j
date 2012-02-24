@@ -34,7 +34,7 @@ import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
-import com.propertyvista.crm.client.ui.crud.settings.tax.TaxFolder;
+import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxFolder;
 import com.propertyvista.crm.rpc.services.selections.SelectProductItemTypeCrudService;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;

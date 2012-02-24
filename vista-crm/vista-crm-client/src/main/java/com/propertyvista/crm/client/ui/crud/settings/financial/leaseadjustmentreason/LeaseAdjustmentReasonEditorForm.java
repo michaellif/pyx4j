@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.tax;
+package com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason;
 
 import com.google.gwt.user.client.ui.IsWidget;
 

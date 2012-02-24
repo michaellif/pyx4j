@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.tax;
+package com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -22,29 +22,30 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
-public class GlCodeLister extends ListerBase<GlCode> {
+public class LeaseAdjustmentReasonLister extends ListerBase<LeaseAdjustmentReason> {
 
-    private static final I18n i18n = I18n.get(GlCodeLister.class);
+    private static final I18n i18n = I18n.get(LeaseAdjustmentReasonLister.class);
 
-    public GlCodeLister() {
-        super(GlCode.class, CrmSiteMap.Settings.GlCode.class, false, true);
+    public LeaseAdjustmentReasonLister() {
+        super(LeaseAdjustmentReason.class, CrmSiteMap.Settings.LeaseAdjustmentReason.class, false, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 
         addActionItem(new Button(i18n.tr("Delete Checked"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                for (GlCode item : getDataTablePanel().getDataTable().getCheckedItems()) {
+                for (LeaseAdjustmentReason item : getDataTablePanel().getDataTable().getCheckedItems()) {
                     getPresenter().delete(item.getPrimaryKey());
                 }
             }
         }));
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().glId()).build(),
-            new MemberColumnDescriptor.Builder(proto().description()).build()
+            new MemberColumnDescriptor.Builder(proto().name()).build(),
+            new MemberColumnDescriptor.Builder(proto().glCode()).build(),
+            new MemberColumnDescriptor.Builder(proto().taxes()).build()
         );//@formatter:on
     }
 }
