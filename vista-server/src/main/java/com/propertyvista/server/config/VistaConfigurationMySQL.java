@@ -29,6 +29,11 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
     }
 
     @Override
+    public boolean createForeignKeys() {
+        return true;
+    }
+
+    @Override
     public boolean isAutoReconnect() {
         return true;
     }

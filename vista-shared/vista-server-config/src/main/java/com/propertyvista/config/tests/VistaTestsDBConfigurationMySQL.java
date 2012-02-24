@@ -45,6 +45,11 @@ public class VistaTestsDBConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Con
     }
 
     @Override
+    public boolean createForeignKeys() {
+        return true;
+    }
+
+    @Override
     public boolean showSql() {
         if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
             return true;

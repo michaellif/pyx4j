@@ -90,7 +90,9 @@ public class DBResetServlet extends HttpServlet {
         @Translate("Generate Mockup on top of existing data - Only MockupTenantPreloader")
         addPmcMockupTest1,
 
-        clearPmc;
+        clearPmc,
+
+        dropForeignKeys;
 
         @Override
         public String toString() {
@@ -169,6 +171,11 @@ public class DBResetServlet extends HttpServlet {
                         Persistence.service().delete(criteria);
                     }
                         break;
+                    case dropForeignKeys:
+                        RDBUtils.dropAllForeignKeys();
+                        break;
+                    default:
+                        throw new Error("unimplemented: " + type);
                     }
 
                     buf.append("\nTotal time: " + TimeUtils.secSince(start));
