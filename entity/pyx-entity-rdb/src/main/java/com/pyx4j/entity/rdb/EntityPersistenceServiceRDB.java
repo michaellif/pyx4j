@@ -1177,6 +1177,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                             && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
                         @SuppressWarnings("unchecked")
                         ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(cascadedeleteDataEntity);
+                        if (collectionMember.getAttachLevel() == AttachLevel.Detached) {
+                            collectionMember.setAttachLevel(AttachLevel.Attached);
+                            tm.retrieveMember(connection, collectionMember.getOwner(), collectionMember);
+                        }
                         for (IEntity childEntity : collectionMember) {
                             cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
                         }
