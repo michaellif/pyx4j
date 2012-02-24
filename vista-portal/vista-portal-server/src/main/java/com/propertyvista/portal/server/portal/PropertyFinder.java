@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.portal;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -116,11 +117,11 @@ public class PropertyFinder {
         // price
         Integer minPrice = searchCriteria.minPrice().getValue();
         if (minPrice != null) {
-            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.GREATER_THAN_OR_EQUAL, minPrice.doubleValue()));
+            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.GREATER_THAN_OR_EQUAL, new BigDecimal(minPrice)));
         }
         Integer maxPrice = searchCriteria.maxPrice().getValue();
         if (maxPrice != null && maxPrice > 0) {
-            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.LESS_THAN_OR_EQUAL, maxPrice.doubleValue()));
+            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.LESS_THAN_OR_EQUAL, new BigDecimal(maxPrice)));
         }
         // prepare new floorplan filter 1
         final HashSet<Key> fpSet1 = new HashSet<Key>();
@@ -169,8 +170,8 @@ public class PropertyFinder {
 
     public static List<Building> getPropertyList(PropertySearchCriteria searchCriteria) {
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
+        // if search criteria returns nothing, quit now!
         if (searchCriteria != null && !addSearchCriteria(dbCriteria, searchCriteria)) {
-            // if search criteria returns nothing, quit now!
             return null;
         }
 
