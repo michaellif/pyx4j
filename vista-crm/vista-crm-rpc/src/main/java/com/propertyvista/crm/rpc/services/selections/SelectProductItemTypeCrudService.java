@@ -11,11 +11,11 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.building.catalog;
+package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractListService;
 
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public interface ProductItemTypeCrudService extends AbstractCrudService<ProductItemType> {
+public interface SelectProductItemTypeCrudService extends AbstractListService<ProductItemType> {
 }

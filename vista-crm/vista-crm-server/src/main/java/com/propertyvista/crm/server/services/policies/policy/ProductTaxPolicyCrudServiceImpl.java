@@ -40,7 +40,6 @@ public class ProductTaxPolicyCrudServiceImpl extends GenericPolicyCrudService<Pr
 
     @Override
     protected void persistDBO(ProductTaxPolicy dbo, ProductTaxPolicyDTO in) {
-        // TODO Auto-generated method stub
         super.persistDBO(dbo, in);
     }
 }
