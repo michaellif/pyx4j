@@ -15,8 +15,8 @@ package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 
@@ -25,17 +25,12 @@ import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 
 /**
  * Type of service/feature, applicable taxes, revenue code, GL, accountability for late payment
- * 
- * @author michaellif
- * 
  */
 @DiscriminatorValue("ProductTaxPolicy")
 public interface ProductTaxPolicy extends Policy {
 
-// TODO Uncomment when  lines ## 10,15,17 of "Domain Entities Associations.doc" will be implementated!..
-//    @Owned
+    @Owned
     @Detached(level = AttachLevel.Detached)
-    @JoinTable(ProductTaxPolicyJT.class)
-    @OrderBy(ProductTaxPolicyJT.OrderId.class)
+    @OrderBy(ProductTaxPolicyItem.OrderId.class)
     IList<ProductTaxPolicyItem> policyItems();
 }
