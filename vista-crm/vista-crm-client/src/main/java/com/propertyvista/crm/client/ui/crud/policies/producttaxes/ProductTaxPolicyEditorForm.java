@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
+import com.propertyvista.crm.client.ui.crud.settings.tax.TaxFolder;
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 
@@ -53,7 +54,6 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
         FormFlexPanel panel = new FormFlexPanel();
 
         int row = -1;
-
         panel.setWidget(++row, 0, inject(proto().policyItems(), new ProductTaxPolicyItemFolder(isEditable())));
 
         return panel;
@@ -76,8 +76,6 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
 
         private static class ProductTaxPolicyItemEditor extends CEntityDecoratableEditor<ProductTaxPolicyItem> {
 
-            private final static I18n i18n = I18n.get(ProductTaxPolicyItemEditor.class);
-
             public ProductTaxPolicyItemEditor() {
                 super(ProductTaxPolicyItem.class);
             }
@@ -85,15 +83,16 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
             @Override
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
-                int row = -1;
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType().name())).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType().type())).build());
+                int row = -1;
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType())).build());
+                get(proto().productItemType()).setViewable(true);
+
+                content.setH2(++row, 0, 1, proto().taxes().getMeta().getCaption());
+                content.setWidget(++row, 0, inject(proto().taxes(), new TaxFolder(isEditable())));
 
                 return content;
             }
         }
-
     }
-
 }

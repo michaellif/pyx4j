@@ -36,12 +36,6 @@ import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.tax.ChargeCodeEditorView;
-import com.propertyvista.crm.client.ui.crud.settings.tax.ChargeCodeEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.tax.ChargeCodeListerView;
-import com.propertyvista.crm.client.ui.crud.settings.tax.ChargeCodeListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.tax.ChargeCodeViewerView;
-import com.propertyvista.crm.client.ui.crud.settings.tax.ChargeCodeViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeEditorView;
 import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.tax.GlCodeListerView;
@@ -110,18 +104,13 @@ public class SettingsViewFactory extends ViewFactoryBase {
             } else if (GlCodeViewerView.class.equals(type)) {
                 map.put(type, new GlCodeViewerViewImpl());
 
-            } else if (ChargeCodeListerView.class.equals(type)) {
-                map.put(type, new ChargeCodeListerViewImpl());
-            } else if (ChargeCodeEditorView.class.equals(type)) {
-                map.put(type, new ChargeCodeEditorViewImpl());
-            } else if (ChargeCodeViewerView.class.equals(type)) {
-                map.put(type, new ChargeCodeViewerViewImpl());
             } else if (LeaseAdjustmentReasonListerView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentReasonListerViewImpl());
             } else if (LeaseAdjustmentReasonEditorView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentReasonEditorViewImpl());
             } else if (LeaseAdjustmentReasonViewerView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentReasonViewerViewImpl());
+
             } else if (PaymentListerView.class.equals(type)) {
                 map.put(type, new PaymentListerViewImpl());
             } else if (PaymentEditorView.class.equals(type)) {

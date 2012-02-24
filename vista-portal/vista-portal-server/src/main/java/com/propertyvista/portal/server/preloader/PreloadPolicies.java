@@ -16,7 +16,7 @@ package com.propertyvista.portal.server.preloader;
 import java.util.Arrays;
 
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.ChargePolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseTermsPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MiscPolicyPreloader;
@@ -34,7 +34,7 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
                         ApplicationDocumentationPolicyPreloader.class,
                         LeaseTermsPolicyPreloader.class,
                         EmailTemplatesPolicyPreloader.class,
-                        ChargePolicyPreloader.class
+                        ProductTaxPolicyPreloader.class
                 }
         ));//@formatter:on
     }

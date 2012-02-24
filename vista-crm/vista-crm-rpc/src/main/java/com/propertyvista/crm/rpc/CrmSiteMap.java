@@ -321,8 +321,8 @@ public class CrmSiteMap implements SiteMap {
 
             }
 
-            @PlaceProperties(caption = "ProductTaxes")
-            @NavigationItem(navigLabel = "ProductTaxes")
+            @PlaceProperties(caption = "Product Taxes")
+            @NavigationItem(navigLabel = "Product Taxes")
             public static class ProductTax extends CrudAppPlace {
 
             }
@@ -384,11 +384,6 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "GlCode")
         @NavigationItem(navigLabel = "GlCodes")
         public static class GlCode extends CrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Charge Code")
-        @NavigationItem(navigLabel = "Charge Codes")
-        public static class ChargeCode extends CrudAppPlace {
         }
 
         @PlaceProperties(caption = "Lease Adjustment Reason")

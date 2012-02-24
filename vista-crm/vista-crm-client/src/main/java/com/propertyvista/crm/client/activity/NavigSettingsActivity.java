@@ -60,7 +60,6 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         folder.addNavigItem(new CrmSiteMap.Settings.ProductDictionary());
         folder.addNavigItem(new CrmSiteMap.Settings.Tax());
         folder.addNavigItem(new CrmSiteMap.Settings.GlCode());
-        folder.addNavigItem(new CrmSiteMap.Settings.ChargeCode());
         folder.addNavigItem(new CrmSiteMap.Settings.LeaseAdjustmentReason());
         list.add(folder);
 
@@ -68,12 +67,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         folder.addNavigItem(new CrmSiteMap.Settings.Content());
         list.add(folder);
 
-        list.add(createPoliciesFolder());
-        return list;
-    }
-
-    public NavigFolder createPoliciesFolder() {
-        NavigFolder folder = new NavigFolder(i18n.tr("Policies"));
+        folder = new NavigFolder(i18n.tr("Policies"));
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.ApplicationDocumentation());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.EmailTemplates());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTerms());
@@ -81,6 +75,8 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.AdjustmentTax());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.Misc());
 //      folder.addNavigItem(new CrmSiteMap.Settings.Policies.PetPolicy());
-        return folder;
+        list.add(folder);
+
+        return list;
     }
 }

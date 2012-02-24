@@ -33,11 +33,11 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.rpc.services.selections.SelectTaxCrudService;
 import com.propertyvista.domain.financial.tax.Tax;
 
-public class ChargeCodeTaxFolder extends VistaTableFolder<Tax> {
+public class TaxFolder extends VistaTableFolder<Tax> {
 
-    private static final I18n i18n = I18n.get(ChargeCodeTaxFolder.class);
+    private static final I18n i18n = I18n.get(TaxFolder.class);
 
-    public ChargeCodeTaxFolder(boolean modifyable) {
+    public TaxFolder(boolean modifyable) {
         super(Tax.class, modifyable);
     }
 
