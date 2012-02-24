@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.policies.policy;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.crm.rpc.services.policies.policy.ProductTaxPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
@@ -31,7 +32,9 @@ public class ProductTaxPolicyCrudServiceImpl extends GenericPolicyCrudService<Pr
         super.enhanceDTO(in, dto, fromList);
 
         if (!fromList) {
-            Persistence.service().retrieve(dto.policyItems());
+            Persistence.service().retrieveMember(in.policyItems());
+            dto.policyItems().setAttachLevel(AttachLevel.Attached);
+            dto.policyItems().addAll(in.policyItems());
         }
     }
 

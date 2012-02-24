@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.policy.policies;
 
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
@@ -30,6 +29,5 @@ public interface LeaseAdjustmentPolicy extends IEntity {
 
     LeaseAdjustmentReason leaseAdjustmentReason();
 
-    @Owned
     IList<Tax> taxes();
 }
