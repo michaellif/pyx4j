@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -41,7 +41,7 @@ public class RetrievePasswordForm extends CEntityEditor<PasswordRetrievalRequest
     public RetrievePasswordForm(Command onSubmitCommand) {
         super(PasswordRetrievalRequest.class);
         this.onSubmitCommand = onSubmitCommand;
-        this.passwordResetFailedMessage = new HTML(i18n.tr("Failed to reset password. Check that email and chaptcha you provided are correct."));
+        this.passwordResetFailedMessage = new HTML(i18n.tr("Failed to reset password. Check that email and captcha you provided are correct."));
         setWidth("30em");
 
     }
