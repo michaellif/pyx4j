@@ -14,6 +14,7 @@
 package com.propertyvista.domain.policy.framework;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -21,4 +22,6 @@ import com.pyx4j.entity.shared.IEntity;
 @AbstractEntity
 public interface Policy extends IEntity {
 
+    @Caption(name = "Scope")
+    PolicyNode node();
 }

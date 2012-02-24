@@ -48,6 +48,7 @@ public class PolicyManager {
      * @param node
      * @return the list of effective policies, i.e. policies that are active at the specified node
      */
+    @Deprecated
     public static List<PolicyAtNode> effectivePolicies(PolicyNode node) {
         if (node == null || node.isNull()) {
             throw new IllegalArgumentException("node must not be null");
@@ -90,18 +91,30 @@ public class PolicyManager {
      *            not <code>null</code>.
      * @param policyClass
      *            not <code>null</code>.
-     * @return policy at the requested organization policies hierarchy node or <code>null</code> if that policy has no default instance attached to
-     *         {@link DefaultPoliciesNode}.
+     * @return policy at the requested organization policies hierarchy node or <code>null</code>.
      */
-    public static <POLICY extends Policy> POLICY effectivePolicy(PolicyNode node, Class<POLICY> policyClass) {
-        // TODO refactor this, no realy has to use effectivePolicies();
-        List<PolicyAtNode> effectivePolicies = effectivePolicies(node);
-        for (PolicyAtNode policyAtNode : effectivePolicies) {
-            if (policyAtNode.policy().getInstanceValueClass().equals(policyClass)) {
-                return policyAtNode.policy().duplicate(policyClass);
-            }
+    public static <POLICY extends Policy> POLICY effectivePolicy(final PolicyNode node, final Class<POLICY> policyClass) {
+        POLICY policy = null;
+
+        if (node == null || node.isNull()) {
+            throw new IllegalArgumentException("node must not be null");
         }
-        return null;
+        PolicyNode currentNode = node;
+
+        do {
+            EntityQueryCriteria<POLICY> criteria = EntityQueryCriteria.create(policyClass);
+            criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
+            policy = Persistence.service().retrieve(criteria);
+
+            if (policy != null) {
+                break;
+            }
+            ;
+            currentNode = parentOf(currentNode);
+
+        } while (currentNode != null);
+
+        return policy;
     }
 
     private static List<PolicyAtNode> merge(List<PolicyAtNode> effectivePolicies, List<PolicyAtNode> policies) {
@@ -239,4 +252,5 @@ public class PolicyManager {
             throw new Error("Got unknown type of " + PolicyNode.class.getName() + ": '" + nodeClass.getName() + "'");
         }
     }
+
 }

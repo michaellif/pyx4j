@@ -20,7 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -30,6 +30,8 @@ import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 
 public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO extends POLICY> extends GenericCrudServiceDtoImpl<POLICY, POLICY_DTO> {
+
+    private final static I18n i18n = I18n.get(GenericPolicyCrudService.class);
 
     public GenericPolicyCrudService(Class<POLICY> dboClass, Class<POLICY_DTO> dtoClass) {
         super(dboClass, dtoClass);
@@ -44,16 +46,6 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
     protected void enhanceDTO(POLICY in, POLICY_DTO dto, boolean fromList) {
         super.enhanceDTO(in, dto, fromList);
 
-        EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().policy(), in));
-        PolicyAtNode policyAtNode = Persistence.service().retrieve(criteria);
-
-        if (policyAtNode == null) {
-            throw new Error("DB integrity error: policy instance doesn't have associated node");
-        }
-
-        ((PolicyDTOBase) dto).node().set(policyAtNode.node().cast());
-
         if (fromList) {
             PolicyNode castedNode = ((PolicyDTOBase) dto).node().cast();
             ((PolicyDTOBase) dto).nodeType().setValue(castedNode.getEntityMeta().getCaption());
@@ -61,7 +53,6 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void persistDBO(POLICY dbo, POLICY_DTO in) {
         PolicyNode node = ((PolicyDTOBase) in).node().cast();
@@ -78,38 +69,17 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
             throw new Error("unable to persist policy, the scope (a node in organizatonal hierarchy) was not set");
         }
 
-        POLICY policy = null;
-        if (!isNewPolicy(dbo)) {
-            policy = EntityGraph.businessDuplicate(dbo);
-        } else {
-            policy = dbo;
-        }
-
-        EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
+        EntityQueryCriteria<POLICY> criteria = new EntityQueryCriteria<POLICY>(dboClass);
         criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
-        criteria.add(PropertyCriterion.eq(criteria.proto().policy(), dboClass));
-        PolicyAtNode policyAtNode = Persistence.service().retrieve(criteria);
+        POLICY oldPolicyAtTheSameNode = Persistence.service().retrieve(criteria);
 
-        if (policyAtNode != null) {
+        if (oldPolicyAtTheSameNode != null) {
             // override, i.e. delete the old policy that was at that node
             // TODO review this: maybe it's better to forbid such an action on server and populate the form with the existing policy when the user selects a scope with a policy that actually exists            
-            Persistence.service().delete(policyAtNode.policy().cast());
-        } else {
-            policyAtNode = EntityFactory.create(PolicyAtNode.class);
-            policyAtNode.node().set(node);
+            throw new Error(i18n.tr("not allowed to override existing policy"));
         }
-        policyAtNode.policy().set(policy);
 
-        super.persistDBO(policy, in);
-        Persistence.service().merge(policyAtNode);
-
-        // A hack to return the correct result back to the client (because java has no C++ references)
-        if (policy != dbo) {
-            dbo.id().set(policy.id());
-            for (String member : policy.getEntityMeta().getMemberNames()) {
-                dbo.set(dbo.getMember(member), policy.getMember(member));
-            }
-        }
+        super.persistDBO(dbo, in);
     }
 
     @Override
@@ -123,9 +93,5 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
         Persistence.service().delete(criteria);
 
         super.delete(callback, entityId);
-    }
-
-    private boolean isNewPolicy(POLICY policy) {
-        return policy.id().isNull();
     }
 }

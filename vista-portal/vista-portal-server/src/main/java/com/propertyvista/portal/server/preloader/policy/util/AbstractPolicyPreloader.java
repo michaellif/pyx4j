@@ -17,12 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.policy.framework.Policy;
-import com.propertyvista.domain.policy.framework.PolicyAtNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 
@@ -59,10 +56,6 @@ public abstract class AbstractPolicyPreloader<P extends Policy> extends Abstract
             if (topNode == null) {
                 throw new Error("top node was not set");
             }
-            PolicyAtNode policyAtNode = EntityFactory.create(PolicyAtNode.class);
-            policyAtNode.node().set(topNode);
-            policyAtNode.policy().set(createPolicy(log));
-            Persistence.service().persist(policyAtNode);
         } catch (Throwable e) {
             // We need this policyClass for hack
             String policyName = policyClass.equals(Policy.class) ? "" : " " + policyClass.getSimpleName();

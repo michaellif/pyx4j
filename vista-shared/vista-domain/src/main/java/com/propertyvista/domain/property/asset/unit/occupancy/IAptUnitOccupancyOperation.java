@@ -7,22 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 22, 2011
+ * Created on Feb 24, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.framework;
+package com.propertyvista.domain.property.asset.unit.occupancy;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import java.io.Serializable;
 
-@Transient
-public abstract interface PolicyDTOBase extends Policy {
+public interface IAptUnitOccupancyOperation extends Serializable {
 
-    @Caption(name = "Scope")
-    IPrimitive<String> nodeType();
-
-    @Caption(name = "Applied To")
-    IPrimitive<String> nodeRepresentation();
 }

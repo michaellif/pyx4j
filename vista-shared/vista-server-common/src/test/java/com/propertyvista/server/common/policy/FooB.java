@@ -7,22 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 22, 2011
+ * Created on Feb 24, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.framework;
+package com.propertyvista.server.common.policy;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-@Transient
-public abstract interface PolicyDTOBase extends Policy {
+@DiscriminatorValue("FooB")
+public interface FooB extends AbstractFoo {
 
-    @Caption(name = "Scope")
-    IPrimitive<String> nodeType();
-
-    @Caption(name = "Applied To")
-    IPrimitive<String> nodeRepresentation();
 }

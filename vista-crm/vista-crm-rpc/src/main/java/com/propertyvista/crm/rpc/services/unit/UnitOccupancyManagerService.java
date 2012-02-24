@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.rpc.services.unit;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -22,7 +20,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.occupancy.IAptUnitOccupancyOperation;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 
 public interface UnitOccupancyManagerService extends IService {
@@ -34,7 +31,5 @@ public interface UnitOccupancyManagerService extends IService {
     void scopeAvailable(AsyncCallback<VoidSerializable> callback, Key unitPk);
 
     void makeVacant(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate vacantFrom);
-
-    void getAvailableOperations(AsyncCallback<Vector<IAptUnitOccupancyOperation>> callback, Key unitPk, LogicalDate startingAt);
 
 }

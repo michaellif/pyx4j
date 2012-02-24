@@ -7,21 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 23, 2012
+ * Created on Feb 24, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.occupancy;
+package com.propertyvista.server.common.policy;
 
-import java.util.Vector;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
+import com.propertyvista.domain.policy.framework.BuildingPolicy;
 
-public interface IAptUnitOccupancyManager {
+@DiscriminatorValue("MockupBuildingPolicyB")
+public interface MockupBuildingPolicyB extends BuildingPolicy {
 
-    Vector<IAptUnitOccupancyOperation> getAvailableOperations(Key unitPk, LogicalDate when);
-
-    void apply(IAptUnitOccupancyOperation op);
+    IPrimitive<Integer> value();
 
 }

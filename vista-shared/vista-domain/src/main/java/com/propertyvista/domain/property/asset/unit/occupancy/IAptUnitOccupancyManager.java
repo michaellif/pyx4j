@@ -7,14 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 23, 2012
+ * Created on Feb 24, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.occupancy;
+package com.propertyvista.domain.property.asset.unit.occupancy;
 
-public enum UnitStatus {
+public interface IAptUnitOccupancyManager {
 
-    V, A, R, r, L, l, n, O, o
+    void defineConstraints(IAptUnitOccupancyOperationConstraints<?> constraints);
+
+    void apply(IAptUnitOccupancyOperation op);
 
 }

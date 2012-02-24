@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.unit;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -22,7 +20,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
-import com.propertyvista.domain.occupancy.IAptUnitOccupancyOperation;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
@@ -50,11 +47,6 @@ public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerServ
     public void makeVacant(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate vacantFrom) {
         new AptUnitOccupancyManagerImpl(unitPk).makeVacant(vacantFrom);
         callback.onSuccess(null);
-    }
-
-    @Override
-    public void getAvailableOperations(AsyncCallback<Vector<IAptUnitOccupancyOperation>> callback, Key unitPk, LogicalDate startingAt) {
-        callback.onSuccess(new com.propertyvista.server.common.util.occupancy.mk2.AptUnitOccupancyManagerImpl().getAvailableOperations(unitPk, startingAt));
     }
 
 }

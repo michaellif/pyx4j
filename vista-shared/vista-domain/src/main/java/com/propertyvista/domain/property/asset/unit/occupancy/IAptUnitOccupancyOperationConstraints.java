@@ -7,21 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 23, 2012
+ * Created on Feb 24, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.occupancy;
+package com.propertyvista.domain.property.asset.unit.occupancy;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public interface IAptUnitOccupancyOperationConstraints<OP extends IAptUnitOccupancyOperation> {
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE })
-public @interface DefineSourceOccupancyStatePrefix {
-
-    UnitStatus[] value();
+    boolean isValid(OP op);
 
 }

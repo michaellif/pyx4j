@@ -27,9 +27,6 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopingResultDTO.ScopingResult;
-import com.propertyvista.domain.occupancy.operations.OpScopeAvailable;
-import com.propertyvista.domain.occupancy.operations.OpScopeOffMarket;
-import com.propertyvista.domain.occupancy.operations.OpScopeRenovation;
 
 public class ScopeDialog extends OkCancelDialog {
 
@@ -39,8 +36,7 @@ public class ScopeDialog extends OkCancelDialog {
 
     private Presenter presenter;
 
-    public ScopeDialog(Presenter presenter, final OpScopeAvailable opScopeAvailable, final OpScopeOffMarket opScopeOffMarket,
-            final OpScopeRenovation opScopeRenovation) {
+    public ScopeDialog(Presenter presenter) {
         super(i18n.tr("Scoping Result"));
         this.presenter = presenter;
 
@@ -60,15 +56,15 @@ public class ScopeDialog extends OkCancelDialog {
                 });
                 CComboBox<ScopingResult> combo = (CComboBox<ScopingResult>) get(proto().scopingResult());
                 ArrayList<ScopingResult> options = new ArrayList<ScopingResultDTO.ScopingResult>();
-                if (opScopeAvailable != null) {
-                    options.add(ScopingResult.available);
-                }
-                if (opScopeRenovation != null) {
-                    options.add(ScopingResult.renovation);
-                }
-                if (opScopeOffMarket != null) {
-                    options.add(ScopingResult.offMarket);
-                }
+//                if (opScopeAvailable != null) {
+//                    options.add(ScopingResult.available);
+//                }
+//                if (opScopeRenovation != null) {
+//                    options.add(ScopingResult.renovation);
+//                }
+//                if (opScopeOffMarket != null) {
+//                    options.add(ScopingResult.offMarket);
+//                }
                 combo.setOptions(options);
 
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().renovationEndsOn())).build());

@@ -17,7 +17,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.offering.ProductItemType;
-import com.propertyvista.domain.policy.framework.PolicyAtNode;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 
@@ -48,13 +47,10 @@ public class ProductTaxPolicyDataModel {
             policy.policyItems().add(item);
         }
 
-        PolicyAtNode policyAtNode = EntityFactory.create(PolicyAtNode.class);
-        policyAtNode.policy().set(policy);
-        policyAtNode.node().set(buildingDataModel.getBuilding());
+        policy.node().set(buildingDataModel.getBuilding());
 
         if (persist) {
             Persistence.service().persist(policy);
-            Persistence.service().persist(policyAtNode);
         }
     }
 

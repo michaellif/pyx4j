@@ -85,7 +85,7 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
     public void validateAndRemoveRecursively(final Queue<P> itemsToRemove) {
         if (!itemsToRemove.isEmpty()) {
             final P item = itemsToRemove.poll();
-            if (item.node().isInstanceOf(OrganizationPoliciesNode.class)) {
+            if (item.isInstanceOf(OrganizationPoliciesNode.class)) {
                 MessageDialog.confirm(i18n.tr("Policy Removal Confirmation"), i18n.tr("Are you sure it's ok to remove the policy for the whole company?"),
                         new Command() {
                             @Override
