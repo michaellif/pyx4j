@@ -102,8 +102,8 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
             new BuildingSelectorDialog(true, getValue()) {
                 @Override
                 public boolean onClickOk() {
-                    for (Building building : getSelectedItems()) {
-                        addItem(building);
+                    for (Building selected : getSelectedItems()) {
+                        addItem(selected);
                     }
                     return true;
                 }

@@ -89,8 +89,8 @@ public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
                     if (getSelectedItems().isEmpty()) {
                         return false;
                     } else {
-                        for (VistaCrmBehaviorDTO item : getSelectedItems()) {
-                            addItem(item);
+                        for (VistaCrmBehaviorDTO selected : getSelectedItems()) {
+                            addItem(selected);
                         }
                         return true;
                     }

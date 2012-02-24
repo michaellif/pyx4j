@@ -124,8 +124,8 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
         @Override
         public boolean onClickOk() {
-            for (Portfolio portfolio : getSelectedItems()) {
-                addItem(portfolio);
+            for (Portfolio selected : getSelectedItems()) {
+                addItem(selected);
             }
             return true;
         }

@@ -183,7 +183,6 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             } else {
                 for (Tenant tenant : getSelectedItems()) {
                     TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
-
                     newTenantInLease.lease().setPrimaryKey(parent.getValue().getPrimaryKey());
                     newTenantInLease.tenant().set(tenant);
                     if (!isApplicantPresent()) {
@@ -192,7 +191,6 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                     }
                     addItem(newTenantInLease);
                 }
-
                 return true;
             }
         }

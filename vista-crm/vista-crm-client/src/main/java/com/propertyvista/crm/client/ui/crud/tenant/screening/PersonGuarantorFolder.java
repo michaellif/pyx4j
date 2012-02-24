@@ -120,12 +120,11 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
             if (getSelectedItems().isEmpty()) {
                 return false;
             } else {
-                for (Guarantor guarantor : getSelectedItems()) {
-                    PersonGuarantor personGuarantor = EntityFactory.create(PersonGuarantor.class);
-                    personGuarantor.guarantor().set(guarantor);
-                    addItem(personGuarantor);
+                for (Guarantor selected : getSelectedItems()) {
+                    PersonGuarantor item = EntityFactory.create(PersonGuarantor.class);
+                    item.guarantor().set(selected);
+                    addItem(item);
                 }
-
                 return true;
             }
         }

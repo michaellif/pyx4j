@@ -81,8 +81,8 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
             if (getSelectedItems().isEmpty()) {
                 return false;
             } else {
-                for (Feature item : getSelectedItems()) {
-                    addItem(item);
+                for (Feature selected : getSelectedItems()) {
+                    addItem(selected);
                 }
                 return true;
             }

@@ -126,8 +126,8 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
 
         @Override
         public boolean onClickOk() {
-            for (Employee employee : getSelectedItems()) {
-                addItem(employee);
+            for (Employee selected : getSelectedItems()) {
+                addItem(selected);
             }
             return true;
         }

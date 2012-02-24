@@ -82,8 +82,8 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
             if (getSelectedItems().isEmpty()) {
                 return false;
             } else {
-                for (Concession item : getSelectedItems()) {
-                    addItem(item);
+                for (Concession selected : getSelectedItems()) {
+                    addItem(selected);
                 }
                 return true;
             }

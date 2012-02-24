@@ -73,9 +73,9 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
                 if (getSelectedItems().isEmpty()) {
                     return false;
                 } else {
-                    for (Building item : getSelectedItems()) {
-                        item.complexPrimary().setValue(false);
-                        addItem(item);
+                    for (Building selected : getSelectedItems()) {
+                        selected.complexPrimary().setValue(false);
+                        addItem(selected);
                     }
                     return true;
                 }

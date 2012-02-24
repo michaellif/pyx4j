@@ -90,8 +90,8 @@ public class LeaseAdjustmentReasonTaxFolder extends VistaTableFolder<Tax> {
             if (getSelectedItems().isEmpty()) {
                 return false;
             } else {
-                for (Tax tax : getSelectedItems()) {
-                    addItem(tax);
+                for (Tax selected : getSelectedItems()) {
+                    addItem(selected);
                 }
             }
             return true;

@@ -75,8 +75,8 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
             if (getSelectedItems().isEmpty()) {
                 return false;
             } else {
-                for (CrmRole role : getSelectedItems()) {
-                    addItem(role);
+                for (CrmRole selected : getSelectedItems()) {
+                    addItem(selected);
                 }
                 return true;
             }
