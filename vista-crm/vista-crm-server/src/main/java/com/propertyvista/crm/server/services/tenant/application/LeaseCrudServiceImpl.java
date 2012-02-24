@@ -108,18 +108,18 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     private void updateAdjustments(Lease lease) {
         // ServiceItem Adjustments:
-        updateAdjustments(lease.serviceAgreement().serviceItem(), lease.leaseTo().getValue());
+        updateAdjustments(lease.serviceAgreement().serviceItem());
 
         // BillableItem Adjustments:
         for (BillableItem ci : lease.serviceAgreement().featureItems()) {
-            updateAdjustments(ci, lease.leaseTo().getValue());
+            updateAdjustments(ci);
         }
 
         // Lease Financial Adjustments:
         updateAdjustments(lease.leaseFinancial());
     }
 
-    private void updateAdjustments(BillableItem item, LogicalDate leaseEndDate) {
+    private void updateAdjustments(BillableItem item) {
         for (BillableItemAdjustment adj : item.adjustments()) {
             // set creator:
             if (adj.createdWhen().isNull()) {
@@ -128,8 +128,6 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             // set adjustment expiration date:
             if (TermType.oneTime == adj.termType().getValue()) {
                 adj.expirationDate().setValue(item.effectiveDate().getValue());
-            } else {
-                adj.expirationDate().setValue(leaseEndDate);
             }
         }
     }
@@ -141,6 +139,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
                 adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
             }
             // set adjustment expiration date:
+            // (to the same date as effective - one time adjustment)
             adj.expirationDate().setValue(adj.effectiveDate().getValue());
         }
     }

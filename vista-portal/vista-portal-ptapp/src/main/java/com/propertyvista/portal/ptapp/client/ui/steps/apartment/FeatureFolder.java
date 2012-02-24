@@ -73,7 +73,6 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
                         newItem.item().set(item);
                         newItem._currentPrice().setValue(item.price().getValue());
                         newItem.effectiveDate().setValue(new LogicalDate());
-                        newItem.expirationDate().setValue(new LogicalDate());
                         addItem(newItem);
                     }
                     return true;

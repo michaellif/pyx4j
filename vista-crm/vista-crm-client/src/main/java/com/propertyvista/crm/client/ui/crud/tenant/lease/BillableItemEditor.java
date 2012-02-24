@@ -170,7 +170,6 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         protected void addItem(BillableItemAdjustment newEntity) {
             if (newEntity.isEmpty()) {
                 newEntity.effectiveDate().setValue(new LogicalDate());
-                newEntity.expirationDate().setValue(new LogicalDate());
             }
             super.addItem(newEntity);
         }
