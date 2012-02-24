@@ -39,7 +39,7 @@ import com.propertyvista.domain.ref.Province;
 
 public class PolicyManager {
 
-    // TODO keep this in some kind of "PoliciesHeriarchy" class
+    // TODO keep this in some kind of "PoliciesHeriarchy" class, pass as dependency in the constructor
     @SuppressWarnings("unchecked")
     private static final List<Class<? extends PolicyNode>> HIERARCHY = Arrays.asList(AptUnit.class, Floorplan.class, Building.class, Complex.class,
             Province.class, Country.class, OrganizationPoliciesNode.class);
@@ -49,6 +49,9 @@ public class PolicyManager {
      * @return the list of effective policies, i.e. policies that are active at the specified node
      */
     public static List<PolicyAtNode> effectivePolicies(PolicyNode node) {
+        if (node == null || node.isNull()) {
+            throw new IllegalArgumentException("node must not be null");
+        }
         List<PolicyAtNode> effectivePolicies = null;
 
         Class<? extends PolicyNode> requestedNodeClass = (Class<? extends PolicyNode>) node.getInstanceValueClass();
@@ -90,8 +93,8 @@ public class PolicyManager {
      * @return policy at the requested organization policies hierarchy node or <code>null</code> if that policy has no default instance attached to
      *         {@link DefaultPoliciesNode}.
      */
-    // TODO refactor this, no realy has to use effectivePolicies(); 
-    public static Policy effectivePolicy(PolicyNode node, Class<? extends Policy> policyClass) {
+    public static <POLICY extends Policy> POLICY effectivePolicy(PolicyNode node, Class<POLICY> policyClass) {
+        // TODO refactor this, no realy has to use effectivePolicies();
         List<PolicyAtNode> effectivePolicies = effectivePolicies(node);
         for (PolicyAtNode policyAtNode : effectivePolicies) {
             if (policyAtNode.policy().getInstanceValueClass().equals(policyClass)) {

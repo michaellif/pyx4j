@@ -27,12 +27,11 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.financial.billing.BillChargeTax;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.tax.Tax;
-import com.propertyvista.domain.policy.framework.Policy;
-import com.propertyvista.domain.policy.framework.PolicyAtNode;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.server.common.policy.PolicyManager;
 
 public class TaxUtils {
 
@@ -73,16 +72,9 @@ public class TaxUtils {
         return chargeTaxes;
     }
 
-    //FIXME do it properly using policy framework
     private static List<Tax> retrieveTaxes(ProductItemType productItemType, Building building) {
-        Policy policy = Persistence.service().retrieve(new EntityQueryCriteria<ProductTaxPolicy>(ProductTaxPolicy.class));
 
-        ProductTaxPolicy productTaxPolicy = null;
-        {
-            EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().policy(), policy));
-            productTaxPolicy = Persistence.service().retrieve(criteria).policy().cast();
-        }
+        ProductTaxPolicy productTaxPolicy = PolicyManager.effectivePolicy(building, ProductTaxPolicy.class);
 
         ProductTaxPolicyItem productTaxPolicyItem = null;
         {
