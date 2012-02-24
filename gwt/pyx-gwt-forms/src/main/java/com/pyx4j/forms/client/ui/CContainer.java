@@ -133,7 +133,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                 }
             }
         }
-        return true;
+        return super.isValid();
     }
 
     public ValidationResults getValidationResults() {
