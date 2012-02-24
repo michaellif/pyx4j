@@ -25,27 +25,23 @@ import java.util.Date;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.ManagedColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.i18n.annotations.I18n;
 
 @AbstractEntity(generateMetadata = false)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface IVersionData extends IEntity {
+public interface IVersionData<VERSIONED_ENTITY extends IVersionedEntity<?>> extends IEntity {
 
     @Owner
     @JoinColumn
-    IVersionedEntity<?> holder();
+    VERSIONED_ENTITY holder();
 
-    @ManagedColumn
     @OrderColumn
     IPrimitive<Integer> versionNumber();
 
-    @ManagedColumn
     IPrimitive<Date> fromDate();
 
-    @ManagedColumn
     IPrimitive<Date> toDate();
 
     IPrimitive<Key> createdByUserKey();

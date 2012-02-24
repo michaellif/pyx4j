@@ -39,6 +39,29 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         service.setTimeNow(DateUtils.detectDateformat(dateStr));
     }
 
+    public void testSaveDraft() {
+        String testId = uniqueString();
+        if (true) {
+            // return;
+        }
+
+        // Initial item
+        ItemA itemA1 = EntityFactory.create(ItemA.class);
+
+        final String origName = "V1" + uniqueString();
+        itemA1.version().name().setValue(origName);
+        itemA1.version().testId().setValue(testId);
+
+        //Save Draft
+        srv.persist(itemA1);
+
+        // Retrieval of item itself, by default returns current
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey());
+            assertTrue("current is null", itemA1r.version().isNull());
+        }
+    }
+
     private void srv_finalize(IVersionedEntity<?> entity) {
         // TODO create function in  PersistenceService
     }

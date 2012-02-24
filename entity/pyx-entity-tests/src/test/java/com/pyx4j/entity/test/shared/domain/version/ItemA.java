@@ -35,7 +35,7 @@ public interface ItemA extends IVersionedEntity<ItemAVersion> {
     @ToString(index = 0)
     IPrimitive<String> name();
 
-    public interface ItemAVersion extends IVersionData {
+    public interface ItemAVersion extends IVersionData<ItemA> {
 
         IPrimitive<String> testId();
 
@@ -43,7 +43,7 @@ public interface ItemA extends IVersionedEntity<ItemAVersion> {
         IPrimitive<String> name();
     }
 
-//    
+//  To show concept we have this member:    
 //    @Override
 //    ItemAVersion version();
 }

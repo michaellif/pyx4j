@@ -30,7 +30,7 @@ import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
 
 public class EntityGenericTest extends InitializerTestBase {
 
-    public void testParametrizedMembers() {
+    public void testParameterizedMembers() {
         EntityMeta meta = EntityFactory.getEntityMeta(ConcreteParametrizedEntity.class);
         assertEquals("Meta entities valueClass", DetailParameter.class, meta.getMemberMeta("entity").getValueClass());
         assertEquals("Meta entities valueClass", DetailParameter.class, meta.getMemberMeta("entities").getValueClass());
@@ -71,7 +71,10 @@ public class EntityGenericTest extends InitializerTestBase {
 
         ItemA itemA1 = EntityFactory.create(ItemA.class);
         // Test Meta
-        assertEquals("Meta valueClass", ItemAVersion.class, itemA1.version().getValueClass());
+        assertEquals("Parameterized member valueClass", ItemAVersion.class, itemA1.version().getValueClass());
+        assertEquals("Parameterized member objectClass", ItemAVersion.class, itemA1.version().getObjectClass());
+        assertEquals("Parameterized member valueClass", ItemA.class, itemA1.version().holder().getValueClass());
+        assertEquals("Parameterized member objectClass", ItemA.class, itemA1.version().holder().getObjectClass());
 
         itemA1.version().testId().setValue("1");
         itemA1.version().name().setValue("2");
