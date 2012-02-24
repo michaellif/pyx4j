@@ -103,6 +103,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             get(proto().leaseFrom()).setEditable(!isLeaseSigned);
             get(proto().leaseTo()).setEditable(!isLeaseSigned);
 
+            get(proto().serviceAgreement().serviceItem()).setEditable(!isLeaseSigned);
+
             // set one-time editing:
             get(proto().expectedMoveIn()).setEditable(getValue().expectedMoveIn().isNull());
             get(proto().actualMoveIn()).setEditable(getValue().actualMoveIn().isNull());

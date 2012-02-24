@@ -45,6 +45,9 @@ public interface LeaseAdjustment extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> effectiveDate();
 
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> expirationDate();
+
     IPrimitive<Integer> billingPeriodNumber();
 
     @Timestamp(Update.Created)

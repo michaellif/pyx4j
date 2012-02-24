@@ -98,20 +98,20 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
         }
     }
 
-    List<Guarantor> alreadySelectedGuarantor() {
-        List<Guarantor> guarantors = new Vector<Guarantor>();
-        for (PersonGuarantor g : getValue()) {
-            if (g.guarantor().id() != null) {
-                guarantors.add(g.guarantor());
+    List<Guarantor> getAlreadySelected() {
+        List<Guarantor> selected = new Vector<Guarantor>();
+        for (PersonGuarantor item : getValue()) {
+            if (!item.guarantor().isNull()) {
+                selected.add(item.guarantor());
             }
         }
-        return guarantors;
+        return selected;
     }
 
     private class TenantSelectorDialog extends EntitySelectorDialog<Guarantor> {
 
         public TenantSelectorDialog() {
-            super(Guarantor.class, true, alreadySelectedGuarantor(), i18n.tr("Select Guarantor"));
+            super(Guarantor.class, true, getAlreadySelected(), i18n.tr("Select Guarantor"));
             setWidth("700px");
         }
 

@@ -35,6 +35,7 @@ public class LeaseAdjustmentFolder extends VistaTableFolder<LeaseAdjustment> {
         columns.add(new EntityFolderColumnDescriptor(proto().amount(), "8em"));
         columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "9em"));
         return columns;
     }
 

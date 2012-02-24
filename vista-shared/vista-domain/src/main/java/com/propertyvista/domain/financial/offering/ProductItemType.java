@@ -31,7 +31,7 @@ import com.propertyvista.domain.financial.tax.Tax;
 public interface ProductItemType extends IEntity {
 
     @I18n
-    @XmlType(name = "ServiceItemTypeType")
+    @XmlType(name = "ProductItemTypeType")
     public enum Type {
 
         service, feature;

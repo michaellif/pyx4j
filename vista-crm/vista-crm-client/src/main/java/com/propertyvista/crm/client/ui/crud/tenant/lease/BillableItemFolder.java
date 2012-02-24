@@ -51,6 +51,7 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
                         newItem.item().set(item);
                         newItem._currentPrice().setValue(item.price().getValue());
                         newItem.effectiveDate().setValue(new LogicalDate());
+                        newItem.expirationDate().setValue(new LogicalDate());
                         addItem(newItem);
                     }
                     return true;
@@ -58,12 +59,12 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
                 @Override
                 public String defineWidth() {
-                    return "300px";
+                    return "400px";
                 }
 
                 @Override
                 public String defineHeight() {
-                    return "100px";
+                    return "200px";
                 }
             }.show();
         }

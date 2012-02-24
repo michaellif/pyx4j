@@ -35,6 +35,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -107,22 +108,28 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     private void updateAdjustments(Lease lease) {
         // ServiceItem Adjustments:
-        updateAdjustments(lease.serviceAgreement().serviceItem());
+        updateAdjustments(lease.serviceAgreement().serviceItem(), lease.leaseTo().getValue());
 
         // BillableItem Adjustments:
         for (BillableItem ci : lease.serviceAgreement().featureItems()) {
-            updateAdjustments(ci);
+            updateAdjustments(ci, lease.leaseTo().getValue());
         }
 
         // Lease Financial Adjustments:
         updateAdjustments(lease.leaseFinancial());
     }
 
-    private void updateAdjustments(BillableItem item) {
+    private void updateAdjustments(BillableItem item, LogicalDate leaseEndDate) {
         for (BillableItemAdjustment adj : item.adjustments()) {
             // set creator:
             if (adj.createdWhen().isNull()) {
                 adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
+            }
+            // set adjustment expiration date:
+            if (TermType.oneTime == adj.termType().getValue()) {
+                adj.expirationDate().setValue(item.effectiveDate().getValue());
+            } else {
+                adj.expirationDate().setValue(leaseEndDate);
             }
         }
     }
@@ -133,6 +140,8 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             if (adj.createdWhen().isNull()) {
                 adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
             }
+            // set adjustment expiration date:
+            adj.expirationDate().setValue(adj.effectiveDate().getValue());
         }
     }
 

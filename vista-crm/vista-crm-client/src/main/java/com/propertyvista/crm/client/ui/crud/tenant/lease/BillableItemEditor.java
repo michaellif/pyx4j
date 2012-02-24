@@ -65,6 +65,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         get(proto().item().price()).setViewable(true);
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().expirationDate()), 9).build());
 
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -85,13 +86,23 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
     @Override
     protected void onPopulate() {
         super.onPopulate();
+
         if (!getValue().item().isEmpty()) {
-            if (getValue().item().type().featureType().getValue() == Feature.Type.utility) {
-                // correct folder item:
-                if (getParent() instanceof CEntityFolderItem) {
-                    CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
-                    item.setRemovable(false);
+            switch (getValue().item().type().type().getValue()) {
+            case feature:
+                if (getValue().item().type().featureType().getValue() == Feature.Type.utility) {
+                    // correct folder item:
+                    if (getParent() instanceof CEntityFolderItem) {
+                        CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
+                        item.setRemovable(false);
+                    }
                 }
+                break;
+            case service:
+                // hide effective dates:
+                get(proto().effectiveDate()).setVisible(false);
+                get(proto().expirationDate()).setVisible(false);
+                break;
             }
 
             if (!isEditable()) {
@@ -129,6 +140,14 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         }
     }
 
+    @Override
+    public void setEditable(boolean editable) {
+        super.setEditable(editable);
+        if (!isEditable() && !getValue().isNull()) {
+            adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
+        }
+    }
+
     private class ChargeItemAdjustmentFolder extends VistaTableFolder<BillableItemAdjustment> {
 
         public ChargeItemAdjustmentFolder() {
@@ -143,6 +162,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             columns.add(new EntityFolderColumnDescriptor(proto().termType(), "8em"));
             columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
             columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "9em"));
             return columns;
         }
 
@@ -150,6 +170,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         protected void addItem(BillableItemAdjustment newEntity) {
             if (newEntity.isEmpty()) {
                 newEntity.effectiveDate().setValue(new LogicalDate());
+                newEntity.expirationDate().setValue(new LogicalDate());
             }
             super.addItem(newEntity);
         }

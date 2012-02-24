@@ -98,6 +98,7 @@ public class LeaseHelper {
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(serviceItem);
         newItem.effectiveDate().setValue(new LogicalDate());
+        newItem.expirationDate().setValue(new LogicalDate());
         return newItem;
     }
 }
