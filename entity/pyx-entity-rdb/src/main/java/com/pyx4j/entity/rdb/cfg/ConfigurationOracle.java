@@ -50,6 +50,11 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public boolean createForeignKeys() {
+        return true;
+    }
+
+    @Override
     public String connectionValidationQuery() {
         return "SELECT 1 FROM DUAL";
     }

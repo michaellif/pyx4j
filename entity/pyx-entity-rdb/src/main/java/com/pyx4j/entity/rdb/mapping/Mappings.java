@@ -40,6 +40,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.SQLUtils;
+import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -52,6 +53,8 @@ public class Mappings {
 
     private final ConnectionProvider connectionProvider;
 
+    private final Configuration configuration;
+
     private final Map<Class<? extends IEntity>, TableModel> tables = new Hashtable<Class<? extends IEntity>, TableModel>();
 
     private final Set<String> usedTableNames = new HashSet<String>();
@@ -62,8 +65,9 @@ public class Mappings {
 
     public static final boolean traceInit = false;
 
-    public Mappings(ConnectionProvider connectionProvider) {
+    public Mappings(ConnectionProvider connectionProvider, Configuration configuration) {
         this.connectionProvider = connectionProvider;
+        this.configuration = configuration;
 
         if (connectionProvider.getDialect().isSequencesBaseIdentity()) {
             sequences = new HashSet<String>();
@@ -187,12 +191,14 @@ public class Mappings {
                 }
             }
 
-            synchronized (entityTypeLock) {
-                try {
-                    model.ensureForeignKeys(connection, dialect);
-                } catch (SQLException e) {
-                    log.error("Foreign Keys creation error", e);
-                    throw new RuntimeException(e);
+            if (configuration.createForeignKeys()) {
+                synchronized (entityTypeLock) {
+                    try {
+                        model.ensureForeignKeys(connection, dialect);
+                    } catch (SQLException e) {
+                        log.error("Foreign Keys creation error", e);
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 

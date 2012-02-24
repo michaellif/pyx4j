@@ -139,6 +139,25 @@ public class RDBUtils implements Closeable {
         log.info("Total of {} tables dropped in {}", countTotal, TimeUtils.secSince(start));
     }
 
+    public static void dropAllForeignKeys() {
+        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
+        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
+        int countTotal = 0;
+        long start = System.currentTimeMillis();
+        for (String className : allClasses) {
+            Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
+            EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
+            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
+                continue;
+            }
+            if (srv.isTableExists(meta.getEntityClass())) {
+                log.info("drop ForeignKeys in {}", meta.getEntityClass().getName());
+                countTotal += srv.dropForeignKeys(meta.getEntityClass());
+            }
+        }
+        log.info("Total of {} ForeignKeys dropped in {}", countTotal, TimeUtils.secSince(start));
+    }
+
     public static void initAllEntityTables() {
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();

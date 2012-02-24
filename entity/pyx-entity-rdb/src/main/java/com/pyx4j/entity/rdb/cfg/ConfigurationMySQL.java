@@ -60,6 +60,11 @@ public abstract class ConfigurationMySQL implements Configuration {
         return false;
     }
 
+    @Override
+    public boolean createForeignKeys() {
+        return true;
+    }
+
     public boolean isAutoReconnect() {
         return false;
     }

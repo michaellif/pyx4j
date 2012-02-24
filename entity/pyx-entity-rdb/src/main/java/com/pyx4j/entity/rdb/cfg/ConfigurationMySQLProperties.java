@@ -38,6 +38,8 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
 
     protected boolean multitenant;
 
+    private boolean createForeignKeys = true;
+
     protected boolean autoReconnect;
 
     protected int minPoolSize = 3;
@@ -81,6 +83,11 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
     }
 
     @Override
+    public boolean createForeignKeys() {
+        return createForeignKeys;
+    }
+
+    @Override
     public boolean isAutoReconnect() {
         return autoReconnect;
     }
@@ -120,6 +127,7 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
         this.password = c.getValue("password", this.password);
 
         this.multitenant = c.getBooleanValue("multitenant", this.multitenant);
+        this.createForeignKeys = c.getBooleanValue("createForeignKeys", this.createForeignKeys);
         this.autoReconnect = c.getBooleanValue("autoReconnect", this.autoReconnect);
 
         this.minPoolSize = c.getIntegerValue("minPoolSize", this.minPoolSize);

@@ -262,7 +262,7 @@ public class TableModelCollections {
                 connection.clearWarnings();
             }
         } catch (SQLException e) {
-            log.error("{} SQL {}", member.sqlName(), sql);
+            log.error("{} Cursor SQL: {}", member.sqlName(), sql);
             log.error("{} SQL update error", member.sqlName(), e);
             throw new RuntimeException(e);
         } finally {

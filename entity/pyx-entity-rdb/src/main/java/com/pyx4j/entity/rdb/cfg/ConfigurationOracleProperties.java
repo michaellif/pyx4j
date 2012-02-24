@@ -46,6 +46,8 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
     private int tablesItentityOffset;
 
+    private boolean createForeignKeys = true;
+
     @Override
     public String dbHost() {
         return host;
@@ -87,6 +89,11 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     }
 
     @Override
+    public boolean createForeignKeys() {
+        return createForeignKeys;
+    }
+
+    @Override
     public int unreturnedConnectionTimeout() {
         return unreturnedConnectionTimeout;
     }
@@ -104,6 +111,8 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
         this.user = c.getValue("user", this.user);
         this.password = c.getValue("password", this.password);
+
+        this.createForeignKeys = c.getBooleanValue("createForeignKeys", this.createForeignKeys);
 
         this.minPoolSize = c.getIntegerValue("minPoolSize", this.minPoolSize);
         this.maxPoolSize = c.getIntegerValue("maxPoolSize", this.maxPoolSize);

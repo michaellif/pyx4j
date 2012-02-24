@@ -107,7 +107,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 log.error("RDB initialization error", e);
                 throw new RuntimeException(e.getMessage());
             }
-            mappings = new Mappings(connectionProvider);
+            mappings = new Mappings(connectionProvider, configuration);
             databaseVersion();
         }
     }
@@ -150,6 +150,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             mappings.droppedTable(connectionProvider.getDialect(), entityMeta);
         } catch (SQLException e) {
             log.error("drop table error", e);
+            throw new RuntimeExceptionSerializable(e);
+        }
+    }
+
+    public int dropForeignKeys(Class<? extends IEntity> entityClass) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        TableModel tm = new TableModel(connectionProvider.getDialect(), mappings, entityMeta);
+        try {
+            return tm.dropForeignKeys(connectionProvider);
+        } catch (SQLException e) {
+            log.error("drop ForeignKeys error", e);
             throw new RuntimeExceptionSerializable(e);
         }
     }

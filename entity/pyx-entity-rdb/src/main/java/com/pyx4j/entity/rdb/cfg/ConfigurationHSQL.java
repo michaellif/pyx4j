@@ -60,6 +60,11 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
+    public boolean createForeignKeys() {
+        return true;
+    }
+
+    @Override
     public String connectionValidationQuery() {
         return null;
     }

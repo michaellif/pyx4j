@@ -49,6 +49,8 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public boolean isMultitenant();
 
+    public boolean createForeignKeys();
+
     /**
      * Used in development to create sparse identity values for every table, to ensure pseudo-unique value of every key.
      * 
