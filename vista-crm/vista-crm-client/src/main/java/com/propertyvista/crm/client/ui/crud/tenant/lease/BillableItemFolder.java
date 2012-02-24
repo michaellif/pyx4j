@@ -14,6 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -22,7 +24,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.dto.LeaseDTO;
@@ -31,19 +32,19 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
     private static final I18n i18n = I18n.get(BillableItemFolder.class);
 
-    final CrmEntityForm<LeaseDTO> parent;
+    private final CEntityEditor<LeaseDTO> lease;
 
-    public BillableItemFolder(boolean modifyable, CrmEntityForm<LeaseDTO> parent) {
+    public BillableItemFolder(boolean modifyable, CEntityEditor<LeaseDTO> lease) {
         super(BillableItem.class, modifyable);
-        this.parent = parent;
+        this.lease = lease;
     }
 
     @Override
     protected void addItem() {
-        if (parent.getValue().serviceAgreement().serviceItem().isNull()) {
+        if (lease.getValue().serviceAgreement().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
-            new SelectDialog<ProductItem>(i18n.tr("Select Features"), true, parent.getValue().selectedFeatureItems()) {
+            new SelectDialog<ProductItem>(i18n.tr("Select Features"), true, lease.getValue().selectedFeatureItems()) {
                 @Override
                 public boolean onClickOk() {
                     for (ProductItem item : getSelectedItems()) {
@@ -72,9 +73,16 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof BillableItem) {
-            return new BillableItemEditor();
+            return new BillableItemEditor(lease);
         }
         return super.create(member);
     }
 
+    @Override
+    protected CEntityFolderItem<BillableItem> createItem(boolean first) {
+        CEntityFolderItem<BillableItem> item = super.createItem(first);
+        item.setRemovable(lease.getValue().approvalDate().isNull());
+        item.setMovable(lease.getValue().approvalDate().isNull());
+        return item;
+    }
 }

@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -27,15 +28,15 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.concession.Concessi
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.dto.LeaseDTO;
 
-class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
+class ConcessionFolder extends VistaBoxFolder<Concession> {
 
-    private static final I18n i18n = I18n.get(ServiceConcessionFolder.class);
+    private static final I18n i18n = I18n.get(ConcessionFolder.class);
 
-    private final CEntityEditor<LeaseDTO> parent;
+    private final CEntityEditor<LeaseDTO> lease;
 
-    public ServiceConcessionFolder(boolean modifyable, CEntityEditor<LeaseDTO> parent) {
+    public ConcessionFolder(boolean modifyable, CEntityEditor<LeaseDTO> lease) {
         super(Concession.class, modifyable);
-        this.parent = parent;
+        this.lease = lease;
     }
 
     @Override
@@ -56,11 +57,11 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
 
     @Override
     protected void addItem() {
-        if (parent.getValue().serviceAgreement().serviceItem().isNull()) {
+        if (lease.getValue().serviceAgreement().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
 
-            new SelectDialog<Concession>(i18n.tr("Select Concessions"), true, parent.getValue().selectedConcessions()) {
+            new SelectDialog<Concession>(i18n.tr("Select Concessions"), true, lease.getValue().selectedConcessions()) {
                 @Override
                 public boolean onClickOk() {
                     for (Concession item : getSelectedItems()) {
@@ -82,5 +83,13 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
             }.show();
         }
 
+    }
+
+    @Override
+    protected CEntityFolderItem<Concession> createItem(boolean first) {
+        CEntityFolderItem<Concession> item = super.createItem(first);
+        item.setRemovable(lease.getValue().approvalDate().isNull());
+        item.setMovable(lease.getValue().approvalDate().isNull());
+        return item;
     }
 }

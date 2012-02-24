@@ -39,6 +39,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
+import com.propertyvista.dto.LeaseDTO;
 
 class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
@@ -48,8 +49,11 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
 
-    public BillableItemEditor() {
+    private final CEntityEditor<LeaseDTO> lease;
+
+    public BillableItemEditor(CEntityEditor<LeaseDTO> lease) {
         super(BillableItem.class);
+        this.lease = lease;
     }
 
     @Override
@@ -172,6 +176,14 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 newEntity.effectiveDate().setValue(new LogicalDate());
             }
             super.addItem(newEntity);
+        }
+
+        @Override
+        protected CEntityFolderItem<BillableItemAdjustment> createItem(boolean first) {
+            CEntityFolderItem<BillableItemAdjustment> item = super.createItem(first);
+            item.setRemovable(lease.getValue().approvalDate().isNull());
+            item.setMovable(lease.getValue().approvalDate().isNull());
+            return item;
         }
     }
 }

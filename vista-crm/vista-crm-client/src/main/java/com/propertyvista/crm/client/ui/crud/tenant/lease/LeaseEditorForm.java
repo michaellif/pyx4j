@@ -231,7 +231,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
         if (isEditable()) {
-            serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new BillableItemEditor()));
+            serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new BillableItemEditor(this)));
             serviceItemPanel.add(serviceselector = new AnchorButton("Select...", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -275,7 +275,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, inject(proto().serviceAgreement().featureItems(), new BillableItemFolder(isEditable(), this)));
 
         main.setH1(++row, 0, 2, proto().serviceAgreement().concessions().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().serviceAgreement().concessions(), new ServiceConcessionFolder(isEditable(), this)));
+        main.setWidget(++row, 0, inject(proto().serviceAgreement().concessions(), new ConcessionFolder(isEditable(), this)));
 
         main.setH1(++row, 0, 2, proto().leaseFinancial().adjustments().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().leaseFinancial().adjustments(), new LeaseAdjustmentFolder(isEditable())));
