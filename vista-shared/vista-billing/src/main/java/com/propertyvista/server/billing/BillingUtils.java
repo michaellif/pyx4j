@@ -41,6 +41,7 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class BillingUtils {
@@ -153,6 +154,11 @@ public class BillingUtils {
         }
     }
 
+    public static boolean isLeaseAdjustmentApplicable(LeaseAdjustment item, Bill bill) {
+        // TODO Implement
+        return true;
+    }
+
     static boolean isService(Product product) {
         return product.cast().isAssignableFrom(Service.class);
     }
@@ -164,4 +170,5 @@ public class BillingUtils {
     static boolean isRecurringFeature(Product product) {
         return isFeature(product) && ((Feature) product.cast()).isRecurring().getValue();
     }
+
 }

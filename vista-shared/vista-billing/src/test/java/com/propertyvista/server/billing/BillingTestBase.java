@@ -46,11 +46,11 @@ public class BillingTestBase extends VistaDBTestBase {
         ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel();
         productItemTypesDataModel.generate(true);
 
-        ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(productItemTypesDataModel, taxesDataModel);
-        productTaxPolicyDataModel.generate(true);
-
         BuildingDataModel buildingDataModel = new BuildingDataModel(productItemTypesDataModel);
         buildingDataModel.generate(true);
+
+        ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(productItemTypesDataModel, taxesDataModel, buildingDataModel);
+        productTaxPolicyDataModel.generate(true);
 
         TenantDataModel tenantDataModel = new TenantDataModel();
         tenantDataModel.generate(true);

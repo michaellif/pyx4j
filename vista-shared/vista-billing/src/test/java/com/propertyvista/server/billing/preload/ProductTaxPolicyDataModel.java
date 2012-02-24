@@ -13,6 +13,13 @@
  */
 package com.propertyvista.server.billing.preload;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+
+import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.policy.framework.PolicyAtNode;
+import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
+import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 
 public class ProductTaxPolicyDataModel {
 
@@ -20,12 +27,38 @@ public class ProductTaxPolicyDataModel {
 
     private final TaxesDataModel taxesDataModel;
 
-    public ProductTaxPolicyDataModel(ProductItemTypesDataModel productItemTypesDataModel, TaxesDataModel taxesDataModel) {
+    private final BuildingDataModel buildingDataModel;
+
+    private ProductTaxPolicy policy;
+
+    public ProductTaxPolicyDataModel(ProductItemTypesDataModel productItemTypesDataModel, TaxesDataModel taxesDataModel, BuildingDataModel buildingDataModel) {
         this.productItemTypesDataModel = productItemTypesDataModel;
         this.taxesDataModel = taxesDataModel;
+        this.buildingDataModel = buildingDataModel;
+        generate(true);
     }
 
     public void generate(boolean persist) {
+        policy = EntityFactory.create(ProductTaxPolicy.class);
+
+        for (ProductItemType type : productItemTypesDataModel.getProductItemTypes()) {
+            ProductTaxPolicyItem item = EntityFactory.create(ProductTaxPolicyItem.class);
+            item.productItemType().set(type);
+            item.taxes().add(taxesDataModel.getTaxes().get(0));
+            policy.policyItems().add(item);
+        }
+
+        PolicyAtNode policyAtNode = EntityFactory.create(PolicyAtNode.class);
+        policyAtNode.policy().set(policy);
+        policyAtNode.node().set(buildingDataModel.getBuilding());
+
+        if (persist) {
+            Persistence.service().persist(policy);
+            Persistence.service().persist(policyAtNode);
+        }
     }
 
+    ProductTaxPolicy getPolicy() {
+        return policy;
+    }
 }

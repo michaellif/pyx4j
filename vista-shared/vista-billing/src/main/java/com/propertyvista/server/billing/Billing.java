@@ -94,8 +94,8 @@ class Billing {
         getPreviousTotals();
         createPayments();
         createCharges();
-        createLeaseAdjustments();
         createChargeAdjustments();
+        createLeaseAdjustments();
 
         calculateTotals();
 
@@ -149,7 +149,7 @@ class Billing {
         charge.billableItem().set(billableItem);
         charge.amount().setValue(billableItem.item().price().getValue());
         if (!charge.amount().isNull()) {
-            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), billableItem.item().type().taxes()));
+            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), billableItem.item().type(), bill.billingRun().building()));
         }
         charge.taxTotal().setValue(new BigDecimal(0));
         for (BillChargeTax chargeTax : charge.taxes()) {
@@ -168,18 +168,7 @@ class Billing {
             bill.oneTimeFeatureCharges().setValue(bill.oneTimeFeatureCharges().getValue().add(charge.amount().getValue()));
         }
         bill.charges().add(charge);
-    }
-
-    private void createLeaseAdjustments() {
-        for (LeaseAdjustment item : bill.billingAccount().leaseFinancial().adjustments()) {
-            createLeaseAdjustment(item);
-        }
-    }
-
-    private void createLeaseAdjustment(LeaseAdjustment item) {
-        BillLeaseAdjustment adjustment = EntityFactory.create(BillLeaseAdjustment.class);
-        bill.leaseAdjustments().add(adjustment);
-        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.amount().getValue()));
+        bill.taxes().setValue(bill.taxes().getValue().add(charge.taxTotal().getValue()));
     }
 
     private void createChargeAdjustments() {
@@ -217,8 +206,40 @@ class Billing {
         bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.amount().getValue()));
     }
 
-    private void calculateTotals() {
+    private void createLeaseAdjustments() {
+        for (LeaseAdjustment item : bill.billingAccount().leaseFinancial().adjustments()) {
+            createLeaseAdjustment(item);
+        }
+    }
 
+    private void createLeaseAdjustment(LeaseAdjustment item) {
+        if (!BillingUtils.isLeaseAdjustmentApplicable(item, bill)) {
+            return;
+        }
+
+        BillLeaseAdjustment adjustment = EntityFactory.create(BillLeaseAdjustment.class);
+        adjustment.bill().set(bill);
+        bill.leaseAdjustments().add(adjustment);
+        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.amount().getValue()));
+
+        if (!adjustment.amount().isNull()) {
+            adjustment.taxes().addAll(TaxUtils.calculateTaxes(adjustment.amount().getValue(), item.reason(), bill.billingRun().building()));
+        }
+        adjustment.taxTotal().setValue(new BigDecimal(0));
+        for (BillChargeTax chargeTax : adjustment.taxes()) {
+            adjustment.taxTotal().setValue(adjustment.taxTotal().getValue().add(chargeTax.amount().getValue()));
+        }
+
+        addLeaseAdjustment(adjustment);
+    }
+
+    private void addLeaseAdjustment(BillLeaseAdjustment item) {
+        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(item.amount().getValue()));
+        bill.leaseAdjustments().add(item);
+        bill.taxes().setValue(bill.taxes().getValue().add(item.taxTotal().getValue()));
+    }
+
+    private void calculateTotals() {
         bill.pastDueAmount().setValue(
                 bill.previousBalanceAmount().getValue().subtract(bill.paymentReceivedAmount().getValue()).subtract(bill.immediateAdjustments().getValue()));
 

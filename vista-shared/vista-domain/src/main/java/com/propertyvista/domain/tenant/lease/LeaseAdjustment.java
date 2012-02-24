@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -35,7 +37,7 @@ public interface LeaseAdjustment extends IEntity {
     @NotNull
     @ToString(index = 1)
     @Format("#0.00")
-    IPrimitive<Double> amount();
+    IPrimitive<BigDecimal> amount();
 
     IPrimitive<String> description();
 

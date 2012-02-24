@@ -16,37 +16,81 @@ package com.propertyvista.server.billing;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.billing.BillChargeTax;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.tax.Tax;
+import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.framework.PolicyAtNode;
+import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
+import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class TaxUtils {
 
+    public static List<BillChargeTax> calculateTaxes(final BigDecimal baseAmount, ProductItemType productItemType, Building building) {
+        List<Tax> taxes = retrieveTaxes(productItemType, building);
+        return calculateTaxes(baseAmount, taxes);
+    }
+
+    public static Collection<? extends BillChargeTax> calculateTaxes(BigDecimal value, LeaseAdjustmentReason reason, Building building) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     public static List<BillChargeTax> calculateTaxes(final BigDecimal baseAmount, List<Tax> taxes) {
+
         List<BillChargeTax> chargeTaxes = new ArrayList<BillChargeTax>();
-        BigDecimal interimAmount = baseAmount;
-        for (Tax tax : taxes) {
-            if (!tax.compound().getValue()) {
-                BillChargeTax chargeTax = EntityFactory.create(BillChargeTax.class);
-                chargeTax.tax().set(tax);
-                chargeTax.amount().setValue(baseAmount.multiply(tax.rate().getValue()).setScale(2, RoundingMode.HALF_UP));
-                chargeTaxes.add(chargeTax);
-                interimAmount = interimAmount.add(chargeTax.amount().getValue());
+        if (taxes != null) {
+            BigDecimal interimAmount = baseAmount;
+            for (Tax tax : taxes) {
+                if (!tax.compound().getValue()) {
+                    BillChargeTax chargeTax = EntityFactory.create(BillChargeTax.class);
+                    chargeTax.tax().set(tax);
+                    chargeTax.amount().setValue(baseAmount.multiply(tax.rate().getValue()).setScale(2, RoundingMode.HALF_UP));
+                    chargeTaxes.add(chargeTax);
+                    interimAmount = interimAmount.add(chargeTax.amount().getValue());
+                }
             }
-        }
-        for (Tax tax : taxes) {
-            if (tax.compound().getValue()) {
-                BillChargeTax chargeTax = EntityFactory.create(BillChargeTax.class);
-                chargeTax.tax().set(tax);
-                chargeTax.amount().setValue(interimAmount.multiply(tax.rate().getValue()).setScale(2, RoundingMode.HALF_UP));
-                chargeTaxes.add(chargeTax);
-                interimAmount = interimAmount.add(chargeTax.amount().getValue());
+            for (Tax tax : taxes) {
+                if (tax.compound().getValue()) {
+                    BillChargeTax chargeTax = EntityFactory.create(BillChargeTax.class);
+                    chargeTax.tax().set(tax);
+                    chargeTax.amount().setValue(interimAmount.multiply(tax.rate().getValue()).setScale(2, RoundingMode.HALF_UP));
+                    chargeTaxes.add(chargeTax);
+                    interimAmount = interimAmount.add(chargeTax.amount().getValue());
+                }
             }
         }
         return chargeTaxes;
+    }
+
+    //FIXME do it properly using policy framework
+    private static List<Tax> retrieveTaxes(ProductItemType productItemType, Building building) {
+        Policy policy = Persistence.service().retrieve(new EntityQueryCriteria<ProductTaxPolicy>(ProductTaxPolicy.class));
+
+        ProductTaxPolicy productTaxPolicy = null;
+        {
+            EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().policy(), policy));
+            productTaxPolicy = Persistence.service().retrieve(criteria).policy().cast();
+        }
+
+        ProductTaxPolicyItem productTaxPolicyItem = null;
+        {
+            EntityQueryCriteria<ProductTaxPolicyItem> criteria = new EntityQueryCriteria<ProductTaxPolicyItem>(ProductTaxPolicyItem.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().taxPolicy(), productTaxPolicy));
+            productTaxPolicyItem = Persistence.service().retrieve(criteria);
+        }
+        return productTaxPolicyItem.taxes();
     }
 
 }

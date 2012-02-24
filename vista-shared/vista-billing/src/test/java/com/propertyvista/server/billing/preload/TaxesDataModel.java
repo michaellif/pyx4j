@@ -64,8 +64,9 @@ public class TaxesDataModel {
 
         generateTax("GST", "YT", new BigDecimal("0.05"), false);
 
-        Persistence.service().persist(taxes);
-
+        if (persist) {
+            Persistence.service().persist(taxes);
+        }
     }
 
     private void generateTax(String name, String authority, BigDecimal rate, Boolean compound) {
