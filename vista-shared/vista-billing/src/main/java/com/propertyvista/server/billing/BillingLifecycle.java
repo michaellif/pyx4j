@@ -51,6 +51,7 @@ public class BillingLifecycle {
         BillingRun billingRun = EntityFactory.create(BillingRun.class);
         billingRun.status().setValue(BillingRunStatus.Scheduled);
         billingRun.billingCycle().set(billingAccount.billingCycle());
+        Persistence.service().retrieve(lease.unit());
         billingRun.building().set(lease.unit().belongsTo());
 
         billingRun.billingPeriodStartDate().setValue(BillingUtils.getNextBillingPeriodStartDate(billingAccount));
