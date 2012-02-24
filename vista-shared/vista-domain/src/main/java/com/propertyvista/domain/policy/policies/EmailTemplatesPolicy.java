@@ -22,6 +22,7 @@ import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
 
 @DiscriminatorValue("EmailTemplatesPolicy")
 public interface EmailTemplatesPolicy extends BuildingPolicy {
+
     @Owned
     IList<EmailTemplate> templates();
 }

@@ -16,7 +16,6 @@ package com.propertyvista.domain.policy.policies.domain;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.OrderColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -24,12 +23,17 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.ChargeCode;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 
 public interface ProductTaxPolicyItem extends IEntity {
+
+    ProductItemType productItemType();
+
+    IList<Tax> taxes();
+
+    // internals:
 
     @Owner
     @Detached(level = AttachLevel.Detached)
@@ -41,12 +45,4 @@ public interface ProductTaxPolicyItem extends IEntity {
 
     @OrderColumn(OrderId.class)
     IPrimitive<Integer> orderInParent();
-
-    ProductItemType productItemType();
-
-    @Owned
-    IList<Tax> taxes();
-
-    @Deprecated
-    ChargeCode chargeCode();
 }

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.crm.rpc.services.policies.policy.ProductTaxPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
@@ -24,4 +26,18 @@ public class ProductTaxPolicyCrudServiceImpl extends GenericPolicyCrudService<Pr
         super(ProductTaxPolicy.class, ProductTaxPolicyDTO.class);
     }
 
+    @Override
+    protected void enhanceDTO(ProductTaxPolicy in, ProductTaxPolicyDTO dto, boolean fromList) {
+        super.enhanceDTO(in, dto, fromList);
+
+        if (!fromList) {
+            Persistence.service().retrieve(dto.policyItems());
+        }
+    }
+
+    @Override
+    protected void persistDBO(ProductTaxPolicy dbo, ProductTaxPolicyDTO in) {
+        // TODO Auto-generated method stub
+        super.persistDBO(dbo, in);
+    }
 }

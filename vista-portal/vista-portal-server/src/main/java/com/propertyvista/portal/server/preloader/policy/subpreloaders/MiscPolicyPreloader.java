@@ -37,7 +37,6 @@ public class MiscPolicyPreloader extends AbstractPolicyPreloader<MiscPolicy> {
 
     @Override
     protected MiscPolicy createPolicy(StringBuilder log) {
-
         MiscPolicy misc = EntityFactory.create(MiscPolicy.class);
 
         misc.occupantsOver18areApplicants().setValue(OCCUPANTS_OVER_18_ARE_APPLICANTS);
@@ -45,8 +44,8 @@ public class MiscPolicyPreloader extends AbstractPolicyPreloader<MiscPolicy> {
         misc.oneMonthDeposit().setValue(ONE_MONTH_DEPOSIT);
         misc.maxParkingSpots().setValue(MAX_PARKING_SPOTS);
         misc.maxPets().setValue(MAX_PETS);
-        Persistence.service().persist(misc);
 
+        Persistence.service().persist(misc);
         log.append(misc.getStringView());
 
         return misc;
