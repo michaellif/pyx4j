@@ -103,11 +103,11 @@ public class TableModelCollections {
                 numberOfParams++;
             }
             if (dialect.isMultitenant()) {
-                sql.append(", ns");
+                sql.append(", ").append(dialect.getNamingConvention().sqlNameSpaceColumnName());
                 numberOfParams++;
             }
             if (dialect.isSequencesBaseIdentity()) {
-                sql.append(", id");
+                sql.append(", ").append(dialect.getNamingConvention().sqlIdColumnName());
             }
 
             sql.append(" ) VALUES (");
@@ -199,8 +199,8 @@ public class TableModelCollections {
         try {
             sql.append("SELECT ");
             boolean first = true;
-            if (!member.sqlValueName().equals(IEntity.PRIMARY_KEY)) {
-                sql.append(IEntity.PRIMARY_KEY);
+            if (!member.sqlValueName().equals(dialect.getNamingConvention().sqlIdColumnName())) {
+                sql.append(dialect.getNamingConvention().sqlIdColumnName());
                 first = false;
             }
             for (String name : member.getValueAdapter().getColumnNames(member.sqlValueName())) {
@@ -212,14 +212,14 @@ public class TableModelCollections {
                 sql.append(name);
             }
             if (dialect.isMultitenant()) {
-                sql.append(", ns");
+                sql.append(", ").append(dialect.getNamingConvention().sqlNameSpaceColumnName());
             }
             if (isList) {
                 sql.append(", ").append(member.sqlOrderColumnName());
             }
             sql.append(" FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
             if (dialect.isMultitenant()) {
-                sql.append(" AND ns = ?");
+                sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {}", sql);
@@ -231,7 +231,7 @@ public class TableModelCollections {
             }
             rs = stmt.executeQuery();
             while (rs.next()) {
-                if ((dialect.isMultitenant()) && !rs.getString("ns").equals(NamespaceManager.getNamespace())) {
+                if ((dialect.isMultitenant()) && !rs.getString(dialect.getNamingConvention().sqlNameSpaceColumnName()).equals(NamespaceManager.getNamespace())) {
                     throw new RuntimeException("namespace access error");
                 }
                 Object value = member.getValueAdapter().retrieveValue(rs, member.sqlValueName());
@@ -305,7 +305,7 @@ public class TableModelCollections {
             }
 
             if (dialect.isMultitenant()) {
-                sql.append(" AND ns = ?");
+                sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (isList) {
                 sql.append(" ORDER BY ").append(member.sqlOrderColumnName());
@@ -415,7 +415,7 @@ public class TableModelCollections {
         try {
             sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
             if (dialect.isMultitenant()) {
-                sql.append(" AND ns = ?");
+                sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {} ", sql);
@@ -427,7 +427,7 @@ public class TableModelCollections {
             }
             stmt.executeUpdate();
         } catch (SQLException e) {
-            log.error("{} SQL {}", member.sqlName(), sql);
+            log.error("{} SQL: {}", member.sqlName(), sql);
             log.error("{} SQL delete error", member.sqlName(), e);
             throw new RuntimeException(e);
         } finally {
@@ -441,7 +441,7 @@ public class TableModelCollections {
         try {
             sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
             if (dialect.isMultitenant()) {
-                sql.append(" AND ns = ?");
+                sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {} ", sql);
@@ -468,6 +468,7 @@ public class TableModelCollections {
                 connection.clearWarnings();
             }
         } catch (SQLException e) {
+            log.error("{} SQL: {}", member.sqlName(), sql);
             log.error("{} SQL delete error", member.sqlName(), e);
             throw new RuntimeException(e);
         } finally {

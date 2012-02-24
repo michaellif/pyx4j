@@ -152,7 +152,7 @@ public class QueryBuilder<T extends IEntity> {
             }
             bindHolder.adapter = queryMember.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(), bindHolder.bindValue);
 
-            // TODO support more then two columns
+            // TODO P3. support more then two columns
             boolean firstValue = true;
             for (String name : bindHolder.adapter.getColumnNames(queryMember.memberSqlName)) {
                 if (firstValue) {
@@ -262,7 +262,7 @@ public class QueryBuilder<T extends IEntity> {
         if (sql.length() == 0) {
             return "";
         } else {
-            StringBuilder sqlWhere = new StringBuilder(" WHERE ");
+            StringBuilder sqlWhere = new StringBuilder("\n WHERE ");
             sqlWhere.append(sql);
             return sqlWhere.toString();
         }

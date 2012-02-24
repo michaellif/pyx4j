@@ -45,7 +45,7 @@ public class JoinOwnerInformation extends JoinInformation {
             joinTableClass = ownerEntityClass;
             joinTableSameAsTarget = true;
             sqlName = TableModel.getTableName(dialect, ownerEntityMeta);
-            sqlValueName = IEntity.PRIMARY_KEY;
+            sqlValueName = dialect.getNamingConvention().sqlIdColumnName();
             sqlOwnerName = namingConvention.sqlFieldName(EntityOperationsMeta.memberPersistenceName(ownedMemberMeta));
             ownerValueAdapter = EntityOperationsMeta.createEntityValueAdapter(dialect, ownedMemberMeta);
             break;

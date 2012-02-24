@@ -58,7 +58,7 @@ class JoinTableInformation extends JoinInformation {
         joinTableClass = joinEntityClass;
 
         if (joinEntityClass == entityClass) {
-            sqlValueName = IEntity.PRIMARY_KEY;
+            sqlValueName = dialect.getNamingConvention().sqlIdColumnName();
             joinTableSameAsTarget = true;
         } else {
             sqlValueName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(findValueMember(joinEntityMeta, entityClass)));

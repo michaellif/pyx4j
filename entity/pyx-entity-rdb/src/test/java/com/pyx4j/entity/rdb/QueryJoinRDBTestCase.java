@@ -178,7 +178,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("PK Value", empsSortedAsc.get(0).getPrimaryKey(), emp1.getPrimaryKey());
         }
 
-        if (false) { // Verify join using auto-generated table
+        { // Verify join using auto-generated table
             EntityQueryCriteria<Department> criteria = EntityQueryCriteria.create(Department.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().organization().name(), org2.name()));
 
@@ -187,8 +187,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("PK Value", list.get(0).getPrimaryKey(), department2.getPrimaryKey());
         }
 
-        //TODO fix query 
-        if (false) {
+        { // Verify join using auto-generated table on second level
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), setId));
             criteria.add(PropertyCriterion.eq(criteria.proto().department().organization().name(), org2.name()));
@@ -198,7 +197,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("PK Value", empsSortedAsc.get(0).getPrimaryKey(), emp2.getPrimaryKey());
         }
 
-        if (false) {
+        {
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), setId));
             criteria.desc(criteria.proto().department().organization().name());
@@ -208,7 +207,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("PK Value", empsSortedAsc.get(0).getPrimaryKey(), emp2.getPrimaryKey());
         }
 
-        if (false) {
+        {
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), setId));
             criteria.asc(criteria.proto().department().name());

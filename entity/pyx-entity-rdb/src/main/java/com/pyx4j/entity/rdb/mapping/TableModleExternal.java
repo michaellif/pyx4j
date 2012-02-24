@@ -71,7 +71,7 @@ public class TableModleExternal {
             }
 
             if (dialect.isMultitenant()) {
-                sql.append(" AND ns = ?");
+                sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {} ", sql);
