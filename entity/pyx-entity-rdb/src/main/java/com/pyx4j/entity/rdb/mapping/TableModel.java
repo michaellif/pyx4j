@@ -140,7 +140,7 @@ public class TableModel {
     public void ensureForeignKeys(Connection connection, Dialect dialect) throws SQLException {
         TableMetadata tableMetadata = TableMetadata.getTableMetadata(connection, tableName);
         for (MemberOperationsMeta member : operationsMeta().getColumnMembers()) {
-            if (member.getMemberMeta().isEntity() && (!(member.getValueAdapter() instanceof ValueAdapterEntityVirtual))) {
+            if (member.getMemberMeta().isEntity() && (!(member.getValueAdapter() instanceof ValueAdapterEntityPolymorphic))) {
                 @SuppressWarnings("unchecked")
                 Class<? extends IEntity> entityClass = (Class<IEntity>) member.getMemberMeta().getValueClass();
                 String refSqlTableName = TableModel.getTableName(dialect, EntityFactory.getEntityMeta(entityClass));

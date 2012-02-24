@@ -89,8 +89,14 @@ public class TableModelCollections {
         try {
             int numberOfParams = 0;
             sql.append("INSERT INTO ").append(member.sqlName()).append(" ( ");
-            sql.append(member.sqlOwnerName());
-            numberOfParams++;
+
+            for (String name : member.getOwnerValueAdapter().getColumnNames(member.sqlOwnerName())) {
+                if (numberOfParams > 0) {
+                    sql.append(", ");
+                }
+                sql.append(name);
+                numberOfParams++;
+            }
 
             for (String name : member.getValueAdapter().getColumnNames(member.sqlValueName())) {
                 sql.append(", ");
@@ -137,9 +143,7 @@ public class TableModelCollections {
                     }
                 }
                 int parameterIndex = 1;
-                stmt.setLong(parameterIndex, entity.getPrimaryKey().asLong());
-                parameterIndex++;
-
+                parameterIndex += member.getOwnerValueAdapter().bindValue(stmt, parameterIndex, entity);
                 parameterIndex += member.getValueAdapter().bindValue(stmt, parameterIndex, value);
 
                 if (isList) {
@@ -217,7 +221,18 @@ public class TableModelCollections {
             if (isList) {
                 sql.append(", ").append(member.sqlOrderColumnName());
             }
-            sql.append(" FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
+            sql.append(" FROM ").append(member.sqlName()).append(" WHERE ");
+
+            boolean firstWhereColumn = true;
+            for (String name : member.getOwnerValueAdapter().getColumnNames(member.sqlOwnerName())) {
+                if (firstWhereColumn) {
+                    firstWhereColumn = false;
+                } else {
+                    sql.append(" AND ");
+                }
+                sql.append(name).append(" = ?");
+            }
+
             if (dialect.isMultitenant()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
@@ -225,9 +240,12 @@ public class TableModelCollections {
                 log.debug(Trace.id() + " {}", sql);
             }
             stmt = connection.prepareStatement(sql.toString(), ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
-            stmt.setLong(1, entity.getPrimaryKey().asLong());
+
+            int parameterIndex = 1;
+            parameterIndex += member.getOwnerValueAdapter().bindValue(stmt, parameterIndex, entity);
+
             if (dialect.isMultitenant()) {
-                stmt.setString(2, NamespaceManager.getNamespace());
+                stmt.setString(parameterIndex, NamespaceManager.getNamespace());
             }
             rs = stmt.executeQuery();
             while (rs.next()) {
@@ -251,6 +269,9 @@ public class TableModelCollections {
                 } else {
                     rs.deleteRow();
                     if ((value instanceof IEntity) && (member.getMemberMeta().isOwnedRelationships())) {
+                        if (EntityPersistenceServiceRDB.trace) {
+                            log.info(Trace.id() + "add cascadeRemove " + ((IEntity) value).getDebugExceptionInfoString());
+                        }
                         cascadeRemove.add((IEntity) value);
                     }
                 }
@@ -362,6 +383,7 @@ public class TableModelCollections {
             if (dialect.isMultitenant()) {
                 sql.append(" ns = ? AND ");
             }
+            //TODO use  member.getOwnerValueAdapter().
             sql.append(' ').append(member.sqlOwnerName()).append(" = IN (");
             for (int i = 0; i < entities.keySet().size(); i++) {
                 if (i != 0) {
@@ -413,6 +435,9 @@ public class TableModelCollections {
         PreparedStatement stmt = null;
         StringBuilder sql = new StringBuilder();
         try {
+            if (member.getOwnerValueAdapter() instanceof ValueAdapterEntityPolymorphic) {
+                throw new Error("TODO delete by Polymorphic Owner");
+            }
             sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
             if (dialect.isMultitenant()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
@@ -439,6 +464,7 @@ public class TableModelCollections {
         PreparedStatement stmt = null;
         StringBuilder sql = new StringBuilder();
         try {
+            //TODO delete by Polymorphic Owner
             sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
             if (dialect.isMultitenant()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");

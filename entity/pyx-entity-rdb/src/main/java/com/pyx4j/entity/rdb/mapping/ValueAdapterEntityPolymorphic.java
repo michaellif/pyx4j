@@ -39,7 +39,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
-public class ValueAdapterEntityVirtual implements ValueAdapter {
+public class ValueAdapterEntityPolymorphic implements ValueAdapter {
 
     private static String DISCRIMINATOR_COLUNM_NAME_SUFIX = "_disc";
 
@@ -49,7 +49,7 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
 
     private final Map<String, Class<? extends IEntity>> impClasses = new HashMap<String, Class<? extends IEntity>>();
 
-    protected ValueAdapterEntityVirtual(Dialect dialect, Class<? extends IEntity> entityClass) {
+    protected ValueAdapterEntityPolymorphic(Dialect dialect, Class<? extends IEntity> entityClass) {
         sqlTypeKey = dialect.getTargetSqlType(Long.class);
         sqlTypeDiscriminator = dialect.getTargetSqlType(String.class);
 

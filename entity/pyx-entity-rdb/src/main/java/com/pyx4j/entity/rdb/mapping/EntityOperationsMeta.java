@@ -286,7 +286,7 @@ public class EntityOperationsMeta {
         @SuppressWarnings("unchecked")
         Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getValueClass();
         if (entityClass.getAnnotation(Inheritance.class) != null) {
-            return new ValueAdapterEntityVirtual(dialect, entityClass);
+            return new ValueAdapterEntityPolymorphic(dialect, entityClass);
         } else {
             return new ValueAdapterEntity(dialect, entityClass);
         }
