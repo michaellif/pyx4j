@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.propertyvista.crm.rpc.services.policies.policy.ChargePolicyCrudService;
+import com.propertyvista.crm.rpc.services.policies.policy.ProductTaxPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
-import com.propertyvista.domain.policy.dto.ChargePolicyDTO;
+import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 
-public class ChargePolicyCrudServiceImpl extends GenericPolicyCrudService<ProductTaxPolicy, ChargePolicyDTO> implements ChargePolicyCrudService {
+public class ProductTaxPolicyCrudServiceImpl extends GenericPolicyCrudService<ProductTaxPolicy, ProductTaxPolicyDTO> implements ProductTaxPolicyCrudService {
 
-    public ChargePolicyCrudServiceImpl() {
-        super(ProductTaxPolicy.class, ChargePolicyDTO.class);
+    public ProductTaxPolicyCrudServiceImpl() {
+        super(ProductTaxPolicy.class, ProductTaxPolicyDTO.class);
     }
 
 }

@@ -11,25 +11,24 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.charges;
+package com.propertyvista.crm.client.ui.crud.policies.producttaxes;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.policy.dto.ChargePolicyDTO;
+import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
-public class ChargePolicyListerViewImpl extends CrmListerViewImplBase<ChargePolicyDTO> implements ChargePolicyListerView {
+public class ProductTaxPolicyListerViewImpl extends CrmListerViewImplBase<ProductTaxPolicyDTO> implements ProductTaxPolicyListerView {
 
-    public ChargePolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.EmailTemplates.class);
+    public ProductTaxPolicyListerViewImpl() {
+        super(CrmSiteMap.Settings.Policies.ProductTax.class);
         setLister(new ChargePolicyLister());
     }
 
-    private static class ChargePolicyLister extends PolicyListerBase<ChargePolicyDTO> {
+    private static class ChargePolicyLister extends PolicyListerBase<ProductTaxPolicyDTO> {
 
         public ChargePolicyLister() {
-            super(ChargePolicyDTO.class, CrmSiteMap.Settings.Policies.Charges.class);
+            super(ProductTaxPolicyDTO.class, CrmSiteMap.Settings.Policies.ProductTax.class);
         }
     }
-
 }

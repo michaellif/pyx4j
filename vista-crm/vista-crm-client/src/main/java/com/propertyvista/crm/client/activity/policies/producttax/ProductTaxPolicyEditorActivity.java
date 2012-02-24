@@ -11,22 +11,22 @@
  * @author igor
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.policies.charges;
+package com.propertyvista.crm.client.activity.policies.producttax;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.policies.charges.ChargePolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.producttaxes.ProductTaxPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
-import com.propertyvista.crm.rpc.services.policies.policy.ChargePolicyCrudService;
-import com.propertyvista.domain.policy.dto.ChargePolicyDTO;
+import com.propertyvista.crm.rpc.services.policies.policy.ProductTaxPolicyCrudService;
+import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
-public class ChargePolicyEditorActivity extends EditorActivityBase<ChargePolicyDTO> {
+public class ProductTaxPolicyEditorActivity extends EditorActivityBase<ProductTaxPolicyDTO> {
 
-    public ChargePolicyEditorActivity(Place place) {
-        super(place, PolicyViewFactory.instance(ChargePolicyEditorView.class), GWT.<ChargePolicyCrudService> create(ChargePolicyCrudService.class),
-                ChargePolicyDTO.class);
+    public ProductTaxPolicyEditorActivity(Place place) {
+        super(place, PolicyViewFactory.instance(ProductTaxPolicyEditorView.class), GWT.<ProductTaxPolicyCrudService> create(ProductTaxPolicyCrudService.class),
+                ProductTaxPolicyDTO.class);
     }
 }

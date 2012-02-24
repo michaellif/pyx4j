@@ -11,17 +11,16 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.charges;
+package com.propertyvista.crm.client.ui.crud.policies.producttaxes;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.policy.dto.ChargePolicyDTO;
+import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
-public class ChargePolicyEditorViewImpl extends CrmEditorViewImplBase<ChargePolicyDTO> implements ChargePolicyEditorView {
+public class ProductTaxPolicyViewerViewImpl extends CrmViewerViewImplBase<ProductTaxPolicyDTO> implements ProductTaxPolicyViewerView {
 
-    public ChargePolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.Charges.class);
-        setForm(new ChargePolicyEditorForm());
+    public ProductTaxPolicyViewerViewImpl() {
+        super(CrmSiteMap.Settings.Policies.ProductTax.class);
+        setForm(new ProductTaxPolicyEditorForm(true));
     }
-
 }

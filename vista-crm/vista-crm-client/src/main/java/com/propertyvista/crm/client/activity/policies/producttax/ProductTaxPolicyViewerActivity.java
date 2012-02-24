@@ -11,23 +11,21 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.policies.charges;
+package com.propertyvista.crm.client.activity.policies.producttax;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-
-import com.propertyvista.crm.client.ui.crud.policies.charges.ChargePolicyListerView;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.ui.crud.policies.producttaxes.ProductTaxPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
-import com.propertyvista.crm.rpc.services.policies.policy.ChargePolicyCrudService;
-import com.propertyvista.domain.policy.dto.ChargePolicyDTO;
+import com.propertyvista.crm.rpc.services.policies.policy.ProductTaxPolicyCrudService;
+import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
-public class ChargePolicyListerActivity extends ListerActivityBase<ChargePolicyDTO> {
+public class ProductTaxPolicyViewerActivity extends CrmViewerActivity<ProductTaxPolicyDTO> {
 
-    public ChargePolicyListerActivity(Place place) {
-        super(place, PolicyViewFactory.instance(ChargePolicyListerView.class), GWT.<ChargePolicyCrudService> create(ChargePolicyCrudService.class),
-                ChargePolicyDTO.class);
+    public ProductTaxPolicyViewerActivity(Place place) {
+        super(place, PolicyViewFactory.instance(ProductTaxPolicyViewerView.class), GWT.<ProductTaxPolicyCrudService> create(ProductTaxPolicyCrudService.class));
     }
 
 }

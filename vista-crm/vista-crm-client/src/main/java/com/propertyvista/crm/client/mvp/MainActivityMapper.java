@@ -135,9 +135,6 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.charges.ChargePolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.charges.ChargePolicyListerActivity;
-import com.propertyvista.crm.client.activity.policies.charges.ChargePolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyViewerActivity;
@@ -150,6 +147,9 @@ import com.propertyvista.crm.client.activity.policies.misc.MiscPolicyViewerActiv
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
 import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
@@ -787,16 +787,16 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new MiscPolicyViewerActivity(place);
                         break;
                     }
-                } else if (place instanceof CrmSiteMap.Settings.Policies.Charges) {
+                } else if (place instanceof CrmSiteMap.Settings.Policies.ProductTax) {
                     switch (((CrudAppPlace) place).getType()) {
                     case lister:
-                        activity = new ChargePolicyListerActivity(place);
+                        activity = new ProductTaxPolicyListerActivity(place);
                         break;
                     case editor:
-                        activity = new ChargePolicyEditorActivity(place);
+                        activity = new ProductTaxPolicyEditorActivity(place);
                         break;
                     case viewer:
-                        activity = new ChargePolicyViewerActivity(place);
+                        activity = new ProductTaxPolicyViewerActivity(place);
                         break;
                     }
                 }

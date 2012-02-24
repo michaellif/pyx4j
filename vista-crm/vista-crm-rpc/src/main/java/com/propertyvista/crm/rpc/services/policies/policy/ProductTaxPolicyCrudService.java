@@ -7,18 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 4, 2012
- * @author igor
+ * Created on Jan 30, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.dto;
+package com.propertyvista.crm.rpc.services.policies.policy;
 
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.policy.framework.PolicyDTOBase;
-import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
+import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
-@Transient
-public interface ChargePolicyDTO extends PolicyDTOBase, ProductTaxPolicy {
+public interface ProductTaxPolicyCrudService extends AbstractCrudService<ProductTaxPolicyDTO> {
 
 }

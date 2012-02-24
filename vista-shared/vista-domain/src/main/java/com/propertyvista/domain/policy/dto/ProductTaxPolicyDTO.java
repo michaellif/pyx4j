@@ -7,16 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 30, 2012
- * @author ArtyomB
+ * Created on Feb 4, 2012
+ * @author igor
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.charges;
+package com.propertyvista.domain.policy.dto;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.policy.dto.ChargePolicyDTO;
+import com.propertyvista.domain.policy.framework.PolicyDTOBase;
+import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 
-public interface ChargePolicyListerView extends IListerView<ChargePolicyDTO> {
+@Transient
+public interface ProductTaxPolicyDTO extends PolicyDTOBase, ProductTaxPolicy {
 
 }

@@ -11,12 +11,12 @@
  * @author igor
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.charges;
+package com.propertyvista.crm.client.ui.crud.policies.producttaxes;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.domain.policy.dto.ChargePolicyDTO;
+import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
-public interface ChargePolicyEditorView extends IEditorView<ChargePolicyDTO> {
+public interface ProductTaxPolicyEditorView extends IEditorView<ProductTaxPolicyDTO> {
 
 }

@@ -54,10 +54,10 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
         NavigFolder folder = new NavigFolder(i18n.tr("Settings"));
         folder.addNavigItem(new CrmSiteMap.Settings.UserRole());
-        folder.addNavigItem(new CrmSiteMap.Settings.ProductDictionary());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Financial"));
+        folder.addNavigItem(new CrmSiteMap.Settings.ProductDictionary());
         folder.addNavigItem(new CrmSiteMap.Settings.Tax());
         folder.addNavigItem(new CrmSiteMap.Settings.GlCode());
         folder.addNavigItem(new CrmSiteMap.Settings.ChargeCode());
@@ -74,12 +74,13 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
     public NavigFolder createPoliciesFolder() {
         NavigFolder folder = new NavigFolder(i18n.tr("Policies"));
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTerms());
-//        folder.addNavigItem(new CrmSiteMap.Settings.Policies.PetPolicy());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.ApplicationDocumentation());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.EmailTemplates());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.Charges());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTerms());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.ProductTax());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.AdjustmentTax());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.Misc());
+//      folder.addNavigItem(new CrmSiteMap.Settings.Policies.PetPolicy());
         return folder;
     }
 }
