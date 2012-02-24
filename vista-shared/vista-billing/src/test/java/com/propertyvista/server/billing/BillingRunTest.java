@@ -22,6 +22,8 @@ package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
 
+import org.junit.Ignore;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -41,6 +43,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.billing.preload.LeaseDataModel;
 
+@Ignore
 public class BillingRunTest extends BillingTestBase {
 
     @Override
