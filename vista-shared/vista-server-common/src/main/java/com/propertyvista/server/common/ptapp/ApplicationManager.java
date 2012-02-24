@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -143,7 +144,16 @@ public class ApplicationManager {
     }
 
     public static void sendMasterApplicationEmail(MasterApplication ma) {
-        sendInvitationEmail(ma.applications().iterator().next().user(), EmailTemplateType.ApplicationCreatedApplicant);
+        if (ma.lease().tenants().getAttachLevel() != AttachLevel.Attached) {
+            Persistence.service().retrieve(ma.lease().tenants());
+        }
+        for (TenantInLease tenantInLease : ma.lease().tenants()) {
+            if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
+                Persistence.service().retrieve(tenantInLease.tenant().user());
+                sendInvitationEmail(tenantInLease.tenant().user(), EmailTemplateType.ApplicationCreatedApplicant);
+                break;
+            }
+        }
     }
 
     public static void makeApplicationCompleted(Application application) {
