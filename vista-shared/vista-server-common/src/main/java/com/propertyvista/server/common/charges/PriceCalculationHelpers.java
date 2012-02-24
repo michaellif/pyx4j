@@ -50,27 +50,11 @@ public class PriceCalculationHelpers {
 
                 switch (adjustment.adjustmentType().getValue()) {
                 case monetary:
-                    switch (adjustment.chargeType().getValue()) {
-                    case discount:
-                        adjustedPrice = adjustedPrice.subtract(adjustment.value().getValue());
-                        break;
-                    case priceCorrection:
-                        adjustedPrice = adjustedPrice.add(adjustment.value().getValue());
-                        break;
-                    }
+                    adjustedPrice = adjustedPrice.add(adjustment.value().getValue());
                     break;
 
                 case percentage:
-                    switch (adjustment.chargeType().getValue()) {
-                    //TODO we need sign with the amount - ChargeType is pure description
-                    case negotiation:
-                    case discount:
-                        adjustedPrice = adjustedPrice.multiply(new BigDecimal(1).subtract(adjustment.value().getValue()).divide(new BigDecimal(100)));
-                        break;
-                    case priceCorrection:
-                        adjustedPrice = adjustedPrice.multiply(new BigDecimal(1).add(adjustment.value().getValue()).divide(new BigDecimal(100)));
-                        break;
-                    }
+                    adjustedPrice = adjustedPrice.multiply(new BigDecimal(1).add(adjustment.value().getValue()).divide(new BigDecimal(100)));
                     break;
                 }
             }
