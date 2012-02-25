@@ -211,36 +211,40 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append(getObjectClass().getName()).append(" ");
-        VALUE_TYPE value = getValue();
-        if (value != null) {
-            Set<Map<String, Object>> processed = new IdentityHashSet<Map<String, Object>>();
-            b.append("[ size=");
-            b.append(((Collection<?>) value).size());
-            b.append(' ');
-            boolean first = true;
-            for (Object o : (Collection<?>) value) {
-                if (first) {
-                    first = false;
-                } else {
-                    b.append(", ");
-                }
-                if (o instanceof Map<?, ?>) {
-                    b.append('{');
-                    if (ToStringStyle.fieldMultiLine) {
-                        b.append('\n');
-                    }
-                    EntityValueMap.dumpMap(b, (Map<String, Object>) o, processed, ToStringStyle.PADDING + ToStringStyle.PADDING);
-                    if (ToStringStyle.fieldMultiLine) {
-                        b.append(ToStringStyle.PADDING);
-                    }
-                    b.append('}');
-                } else {
-                    b.append(o);
-                }
-            }
-            b.append(']');
+        if (getAttachLevel() == AttachLevel.Detached) {
+            b.append("{Detached}");
         } else {
-            b.append("{null}");
+            VALUE_TYPE value = getValue();
+            if (value != null) {
+                Set<Map<String, Object>> processed = new IdentityHashSet<Map<String, Object>>();
+                b.append("[ size=");
+                b.append(((Collection<?>) value).size());
+                b.append(' ');
+                boolean first = true;
+                for (Object o : (Collection<?>) value) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        b.append(", ");
+                    }
+                    if (o instanceof Map<?, ?>) {
+                        b.append('{');
+                        if (ToStringStyle.fieldMultiLine) {
+                            b.append('\n');
+                        }
+                        EntityValueMap.dumpMap(b, (Map<String, Object>) o, processed, ToStringStyle.PADDING + ToStringStyle.PADDING);
+                        if (ToStringStyle.fieldMultiLine) {
+                            b.append(ToStringStyle.PADDING);
+                        }
+                        b.append('}');
+                    } else {
+                        b.append(o);
+                    }
+                }
+                b.append(']');
+            } else {
+                b.append("{null}");
+            }
         }
         return b.toString();
     }
@@ -249,25 +253,29 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
     @Override
     public String toStringIds() {
         StringBuilder b = new StringBuilder();
-        VALUE_TYPE value = getValue();
-        if (value != null) {
-            b.append("[");
-            boolean first = true;
-            for (Object o : (Collection<?>) value) {
-                if (first) {
-                    first = false;
-                } else {
-                    b.append(", ");
-                }
-                if (o instanceof Map<?, ?>) {
-                    b.append(((Map<String, Object>) o).get(IEntity.PRIMARY_KEY));
-                } else {
-                    b.append(o);
-                }
-            }
-            b.append(']');
+        if (getAttachLevel() == AttachLevel.Detached) {
+            b.append("{Detached}");
         } else {
-            b.append("{null}");
+            VALUE_TYPE value = getValue();
+            if (value != null) {
+                b.append("[");
+                boolean first = true;
+                for (Object o : (Collection<?>) value) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        b.append(", ");
+                    }
+                    if (o instanceof Map<?, ?>) {
+                        b.append(((Map<String, Object>) o).get(IEntity.PRIMARY_KEY));
+                    } else {
+                        b.append(o);
+                    }
+                }
+                b.append(']');
+            } else {
+                b.append("{null}");
+            }
         }
         return b.toString();
     }
