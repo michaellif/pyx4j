@@ -14,11 +14,15 @@
 package com.propertyvista.domain.financial;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
@@ -38,6 +42,11 @@ public interface BillingAccount extends IEntity {
      * Set to null when last period bill has been approved or rejected.
      */
     BillingRun currentBillingRun();
+
+    @Owned
+    @Detached
+    @OrderBy(Bill.BillSequenceNumber.class)
+    IList<Bill> bills();
 
     IPrimitive<Integer> billingPeriodCounter();
 

@@ -15,9 +15,13 @@ package com.propertyvista.domain.financial.billing;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -50,17 +54,22 @@ public interface Bill extends IEntity {
         }
     };
 
-    IPrimitive<BillStatus> billStatus();
+    @Owner
+    @JoinColumn
+    BillingAccount billingAccount();
 
+    interface BillSequenceNumber extends ColumnId {
+    }
+
+    @OrderColumn(BillSequenceNumber.class)
     IPrimitive<Integer> billSequenceNumber();
+
+    IPrimitive<BillStatus> billStatus();
 
     @Deprecated
     IPrimitive<Integer> billingPeriodNumber();
 
     IPrimitive<String> rejectReason();
-
-    @ReadOnly
-    BillingAccount billingAccount();
 
     @ReadOnly
     BillingRun billingRun();

@@ -60,7 +60,8 @@ public class LeaseDataModel {
         lease.leaseFrom().setValue(new LogicalDate(calendar.getTime()));
         lease.approvalDate().setValue(lease.leaseFrom().getValue());
 
-        calendar.add(Calendar.MONTH, 1);
+        calendar.add(Calendar.MONTH, 6);
+        calendar.add(Calendar.DATE, -1);
         lease.leaseTo().setValue(new LogicalDate(calendar.getTime()));
 
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
