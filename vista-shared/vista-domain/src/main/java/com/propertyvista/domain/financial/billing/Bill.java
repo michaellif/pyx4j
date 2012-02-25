@@ -54,6 +54,7 @@ public interface Bill extends IEntity {
 
     IPrimitive<Integer> billSequenceNumber();
 
+    @Deprecated
     IPrimitive<Integer> billingPeriodNumber();
 
     IPrimitive<String> rejectReason();

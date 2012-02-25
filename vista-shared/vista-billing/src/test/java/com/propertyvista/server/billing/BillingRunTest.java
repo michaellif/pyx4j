@@ -22,11 +22,8 @@ package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.dev.DataDump;
 
 import com.propertyvista.domain.financial.billing.Bill;
@@ -41,18 +38,17 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentTy
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ChargeType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.billing.preload.LeaseDataModel;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
-@Ignore
 public class BillingRunTest extends BillingTestBase {
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        createAgreement(leaseDataModel);
+        createAgreement();
     }
 
-    private void createAgreement(LeaseDataModel leaseDataModel) {
+    private void createAgreement() {
         Lease lease = leaseDataModel.getLease();
         ProductItem serviceItem = leaseDataModel.getServiceItem();
 
@@ -132,6 +128,7 @@ public class BillingRunTest extends BillingTestBase {
         //==================== RUN 1 ======================//
 
         Bill bill = runBilling(1, true);
+
         assertEquals("Number of charges", 4, bill.charges().size());
         assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
@@ -231,8 +228,7 @@ public class BillingRunTest extends BillingTestBase {
     }
 
     private Bill runBilling(int billNumber, boolean confirm) {
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        Lease lease = Persistence.service().query(criteria).get(0);
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
         BillingFacade.runBilling(lease);
 
         Bill bill = BillingFacade.getBill(lease.leaseFinancial().billingAccount(), lease.leaseFinancial().billingAccount().currentBillingRun());
@@ -248,6 +244,9 @@ public class BillingRunTest extends BillingTestBase {
 
         DataDump.dump("bill", bill);
         DataDump.dump("lease", lease);
+
+        assertEquals("Billing Cycle Period Start Day", 10, (int) bill.billingRun().billingCycle().billingPeriodStartDay().getValue());
+        assertEquals("Billing Cycle Period Start Day", PaymentFrequency.Monthly, bill.billingRun().billingCycle().paymentFrequency().getValue());
 
         assertEquals("Bill Sequence Number", billNumber, (int) bill.billSequenceNumber().getValue());
         assertEquals("Bill Confirmation Status", confirm ? BillStatus.Confirmed : BillStatus.Rejected, bill.billStatus().getValue());

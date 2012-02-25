@@ -57,7 +57,11 @@ public interface Lease extends IEntity {
 
         Active,
 
-        Completed;
+        Completed, // Lease end date is passed
+
+        Finalised, // Final bill is issued
+
+        Closed; // All the transactions completed and lease closed
 
         @Override
         public String toString() {
@@ -99,15 +103,20 @@ public interface Lease extends IEntity {
         }
     }
 
-    @I18n(context = "Lease Period")
-    @XmlType(name = "LeasePeriod")
-    public enum Period {
+    @I18n(context = "Payment Frequency")
+    @XmlType(name = "PaymentFrequency")
+    public enum PaymentFrequency {
+        Monthly(28), Weekly(7), SemiMonthly(14), BiWeekly(14), SemiAnnyally(182), Annually(365);
 
-        Annual,
+        private final int numOfCycles;
 
-        Monthly,
+        PaymentFrequency(int numOfCycles) {
+            this.numOfCycles = numOfCycles;
+        }
 
-        BiWeekly;
+        public int getNumOfCycles() {
+            return numOfCycles;
+        }
 
         @Override
         public String toString() {
@@ -140,8 +149,7 @@ public interface Lease extends IEntity {
     @OrderBy(TenantInLease.OrderInLeaseId.class)
     IList<TenantInLease> tenants();
 
-    // Duration by:
-    IPrimitive<Period> leasePeriod();
+    IPrimitive<PaymentFrequency> paymentFrequency();
 
     IPrimitive<Integer> numberOfPeriods();
 

@@ -25,11 +25,11 @@ public class BillingFacade {
     }
 
     public static Bill getLatestBill(BillingAccount billingAccount) {
-        return BillingUtils.getLatestBill(billingAccount);
+        return BillingLifecycle.getLatestBill(billingAccount);
     }
 
     public static Bill getBill(BillingAccount billingAccount, BillingRun billingRun) {
-        return BillingUtils.getBill(billingAccount, billingRun);
+        return BillingLifecycle.getBill(billingAccount, billingRun);
     }
 
     public static void confirmBill(Bill bill) {

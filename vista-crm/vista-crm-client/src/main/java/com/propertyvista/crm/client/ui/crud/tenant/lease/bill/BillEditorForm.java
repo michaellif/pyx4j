@@ -44,8 +44,8 @@ public class BillEditorForm extends CrmEntityForm<Bill> {
         int row2 = row;
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionDate()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingPeriod()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingDay()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingCycle().paymentFrequency()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingPeriodStartDay()), 5).build());
 
         main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billStatus()), 10).build());
         main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 15).build());

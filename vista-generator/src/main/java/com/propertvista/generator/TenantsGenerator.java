@@ -41,6 +41,7 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class TenantsGenerator {
 
@@ -85,6 +86,7 @@ public class TenantsGenerator {
         summary.lease().status().setValue(Lease.Status.Active);
         summary.lease().unit().set(selectedUnit);
         summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2010, 2011));
+        summary.lease().paymentFrequency().setValue(PaymentFrequency.Monthly);
         summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2014));
         summary.lease().expectedMoveIn().setValue(summary.lease().leaseFrom().getValue());
         summary.lease().actualMoveIn().setValue(summary.lease().expectedMoveIn().getValue());

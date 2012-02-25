@@ -19,14 +19,14 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.billing.BillingCycle.BillingFrequency;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 @Transient
 public interface StartBuildingBillingDTO extends IEntity {
 
     IPrimitive<Key> buildingId();
 
-    IPrimitive<BillingFrequency> billingPeriod();
+    IPrimitive<PaymentFrequency> paymentFrequency();
 
     IPrimitive<Integer> billingDay();
 

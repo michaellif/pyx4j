@@ -16,18 +16,18 @@ package com.propertyvista.domain.financial.billing;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+
 /**
  * Defines bill day and billing period, for now created by request
  * 
  */
 public interface BillingCycle extends IEntity {
 
-    public enum BillingFrequency {
-        monthly, weekly, semiMonthly, biWeekly, semiAnnyally, annyally
-    }
+    IPrimitive<PaymentFrequency> paymentFrequency();
 
-    IPrimitive<BillingFrequency> billingPeriod();
+    IPrimitive<Integer> billingPeriodStartDay();
 
-    IPrimitive<Integer> billingDay();
+    IPrimitive<Integer> billingRunTargetDay();
 
 }

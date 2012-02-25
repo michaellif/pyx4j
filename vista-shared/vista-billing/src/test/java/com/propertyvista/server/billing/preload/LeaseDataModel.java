@@ -13,8 +13,7 @@
  */
 package com.propertyvista.server.billing.preload;
 
-import com.propertvista.generator.util.RandomUtil;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -22,6 +21,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class LeaseDataModel {
 
@@ -46,9 +46,11 @@ public class LeaseDataModel {
         lease = EntityFactory.create(Lease.class);
 
         lease.unit().set(serviceItem.element());
-        lease.leaseFrom().setValue(RandomUtil.randomLogicalDate(2001, 2011));
+        lease.leaseFrom().setValue(new LogicalDate(112, 1, 10));
         lease.approvalDate().setValue(lease.leaseFrom().getValue());
-        lease.leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2014));
+        lease.leaseTo().setValue(new LogicalDate(113, 1, 9));
+
+        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         addTenants();
 

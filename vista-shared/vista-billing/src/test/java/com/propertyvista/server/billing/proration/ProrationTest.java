@@ -14,6 +14,8 @@
 package com.propertyvista.server.billing.proration;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import junit.framework.TestCase;
 
@@ -23,19 +25,21 @@ import com.propertyvista.server.billing.proration.ProrationUtils.Method;
 
 public class ProrationTest extends TestCase {
 
-    public void testProration() {
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
 
-        assertEquals("Prorate 23/02/2012", new BigDecimal("0.24138"), ProrationUtils.prorate(new LogicalDate(112, 1, 23), Method.Actual));
-        assertEquals("Prorate 23/03/2012", new BigDecimal("0.29032"), ProrationUtils.prorate(new LogicalDate(112, 2, 23), Method.Actual));
-        assertEquals("Prorate 23/04/2012", new BigDecimal("0.26667"), ProrationUtils.prorate(new LogicalDate(112, 3, 23), Method.Actual));
+    public void testProration() throws ParseException {
 
-        assertEquals("Prorate 23/02/2012", new BigDecimal("0.24138"), ProrationUtils.prorate(new LogicalDate(112, 1, 23), Method.Standard));
-        assertEquals("Prorate 23/03/2012", new BigDecimal("0.30000"), ProrationUtils.prorate(new LogicalDate(112, 2, 23), Method.Standard));
-        assertEquals("Prorate 23/04/2012", new BigDecimal("0.26667"), ProrationUtils.prorate(new LogicalDate(112, 3, 23), Method.Standard));
+        assertEquals("Prorate 23/02/2012", new BigDecimal("0.24138"), ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Feb-2012")), Method.Actual));
+        assertEquals("Prorate 23/03/2012", new BigDecimal("0.29032"), ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Mar-2012")), Method.Actual));
+        assertEquals("Prorate 23/04/2012", new BigDecimal("0.26667"), ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Apr-2012")), Method.Actual));
 
-        assertEquals("Prorate 23/02/2012", new BigDecimal("0.23014"), ProrationUtils.prorate(new LogicalDate(112, 1, 23), Method.Annual));
-        assertEquals("Prorate 23/03/2012", new BigDecimal("0.29589"), ProrationUtils.prorate(new LogicalDate(112, 2, 23), Method.Annual));
-        assertEquals("Prorate 23/04/2012", new BigDecimal("0.26301"), ProrationUtils.prorate(new LogicalDate(112, 3, 23), Method.Annual));
+        assertEquals("Prorate 23/02/2012", new BigDecimal("0.24138"), ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Feb-2012")), Method.Standard));
+        assertEquals("Prorate 23/03/2012", new BigDecimal("0.30000"), ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Mar-2012")), Method.Standard));
+        assertEquals("Prorate 23/04/2012", new BigDecimal("0.26667"), ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Apr-2012")), Method.Standard));
+
+        assertEquals("Prorate 23/02/2012", new BigDecimal("0.23014"), ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Feb-2012")), Method.Annual));
+        assertEquals("Prorate 23/03/2012", new BigDecimal("0.29589"), ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Mar-2012")), Method.Annual));
+        assertEquals("Prorate 23/04/2012", new BigDecimal("0.26301"), ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Apr-2012")), Method.Annual));
 
     }
 }

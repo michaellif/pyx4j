@@ -51,6 +51,9 @@ public interface BillingRun extends IEntity {
     IPrimitive<LogicalDate> billingPeriodStartDate();
 
     @ReadOnly
+    IPrimitive<LogicalDate> billingPeriodEndDate();
+
+    @ReadOnly
     Building building();
 
     IPrimitive<BillingRunStatus> status();
