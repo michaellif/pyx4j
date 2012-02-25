@@ -48,9 +48,9 @@ public class TableMetadata {
 
     private final Map<String, ColumnMetadata> columnsMetadata = new HashMap<String, ColumnMetadata>();
 
-    private final List<String> foreignKeys = new ArrayList<String>();
+    private List<String> foreignKeys;
 
-    private final Map<String, String> foreignKeysReference = new HashMap<String, String>();
+    private Map<String, String> foreignKeysReference;
 
     public static TableMetadata getTableMetadata(Connection connection, String name) throws SQLException {
         ResultSet rs = null;
@@ -61,6 +61,21 @@ public class TableMetadata {
                 return new TableMetadata(rs, dbMeta);
             } else {
                 return null;
+            }
+        } finally {
+            SQLUtils.closeQuietly(rs);
+        }
+    }
+
+    public static boolean isTableExists(Connection connection, String name) throws SQLException {
+        ResultSet rs = null;
+        try {
+            DatabaseMetaData dbMeta = connection.getMetaData();
+            rs = dbMeta.getTables(null, null, name, null);
+            if (rs.next()) {
+                return true;
+            } else {
+                return false;
             }
         } finally {
             SQLUtils.closeQuietly(rs);
@@ -85,9 +100,15 @@ public class TableMetadata {
 
         log.debug("table {} @ {} ", name, schema);
         log.debug("columns {} " + columnsMetadata);
+    }
+
+    void readForeignKeys(Connection connection) throws SQLException {
+        foreignKeys = new ArrayList<String>();
+        foreignKeysReference = new HashMap<String, String>();
 
         // read Foreign Keys on this table
         ResultSet krs = null;
+        DatabaseMetaData dbMeta = connection.getMetaData();
         try {
             krs = dbMeta.getImportedKeys(catalog, schema, name);
             while (krs.next()) {

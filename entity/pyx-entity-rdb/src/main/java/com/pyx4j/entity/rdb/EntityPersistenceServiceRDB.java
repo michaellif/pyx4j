@@ -134,9 +134,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     public boolean isTableExists(Class<? extends IEntity> entityClass) {
-        TableModel tm = new TableModel(connectionProvider.getDialect(), mappings, EntityFactory.getEntityMeta(entityClass));
         try {
-            return tm.isTableExists(connectionProvider);
+            return TableModel.isTableExists(connectionProvider, EntityFactory.getEntityMeta(entityClass));
         } catch (SQLException e) {
             log.error("table exists error", e);
             throw new RuntimeExceptionSerializable(e);
