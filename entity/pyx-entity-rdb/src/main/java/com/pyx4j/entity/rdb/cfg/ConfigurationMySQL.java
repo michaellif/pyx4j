@@ -110,7 +110,7 @@ public abstract class ConfigurationMySQL implements Configuration {
 
     @Override
     public int unreturnedConnectionTimeout() {
-        return 60;
+        return 300;
     }
 
     @Override
