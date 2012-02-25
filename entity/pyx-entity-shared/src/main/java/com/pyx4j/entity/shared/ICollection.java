@@ -36,4 +36,5 @@ public interface ICollection<TYPE extends IEntity, VALUE_TYPE> extends IObject<V
      */
     public TYPE $();
 
+    public String toStringIds();
 }

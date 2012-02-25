@@ -244,4 +244,31 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         }
         return b.toString();
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public String toStringIds() {
+        StringBuilder b = new StringBuilder();
+        VALUE_TYPE value = getValue();
+        if (value != null) {
+            b.append("[");
+            boolean first = true;
+            for (Object o : (Collection<?>) value) {
+                if (first) {
+                    first = false;
+                } else {
+                    b.append(", ");
+                }
+                if (o instanceof Map<?, ?>) {
+                    b.append(((Map<String, Object>) o).get(IEntity.PRIMARY_KEY));
+                } else {
+                    b.append(o);
+                }
+            }
+            b.append(']');
+        } else {
+            b.append("{null}");
+        }
+        return b.toString();
+    }
 }
