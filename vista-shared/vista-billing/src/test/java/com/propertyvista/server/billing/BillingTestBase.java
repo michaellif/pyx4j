@@ -20,6 +20,11 @@
  */
 package com.propertyvista.server.billing;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import com.pyx4j.commons.LogicalDate;
+
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.server.billing.preload.BuildingDataModel;
 import com.propertyvista.server.billing.preload.LeaseDataModel;
@@ -33,9 +38,18 @@ public class BillingTestBase extends VistaDBTestBase {
 
     LeaseDataModel leaseDataModel;
 
+    LogicalDate leaseDateFrom;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+
+        //For current tests it should be 6 month and 6 days ago so 6 normal and one final bill will run
+        Calendar calendar = new GregorianCalendar();
+        calendar.add(Calendar.MONTH, -6);
+        calendar.add(Calendar.DATE, -6);
+
+        leaseDateFrom = new LogicalDate(calendar.getTime());
 
         LocationsDataModel locationsDataModel = new LocationsDataModel();
         locationsDataModel.generate(true);
@@ -56,6 +70,7 @@ public class BillingTestBase extends VistaDBTestBase {
         tenantDataModel.generate(true);
 
         leaseDataModel = new LeaseDataModel(buildingDataModel, tenantDataModel);
+        leaseDataModel.setLeaseDateFrom(leaseDateFrom);
         leaseDataModel.generate(true);
 
     }

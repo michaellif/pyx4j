@@ -127,7 +127,6 @@ public class BillingLifecycle {
         } else {
             return billingAccount.leaseFinancial().lease().leaseFrom().getValue();
         }
-
     }
 
     /*

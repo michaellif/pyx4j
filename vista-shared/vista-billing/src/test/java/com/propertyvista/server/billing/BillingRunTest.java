@@ -42,6 +42,8 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class BillingRunTest extends BillingTestBase {
 
+    private String billingCycleId;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -245,9 +247,19 @@ public class BillingRunTest extends BillingTestBase {
         DataDump.dump("bill", bill);
         DataDump.dump("lease", lease);
 
-        assertEquals("Billing Cycle Period Start Day", 10, (int) bill.billingRun().billingCycle().billingPeriodStartDay().getValue());
-        assertEquals("Billing Cycle Period Start Day", PaymentFrequency.Monthly, bill.billingRun().billingCycle().paymentFrequency().getValue());
+        int billingPeriodStartDay = bill.billingRun().billingCycle().billingPeriodStartDay().getValue();
+        if (billingPeriodStartDay <= 28) {
+            assertEquals("Billing Cycle Period Start Day", leaseDateFrom.getDate(), billingPeriodStartDay);
+        } else {
+            assertEquals("Billing Cycle Period Start Day", 1, billingPeriodStartDay);
+        }
+        assertEquals("Billing Cycle Payment Frequency", PaymentFrequency.Monthly, bill.billingRun().billingCycle().paymentFrequency().getValue());
 
+        if (billingCycleId == null) {
+            billingCycleId = bill.billingRun().billingCycle().id().getValue().toString();
+        } else {
+            assertEquals("Billing Cycle Id", billingCycleId, bill.billingRun().billingCycle().id().getValue().toString());
+        }
         assertEquals("Bill Sequence Number", billNumber, (int) bill.billSequenceNumber().getValue());
         assertEquals("Bill Confirmation Status", confirm ? BillStatus.Confirmed : BillStatus.Rejected, bill.billStatus().getValue());
 

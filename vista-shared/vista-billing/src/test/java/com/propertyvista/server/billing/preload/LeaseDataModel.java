@@ -13,6 +13,9 @@
  */
 package com.propertyvista.server.billing.preload;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -33,10 +36,16 @@ public class LeaseDataModel {
 
     private final BuildingDataModel buildingDataModel;
 
+    private LogicalDate leaseDateFrom = new LogicalDate();
+
     public LeaseDataModel(BuildingDataModel buildingDataModel, TenantDataModel tenantDataModel) {
         this.buildingDataModel = buildingDataModel;
         this.tenantDataModel = tenantDataModel;
 
+    }
+
+    public void setLeaseDateFrom(LogicalDate leaseDateFrom) {
+        this.leaseDateFrom = leaseDateFrom;
     }
 
     public void generate(boolean persist) {
@@ -46,9 +55,13 @@ public class LeaseDataModel {
         lease = EntityFactory.create(Lease.class);
 
         lease.unit().set(serviceItem.element());
-        lease.leaseFrom().setValue(new LogicalDate(112, 1, 10));
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(leaseDateFrom);
+        lease.leaseFrom().setValue(new LogicalDate(calendar.getTime()));
         lease.approvalDate().setValue(lease.leaseFrom().getValue());
-        lease.leaseTo().setValue(new LogicalDate(113, 1, 9));
+
+        calendar.add(Calendar.MONTH, 1);
+        lease.leaseTo().setValue(new LogicalDate(calendar.getTime()));
 
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
