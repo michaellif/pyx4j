@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.server.billing.proration;
+package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -21,7 +21,8 @@ import junit.framework.TestCase;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.server.billing.proration.ProrationUtils.Method;
+import com.propertyvista.server.billing.ProrationUtils;
+import com.propertyvista.server.billing.ProrationUtils.Method;
 
 public class ProrationTest extends TestCase {
 

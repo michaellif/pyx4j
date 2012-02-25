@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.server.billing.proration;
+package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
