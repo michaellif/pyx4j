@@ -159,6 +159,8 @@ public class RDBUtils implements Closeable {
     }
 
     public static void initAllEntityTables() {
+        int countTotal = 0;
+        long start = System.currentTimeMillis();
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         for (String className : allClasses) {
@@ -171,7 +173,9 @@ public class RDBUtils implements Closeable {
                 continue;
             }
             srv.count(EntityQueryCriteria.create(entityClass));
+            countTotal++;
         }
+        log.info("Total of {} tables created in {}", countTotal, TimeUtils.secSince(start));
     }
 
     public static void deleteFromAllEntityTables() {
