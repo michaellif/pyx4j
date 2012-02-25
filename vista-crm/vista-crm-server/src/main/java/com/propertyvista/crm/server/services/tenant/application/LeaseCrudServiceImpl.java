@@ -37,7 +37,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
@@ -215,7 +215,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
         Lease lease = Persistence.secureRetrieve(dboClass, entityId);
-        lease.status().setValue(Status.OnNotice);
+        lease.completion().setValue(CompletionType.Notice);
         lease.moveOutNotice().setValue(date);
         lease.expectedMoveOut().setValue(moveOut);
         Persistence.secureSave(lease);
@@ -225,7 +225,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.secureRetrieve(dboClass, entityId);
-        lease.status().setValue(Status.Active);
+        lease.completion().setValue(CompletionType.None);
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);
@@ -235,7 +235,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
         Lease lease = Persistence.secureRetrieve(dboClass, entityId);
-        lease.status().setValue(Status.Broken);
+        lease.completion().setValue(CompletionType.Eviction);
         lease.moveOutNotice().setValue(date);
         lease.expectedMoveOut().setValue(moveOut);
         Persistence.secureSave(lease);
@@ -245,7 +245,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.secureRetrieve(dboClass, entityId);
-        lease.status().setValue(Status.Active);
+        lease.completion().setValue(CompletionType.None);
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);

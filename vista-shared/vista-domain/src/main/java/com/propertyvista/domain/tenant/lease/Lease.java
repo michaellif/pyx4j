@@ -57,15 +57,25 @@ public interface Lease extends IEntity {
 
         Active,
 
-        Completed,
+        Completed;
 
-        OnNotice,
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
 
-        Broken,
+    @I18n(context = "Lease Completion Type")
+    @XmlType(name = "LeaseCompletionType")
+    public enum CompletionType {
 
-        Renewed,
+        Notice,
 
-        Transferred;
+        Termination,
+
+        Eviction,
+
+        None;
 
         @Override
         public String toString() {
@@ -77,11 +87,11 @@ public interface Lease extends IEntity {
     @XmlType(name = "LeaseTerm")
     public enum Term {
 
-        fixed,
+        Fixed,
 
-        periodic,
+        Periodic,
 
-        indefinite;
+        Indefinite;
 
         @Override
         public String toString() {
@@ -93,11 +103,11 @@ public interface Lease extends IEntity {
     @XmlType(name = "LeasePeriod")
     public enum Period {
 
-        annual,
+        Annual,
 
-        monthly,
-        
-        biWeekly;
+        Monthly,
+
+        BiWeekly;
 
         @Override
         public String toString() {
@@ -110,6 +120,10 @@ public interface Lease extends IEntity {
     IPrimitive<String> leaseID();
 
     IPrimitive<Status> status();
+
+    IPrimitive<CompletionType> completion();
+
+    IPrimitive<Boolean> transferred();
 
     @NotNull
     @MemberColumn(name = "leaseType")

@@ -92,15 +92,36 @@ public class TenantsGenerator {
         summary.lease().createDate().setValue(RandomUtil.randomLogicalDate(2010, 2010));
 
         if (RandomUtil.randomBoolean()) {
-            LogicalDate date = new LogicalDate(summary.lease().leaseTo().getValue());
-            date.setTime(date.getTime() - 31 * 24 * 60 * 60 * 1000L);
-            summary.lease().moveOutNotice().setValue(date);
+            if (RandomUtil.randomBoolean()) {
+                LogicalDate date = new LogicalDate(summary.lease().leaseTo().getValue());
+                date.setTime(date.getTime() - 31 * 24 * 60 * 60 * 1000L);
+                summary.lease().moveOutNotice().setValue(date);
 
-            date = new LogicalDate(summary.lease().leaseTo().getValue());
-            date.setTime(date.getTime() - 3 * 24 * 60 * 60 * 1000L);
-            summary.lease().expectedMoveOut().setValue(date);
+                date = new LogicalDate(summary.lease().leaseTo().getValue());
+                date.setTime(date.getTime() - 3 * 24 * 60 * 60 * 1000L);
+                summary.lease().expectedMoveOut().setValue(date);
 
-            summary.lease().status().setValue(Lease.Status.OnNotice);
+                summary.lease().completion().setValue(Lease.CompletionType.Notice);
+            }
+            if (RandomUtil.randomBoolean()) {
+                LogicalDate date = new LogicalDate(summary.lease().leaseTo().getValue());
+                date.setTime(date.getTime() - 100 * 24 * 60 * 60 * 1000L);
+                summary.lease().moveOutNotice().setValue(date);
+
+                date = new LogicalDate(date);
+                date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000L);
+                summary.lease().expectedMoveOut().setValue(date);
+
+                summary.lease().completion().setValue(Lease.CompletionType.Termination);
+            }
+            if (RandomUtil.randomBoolean()) {
+                LogicalDate date = new LogicalDate(summary.lease().leaseTo().getValue());
+                date.setTime(date.getTime() - 100 * 24 * 60 * 60 * 1000L);
+                summary.lease().moveOutNotice().setValue(date);
+                summary.lease().expectedMoveOut().setValue(date);
+
+                summary.lease().completion().setValue(Lease.CompletionType.Eviction);
+            }
         }
 
         TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);

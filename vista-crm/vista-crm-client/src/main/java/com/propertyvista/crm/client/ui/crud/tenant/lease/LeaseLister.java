@@ -29,6 +29,9 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().unit()).build(),
             new Builder(proto().leaseID()).build(),
             new Builder(proto().type()).build(),
+            new Builder(proto().status()).build(),
+            new Builder(proto().completion()).build(),
+            new Builder(proto().transferred(), false).build(),
             new Builder(proto().leaseFrom()).build(),
             new Builder(proto().leaseTo()).build(),
             new Builder(proto().expectedMoveIn()).build(),
@@ -36,7 +39,6 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().actualMoveIn(), false).build(),
             new Builder(proto().actualMoveOut(), false).build(),
             new Builder(proto().moveOutNotice()).build(),
-            new Builder(proto().status()).build(),
             new Builder(proto().approvalDate()).build(),
             new Builder(proto().createDate()).build()
         );//@formatter:on

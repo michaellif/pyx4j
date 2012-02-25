@@ -34,6 +34,7 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -89,7 +90,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
             @Override
             public void onClick(ClickEvent event) {
-                new ActionBox(Status.OnNotice) {
+                new ActionBox(CompletionType.Notice) {
                     @Override
                     public boolean onClickOk() {
                         ((LeaseViewerView.Presenter) presenter).notice(getDate(), getMoveOutDate());
@@ -113,7 +114,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
             @Override
             public void onClick(ClickEvent event) {
-                new ActionBox(Status.Broken) {
+                new ActionBox(CompletionType.Eviction) {
                     @Override
                     public boolean onClickOk() {
                         ((LeaseViewerView.Presenter) presenter).evict(getDate(), getMoveOutDate());
@@ -140,12 +141,16 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         // set buttons state:
         Status status = value.status().getValue();
+        CompletionType completion = value.completion().getValue();
+
         createApplication.setVisible(status == Status.Draft);
+
         runBill.setVisible(status == Status.Active);
-        notice.setVisible(status == Status.Active);
-        cancelNotice.setVisible(status == Status.OnNotice);
-        evict.setVisible(status == Status.Active);
-        cancelEvict.setVisible(status == Status.Broken);
+
+        notice.setVisible(status == Status.Active && completion == CompletionType.None);
+        cancelNotice.setVisible(completion == CompletionType.Notice);
+        evict.setVisible(status == Status.Active && completion == CompletionType.None);
+        cancelEvict.setVisible(completion == CompletionType.Eviction);
     }
 
     @Override
@@ -164,9 +169,9 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         private final CDatePicker moveOut = new CDatePicker();
 
-        private final Status action;
+        private final CompletionType action;
 
-        public ActionBox(Status action) {
+        public ActionBox(CompletionType action) {
             super(i18n.tr("Please select"));
             this.action = action;
             setBody(createBody());
@@ -180,10 +185,10 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
             HorizontalPanel datePanel = new HorizontalPanel();
             switch (action) {
-            case OnNotice:
+            case Notice:
                 datePanel.add(label = new HTML(i18n.tr("Notice Date") + ":"));
                 break;
-            case Broken:
+            case Eviction:
                 datePanel.add(label = new HTML(i18n.tr("Evict Date") + ":"));
                 break;
             }
