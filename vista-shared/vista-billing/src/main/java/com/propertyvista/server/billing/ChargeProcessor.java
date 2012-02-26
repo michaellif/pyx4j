@@ -77,16 +77,17 @@ public class ChargeProcessor {
     }
 
     private static boolean isBillableItemApplicable(BillableItem item, Bill bill) {
-        if (item.billingPeriodNumber().isNull()) {
-            throw new Error("billingPeriodNumber should not be null");
-        } else if (bill.billingPeriodNumber().getValue() >= item.billingPeriodNumber().getValue()) {
-            if (BillingUtils.isFeature(item.item().product()) && !BillingUtils.isRecurringFeature(item.item().product())) {
-                return bill.billingPeriodNumber().getValue() == item.billingPeriodNumber().getValue();
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
+//        if (item.billingPeriodNumber().isNull()) {
+//            throw new Error("billingPeriodNumber should not be null");
+//        } else if (bill.billingPeriodNumber().getValue() >= item.billingPeriodNumber().getValue()) {
+//            if (BillingUtils.isFeature(item.item().product()) && !BillingUtils.isRecurringFeature(item.item().product())) {
+//                return bill.billingPeriodNumber().getValue() == item.billingPeriodNumber().getValue();
+//            } else {
+//                return true;
+//            }
+//        } else {
+//            return false;
+//        }
+        return true;
     }
 }

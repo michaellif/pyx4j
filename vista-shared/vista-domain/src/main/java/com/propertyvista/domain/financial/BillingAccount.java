@@ -44,11 +44,9 @@ public interface BillingAccount extends IEntity {
     BillingRun currentBillingRun();
 
     @Owned
-    @Detached
+    @Detached()
     @OrderBy(Bill.BillSequenceNumber.class)
     IList<Bill> bills();
-
-    IPrimitive<Integer> billingPeriodCounter();
 
     IPrimitive<Integer> billCounter();
 

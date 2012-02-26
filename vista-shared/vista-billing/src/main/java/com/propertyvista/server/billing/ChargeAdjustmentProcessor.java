@@ -66,17 +66,18 @@ public class ChargeAdjustmentProcessor {
     }
 
     private static boolean isBillableItemAdjustmentApplicable(BillableItemAdjustment adjustment, Bill bill) {
-        if (BillableItemAdjustment.TermType.postLease.equals(adjustment.termType().getValue())) {
-            return false;
-        } else if (BillableItemAdjustment.TermType.oneTime.equals(adjustment.termType().getValue())
-                && bill.billingPeriodNumber().getValue() == adjustment.billingPeriodNumber().getValue()) {
-            return true;
-        } else if (BillableItemAdjustment.TermType.inLease.equals(adjustment.termType().getValue())
-                && bill.billingPeriodNumber().getValue() >= adjustment.billingPeriodNumber().getValue()) {
-            return true;
-        } else {
-            return false;
-        }
+//        if (BillableItemAdjustment.TermType.postLease.equals(adjustment.termType().getValue())) {
+//            return false;
+//        } else if (BillableItemAdjustment.TermType.oneTime.equals(adjustment.termType().getValue())
+//                && bill.billingPeriodNumber().getValue() == adjustment.billingPeriodNumber().getValue()) {
+//            return true;
+//        } else if (BillableItemAdjustment.TermType.inLease.equals(adjustment.termType().getValue())
+//                && bill.billingPeriodNumber().getValue() >= adjustment.billingPeriodNumber().getValue()) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+        return true;
     }
 
 }

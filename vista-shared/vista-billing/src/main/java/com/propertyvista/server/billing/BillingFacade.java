@@ -24,12 +24,12 @@ public class BillingFacade {
         return BillingLifecycle.runBilling(lease);
     }
 
-    public static Bill getLatestBill(BillingAccount billingAccount) {
-        return BillingLifecycle.getLatestBill(billingAccount);
+    public static Bill getLatestConfirmedBill(BillingAccount billingAccount) {
+        return BillingLifecycle.getLatestConfirmedBill(billingAccount);
     }
 
-    public static Bill getBill(BillingAccount billingAccount, BillingRun billingRun) {
-        return BillingLifecycle.getBill(billingAccount, billingRun);
+    public static Bill getLatestBill(BillingAccount billingAccount) {
+        return BillingLifecycle.getLatestBill(billingAccount);
     }
 
     public static void confirmBill(Bill bill) {

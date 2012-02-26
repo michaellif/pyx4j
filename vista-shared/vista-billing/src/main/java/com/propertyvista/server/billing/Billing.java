@@ -30,7 +30,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillingRun;
 
 class Billing {
@@ -44,29 +43,48 @@ class Billing {
     }
 
     static void createBill(BillingRun billingRun, BillingAccount billingAccount) {
+        Persistence.service().retrieve(billingAccount.leaseFinancial());
+        Persistence.service().retrieve(billingAccount.leaseFinancial().lease());
+        Persistence.service().retrieve(billingAccount.leaseFinancial().lease().serviceAgreement());
+
         Bill bill = EntityFactory.create(Bill.class);
-        bill.billStatus().setValue(BillStatus.Running);
-        bill.billingAccount().set(billingAccount);
+        bill.billStatus().setValue(Bill.BillStatus.Running);
+        billingAccount.bills().add(bill);
 
         bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
-        bill.billingPeriodNumber().setValue(billingAccount.billingPeriodCounter().getValue());
-
         bill.billingRun().set(billingRun);
+
         Persistence.service().persist(bill);
+
+        if (billingAccount.leaseFinancial().lease().leaseFrom().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) <= 0) {
+            bill.billingPeriodStartDate().setValue(billingRun.billingPeriodStartDate().getValue());
+        } else if (billingAccount.leaseFinancial().lease().leaseFrom().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0) {
+            bill.billingPeriodStartDate().setValue(billingAccount.leaseFinancial().lease().leaseFrom().getValue());
+        } else {
+            throw new Error("Lease didn't start yet");
+        }
+
+        if (billingAccount.leaseFinancial().lease().leaseTo().isNull()
+                || (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
+            bill.billingPeriodEndDate().setValue(billingRun.billingPeriodEndDate().getValue());
+        } else if (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) <= 0) {
+            bill.billingPeriodEndDate().setValue(billingAccount.leaseFinancial().lease().leaseTo().getValue());
+        } else {
+            //TODO add final bill handler
+            throw new Error("Lease already ended");
+        }
+
         try {
             new Billing(bill).run();
-            bill.billStatus().setValue(BillStatus.Finished);
+            bill.billStatus().setValue(Bill.BillStatus.Finished);
         } catch (Throwable e) {
             log.error("Bill run error", e);
-            bill.billStatus().setValue(BillStatus.Erred);
+            bill.billStatus().setValue(Bill.BillStatus.Erred);
         }
         Persistence.service().persist(bill);
     }
 
     private void run() {
-        Persistence.service().retrieve(bill.billingAccount().leaseFinancial());
-        Persistence.service().retrieve(bill.billingAccount().leaseFinancial().lease());
-        Persistence.service().retrieve(bill.billingAccount().leaseFinancial().lease().serviceAgreement());
 
         //Set accumulating fields to 0 value
         bill.paymentReceivedAmount().setValue(new BigDecimal(0));
@@ -90,7 +108,7 @@ class Billing {
     }
 
     private void getPreviousTotals() {
-        Bill lastBill = BillingLifecycle.getLatestBill(bill.billingAccount());
+        Bill lastBill = BillingLifecycle.getLatestConfirmedBill(bill.billingAccount());
         if (lastBill != null) {
             bill.previousBalanceAmount().setValue(lastBill.totalDueAmount().getValue());
         } else {

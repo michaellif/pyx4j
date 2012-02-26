@@ -46,6 +46,7 @@ public class BillingLifecycle {
 
     static BillingRun runBilling(Lease lease) {
         BillingAccount billingAccount = ensureBillingAccount(lease);
+
         if (!billingAccount.currentBillingRun().isNull()) {
             throw new UserRuntimeException("Can't run billing on Account with non-confirmed bills");
         }
@@ -55,7 +56,10 @@ public class BillingLifecycle {
         Persistence.service().retrieve(lease.unit());
         billingRun.building().set(lease.unit().belongsTo());
 
-        billingRun.billingPeriodStartDate().setValue(getNextBillingPeriodStartDate(billingAccount));
+        LogicalDate startDate = getNextBillingPeriodStartDate(billingAccount);
+        billingRun.billingPeriodStartDate().setValue(startDate);
+        billingRun.billingPeriodEndDate().setValue(
+                BillingCycleManger.calculateBillingPeriodEndDate(billingAccount.billingCycle().paymentFrequency().getValue(), startDate));
 
         Persistence.service().persist(billingRun);
 
@@ -109,10 +113,6 @@ public class BillingLifecycle {
             bill.billingAccount().currentBillingRun().setValue(null);
             bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
 
-            if (BillStatus.Confirmed.equals(billStatus)) {
-                bill.billingAccount().billingPeriodCounter().setValue(bill.billingAccount().billingPeriodCounter().getValue() + 1);
-            }
-
             Persistence.service().persist(bill.billingAccount());
         } else {
             throw new Error("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
@@ -120,7 +120,7 @@ public class BillingLifecycle {
     }
 
     static LogicalDate getNextBillingPeriodStartDate(BillingAccount billingAccount) {
-        Bill previousBill = getLatestBill(billingAccount);
+        Bill previousBill = getLatestConfirmedBill(billingAccount);
         if (previousBill != null) {
             return BillingCycleManger.calculateBillingPeriodStartDate(billingAccount.billingCycle().paymentFrequency().getValue(), previousBill.billingRun()
                     .billingPeriodStartDate().getValue());
@@ -143,25 +143,24 @@ public class BillingLifecycle {
         if (leaseFinancial.billingAccount().id().isNull()) {
             leaseFinancial.billingAccount().billingCycle().set(BillingCycleManger.ensureBillingCycle(lease));
             leaseFinancial.billingAccount().billCounter().setValue(1);
-            leaseFinancial.billingAccount().billingPeriodCounter().setValue(1);
             Persistence.service().persist(lease);
         }
         return leaseFinancial.billingAccount();
 
     }
 
-    static Bill getLatestBill(BillingAccount billingAccount) {
+    static Bill getLatestConfirmedBill(BillingAccount billingAccount) {
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), BillStatus.Confirmed));
-        criteria.desc(criteria.proto().billingRun().billingPeriodStartDate());
+        criteria.desc(criteria.proto().billSequenceNumber());
         return Persistence.service().retrieve(criteria);
     }
 
-    static Bill getBill(BillingAccount billingAccount, BillingRun billingRun) {
+    static Bill getLatestBill(BillingAccount billingAccount) {
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingRun(), billingRun));
+        criteria.desc(criteria.proto().billSequenceNumber());
         return Persistence.service().retrieve(criteria);
     }
 }
