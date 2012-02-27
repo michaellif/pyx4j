@@ -99,16 +99,34 @@ select {
 	height: 130px;
 }
 
-
-.titleLogo {
-	display: inline-block;
-	font-size:0;
+#siteTitle {
+	float:left;
+	margin:10px;
 }
-.titleLogo a {
-	background: url("images/template2/logo.png") no-repeat scroll 0 0 transparent;
-	display: inline-block;
-	height: 100px;
-	width: 340px;
+#siteTitle a:hover {
+	text-decoration:none;
+}
+#noLogo {
+	font-size:40px;
+	line-height:80px;
+	margin-right:20px;
+}
+
+#siteAuth {
+	float:right;
+	margin:10px;
+}
+#siteAuth .greeting {
+	color:  ${object1_20};
+	font-weight: bold;
+	padding-right:10px;
+}
+#siteAuth a {
+	color:  ${object1_20};
+}
+
+#siteAuth a:hover {
+	color: ${object1_20};
 }
 
 .navigation {
@@ -165,26 +183,6 @@ select {
 .navigation .active a:hover {
 }
 
-
-
-
-.auth {
-	float: right;
-	padding-right: 10px;
-	display:inline;
-}
-.auth .greeting {
-	color:  ${object1_20};
-	font-weight: bold;
-	padding-right:10px;
-}
-.auth a {
-	color:  ${object1_20};
-}
-
-.auth a:hover {
-	color: ${object1_20};
-}
 /*
  * Footer
  */

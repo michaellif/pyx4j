@@ -2,18 +2,17 @@
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
 	<div class="header">
-
 		<div class="main">
-
-			<strong class="titleLogo"> <a wicket:id="titleLogo" href="#">Logo</a>
-			</strong> <strong class="slogan"></strong>
-
-			<div class="auth" wicket:id="auth" />
-			
+			<div id="siteTitle">
+				<a wicket:id="logoLink" href="">
+					<img id="siteLogo" wicket:id="logoImg"/>
+					<span id="noLogo" wicket:id="noLogoLabel"/>
+				</a>
+				<span wicket:id="slogan"/>
+			</div>
+			<div id="siteAuth" wicket:id="auth" />
 			<div class="navigation" wicket:id="mainNavig" />
-
 		</div>
-
 	</div>
 
 </wicket:panel>

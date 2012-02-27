@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -37,15 +38,19 @@ import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptorChanges;
+import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.shared.CompiledLocale;
@@ -324,11 +329,21 @@ public class PMSiteContentManager implements Serializable {
      * Media images rendered by media servlet at /contextPath/media/{id}/{size}.jpg
      * We want to build a relative! path from the current page down to the servlet root
      */
-    public static String getMediaImgUrl(long mediaId, ThumbnailSize size) {
+    public static String getContextPath() {
         String servletPath = com.pyx4j.server.contexts.Context.getRequest().getServletPath();
         // shift back for every path segment; then remove one segment - for the script name
-        String servletRoot = servletPath.replaceAll("/+[^/]*", "../").replaceFirst("../", "");
-        return servletRoot + "media/" + mediaId + "/" + size.name() + "." + ImageConsts.THUMBNAIL_TYPE;
+        return servletPath.replaceAll("/+[^/]*", "../").replaceFirst("../", "");
+    }
+
+    public static String getMediaImgUrl(long mediaId, ThumbnailSize size) {
+        return getContextPath() + DeploymentConsts.mediaImagesServletMapping + mediaId + "/" + size.name() + "." + ImageConsts.THUMBNAIL_TYPE;
+    }
+
+    public static String getSiteImageResourceUrl(SiteImageResource resource) {
+        if (resource == null) {
+            throw new Error("SiteImageResource cannot be null.");
+        }
+        return getContextPath() + DeploymentConsts.siteImageResourceServletMapping + resource.id().getStringView() + "/" + resource.fileName().getStringView();
     }
 
     public static String getFistVisibleMediaImgUrl(List<Media> medias, ThumbnailSize size) {
@@ -405,4 +420,48 @@ public class PMSiteContentManager implements Serializable {
         return siteDescriptor;
     }
 
+    public SiteImageResource getSiteLogo(AvailableLocale locale) {
+        SiteImageResource logo = null;
+        String lang = locale.lang().getValue().name();
+        IList<PortalImageResource> allLogos = getSiteDescriptor().logo();
+        for (PortalImageResource logoRc : allLogos) {
+            if (logoRc.locale().lang().getValue().name().equals(lang)) {
+                logo = logoRc.imageResource();
+            }
+        }
+        if (logo == null && allLogos.size() > 0) {
+            logo = allLogos.get(0).imageResource();
+        }
+        return logo;
+    }
+
+    public SiteImageResource getSiteBanner(AvailableLocale locale) {
+        SiteImageResource banner = null;
+        String lang = locale.lang().getValue().name();
+        IList<PortalImageResource> allBanners = getSiteDescriptor().banner();
+        for (PortalImageResource bannerRc : allBanners) {
+            if (bannerRc.locale().lang().getValue().name().equals(lang)) {
+                banner = bannerRc.imageResource();
+            }
+        }
+        if (banner == null && allBanners.size() > 0) {
+            banner = allBanners.get(0).imageResource();
+        }
+        return banner;
+    }
+
+    public String getSiteSlogan(AvailableLocale locale) {
+        String slogan = null;
+        String lang = locale.lang().getValue().name();
+        IList<HtmlContent> allSlogans = getSiteDescriptor().slogan();
+        for (HtmlContent sloganRc : allSlogans) {
+            if (sloganRc.locale().lang().getValue().name().equals(lang)) {
+                slogan = sloganRc.html().getValue();
+            }
+        }
+        if (slogan == null && allSlogans.size() > 0) {
+            slogan = allSlogans.get(0).html().getValue();
+        }
+        return slogan;
+    }
 }

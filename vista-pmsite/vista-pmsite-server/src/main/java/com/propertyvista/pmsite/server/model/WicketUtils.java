@@ -56,7 +56,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.pmsite.server.PMSiteApplication;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 
 public class WicketUtils {
     private static final I18n i18n = I18n.get(WicketUtils.class);
@@ -185,6 +187,14 @@ public class WicketUtils {
         @Override
         public boolean getStatelessHint() {
             return true;
+        }
+    }
+
+    public static class ResourceImage extends SimpleImage {
+        private static final long serialVersionUID = 1L;
+
+        public ResourceImage(String wicketId, SiteImageResource rc) {
+            super(wicketId, PMSiteContentManager.getSiteImageResourceUrl(rc));
         }
     }
 

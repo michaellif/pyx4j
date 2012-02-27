@@ -96,36 +96,35 @@ select {
 	width: 960px;
 }
 
-.titleLogo,.titleLogo a {
-	display: block;
-	height: 84px;
-	width: 220px;
+#siteTitle {
+	float:left;
+	margin:10px;
+}
+#siteTitle a:hover {
+	text-decoration:none;
+}
+#noLogo {
+	font-size:40px;
+	line-height:80px;
+	margin-right:20px;
+}
+#siteAuth {
+	float:right;
+	margin:10px;
 }
 
-.titleLogo {
-	background: url("images/template0/logo.png") no-repeat scroll 0 0
-		transparent;
-	left: 14px;
-	position: absolute;
-	top: 10px;
+#siteAuth .greeting {
+    color: #339900;
+	font-weight: bold;
+	padding-right:10px;
 }
 
-.titleLogo a {
-	overflow: hidden;
-	text-indent: -9999px;
+#siteAuth a {
+    color: #339900;
 }
 
-.slogan {
-	background: url("images/template0/home_slogan.png") no-repeat scroll 0 0
-		transparent;
-	display: block;
-	height: 15px;
-	left: 243px;
-	overflow: hidden;
-	position: absolute;
-	text-indent: -9999px;
-	top: 48px;
-	width: 244px;
+#siteAuth a:hover {
+	color: #B5E329;
 }
 
 .navigation {
@@ -192,23 +191,6 @@ select {
 	color: #191B22;
 }
 
-.auth {
-	float: right;
-	padding: 0 10px;
-}
-.auth .greeting {
-    color: #339900;
-	font-weight: bold;
-	padding-right:10px;
-}
-
-.auth a {
-    color: #339900;
-}
-
-.auth a:hover {
-	color: #B5E329;
-}
 /*
  * Footer
  */

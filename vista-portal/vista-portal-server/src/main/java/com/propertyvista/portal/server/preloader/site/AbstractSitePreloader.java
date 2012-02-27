@@ -37,6 +37,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
@@ -411,28 +412,64 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     }
 
     private void createLogo(SiteDescriptor site, List<LocaleInfo> siteLocale) {
-        byte raw[];
-        try {
-            raw = IOUtils.getBinaryResource("crm-logo.png", this.getClass());
-        } catch (IOException e) {
-            log.error("logo load error", e);
-            return;
-        }
-        if (raw != null) {
-            Key blobKey = BlobService.persist(raw, "crm-logo.png", "image/png");
-            SiteImageResource siteImage = EntityFactory.create(SiteImageResource.class);
-            siteImage.blobKey().setValue(blobKey);
-            siteImage.fileSize().setValue(raw.length);
-            siteImage.contentMimeType().setValue("image/png");
-            siteImage.timestamp().setValue(System.currentTimeMillis());
-            Persistence.service().persist(siteImage);
+        String cType = "image/png";
+        String fileName = "logo.png";
+        SiteImageResource siteImage = makeSiteImage(fileName, cType);
+        if (siteImage != null) {
             for (LocaleInfo li : siteLocale) {
+                // logo
                 PortalImageResource res = site.logo().$();
                 res.locale().set(li.aLocale);
                 res.imageResource().set(siteImage);
                 site.logo().add(res);
             }
         }
+        // banner image
+        fileName = "banner.png";
+        siteImage = makeSiteImage(fileName, cType);
+        if (siteImage != null) {
+            for (LocaleInfo li : siteLocale) {
+                // banner
+                PortalImageResource res = site.banner().$();
+                res.locale().set(li.aLocale);
+                res.imageResource().set(siteImage);
+                site.banner().add(res);
+            }
+        }
+        // slogan image
+        fileName = "slogan.png";
+        siteImage = makeSiteImage(fileName, cType);
+        if (siteImage != null) {
+            String sloganHtml = "<img style=\"vertical-align:top; margin-top:38px\" src=\"../site-imageresource/" + siteImage.getPrimaryKey().toString()
+                    + "/slogan.png\">";
+            for (LocaleInfo li : siteLocale) {
+                // crm logo
+                HtmlContent cont = site.slogan().$();
+                cont.locale().set(li.aLocale);
+                cont.html().setValue(sloganHtml);
+                site.slogan().add(cont);
+            }
+        }
+    }
+
+    private SiteImageResource makeSiteImage(String fileName, String mime) {
+        SiteImageResource siteImage = null;
+        try {
+            byte raw[] = IOUtils.getBinaryResource(fileName, this.getClass());
+            if (raw != null) {
+                Key blobKey = BlobService.persist(raw, fileName, mime);
+                siteImage = EntityFactory.create(SiteImageResource.class);
+                siteImage.blobKey().setValue(blobKey);
+                siteImage.fileName().setValue(fileName);
+                siteImage.fileSize().setValue(raw.length);
+                siteImage.contentMimeType().setValue(mime);
+                siteImage.timestamp().setValue(System.currentTimeMillis());
+                Persistence.service().persist(siteImage);
+            }
+        } catch (IOException e) {
+            log.error("SiteImageResource load error", e);
+        }
+        return siteImage;
     }
 
     @SuppressWarnings("unchecked")

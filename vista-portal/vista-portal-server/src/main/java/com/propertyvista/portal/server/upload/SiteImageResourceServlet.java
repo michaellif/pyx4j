@@ -31,7 +31,10 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.site.PortalImageResource;
+import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.portal.server.portal.services.SiteThemeServicesImpl;
 import com.propertyvista.server.common.blob.ETag;
 import com.propertyvista.server.domain.FileBlob;
 
@@ -54,22 +57,49 @@ public class SiteImageResourceServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String filename = request.getPathInfo();
-        String id = FilenameUtils.getPathNoEndSeparator(filename);
-        if (CommonsStringUtils.isEmpty(id) || "0".equals(id)) {
-            response.setStatus(HttpServletResponse.SC_GONE);
-            return;
+        Key key = null;
+        // check if logo was requested
+        if (filename.startsWith("/logo.")) {
+            SiteDescriptor descriptor = SiteThemeServicesImpl.getSiteDescriptorFromCache();
+            if (descriptor.logo().size() == 0) {
+                log.debug("descriptor has no logos");
+                response.setStatus(HttpServletResponse.SC_GONE);
+                return;
+            }
+            // see if locale is given
+            String locale = request.getParameter("locale");
+            if (locale != null && locale.length() > 0) {
+                for (PortalImageResource logo : descriptor.logo()) {
+                    if (logo.locale().lang().getValue().name().equals(locale)) {
+                        key = logo.imageResource().getPrimaryKey();
+                        break;
+                    }
+                }
+            }
+            // if still no logo found, get default
+            if (key == null) {
+                // TODO define default locale per PMC; use first one for now
+                key = descriptor.logo().get(0).imageResource().getPrimaryKey();
+            }
+        } else {
+            String id = FilenameUtils.getPathNoEndSeparator(filename);
+            if (CommonsStringUtils.isEmpty(id) || "0".equals(id)) {
+                response.setStatus(HttpServletResponse.SC_GONE);
+                return;
+            }
+            key = new Key(id);
         }
 
         //TODO deserialize key
-        SiteImageResource file = Persistence.service().retrieve(SiteImageResource.class, new Key(id));
+        SiteImageResource file = Persistence.service().retrieve(SiteImageResource.class, key);
         if (file == null) {
-            log.debug("no such document {} {}", id, filename);
+            log.debug("no such document {} {}", key, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
         if (file.blobKey().isNull()) {
-            log.debug("resources {} {} is not file", id, filename);
+            log.debug("resources {} {} is not file", key, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
@@ -101,7 +131,7 @@ public class SiteImageResourceServlet extends HttpServlet {
 
         FileBlob blob = Persistence.service().retrieve(FileBlob.class, file.blobKey().getValue());
         if (blob == null) {
-            log.debug("no such blob {} {}", id, filename);
+            log.debug("no such blob {} {}", key, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
