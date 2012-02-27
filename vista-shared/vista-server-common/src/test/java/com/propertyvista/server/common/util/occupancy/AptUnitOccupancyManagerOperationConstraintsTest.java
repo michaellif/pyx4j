@@ -14,14 +14,12 @@
 package com.propertyvista.server.common.util.occupancy;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-@Ignore
 public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccupancyManagerTestBase {
 
     @Test
@@ -231,10 +229,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         Assert.assertFalse(getUOM().isEndLeaseAvailable());
 
         now("2010-01-11");
-        Assert.assertFalse(getUOM().isEndLeaseAvailable());
+        Assert.assertTrue(getUOM().isEndLeaseAvailable());
 
         now("2010-01-15");
-        Assert.assertFalse(getUOM().isEndLeaseAvailable());
+        Assert.assertTrue(getUOM().isEndLeaseAvailable());
     }
 
 }

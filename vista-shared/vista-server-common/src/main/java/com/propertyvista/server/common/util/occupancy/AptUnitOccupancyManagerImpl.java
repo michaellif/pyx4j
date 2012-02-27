@@ -328,56 +328,131 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     @Override
     public boolean isScopeOffMarketAvailable() {
-        // TODO Auto-generated method stub
+        LogicalDate now = nowProvider.getNow();
+
+        LogicalDate start = nowProvider.getNow();
+        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, start);
+
+        for (AptUnitOccupancySegment segment : occupancy) {
+            if (segment.status().getValue() == Status.vacant) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     @Override
     public LogicalDate isRenovationAvailable() {
-        // TODO Auto-generated method stub
+
+        LogicalDate start = nowProvider.getNow();
+        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, start);
+
+        for (AptUnitOccupancySegment segment : occupancy) {
+            if (segment.status().getValue() == Status.vacant) {
+                LogicalDate vacantStart = segment.dateFrom().getValue();
+                return vacantStart.before(start) ? start : vacantStart;
+            }
+        }
+
         return null;
     }
 
     @Override
     public boolean isScopeAvailableAvailable() {
-        // TODO Auto-generated method stub
+        LogicalDate start = nowProvider.getNow();
+        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, start);
+
+        for (AptUnitOccupancySegment segment : occupancy) {
+            if (segment.status().getValue() == Status.vacant) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     @Override
     public boolean isAvailableToVacantAvailable() {
-        // TODO Auto-generated method stub
+        LogicalDate start = nowProvider.getNow();
+        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, start);
+
+        for (AptUnitOccupancySegment segment : occupancy) {
+            if (segment.status().getValue() == Status.available) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     @Override
     public LogicalDate isMakeVacantAvailable() {
-        // TODO Auto-generated method stub
+        LogicalDate start = nowProvider.getNow();
+        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, start);
+
+        for (AptUnitOccupancySegment segment : occupancy) {
+            if (segment.status().getValue() == Status.offMarket) {
+                LogicalDate offMarketStart = segment.dateFrom().getValue();
+                return offMarketStart.before(start) ? start : offMarketStart;
+            }
+        }
+
         return null;
     }
 
     @Override
     public LogicalDate isReserveAvailable() {
-        // TODO Auto-generated method stub
+        LogicalDate start = nowProvider.getNow();
+        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, start);
+
+        for (AptUnitOccupancySegment segment : occupancy) {
+            if (segment.status().getValue() == Status.available) {
+                LogicalDate segmentStart = segment.dateFrom().getValue();
+                return segmentStart.before(start) ? start : segmentStart;
+            }
+        }
+
         return null;
     }
 
     @Override
     public boolean isUnreserveAvailable() {
-        // TODO Auto-generated method stub
+        LogicalDate start = nowProvider.getNow();
+        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, start);
+
+        for (AptUnitOccupancySegment segment : occupancy) {
+            if (segment.status().getValue() == Status.reserved) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     @Override
     public boolean isApproveLeaseAvaialble() {
-        // TODO Auto-generated method stub
+        LogicalDate start = nowProvider.getNow();
+        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, start);
+
+        for (AptUnitOccupancySegment segment : occupancy) {
+            if (segment.status().getValue() == Status.reserved) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     @Override
     public boolean isEndLeaseAvailable() {
-        // TODO Auto-generated method stub
-        return false;
+        LogicalDate start = nowProvider.getNow();
+        AptUnitOccupancySegment segment = retrieveOccupancySegment(unit, start);
+        if (segment != null && segment.status().getValue() == Status.leased) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public interface NowSource {
