@@ -48,8 +48,14 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // Initial item
         ItemA itemA1 = EntityFactory.create(ItemA.class);
 
-        final String origName = "V1" + uniqueString();
-        itemA1.version().name().setValue(origName);
+        final String currentName = "V0" + uniqueString();
+        itemA1.versions().add(itemA1.versions().$());
+        itemA1.versions().get(0).fromDate().setValue(DateUtils.detectDateformat("2011-01-01"));
+        itemA1.versions().get(0).name().setValue(currentName);
+        itemA1.versions().get(0).testId().setValue(testId);
+
+        final String draftName = "V1" + uniqueString();
+        itemA1.version().name().setValue(draftName);
         itemA1.version().testId().setValue(testId);
 
         //Save Draft
@@ -57,9 +63,11 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
         // Retrieval of item itself, by default returns current
         {
+            setDBTime("2011-01-02");
             ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey());
             assertTrue("current is null", itemA1r.version().isNull());
         }
+
     }
 
     private void srv_finalize(IVersionedEntity<?> entity) {
