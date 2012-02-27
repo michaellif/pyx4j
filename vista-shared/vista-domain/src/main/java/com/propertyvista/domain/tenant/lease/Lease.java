@@ -77,9 +77,7 @@ public interface Lease extends IEntity {
 
         Termination,
 
-        Eviction,
-
-        None;
+        Eviction;
 
         @Override
         public String toString() {

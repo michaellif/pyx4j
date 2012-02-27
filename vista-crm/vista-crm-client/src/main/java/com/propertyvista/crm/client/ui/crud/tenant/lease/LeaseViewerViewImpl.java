@@ -147,9 +147,9 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         runBill.setVisible(status == Status.Active);
 
-        notice.setVisible(status == Status.Active && completion == CompletionType.None);
+        notice.setVisible(status == Status.Active && completion == null);
         cancelNotice.setVisible(completion == CompletionType.Notice);
-        evict.setVisible(status == Status.Active && completion == CompletionType.None);
+        evict.setVisible(status == Status.Active && completion == null);
         cancelEvict.setVisible(completion == CompletionType.Eviction);
     }
 
