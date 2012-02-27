@@ -30,6 +30,8 @@ public interface AptUnitOccupancyManager {
      */
     void scopeOffMarket(OffMarketType type, LogicalDate startDate);
 
+    boolean isScopeOffMarketAvailable();
+
     /**
      * Applied to {@link Status#vacant}
      * 
@@ -38,10 +40,24 @@ public interface AptUnitOccupancyManager {
     void scopeRenovation(LogicalDate renovationEndDate);
 
     /**
+     * @return minimum renovation end date or null if not available
+     */
+    LogicalDate isRenovationAvailable();
+
+    /**
      * Converts {@link Status#vacant} to {@link Status#available} from now to the future (the past part of the vacant segment stays vacant). At most one
      * vacant/availble segment can be present in the present to future timeline.
      */
     void scopeAvailable();
+
+    boolean isScopeAvailableAvailable();
+
+    /**
+     * Converts 'available' segment to 'vacant' segment
+     */
+    void availableToVacant();
+
+    boolean isAvailableToVacantAvailable();
 
     /**
      * Applied to {@link Status#offMarket}
@@ -49,19 +65,37 @@ public interface AptUnitOccupancyManager {
     void makeVacant(LogicalDate vacantFrom);
 
     /**
+     * @return minimal vacantFrom date for makeVacant, or null if it cannot be done
+     */
+    LogicalDate isMakeVacantAvailable();
+
+    /**
      * Create lease in draft mode. To create lease it first must be created in draft mode via {@link #reserve()} and then {@link #approveLease()}.
      */
     void reserve(Lease lease);
+
+    /**
+     * @return the starting day of the 'available' segment, i.e. the minimum day that can be given to lease.leasFrom; or null, if it can't be done
+     */
+    LogicalDate isReserveAvailable();
 
     /**
      * Cancel lease draft.
      */
     void unreserve();
 
+    boolean isUnreserveAvailable();
+
     void approveLease();
+
+    boolean isApproveLeaseAvaialble();
 
     /**
      * Source: CRM/Lease form/Button or Portal (becomes {@link Status#vacant})).
      */
     void endLease();
+
+    boolean isEndLeaseAvailable();
+
+    void cancelEndLease();
 }

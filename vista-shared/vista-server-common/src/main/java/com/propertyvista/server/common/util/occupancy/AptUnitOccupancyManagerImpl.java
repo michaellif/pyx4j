@@ -314,10 +314,75 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         availabilityManager.generateUnitAvailablity(now);
     }
 
+    @Override
+    public void cancelEndLease() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void availableToVacant() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isScopeOffMarketAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public LogicalDate isRenovationAvailable() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean isScopeAvailableAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isAvailableToVacantAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public LogicalDate isMakeVacantAvailable() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public LogicalDate isReserveAvailable() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean isUnreserveAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isApproveLeaseAvaialble() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isEndLeaseAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
     public interface NowSource {
 
         LogicalDate getNow();
 
     }
-
 }
