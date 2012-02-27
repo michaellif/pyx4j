@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,15 +18,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.propertvista.generator.LeaseAdjustmentReasonGenerator;
-import com.propertvista.generator.GLCodeGenerator;
 import com.propertvista.generator.ProductItemTypesGenerator;
 import com.propertvista.generator.TaxGenerator;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
+import com.pyx4j.essentials.server.csv.EntityCSVReciver;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.domain.financial.GlCodeCategory;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
@@ -40,13 +42,30 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
 
     private static final int GLCODE_QUANTITY = 15;
 
+    private static List<GlCodeCategory> glcodeCategories = EntityCSVReciver.create(GlCodeCategory.class).loadFile(
+            IOUtils.resourceFileName("glcode-categories.csv", ProductCatalogPreloader.class));
+
+    private static List<GlCode> glcodes = EntityCSVReciver.create(GlCode.class)
+            .loadFile(IOUtils.resourceFileName("glcodes.csv", ProductCatalogPreloader.class));
+
     private static final List<String> reasons = Arrays.asList("Admin Expenses", "Commisions", "Maintenance Fees", "Maintenance Labour", "Legal Expences",
             "Security", "Repairs Material", "Management Fee", "Rental Deposit", "Late Fee", "NSF Fees", "Application Fee", "Tenant Improvements",
             "Good Will - general", "Move In Charges", "Move Out Charges", "Deposit Forfeit", "Marketing And Promotion", "Billing Adjustment", "Misc Labour",
             "Misc Material", "Misc Generic(no tax)", "Misc Generic(tax included)");
 
-    public ProductCatalogPreloader() {
-
+    private void addGlCategoryDescriptions() {
+        int i = 0;
+        for (GlCode code : glcodes) {
+            for (GlCodeCategory category : glcodeCategories) {
+                int id = code.glCodeCategory().glCategoryId().getValue();
+                if (category.glCategoryId().getValue() == id) {
+                    String desc = category.glCategoryDescription().getValue();
+                    code.glCodeCategory().glCategoryDescription().setValue(desc);
+                    glcodes.set(i, code);
+                }
+            }
+            i++;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -62,26 +81,27 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
 
+        addGlCategoryDescriptions(); //extracts glcategory info from csv file, attached to glcodes
         List<Tax> taxes = new ArrayList<Tax>();
-        List<GlCode> glCodes = new ArrayList<GlCode>();
 
         for (int i = 0; i < TAX_QUANTITY; i++) {
             Tax tax = TaxGenerator.createTax(i);
             taxes.add(tax);
             Persistence.service().persist(tax);
         }
-        for (int j = 0; j < GLCODE_QUANTITY; j++) {
-            GlCode glCode = GLCodeGenerator.createGlCode();
-            glCodes.add(glCode);
-            Persistence.service().persist(glCode);
+        for (GlCode code : glcodes) {
+//            GlCode glCode = GLCodeGenerator.createGlCode();
+//            glCodes.add(glCode);
+            Persistence.service().persist(code.glCodeCategory());
+            Persistence.service().persist(code);
         }
 
-        ProductItemTypesGenerator generator = new ProductItemTypesGenerator(glCodes);
+        ProductItemTypesGenerator generator = new ProductItemTypesGenerator(glcodes);
         Persistence.service().persist(generator.getServiceItemTypes());
         Persistence.service().persist(generator.getFeatureItemTypes());
 
         for (int l = 0; l < reasons.size(); l++) {
-            LeaseAdjustmentReason lar = LeaseAdjustmentReasonGenerator.createLeaseAdjustmentReason(l, taxes, glCodes);
+            LeaseAdjustmentReason lar = LeaseAdjustmentReasonGenerator.createLeaseAdjustmentReason(l, taxes, glcodes);
             lar.name().setValue(reasons.get(l));
             Persistence.service().persist(lar);
         }

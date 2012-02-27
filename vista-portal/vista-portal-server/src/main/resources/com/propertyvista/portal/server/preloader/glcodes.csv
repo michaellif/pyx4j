@@ -1,0 +1,28 @@
+glCodeCategory.glCategoryId,glId,description
+1800,1820,Security Deposit Receivable
+1800,1861,Rental Revenue Receivable
+1800,1862,Late Fee Receivable
+1800,1880,Accounts Receivable Other
+2100,2110,Accounts Payable
+2100,2191,Security Deposit
+2100,2192,Security Deposit Interest
+5100,5110,Rental Revenue
+5100,5210,Concessions
+5100,5230,Vacancy
+5100,5300,Prepaid Rent
+5350,5350,Last Months Rent
+5900,5905,Rental Deposit
+5900,5910,Late Fee
+5900,5920,NSF Fees Collected
+5900,5930,Pet Fee - Non Refundable
+5900,5931,Application Fee Revenue
+5900,5932,Laundry Revenue
+5900,5933,Window Cleaning Revenue
+5900,5940,Move In Charges
+5900,5941,Move Out Charges
+5900,5950,Deposit Forfeit
+5900,5960,Tenant Improvements
+5900,5990,Misc Revenue
+5900,5997,Utilities - Gas
+5900,5998,Utilities - Electricity
+5900,5999,Utilities - Other

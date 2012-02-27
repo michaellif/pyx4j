@@ -29,6 +29,6 @@ public interface GlCode extends IEntity {
     @Editor(type = EditorType.textarea)
     IPrimitive<String> description();
 
-    // not used currently!
+    //categories preloaded but not visible in the application (27/02/2012)
     GlCodeCategory glCodeCategory();
 }
