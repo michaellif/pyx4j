@@ -84,12 +84,4 @@ class ConcessionFolder extends VistaBoxFolder<Concession> {
         }
 
     }
-
-    @Override
-    protected CEntityFolderItem<Concession> createItem(boolean first) {
-        CEntityFolderItem<Concession> item = super.createItem(first);
-        item.setRemovable(lease.getValue().approvalDate().isNull());
-        item.setMovable(lease.getValue().approvalDate().isNull());
-        return item;
-    }
 }

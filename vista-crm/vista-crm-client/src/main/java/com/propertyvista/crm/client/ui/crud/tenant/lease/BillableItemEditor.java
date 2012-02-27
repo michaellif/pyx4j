@@ -177,13 +177,5 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             }
             super.addItem(newEntity);
         }
-
-        @Override
-        protected CEntityFolderItem<BillableItemAdjustment> createItem(boolean first) {
-            CEntityFolderItem<BillableItemAdjustment> item = super.createItem(first);
-            item.setRemovable(lease.getValue().approvalDate().isNull());
-            item.setMovable(lease.getValue().approvalDate().isNull());
-            return item;
-        }
     }
 }
