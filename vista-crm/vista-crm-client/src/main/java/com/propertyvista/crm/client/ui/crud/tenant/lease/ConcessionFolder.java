@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;

@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -26,7 +25,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.dto.LeaseDTO;
@@ -48,7 +46,7 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
         decor.setExpended(false);
         return decor;
     }
-    
+
     @Override
     protected void addItem() {
         if (lease.getValue().serviceAgreement().serviceItem().isNull()) {
