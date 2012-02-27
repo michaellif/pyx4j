@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.policy.policies.MiscPolicy;
@@ -45,7 +44,6 @@ public class MiscPolicyPreloader extends AbstractPolicyPreloader<MiscPolicy> {
         misc.maxParkingSpots().setValue(MAX_PARKING_SPOTS);
         misc.maxPets().setValue(MAX_PETS);
 
-        Persistence.service().persist(misc);
         log.append(misc.getStringView());
 
         return misc;

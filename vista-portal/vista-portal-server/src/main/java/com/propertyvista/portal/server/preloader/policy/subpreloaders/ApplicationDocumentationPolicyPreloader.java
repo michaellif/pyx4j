@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -46,7 +45,6 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
         id.name().setValue(i18n.tr("Citizenship Card"));
         policy.allowedIDs().add(id);
 
-        Persistence.service().persist(policy);
         return policy;
     }
 

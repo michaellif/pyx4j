@@ -49,8 +49,6 @@ public class ProductTaxPolicyPreloader extends AbstractPolicyPreloader<ProductTa
                 policy.policyItems().add(item);
             }
         }
-
-        Persistence.service().persist(policy);
         log.append(policy.getStringView());
 
         return policy;

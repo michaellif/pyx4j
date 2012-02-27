@@ -75,7 +75,6 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
             }
         }
 
-        Persistence.service().persist(policy);
         log.append(policy.getStringView());
 
         return policy;
