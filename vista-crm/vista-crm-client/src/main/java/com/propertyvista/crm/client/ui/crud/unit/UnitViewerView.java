@@ -30,7 +30,7 @@ public interface UnitViewerView extends IViewerView<AptUnitDTO> {
 
         IListerView.Presenter getOccupanciesPresenter();
 
-        void scopeOffMarket(OffMarketType type, LogicalDate startDate);
+        void scopeOffMarket(OffMarketType type);
 
         void scopeRenovation(LogicalDate renovationEndDate);
 

@@ -22,13 +22,13 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public interface AptUnitOccupancyManager {
 
     /**
-     * Applied to {@link Status#vacant}
+     * Applied to {@link Status#vacant}: convert's it to offMarket
      * 
      * @param unit
      * @param type
      *            not {@link OffMarketType#construction}
      */
-    void scopeOffMarket(OffMarketType type, LogicalDate startDate);
+    void scopeOffMarket(OffMarketType type);
 
     boolean isScopeOffMarketAvailable();
 

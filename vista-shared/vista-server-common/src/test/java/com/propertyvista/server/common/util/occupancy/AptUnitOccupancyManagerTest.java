@@ -199,24 +199,24 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     public void testScopeOffMarketSingle() {
         setup().fromTheBeginning().toTheEndOfTime().status(Status.vacant).x();
 
-        now("2011-05-01");
+        now("2011-05-02");
 
-        getUOM().scopeOffMarket(OffMarketType.down, asDate("2011-05-20"));
+        getUOM().scopeOffMarket(OffMarketType.down);
 
-        expect().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
-        expect().from("2011-05-20").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        expect().fromTheBeginning().to("2011-05-01").status(Status.vacant).x();
+        expect().from("2011-05-02").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         assertExpectedTimeline();
     }
 
     @Test
-    public void testScopeOffMarketCanAddAnotherOffMarketSegment() {
+    public void testScopeOffMarketCanAddAnotherFutureOffMarketSegment() {
         setup().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         setup().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         setup().from("2011-07-20").toTheEndOfTime().status(Status.vacant).x();
 
-        now("2011-05-02");
+        now("2011-07-18");
 
-        getUOM().scopeOffMarket(OffMarketType.model, asDate("2011-07-20"));
+        getUOM().scopeOffMarket(OffMarketType.model);
 
         expect().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         expect().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();

@@ -26,8 +26,8 @@ import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImp
 public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerService {
 
     @Override
-    public void scopeOffMarket(AsyncCallback<VoidSerializable> callback, Key unitPk, OffMarketType type, LogicalDate startDate) {
-        new AptUnitOccupancyManagerImpl(unitPk).scopeOffMarket(type, startDate);
+    public void scopeOffMarket(AsyncCallback<VoidSerializable> callback, Key unitPk, OffMarketType type) {
+        new AptUnitOccupancyManagerImpl(unitPk).scopeOffMarket(type);
         callback.onSuccess(null);
     }
 

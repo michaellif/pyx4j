@@ -95,7 +95,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     }
 
     @Override
-    public void scopeOffMarket(OffMarketType type, LogicalDate startDate) {
+    public void scopeOffMarket(OffMarketType type) {
         occupancyManagerService.scopeOffMarket(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override
@@ -103,7 +103,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
                 getOccupanciesPresenter().populate();
             }
 
-        }, entityId, type, startDate);
+        }, entityId, type);
     }
 
     @Override

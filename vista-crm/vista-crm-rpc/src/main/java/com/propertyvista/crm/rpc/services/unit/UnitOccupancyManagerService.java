@@ -24,7 +24,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 
 public interface UnitOccupancyManagerService extends IService {
 
-    void scopeOffMarket(AsyncCallback<VoidSerializable> callback, Key unitPk, OffMarketType type, LogicalDate startDate);
+    void scopeOffMarket(AsyncCallback<VoidSerializable> callback, Key unitPk, OffMarketType type);
 
     void scopeRenovation(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate renovationEndDate);
 

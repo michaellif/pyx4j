@@ -104,23 +104,31 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
     }
 
     @Override
-    public void scopeOffMarket(final OffMarketType type, LogicalDate startDate) {
-        AptUnitOccupancyManagerHelper.split(unit, startDate, new SplittingHandler() {
-            @Override
-            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-                if (segment.status().getValue() != AptUnitOccupancySegment.Status.vacant) {
-                    throw new IllegalStateException("It's impossible to apply scopeOffMarket operation to " + segment.status().getValue());
-                }
-            }
+    public void scopeOffMarket(final OffMarketType type) {
+        LogicalDate now = nowProvider.getNow();
+        List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unit, now);
+        for (AptUnitOccupancySegment segment : occupancy) {
+            if (segment.status().getValue() == Status.vacant) {
+                LogicalDate splitDay = segment.dateFrom().getValue().before(now) ? now : segment.dateFrom().getValue();
+                AptUnitOccupancyManagerHelper.split(segment, splitDay, new SplittingHandler() {
+                    @Override
+                    public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
+                        // segment must be vacant
+                    }
 
-            @Override
-            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                segment.status().setValue(Status.offMarket);
-                segment.offMarket().setValue(type);
-                segment.lease().setValue(null);
+                    @Override
+                    public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
+                        segment.status().setValue(Status.offMarket);
+                        segment.offMarket().setValue(type);
+                        segment.lease().setValue(null);
+                    }
+                });
+                availabilityManager.generateUnitAvailablity(nowProvider.getNow());
+                return;
             }
-        });
-        availabilityManager.generateUnitAvailablity(nowProvider.getNow());
+        }
+
+        throw new IllegalStateException("a vacant segment was not found");
     }
 
     @Override
