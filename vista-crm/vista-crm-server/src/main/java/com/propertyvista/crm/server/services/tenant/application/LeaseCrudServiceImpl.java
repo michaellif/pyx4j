@@ -225,7 +225,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.secureRetrieve(dboClass, entityId);
-        lease.completion().setValue(CompletionType.None);
+        lease.completion().setValue(null);
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);
@@ -245,7 +245,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.secureRetrieve(dboClass, entityId);
-        lease.completion().setValue(CompletionType.None);
+        lease.completion().setValue(null);
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);
