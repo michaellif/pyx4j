@@ -138,6 +138,9 @@ import com.propertyvista.crm.client.activity.policies.deposit.DepositPolicyViewe
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyViewerActivity;
@@ -515,7 +518,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-// - Organisation-related:
+// - Organization-related:
                 } else if (place instanceof CrmSiteMap.Organization.Employee) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -560,7 +563,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new DashboardManagementActivity(place);
 // - Other:
                 } else if (place instanceof CrmSiteMap.Account) {
-                    // the service that the Account related activites use doesn't care about the 'id' arg,
+                    // the service that the Account related activities use doesn't care about the 'id' arg,
                     // but nevertheless the base "Activity" classes need it, so we just add a value let them be happy
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -785,6 +788,20 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new ProductTaxPolicyViewerActivity(place);
                         break;
                     }
+
+                } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseAdjustment) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case lister:
+                        activity = new LeaseAdjustmentPolicyListerActivity(place);
+                        break;
+                    case editor:
+                        activity = new LeaseAdjustmentPolicyEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new LeaseAdjustmentPolicyViewerActivity(place);
+                        break;
+                    }
+
                 } else if (place instanceof CrmSiteMap.Settings.Policies.Deposits) {
                     switch (((CrudAppPlace) place).getType()) {
                     case lister:

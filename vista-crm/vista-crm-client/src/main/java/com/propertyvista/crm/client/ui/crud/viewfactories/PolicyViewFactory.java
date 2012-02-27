@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -32,6 +32,12 @@ import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplat
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerView;
@@ -95,6 +101,13 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(ProductTaxPolicyEditorView.class, new ProductTaxPolicyEditorViewImpl());
             } else if (ProductTaxPolicyViewerView.class.equals(type)) {
                 map.put(ProductTaxPolicyViewerView.class, new ProductTaxPolicyViewerViewImpl());
+
+            } else if (LeaseAdjustmentPolicyListerView.class.equals(type)) {
+                map.put(LeaseAdjustmentPolicyListerView.class, new LeaseAdjustmentPolicyListerViewImpl());
+            } else if (LeaseAdjustmentPolicyEditorView.class.equals(type)) {
+                map.put(LeaseAdjustmentPolicyEditorView.class, new LeaseAdjustmentPolicyEditorViewImpl());
+            } else if (LeaseAdjustmentPolicyViewerView.class.equals(type)) {
+                map.put(LeaseAdjustmentPolicyViewerView.class, new LeaseAdjustmentPolicyViewerViewImpl());
 
             } else if (DepositPolicyListerView.class.equals(type)) {
                 map.put(DepositPolicyListerView.class, new DepositPolicyListerViewImpl());

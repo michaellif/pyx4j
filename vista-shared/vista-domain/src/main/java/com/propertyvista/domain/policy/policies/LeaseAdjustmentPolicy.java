@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,21 +13,19 @@
  */
 package com.propertyvista.domain.policy.policies;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.financial.tax.Tax;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.domain.policy.framework.BuildingPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
 
-/**
- * Reason code
- * 
- * @author michaellif
- * 
- */
-public interface LeaseAdjustmentPolicy extends IEntity {
+@DiscriminatorValue("LeaseAdjustmentPolicy")
+public interface LeaseAdjustmentPolicy extends BuildingPolicy {
 
-    LeaseAdjustmentReason leaseAdjustmentReason();
-
-    IList<Tax> taxes();
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    IList<LeaseAdjustmentPolicyItem> policyItems();
 }

@@ -327,9 +327,15 @@ public class CrmSiteMap implements SiteMap {
 
             }
 
+//            @PlaceProperties(caption = "Adjustment Taxes")
+//            @NavigationItem(navigLabel = "Adjustment Taxes")
+//            public static class AdjustmentTax extends CrudAppPlace {
+//
+//            }
+
             @PlaceProperties(caption = "Adjustment Taxes")
             @NavigationItem(navigLabel = "Adjustment Taxes")
-            public static class AdjustmentTax extends CrudAppPlace {
+            public static class LeaseAdjustment extends CrudAppPlace {
 
             }
 
