@@ -55,6 +55,9 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey);
 
+    //TODO implement
+    //public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel);
+
     /**
      * Fill all the information to already existing entity object that has only PK value
      * set. e.g. @link Detached entity member.
@@ -63,13 +66,24 @@ public interface IEntityPersistenceService {
      */
     public <T extends IEntity> boolean retrieve(T entity);
 
+    //TODO implement
+    //public <T extends IEntity> boolean retrieve(T entity, AttachLevel attachLevel);
+
+    //TODO make @Deprecated and use retrieve
     public <T extends IEntity> void retrieveMember(T entityMember);
 
+    public <T extends IEntity> void retrieve(Iterable<T> entityIterable);
+
+    //TODO implement
+    //public <T extends IEntity> void retrieve(Iterable<T> entityIterable, AttachLevel attachLevel);
+
+    //TODO make @Deprecated and use retrieve
     public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember);
 
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> void retrieve(Iterable<T> entityIterable);
+    //TODO implement
+    //public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria, AttachLevel attachLevel);
 
     public <T extends IEntity> Map<Key, T> retrieve(Class<T> entityClass, Iterable<Key> primaryKeys);
 
@@ -81,6 +95,9 @@ public interface IEntityPersistenceService {
     public String getPropertyName(EntityMeta meta, Path path);
 
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria);
+
+    //TODO implement
+    //public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria, AttachLevel attachLevel);
 
     public <T extends IEntity> ICursorIterator<T> query(String encodedCursorReference, EntityQueryCriteria<T> criteria);
 
