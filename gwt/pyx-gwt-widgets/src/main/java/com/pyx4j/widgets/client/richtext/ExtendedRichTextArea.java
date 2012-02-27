@@ -22,6 +22,7 @@ package com.pyx4j.widgets.client.richtext;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -77,6 +78,17 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
                     textMode = true;
                     toolbar.getElement().getStyle().setVisibility(Visibility.VISIBLE);
                 }
+            }
+        });
+        /*
+         * When this button gets focus the textarea will ignore blur event and therefore
+         * will not update component value with any changes that were made.
+         * So, we need to fire onBlur for textarea to save changes when focus moves somewhere else.
+         */
+        textHtmlSwitch.addBlurHandler(new BlurHandler() {
+            @Override
+            public void onBlur(BlurEvent event) {
+                richTextArea.fireEvent(event);
             }
         });
         toolPanel.setVerticalAlignment(ALIGN_BOTTOM);
