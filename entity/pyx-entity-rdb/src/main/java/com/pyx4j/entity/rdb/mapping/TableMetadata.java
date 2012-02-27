@@ -104,8 +104,6 @@ public class TableMetadata {
 
     void readForeignKeys(Connection connection) throws SQLException {
         foreignKeys = new ArrayList<String>();
-        foreignKeysReference = new HashMap<String, String>();
-
         // read Foreign Keys on this table
         ResultSet krs = null;
         DatabaseMetaData dbMeta = connection.getMetaData();
@@ -121,8 +119,16 @@ public class TableMetadata {
         } finally {
             SQLUtils.closeQuietly(krs);
         }
+    }
 
+    void readReferenceForeignKeys(Connection connection) throws SQLException {
+        if (foreignKeys == null) {
+            readForeignKeys(connection);
+        }
+        foreignKeysReference = new HashMap<String, String>();
         // read Foreign Keys to this table
+        ResultSet krs = null;
+        DatabaseMetaData dbMeta = connection.getMetaData();
         try {
             krs = dbMeta.getExportedKeys(catalog, schema, name);
             while (krs.next()) {
