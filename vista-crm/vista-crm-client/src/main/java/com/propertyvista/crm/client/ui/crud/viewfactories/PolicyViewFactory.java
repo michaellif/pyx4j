@@ -20,6 +20,12 @@ import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.Ap
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyEdtiorView;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyListerView;
@@ -89,6 +95,13 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(ProductTaxPolicyEditorView.class, new ProductTaxPolicyEditorViewImpl());
             } else if (ProductTaxPolicyViewerView.class.equals(type)) {
                 map.put(ProductTaxPolicyViewerView.class, new ProductTaxPolicyViewerViewImpl());
+
+            } else if (DepositPolicyListerView.class.equals(type)) {
+                map.put(DepositPolicyListerView.class, new DepositPolicyListerViewImpl());
+            } else if (DepositPolicyEditorView.class.equals(type)) {
+                map.put(DepositPolicyEditorView.class, new DepositPolicyEditorViewImpl());
+            } else if (DepositPolicyViewerView.class.equals(type)) {
+                map.put(DepositPolicyViewerView.class, new DepositPolicyViewerViewImpl());
             }
 
         }

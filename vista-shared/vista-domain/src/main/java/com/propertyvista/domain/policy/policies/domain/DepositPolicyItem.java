@@ -73,6 +73,7 @@ public interface DepositPolicyItem extends IEntity {
 
     IPrimitive<ValueType> valueType();
 
+    @NotNull
     IPrimitive<BigDecimal> depositValue();
 
     IPrimitive<ApplyToRepayAt> applyToRepayAt();
