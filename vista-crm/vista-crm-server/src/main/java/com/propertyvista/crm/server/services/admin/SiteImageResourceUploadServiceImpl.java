@@ -70,6 +70,7 @@ public class SiteImageResourceUploadServiceImpl extends UploadServiceImpl<IEntit
         newDocument.timestamp().setValue(response.timestamp);
         newDocument.contentMimeType().setValue(response.fileContentType);
         Persistence.service().persist(newDocument);
+        Persistence.service().commit();
 
         response.data = newDocument;
 

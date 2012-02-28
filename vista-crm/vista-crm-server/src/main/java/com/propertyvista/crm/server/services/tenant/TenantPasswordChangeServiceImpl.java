@@ -38,6 +38,7 @@ public class TenantPasswordChangeServiceImpl implements TenantPasswordChangeServ
             credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.TRUE);
         }
         Persistence.service().persist(credential);
+        Persistence.service().commit();
         callback.onSuccess(null);
     }
 }

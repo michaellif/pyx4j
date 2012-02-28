@@ -73,7 +73,12 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
         Thread t = new DeferredProcessorThread("Import", process, new Runnable() {
             @Override
             public void run() {
-                runImport(data, process, response);
+                Persistence.service().startTransaction();
+                try {
+                    runImport(data, process, response);
+                } finally {
+                    Persistence.service().endTransaction();
+                }
             }
         });
         t.setDaemon(true);
@@ -139,6 +144,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
                     counters.add(new BuildingUpdater().updateData(building, mediaConfig));
                     break;
                 }
+                Persistence.service().commit();
                 count++;
                 process.status().setProgress(count);
             }

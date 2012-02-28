@@ -189,6 +189,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         if (!cr.accessKey().isNull()) {
             cr.accessKey().setValue(null);
             Persistence.service().persist(cr);
+            Persistence.service().commit();
         }
         if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
             Set<Behavior> behaviors = new HashSet<Behavior>();
@@ -251,6 +252,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         U user = users.get(0);
 
         String token = AccessKey.createAccessToken(user, credentialClass, 1);
+        Persistence.service().commit();
         if (token == null) {
             throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }

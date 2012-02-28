@@ -18,6 +18,7 @@ import java.util.Collection;
 import org.apache.commons.io.FilenameUtils;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -59,6 +60,7 @@ public class MediaUploadServiceImpl extends UploadServiceImpl<MediaUploadDTO, Fi
 
         MediaUploadDTO mediaUploadDTO = process.getData();
         ThumbnailService.persist(blobKey, response.fileName, data.data, mediaUploadDTO.target().getValue());
+        Persistence.service().commit();
         response.uploadKey = blobKey;
         return ProcessingStatus.completed;
     }

@@ -22,9 +22,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.security.rpc.AbstractPasswordResetService;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.security.rpc.AbstractPasswordResetService;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.security.AbstractUser;
@@ -58,6 +58,7 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
         credentials.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
         credentials.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
         Persistence.service().persist(credentials);
+        Persistence.service().commit();
         log.info("password changed by user {} {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
 
         // logout

@@ -45,6 +45,7 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<Sit
         if (list.isEmpty()) {
             SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
             Persistence.service().persist(site);
+            Persistence.service().commit();
             callback.onSuccess(site.getPrimaryKey());
         } else {
             callback.onSuccess(list.get(0));

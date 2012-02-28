@@ -96,6 +96,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
         cr.accessKey().setValue(null);
         cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
         Persistence.service().persist(cr);
+        Persistence.service().commit();
         log.info("password changed by user {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
         callback.onSuccess(null);
     }

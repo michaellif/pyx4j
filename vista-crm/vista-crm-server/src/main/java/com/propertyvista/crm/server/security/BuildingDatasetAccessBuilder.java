@@ -69,5 +69,6 @@ public class BuildingDatasetAccessBuilder {
         for (Building b : unConfirmed) {
             Persistence.service().delete(userBuildingMap.get(b));
         }
+        Persistence.service().commit();
     }
 }
