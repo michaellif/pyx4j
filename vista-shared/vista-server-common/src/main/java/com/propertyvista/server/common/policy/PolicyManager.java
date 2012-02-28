@@ -103,7 +103,7 @@ public class PolicyManager {
 
         do {
             EntityQueryCriteria<POLICY> criteria = EntityQueryCriteria.create(policyClass);
-            criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
+            criteria.add(PropertyCriterion.eq(criteria.proto().node(), currentNode));
             policy = Persistence.service().retrieve(criteria);
 
             if (policy != null) {
@@ -175,7 +175,7 @@ public class PolicyManager {
                 }
             }
             // if we haven't found a parent: return settings at organization (we assume that one node at must be preloaded)
-            return Persistence.service().query(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class)).get(0);
+            return Persistence.service().retrieve(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
 
         } else if (Province.class.equals(nodeClass)) {
 
