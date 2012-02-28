@@ -14,21 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 30, 2011
+ * Created on Feb 27, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.mapping;
+package com.pyx4j.config.server;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.List;
+public interface LifecycleListener {
 
-import com.pyx4j.entity.rdb.PersistenceContext;
+    public void onRequestBegin();
 
-public interface ValueBindAdapter {
+    public void onRequestEnd();
 
-    List<String> getColumnNames(String memberSqlName);
-
-    int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException;
 }

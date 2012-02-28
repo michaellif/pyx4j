@@ -20,13 +20,12 @@
  */
 package com.pyx4j.entity.rdb;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
-import com.pyx4j.entity.rdb.mapping.TableModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 
 public abstract class AssociationMappingTestCase extends DatastoreTestBase {
@@ -44,17 +43,13 @@ public abstract class AssociationMappingTestCase extends DatastoreTestBase {
     }
 
     public boolean testColumnExists(Class<? extends IEntity> type, String columnName) {
+        srv.count(EntityQueryCriteria.create(type));
         EntityPersistenceServiceRDB service = ((EntityPersistenceServiceRDB) srv);
-        Connection connection = service.getConnection();
         try {
-            TableModel tableModel = service.tableModel(connection, EntityFactory.getEntityMeta(type));
-
-            TableMetadata tableMetadata = TableMetadata.getTableMetadata(connection, tableModel.getTableName());
+            TableMetadata tableMetadata = service.getTableMetadata(EntityFactory.getEntityMeta(type));
             return tableMetadata.getColumn(columnName) != null;
         } catch (SQLException e) {
             throw new Error("Error in getTableMetadata", e);
-        } finally {
-            SQLUtils.closeQuietly(connection);
         }
     }
 

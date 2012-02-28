@@ -27,7 +27,6 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.ManagedColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.i18n.annotations.I18n;
 
 @AbstractEntity(generateMetadata = false)
@@ -37,6 +36,9 @@ public interface IVersionedEntity<VERSIONED_ITEM extends IVersionData<?>> extend
     @Detached(level = AttachLevel.Detached)
     @Owned
     IList<VERSIONED_ITEM> versions();
+
+    @ManagedColumn
+    IPrimitive<Boolean> draft();
 
     /**
      * null for draft
@@ -52,7 +54,6 @@ public interface IVersionedEntity<VERSIONED_ITEM extends IVersionData<?>> extend
     IPrimitive<Date> forDate();
 
     @ManagedColumn
-    @Transient
     @ToString(index = 1)
     VERSIONED_ITEM version();
 

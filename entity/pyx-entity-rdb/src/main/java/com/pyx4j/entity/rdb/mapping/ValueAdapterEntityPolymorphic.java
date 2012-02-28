@@ -33,6 +33,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -103,7 +104,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+    public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         IEntity childEntity = (IEntity) value;
         Key primaryKey = childEntity.getPrimaryKey();
         if (primaryKey == null) {
@@ -142,7 +143,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
             return new ValueBindAdapter() {
 
                 @Override
-                public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+                public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
                     IEntity childEntity = (IEntity) value;
                     assert impClasses.containsValue(childEntity.getInstanceValueClass()) : "Unexpected class " + childEntity.getInstanceValueClass() + "\n"
                             + impClasses.values() + "\n" + value;

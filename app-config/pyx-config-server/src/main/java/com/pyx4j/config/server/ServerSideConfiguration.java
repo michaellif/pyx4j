@@ -161,6 +161,10 @@ public class ServerSideConfiguration {
         return null;
     }
 
+    public LifecycleListener getLifecycleListener() {
+        return null;
+    }
+
     /**
      * Null assumes GAE e-mail delivery
      */

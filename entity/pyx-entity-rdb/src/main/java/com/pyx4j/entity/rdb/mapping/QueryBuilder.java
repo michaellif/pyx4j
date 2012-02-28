@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -35,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
@@ -68,12 +68,12 @@ public class QueryBuilder<T extends IEntity> {
 
     QueryJoinBuilder queryJoin;
 
-    public QueryBuilder(Connection connection, Dialect dialect, Mappings mappings, String alias, EntityOperationsMeta operationsMeta,
+    public QueryBuilder(PersistenceContext persistenceContext, Mappings mappings, String alias, EntityOperationsMeta operationsMeta,
             EntityQueryCriteria<T> criteria) {
-        this.dialect = dialect;
+        this.dialect = persistenceContext.getDialect();
         this.mainTableSqlAlias = alias;
 
-        this.queryJoin = new QueryJoinBuilder(connection, dialect, mappings, operationsMeta, alias);
+        this.queryJoin = new QueryJoinBuilder(persistenceContext, mappings, operationsMeta, alias);
 
         boolean firstCriteria = true;
         if (dialect.isMultitenant()) {
@@ -290,7 +290,7 @@ public class QueryBuilder<T extends IEntity> {
         }
     }
 
-    int bindParameters(PreparedStatement stmt) throws SQLException {
+    int bindParameters(PersistenceContext persistenceContext, PreparedStatement stmt) throws SQLException {
         int parameterIndex = 1;
         if (dialect.isMultitenant()) {
             stmt.setString(parameterIndex, NamespaceManager.getNamespace());
@@ -299,7 +299,7 @@ public class QueryBuilder<T extends IEntity> {
         for (Object param : bindParams) {
             if (param instanceof BindHolder) {
                 if (((BindHolder) param).adapter != null) {
-                    parameterIndex += ((BindHolder) param).adapter.bindValue(stmt, parameterIndex, ((BindHolder) param).bindValue);
+                    parameterIndex += ((BindHolder) param).adapter.bindValue(persistenceContext, stmt, parameterIndex, ((BindHolder) param).bindValue);
                 } else {
                     stmt.setObject(parameterIndex, encodeValue(((BindHolder) param).bindValue));
                     parameterIndex++;

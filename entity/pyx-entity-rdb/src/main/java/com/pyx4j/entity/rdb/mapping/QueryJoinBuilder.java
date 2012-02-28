@@ -20,11 +20,11 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
-import java.sql.Connection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.Path;
 
 class QueryJoinBuilder {
 
-    private final Connection connection;
+    private final PersistenceContext persistenceContext;
 
     private final Dialect dialect;
 
@@ -80,9 +80,9 @@ class QueryJoinBuilder {
     //keep the keys in the order they were inserted.
     private final Map<String, JoinDef> memberJoinAliases = new LinkedHashMap<String, JoinDef>();
 
-    QueryJoinBuilder(Connection connection, Dialect dialect, Mappings mappings, EntityOperationsMeta operationsMeta, String mainTableSqlAlias) {
-        this.connection = connection;
-        this.dialect = dialect;
+    QueryJoinBuilder(PersistenceContext persistenceContext, Mappings mappings, EntityOperationsMeta operationsMeta, String mainTableSqlAlias) {
+        this.persistenceContext = persistenceContext;
+        this.dialect = persistenceContext.getDialect();
         this.mappings = mappings;
         this.operationsMeta = operationsMeta;
         this.mainTableSqlAlias = mainTableSqlAlias;
@@ -121,7 +121,7 @@ class QueryJoinBuilder {
         }
         @SuppressWarnings("unchecked")
         Class<? extends IEntity> targetEntityClass = (Class<? extends IEntity>) memberOper.getMemberMeta().getValueClass();
-        EntityOperationsMeta targetEntityOperationsMeta = mappings.getEntityOperationsMeta(connection, targetEntityClass);
+        EntityOperationsMeta targetEntityOperationsMeta = mappings.getEntityOperationsMeta(persistenceContext.getConnection(), targetEntityClass);
 
         String pathFragmet = propertyPath.substring(memberOper.getMemberPath().length());
         if (pathFragmet.startsWith(Path.COLLECTION_SEPARATOR)) {

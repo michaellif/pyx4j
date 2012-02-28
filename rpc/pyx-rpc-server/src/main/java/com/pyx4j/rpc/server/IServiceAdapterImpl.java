@@ -34,6 +34,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
@@ -188,6 +189,10 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             if (!callback.onSuccessCalled) {
                 log.error("Error forgot to call \"onSuccess\" from method {} in class {}", method.getName(), serviceInstance.getClass().getName());
                 throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
+            }
+            if (!ApplicationBackend.TODO_TRANSACTION) {
+                //TODO call Persistence.service().endTransaction();
+                //Lifecycle.endRpcRequest();
             }
             return callback.result;
         } catch (IllegalArgumentException e) {

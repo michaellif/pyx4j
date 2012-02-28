@@ -24,6 +24,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
@@ -47,7 +48,7 @@ class ValueAdapterString extends ValueAdapterPrimitive {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+    public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         String str = (String) value;
         if (str == null) {
             stmt.setNull(parameterIndex, sqlType);

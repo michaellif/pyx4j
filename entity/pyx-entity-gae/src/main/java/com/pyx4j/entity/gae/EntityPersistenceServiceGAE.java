@@ -216,6 +216,26 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return i18n.tr("Application is in read-only due to short maintenance.\nPlease try again in one hour");
     }
 
+    @Override
+    public void startTransaction() {
+        //TODO
+    }
+
+    @Override
+    public void endTransaction() {
+        //TODO
+    }
+
+    @Override
+    public void commit() {
+        //TODO
+    }
+
+    @Override
+    public void rollback() {
+        //TODO
+    }
+
     private Blob createBlob(Serializable o) {
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
         ObjectOutputStream out = null;

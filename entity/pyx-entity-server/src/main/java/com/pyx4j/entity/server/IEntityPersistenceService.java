@@ -33,6 +33,17 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public interface IEntityPersistenceService {
 
+    /**
+     * Usually called when on startRequest from Lifecycle.beginRequest
+     */
+    public void startTransaction();
+
+    public void endTransaction();
+
+    public void commit();
+
+    public void rollback();
+
     public interface ICursorIterator<T> extends Iterator<T> {
 
         /**

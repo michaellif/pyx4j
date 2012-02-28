@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 
 class ValueAdapterLogicalDate extends ValueAdapterPrimitive {
@@ -37,7 +38,7 @@ class ValueAdapterLogicalDate extends ValueAdapterPrimitive {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+    public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);
         } else if (value instanceof java.sql.Date) {

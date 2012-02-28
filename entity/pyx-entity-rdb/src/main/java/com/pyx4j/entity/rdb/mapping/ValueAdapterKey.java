@@ -25,6 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 
 class ValueAdapterKey extends ValueAdapterPrimitive {
@@ -34,7 +35,7 @@ class ValueAdapterKey extends ValueAdapterPrimitive {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+    public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);
         } else {

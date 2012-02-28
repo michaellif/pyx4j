@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.i18n.server.I18nManager;
 import com.pyx4j.log4j.LoggerConfig;
@@ -92,7 +93,10 @@ public class Lifecycle {
         }
 
         //log.debug("beginRequest, took {}ms", (int) (System.nanoTime() - start) / Consts.MSEC2NANO);
-        // PersistenceServicesFactory.getPersistenceService().startRequest();
+        LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
+        if (lifecycleListener != null) {
+            lifecycleListener.onRequestBegin();
+        }
     }
 
     public static void endRequest() {
@@ -117,6 +121,10 @@ public class Lifecycle {
                 c.setMaxAge(0);
                 Context.getResponse().addCookie(c);
             }
+            LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
+            if (lifecycleListener != null) {
+                lifecycleListener.onRequestEnd();
+            }
         } finally {
             endContext();
         }
@@ -135,6 +143,10 @@ public class Lifecycle {
             c.setPath("/");
             c.setMaxAge(0);
             Context.getResponse().addCookie(c);
+        }
+        LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
+        if (lifecycleListener != null) {
+            lifecycleListener.onRequestEnd();
         }
     }
 

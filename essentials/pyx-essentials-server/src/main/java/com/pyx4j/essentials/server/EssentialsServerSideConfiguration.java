@@ -20,8 +20,10 @@
  */
 package com.pyx4j.essentials.server;
 
+import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.config.server.LocaleResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.server.PersistenceContextLifecycleListener;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
@@ -32,6 +34,11 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
     @Override
     public LocaleResolver getLocaleResolver() {
         return new CookieLocaleResolver();
+    }
+
+    @Override
+    public LifecycleListener getLifecycleListener() {
+        return new PersistenceContextLifecycleListener();
     }
 
     public DataPreloaderCollection getDataPreloaders() {

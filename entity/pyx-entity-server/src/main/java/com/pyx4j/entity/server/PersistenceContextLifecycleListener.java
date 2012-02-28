@@ -14,21 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 30, 2011
+ * Created on Feb 27, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.mapping;
+package com.pyx4j.entity.server;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.List;
+import com.pyx4j.config.server.LifecycleListener;
+import com.pyx4j.config.shared.ApplicationBackend;
 
-import com.pyx4j.entity.rdb.PersistenceContext;
+public class PersistenceContextLifecycleListener implements LifecycleListener {
 
-public interface ValueBindAdapter {
+    @Override
+    public void onRequestBegin() {
+        if (!ApplicationBackend.TODO_TRANSACTION) {
+            Persistence.service().startTransaction();
+        }
+    }
 
-    List<String> getColumnNames(String memberSqlName);
+    @Override
+    public void onRequestEnd() {
+        if (!ApplicationBackend.TODO_TRANSACTION) {
+            Persistence.service().endTransaction();
+        }
+    }
 
-    int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException;
 }

@@ -41,9 +41,12 @@ import com.google.gwt.user.server.rpc.SerializationPolicy;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.server.RequestDebug;
+import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.RemoteService;
+import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
@@ -188,7 +191,15 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
         try {
             return implementation.execute(realServiceName, serviceRequest, userVisitHashCode);
         } finally {
-            Lifecycle.endRpcRequest();
+            try {
+                Lifecycle.endRpcRequest();
+            } catch (Throwable e) {
+                if (ApplicationMode.isDevelopment()) {
+                    throw new DevInfoUnRecoverableRuntimeException(e);
+                } else {
+                    throw new UnRecoverableRuntimeException("Fatal system error");
+                }
+            }
         }
     }
 

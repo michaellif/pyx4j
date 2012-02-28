@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.HSQLDialect;
@@ -62,7 +62,7 @@ public class TableModelCollections {
     }
 
     @SuppressWarnings("unchecked")
-    public static void insert(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member) {
+    public static void insert(PersistenceContext persistenceContext, IEntity entity, MemberCollectionOperationsMeta member) {
         if (!member.getMemberMeta().isCascadePersist()) {
             // Never update
             return;
@@ -74,11 +74,11 @@ public class TableModelCollections {
         if ((collectionMember == null) || collectionMember.isEmpty()) {
             return;
         } else {
-            insert(connection, dialect, entity, member, (Collection<Object>) member.getMember(entity), null);
+            insert(persistenceContext, entity, member, (Collection<Object>) member.getMember(entity), null);
         }
     }
 
-    private static void insert(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member, Collection<Object> dataSet,
+    private static void insert(PersistenceContext persistenceContext, IEntity entity, MemberCollectionOperationsMeta member, Collection<Object> dataSet,
             List<Object> dataPositions) {
         PreparedStatement stmt = null;
 
@@ -86,6 +86,7 @@ public class TableModelCollections {
         boolean isList = (type == ObjectClassType.EntityList);
 
         StringBuilder sql = new StringBuilder();
+        Dialect dialect = persistenceContext.getDialect();
         try {
             int numberOfParams = 0;
             sql.append("INSERT INTO ").append(member.sqlName()).append(" ( ");
@@ -132,7 +133,7 @@ public class TableModelCollections {
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {} ", sql);
             }
-            stmt = connection.prepareStatement(sql.toString());
+            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             int seq = 0;
             for (Object value : dataSet) {
                 if ((type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
@@ -143,8 +144,8 @@ public class TableModelCollections {
                     }
                 }
                 int parameterIndex = 1;
-                parameterIndex += member.getOwnerValueAdapter().bindValue(stmt, parameterIndex, entity);
-                parameterIndex += member.getValueAdapter().bindValue(stmt, parameterIndex, value);
+                parameterIndex += member.getOwnerValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, entity);
+                parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, value);
 
                 if (isList) {
                     if (dataPositions != null) {
@@ -160,6 +161,7 @@ public class TableModelCollections {
                 if (EntityPersistenceServiceRDB.trace) {
                     log.info(Trace.id() + "insert {} (" + entity.getPrimaryKey() + ", " + value + ", " + seq + ")", member.sqlName());
                 }
+                persistenceContext.setUncommittedChanges();
                 stmt.executeUpdate();
                 seq++;
             }
@@ -173,7 +175,7 @@ public class TableModelCollections {
     }
 
     @SuppressWarnings("unchecked")
-    public static void update(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member, List<IEntity> cascadeRemove) {
+    public static void update(PersistenceContext persistenceContext, IEntity entity, MemberCollectionOperationsMeta member, List<IEntity> cascadeRemove) {
         if (!member.getMemberMeta().isCascadePersist()) {
             // Never update
             return;
@@ -197,6 +199,7 @@ public class TableModelCollections {
         List<Object> insertData = new Vector<Object>();
         insertData.addAll(allData);
 
+        Dialect dialect = persistenceContext.getDialect();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         StringBuilder sql = new StringBuilder();
@@ -239,10 +242,10 @@ public class TableModelCollections {
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {}", sql);
             }
-            stmt = connection.prepareStatement(sql.toString(), ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+            stmt = persistenceContext.getConnection().prepareStatement(sql.toString(), ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
 
             int parameterIndex = 1;
-            parameterIndex += member.getOwnerValueAdapter().bindValue(stmt, parameterIndex, entity);
+            parameterIndex += member.getOwnerValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, entity);
 
             if (dialect.isMultitenant()) {
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());
@@ -262,11 +265,13 @@ public class TableModelCollections {
                                 log.info(Trace.id() + "update {} (" + entity.getPrimaryKey() + ", " + value + ", " + rs.getInt(member.sqlOrderColumnName())
                                         + "->" + valueIdx + ")", member.sqlName());
                             }
+                            persistenceContext.setUncommittedChanges();
                             rs.updateInt(member.sqlOrderColumnName(), valueIdx);
                             rs.updateRow();
                         }
                     }
                 } else {
+                    persistenceContext.setUncommittedChanges();
                     rs.deleteRow();
                     if ((value instanceof IEntity) && (member.getMemberMeta().isOwnedRelationships())) {
                         if (EntityPersistenceServiceRDB.trace) {
@@ -277,10 +282,10 @@ public class TableModelCollections {
                 }
             }
             if (EntityPersistenceServiceRDB.traceWarnings) {
-                SQLUtils.logAndClearWarnings(connection);
+                SQLUtils.logAndClearWarnings(persistenceContext.getConnection());
             } else if (dialect instanceof HSQLDialect) {
                 // https://sourceforge.net/tracker/?func=detail&aid=3490661&group_id=23316&atid=378131
-                connection.clearWarnings();
+                persistenceContext.getConnection().clearWarnings();
             }
         } catch (SQLException e) {
             log.error("{} Cursor SQL: {}", member.sqlName(), sql);
@@ -292,11 +297,12 @@ public class TableModelCollections {
         }
 
         if (!insertData.isEmpty()) {
-            insert(connection, dialect, entity, member, insertData, allData);
+            insert(persistenceContext, entity, member, insertData, allData);
         }
     }
 
-    static void retrieve(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member) {
+    static void retrieve(PersistenceContext persistenceContext, IEntity entity, MemberCollectionOperationsMeta member) {
+        Dialect dialect = persistenceContext.getDialect();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
@@ -334,11 +340,11 @@ public class TableModelCollections {
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {} ", sql);
             }
-            stmt = connection.prepareStatement(sql.toString());
+            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections 
             stmt.setMaxRows(0);
             int parameterIndex = 1;
-            parameterIndex += member.getOwnerValueAdapter().bindValue(stmt, parameterIndex, entity);
+            parameterIndex += member.getOwnerValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, entity);
 
             if (dialect.isMultitenant()) {
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());
@@ -367,12 +373,13 @@ public class TableModelCollections {
         }
     }
 
-    static <T extends IEntity> void retrieve(Connection connection, Dialect dialect, Map<Long, T> entities, MemberCollectionOperationsMeta member) {
+    static <T extends IEntity> void retrieve(PersistenceContext persistenceContext, Map<Long, T> entities, MemberCollectionOperationsMeta member) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
         StringBuilder sql = new StringBuilder();
+        Dialect dialect = persistenceContext.getDialect();
         try {
             sql.append("SELECT owner");
             for (String name : member.getValueAdapter().getColumnNames(member.sqlValueName())) {
@@ -399,7 +406,7 @@ public class TableModelCollections {
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {} ", sql);
             }
-            stmt = connection.prepareStatement(sql.toString());
+            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections 
             stmt.setMaxRows(0);
             int parameterIndex = 1;
@@ -431,9 +438,10 @@ public class TableModelCollections {
         }
     }
 
-    public static void delete(Connection connection, Dialect dialect, Key primaryKey, MemberCollectionOperationsMeta member) {
+    public static void delete(PersistenceContext persistenceContext, Key primaryKey, MemberCollectionOperationsMeta member) {
         PreparedStatement stmt = null;
         StringBuilder sql = new StringBuilder();
+        Dialect dialect = persistenceContext.getDialect();
         try {
             if (member.getOwnerValueAdapter() instanceof ValueAdapterEntityPolymorphic) {
                 throw new Error("TODO delete by Polymorphic Owner");
@@ -445,11 +453,12 @@ public class TableModelCollections {
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {} ", sql);
             }
-            stmt = connection.prepareStatement(sql.toString());
+            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             stmt.setLong(1, primaryKey.asLong());
             if (dialect.isMultitenant()) {
                 stmt.setString(2, NamespaceManager.getNamespace());
             }
+            persistenceContext.setUncommittedChanges();
             stmt.executeUpdate();
         } catch (SQLException e) {
             log.error("{} SQL: {}", member.sqlName(), sql);
@@ -460,9 +469,10 @@ public class TableModelCollections {
         }
     }
 
-    public static void delete(Connection connection, Dialect dialect, Iterable<Key> primaryKeys, MemberCollectionOperationsMeta member) {
+    public static void delete(PersistenceContext persistenceContext, Iterable<Key> primaryKeys, MemberCollectionOperationsMeta member) {
         PreparedStatement stmt = null;
         StringBuilder sql = new StringBuilder();
+        Dialect dialect = persistenceContext.getDialect();
         try {
             //TODO delete by Polymorphic Owner
             sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
@@ -472,7 +482,7 @@ public class TableModelCollections {
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {} ", sql);
             }
-            stmt = connection.prepareStatement(sql.toString());
+            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             int pkSize = 0;
             for (Key primaryKey : primaryKeys) {
                 stmt.setLong(1, primaryKey.asLong());
@@ -485,13 +495,13 @@ public class TableModelCollections {
             if (pkSize == 0) { //nothing to delete
                 return;
             }
-
+            persistenceContext.setUncommittedChanges();
             stmt.executeBatch();
 
             if (EntityPersistenceServiceRDB.traceWarnings) {
-                SQLUtils.logAndClearWarnings(connection);
+                SQLUtils.logAndClearWarnings(persistenceContext.getConnection());
             } else if (dialect instanceof HSQLDialect) {
-                connection.clearWarnings();
+                persistenceContext.getConnection().clearWarnings();
             }
         } catch (SQLException e) {
             log.error("{} SQL: {}", member.sqlName(), sql);
@@ -502,10 +512,10 @@ public class TableModelCollections {
         }
     }
 
-    public static void truncate(Connection connection, MemberOperationsMeta member) {
+    public static void truncate(PersistenceContext persistenceContext, MemberOperationsMeta member) {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement("TRUNCATE TABLE " + member.sqlName());
+            stmt = persistenceContext.getConnection().prepareStatement("TRUNCATE TABLE " + member.sqlName());
             stmt.execute();
         } catch (SQLException e) {
             log.error("{} SQL truncate error", member.sqlName(), e);

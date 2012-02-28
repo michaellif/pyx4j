@@ -61,6 +61,7 @@ public abstract class AbstractCrudServiceImpl<E extends IEntity> extends Abstrac
     @Override
     public void create(AsyncCallback<E> callback, E entity) {
         persist(entity);
+        Persistence.service().commit();
         enhanceRetrieved(entity);
         callback.onSuccess(entity);
     }
@@ -68,6 +69,7 @@ public abstract class AbstractCrudServiceImpl<E extends IEntity> extends Abstrac
     @Override
     public void save(AsyncCallback<E> callback, E entity) {
         persist(entity);
+        Persistence.service().commit();
         enhanceRetrieved(entity);
         callback.onSuccess(entity);
     }

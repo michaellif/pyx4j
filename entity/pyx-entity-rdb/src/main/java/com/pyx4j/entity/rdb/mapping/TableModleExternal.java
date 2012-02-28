@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -40,10 +40,11 @@ public class TableModleExternal {
 
     private static final Logger log = LoggerFactory.getLogger(TableModleExternal.class);
 
-    public static void retrieve(Connection connection, Dialect dialect, IEntity entity, MemberExternalOperationsMeta member) {
+    public static void retrieve(PersistenceContext persistenceContext, IEntity entity, MemberExternalOperationsMeta member) {
         if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
             return;
         }
+        Dialect dialect = persistenceContext.getDialect();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         StringBuilder sql = new StringBuilder();
@@ -76,12 +77,12 @@ public class TableModleExternal {
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {} ", sql);
             }
-            stmt = connection.prepareStatement(sql.toString());
+            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // Just in case, used for pooled connections 
             stmt.setMaxRows(1);
 
             int parameterIndex = 1;
-            parameterIndex += member.getOwnerValueAdapter().bindValue(stmt, parameterIndex, entity);
+            parameterIndex += member.getOwnerValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, entity);
 
             if (dialect.isMultitenant()) {
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());

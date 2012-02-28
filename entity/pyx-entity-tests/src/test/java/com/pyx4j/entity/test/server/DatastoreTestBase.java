@@ -90,6 +90,7 @@ public abstract class DatastoreTestBase extends TestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
         if (persistenceEnvironment != null) {
+            srv.endTransaction();
             persistenceEnvironment.teardownDatastore(srv);
         }
         log.debug("ended test {}.{}", this.getClass().getName(), this.getName());

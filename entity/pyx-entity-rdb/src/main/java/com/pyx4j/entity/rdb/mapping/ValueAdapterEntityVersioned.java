@@ -23,6 +23,9 @@ package com.pyx4j.entity.rdb.mapping;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -31,16 +34,22 @@ import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
-class ValueAdapterEntity implements ValueAdapter {
+class ValueAdapterEntityVersioned implements ValueAdapter {
+
+    private static String FOR_DATE_COLUNM_NAME_SUFIX = "_for";
 
     protected int sqlTypeKey;
 
+    protected int sqlTypeForDate;
+
     private final Class<? extends IEntity> entityClass;
 
-    protected ValueAdapterEntity(Dialect dialect, Class<? extends IEntity> entityClass) {
+    protected ValueAdapterEntityVersioned(Dialect dialect, Class<? extends IEntity> entityClass) {
         sqlTypeKey = dialect.getTargetSqlType(Long.class);
+        sqlTypeForDate = dialect.getTargetSqlType(java.util.Date.class);
         this.entityClass = entityClass;
     }
 
@@ -48,29 +57,49 @@ class ValueAdapterEntity implements ValueAdapter {
     public List<String> getColumnNames(String memberSqlName) {
         List<String> columnNames = new Vector<String>();
         columnNames.add(memberSqlName);
+        columnNames.add(memberSqlName + FOR_DATE_COLUNM_NAME_SUFIX);
         return columnNames;
     }
 
     @Override
     public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName) {
-        return dialect.isCompatibleType(Long.class, 0, typeName);
+        if (coumnName.endsWith(FOR_DATE_COLUNM_NAME_SUFIX)) {
+            return dialect.isCompatibleType(java.util.Date.class, 0, typeName);
+        } else {
+            return dialect.isCompatibleType(Long.class, 0, typeName);
+        }
     }
 
     @Override
     public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName) {
-        sql.append(dialect.getSqlType(Long.class));
+        if (coumnName.endsWith(FOR_DATE_COLUNM_NAME_SUFIX)) {
+            sql.append(dialect.getSqlType(java.util.Date.class));
+        } else {
+            sql.append(dialect.getSqlType(Long.class));
+        }
     }
 
     @Override
     public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
-        IEntity childEntity = (IEntity) value;
+        IVersionedEntity<?> childEntity = (IVersionedEntity<?>) value;
         Key primaryKey = childEntity.getPrimaryKey();
         if (primaryKey == null) {
             stmt.setNull(parameterIndex, sqlTypeKey);
+            stmt.setNull(parameterIndex + 1, sqlTypeForDate);
         } else {
             stmt.setLong(parameterIndex, primaryKey.asLong());
+            Calendar c = new GregorianCalendar();
+            Date forDate = childEntity.forDate().getValue();
+            if (forDate == null) {
+                forDate = persistenceContext.getTimeNow();
+                childEntity.forDate().setValue(forDate);
+            }
+            c.setTime(childEntity.forDate().getValue());
+            // DB does not store Milliseconds
+            c.set(Calendar.MILLISECOND, 0);
+            stmt.setTimestamp(parameterIndex + 1, new java.sql.Timestamp(c.getTimeInMillis()));
         }
-        return 1;
+        return 2;
     }
 
     @Override
@@ -81,6 +110,10 @@ class ValueAdapterEntity implements ValueAdapter {
         } else {
             IEntity entity = EntityFactory.create(entityClass);
             entity.setPrimaryKey(new Key(value));
+            java.sql.Timestamp forDate = rs.getTimestamp(memberSqlName + FOR_DATE_COLUNM_NAME_SUFIX);
+            if (!rs.wasNull()) {
+                ((IVersionedEntity<?>) entity).forDate().setValue(new java.util.Date(forDate.getTime()));
+            }
             entity.setValueDetached();
             return entity;
         }
@@ -127,6 +160,6 @@ class ValueAdapterEntity implements ValueAdapter {
 
     @Override
     public String toString() {
-        return "Entity '" + entityClass.getSimpleName() + "'";
+        return "EntityVersioned '" + entityClass.getSimpleName() + "'";
     }
 }

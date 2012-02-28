@@ -36,7 +36,9 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
+import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.adapters.EntityModificationAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
@@ -54,6 +56,7 @@ import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.MemberCollectionOperationsMeta;
 import com.pyx4j.entity.rdb.mapping.MemberOperationsMeta;
 import com.pyx4j.entity.rdb.mapping.ResultSetIterator;
+import com.pyx4j.entity.rdb.mapping.TableMetadata;
 import com.pyx4j.entity.rdb.mapping.TableModel;
 import com.pyx4j.entity.rdb.mapping.TableModelCollections;
 import com.pyx4j.entity.rdb.mapping.ValueAdapterEntityPolymorphic;
@@ -71,8 +74,8 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 /**
@@ -96,6 +99,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     public static final boolean traceWarnings = false;
 
+    private final ThreadLocal<PersistenceContext> threadSessions = new ThreadLocal<PersistenceContext>();
+
     public EntityPersistenceServiceRDB() {
         this(RDBUtils.getRDBConfiguration());
     }
@@ -113,10 +118,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
-    public Connection getConnection() {
-        return connectionProvider.getConnection(ConnectionTarget.forUpdate);
-    }
-
     @Override
     public void dispose() {
         connectionProvider.dispose();
@@ -128,9 +129,76 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         CacheService.shutdown();
     }
 
-    //TODO implement thread locale
-    void setTimeNow(Date date) {
+    private void startContext(ConnectionTarget reason) {
+        if ((reason == ConnectionTarget.forUpdate) && ServerSideConfiguration.instance().datastoreReadOnly()) {
+            throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
+        }
+        PersistenceContext persistenceContext = threadSessions.get();
+        if (persistenceContext == null) {
+            threadSessions.set(new PersistenceContext(connectionProvider, false));
+        } else {
+            assert (persistenceContext.isExplicitTransaction()) : "PersistenceContext leftover detected ";
+        }
+    }
 
+    private void endContext() {
+        PersistenceContext persistenceContext = threadSessions.get();
+        if ((persistenceContext != null) && (!persistenceContext.isExplicitTransaction())) {
+            try {
+                persistenceContext.close();
+            } finally {
+                threadSessions.remove();
+            }
+        }
+    }
+
+    private PersistenceContext getPersistenceContext() {
+        return threadSessions.get();
+    }
+
+    void setTimeNow(Date date) {
+        getPersistenceContext().setTimeNow(date);
+    }
+
+    @Override
+    public void startTransaction() {
+        threadSessions.set(new PersistenceContext(connectionProvider, true));
+    }
+
+    @Override
+    public void endTransaction() {
+        PersistenceContext persistenceContext = threadSessions.get();
+        if (persistenceContext != null) {
+            try {
+                persistenceContext.close();
+            } finally {
+                threadSessions.remove();
+            }
+        }
+    }
+
+    @Override
+    public void commit() {
+        PersistenceContext persistenceContext = threadSessions.get();
+        if ((persistenceContext == null) || (!persistenceContext.isExplicitTransaction())) {
+            if (!ApplicationBackend.TODO_TRANSACTION) {
+                throw new Error("There are no open transaction");
+            }
+        }
+        if (ApplicationBackend.TODO_TRANSACTION && persistenceContext == null) {
+            return;
+        }
+
+        persistenceContext.commit();
+    }
+
+    @Override
+    public void rollback() {
+        PersistenceContext persistenceContext = threadSessions.get();
+        if ((persistenceContext == null) || (!persistenceContext.isExplicitTransaction())) {
+            throw new Error("There are no open transaction");
+        }
+        persistenceContext.rollback();
     }
 
     public boolean isTableExists(Class<? extends IEntity> entityClass) {
@@ -168,7 +236,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private void databaseVersion() {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
+            connection = connectionProvider.getConnection();
             DatabaseMetaData dbMeta = connection.getMetaData();
             log.debug("DB {} {}", dbMeta.getDatabaseProductName(), dbMeta.getDatabaseProductVersion());
         } catch (SQLException e) {
@@ -179,24 +247,33 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
-    TableModel tableModel(Connection connection, EntityMeta entityMeta) {
-        return mappings.ensureTable(connection, connectionProvider.getDialect(), entityMeta);
+    TableModel tableModel(EntityMeta entityMeta) {
+        return mappings.ensureTable(getPersistenceContext().getConnection(), connectionProvider.getDialect(), entityMeta);
+    }
+
+    public TableMetadata getTableMetadata(EntityMeta entityMeta) throws SQLException {
+        startContext(ConnectionTarget.forRead);
+        try {
+            return TableMetadata
+                    .getTableMetadata(getPersistenceContext().getConnection(), TableModel.getTableName(connectionProvider.getDialect(), entityMeta));
+        } finally {
+            endContext();
+        }
     }
 
     @Override
     public void persist(IEntity entity) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forUpdate);
         try {
             entity = entity.cast();
-            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
-            persist(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
+            persist(tableModel(entity.getEntityMeta()), entity);
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void mergeReference(Connection connection, MemberMeta meta, IEntity entity, Date now) {
+    private void mergeReference(MemberMeta meta, IEntity entity) {
         ReferenceAdapter adapter;
         try {
             adapter = meta.getAnnotation(Reference.class).adapter().newInstance();
@@ -205,12 +282,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         } catch (IllegalAccessException e) {
             throw new Error(e);
         }
-        IEntity ent = retrieve(adapter.getMergeCriteria(entity));
-        if (ent != null) {
-            entity.setPrimaryKey(ent.getPrimaryKey());
+        TableModel tm = tableModel(EntityFactory.getEntityMeta(entity.getValueClass()));
+        List<Key> rs = tm.queryKeys(getPersistenceContext(), adapter.getMergeCriteria(entity), 1);
+        if (!rs.isEmpty()) {
+            entity.setPrimaryKey(rs.get(0));
         } else {
             entity = adapter.onEntityCreation(entity);
-            persist(connection, tableModel(connection, entity.getEntityMeta()), entity, now);
+            persist(tableModel(entity.getEntityMeta()), entity);
         }
     }
 
@@ -219,7 +297,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         entity.setPrimaryKey(entity.getPrimaryKey());
     }
 
-    private void persist(Connection connection, TableModel tm, IEntity entity, Date now) {
+    private void persist(TableModel tm, IEntity entity) {
         if (entity.isValueDetached()) {
             throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
         }
@@ -231,39 +309,39 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 if (memberMeta.isOwnedRelationships()) {
                     if (!childEntity.isValueDetached()) {
                         childEntity = childEntity.cast();
-                        persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                        persist(tableModel(childEntity.getEntityMeta()), childEntity);
                     }
                 } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null)) {
-                    mergeReference(connection, memberMeta, childEntity, now);
+                    mergeReference(memberMeta, childEntity);
                 }
             }
         }
         MemberOperationsMeta updatedTs = tm.operationsMeta().getUpdatedTimestampMember();
         if (updatedTs != null) {
-            updatedTs.setMemberValue(entity, now);
+            updatedTs.setMemberValue(entity, getPersistenceContext().getTimeNow());
         }
         boolean isNewEntity = ((entity.getPrimaryKey() == null) || ((tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) && (!tm.exists(
-                connection, entity.getPrimaryKey()))));
+                getPersistenceContext(), entity.getPrimaryKey()))));
         if (isNewEntity) {
-            insert(connection, tm, entity, now);
+            insert(tm, entity);
         } else {
-            if (!update(connection, tm, entity, now, false)) {
+            if (!update(tm, entity, false)) {
                 throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
             }
         }
         CacheService.entityCache().put(entity);
     }
 
-    private void insert(Connection connection, TableModel tm, IEntity entity, Date now) {
+    private void insert(TableModel tm, IEntity entity) {
         if (trace) {
             log.info(Trace.enter() + "insert {}", tm.getTableName());
         }
         MemberOperationsMeta createdTs = tm.operationsMeta().getCreatedTimestampMember();
         if ((createdTs != null) && (createdTs.getMemberValue(entity) == null)) {
-            createdTs.setMemberValue(entity, now);
+            createdTs.setMemberValue(entity, getPersistenceContext().getTimeNow());
         }
         try {
-            tm.insert(connection, entity);
+            tm.insert(getPersistenceContext(), entity);
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 if (!member.getMemberMeta().isCascadePersist()) {
                     // Never update
@@ -291,23 +369,23 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                                 }
                             }
                             if (!childEntity.isValueDetached()) {
-                                persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                                persist(tableModel(childEntity.getEntityMeta()), childEntity);
                             }
                         } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
-                            mergeReference(connection, memberMeta, childEntity, now);
+                            mergeReference(memberMeta, childEntity);
                         }
                     }
                 }
                 //TODO TMP hack to make it work
                 if (member.isAutogenerated()) {
-                    TableModelCollections.insert(connection, connectionProvider.getDialect(), entity, member);
+                    TableModelCollections.insert(getPersistenceContext(), entity, member);
                 }
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembersSecondPass()) {
                 IEntity childEntity = (IEntity) member.getMember(entity);
                 if ((!childEntity.isNull()) && (!childEntity.isValueDetached())) {
                     childEntity = childEntity.cast();
-                    persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                    persist(tableModel(childEntity.getEntityMeta()), childEntity);
                 }
             }
         } finally {
@@ -317,7 +395,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
-    private boolean update(Connection connection, TableModel tm, IEntity entity, Date now, boolean doMerge) {
+    private boolean update(TableModel tm, IEntity entity, boolean doMerge) {
         if (trace) {
             log.info(Trace.enter() + "update {} id={}", tm.getTableName(), entity.getPrimaryKey());
         }
@@ -340,35 +418,35 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         if (memberMeta.isOwnedRelationships()) {
                             if (!childEntity.isValueDetached()) {
                                 if (doMerge) {
-                                    merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                                    merge(tableModel(childEntity.getEntityMeta()), childEntity);
                                 } else {
-                                    persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                                    persist(tableModel(childEntity.getEntityMeta()), childEntity);
                                 }
                             }
                         } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
-                            mergeReference(connection, memberMeta, childEntity, now);
+                            mergeReference(memberMeta, childEntity);
                         }
                     }
                 }
             }
-            boolean updated = tm.update(connection, entity);
+            boolean updated = tm.update(getPersistenceContext(), entity);
             List<IEntity> cascadeRemove = new Vector<IEntity>();
             if (updated) {
                 for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                    TableModelCollections.update(connection, connectionProvider.getDialect(), entity, member, cascadeRemove);
+                    TableModelCollections.update(getPersistenceContext(), entity, member, cascadeRemove);
                 }
             }
             for (IEntity ce : cascadeRemove) {
-                cascadeDelete(connection, ce.getEntityMeta(), ce.getPrimaryKey(), ce);
+                cascadeDelete(ce.getEntityMeta(), ce.getPrimaryKey(), ce);
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembersSecondPass()) {
                 IEntity childEntity = (IEntity) member.getMember(entity);
                 if ((!childEntity.isNull()) && (!childEntity.isValueDetached())) {
                     childEntity = childEntity.cast();
                     if (doMerge) {
-                        merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                        merge(tableModel(childEntity.getEntityMeta()), childEntity);
                     } else {
-                        persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                        persist(tableModel(childEntity.getEntityMeta()), childEntity);
                     }
                 }
             }
@@ -383,16 +461,15 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     //TODO remove this function, see proper implementation below
     @Override
     public <T extends IEntity> void persist(Iterable<T> entityIterable) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forUpdate);
         try {
             if (entityIterable.iterator().hasNext()) {
-                connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
                 for (T entity : entityIterable) {
-                    persist(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
+                    persist(tableModel(entity.getEntityMeta()), entity);
                 }
             }
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
@@ -403,49 +480,46 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
      */
     @Deprecated
     public <T extends IEntity> void persistListOneLevel(Iterable<T> entityIterable, boolean returnId) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forUpdate);
         try {
             if (entityIterable.iterator().hasNext()) {
-                connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
                 T entity = entityIterable.iterator().next();
-                persist(connection, tableModel(connection, entity.getEntityMeta()), entityIterable, DateUtils.getRoundedNow(), returnId);
+                persist(tableModel(entity.getEntityMeta()), entityIterable, returnId);
             }
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
     //@Override
     //TODO Fix this to save collection
     public <T extends IEntity> void persist_TODO_FIX(Iterable<T> entityIterable) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forUpdate);
         try {
             if (entityIterable.iterator().hasNext()) {
-                connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
                 T entity = entityIterable.iterator().next();
-                persist(connection, tableModel(connection, entity.getEntityMeta()), entityIterable, DateUtils.getRoundedNow(), true);
+                persist(tableModel(entity.getEntityMeta()), entityIterable, true);
             }
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
     @Override
     public <T extends IEntity> void merge(Iterable<T> entityIterable) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forUpdate);
         try {
             if (entityIterable.iterator().hasNext()) {
-                connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
                 for (T entity : entityIterable) {
-                    merge(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
+                    merge(tableModel(entity.getEntityMeta()), entity);
                 }
             }
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
-    private <T extends IEntity> void persist(Connection connection, TableModel tm, Iterable<T> entityIterable, Date now, boolean returnId) {
+    private <T extends IEntity> void persist(TableModel tm, Iterable<T> entityIterable, boolean returnId) {
         //TODO  //for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) { ... }
         /*
          * for (MemberOperationsMeta member :
@@ -462,7 +536,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (updatedTs != null) {
             for (T entity : entityIterable) {
                 if (updatedTs != null) {
-                    updatedTs.setMemberValue(entity, now);
+                    updatedTs.setMemberValue(entity, getPersistenceContext().getTimeNow());
                 }
             }
         }
@@ -479,20 +553,20 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         if (newEntities.size() > 0) {
             if (returnId) {
-                tm.insert(connection, newEntities);
+                tm.insert(getPersistenceContext(), newEntities);
             } else {
-                tm.insertBulk(connection, newEntities);
+                tm.insertBulk(getPersistenceContext(), newEntities);
             }
         }
 
         Vector<T> notUpdated = new Vector<T>();
         if (updEntities.size() > 0) {
-            tm.persist(connection, updEntities, notUpdated);
+            tm.persist(getPersistenceContext(), updEntities, notUpdated);
             if (notUpdated.size() > 0) {
                 for (T entity : notUpdated) {
                     //these entities have PKs assigned, that's how they selected to be updEntities.
                     if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
-                        insert(connection, tm, entity, now);
+                        insert(tm, entity);
                     } else {
                         // in this case they can't be handled, throw
                         throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
@@ -506,18 +580,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void merge(IEntity entity) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forUpdate);
         try {
             entity = entity.cast();
-            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
-            merge(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
+            merge(tableModel(entity.getEntityMeta()), entity);
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
     @SuppressWarnings("unchecked")
-    private boolean applyModifications(Connection connection, TableModel tm, IEntity baseEntity, IEntity entity) {
+    private boolean applyModifications(TableModel tm, IEntity baseEntity, IEntity entity) {
         boolean updated = false;
         Class<? extends MemberModificationAdapter<?>>[] entityMembersModificationAdapters = null;
         Adapters adapters = entity.getEntityMeta().getAnnotation(Adapters.class);
@@ -578,9 +651,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     IEntity childEntity = iterator.next();
                     if (!childEntity.isValueDetached()) {
                         childEntity = childEntity.cast();
-                        TableModel childTM = tableModel(connection, EntityFactory.getEntityMeta(childEntity.getValueClass()));
+                        TableModel childTM = tableModel(EntityFactory.getEntityMeta(childEntity.getValueClass()));
                         IEntity childBaseEntity = baseIterator.next();
-                        updated |= retrieveAndApplyModifications(connection, childTM, childBaseEntity, childEntity);
+                        updated |= retrieveAndApplyModifications(childTM, childBaseEntity, childEntity);
                     }
                 }
                 updated = true;
@@ -596,8 +669,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         return updated;
     }
 
-    private boolean retrieveAndApplyModifications(Connection connection, TableModel tm, IEntity baseEntity, IEntity entity) {
-        if (!tm.retrieve(connection, entity.getPrimaryKey(), baseEntity)) {
+    private boolean retrieveAndApplyModifications(TableModel tm, IEntity baseEntity, IEntity entity) {
+        if (!tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), baseEntity)) {
             if (tm.getPrimaryKeyStrategy() != Table.PrimaryKeyStrategy.ASSIGNED) {
                 throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
             } else {
@@ -616,11 +689,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 throw new SecurityViolationException("Permission Denied");
             }
         }
-        return applyModifications(connection, tm, baseEntity, entity);
+        return applyModifications(tm, baseEntity, entity);
     }
 
     @SuppressWarnings("unchecked")
-    private void fireModificationAdapters(Connection connection, TableModel tm, IEntity entity) {
+    private void fireModificationAdapters(TableModel tm, IEntity entity) {
         Class<? extends MemberModificationAdapter<?>>[] entityMembersModificationAdapters = null;
         Adapters adapters = entity.getEntityMeta().getAnnotation(Adapters.class);
         if (adapters != null) {
@@ -663,28 +736,28 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     IEntity childEntity = iterator.next();
                     if (!childEntity.isValueDetached()) {
                         childEntity = childEntity.cast();
-                        TableModel childTM = tableModel(connection, EntityFactory.getEntityMeta(childEntity.getValueClass()));
-                        fireModificationAdapters(connection, childTM, childEntity);
+                        TableModel childTM = tableModel(EntityFactory.getEntityMeta(childEntity.getValueClass()));
+                        fireModificationAdapters(childTM, childEntity);
                     }
                 }
             }
         }
     }
 
-    private void merge(Connection connection, TableModel tm, IEntity entity, Date now) {
+    private void merge(TableModel tm, IEntity entity) {
         if (entity.isValueDetached()) {
             throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
         }
         final IEntity baseEntity = EntityFactory.create(tm.entityMeta().getEntityClass());
 
         boolean isNewEntity = ((entity.getPrimaryKey() == null) || ((tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) && (!tm.exists(
-                connection, entity.getPrimaryKey()))));
+                getPersistenceContext(), entity.getPrimaryKey()))));
         ensureEntityValue(entity);
         boolean updated;
         if (!isNewEntity) {
-            updated = retrieveAndApplyModifications(connection, tm, baseEntity, entity);
+            updated = retrieveAndApplyModifications(tm, baseEntity, entity);
         } else {
-            fireModificationAdapters(connection, tm, entity);
+            fireModificationAdapters(tm, entity);
             updated = true;
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
@@ -702,26 +775,26 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         }
                     } else if (baseChildEntity.getPrimaryKey() != null) {
                         // Cascade delete
-                        cascadeDelete(connection, baseChildEntity.getEntityMeta(), baseChildEntity.getPrimaryKey(), baseChildEntity);
+                        cascadeDelete(baseChildEntity.getEntityMeta(), baseChildEntity.getPrimaryKey(), baseChildEntity);
                     }
                 }
                 if (!childEntity.isValueDetached() && (!childEntity.isNull())) {
                     childEntity = childEntity.cast();
-                    merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                    merge(tableModel(childEntity.getEntityMeta()), childEntity);
                 }
             } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
-                mergeReference(connection, memberMeta, childEntity, now);
+                mergeReference(memberMeta, childEntity);
             }
         }
         if (updated) {
             MemberOperationsMeta updatedTs = tm.operationsMeta().getUpdatedTimestampMember();
             if (updatedTs != null) {
-                updatedTs.setMemberValue(entity, now);
+                updatedTs.setMemberValue(entity, getPersistenceContext().getTimeNow());
             }
             if (isNewEntity) {
-                insert(connection, tm, entity, now);
+                insert(tm, entity);
             } else {
-                if (!update(connection, tm, entity, now, true)) {
+                if (!update(tm, entity, true)) {
                     throw new RuntimeException("Entity '" + tm.entityMeta().getCaption() + "' " + entity.getPrimaryKey() + " NotFound");
                 }
             }
@@ -742,13 +815,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> boolean retrieve(T entity) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forRead);
         try {
             entity = entity.cast();
-            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
-            return cascadeRetrieve(connection, entity) != null;
+            return cascadeRetrieve(entity) != null;
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
@@ -763,17 +835,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             break;
         case Detached:
             assert (entityMember.getOwner().getPrimaryKey() != null);
-            Connection connection = null;
+            startContext(ConnectionTarget.forRead);
             try {
-                connection = connectionProvider.getConnection(ConnectionTarget.forRead);
-                TableModel tm = tableModel(connection, entityMember.getOwner().getEntityMeta());
-                tm.retrieveMember(connection, entityMember.getOwner(), entityMember);
-                if (cascadeRetrieve(connection, entityMember) == null) {
+                TableModel tm = tableModel(entityMember.getOwner().getEntityMeta());
+                tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
+                if (cascadeRetrieve(entityMember) == null) {
                     throw new RuntimeException("Entity '" + entityMember.getEntityMeta().getCaption() + "' " + entityMember.getPrimaryKey() + " "
                             + entityMember.getPath() + " NotFound");
                 }
             } finally {
-                SQLUtils.closeQuietly(connection);
+                endContext();
             }
         }
     }
@@ -794,28 +865,27 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
         case Detached:
             assert (collectionMember.getOwner().getPrimaryKey() != null);
-            Connection connection = null;
+            startContext(ConnectionTarget.forRead);
             try {
-                connection = connectionProvider.getConnection(ConnectionTarget.forRead);
-                TableModel tm = tableModel(connection, collectionMember.getOwner().getEntityMeta());
+                TableModel tm = tableModel(collectionMember.getOwner().getEntityMeta());
                 //TODO collectionMember.setAttachLevel(AttachLevel.IdOnly);
                 collectionMember.setAttachLevel(AttachLevel.Attached);
-                tm.retrieveMember(connection, collectionMember.getOwner(), collectionMember);
+                tm.retrieveMember(getPersistenceContext(), collectionMember.getOwner(), collectionMember);
                 for (IEntity childEntity : collectionMember) {
-                    if (cascadeRetrieve(connection, childEntity) == null) {
+                    if (cascadeRetrieve(childEntity) == null) {
                         throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
                                 + childEntity.getPath() + " NotFound");
                     }
                 }
                 collectionMember.setAttachLevel(AttachLevel.Attached);
             } finally {
-                SQLUtils.closeQuietly(connection);
+                endContext();
             }
         }
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends IEntity> T cascadeRetrieve(Connection connection, T entity) {
+    private <T extends IEntity> T cascadeRetrieve(T entity) {
         if (entity.getPrimaryKey() == null) {
             return null;
         }
@@ -825,9 +895,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             return cachedEntity;
         }
 
-        TableModel tm = tableModel(connection, entity.getEntityMeta());
-        if (tm.retrieve(connection, entity.getPrimaryKey(), entity)) {
-            entity = cascadeRetrieveMembers(connection, tm, entity);
+        TableModel tm = tableModel(entity.getEntityMeta());
+        if (tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), entity)) {
+            entity = cascadeRetrieveMembers(tm, entity);
             CacheService.entityCache().put(entity);
             return entity;
         } else {
@@ -835,7 +905,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
-    private <T extends IEntity> T cascadeRetrieveMembers(Connection connection, TableModel tm, T entity) {
+    private <T extends IEntity> T cascadeRetrieveMembers(TableModel tm, T entity) {
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadeRetrieveMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
             // Do not retrieve Owner, since already retrieved
@@ -845,7 +915,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if (memberMeta.isEntity()) {
                 IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
                 if (childEntity.getPrimaryKey() != null) {
-                    if (cascadeRetrieve(connection, childEntity) == null) {
+                    if (cascadeRetrieve(childEntity) == null) {
                         throw new RuntimeException("Entity '" + memberMeta.getCaption() + "' [primary key =  " + childEntity.getPrimaryKey() + "; path = "
                                 + childEntity.getPath() + "] is not found");
                     }
@@ -854,7 +924,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 @SuppressWarnings("unchecked")
                 ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                 for (IEntity childEntity : iCollectionMember) {
-                    if (cascadeRetrieve(connection, childEntity) == null) {
+                    if (cascadeRetrieve(childEntity) == null) {
                         throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
                                 + childEntity.getPath() + " NotFound");
                     }
@@ -869,18 +939,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forRead);
         try {
-            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
-            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
-            List<T> rs = tm.query(connection, criteria, 1);
+            TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+            List<T> rs = tm.query(getPersistenceContext(), criteria, 1);
             if (rs.isEmpty()) {
                 return null;
             } else {
-                return cascadeRetrieveMembers(connection, tm, rs.get(0));
+                return cascadeRetrieveMembers(tm, rs.get(0));
             }
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
@@ -894,25 +963,24 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> Map<Key, T> retrieve(Class<T> entityClass, Iterable<Key> primaryKeys) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forRead);
         Map<Key, T> entities = new HashMap<Key, T>();
         TableModel tm = null;
         try {
-            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
             int count = 0;
             for (Key pk : primaryKeys) {
                 final T entity = EntityFactory.create(entityClass);
                 entity.setPrimaryKey(pk);
                 if (count == 0) {
-                    tm = tableModel(connection, entity.getEntityMeta());
+                    tm = tableModel(entity.getEntityMeta());
                 }
                 entities.put(pk, entity);
                 count++;
             }
-            tm.retrieve(connection, entities);
+            tm.retrieve(getPersistenceContext(), entities);
             return entities;
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
@@ -955,30 +1023,29 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forRead);
         try {
-            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
-            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
-            List<T> l = tm.query(connection, criteria, -1);
+            TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+            List<T> l = tm.query(getPersistenceContext(), criteria, -1);
             for (T entity : l) {
-                cascadeRetrieveMembers(connection, tm, entity);
+                cascadeRetrieveMembers(tm, entity);
             }
             return l;
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
     @Override
     public <T extends IEntity> ICursorIterator<T> query(final String encodedCursorReference, EntityQueryCriteria<T> criteria) {
-        final Connection connection = connectionProvider.getConnection(ConnectionTarget.forRead);
-        final TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        startContext(ConnectionTarget.forRead);
+        final TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         if (encodedCursorReference != null) {
             log.info("Received encodedCursorReference:" + encodedCursorReference + ", will use it");
             // TODO
         }
         try {
-            final ResultSetIterator<T> iterable = tm.queryIterable(connection, criteria);
+            final ResultSetIterator<T> iterable = tm.queryIterable(getPersistenceContext(), criteria);
 
             return new ICursorIterator<T>() {
 
@@ -989,7 +1056,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
                 @Override
                 public T next() {
-                    return cascadeRetrieveMembers(connection, tm, iterable.next());
+                    return cascadeRetrieveMembers(tm, iterable.next());
                 }
 
                 @Override
@@ -1006,12 +1073,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 @Override
                 public void completeRetrieval() {
                     iterable.close();
-                    SQLUtils.closeQuietly(connection);
+                    endContext();
                 }
             };
 
         } catch (Throwable e) {
-            SQLUtils.closeQuietly(connection);
+            endContext();
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
             } else if (e instanceof Error) {
@@ -1025,26 +1092,25 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> List<Key> queryKeys(EntityQueryCriteria<T> criteria) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forRead);
         try {
-            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
-            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
-            return tm.queryKeys(connection, criteria, -1);
+            TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+            return tm.queryKeys(getPersistenceContext(), criteria, -1);
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
     @Override
     public <T extends IEntity> ICursorIterator<Key> queryKeys(final String encodedCursorReference, EntityQueryCriteria<T> criteria) {
-        final Connection connection = connectionProvider.getConnection(ConnectionTarget.forRead);
-        final TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        startContext(ConnectionTarget.forRead);
+        final TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         if (encodedCursorReference != null) {
             log.info("Received encodedCursorReference:" + encodedCursorReference + ", will use it");
             // TODO
         }
         try {
-            final ResultSetIterator<Key> iterable = tm.queryKeysIterable(connection, criteria);
+            final ResultSetIterator<Key> iterable = tm.queryKeysIterable(getPersistenceContext(), criteria);
 
             return new ICursorIterator<Key>() {
 
@@ -1072,12 +1138,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 @Override
                 public void completeRetrieval() {
                     iterable.close();
-                    SQLUtils.closeQuietly(connection);
+                    endContext();
                 }
             };
 
         } catch (Throwable e) {
-            SQLUtils.closeQuietly(connection);
+            endContext();
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
             } else if (e instanceof Error) {
@@ -1090,13 +1156,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> boolean exists(Class<T> entityClass, Key primaryKey) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forRead);
         try {
-            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
-            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(entityClass));
-            return tm.exists(connection, primaryKey);
+            TableModel tm = tableModel(EntityFactory.getEntityMeta(entityClass));
+            return tm.exists(getPersistenceContext(), primaryKey);
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
@@ -1112,18 +1177,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forRead);
         try {
-            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
-            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
-            Number count = (Number) tm.aggregate(connection, criteria, SQLAggregateFunctions.COUNT, null);
+            TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+            Number count = (Number) tm.aggregate(getPersistenceContext(), criteria, SQLAggregateFunctions.COUNT, null);
             if (count == null) {
                 return 0;
             } else {
                 return count.intValue();
             }
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
@@ -1138,22 +1202,21 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private <T extends IEntity> void delete(EntityMeta entityMeta, Key primaryKey, IEntity cascadedeleteDataEntity) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forUpdate);
         try {
-            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
-            cascadeDelete(connection, entityMeta, primaryKey, cascadedeleteDataEntity);
+            cascadeDelete(entityMeta, primaryKey, cascadedeleteDataEntity);
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
     // cascadedeleteDataEntity is consistent with GAE implementation of delete(IEntity entity).
-    private <T extends IEntity> void cascadeDelete(Connection connection, EntityMeta entityMeta, Key primaryKey, IEntity cascadedeleteDataEntity) {
+    private <T extends IEntity> void cascadeDelete(EntityMeta entityMeta, Key primaryKey, IEntity cascadedeleteDataEntity) {
         if (trace) {
             log.info(Trace.enter() + "cascadeDelete {} id={}", entityMeta.getPersistenceName(), primaryKey);
         }
         try {
-            TableModel tm = tableModel(connection, entityMeta);
+            TableModel tm = tableModel(entityMeta);
 
             if (cascadedeleteDataEntity != null) {
                 for (MemberOperationsMeta member : tm.operationsMeta().getCascadeDeleteMembers()) {
@@ -1162,7 +1225,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         if (trace) {
                             log.info(Trace.id() + "cascadeDelete member {}", member.getMemberName());
                         }
-                        cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                        cascadeDelete(childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
                     }
                 }
             }
@@ -1170,7 +1233,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 if (member.getMemberMeta().isOwnedRelationships() || member.isAutogenerated()) {
                     // remove join table data
-                    TableModelCollections.delete(connection, connectionProvider.getDialect(), primaryKey, member);
+                    TableModelCollections.delete(getPersistenceContext(), primaryKey, member);
 
                     if ((cascadedeleteDataEntity != null) && member.getMemberMeta().isOwnedRelationships()
                             && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
@@ -1178,16 +1241,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(cascadedeleteDataEntity);
                         if (collectionMember.getAttachLevel() == AttachLevel.Detached) {
                             collectionMember.setAttachLevel(AttachLevel.Attached);
-                            tm.retrieveMember(connection, collectionMember.getOwner(), collectionMember);
+                            tm.retrieveMember(getPersistenceContext(), collectionMember.getOwner(), collectionMember);
                         }
                         for (IEntity childEntity : collectionMember) {
-                            cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                            cascadeDelete(childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
                         }
                     }
                 }
             }
 
-            if (!tm.delete(connection, primaryKey)) {
+            if (!tm.delete(getPersistenceContext(), primaryKey)) {
                 throw new RuntimeException("Entity '" + entityMeta.getCaption() + "' " + primaryKey + " NotFound");
             }
         } finally {
@@ -1202,12 +1265,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
      */
     @Override
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forUpdate);
         try {
-            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
-            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
+            TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
 
-            List<T> entities = tm.query(connection, criteria, -1);
+            List<T> entities = tm.query(getPersistenceContext(), criteria, -1);
 
             int count = 0;
             if (entities.size() > 0) {
@@ -1215,7 +1277,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 for (T entity : entities) {
                     primaryKeys.add(entity.getPrimaryKey());
                     // TODO optimize
-                    cascadeRetrieveMembers(connection, tm, entity);
+                    cascadeRetrieveMembers(tm, entity);
                 }
                 if (trace) {
                     log.info(Trace.enter() + "delete {} rows {}", tm.getTableName(), entities.size());
@@ -1229,7 +1291,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                             if (member.getOwnerValueAdapter() instanceof ValueAdapterEntityPolymorphic) {
                                 throw new Error("TODO delete by Polymorphic Owner");
                             }
-                            TableModelCollections.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
+                            TableModelCollections.delete(getPersistenceContext(), primaryKeys, member);
 
                             if (member.getMemberMeta().isOwnedRelationships() && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
                                 if (trace) {
@@ -1240,20 +1302,20 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                                     @SuppressWarnings("unchecked")
                                     ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                                     if (member.getMember(entity).getAttachLevel() == AttachLevel.Detached) {
-                                        TableModel memberTableModel = tableModel(connection, collectionMember.getOwner().getEntityMeta());
+                                        TableModel memberTableModel = tableModel(collectionMember.getOwner().getEntityMeta());
                                         //TODO collectionMember.setAttachLevel(AttachLevel.IdOnly);
                                         collectionMember.setAttachLevel(AttachLevel.Attached);
-                                        memberTableModel.retrieveMember(connection, collectionMember.getOwner(), collectionMember);
+                                        memberTableModel.retrieveMember(getPersistenceContext(), collectionMember.getOwner(), collectionMember);
                                     }
                                     for (IEntity childEntity : collectionMember) {
-                                        cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                                        cascadeDelete(childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
                                     }
                                 }
                             }
                         }
                     }
 
-                    count = tm.delete(connection, primaryKeys);
+                    count = tm.delete(getPersistenceContext(), primaryKeys);
                     // TODO remove entities from Cache
 
                 } finally {
@@ -1264,17 +1326,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             return count;
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
     @Override
     public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Key> primaryKeys) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forUpdate);
         try {
-            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-            TableModel tm = tableModel(connection, entityMeta);
+            TableModel tm = tableModel(entityMeta);
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 if (member.getMemberMeta().isOwnedRelationships()) {
                     if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
@@ -1286,22 +1347,21 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     if (member.getOwnerValueAdapter() instanceof ValueAdapterEntityPolymorphic) {
                         throw new Error("TODO delete by Polymorphic Owner");
                     }
-                    TableModelCollections.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
+                    TableModelCollections.delete(getPersistenceContext(), primaryKeys, member);
                 }
             }
-            tm.delete(connection, primaryKeys);
+            tm.delete(getPersistenceContext(), primaryKeys);
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
     @Override
     public <T extends IEntity> void truncate(Class<T> entityClass) {
-        Connection connection = null;
+        startContext(ConnectionTarget.forUpdate);
         try {
-            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-            TableModel tm = tableModel(connection, entityMeta);
+            TableModel tm = tableModel(entityMeta);
             for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 if (member.getMemberMeta().isOwnedRelationships()) {
                     if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
@@ -1311,12 +1371,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         truncate(ownedEntityClass);
                     }
 
-                    TableModelCollections.truncate(connection, member);
+                    TableModelCollections.truncate(getPersistenceContext(), member);
                 }
             }
-            tm.truncate(connection);
+            tm.truncate(getPersistenceContext());
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
         }
     }
 
