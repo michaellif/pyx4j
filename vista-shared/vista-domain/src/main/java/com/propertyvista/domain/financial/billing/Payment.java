@@ -16,10 +16,15 @@ package com.propertyvista.domain.financial.billing;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,18 +33,17 @@ import com.propertyvista.domain.financial.BillingAccount;
 
 /**
  * 
- * Actual payment record. {@link com.propertyvista.domain.financial.billing.BillPayment} captures payment portion for particular charge (in future version)
+ * Actual payment record. {@link com.propertyvista.domain.financial.billing.BillPayment}
+ * captures payment portion for particular charge (in future version)
  * Deposit is considered as payment and presented by this class.
  * 
  */
 public interface Payment extends IEntity {
 
-    IPrimitive<Integer> paymentSequenceNumber();
+    @ReadOnly
+    IPrimitive<Integer> sequenceNumber();
 
     IPrimitive<LogicalDate> depositDate();
-
-    @ReadOnly
-    BillingAccount billingAccount();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
@@ -47,4 +51,17 @@ public interface Payment extends IEntity {
 
     @JoinTable(value = BillPayment.class, cascade = false)
     BillPayment billPayment();
+
+    @Owner
+    @ReadOnly
+    @Detached
+    @JoinColumn
+    BillingAccount billingAccount();
+
+    // internals:
+    interface OrderId extends ColumnId {
+    }
+
+    @OrderColumn(OrderId.class)
+    IPrimitive<Integer> orderInParent();
 }

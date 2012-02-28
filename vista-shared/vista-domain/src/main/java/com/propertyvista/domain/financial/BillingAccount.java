@@ -14,24 +14,27 @@
 package com.propertyvista.domain.financial;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public interface BillingAccount extends IEntity {
 
+    @Owner
     @ReadOnly
     @Detached
-    @Owner
     LeaseFinancial leaseFinancial();
 
     @ReadOnly
@@ -51,8 +54,10 @@ public interface BillingAccount extends IEntity {
 
     IPrimitive<Double> total();
 
-    //Should own Payments
+    @Owned
+    @OrderBy(Payment.OrderId.class)
+    @Detached(level = AttachLevel.Detached)
+    IList<Payment> payments();
 
     //Should have deposit value field
-
 }
