@@ -38,14 +38,11 @@ public class MakeVacantDialog extends OkCancelDialog {
 
     private final Presenter presenter;
 
-    private final LogicalDate minMakeVacantStartDay;
-
     private CEntityDecoratableEditor<MakeVacantDTO> form;
 
     public MakeVacantDialog(UnitViewerView.Presenter presenter, final LogicalDate minMakeVacantStartDay) {
         super(i18n.tr("Make Vacant..."));
         this.presenter = presenter;
-        this.minMakeVacantStartDay = minMakeVacantStartDay;
         this.form = new CEntityDecoratableEditor<MakeVacantDTO>(MakeVacantDTO.class) {
 
             @Override
@@ -58,7 +55,7 @@ public class MakeVacantDialog extends OkCancelDialog {
                     @Override
                     public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
                         if (value == null || value.before(minMakeVacantStartDay)) {
-                            return new ValidationFailure(i18n.tr("please enter date greater or equal to {0}", value));
+                            return new ValidationFailure(i18n.tr("please enter date greater or equal to {0}", minMakeVacantStartDay));
                         } else {
                             return null;
                         }
