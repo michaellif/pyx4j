@@ -109,7 +109,6 @@ public class PolicyManager {
             if (policy != null) {
                 break;
             }
-            ;
             currentNode = parentOf(currentNode);
 
         } while (currentNode != null);
@@ -188,8 +187,8 @@ public class PolicyManager {
             return Persistence.service().retrieve(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
 
         } else if (OrganizationPoliciesNode.class.equals(nodeClass)) {
-            // the parent of the organization is organization :)        
-            return node;
+
+            return null;
 
         } else {
 
