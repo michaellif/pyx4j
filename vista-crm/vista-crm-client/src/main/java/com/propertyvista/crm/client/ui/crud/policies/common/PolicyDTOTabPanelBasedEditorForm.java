@@ -44,7 +44,6 @@ import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
 public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends PolicyDTOBase> extends CrmEntityForm<POLICY_DTO> {
@@ -52,6 +51,8 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
     private static final I18n i18n = I18n.get(PolicyDTOTabPanelBasedEditorForm.class);
 
     private VistaTabLayoutPanel tabPanel;
+
+    private CComboBox<NodeType> selectPolicyScopeBox;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private static final List<NodeType> AVAILABLE_NODE_TYPES = Arrays.asList(//@formatter:off
@@ -61,7 +62,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                 new NodeType.Builder(Building.class).build(),
                 new NodeType.Builder(Complex.class).build(),
                 new NodeType.Builder(Province.class).build(),
-                new NodeType.Builder(Country.class).build(),
+//                new NodeType.Builder(Country.class).build(),
                 new NodeType.Builder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build()
     );//@formatter:on
 
@@ -100,9 +101,9 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         content.setHeight("3em");
         int row = -1;
 
-        final CComboBox<NodeType> selectPolicyScopeBox = new CComboBox<NodeType>();
+        selectPolicyScopeBox = new CComboBox<NodeType>();
         selectPolicyScopeBox.setEditable(isEditable());
-
+        selectPolicyScopeBox.inheritViewable(false);
         selectPolicyScopeBox.setOptions(AVAILABLE_NODE_TYPES);
         selectPolicyScopeBox.setMandatory(true);
         // add value change handler that resets the node when node type is changed
@@ -130,7 +131,9 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         content.setWidget(++row, 0, new DecoratorBuilder(selectPolicyScopeBox).customLabel(i18n.tr("Scope")).labelWidth(8).componentWidth(10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().node(), new PolicyNodeEditor())).customLabel(i18n.tr("Applied to")).labelWidth(8)
                 .componentWidth(15).build());
-
+        if (isEditable()) {
+            get(proto().node()).inheritViewable(false);
+        }
         // register handler that propagates scope/node type to the scope box on form population
         addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
@@ -152,12 +155,17 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                         }
                     }
                     selectPolicyScopeBox.setValue(policyScope, true);
-
+                    selectPolicyScopeBox.setViewable(!isNewEntity());
+                    get(proto().node()).setViewable(!isNewEntity());
                 }
             }
         });
 
         return content;
+    }
+
+    private boolean isNewEntity() {
+        return getValue().getPrimaryKey() == null;
     }
 
     /**
@@ -167,8 +175,20 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
      */
     private static class PolicyNodeEditor extends CPolymorphicEntityEditorTEMP<PolicyNode> {
 
+        private Map<Class<? extends PolicyNode>, CComponent<?, ?>> nodeTypeToComponentMap;
+
         public PolicyNodeEditor() {
             super(PolicyNode.class);
+        }
+
+        @Override
+        public void setViewable(boolean viewable) {
+            super.setViewable(viewable);
+            Class<? extends PolicyNode> nodeType = (Class<? extends PolicyNode>) getValue().getInstanceValueClass();
+            if (nodeTypeToComponentMap.containsKey(nodeType)) {
+                CComponent<PolicyNode, ?> comp = (CComponent<PolicyNode, ?>) nodeTypeToComponentMap.get(nodeType);
+                comp.setViewable(viewable);
+            }
         }
 
         @SuppressWarnings("unchecked")
@@ -176,7 +196,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         public IsWidget createContent() {
             FormFlexPanel content = new FormFlexPanel();
 
-            final Map<Class<? extends PolicyNode>, CComponent<?, ?>> nodeTypeToComponentMap = new HashMap<Class<? extends PolicyNode>, CComponent<?, ?>>();
+            nodeTypeToComponentMap = new HashMap<Class<? extends PolicyNode>, CComponent<?, ?>>();
             for (NodeType nodeType : AVAILABLE_NODE_TYPES) {
                 if (!nodeType.hasOnlyOneInstance()) {
                     CComponent<? extends PolicyNode, ?> comp = null;
@@ -189,6 +209,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                             }
                         });
                         comp = comboBox;
+                        comp.inheritViewable(false);
                     } else {
                         comp = new CEntityLabel();
                     }

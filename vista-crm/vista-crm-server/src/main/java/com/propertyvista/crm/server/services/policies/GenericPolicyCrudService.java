@@ -74,8 +74,6 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
         POLICY oldPolicyAtTheSameNode = Persistence.service().retrieve(criteria);
 
         if (oldPolicyAtTheSameNode != null) {
-            // override, i.e. delete the old policy that was at that node
-            // TODO review this: maybe it's better to forbid such an action on server and populate the form with the existing policy when the user selects a scope with a policy that actually exists            
             throw new Error(i18n.tr("not allowed to override existing policy"));
         }
 
