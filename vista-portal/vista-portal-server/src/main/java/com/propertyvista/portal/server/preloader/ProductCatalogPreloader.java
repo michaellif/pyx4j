@@ -24,6 +24,7 @@ import com.propertvista.generator.TaxGenerator;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
@@ -48,20 +49,19 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
     private static List<GlCode> glcodes = EntityCSVReciver.create(GlCode.class)
             .loadFile(IOUtils.resourceFileName("glcodes.csv", ProductCatalogPreloader.class));
 
-    private static final List<String> reasons = Arrays.asList("Admin Expenses", "Commisions", "Maintenance Fees", "Maintenance Labour", "Legal Expences",
+    private static final List<String> reasons = Arrays.asList("Admin Expenses", "Commissions", "Maintenance Fees", "Maintenance Labor", "Legal Expenses",
             "Security", "Repairs Material", "Management Fee", "Rental Deposit", "Late Fee", "NSF Fees", "Application Fee", "Tenant Improvements",
-            "Good Will - general", "Move In Charges", "Move Out Charges", "Deposit Forfeit", "Marketing And Promotion", "Billing Adjustment", "Misc Labour",
+            "Good Will - general", "Move In Charges", "Move Out Charges", "Deposit Forfeit", "Marketing And Promotion", "Billing Adjustment", "Misc Labor",
             "Misc Material", "Misc Generic(no tax)", "Misc Generic(tax included)");
 
     private void addGlCategoryDescriptions() {
         int i = 0;
-        for (GlCode code : glcodes) {
-            for (GlCodeCategory category : glcodeCategories) {
+        for (GlCodeCategory category : glcodeCategories) {
+            for (GlCode code : glcodes) {
+
                 int id = code.glCodeCategory().glCategoryId().getValue();
                 if (category.glCategoryId().getValue() == id) {
-                    String desc = category.glCategoryDescription().getValue();
-                    code.glCodeCategory().glCategoryDescription().setValue(desc);
-                    glcodes.set(i, code);
+                    category.glCodes().add(code);
                 }
             }
             i++;
@@ -89,12 +89,16 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
             taxes.add(tax);
             Persistence.service().persist(tax);
         }
-        for (GlCode code : glcodes) {
+//        for (GlCode code : glcodes)
+        for (GlCodeCategory category : glcodeCategories) {
 //            GlCode glCode = GLCodeGenerator.createGlCode();
 //            glCodes.add(glCode);
-            Persistence.service().persist(code.glCodeCategory());
-            Persistence.service().persist(code);
+            Persistence.service().persist(category);
+//            Persistence.service().persist(code);
         }
+
+        EntityQueryCriteria<GlCode> glcodeCriteria = EntityQueryCriteria.create(GlCode.class);
+        glcodes = Persistence.service().query(glcodeCriteria);
 
         ProductItemTypesGenerator generator = new ProductItemTypesGenerator(glcodes);
         Persistence.service().persist(generator.getServiceItemTypes());

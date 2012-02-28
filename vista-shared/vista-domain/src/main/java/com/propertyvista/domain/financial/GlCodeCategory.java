@@ -13,13 +13,24 @@
  */
 package com.propertyvista.domain.financial;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface GlCodeCategory extends IEntity {
 
+    @ToString
     IPrimitive<Integer> glCategoryId();
 
     IPrimitive<String> glCategoryDescription();
 
+    @Owned
+    @OrderBy(GlCode.OrderId.class)
+    @Detached(level = AttachLevel.Detached)
+    IList<GlCode> glCodes();
 }
