@@ -146,7 +146,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         CompletionType completion = value.completion().getValue();
 
         // disable editing for signed leases:
-        getEditButton().setVisible(!value.approvalDate().isNull());
+        getEditButton().setVisible(value.approvalDate().isNull());
 
         createApplication.setVisible(status == Status.Draft);
 
