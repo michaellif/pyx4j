@@ -14,48 +14,21 @@
 package com.propertyvista.crm.client.ui.crud.policies.deposit;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.PushButton;
-import com.google.gwt.user.client.ui.RichTextArea.Formatter;
-import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.richtext.ExtendedRichTextToolbar.RichTextAction;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
-import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
-import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
-import com.propertyvista.domain.policy.policies.emailtemplates.EmailTemplateTypeDTO;
-import com.propertyvista.domain.policy.policies.emailtemplates.EmailTemplateTypesDTO;
+import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 
 public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<DepositPolicyDTO> {
 
@@ -80,55 +53,32 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
 
-        //panel.setWidget(++row, 0, inject(proto().prorate(), new EmailTemplateEditorFolder()));
-
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prorate())).build());
+        panel.setWidget(++row, 0, inject(proto().policyItems(), new DepositPolicyItemEditorFolder()));
 
         return panel;
     }
 
-    // TODO this cannot be used because too many tabs are too wide and unable to fit in one sceen
-    @Deprecated
-    private TabDescriptor createEmailTemplateTab(IObject<?> template) {
-        return new TabDescriptor(new CrmScrollPanel(inject(template, new EmailTemplateEditorFolder()).asWidget()), template.getMeta().getCaption());
-    }
+    private static class DepositPolicyItemEditorFolder extends VistaBoxFolder<DepositPolicyItem> {
 
-    private static class EmailTemplateEditorFolder extends VistaBoxFolder<EmailTemplate> {
-        private static final Map<EmailTemplateType, Set<String>> templateObjects = new HashMap<EmailTemplateType, Set<String>>();
+        public DepositPolicyItemEditorFolder() {
+            super(DepositPolicyItem.class);
 
-        public EmailTemplateEditorFolder() {
-            super(EmailTemplate.class);
-
-            // get the template object list
-            EmailTemplateManagerService service = GWT.create(EmailTemplateManagerService.class);
-            service.getTemplateDataObjects(new AsyncCallback<EmailTemplateTypesDTO>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                    MessageDialog.error(i18n.tr("Server Error"), i18n.tr("Data not available.") + " " + caught.getMessage());
-                }
-
-                @Override
-                public void onSuccess(EmailTemplateTypesDTO result) {
-                    for (EmailTemplateTypeDTO tplType : result.types()) {
-                        templateObjects.put(tplType.type().getValue(), tplType.objectNames().getValue());
-                    }
-                }
-            });
         }
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof EmailTemplate) {
-                return new EmailTemplateEditor();
+            if (member instanceof DepositPolicyItem) {
+                return new DepositPolicyItemEditor();
             } else {
                 return super.create(member);
             }
         }
 
-        private static class EmailTemplateEditor extends CEntityDecoratableEditor<EmailTemplate> {
+        private static class DepositPolicyItemEditor extends CEntityDecoratableEditor<DepositPolicyItem> {
 
-            public EmailTemplateEditor() {
-                super(EmailTemplate.class);
+            public DepositPolicyItemEditor() {
+                super(DepositPolicyItem.class);
             }
 
             @Override
@@ -136,141 +86,14 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
                 FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
 
-                //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type())).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).build());
-                if (isEditable()) {
-                    CRichTextArea editor = new CRichTextArea();
-                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor)).build());
-                    // create variable selection button
-                    final PushButton pb = editor.getWidget().getEditor().getCustomButton();
-                    pb.setText("TVars");
-                    pb.getElement().getStyle().setColor("black");
-                    pb.setVisible(true);
-                    final TemplateVarSelector vm = new TemplateVarSelector();
-                    editor.getWidget().getEditor().setCustomAction(new RichTextAction() {
-                        @Override
-                        public void perform(final Formatter formatter, final Command onComplete) {
-                            vm.setSelectionHandler(new Command() {
-                                @Override
-                                public void execute() {
-                                    formatter.insertHTML(vm.getSelectedValue());
-                                    onComplete.execute();
-                                }
-                            });
-                            vm.showBelow(pb);
-                        }
-                    });
-                    // change template object list when template type selection changes
-                    final CComponent<EmailTemplateType, ?> comp = get(proto().type());
-                    comp.addValueChangeHandler(new ValueChangeHandler<EmailTemplateType>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<EmailTemplateType> event) {
-                            vm.setItems(templateObjects.get(event.getValue()));
-                        }
-                    });
-                    comp.addPropertyChangeHandler(new PropertyChangeHandler() {
-                        @Override
-                        public void onPropertyChange(PropertyChangeEvent event) {
-                            if (event.isEventOfType(PropertyChangeEvent.PropertyName.repopulated)) {
-                                vm.setItems(templateObjects.get(comp.getValue()));
-                            }
-                        }
-                    });
-                } else {
-                    CLabel body = new CLabel();
-                    body.setAllowHtml(true);
-                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), body), 60).build());
-                }
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().valueType())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositValue())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().appliedTo())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().repaymentMode())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().applyToRepayAt())).build());
+
                 return content;
-            }
-
-            static class TemplateVarSelector extends PopupPanel {
-                private String selectedValue;
-
-                private Command selectionHandler;
-
-                private final TemplateVarMenu menu = new TemplateVarMenu();
-
-                public TemplateVarSelector() {
-                    super(true);
-                }
-
-                public void setSelectionHandler(Command handler) {
-                    selectionHandler = handler;
-                }
-
-                public String getSelectedValue() {
-                    return selectedValue != null ? "${" + selectedValue + "}" : "";
-                }
-
-                public void showBelow(UIObject target) {
-                    selectedValue = null;
-                    if (getWidget() == null) {
-                        addCloseHandler(new CloseHandler<PopupPanel>() {
-                            @Override
-                            public void onClose(CloseEvent<PopupPanel> event) {
-                                if (selectionHandler != null) {
-                                    selectionHandler.execute();
-                                }
-                            }
-                        });
-
-                        add(menu);
-                    }
-                    showRelativeTo(target);
-                }
-
-                public void setItems(Set<String> items) {
-                    if (items == null) {
-                        return;
-                    }
-                    menu.clearItems();
-                    for (final String item : items) {
-                        TemplateVarMenu parent = menu;
-                        String[] segments = item.split("\\.");
-                        for (int i = 0; i < segments.length; i++) {
-                            String segment = segments[i];
-                            MenuItem mi = parent.findItem(segment);
-                            if (mi == null) {
-                                final MenuItem menuItem = new MenuItem(segment, (Command) null);
-                                menuItem.setTitle(item);
-                                if (i == segments.length - 1) {
-                                    // last item can be selected
-                                    menuItem.setCommand(new Command() {
-                                        @Override
-                                        public void execute() {
-                                            selectedValue = menuItem.getTitle();
-                                            hide();
-                                        }
-                                    });
-                                } else {
-                                    menuItem.setSubMenu(new TemplateVarMenu());
-                                }
-                                parent.addItem(menuItem);
-                                mi = menuItem;
-                            }
-                            parent = (TemplateVarMenu) mi.getSubMenu();
-                        }
-                    }
-                }
-
-                static class TemplateVarMenu extends MenuBar {
-                    public TemplateVarMenu() {
-                        super(true);
-                        setAutoOpen(true);
-                        setAnimationEnabled(true);
-                    }
-
-                    public MenuItem findItem(String text) {
-                        for (MenuItem item : getItems()) {
-                            if (text.equals(item.getText())) {
-                                return item;
-                            }
-                        }
-                        return null;
-                    }
-                }
             }
         }
     }
