@@ -31,10 +31,10 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.config.server.rpc.IServiceFactory;
-import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
@@ -190,10 +190,6 @@ public class IServiceAdapterImpl implements IServiceAdapter {
                 log.error("Error forgot to call \"onSuccess\" from method {} in class {}", method.getName(), serviceInstance.getClass().getName());
                 throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
             }
-            if (!ApplicationBackend.TODO_TRANSACTION) {
-                //TODO call Persistence.service().endTransaction();
-                //Lifecycle.endRpcRequest();
-            }
             return callback.result;
         } catch (IllegalArgumentException e) {
             log.error("Error", e);
@@ -212,6 +208,21 @@ public class IServiceAdapterImpl implements IServiceAdapter {
                     throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
                 }
             }
+        } finally {
+            // call Persistence.service().endTransaction();
+            LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
+            if (lifecycleListener != null) {
+                boolean success = false;
+                try {
+                    lifecycleListener.onRequestEnd();
+                    success = true;
+                } finally {
+                    if (!success) {
+                        log.error("Service call error\n{}\n", Trace.clickableClassLocation(serviceInstance.getClass()));
+                    }
+                }
+            }
+
         }
     }
 }

@@ -21,22 +21,17 @@
 package com.pyx4j.entity.server;
 
 import com.pyx4j.config.server.LifecycleListener;
-import com.pyx4j.config.shared.ApplicationBackend;
 
 public class PersistenceContextLifecycleListener implements LifecycleListener {
 
     @Override
     public void onRequestBegin() {
-        if (!ApplicationBackend.TODO_TRANSACTION) {
-            Persistence.service().startTransaction();
-        }
+        Persistence.service().startTransaction();
     }
 
     @Override
     public void onRequestEnd() {
-        if (!ApplicationBackend.TODO_TRANSACTION) {
-            Persistence.service().endTransaction();
-        }
+        Persistence.service().endTransaction();
     }
 
 }

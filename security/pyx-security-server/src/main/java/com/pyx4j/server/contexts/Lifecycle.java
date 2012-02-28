@@ -121,10 +121,6 @@ public class Lifecycle {
                 c.setMaxAge(0);
                 Context.getResponse().addCookie(c);
             }
-            LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
-            if (lifecycleListener != null) {
-                lifecycleListener.onRequestEnd();
-            }
         } finally {
             endContext();
         }

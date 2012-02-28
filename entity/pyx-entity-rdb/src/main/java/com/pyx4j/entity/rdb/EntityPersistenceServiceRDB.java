@@ -38,7 +38,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
-import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.adapters.EntityModificationAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
@@ -184,14 +183,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public void commit() {
         PersistenceContext persistenceContext = threadSessions.get();
         if ((persistenceContext == null) || (!persistenceContext.isExplicitTransaction())) {
-            if (!ApplicationBackend.TODO_TRANSACTION) {
-                throw new Error("There are no open transaction");
-            }
+            throw new Error("There are no open transaction");
         }
-        if (ApplicationBackend.TODO_TRANSACTION && persistenceContext == null) {
-            return;
-        }
-
         persistenceContext.commit();
     }
 

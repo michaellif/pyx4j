@@ -28,8 +28,6 @@ public class ApplicationBackend {
 
     public static final int GAE_ORDINARY_STRING_LENGTH_MAX = 500;
 
-    public static final boolean TODO_TRANSACTION = true;
-
     public static enum ApplicationBackendType {
         RDB, GAE, AmazonEC2
     }
