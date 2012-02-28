@@ -106,6 +106,7 @@ public class PersistenceContext {
     }
 
     void savepointRelease() {
+        assert (savepoints > 0) : " Inconsistent Transaction end";
         savepoints--;
         // TODO
     }

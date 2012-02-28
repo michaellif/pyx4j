@@ -178,7 +178,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public void endTransaction() {
         PersistenceContext persistenceContext = threadSessions.get();
         if (persistenceContext != null) {
-            if (!persistenceContext.savepointActive()) {
+            if (persistenceContext.savepointActive()) {
                 persistenceContext.savepointRelease();
             } else {
                 try {
