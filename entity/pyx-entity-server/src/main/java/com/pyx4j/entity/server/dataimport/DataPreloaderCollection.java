@@ -33,6 +33,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 
 public class DataPreloaderCollection extends AbstractDataPreloader {
@@ -141,7 +142,19 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             preloader.setParametersValues(parameters);
             log.debug("create preloader {}", preloader.getClass());
             long start = System.currentTimeMillis();
-            String txt = preloader.create();
+            Persistence.service().startTransaction();
+            String txt;
+            boolean success = false;
+            try {
+                txt = preloader.create();
+                Persistence.service().commit();
+                success = true;
+            } finally {
+                if (!success) {
+                    Persistence.service().rollback();
+                }
+                Persistence.service().endTransaction();
+            }
             if (CommonsStringUtils.isStringSet(txt)) {
                 b.append(txt).append('\n');
             }
