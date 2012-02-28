@@ -23,11 +23,14 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.BillingAccount;
 
@@ -40,14 +43,33 @@ import com.propertyvista.domain.financial.BillingAccount;
  */
 public interface Payment extends IEntity {
 
+    @I18n
+    enum Type {
+
+        Cash,
+
+        Check,
+
+        Other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    };
+
     @ReadOnly
-    IPrimitive<Integer> sequenceNumber();
+    @MemberColumn(name = "SequenceNumber")
+    IPrimitive<Integer> number();
 
     IPrimitive<LogicalDate> depositDate();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
+
+    @MemberColumn(name = "paymentType")
+    IPrimitive<Type> type();
 
     @JoinTable(value = BillPayment.class, cascade = false)
     BillPayment billPayment();

@@ -36,11 +36,10 @@ public class PaymentEditorForm extends CrmEntityForm<Payment> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sequenceNumber()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositDate()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
-//        main.setWidget(++row, 0,
-//                new DecoratorBuilder(inject(proto().billingAccount().leaseFinancial().billingAccount(), new CEntityComboBox<Lease>(Lease.class)), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
 
         return new CrmScrollPanel(main);
     }
