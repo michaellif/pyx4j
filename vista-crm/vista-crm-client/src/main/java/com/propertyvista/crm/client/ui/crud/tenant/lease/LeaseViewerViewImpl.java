@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -27,6 +28,8 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
+import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentLister;
@@ -190,6 +193,11 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                         break;
                     }
                     main.setWidget(1, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
+
+                    // just for validation purpose:
+                    inject(proto().leaseFrom());
+                    inject(proto().leaseTo());
+
                     return main;
                 }
 
@@ -204,6 +212,21 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                     if (getValue().expectedMoveOut().isNull()) {
                         get(proto().expectedMoveOut()).setValue(new LogicalDate());
                     }
+                }
+
+                @Override
+                public void addValidations() {
+                    super.addValidations();
+
+                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().moveOutNotice()), get(proto().leaseTo()),
+                            i18n.tr("The Date Should Be Within The Lease Period"));
+                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveOut()), get(proto().leaseTo()),
+                            i18n.tr("The Date Should Be Within The Lease Period"));
+
+                    new StartEndDateValidation(get(proto().moveOutNotice()), get(proto().expectedMoveOut()),
+                            i18n.tr("The Notice Date Must Be Earlier Than The Expected Move Out date"));
+                    get(proto().moveOutNotice()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
+                    get(proto().expectedMoveOut()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().moveOutNotice())));
                 }
             };
 
