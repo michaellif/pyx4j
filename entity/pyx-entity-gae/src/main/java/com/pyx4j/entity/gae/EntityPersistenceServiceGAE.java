@@ -227,6 +227,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public void removeThreadLocale() {
+        //TODO
+    }
+
+    @Override
     public void commit() {
         //TODO
     }

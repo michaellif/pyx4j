@@ -26,4 +26,6 @@ public interface LifecycleListener {
 
     public void onRequestEnd();
 
+    public void onContextEnd();
+
 }

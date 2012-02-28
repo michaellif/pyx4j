@@ -40,6 +40,8 @@ public interface IEntityPersistenceService {
 
     public void endTransaction();
 
+    public void removeThreadLocale();
+
     public void commit();
 
     public void rollback();
@@ -155,4 +157,5 @@ public interface IEntityPersistenceService {
     public int getDatastoreCallCount();
 
     public int getDatastoreWriteCallCount();
+
 }

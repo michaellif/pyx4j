@@ -34,4 +34,9 @@ public class PersistenceContextLifecycleListener implements LifecycleListener {
         Persistence.service().endTransaction();
     }
 
+    @Override
+    public void onContextEnd() {
+        Persistence.service().removeThreadLocale();
+    }
+
 }

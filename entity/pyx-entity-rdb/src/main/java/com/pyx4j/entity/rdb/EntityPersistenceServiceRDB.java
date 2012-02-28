@@ -187,7 +187,18 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     threadSessions.remove();
                 }
             }
+        }
+    }
 
+    @Override
+    public void removeThreadLocale() {
+        PersistenceContext persistenceContext = threadSessions.get();
+        if (persistenceContext != null) {
+            try {
+                persistenceContext.terminate();
+            } finally {
+                threadSessions.remove();
+            }
         }
     }
 

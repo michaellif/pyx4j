@@ -100,19 +100,6 @@ public class PersistenceContext {
         }
     }
 
-    void close() {
-        if (connection != null) {
-            if (explicitTransaction && uncommittedChanges) {
-                log.error("There are uncommitted changes in Database");
-            }
-            SQLUtils.closeQuietly(connection);
-            connection = null;
-            if (explicitTransaction && uncommittedChanges) {
-                throw new Error("There are uncommitted changes in Database");
-            }
-        }
-    }
-
     void savepointCreate() {
         savepoints++;
         //TODO
@@ -146,6 +133,26 @@ public class PersistenceContext {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    void close() {
+        if (connection != null) {
+            if (explicitTransaction && uncommittedChanges) {
+                log.error("There are uncommitted changes in Database");
+            }
+            SQLUtils.closeQuietly(connection);
+            connection = null;
+            if (explicitTransaction && uncommittedChanges) {
+                throw new Error("There are uncommitted changes in Database");
+            }
+        }
+    }
+
+    public void terminate() {
+        if (connection != null) {
+            SQLUtils.closeQuietly(connection);
+            connection = null;
         }
     }
 
