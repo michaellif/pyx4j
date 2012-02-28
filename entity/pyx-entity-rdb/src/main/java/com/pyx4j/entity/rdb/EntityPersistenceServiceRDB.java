@@ -204,9 +204,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public void rollback() {
         PersistenceContext persistenceContext = threadSessions.get();
         if ((persistenceContext == null) || (!persistenceContext.isExplicitTransaction())) {
-            //throw new Error("There are no open transaction");
+            throw new Error("There are no open transaction");
         }
-        //persistenceContext.rollback();
+        persistenceContext.rollback();
     }
 
     public boolean isTableExists(Class<? extends IEntity> entityClass) {
