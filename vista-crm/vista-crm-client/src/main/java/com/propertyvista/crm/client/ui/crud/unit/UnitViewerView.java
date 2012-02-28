@@ -43,4 +43,13 @@ public interface UnitViewerView extends IViewerView<AptUnitDTO> {
     IListerView<AptUnitItem> getUnitItemsListerView();
 
     IListerView<AptUnitOccupancySegment> getOccupanciesListerView();
+
+    void setCanScopeOffMarket(boolean canScopeOffMarket);
+
+    void setCanScopeAvailable(boolean canScopeAvailable);
+
+    void setMinRenovationEndDate(LogicalDate minRenovationEndDate);
+
+    void setMinMakeVacantStartDay(LogicalDate minMakeVacantStartDay);
+
 }

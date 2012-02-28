@@ -14,13 +14,18 @@
 package com.propertyvista.crm.client.ui.crud.unit.dialogs;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -34,9 +39,9 @@ public class ScopeDialog extends OkCancelDialog {
 
     private CEntityDecoratableEditor<ScopingResultDTO> form;
 
-    private Presenter presenter;
+    private final Presenter presenter;
 
-    public ScopeDialog(Presenter presenter) {
+    public ScopeDialog(Presenter presenter, final boolean canScopeAvailable, final boolean canScopeOffMarket, final LogicalDate minRenoEndDay) {
         super(i18n.tr("Scoping Result"));
         this.presenter = presenter;
 
@@ -56,19 +61,29 @@ public class ScopeDialog extends OkCancelDialog {
                 });
                 CComboBox<ScopingResult> combo = (CComboBox<ScopingResult>) get(proto().scopingResult());
                 ArrayList<ScopingResult> options = new ArrayList<ScopingResultDTO.ScopingResult>();
-//                if (opScopeAvailable != null) {
-//                    options.add(ScopingResult.available);
-//                }
-//                if (opScopeRenovation != null) {
-//                    options.add(ScopingResult.renovation);
-//                }
-//                if (opScopeOffMarket != null) {
-//                    options.add(ScopingResult.offMarket);
-//                }
+                if (canScopeAvailable) {
+                    options.add(ScopingResult.available);
+                }
+                if (canScopeOffMarket) {
+                    options.add(ScopingResult.offMarket);
+                }
+                if (minRenoEndDay != null) {
+                    options.add(ScopingResult.renovation);
+                }
                 combo.setOptions(options);
 
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().renovationEndsOn())).build());
                 get(proto().renovationEndsOn()).setVisible(false);
+                get(proto().renovationEndsOn()).addValueValidator(new EditableValueValidator<Date>() {
+                    @Override
+                    public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                        if (value.before(minRenoEndDay)) {
+                            return new ValidationFailure(i18n.tr("The minimal acceptable renovation date is {0}", minRenoEndDay));
+                        } else {
+                            return null;
+                        }
+                    }
+                });
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offMarketType())).build());
                 get(proto().offMarketType()).setVisible(false);
 
@@ -76,6 +91,7 @@ public class ScopeDialog extends OkCancelDialog {
             }
         };
         form.initContent();
+        form.populateNew();
         form.asWidget().setSize("100%", "100%");
         setBody(form);
     }
@@ -89,6 +105,17 @@ public class ScopeDialog extends OkCancelDialog {
         if (!form.isValid()) {
             return false;
         } else {
+            switch (form.getValue().scopingResult().getValue()) {
+            case available:
+                presenter.scopeAvailable();
+                break;
+            case offMarket:
+                presenter.scopeOffMarket(form.getValue().offMarketType().getValue());
+                break;
+            case renovation:
+                presenter.scopeRenovation(form.getValue().renovationEndsOn().getValue());
+                break;
+            }
             return true;
         }
     }

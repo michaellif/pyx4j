@@ -21,7 +21,6 @@ import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyMan
 import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.split;
 import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.substractDay;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -133,62 +132,42 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     @Override
     public void scopeRenovation(LogicalDate renovationEndDate) {
-        // there are two possible scenarios:
-        // 1. scope happens during lease - during 'leased' segment:
-        //   - we have to fetch the next segment that MUST be vacant        
-        // 2. scope happens after lease
-        //   - then it happens during 'vacant' segment
         LogicalDate now = nowProvider.getNow();
+        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, renovationEndDate);
+        for (AptUnitOccupancySegment seg : occupancy) {
+            if (seg.status().getValue() == Status.vacant) {
+                LogicalDate renoStartDay = seg.dateFrom().getValue().before(now) ? now : seg.dateFrom().getValue();
+                if (!(renoStartDay.before(renovationEndDate) | renoStartDay.equals(renovationEndDate))) {
+                    throw new IllegalStateException("reno end day is less then reno start day");
+                }
+                AptUnitOccupancySegment renoSeg = split(seg, renoStartDay, new SplittingHandler() {
+                    @Override
+                    public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
+                        // we already checked that;   
+                    }
 
-        AptUnitOccupancySegment vacantSegment = null;
-        AptUnitOccupancySegment segment = AptUnitOccupancyManagerHelper.retrieveOccupancySegment(unit, now);
+                    @Override
+                    public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
+                        segment.status().setValue(Status.renovation);
+                    }
+                });
+                split(renoSeg, addDay(renovationEndDate), new SplittingHandler() {
 
-        if (segment == null) {
-            throw new IllegalStateException("failed to find an segment with status for that contains the following date: "
-                    + SimpleDateFormat.getInstance().format(now));
-        } else if (segment.status().getValue() == Status.vacant) {
-            vacantSegment = segment;
-        } else if (segment.status().getValue() == Status.leased) {
-            vacantSegment = AptUnitOccupancyManagerHelper.retrieveOccupancySegment(unit, AptUnitOccupancyManagerHelper.addDay(segment.dateTo().getValue()));
-        }
+                    @Override
+                    public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
 
-        if (vacantSegment == null) {
-            throw new IllegalStateException("failed to find a 'vacant' segment for 'scopeRenovation'");
-        } else if (vacantSegment.status().getValue() != Status.vacant) {
-            throw new IllegalStateException("It's impossible to apply 'scopeRenovation' operation during " + segment.status().getValue());
-        }
+                    }
 
-        LogicalDate renovationStart = now.after(vacantSegment.dateFrom().getValue()) ? now : vacantSegment.dateFrom().getValue();
-
-        AptUnitOccupancySegment renovationSegment = split(vacantSegment, renovationStart, new SplittingHandler() {
-            @Override
-            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-                // should be ok: we checked it before
+                    @Override
+                    public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
+                        segment.status().setValue(Status.available);
+                    }
+                });
+                availabilityManager.generateUnitAvailablity(now);
+                return;
             }
-
-            @Override
-            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                segment.status().setValue(Status.renovation);
-            }
-        });
-        if (renovationSegment == null) {
-            throw new IllegalStateException("failed to create 'renovation' segment");
         }
-        AptUnitOccupancySegment availableSegment = AptUnitOccupancyManagerHelper.split(renovationSegment, addDay(renovationEndDate), new SplittingHandler() {
-            @Override
-            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-
-            }
-
-            @Override
-            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                segment.status().setValue(Status.available);
-            }
-        });
-        if (availableSegment == null) {
-            throw new IllegalStateException("failed to create 'available' segment");
-        }
-        availabilityManager.generateUnitAvailablity(now);
+        throw new IllegalStateException("vacant segment was not found");
     }
 
     @Override

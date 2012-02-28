@@ -17,6 +17,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -78,8 +79,45 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
         unitItemsLister.setParent(result.getPrimaryKey());
         unitItemsLister.populate();
 
-        OccupanciesLister.setParent(result.getPrimaryKey());
+        populateOccupancy(result.getPrimaryKey());
+    }
+
+    private void populateOccupancy(Key entityId) {
+        OccupanciesLister.setParent(entityId);
         OccupanciesLister.populate();
+
+        final UnitViewerView myView = (UnitViewerView) view;
+
+        occupancyManagerService.canMakeVacant(new DefaultAsyncCallback<LogicalDate>() {
+            @Override
+            public void onSuccess(LogicalDate result) {
+                myView.setMinMakeVacantStartDay(result);
+            }
+        }, entityId);
+
+        occupancyManagerService.canScopeAvailable(new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                myView.setCanScopeAvailable(result);
+            }
+        }, entityId);
+
+        occupancyManagerService.canScopeOffMarket(new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                myView.setCanScopeOffMarket(result);
+            }
+        }, entityId);
+
+        occupancyManagerService.canScopeRenovation(new DefaultAsyncCallback<LogicalDate>() {
+            @Override
+            public void onSuccess(LogicalDate result) {
+                myView.setMinRenovationEndDate(result);
+            }
+        }, entityId);
+
     }
 
     @Override
@@ -100,7 +138,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                getOccupanciesPresenter().populate();
+                populateOccupancy(entityId);
             }
 
         }, entityId, type);
@@ -112,7 +150,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                getOccupanciesPresenter().populate();
+                populateOccupancy(entityId);
             }
 
         }, entityId, renovationEndDate);
@@ -124,7 +162,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                getOccupanciesPresenter().populate();
+                populateOccupancy(entityId);
             }
 
         }, entityId);
@@ -136,7 +174,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                getOccupanciesPresenter().populate();
+                populateOccupancy(entityId);
             }
 
         }, entityId, vacantFrom);

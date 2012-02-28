@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
@@ -42,6 +43,14 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     private Button makeVacantAction;
 
+    private boolean canScopeOffMarket;
+
+    private boolean canScopeAvailable;
+
+    private LogicalDate minRenovationEndDate;
+
+    private LogicalDate minMakeVacantStartDay;
+
     public enum DebugIds implements IDebugId {
 
         unitViewerViewScopeAction, unitViewerViewMakeVacantAction;
@@ -59,6 +68,10 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         unitItemsLister = new ListerInternalViewImplBase<AptUnitItem>(new UnitItemLister());
         OccupanciesLister = new ListerInternalViewImplBase<AptUnitOccupancySegment>(new UnitOccupancyLister());
 
+        canScopeAvailable = false;
+        canScopeOffMarket = false;
+        minRenovationEndDate = null;
+
         // set main main form here:
         setForm(new UnitEditorForm(true));
         initOccupancyActions();
@@ -69,7 +82,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         scopeAction = new Button(i18n.tr("Scope..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new ScopeDialog((UnitViewerView.Presenter) presenter) {
+                new ScopeDialog((UnitViewerView.Presenter) presenter, canScopeAvailable, canScopeOffMarket, minRenovationEndDate) {
                 }.show();
             }
         });
@@ -80,12 +93,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
             @Override
             public void onClick(ClickEvent event) {
-                new MakeVacantDialog() {
-                    @Override
-                    public boolean onClickOk() {
-                        ((UnitViewerView.Presenter) presenter).makeVacant(getStartingDate());
-                        return true;
-                    }
+                new MakeVacantDialog((com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter) presenter, minMakeVacantStartDay) {
                 }.show();
             }
         });
@@ -103,4 +111,24 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         return OccupanciesLister;
     }
 
+    @Override
+    public void setCanScopeOffMarket(boolean canScopeOffMarket) {
+        scopeAction.setVisible(this.canScopeOffMarket = canScopeOffMarket);
+    }
+
+    @Override
+    public void setCanScopeAvailable(boolean canScopeAvailable) {
+        scopeAction.setVisible(this.canScopeAvailable = canScopeAvailable);
+    }
+
+    @Override
+    public void setMinRenovationEndDate(LogicalDate minRenovationEndDate) {
+        scopeAction.setVisible((this.minRenovationEndDate = minRenovationEndDate) != null);
+    }
+
+    @Override
+    public void setMinMakeVacantStartDay(LogicalDate minMakeVacantStartDay) {
+        makeVacantAction.setVisible(minMakeVacantStartDay != null);
+        this.minMakeVacantStartDay = minMakeVacantStartDay;
+    }
 }

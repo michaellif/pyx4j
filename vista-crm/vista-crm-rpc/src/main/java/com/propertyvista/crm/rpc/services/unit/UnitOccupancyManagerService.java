@@ -26,10 +26,26 @@ public interface UnitOccupancyManagerService extends IService {
 
     void scopeOffMarket(AsyncCallback<VoidSerializable> callback, Key unitPk, OffMarketType type);
 
+    void canScopeOffMarket(AsyncCallback<Boolean> callback, Key unitPk);
+
     void scopeRenovation(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate renovationEndDate);
+
+    /**
+     * callback holds value or minimal renovation end date
+     */
+    void canScopeRenovation(AsyncCallback<LogicalDate> callback, Key unitPk);
 
     void scopeAvailable(AsyncCallback<VoidSerializable> callback, Key unitPk);
 
+    void canScopeAvailable(AsyncCallback<Boolean> callback, Key unitPk);
+
     void makeVacant(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate vacantFrom);
 
+    /**
+     * callback holds value of minimal vacant from date
+     * 
+     * @param callback
+     * @param unitPk
+     */
+    void canMakeVacant(AsyncCallback<LogicalDate> callback, Key unitPk);
 }

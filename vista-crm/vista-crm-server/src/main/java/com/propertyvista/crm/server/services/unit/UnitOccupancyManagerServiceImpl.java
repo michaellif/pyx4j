@@ -49,4 +49,24 @@ public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerServ
         callback.onSuccess(null);
     }
 
+    @Override
+    public void canScopeOffMarket(AsyncCallback<Boolean> callback, Key unitPk) {
+        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isScopeOffMarketAvailable());
+    }
+
+    @Override
+    public void canScopeRenovation(AsyncCallback<LogicalDate> callback, Key unitPk) {
+        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isRenovationAvailable());
+    }
+
+    @Override
+    public void canScopeAvailable(AsyncCallback<Boolean> callback, Key unitPk) {
+        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isScopeAvailableAvailable());
+    }
+
+    @Override
+    public void canMakeVacant(AsyncCallback<LogicalDate> callback, Key unitPk) {
+        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isMakeVacantAvailable());
+    }
+
 }
