@@ -49,7 +49,6 @@ import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -233,8 +232,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
+        serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new BillableItemEditor(this)));
         if (isEditable()) {
-            serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new BillableItemEditor(this)));
             serviceItemPanel.add(serviceselector = new AnchorButton("Select...", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -267,8 +266,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 }
             }));
             serviceselector.getElement().getStyle().setMarginLeft(4, Unit.EM);
-        } else {
-            serviceItemPanel.add(new DecoratorBuilder(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel<BillableItem>()), 50).build());
         }
 
         int row = -1;

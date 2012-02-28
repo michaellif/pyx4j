@@ -52,9 +52,12 @@ public interface BillableItem extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> expirationDate();
 
+    IPrimitive<Boolean> exemptFromTax();
+
     /**
      * Current price: contractual price value (ProductItem.price + adjustments),
-     * should be recalculated (@link PriceCalculationHelpers.calculateBillableItemAdjustments()) before use!..
+     * should be recalculated (@link
+     * PriceCalculationHelpers.calculateBillableItemAdjustments()) before use!..
      */
     @ToString(index = 1)
     @Format("#0.00")
