@@ -95,6 +95,10 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, (Serializable) null);
     }
 
+    public static PropertyCriterion isNotNull(IObject<?> member) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EQUAL, (Serializable) null);
+    }
+
     public static PropertyCriterion like(IObject<?> member, String value) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.RDB_LIKE, value);
     }

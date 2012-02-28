@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,12 +57,61 @@ public class TableModleVersioned {
         TableModel tm = mappings.getTableModel(persistenceContext.getConnection(), targetEntityClass);
         List<Key> keys = tm.queryKeys(persistenceContext, criteria, 1);
 
-        IEntity memeberEntity = (IEntity) member.getMember(entity);
+        IVersionData<?> memeberEntity = (IVersionData<?>) member.getMember(entity);
         if (keys.isEmpty()) {
             memeberEntity.set(null);
         } else {
             memeberEntity.setPrimaryKey(keys.get(0));
             memeberEntity.setValueDetached();
         }
+    }
+
+    public static List<IVersionData<IVersionedEntity<?>>> update(PersistenceContext persistenceContext, Mappings mappings, IEntity entity,
+            MemberOperationsMeta member) {
+        List<IVersionData<IVersionedEntity<?>>> update = new ArrayList<IVersionData<IVersionedEntity<?>>>();
+        @SuppressWarnings("unchecked")
+        IVersionData<IVersionedEntity<?>> memeberEntity = (IVersionData<IVersionedEntity<?>>) member.getMember(entity);
+        if (memeberEntity.isNull()) {
+            return update;
+        }
+        IVersionedEntity<?> versionedEntity = (IVersionedEntity<?>) entity;
+        @SuppressWarnings("unchecked")
+        Class<? extends IVersionData<IVersionedEntity<?>>> targetEntityClass = (Class<? extends IVersionData<IVersionedEntity<?>>>) member.getMemberMeta()
+                .getValueClass();
+        EntityQueryCriteria<? extends IVersionData<IVersionedEntity<?>>> criteria = EntityQueryCriteria.create(targetEntityClass);
+        criteria.add(PropertyCriterion.eq(criteria.proto().holder(), entity));
+        if (versionedEntity.draft().isBooleanTrue()) {
+            criteria.add(PropertyCriterion.isNull(criteria.proto().fromDate()));
+            criteria.add(PropertyCriterion.isNull(criteria.proto().toDate()));
+        } else {
+            criteria.add(PropertyCriterion.isNotNull(criteria.proto().fromDate()));
+            criteria.add(PropertyCriterion.isNull(criteria.proto().toDate()));
+        }
+
+        memeberEntity.holder().set(versionedEntity);
+        if (versionedEntity.draft().isBooleanTrue()) {
+            memeberEntity.fromDate().setValue(null);
+            memeberEntity.toDate().setValue(null);
+        } else {
+            memeberEntity.fromDate().setValue(persistenceContext.getTimeNow());
+            memeberEntity.toDate().setValue(null);
+        }
+        //Save using EntityPersistenceService
+        update.add(memeberEntity);
+
+        TableModel tm = mappings.getTableModel(persistenceContext.getConnection(), targetEntityClass);
+        List<? extends IVersionData<IVersionedEntity<?>>> existing = tm.query(persistenceContext, criteria, 1);
+        if (existing.size() > 0) {
+            IVersionData<IVersionedEntity<?>> memeberEntityExisting = existing.get(0);
+            if (versionedEntity.draft().isBooleanTrue()) {
+                // Update draft ?
+                memeberEntity.setPrimaryKey(memeberEntityExisting.getPrimaryKey());
+            } else {
+                // End effective period of currently active entity
+                memeberEntityExisting.toDate().setValue(persistenceContext.getTimeNow());
+                update.add(memeberEntityExisting);
+            }
+        }
+        return update;
     }
 }

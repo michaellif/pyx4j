@@ -41,12 +41,10 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     public void testRetrieve() {
         String testId = uniqueString();
-        if (true) {
-            // return;
-        }
 
         // Initial item
         ItemA itemA1 = EntityFactory.create(ItemA.class);
+        itemA1.testId().setValue(testId);
 
         itemA1.versions().add(itemA1.versions().$());
         itemA1.versions().add(itemA1.versions().$());
@@ -126,6 +124,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
         // Initial item
         ItemA itemA1 = EntityFactory.create(ItemA.class);
+        itemA1.testId().setValue(testId);
 
         final String currentName = "V0" + uniqueString();
         itemA1.versions().add(itemA1.versions().$());
@@ -133,19 +132,31 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.versions().get(0).name().setValue(currentName);
         itemA1.versions().get(0).testId().setValue(testId);
 
-        final String draftName = "V1" + uniqueString();
-        itemA1.version().name().setValue(draftName);
-        itemA1.version().testId().setValue(testId);
-
-        //Save Draft
+        //Save initial value
         srv.persist(itemA1);
 
-        srv.startTransaction();
-        // Retrieval of item before current existed
+        ItemA itemA1draft = EntityFactory.create(ItemA.class);
+        itemA1draft.setPrimaryKey(itemA1.getPrimaryKey());
+        itemA1draft.draft().setValue(Boolean.TRUE);
+
+        srv.retrieve(itemA1draft);
+
+        final String draftName = "V1" + uniqueString();
+        itemA1draft.version().name().setValue(draftName);
+        itemA1draft.version().testId().setValue(testId);
+
+        //Save Draft
+        srv.persist(itemA1draft);
+
+        // Retrieval of item as draft
         {
-            setDBTime("2010-01-01");
-            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey());
-            // assertTrue("current is null", itemA1r.version().isNull());
+            ItemA itemA1r = EntityFactory.create(ItemA.class);
+            itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
+            itemA1r.draft().setValue(Boolean.TRUE);
+
+            srv.retrieve(itemA1r);
+            assertTrue("version is not null", !itemA1r.version().isNull());
+            assertEquals("getDraft", draftName, itemA1r.version().name().getValue());
         }
 
     }

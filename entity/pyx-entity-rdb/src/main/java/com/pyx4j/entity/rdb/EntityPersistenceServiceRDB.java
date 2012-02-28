@@ -59,6 +59,7 @@ import com.pyx4j.entity.rdb.mapping.ResultSetIterator;
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
 import com.pyx4j.entity.rdb.mapping.TableModel;
 import com.pyx4j.entity.rdb.mapping.TableModelCollections;
+import com.pyx4j.entity.rdb.mapping.TableModleVersioned;
 import com.pyx4j.entity.rdb.mapping.ValueAdapterEntityPolymorphic;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -69,6 +70,8 @@ import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IVersionData;
+import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -388,6 +391,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     persist(tableModel(childEntity.getEntityMeta()), childEntity);
                 }
             }
+            for (MemberOperationsMeta member : tm.operationsMeta().getVersionInfoMembers()) {
+                for (IVersionData<IVersionedEntity<?>> memeberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, member)) {
+                    merge(tableModel(memeberEntity.getEntityMeta()), memeberEntity);
+                }
+            }
         } finally {
             if (trace) {
                 log.info(Trace.returns() + "insert {}", tm.getTableName());
@@ -448,6 +456,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     } else {
                         persist(tableModel(childEntity.getEntityMeta()), childEntity);
                     }
+                }
+            }
+            for (MemberOperationsMeta member : tm.operationsMeta().getVersionInfoMembers()) {
+                for (IVersionData<IVersionedEntity<?>> memeberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, member)) {
+                    merge(tableModel(memeberEntity.getEntityMeta()), memeberEntity);
                 }
             }
             return updated;
