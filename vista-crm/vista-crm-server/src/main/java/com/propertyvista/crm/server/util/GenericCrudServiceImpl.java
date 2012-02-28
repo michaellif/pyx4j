@@ -39,6 +39,7 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> extends Generi
     @Override
     public void create(AsyncCallback<DBO> callback, DBO entity) {
         persistDBO(entity);
+        Persistence.service().commit();
         callback.onSuccess(entity);
     }
 
@@ -58,6 +59,7 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> extends Generi
     @Override
     public void save(AsyncCallback<DBO> callback, DBO entity) {
         persistDBO(entity);
+        Persistence.service().commit();
         enhanceSave(entity);
         callback.onSuccess(entity);
     }
