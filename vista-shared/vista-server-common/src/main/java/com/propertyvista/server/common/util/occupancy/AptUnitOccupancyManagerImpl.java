@@ -27,8 +27,11 @@ import java.util.List;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -174,20 +177,24 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     @Override
     public void makeVacant(LogicalDate vacantFrom) {
-        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, vacantFrom);
-        Iterator<AptUnitOccupancySegment> i = occupancy.iterator();
-        if (i.hasNext()) {
-            i.next();
-            while (i.hasNext()) {
-                Persistence.service().delete(i.next());
-            }
-        } else {
-            throw new IllegalStateException("cannot find a segment to convert it to 'vacant'");
+        if (vacantFrom == null) {
+            throw new IllegalArgumentException("vacantFrom must not be null");
         }
-        split(unit, vacantFrom, new SplittingHandler() {
+        MakeVacantConstraintsDTO constraints = getMakeVacantConstraints();
+        LogicalDate min = constraints.minVacantFrom().getValue();
+        LogicalDate max = constraints.maxVacantFrom().getValue();
+        if (//@formatter:off
+             constraints == null
+                 || !((vacantFrom.after(min) | vacantFrom.equals(min))                             
+                         & (max == null || (vacantFrom.before(max) | vacantFrom.equals(max))))) { //@formatter:on
+            throw new IllegalArgumentException(SimpleMessageFormat.format("vacantFrom {0} doesn't match the constraints", vacantFrom));
+        }
+
+        AptUnitOccupancySegment makeVacantStartSegment = retrieveOccupancySegment(unit, vacantFrom);
+        AptUnitOccupancySegment vacantSegment = split(makeVacantStartSegment, vacantFrom, new SplittingHandler() {
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-                assertStatus(segment, Status.offMarket);
+
             }
 
             @Override
@@ -197,6 +204,14 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                 segment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
             }
         });
+
+        // now remove the rest
+        EntityQueryCriteria<AptUnitOccupancySegment> deleteCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+        deleteCriteria.add(PropertyCriterion.eq(deleteCriteria.proto().unit(), unit));
+        deleteCriteria.add(PropertyCriterion.ge(deleteCriteria.proto().dateTo(), vacantFrom));
+        deleteCriteria.add(PropertyCriterion.ne(deleteCriteria.proto().id(), vacantSegment.id().getValue()));
+        Persistence.service().delete(deleteCriteria);
+
         availabilityManager.generateUnitAvailablity(nowProvider.getNow());
     }
 

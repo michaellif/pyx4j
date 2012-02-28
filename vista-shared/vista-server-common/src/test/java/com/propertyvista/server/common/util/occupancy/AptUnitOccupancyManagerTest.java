@@ -13,7 +13,6 @@
  */
 package com.propertyvista.server.common.util.occupancy;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -226,8 +225,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
-    @Ignore
-    public void testMakeVacant1() {
+    public void testMakeVacantAppliedToOffMarket() {
         setup().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         setup().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         setup().from("2011-07-20").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.model).x();
@@ -243,11 +241,10 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
-    @Ignore
-    public void testMakeVacant2() {
+    public void testMakeVacantWhenAppliedToOffMarketAndAvailable() {
         setup().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         setup().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2011-07-20").toTheEndOfTime().status(Status.available).withOffMarketType(OffMarketType.model).x();
+        setup().from("2011-07-20").toTheEndOfTime().status(Status.available).x();
 
         now("2011-05-01");
 
@@ -260,11 +257,10 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
-    @Ignore
     public void testMakeVacantAppliedToAvailable() {
         setup().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         setup().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2011-07-20").toTheEndOfTime().status(Status.available).withOffMarketType(OffMarketType.model).x();
+        setup().from("2011-07-20").toTheEndOfTime().status(Status.available).x();
 
         now("2011-05-01");
 
