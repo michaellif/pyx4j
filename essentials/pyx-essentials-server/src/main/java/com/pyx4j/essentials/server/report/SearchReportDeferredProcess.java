@@ -94,6 +94,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
             formatCompleate = true;
         } else {
             long start = System.currentTimeMillis();
+            Persistence.service().startTransaction();
             try {
                 if (selectedMemberNames == null) {
                     maximum = Persistence.service().count(request.getCriteria());
@@ -129,6 +130,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
                 log.debug("fetch complete rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
                 fetchCompleate = true;
             } finally {
+                Persistence.service().endTransaction();
                 if (canceled) {
                     formater = null;
                 }
