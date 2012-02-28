@@ -28,11 +28,13 @@ import java.util.List;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
+import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
 
@@ -308,12 +310,6 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
     }
 
     @Override
-    public void availableToVacant() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public boolean isScopeOffMarketAvailable() {
         LogicalDate now = nowProvider.getNow();
 
@@ -360,32 +356,48 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
     }
 
     @Override
-    public boolean isAvailableToVacantAvailable() {
+    public MakeVacantConstraintsDTO getMakeVacantConstraints() {
         LogicalDate start = nowProvider.getNow();
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, start);
 
+        LogicalDate minVacantFromCandidate = null;
+        LogicalDate maxVacantFromCandidate = null;
         for (AptUnitOccupancySegment segment : occupancy) {
-            if (segment.status().getValue() == Status.available) {
-                return true;
+            Status segStatus = segment.status().getValue();
+            if ((segStatus == Status.reserved | segStatus == Status.leased) & minVacantFromCandidate != null) {
+                return null;
+            }
+            if (minVacantFromCandidate == null) {
+                if (segStatus == Status.offMarket | segStatus == Status.available) {
+                    LogicalDate segStart = segment.dateFrom().getValue();
+                    minVacantFromCandidate = segStart.before(start) ? start : segStart;
+                }
+            }
+            switch (segStatus) {
+            case offMarket:
+                maxVacantFromCandidate = segment.dateTo().getValue();
+                break;
+            case available:
+                maxVacantFromCandidate = segment.dateFrom().getValue();
+            default:
+                break;
+
             }
         }
 
-        return false;
-    }
-
-    @Override
-    public LogicalDate isMakeVacantAvailable() {
-        LogicalDate start = nowProvider.getNow();
-        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, start);
-
-        for (AptUnitOccupancySegment segment : occupancy) {
-            if (segment.status().getValue() == Status.offMarket) {
-                LogicalDate offMarketStart = segment.dateFrom().getValue();
-                return offMarketStart.before(start) ? start : offMarketStart;
+        if (minVacantFromCandidate == null) {
+            return null;
+        } else {
+            MakeVacantConstraintsDTO constraints = EntityFactory.create(MakeVacantConstraintsDTO.class);
+            constraints.minVacantFrom().setValue(minVacantFromCandidate);
+            if (minVacantFromCandidate.after(maxVacantFromCandidate)) {
+                constraints.maxVacantFrom().setValue(minVacantFromCandidate);
+            } else {
+                constraints.maxVacantFrom().setValue(maxVacantFromCandidate.before(AptUnitOccupancyManagerHelper.MAX_DATE) ? maxVacantFromCandidate : null);
             }
-        }
 
-        return null;
+            return constraints;
+        }
     }
 
     @Override

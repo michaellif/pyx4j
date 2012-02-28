@@ -21,6 +21,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
+import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerService {
@@ -65,8 +66,8 @@ public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerServ
     }
 
     @Override
-    public void canMakeVacant(AsyncCallback<LogicalDate> callback, Key unitPk) {
-        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isMakeVacantAvailable());
+    public void getMakeVacantConstraints(AsyncCallback<MakeVacantConstraintsDTO> callback, Key unitPk) {
+        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).getMakeVacantConstraints());
     }
 
 }

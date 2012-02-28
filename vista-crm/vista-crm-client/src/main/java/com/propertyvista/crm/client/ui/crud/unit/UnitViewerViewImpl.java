@@ -29,6 +29,7 @@ import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopeDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implements UnitViewerView {
@@ -50,6 +51,8 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     private LogicalDate minRenovationEndDate;
 
     private LogicalDate minMakeVacantStartDay;
+
+    private LogicalDate maxMakeVacantStartDay;
 
     public enum DebugIds implements IDebugId {
 
@@ -127,8 +130,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     }
 
     @Override
-    public void setMinMakeVacantStartDay(LogicalDate minMakeVacantStartDay) {
-        makeVacantAction.setVisible(minMakeVacantStartDay != null);
-        this.minMakeVacantStartDay = minMakeVacantStartDay;
+    public void setMakeVacantConstraints(MakeVacantConstraintsDTO constraints) {
+        makeVacantAction.setVisible(constraints != null);
+        this.minMakeVacantStartDay = constraints.minVacantFrom().getValue();
+        this.maxMakeVacantStartDay = constraints.maxVacantFrom().getValue();
     }
 }

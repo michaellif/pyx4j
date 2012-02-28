@@ -21,6 +21,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
+import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 
 public interface UnitOccupancyManagerService extends IService {
 
@@ -47,5 +48,5 @@ public interface UnitOccupancyManagerService extends IService {
      * @param callback
      * @param unitPk
      */
-    void canMakeVacant(AsyncCallback<LogicalDate> callback, Key unitPk);
+    void getMakeVacantConstraints(AsyncCallback<MakeVacantConstraintsDTO> callback, Key unitPk);
 }

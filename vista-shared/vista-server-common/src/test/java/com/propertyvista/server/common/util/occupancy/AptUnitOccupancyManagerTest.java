@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.common.util.occupancy;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -225,10 +226,11 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
-    public void testMakeVacant() {
+    @Ignore
+    public void testMakeVacant1() {
         setup().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         setup().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2011-07-19").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.model).x();
+        setup().from("2011-07-20").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.model).x();
 
         now("2011-05-01");
 
@@ -237,6 +239,40 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         expect().from("2011-05-20").to("2011-06-14").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         expect().from("2011-06-15").toTheEndOfTime().status(Status.vacant).x();
+        assertExpectedTimeline();
+    }
+
+    @Test
+    @Ignore
+    public void testMakeVacant2() {
+        setup().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
+        setup().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2011-07-20").toTheEndOfTime().status(Status.available).withOffMarketType(OffMarketType.model).x();
+
+        now("2011-05-01");
+
+        getUOM().makeVacant(asDate("2011-06-15"));
+
+        expect().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
+        expect().from("2011-05-20").to("2011-06-14").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        expect().from("2011-06-15").toTheEndOfTime().status(Status.vacant).x();
+        assertExpectedTimeline();
+    }
+
+    @Test
+    @Ignore
+    public void testMakeVacantAppliedToAvailable() {
+        setup().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
+        setup().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2011-07-20").toTheEndOfTime().status(Status.available).withOffMarketType(OffMarketType.model).x();
+
+        now("2011-05-01");
+
+        getUOM().makeVacant(asDate("2011-07-20"));
+
+        expect().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
+        expect().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        expect().from("2011-07-20").toTheEndOfTime().status(Status.vacant).x();
         assertExpectedTimeline();
     }
 

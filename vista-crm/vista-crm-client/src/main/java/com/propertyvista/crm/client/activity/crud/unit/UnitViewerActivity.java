@@ -37,6 +37,7 @@ import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
+import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AptUnitDTO;
 
@@ -88,10 +89,10 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
         final UnitViewerView myView = (UnitViewerView) view;
 
-        occupancyManagerService.canMakeVacant(new DefaultAsyncCallback<LogicalDate>() {
+        occupancyManagerService.getMakeVacantConstraints(new DefaultAsyncCallback<MakeVacantConstraintsDTO>() {
             @Override
-            public void onSuccess(LogicalDate result) {
-                myView.setMinMakeVacantStartDay(result);
+            public void onSuccess(MakeVacantConstraintsDTO result) {
+                myView.setMakeVacantConstraints(result);
             }
         }, entityId);
 

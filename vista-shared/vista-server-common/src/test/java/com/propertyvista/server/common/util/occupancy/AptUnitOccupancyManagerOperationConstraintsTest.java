@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
+import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccupancyManagerTestBase {
@@ -95,53 +96,123 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     }
 
     @Test
-    public void testIsAvailableToVacantAvailableWhenAvailable() {
-        setup().from("2010-01-01").to("2010-05-01").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2010-05-02").toTheEndOfTime().status(Status.available).x();
-
-        now("2010-04-30");
-        Assert.assertTrue(getUOM().isAvailableToVacantAvailable());
-
-        now("2010-05-05");
-        Assert.assertTrue(getUOM().isAvailableToVacantAvailable());
-    }
-
-    @Test
-    public void testIsAvailableToVacantAvailableWhenNotAvailable() {
-        setup().from("2010-01-01").to("2010-05-01").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2010-05-02").toTheEndOfTime().status(Status.vacant).x();
-
-        now("2010-04-30");
-        Assert.assertFalse(getUOM().isAvailableToVacantAvailable());
-
-        now("2010-05-05");
-        Assert.assertFalse(getUOM().isAvailableToVacantAvailable());
-    }
-
-    @Test
-    public void testIsMakeVacantAvailableWhenAvaialble() {
+    public void testgetMakeVacantConstraintsWhenMaxIsLimitedByAvaialble() {
         Lease lease = createLease("2010-01-01", "2010-01-02");
         setup().from("2010-01-01").to("2010-01-02").status(Status.leased).withLease(lease).x();
-        setup().from("2010-01-03").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2010-01-03").to("2010-02-05").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2010-02-06").toTheEndOfTime().status(Status.available).x();
 
         now("2010-01-01");
-        Assert.assertEquals(asDate("2010-01-03"), getUOM().isMakeVacantAvailable());
+        MakeVacantConstraintsDTO constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertEquals(asDate("2010-01-03"), constraints.minVacantFrom().getValue());
+        Assert.assertEquals(asDate("2010-02-06"), constraints.maxVacantFrom().getValue());
 
         now("2010-02-01");
-        Assert.assertEquals(asDate("2010-02-01"), getUOM().isMakeVacantAvailable());
+        constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertEquals(asDate("2010-02-01"), constraints.minVacantFrom().getValue());
+        Assert.assertEquals(asDate("2010-02-06"), constraints.maxVacantFrom().getValue());
+
+        now("2010-02-06");
+        constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertEquals(asDate("2010-02-06"), constraints.minVacantFrom().getValue());
+        Assert.assertEquals(asDate("2010-02-06"), constraints.maxVacantFrom().getValue());
+
+        now("2010-02-10");
+        constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertEquals(asDate("2010-02-10"), constraints.minVacantFrom().getValue());
+        Assert.assertEquals(asDate("2010-02-10"), constraints.maxVacantFrom().getValue());
     }
 
     @Test
-    public void testIsMakeVacantAvailableWhenNotAvailable() {
+    public void testgetMakeVacantConstraintsWhenMaxIsLimitedByVacant() {
         Lease lease = createLease("2010-01-01", "2010-01-02");
         setup().from("2010-01-01").to("2010-01-02").status(Status.leased).withLease(lease).x();
-        setup().from("2010-01-03").toTheEndOfTime().status(Status.available).x();
+        setup().from("2010-01-03").to("2010-02-05").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2010-02-06").toTheEndOfTime().status(Status.vacant).x();
 
         now("2010-01-01");
-        Assert.assertNull(getUOM().isMakeVacantAvailable());
+        MakeVacantConstraintsDTO constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertEquals(asDate("2010-01-03"), constraints.minVacantFrom().getValue());
+        Assert.assertEquals(asDate("2010-02-05"), constraints.maxVacantFrom().getValue());
 
         now("2010-02-01");
-        Assert.assertNull(getUOM().isMakeVacantAvailable());
+        constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertEquals(asDate("2010-02-01"), constraints.minVacantFrom().getValue());
+        Assert.assertEquals(asDate("2010-02-05"), constraints.maxVacantFrom().getValue());
+
+        now("2010-02-06");
+        constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertNull(constraints);
+
+        now("2010-02-10");
+        constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertNull(constraints);
+    }
+
+    @Test
+    public void testgetMakeVacantConstraintsWhenMaxIsNotLimited() {
+        Lease lease = createLease("2010-01-01", "2010-01-02");
+        setup().from("2010-01-01").to("2010-01-02").status(Status.leased).withLease(lease).x();
+        setup().from("2010-01-03").to("2010-02-05").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2010-02-06").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.employee).x();
+
+        now("2010-01-01");
+        MakeVacantConstraintsDTO constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertEquals(asDate("2010-01-03"), constraints.minVacantFrom().getValue());
+        Assert.assertNull(constraints.maxVacantFrom().getValue());
+
+        now("2010-02-01");
+        constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertEquals(asDate("2010-02-01"), constraints.minVacantFrom().getValue());
+        Assert.assertNull(constraints.maxVacantFrom().getValue());
+
+        now("2010-02-06");
+        constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertEquals(asDate("2010-02-06"), constraints.minVacantFrom().getValue());
+        Assert.assertNull(constraints.maxVacantFrom().getValue());
+
+        now("2010-02-10");
+        constraints = getUOM().getMakeVacantConstraints();
+        Assert.assertEquals(asDate("2010-02-10"), constraints.minVacantFrom().getValue());
+        Assert.assertNull(constraints.maxVacantFrom().getValue());
+    }
+
+    @Test
+    public void testIsMakeVacantAvailableWhenNotAvailableBecauseLeased() {
+        Lease lease = createLease("2010-02-02", "2011-02-02");
+        setup().from("2010-01-03").to("2010-02-01").status(Status.available).x();
+        setup().from("2010-02-02").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+
+        now("2010-01-01");
+        Assert.assertNull(getUOM().getMakeVacantConstraints());
+
+        now("2010-01-02");
+        Assert.assertNull(getUOM().getMakeVacantConstraints());
+
+        now("2010-02-02");
+        Assert.assertNull(getUOM().getMakeVacantConstraints());
+
+        now("2010-02-04");
+        Assert.assertNull(getUOM().getMakeVacantConstraints());
+    }
+
+    @Test
+    public void testIsMakeVacantAvailableWhenNotAvailableBecauseReserved() {
+        Lease lease = createLease("2010-02-02", "2011-02-02");
+        setup().from("2010-01-03").to("2010-02-01").status(Status.available).x();
+        setup().from("2010-02-02").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
+
+        now("2010-01-01");
+        Assert.assertNull(getUOM().getMakeVacantConstraints());
+
+        now("2010-01-02");
+        Assert.assertNull(getUOM().getMakeVacantConstraints());
+
+        now("2010-02-02");
+        Assert.assertNull(getUOM().getMakeVacantConstraints());
+
+        now("2010-02-04");
+        Assert.assertNull(getUOM().getMakeVacantConstraints());
     }
 
     @Test

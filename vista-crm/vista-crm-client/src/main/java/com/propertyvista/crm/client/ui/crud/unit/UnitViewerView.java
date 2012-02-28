@@ -20,6 +20,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
+import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.dto.AptUnitDTO;
 
 public interface UnitViewerView extends IViewerView<AptUnitDTO> {
@@ -50,6 +51,6 @@ public interface UnitViewerView extends IViewerView<AptUnitDTO> {
 
     void setMinRenovationEndDate(LogicalDate minRenovationEndDate);
 
-    void setMinMakeVacantStartDay(LogicalDate minMakeVacantStartDay);
+    void setMakeVacantConstraints(MakeVacantConstraintsDTO minMakeVacantStartDay);
 
 }

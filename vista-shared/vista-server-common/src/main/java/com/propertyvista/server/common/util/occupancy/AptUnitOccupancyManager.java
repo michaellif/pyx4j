@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
+import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface AptUnitOccupancyManager {
@@ -53,21 +54,17 @@ public interface AptUnitOccupancyManager {
     boolean isScopeAvailableAvailable();
 
     /**
-     * Converts 'available' segment to 'vacant' segment
-     */
-    void availableToVacant();
-
-    boolean isAvailableToVacantAvailable();
-
-    /**
-     * Applied to {@link Status#offMarket}
+     * Applied starting from {@link Status#offMarket} or {@link Status#available}, starts vacant segment starting <code>vacantFrom</code> date, and removes all
+     * future segments.
      */
     void makeVacant(LogicalDate vacantFrom);
 
     /**
-     * @return minimal vacantFrom date for makeVacant, or null if it cannot be done
+     * make make vacant can be done if there are no "leased" or "reserved" segments in the future.
+     * 
+     * @return minimal vacantFrom range, for makeVacant operation, or null if it cannot be done
      */
-    LogicalDate isMakeVacantAvailable();
+    MakeVacantConstraintsDTO getMakeVacantConstraints();
 
     /**
      * Create lease in draft mode. To create lease it first must be created in draft mode via {@link #reserve()} and then {@link #approveLease()}.
