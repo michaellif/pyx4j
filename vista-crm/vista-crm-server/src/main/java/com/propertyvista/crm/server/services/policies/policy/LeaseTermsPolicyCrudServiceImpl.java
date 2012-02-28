@@ -35,10 +35,10 @@ public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<Le
 
     private static boolean isValid(LeaseTermsPolicyDTO in, StringBuffer errors) {
         boolean isValid = true;
-        if (!(isValid &= !in.summaryTerms().isEmpty())) {
+        if (!(isValid &= !in.tenantSummaryTerms().isEmpty())) {
             errors.append("Summary terms list must not be empty; ");
         } else {
-            for (LegalTermsDescriptor terms : in.summaryTerms()) {
+            for (LegalTermsDescriptor terms : in.tenantSummaryTerms()) {
                 if (!(isValid &= isValid(terms))) {
                     // TODO add message
                 }

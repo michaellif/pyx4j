@@ -59,7 +59,7 @@ public class LeaseTermsPolicyPreloader extends AbstractPolicyPreloader<LeaseTerm
         }
 
         String caption = i18n.tr("Mockup Summary Terms");
-        policy.summaryTerms().add(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, termsContentText)));
+        policy.tenantSummaryTerms().add(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, termsContentText)));
 
         caption = i18n.tr("Mockup One Time Payment Terms");
         policy.oneTimePaymentTerms().set(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, termsContentText)));

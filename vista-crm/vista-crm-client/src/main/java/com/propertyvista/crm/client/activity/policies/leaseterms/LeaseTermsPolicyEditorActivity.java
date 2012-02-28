@@ -40,7 +40,7 @@ public class LeaseTermsPolicyEditorActivity extends EditorActivityBase<LeaseTerm
     protected void createNewEntity(AsyncCallback<LeaseTermsPolicyDTO> callback) {
         try {
             LeaseTermsPolicyDTO policy = EntityFactory.create(LeaseTermsPolicyDTO.class);
-            policy.summaryTerms().add(createNewLegalTerms());
+            policy.tenantSummaryTerms().add(createNewLegalTerms());
             policy.oneTimePaymentTerms().set(createNewLegalTerms());
             policy.recurrentPaymentTerms().set(createNewLegalTerms());
             callback.onSuccess(policy);

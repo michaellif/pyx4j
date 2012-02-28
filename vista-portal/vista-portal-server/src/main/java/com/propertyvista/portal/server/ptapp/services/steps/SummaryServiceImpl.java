@@ -157,7 +157,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         // fill Lease Terms:
         LeaseTermsPolicy termsPolicy = LegalStuffUtils.retrieveLegalTermsPolicy();
 
-        for (LegalTermsDescriptor terms : termsPolicy.summaryTerms()) {
+        for (LegalTermsDescriptor terms : termsPolicy.tenantSummaryTerms()) {
             LegalTermsDescriptorDTO ltd = LegalStuffUtils.formLegalTerms(terms);
             for (IAgree agree : agrees) {
                 ltd.agrees().add((IAgree) agree.duplicate());

@@ -15,19 +15,18 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentLister;
@@ -93,7 +92,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 new ActionBox(CompletionType.Notice) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) presenter).notice(getDate(), getMoveOutDate());
+                        ((LeaseViewerView.Presenter) presenter).notice(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
                         return true;
                     }
                 }.show();
@@ -117,7 +116,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 new ActionBox(CompletionType.Eviction) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) presenter).evict(getDate(), getMoveOutDate());
+                        ((LeaseViewerView.Presenter) presenter).evict(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
                         return true;
                     }
                 }.show();
@@ -165,11 +164,9 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     private abstract class ActionBox extends OkCancelDialog {
 
-        private final CDatePicker date = new CDatePicker();
-
-        private final CDatePicker moveOut = new CDatePicker();
-
         private final CompletionType action;
+
+        private CEntityDecoratableEditor<LeaseDTO> content;
 
         public ActionBox(CompletionType action) {
             super(i18n.tr("Please select"));
@@ -180,46 +177,43 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         protected Widget createBody() {
             getOkButton().setEnabled(true);
 
-            VerticalPanel content = new VerticalPanel();
-            Widget label = null;
+            content = new CEntityDecoratableEditor<LeaseDTO>(LeaseDTO.class) {
+                @Override
+                public IsWidget createContent() {
+                    FormFlexPanel main = new FormFlexPanel();
+                    switch (action) {
+                    case Notice:
+                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).customLabel(i18n.tr("Notice Date")).build());
+                        break;
+                    case Eviction:
+                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).customLabel(i18n.tr("Evict Date")).build());
+                        break;
+                    }
+                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
+                    return main;
+                }
 
-            HorizontalPanel datePanel = new HorizontalPanel();
-            switch (action) {
-            case Notice:
-                datePanel.add(label = new HTML(i18n.tr("Notice Date") + ":"));
-                break;
-            case Eviction:
-                datePanel.add(label = new HTML(i18n.tr("Evict Date") + ":"));
-                break;
-            }
-            datePanel.setCellWidth(label, "100px");
-            datePanel.setSpacing(4);
-            datePanel.add(date);
-            date.setWidth("9em");
-            date.setValue(new LogicalDate());
+                @Override
+                protected void onPopulate() {
+                    super.onPopulate();
 
-            content.add(datePanel);
+                    if (getValue().moveOutNotice().isNull()) {
+                        get(proto().moveOutNotice()).setValue(new LogicalDate());
+                    }
 
-            datePanel = new HorizontalPanel();
-            datePanel.add(label = new HTML(i18n.tr("Move Out Date") + ":"));
-            datePanel.setCellWidth(label, "100px");
-            datePanel.setSpacing(4);
-            datePanel.add(moveOut);
-            moveOut.setWidth("9em");
-            moveOut.setValue(new LogicalDate());
+                    if (getValue().expectedMoveOut().isNull()) {
+                        get(proto().expectedMoveOut()).setValue(new LogicalDate());
+                    }
+                }
+            };
 
-            content.add(datePanel);
-
-            content.setWidth("100%");
+            content.initContent();
+            content.populate(form.getValue());
             return content.asWidget();
         }
 
-        public LogicalDate getDate() {
-            return new LogicalDate(date.getValue());
-        }
-
-        public LogicalDate getMoveOutDate() {
-            return new LogicalDate(moveOut.getValue());
+        public LeaseDTO getValue() {
+            return content.getValue();
         }
     }
 }

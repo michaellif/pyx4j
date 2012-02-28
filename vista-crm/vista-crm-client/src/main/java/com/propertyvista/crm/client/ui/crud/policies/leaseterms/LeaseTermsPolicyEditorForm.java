@@ -41,7 +41,7 @@ public class LeaseTermsPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
     protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm.TabDescriptor> createCustomTabPanels() {
         return Arrays.asList(
 
-        new TabDescriptor(createSummaryTermsPanel(), proto().summaryTerms().getMeta().getCaption()),
+        new TabDescriptor(createSummaryTermsPanel(), proto().tenantSummaryTerms().getMeta().getCaption()),
 
         new TabDescriptor(createOneTimePaymentTermsPanel(), proto().oneTimePaymentTerms().getMeta().getCaption()),
 
@@ -52,7 +52,7 @@ public class LeaseTermsPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
 
     private Widget createSummaryTermsPanel() {
         FormFlexPanel container = new FormFlexPanel();
-        container.setWidget(0, 0, inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())));
+        container.setWidget(0, 0, inject(proto().tenantSummaryTerms(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 

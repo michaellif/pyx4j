@@ -24,7 +24,11 @@ import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 public interface LeaseTermsPolicy extends UnitPolicy {
 
     @Owned
-    IList<LegalTermsDescriptor> summaryTerms();
+    IList<LegalTermsDescriptor> tenantSummaryTerms();
+
+    // TODO : add UI for setup!
+    @Owned
+    IList<LegalTermsDescriptor> guarantorSummaryTerms();
 
     @Owned
     LegalTermsDescriptor oneTimePaymentTerms();
