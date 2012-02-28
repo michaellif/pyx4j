@@ -181,6 +181,10 @@ public class IServiceAdapterImpl implements IServiceAdapter {
 
             if (callback.caught != null) {
                 log.error("Error", callback.caught);
+                LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
+                if (lifecycleListener != null) {
+                    lifecycleListener.onRequestError();
+                }
                 if (callback.caught instanceof RuntimeException) {
                     throw (RuntimeException) callback.caught;
                 }
@@ -199,6 +203,12 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
         } catch (InvocationTargetException e) {
             log.error("Service call error\n{}\n for user:" + Context.getVisit(), Trace.clickableClassLocation(serviceInstance.getClass()), e.getCause());
+
+            LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
+            if (lifecycleListener != null) {
+                lifecycleListener.onRequestError();
+            }
+
             if (e.getCause() instanceof RuntimeException) {
                 throw (RuntimeException) e.getCause();
             } else {

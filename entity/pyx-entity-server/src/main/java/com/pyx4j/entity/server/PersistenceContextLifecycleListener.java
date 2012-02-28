@@ -35,6 +35,11 @@ public class PersistenceContextLifecycleListener implements LifecycleListener {
     }
 
     @Override
+    public void onRequestError() {
+        Persistence.service().rollback();
+    }
+
+    @Override
     public void onContextEnd() {
         Persistence.service().removeThreadLocale();
     }
