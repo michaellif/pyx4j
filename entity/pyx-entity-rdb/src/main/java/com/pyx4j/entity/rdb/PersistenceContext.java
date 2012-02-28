@@ -112,20 +112,24 @@ public class PersistenceContext {
     }
 
     void commit() {
-        try {
-            connection.commit();
-            uncommittedChanges = false;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (connection != null) {
+            try {
+                connection.commit();
+                uncommittedChanges = false;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     void rollback() {
-        try {
-            connection.rollback();
-            uncommittedChanges = false;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (connection != null) {
+            try {
+                connection.rollback();
+                uncommittedChanges = false;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
