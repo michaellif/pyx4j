@@ -111,16 +111,17 @@ public interface FloorplanAmenity extends Amenity {
     @MemberColumn(name = "floorplanType")
     IPrimitive<Type> type();
 
-    interface OrderId extends ColumnId {
-    }
-
-    @OrderColumn(OrderId.class)
-    IPrimitive<Integer> orderInParent();
-
     @Owner
     @Detached
     @ReadOnly
     @Indexed
     @JoinColumn
     Floorplan belongsTo();
+
+    // internals:
+    interface OrderId extends ColumnId {
+    }
+
+    @OrderColumn(OrderId.class)
+    IPrimitive<Integer> orderInParent();
 }

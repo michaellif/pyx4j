@@ -41,6 +41,7 @@ public interface GlCode extends IEntity {
     @JoinColumn
     GlCodeCategory glCodeCategory();
 
+    // internals:
     interface OrderId extends ColumnId {
     }
 
