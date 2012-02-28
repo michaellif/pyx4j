@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -43,10 +44,11 @@ public interface DepositPolicyItem extends IEntity {
     @I18n
     @XmlType(name = "RepaymentMode")
     public enum RepaymentMode {
-        value,
+        @Translate("Apply")
+        apply,
 
-        @Translate("Servisce/Feature")
-        serviceFeature, fee;
+        @Translate("Return")
+        returned;
 
         @Override
         public String toString() {
@@ -76,6 +78,7 @@ public interface DepositPolicyItem extends IEntity {
     @NotNull
     IPrimitive<BigDecimal> depositValue();
 
+    @Caption(name = "Apply to/Re-payed at")
     IPrimitive<ApplyToRepayAt> applyToRepayAt();
 
     IPrimitive<RepaymentMode> repaymentMode();

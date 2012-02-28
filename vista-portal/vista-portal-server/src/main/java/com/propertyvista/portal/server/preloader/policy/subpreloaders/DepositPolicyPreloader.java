@@ -48,7 +48,7 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
         item.description().setValue(i18n.tr("Security Depisit"));
         item.applyToRepayAt().setValue(ApplyToRepayAt.leaseEnd);
         item.depositValue().setValue(new BigDecimal(500.00));
-        item.repaymentMode().setValue(RepaymentMode.value);
+        item.repaymentMode().setValue(RepaymentMode.returned);
         item.valueType().setValue(ValueType.absoluteAmount);
 
         policy.policyItems().add(item);
@@ -65,7 +65,7 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
                 item.description().setValue(i18n.tr("First Month Parking"));
                 item.applyToRepayAt().setValue(ApplyToRepayAt.firstMonth);
                 item.depositValue().setValue(new BigDecimal(100.00));
-                item.repaymentMode().setValue(RepaymentMode.serviceFeature);
+                item.repaymentMode().setValue(RepaymentMode.apply);
                 item.valueType().setValue(ValueType.percentage);
                 item.appliedTo().set(pit);
 
