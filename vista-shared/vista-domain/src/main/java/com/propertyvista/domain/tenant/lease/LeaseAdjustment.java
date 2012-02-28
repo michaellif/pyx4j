@@ -16,6 +16,7 @@ package com.propertyvista.domain.tenant.lease;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -29,6 +30,10 @@ import com.propertyvista.domain.company.Employee;
 
 public interface LeaseAdjustment extends IEntity {
 
+    @Caption(name = "Last Updated")
+    @Timestamp
+    IPrimitive<LogicalDate> updated();
+
     @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "itemType")
@@ -38,6 +43,11 @@ public interface LeaseAdjustment extends IEntity {
     @ToString(index = 1)
     @Format("#0.00")
     IPrimitive<BigDecimal> amount();
+
+    @NotNull
+    @ToString(index = 1)
+    @Format("#0.00")
+    IPrimitive<BigDecimal> tax();
 
     IPrimitive<String> description();
 

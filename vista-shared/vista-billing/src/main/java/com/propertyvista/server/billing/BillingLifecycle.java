@@ -44,6 +44,8 @@ public class BillingLifecycle {
 
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycle.class);
 
+    private static LogicalDate sysDate;
+
     static BillingRun runBilling(Lease lease) {
         BillingAccount billingAccount = ensureBillingAccount(lease);
 
@@ -162,5 +164,13 @@ public class BillingLifecycle {
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.desc(criteria.proto().billSequenceNumber());
         return Persistence.service().retrieve(criteria);
+    }
+
+    static LogicalDate getSysDate() {
+        if (sysDate != null) {
+            return sysDate;
+        } else {
+            return new LogicalDate();
+        }
     }
 }

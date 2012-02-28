@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
@@ -34,6 +35,10 @@ public interface BillableItem extends IEntity {
     @ToString(index = 0)
     @Caption(name = "Product Item")
     ProductItem item();
+
+    @Caption(name = "Last Updated")
+    @Timestamp
+    IPrimitive<LogicalDate> updated();
 
     @Owned
     @OrderBy(BillableItemAdjustment.OrderId.class)

@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -73,6 +74,10 @@ public interface BillableItemAdjustment extends IEntity {
             return I18nEnum.toString(this);
         }
     }
+
+    @Caption(name = "Last Updated")
+    @Timestamp
+    IPrimitive<LogicalDate> updated();
 
     @Owner
     @JoinColumn

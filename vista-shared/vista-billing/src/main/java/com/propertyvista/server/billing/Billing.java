@@ -49,10 +49,13 @@ class Billing {
 
         Bill bill = EntityFactory.create(Bill.class);
         bill.billStatus().setValue(Bill.BillStatus.Running);
-        billingAccount.bills().add(bill);
+        bill.billingAccount().set(billingAccount);
 
         bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
         bill.billingRun().set(billingRun);
+
+        Bill previousBill = BillingLifecycle.getLatestConfirmedBill(billingAccount);
+        bill.previousBill().set(previousBill);
 
         Persistence.service().persist(bill);
 

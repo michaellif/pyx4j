@@ -45,7 +45,7 @@ public class ChargeAdjustmentProcessor {
 
     private void createChargeAdjustment(BillableItemAdjustment itemAdjustment) {
 
-        if (!isBillableItemAdjustmentApplicable(itemAdjustment, bill)) {
+        if (!isBillableItemAdjustmentApplicable(itemAdjustment)) {
             return;
         }
 
@@ -65,7 +65,7 @@ public class ChargeAdjustmentProcessor {
         bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.amount().getValue()));
     }
 
-    private static boolean isBillableItemAdjustmentApplicable(BillableItemAdjustment adjustment, Bill bill) {
+    private boolean isBillableItemAdjustmentApplicable(BillableItemAdjustment adjustment) {
 //        if (BillableItemAdjustment.TermType.postLease.equals(adjustment.termType().getValue())) {
 //            return false;
 //        } else if (BillableItemAdjustment.TermType.oneTime.equals(adjustment.termType().getValue())

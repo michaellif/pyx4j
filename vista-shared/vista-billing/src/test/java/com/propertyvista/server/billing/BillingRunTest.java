@@ -139,6 +139,8 @@ public class BillingRunTest extends BillingTestBase {
 
         Bill bill = runBilling(1, true);
 
+        assertTrue("Previous Bill Sequence number", bill.previousBill().billSequenceNumber().isNull());
+
         assertEquals("Number of charges", 5, bill.charges().size());
         assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
@@ -149,6 +151,46 @@ public class BillingRunTest extends BillingTestBase {
         //==================== RUN 2 ======================//
 
         bill = runBilling(2, true);
+
+        assertEquals("Previous Bill Sequence number", 1, (int) bill.previousBill().billSequenceNumber().getValue());
+
+        assertEquals("Number of charges", 5, bill.charges().size());
+        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        assertEquals("Total adjustments", new BigDecimal("-26.19"), bill.totalAdjustments().getValue());
+        assertEquals("One-time feature charges", new BigDecimal("40.00"), bill.oneTimeFeatureCharges().getValue());
+
+        //==================== RUN 3 ======================//
+
+        bill = runBilling(3, false);
+
+        assertEquals("Previous Bill Sequence number", 2, (int) bill.previousBill().billSequenceNumber().getValue());
+
+        assertEquals("Number of charges", 5, bill.charges().size());
+        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        assertEquals("Total adjustments", new BigDecimal("-26.19"), bill.totalAdjustments().getValue());
+        assertEquals("One-time feature charges", new BigDecimal("40.00"), bill.oneTimeFeatureCharges().getValue());
+
+        bill = runBilling(4, true);
+
+        assertEquals("Previous Bill Sequence number", 2, (int) bill.previousBill().billSequenceNumber().getValue());
+
+        assertEquals("Number of charges", 5, bill.charges().size());
+        assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
+        assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
+
+        assertEquals("Total adjustments", new BigDecimal("-26.19"), bill.totalAdjustments().getValue());
+        assertEquals("One-time feature charges", new BigDecimal("40.00"), bill.oneTimeFeatureCharges().getValue());
+
+        //==================== RUN 4 ======================//
+
+        bill = runBilling(5, true);
+
+        assertEquals("Previous Bill Sequence number", 4, (int) bill.previousBill().billSequenceNumber().getValue());
+
         assertEquals("Number of charges", 5, bill.charges().size());
         assertEquals("Number of charge adjustments", 4, bill.chargeAdjustments().size());
         assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
@@ -157,34 +199,6 @@ public class BillingRunTest extends BillingTestBase {
         assertEquals("One-time feature charges", new BigDecimal("40.00"), bill.oneTimeFeatureCharges().getValue());
 
         if (false) {
-
-            //==================== RUN 3 ======================//
-
-            bill = runBilling(3, false);
-            assertEquals("Number of charges", 4, bill.charges().size());
-            assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
-            assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
-
-            assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
-            assertEquals("One-time feature charges", new BigDecimal("0.00"), bill.oneTimeFeatureCharges().getValue());
-
-            bill = runBilling(4, true);
-            assertEquals("Number of charges", 4, bill.charges().size());
-            assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
-            assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
-
-            assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
-            assertEquals("One-time feature charges", new BigDecimal("0.00"), bill.oneTimeFeatureCharges().getValue());
-
-            //==================== RUN 4 ======================//
-
-            bill = runBilling(5, true);
-            assertEquals("Number of charges", 5, bill.charges().size());
-            assertEquals("Number of charge adjustments", 3, bill.chargeAdjustments().size());
-            assertEquals("Number of lease adjustments", 0, bill.leaseAdjustments().size());
-
-            assertEquals("Total adjustments", new BigDecimal("-16.19"), bill.totalAdjustments().getValue());
-            assertEquals("One-time feature charges", new BigDecimal("40.00"), bill.oneTimeFeatureCharges().getValue());
 
             //==================== RUN 5 ======================//
 

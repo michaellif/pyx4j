@@ -45,23 +45,22 @@ public class ChargeProcessor {
 
         Persistence.service().retrieve(billableItem.item().product());
 
-        if (!isBillableItemApplicable(billableItem, bill)) {
-            return;
+        if (isBillableItemEligibaleForCharge(billableItem)) {
+            BillCharge charge = EntityFactory.create(BillCharge.class);
+            charge.bill().set(bill);
+            charge.billableItem().set(billableItem);
+            charge.amount().setValue(billableItem.item().price().getValue());
+            if (!charge.amount().isNull()) {
+                charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), billableItem.item().type(), bill.billingRun().building()));
+            }
+            charge.taxTotal().setValue(new BigDecimal(0));
+            for (BillChargeTax chargeTax : charge.taxes()) {
+                charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
+            }
+
+            addCharge(charge);
         }
 
-        BillCharge charge = EntityFactory.create(BillCharge.class);
-        charge.bill().set(bill);
-        charge.billableItem().set(billableItem);
-        charge.amount().setValue(billableItem.item().price().getValue());
-        if (!charge.amount().isNull()) {
-            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), billableItem.item().type(), bill.billingRun().building()));
-        }
-        charge.taxTotal().setValue(new BigDecimal(0));
-        for (BillChargeTax chargeTax : charge.taxes()) {
-            charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
-        }
-
-        addCharge(charge);
     }
 
     private void addCharge(BillCharge charge) {
@@ -76,7 +75,12 @@ public class ChargeProcessor {
         bill.taxes().setValue(bill.taxes().getValue().add(charge.taxTotal().getValue()));
     }
 
-    private static boolean isBillableItemApplicable(BillableItem item, Bill bill) {
+    /**
+     * Billable Item is eligible for charge creation if it's expiration date equals or higher than bill period start date.
+     * 
+     * Advanced/arrears
+     */
+    private boolean isBillableItemEligibaleForCharge(BillableItem item) {
 //        if (item.billingPeriodNumber().isNull()) {
 //            throw new Error("billingPeriodNumber should not be null");
 //        } else if (bill.billingPeriodNumber().getValue() >= item.billingPeriodNumber().getValue()) {

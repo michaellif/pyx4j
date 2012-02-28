@@ -14,13 +14,13 @@
 package com.propertyvista.domain.financial;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -44,12 +44,15 @@ public interface BillingAccount extends IEntity {
     BillingRun currentBillingRun();
 
     @Owned
-    @Detached()
-    @OrderBy(Bill.BillSequenceNumber.class)
-    IList<Bill> bills();
+    @Detached(level = AttachLevel.Detached)
+    ISet<Bill> bills();
 
     IPrimitive<Integer> billCounter();
 
     IPrimitive<Double> total();
+
+    //Should own Payments
+
+    //Should have deposit value field
 
 }

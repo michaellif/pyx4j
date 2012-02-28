@@ -16,12 +16,10 @@ package com.propertyvista.domain.financial.billing;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderBy;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -60,11 +58,9 @@ public interface Bill extends IEntity {
     @JoinColumn
     BillingAccount billingAccount();
 
-    interface BillSequenceNumber extends ColumnId {
-    }
-
-    @OrderColumn(BillSequenceNumber.class)
     IPrimitive<Integer> billSequenceNumber();
+
+    Bill previousBill();
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> billingPeriodStartDate();

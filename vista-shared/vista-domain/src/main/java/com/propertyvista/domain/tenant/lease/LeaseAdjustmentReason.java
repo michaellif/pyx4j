@@ -32,6 +32,8 @@ public interface LeaseAdjustmentReason extends IEntity {
     @ToString
     IPrimitive<String> name();
 
+    IPrimitive<Boolean> precalculatedTax();
+
     GlCode glCode();
 
     /**

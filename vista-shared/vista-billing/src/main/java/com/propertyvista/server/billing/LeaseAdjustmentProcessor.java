@@ -37,7 +37,7 @@ public class LeaseAdjustmentProcessor {
     }
 
     private void createLeaseAdjustment(LeaseAdjustment item) {
-        if (!isLeaseAdjustmentApplicable(item, bill)) {
+        if (!isLeaseAdjustmentApplicable(item)) {
             return;
         }
 
@@ -63,7 +63,7 @@ public class LeaseAdjustmentProcessor {
         bill.taxes().setValue(bill.taxes().getValue().add(item.taxTotal().getValue()));
     }
 
-    public static boolean isLeaseAdjustmentApplicable(LeaseAdjustment item, Bill bill) {
+    private boolean isLeaseAdjustmentApplicable(LeaseAdjustment item) {
         // TODO Implement
         return true;
     }
