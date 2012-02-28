@@ -23,8 +23,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.common.client.ClentNavigUtils;
-import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.common.client.ui.components.MediaUtils;
 
 public class LogoViewImpl extends SimplePanel implements LogoView {
 
@@ -44,7 +43,7 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
     public LogoViewImpl() {
         HasClickHandlers logoElement;
         if (useLogoImage) {
-            Image logoImage = new Image(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.siteImageResourceServletMapping + "logo.png");
+            Image logoImage = new Image(MediaUtils.createSiteLogoUrl());
             logoImage.getElement().getStyle().setProperty("maxHeight", "50px");
             logoImage.getElement().getStyle().setMarginLeft(20, Unit.PX);
             logoImage.getElement().getStyle().setMarginTop(4, Unit.PX);

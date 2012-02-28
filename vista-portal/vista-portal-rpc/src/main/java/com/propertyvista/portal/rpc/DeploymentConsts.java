@@ -31,7 +31,7 @@ public interface DeploymentConsts {
 
     public static final String siteResourcesServletMapping = "site-resource/";
 
-    public static final String siteImageResourceServletMapping = "site-imageresource/";
+    public static final String siteImageResourceServletMapping = "/vista.siteimgrc";
 
     public static final String applicationDocumentServletMapping = "application_document/";
 

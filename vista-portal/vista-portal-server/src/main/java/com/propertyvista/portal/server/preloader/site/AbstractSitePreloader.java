@@ -48,6 +48,7 @@ import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.Testimonial;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.shared.CompiledLocale;
@@ -440,8 +441,8 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         fileName = "slogan.png";
         siteImage = makeSiteImage(fileName, cType);
         if (siteImage != null) {
-            String sloganHtml = "<img style=\"vertical-align:top; margin-top:38px\" src=\"../site-imageresource/" + siteImage.getPrimaryKey().toString()
-                    + "/slogan.png\">";
+            String sloganHtml = "<img style=\"vertical-align:top; margin-top:38px\" src=\"./" + siteImage.getPrimaryKey().toString() + "/slogan.png"
+                    + DeploymentConsts.siteImageResourceServletMapping + "\">";
             for (LocaleInfo li : siteLocale) {
                 // crm logo
                 HtmlContent cont = site.slogan().$();

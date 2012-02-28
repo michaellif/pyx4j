@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +34,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.portal.services.SiteThemeServicesImpl;
 import com.propertyvista.server.common.blob.ETag;
 import com.propertyvista.server.domain.FileBlob;
@@ -56,10 +57,18 @@ public class SiteImageResourceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String filename = request.getPathInfo();
+        // our format: */id/name/vista.siteimgrc or */logo.*/vista.siteimgrc
+        String filename = request.getServletPath();
+        String segments[] = filename.split("/");
+        ArrayUtils.reverse(segments);
+        if (segments.length < 2 || !DeploymentConsts.siteImageResourceServletMapping.equals("/" + segments[0])) {
+            log.debug("Invalid request format: " + filename);
+            response.setStatus(HttpServletResponse.SC_GONE);
+            return;
+        }
         Key key = null;
         // check if logo was requested
-        if (filename.startsWith("/logo.")) {
+        if (segments[1].startsWith("logo.")) {
             SiteDescriptor descriptor = SiteThemeServicesImpl.getSiteDescriptorFromCache();
             if (descriptor.logo().size() == 0) {
                 log.debug("descriptor has no logos");
@@ -82,7 +91,7 @@ public class SiteImageResourceServlet extends HttpServlet {
                 key = descriptor.logo().get(0).imageResource().getPrimaryKey();
             }
         } else {
-            String id = FilenameUtils.getPathNoEndSeparator(filename);
+            String id = segments[2];
             if (CommonsStringUtils.isEmpty(id) || "0".equals(id)) {
                 response.setStatus(HttpServletResponse.SC_GONE);
                 return;

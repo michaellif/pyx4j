@@ -343,7 +343,7 @@ public class PMSiteContentManager implements Serializable {
         if (resource == null) {
             throw new Error("SiteImageResource cannot be null.");
         }
-        return getContextPath() + DeploymentConsts.siteImageResourceServletMapping + resource.id().getStringView() + "/" + resource.fileName().getStringView();
+        return getContextPath() + resource.id().getStringView() + "/" + resource.fileName().getStringView() + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String getFistVisibleMediaImgUrl(List<Media> medias, ThumbnailSize size) {

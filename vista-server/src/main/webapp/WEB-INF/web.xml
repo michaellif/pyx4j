@@ -101,14 +101,14 @@
 
     <filter>
         <filter-name>wicket.site</filter-name>
-        <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+        <filter-class>com.propertyvista.pmsite.server.PMSiteFilter</filter-class>
         <init-param>
             <param-name>applicationClassName</param-name>
             <param-value>com.propertyvista.pmsite.server.PMSiteApplication</param-value>
         </init-param>
         <init-param>
-            <param-name>ignorePaths</param-name>
-            <param-value>/o/,/public/,/media/site-resource/,/site-imageresource/,/admin/,/crm/,/portal/,/ptapp/,/rest/,/demo/</param-value>
+            <param-name>ignoreUrls</param-name>
+            <param-value>/o/,/public/,/media/site-resource/,/site-imageresource/,/admin/,/crm/,/portal/,/ptapp/,/rest/,/demo/,*.siteimgrc</param-value>
         </init-param>
     </filter>
 
@@ -325,7 +325,7 @@
 
     <servlet-mapping>
         <servlet-name>SiteImageResourceServlet</servlet-name>
-        <url-pattern>/site-imageresource/*</url-pattern>
+        <url-pattern>*.siteimgrc</url-pattern>
     </servlet-mapping>
     
     <!--  need this for deployments where CRM is directly on root URL e.g. http://redridge.propertyvista.com/ -->

@@ -42,7 +42,11 @@ public class MediaUtils {
     }
 
     public static String createSiteImageResourceUrl(SiteImageResource resource) {
-        return ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.siteImageResourceServletMapping + resource.id().getStringView() + "/"
-                + resource.fileName().getStringView();
+        return ClentNavigUtils.getDeploymentBaseURL() + resource.id().getStringView() + "/" + resource.fileName().getStringView()
+                + DeploymentConsts.siteImageResourceServletMapping;
+    }
+
+    public static String createSiteLogoUrl() {
+        return ClentNavigUtils.getDeploymentBaseURL() + "/logo.png" + DeploymentConsts.siteImageResourceServletMapping;
     }
 }
