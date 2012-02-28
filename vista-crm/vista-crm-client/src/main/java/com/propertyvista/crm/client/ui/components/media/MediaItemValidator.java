@@ -29,19 +29,19 @@ public class MediaItemValidator implements EditableValueValidator<Media> {
         boolean valid = true;
         if (value.type().isNull()) {
             valid = false;
-        }
-        switch (value.type().getValue()) {
-        case file:
-            valid = !value.file().isNull();
-            break;
-        case externalUrl:
-            valid = !value.url().isNull();
-            break;
-        case youTube:
-            valid = !value.youTubeVideoID().isNull();
-            break;
+        } else {
+            switch (value.type().getValue()) {
+            case file:
+                valid = !value.file().isNull();
+                break;
+            case externalUrl:
+                valid = !value.url().isNull();
+                break;
+            case youTube:
+                valid = !value.youTubeVideoID().isNull();
+                break;
+            }
         }
         return valid ? null : new ValidationFailure(i18n.tr("Media source cannot be empty!"));
     }
-
 }

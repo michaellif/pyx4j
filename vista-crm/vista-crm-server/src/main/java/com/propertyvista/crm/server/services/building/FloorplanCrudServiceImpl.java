@@ -17,13 +17,13 @@ import java.util.List;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.FloorplanDTO;
 
@@ -38,6 +38,7 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
 
         if (!fromList) {
             Persistence.service().retrieveMember(in.amenities());
+            dto.amenities().setAttachLevel(AttachLevel.Attached);
             dto.amenities().addAll(in.amenities());
             Persistence.service().retrieve(dto.media());
         }
@@ -60,20 +61,20 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
         Persistence.service().merge(dbo);
         updateCounters(dbo, origMarketingName);
 
-        if (!isCreate) {
-            EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), dbo));
-            List<FloorplanAmenity> existingAmenities = Persistence.service().query(criteria);
-            for (FloorplanAmenity amenity : existingAmenities) {
-                if (!in.amenities().contains(amenity)) {
-                    Persistence.service().delete(amenity);
-                }
-            }
-        }
-        for (FloorplanAmenity amenity : in.amenities()) {
-            amenity.belongsTo().set(dbo);
-        }
-        Persistence.service().merge(in.amenities());
+//        if (!isCreate) {
+//            EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
+//            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), dbo));
+//            List<FloorplanAmenity> existingAmenities = Persistence.service().query(criteria);
+//            for (FloorplanAmenity amenity : existingAmenities) {
+//                if (!in.amenities().contains(amenity)) {
+//                    Persistence.service().delete(amenity);
+//                }
+//            }
+//        }
+//        for (FloorplanAmenity amenity : in.amenities()) {
+//            amenity.belongsTo().set(dbo);
+//        }
+//        Persistence.service().merge(in.amenities());
 
         //Update _values on AptUnit, TODO see if # had not been modified and then do not save AptUnit
         {
