@@ -96,7 +96,8 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
             @Override
             public void onClick(ClickEvent event) {
-                new MakeVacantDialog((com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter) presenter, minMakeVacantStartDay) {
+                new MakeVacantDialog((com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter) presenter, minMakeVacantStartDay,
+                        maxMakeVacantStartDay) {
                 }.show();
             }
         });
@@ -132,7 +133,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     @Override
     public void setMakeVacantConstraints(MakeVacantConstraintsDTO constraints) {
         makeVacantAction.setVisible(constraints != null);
-        this.minMakeVacantStartDay = constraints.minVacantFrom().getValue();
-        this.maxMakeVacantStartDay = constraints.maxVacantFrom().getValue();
+        if (constraints != null) {
+            this.minMakeVacantStartDay = constraints.minVacantFrom().getValue();
+            this.maxMakeVacantStartDay = constraints.maxVacantFrom().getValue();
+        }
     }
 }

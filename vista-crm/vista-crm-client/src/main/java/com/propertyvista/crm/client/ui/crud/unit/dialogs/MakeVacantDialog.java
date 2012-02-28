@@ -18,6 +18,7 @@ import java.util.Date;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -40,7 +41,7 @@ public class MakeVacantDialog extends OkCancelDialog {
 
     private CEntityDecoratableEditor<MakeVacantDTO> form;
 
-    public MakeVacantDialog(UnitViewerView.Presenter presenter, final LogicalDate minMakeVacantStartDay) {
+    public MakeVacantDialog(UnitViewerView.Presenter presenter, final LogicalDate minMakeVacantStartDay, final LogicalDate maxMakeVacantStartDay) {
         super(i18n.tr("Make Vacant..."));
         this.presenter = presenter;
         this.form = new CEntityDecoratableEditor<MakeVacantDTO>(MakeVacantDTO.class) {
@@ -50,22 +51,44 @@ public class MakeVacantDialog extends OkCancelDialog {
                 FormFlexPanel content = new FormFlexPanel();
                 content.setWidget(0, 0, new DecoratorBuilder(inject(proto().vacantStartDay())).build());
 
-                get(proto().vacantStartDay()).addValueValidator(new EditableValueValidator<Date>() {
-
-                    @Override
-                    public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                        if (value == null || value.before(minMakeVacantStartDay)) {
-                            return new ValidationFailure(i18n.tr("please enter date greater or equal to {0}", minMakeVacantStartDay));
-                        } else {
-                            return null;
-                        }
+                if (minMakeVacantStartDay.equals(maxMakeVacantStartDay)) {
+                    get(proto().vacantStartDay()).setViewable(true);
+                } else {
+                    EditableValueValidator<Date> validator = null;
+                    if (maxMakeVacantStartDay == null) {
+                        validator = new EditableValueValidator<Date>() {
+                            @Override
+                            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                                if (value == null || value.before(minMakeVacantStartDay)) {
+                                    return new ValidationFailure(i18n.tr("please enter a date greater or equal to {0}", minMakeVacantStartDay));
+                                } else {
+                                    return null;
+                                }
+                            }
+                        };
+                    } else {
+                        validator = new EditableValueValidator<Date>() {
+                            @Override
+                            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                                if (value == null || (value.before(minMakeVacantStartDay) | value.after(maxMakeVacantStartDay))) {
+                                    return new ValidationFailure(i18n.tr("please enter a between {0} and {1}", minMakeVacantStartDay, maxMakeVacantStartDay));
+                                } else {
+                                    return null;
+                                }
+                            }
+                        };
                     }
-                });
+                    get(proto().vacantStartDay()).addValueValidator(validator);
+                }
+
                 return content;
             }
         };
         form.initContent();
-        form.populateNew();
+        MakeVacantDTO defaultValue = EntityFactory.create(MakeVacantDTO.class);
+        defaultValue.vacantStartDay().setValue(minMakeVacantStartDay);
+        form.populate(defaultValue);
+
         setBody(form);
     }
 
