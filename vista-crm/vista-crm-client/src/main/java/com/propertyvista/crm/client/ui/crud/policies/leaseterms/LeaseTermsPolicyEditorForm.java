@@ -39,22 +39,23 @@ public class LeaseTermsPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
 
     @Override
     protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm.TabDescriptor> createCustomTabPanels() {
-        return Arrays.asList(
-
-        new TabDescriptor(createSummaryTermsPanel(), proto().tenantSummaryTerms().getMeta().getCaption()),
-
-        new TabDescriptor(createSummaryTermsPanel(), proto().guarantorSummaryTerms().getMeta().getCaption()),
-
-        new TabDescriptor(createOneTimePaymentTermsPanel(), proto().oneTimePaymentTerms().getMeta().getCaption()),
-
-        new TabDescriptor(createRecurrentPaymentTermsPanel(), proto().recurrentPaymentTerms().getMeta().getCaption())
-
-        );
+        return Arrays.asList(//@formatter:off
+            new TabDescriptor(createTenantSummaryTermsPanel(), proto().tenantSummaryTerms().getMeta().getCaption()),
+            new TabDescriptor(createGuarantorSummaryTermsPanel(), proto().guarantorSummaryTerms().getMeta().getCaption()),
+            new TabDescriptor(createOneTimePaymentTermsPanel(), proto().oneTimePaymentTerms().getMeta().getCaption()),
+            new TabDescriptor(createRecurrentPaymentTermsPanel(), proto().recurrentPaymentTerms().getMeta().getCaption())
+        );//@formatter:on
     }
 
-    private Widget createSummaryTermsPanel() {
+    private Widget createTenantSummaryTermsPanel() {
         FormFlexPanel container = new FormFlexPanel();
         container.setWidget(0, 0, inject(proto().tenantSummaryTerms(), new LegalTermsDescriptorFolder(isEditable())));
+        return container;
+    }
+
+    private Widget createGuarantorSummaryTermsPanel() {
+        FormFlexPanel container = new FormFlexPanel();
+        container.setWidget(0, 0, inject(proto().guarantorSummaryTerms(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 
@@ -84,5 +85,4 @@ public class LeaseTermsPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
             return super.create(member);
         }
     }
-
 }
