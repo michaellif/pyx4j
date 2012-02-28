@@ -43,6 +43,8 @@ public class LeaseTermsPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
 
         new TabDescriptor(createSummaryTermsPanel(), proto().tenantSummaryTerms().getMeta().getCaption()),
 
+        new TabDescriptor(createSummaryTermsPanel(), proto().guarantorSummaryTerms().getMeta().getCaption()),
+
         new TabDescriptor(createOneTimePaymentTermsPanel(), proto().oneTimePaymentTerms().getMeta().getCaption()),
 
         new TabDescriptor(createRecurrentPaymentTermsPanel(), proto().recurrentPaymentTerms().getMeta().getCaption())

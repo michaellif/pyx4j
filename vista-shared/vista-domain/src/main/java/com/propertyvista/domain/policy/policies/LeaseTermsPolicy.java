@@ -26,7 +26,6 @@ public interface LeaseTermsPolicy extends UnitPolicy {
     @Owned
     IList<LegalTermsDescriptor> tenantSummaryTerms();
 
-    // TODO : add UI for setup!
     @Owned
     IList<LegalTermsDescriptor> guarantorSummaryTerms();
 
