@@ -109,6 +109,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             ApplicationProgressMgr.createGurantorDataSteps(application, person);
         }
 
+        Persistence.service().commit();
         log.debug("Application {}", application);
         callback.onSuccess(application);
     }
@@ -171,6 +172,8 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             }
 
         }
+
+        Persistence.service().commit();
         callback.onSuccess(application);
     }
 
