@@ -292,18 +292,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         validate(get(proto().leaseFrom()), get(proto().leaseTo()), null);
         validate(get(proto().leaseFrom()), get(proto().actualLeaseTo()), null);
-        validate(get(proto().expectedMoveIn()), get(proto().expectedMoveOut()), null);
         validate(get(proto().actualMoveIn()), get(proto().actualMoveOut()), null);
-        new StartEndDateValidation(get(proto().moveOutNotice()), get(proto().leaseTo()), i18n.tr("The Date Should Be Before The End Of Lease"));
+
         new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveIn()), get(proto().leaseTo()),
                 i18n.tr("The Date Should Be Within The Lease Period"));
-        new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveOut()), get(proto().leaseTo()),
-                i18n.tr("The Date Should Be Within The Lease Period"));
         get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
-        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
         get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
-        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
-        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().moveOutNotice())));
 
     }
 
