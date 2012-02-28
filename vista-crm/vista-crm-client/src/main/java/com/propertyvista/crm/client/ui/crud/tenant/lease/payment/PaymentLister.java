@@ -26,7 +26,7 @@ public class PaymentLister extends ListerBase<Payment> {
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().number()).build(),
+            new MemberColumnDescriptor.Builder(proto().id()).build(),
             new MemberColumnDescriptor.Builder(proto().depositDate()).build(),
             new MemberColumnDescriptor.Builder(proto().amount()).build(),
             new MemberColumnDescriptor.Builder(proto().type()).build()

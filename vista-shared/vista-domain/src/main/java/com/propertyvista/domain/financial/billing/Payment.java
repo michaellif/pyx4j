@@ -15,18 +15,22 @@ package com.propertyvista.domain.financial.billing;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -58,16 +62,19 @@ public interface Payment extends IEntity {
         }
     };
 
-    @ReadOnly
-    @MemberColumn(name = "SequenceNumber")
-    IPrimitive<Integer> number();
+    @Override
+    @Indexed
+    @ToString
+    IPrimitive<Key> id();
 
     IPrimitive<LogicalDate> depositDate();
 
+    @NotNull
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
+    @NotNull
     @MemberColumn(name = "paymentType")
     IPrimitive<Type> type();
 
