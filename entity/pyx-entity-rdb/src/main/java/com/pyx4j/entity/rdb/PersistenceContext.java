@@ -44,6 +44,8 @@ public class PersistenceContext {
 
     private Date timeNow;
 
+    private int savepoints = 0;
+
     PersistenceContext(ConnectionProvider connectionProvider, boolean explicitTransaction) {
         this.connectionProvider = connectionProvider;
         this.explicitTransaction = explicitTransaction;
@@ -111,6 +113,20 @@ public class PersistenceContext {
         }
     }
 
+    void savepointCreate() {
+        savepoints++;
+        //TODO
+    }
+
+    void savepointRelease() {
+        savepoints--;
+        // TODO
+    }
+
+    public boolean savepointActive() {
+        return (savepoints > 0);
+    }
+
     void commit() {
         if (connection != null) {
             try {
@@ -132,4 +148,5 @@ public class PersistenceContext {
             }
         }
     }
+
 }

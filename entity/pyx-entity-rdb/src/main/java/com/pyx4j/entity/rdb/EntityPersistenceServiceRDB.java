@@ -164,6 +164,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void startTransaction() {
+        PersistenceContext persistenceContext = threadSessions.get();
+        if (persistenceContext != null) {
+            if (persistenceContext.isExplicitTransaction()) {
+                persistenceContext.savepointCreate();
+                return;
+            }
+        }
         threadSessions.set(new PersistenceContext(connectionProvider, true));
     }
 
@@ -171,11 +178,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public void endTransaction() {
         PersistenceContext persistenceContext = threadSessions.get();
         if (persistenceContext != null) {
-            try {
-                persistenceContext.close();
-            } finally {
-                threadSessions.remove();
+            if (!persistenceContext.savepointActive()) {
+                persistenceContext.savepointRelease();
+            } else {
+                try {
+                    persistenceContext.close();
+                } finally {
+                    threadSessions.remove();
+                }
             }
+
         }
     }
 
@@ -192,9 +204,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public void rollback() {
         PersistenceContext persistenceContext = threadSessions.get();
         if ((persistenceContext == null) || (!persistenceContext.isExplicitTransaction())) {
-            throw new Error("There are no open transaction");
+            //throw new Error("There are no open transaction");
         }
-        persistenceContext.rollback();
+        //persistenceContext.rollback();
     }
 
     public boolean isTableExists(Class<? extends IEntity> entityClass) {
