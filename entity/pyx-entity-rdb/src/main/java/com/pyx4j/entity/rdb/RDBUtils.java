@@ -127,7 +127,7 @@ public class RDBUtils implements Closeable {
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
+            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(AbstractEntity.class) != null)) {
                 continue;
             }
             if (srv.isTableExists(meta.getEntityClass())) {
@@ -147,7 +147,7 @@ public class RDBUtils implements Closeable {
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
+            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(AbstractEntity.class) != null)) {
                 continue;
             }
             if (srv.isTableExists(meta.getEntityClass())) {
