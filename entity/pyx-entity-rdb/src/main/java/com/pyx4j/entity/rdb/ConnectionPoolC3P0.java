@@ -36,16 +36,39 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
     private final ComboPooledDataSource dataSource;
 
+    private final ComboPooledDataSource dataSourceBackgroundProcess;
+
     public ConnectionPoolC3P0(Configuration cfg) throws Exception {
-        dataSource = new ComboPooledDataSource();
+        dataSource = createDataSource(cfg);
+
+        // the settings below are optional -- c3p0 can work with defaults
+        dataSource.setMinPoolSize(cfg.minPoolSize()); // default is 3
+        dataSource.setMaxPoolSize(cfg.maxPoolSize()); // default is 15, we may need more for the server
+
+        dataSource.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionTimeout());
+        dataSource.setDebugUnreturnedConnectionStackTraces(true);
+
+        log.debug("Pool size is {} min and {} max", dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
+
+        dataSourceBackgroundProcess = createDataSource(cfg);
+
+        // the settings below are optional -- c3p0 can work with defaults
+        dataSourceBackgroundProcess.setMinPoolSize(cfg.minPoolSize()); // default is 3
+        dataSourceBackgroundProcess.setMaxPoolSize(cfg.maxBackgroundProcessPoolSize());
+
+        dataSourceBackgroundProcess.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionBackgroundProcessTimeout());
+        dataSourceBackgroundProcess.setDebugUnreturnedConnectionStackTraces(true);
+
+    }
+
+    private ComboPooledDataSource createDataSource(Configuration cfg) throws Exception {
+        ComboPooledDataSource dataSource = new ComboPooledDataSource();
         dataSource.setDriverClass(cfg.driverClass()); // load the jdbc driver            
         dataSource.setJdbcUrl(cfg.connectionUrl());
         dataSource.setUser(cfg.userName());
         dataSource.setPassword(cfg.password());
 
         // the settings below are optional -- c3p0 can work with defaults
-        dataSource.setMinPoolSize(cfg.minPoolSize()); // default is 3
-        dataSource.setMaxPoolSize(cfg.maxPoolSize()); // default is 15, we may need more for the server
         dataSource.setAcquireIncrement(1); // how many new connections it will try to acquire if pool is exhausted
         dataSource.setAcquireRetryAttempts(3); // Defines how many times c3p0 will try to acquire a new Connection from the database before giving up
         dataSource.setMaxIdleTime(20 * Consts.MIN2SEC); // Seconds a Connection can remain pooled but unused before being discarded.
@@ -54,11 +77,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         dataSource.setIdleConnectionTestPeriod(5 * Consts.MIN2SEC); //If this is a number greater than 0, c3p0 will test all idle, pooled but unchecked-out connections, every this number of seconds.
 
         dataSource.setMaxStatements(cfg.maxPoolPreparedStatements());
-
-        dataSource.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionTimeout());
-        dataSource.setDebugUnreturnedConnectionStackTraces(true);
-
-        log.debug("Pool size is {} min and {} max", dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
+        return dataSource;
     }
 
     @Override
@@ -67,8 +86,17 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
     }
 
     @Override
+    public DataSource getBackgroundProcessDataSource() {
+        return dataSourceBackgroundProcess;
+    }
+
+    @Override
     public void close() throws Exception {
-        dataSource.close();
+        try {
+            dataSource.close();
+        } finally {
+            dataSourceBackgroundProcess.close();
+        }
     }
 
     @Override

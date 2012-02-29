@@ -70,9 +70,13 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public int maxPoolSize();
 
+    public int maxBackgroundProcessPoolSize();
+
     public int maxPoolPreparedStatements();
 
     public int unreturnedConnectionTimeout();
+
+    public int unreturnedConnectionBackgroundProcessTimeout();
 
     /**
      * 

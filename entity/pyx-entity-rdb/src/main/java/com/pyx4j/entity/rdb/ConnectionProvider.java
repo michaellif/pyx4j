@@ -56,6 +56,8 @@ public class ConnectionProvider {
 
     private DataSource dataSource;
 
+    public DataSource backgroundProcessDataSource;
+
     private Dialect dialect;
 
     public static enum ConnectionTarget {
@@ -92,6 +94,7 @@ public class ConnectionProvider {
             log.debug("Using connection pool {}", connectionPool);
 
             dataSource = connectionPool.getDataSource();
+            backgroundProcessDataSource = connectionPool.getBackgroundProcessDataSource();
         } catch (Exception e) {
             throw new SQLException("Failed to initialize connection pool: " + e.getMessage());
         }
@@ -188,6 +191,15 @@ public class ConnectionProvider {
     public Connection getConnection() {
         try {
             return dataSource.getConnection();
+        } catch (SQLException e) {
+            log.error("SQL connection error", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Connection getBackgroundProcessConnection() {
+        try {
+            return backgroundProcessDataSource.getConnection();
         } catch (SQLException e) {
             log.error("SQL connection error", e);
             throw new RuntimeException(e);

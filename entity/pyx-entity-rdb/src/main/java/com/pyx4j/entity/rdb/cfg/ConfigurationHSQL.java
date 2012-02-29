@@ -95,12 +95,22 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
+    public int maxBackgroundProcessPoolSize() {
+        return 2;
+    }
+
+    @Override
     public int maxPoolPreparedStatements() {
         return 1000;
     }
 
     @Override
     public int unreturnedConnectionTimeout() {
+        return 60;
+    }
+
+    @Override
+    public int unreturnedConnectionBackgroundProcessTimeout() {
         return 60;
     }
 

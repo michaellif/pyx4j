@@ -38,6 +38,8 @@ public interface IEntityPersistenceService {
      */
     public void startTransaction();
 
+    public void startBackgroundProcessTransaction();
+
     public void endTransaction();
 
     public void removeThreadLocale();

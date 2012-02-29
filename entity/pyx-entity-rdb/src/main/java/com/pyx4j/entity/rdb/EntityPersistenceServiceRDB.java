@@ -49,6 +49,7 @@ import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
+import com.pyx4j.entity.rdb.PersistenceContext.TransactionType;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.Mappings;
@@ -137,7 +138,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         PersistenceContext persistenceContext = threadSessions.get();
         if (persistenceContext == null) {
-            threadSessions.set(new PersistenceContext(connectionProvider, false));
+            threadSessions.set(new PersistenceContext(connectionProvider, TransactionType.AutoCommit));
         } else {
             assert (persistenceContext.isExplicitTransaction()) : "PersistenceContext leftover detected ";
         }
@@ -171,7 +172,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 return;
             }
         }
-        threadSessions.set(new PersistenceContext(connectionProvider, true));
+        threadSessions.set(new PersistenceContext(connectionProvider, TransactionType.ExplicitTransaction));
+    }
+
+    @Override
+    public void startBackgroundProcessTransaction() {
+        endTransaction();
+        threadSessions.set(new PersistenceContext(connectionProvider, TransactionType.BackgroundProcess));
     }
 
     @Override

@@ -26,5 +26,7 @@ public interface ConnectionPool {
 
     public DataSource getDataSource();
 
+    public DataSource getBackgroundProcessDataSource();
+
     public void close() throws Exception;
 }

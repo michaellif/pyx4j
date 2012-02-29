@@ -222,6 +222,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public void startBackgroundProcessTransaction() {
+        //TODO
+    }
+
+    @Override
     public void endTransaction() {
         //TODO
     }

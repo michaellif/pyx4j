@@ -36,17 +36,36 @@ public class ConnectionPoolDBCP implements ConnectionPool {
 
     private final DataSource dataSource;
 
+    private final GenericObjectPool connectionPoolBackgroundProcess;
+
+    private final DataSource dataSourceBackgroundProcess;
+
     public ConnectionPoolDBCP(Configuration cfg) {
-        connectionPool = new GenericObjectPool(null);
-        connectionPool.setTestWhileIdle(true);
+        {
+            connectionPool = new GenericObjectPool(null);
+            connectionPool.setTestWhileIdle(true);
 
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.userName(), cfg.password());
+            ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.userName(), cfg.password());
 
-        PoolableConnectionFactory poolable = new PoolableConnectionFactory(connectionFactory, connectionPool, null, cfg.connectionValidationQuery(),
-                cfg.readOnly(), true);
-        poolable.setValidationQueryTimeout(1);
+            PoolableConnectionFactory poolable = new PoolableConnectionFactory(connectionFactory, connectionPool, null, cfg.connectionValidationQuery(),
+                    cfg.readOnly(), true);
+            poolable.setValidationQueryTimeout(1);
 
-        dataSource = new PoolingDataSource(connectionPool);
+            dataSource = new PoolingDataSource(connectionPool);
+        }
+
+        {
+            connectionPoolBackgroundProcess = new GenericObjectPool(null);
+            connectionPoolBackgroundProcess.setTestWhileIdle(true);
+
+            ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.userName(), cfg.password());
+
+            PoolableConnectionFactory poolable = new PoolableConnectionFactory(connectionFactory, connectionPoolBackgroundProcess, null,
+                    cfg.connectionValidationQuery(), cfg.readOnly(), true);
+            poolable.setValidationQueryTimeout(1);
+
+            dataSourceBackgroundProcess = new PoolingDataSource(connectionPoolBackgroundProcess);
+        }
     }
 
     @Override
@@ -55,12 +74,22 @@ public class ConnectionPoolDBCP implements ConnectionPool {
     }
 
     @Override
+    public DataSource getBackgroundProcessDataSource() {
+        return dataSourceBackgroundProcess;
+    }
+
+    @Override
     public void close() throws Exception {
-        connectionPool.close();
+        try {
+            connectionPool.close();
+        } finally {
+            connectionPoolBackgroundProcess.close();
+        }
     }
 
     @Override
     public String toString() {
         return "DBCP";
     }
+
 }

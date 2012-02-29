@@ -40,9 +40,13 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
     protected int maxPoolSize = 15;
 
+    protected int maxBackgroundProcessPoolSize = 40;
+
     protected int maxPoolPreparedStatement = 1000;
 
     protected int unreturnedConnectionTimeout = 60;
+
+    protected int unreturnedConnectionBackgroundProcessTimeout = 60 * 60;
 
     private int tablesItentityOffset;
 
@@ -84,6 +88,11 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     }
 
     @Override
+    public int maxBackgroundProcessPoolSize() {
+        return maxBackgroundProcessPoolSize;
+    }
+
+    @Override
     public int maxPoolPreparedStatements() {
         return maxPoolPreparedStatement;
     }
@@ -96,6 +105,11 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     @Override
     public int unreturnedConnectionTimeout() {
         return unreturnedConnectionTimeout;
+    }
+
+    @Override
+    public int unreturnedConnectionBackgroundProcessTimeout() {
+        return unreturnedConnectionBackgroundProcessTimeout;
     }
 
     @Override
@@ -118,6 +132,10 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
         this.maxPoolSize = c.getIntegerValue("maxPoolSize", this.maxPoolSize);
         this.maxPoolPreparedStatement = c.getIntegerValue("maxPoolPreparedStatement", this.maxPoolPreparedStatement);
         this.unreturnedConnectionTimeout = c.getIntegerValue("unreturnedConnectionTimeout", this.unreturnedConnectionTimeout);
+
+        this.maxBackgroundProcessPoolSize = c.getIntegerValue("maxBackgroundProcessPoolSize", this.maxBackgroundProcessPoolSize);
+        this.unreturnedConnectionBackgroundProcessTimeout = c.getIntegerValue("unreturnedConnectionBackgroundProcessTimeout",
+                this.unreturnedConnectionBackgroundProcessTimeout);
 
         this.tablesItentityOffset = c.getIntegerValue("tablesItentityOffset", this.tablesItentityOffset);
     }

@@ -85,6 +85,11 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public int maxBackgroundProcessPoolSize() {
+        return 40;
+    }
+
+    @Override
     public int maxPoolPreparedStatements() {
         return 1000;
     }
@@ -92,6 +97,11 @@ public abstract class ConfigurationOracle implements Configuration {
     @Override
     public int unreturnedConnectionTimeout() {
         return 60;
+    }
+
+    @Override
+    public int unreturnedConnectionBackgroundProcessTimeout() {
+        return 60 * 60;
     }
 
     @Override

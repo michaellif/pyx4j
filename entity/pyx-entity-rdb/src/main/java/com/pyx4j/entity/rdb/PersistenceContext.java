@@ -36,7 +36,7 @@ public class PersistenceContext {
 
     private final ConnectionProvider connectionProvider;
 
-    private final boolean explicitTransaction;
+    private final TransactionType transactionType;
 
     private Connection connection = null;
 
@@ -46,13 +46,22 @@ public class PersistenceContext {
 
     private int savepoints = 0;
 
-    PersistenceContext(ConnectionProvider connectionProvider, boolean explicitTransaction) {
+    public static enum TransactionType {
+
+        BackgroundProcess,
+
+        ExplicitTransaction,
+
+        AutoCommit
+    }
+
+    PersistenceContext(ConnectionProvider connectionProvider, TransactionType transactionType) {
         this.connectionProvider = connectionProvider;
-        this.explicitTransaction = explicitTransaction;
+        this.transactionType = transactionType;
     }
 
     public boolean isExplicitTransaction() {
-        return explicitTransaction;
+        return transactionType != TransactionType.AutoCommit;
     }
 
     void setTimeNow(Date date) {
@@ -68,8 +77,12 @@ public class PersistenceContext {
 
     public Connection getConnection() {
         if (connection == null) {
-            connection = connectionProvider.getConnection();
-            if (explicitTransaction) {
+            if (transactionType == TransactionType.BackgroundProcess) {
+                connection = connectionProvider.getBackgroundProcessConnection();
+            } else {
+                connection = connectionProvider.getConnection();
+            }
+            if (isExplicitTransaction()) {
                 try {
                     connection.setAutoCommit(false);
                 } catch (SQLException e) {
@@ -95,7 +108,7 @@ public class PersistenceContext {
     }
 
     void release() {
-        if (!explicitTransaction) {
+        if (!isExplicitTransaction()) {
             close();
         }
     }
@@ -139,12 +152,12 @@ public class PersistenceContext {
 
     void close() {
         if (connection != null) {
-            if (explicitTransaction && uncommittedChanges) {
+            if (isExplicitTransaction() && uncommittedChanges) {
                 log.error("There are uncommitted changes in Database");
             }
             SQLUtils.closeQuietly(connection);
             connection = null;
-            if (explicitTransaction && uncommittedChanges) {
+            if (isExplicitTransaction() && uncommittedChanges) {
                 throw new Error("There are uncommitted changes in Database");
             }
         }
