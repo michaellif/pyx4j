@@ -94,9 +94,11 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
                     if (CommonsStringUtils.isStringSet(txt)) {
                         b.append(txt).append('\n');
                     }
-                    if (TimeUtils.since(start) > 1 * Consts.SEC2MSEC) {
-                        b.append(" ! ").append(preloader.getClass().getSimpleName() + " " + TimeUtils.secSince(start) + "\n");
+                    String warn = "";
+                    if (TimeUtils.since(start) > 4 * Consts.SEC2MSEC) {
+                        warn = " ***";
                     }
+                    b.append("\t").append(preloader.getClass().getSimpleName()).append(" ").append(TimeUtils.secSince(start)).append(warn).append("\n");
                     break findPreloader;
                 }
             }
@@ -158,9 +160,12 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             if (CommonsStringUtils.isStringSet(txt)) {
                 b.append(txt).append('\n');
             }
-            //if (TimeUtils.since(start) > 1 * Consts.SEC2MSEC) {
-            b.append(" ! ").append(preloader.getClass().getSimpleName() + " " + TimeUtils.secSince(start) + "\n");
-            //}
+
+            String warn = "";
+            if (TimeUtils.since(start) > 4 * Consts.SEC2MSEC) {
+                warn = " ***";
+            }
+            b.append("\t").append(preloader.getClass().getSimpleName()).append(" ").append(TimeUtils.secSince(start)).append(warn).append("\n");
         }
         return b.toString();
     }
