@@ -99,13 +99,14 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         updateAdjustments(dbo);
 
         // occupacny system related stuff: here we decide if we reserve lease or cancel it
-        boolean isNewLease = dbo.getPrimaryKey() != null;
+        boolean isNewLease = dbo.getPrimaryKey() == null;
         boolean isChanged = isNewLease;
         boolean doReserve = false;
         boolean doUnreserve = false;
         Lease oldLease = null;
         if (!isNewLease) {
             oldLease = Persistence.secureRetrieve(Lease.class, dbo.getPrimaryKey());
+            Persistence.service().retrieve(oldLease.unit());
             if (!EqualsHelper.equals(oldLease.unit().id().getValue(), dbo.unit().id().getValue())) {
                 isChanged = true;
                 // old lease has unit: o
