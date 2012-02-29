@@ -54,6 +54,21 @@ public interface Bill extends IEntity {
         }
     };
 
+    @I18n
+    enum BillType {
+
+        Regular,
+
+        Final,
+
+        Draft;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    };
+
     @Owner
     @JoinColumn
     BillingAccount billingAccount();
@@ -71,6 +86,8 @@ public interface Bill extends IEntity {
     IPrimitive<BigDecimal> billProration();
 
     IPrimitive<BillStatus> billStatus();
+
+    IPrimitive<BillType> billType();
 
     IPrimitive<String> rejectReason();
 

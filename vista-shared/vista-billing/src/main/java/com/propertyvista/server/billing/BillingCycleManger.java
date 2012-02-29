@@ -58,6 +58,9 @@ public class BillingCycleManger {
                 billingCycle = EntityFactory.create(BillingCycle.class);
                 billingCycle.paymentFrequency().setValue(paymentFrequency);
                 billingCycle.billingPeriodStartDay().setValue(billingPeriodStartDay);
+                billingCycle.billingRunTargetDay().setValue(
+                        (billingPeriodStartDay + lease.paymentFrequency().getValue().getBillRunTargetDayOffset())
+                                % lease.paymentFrequency().getValue().getNumOfCycles());
 
                 Persistence.service().persist(billingCycle);
             }

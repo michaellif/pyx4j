@@ -23,8 +23,6 @@ package com.propertyvista.server.billing;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import org.junit.Ignore;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.dev.DataDump;
@@ -52,9 +50,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertTrue("Previous Bill Sequence number", bill.previousBill().billSequenceNumber().isNull());
 
         assertEquals("Billing Cycle Period Start Day", 1, (int) bill.billingRun().billingCycle().billingPeriodStartDay().getValue());
+        assertEquals("Billing Cycle Period Run Target Day", 15, (int) bill.billingRun().billingCycle().billingRunTargetDay().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("1-Mar-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("31-Mar-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-Mar-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-Mar-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-Mar-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("31-Mar-2011")), bill.billingPeriodEndDate().getValue());
@@ -68,8 +67,8 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Bill Sequence Number", 2, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 1, (int) bill.previousBill().billSequenceNumber().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("1-Apr-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("30-Apr-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-Apr-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("30-Apr-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-Apr-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("30-Apr-2011")), bill.billingPeriodEndDate().getValue());
@@ -83,8 +82,8 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Bill Sequence Number", 3, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 2, (int) bill.previousBill().billSequenceNumber().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("1-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("31-May-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-May-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-May-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("31-May-2011")), bill.billingPeriodEndDate().getValue());
@@ -96,8 +95,8 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Bill Sequence Number", 4, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 2, (int) bill.previousBill().billSequenceNumber().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("1-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("31-May-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-May-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-May-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("31-May-2011")), bill.billingPeriodEndDate().getValue());
@@ -111,8 +110,8 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Bill Sequence Number", 5, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 4, (int) bill.previousBill().billSequenceNumber().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("1-June-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("30-June-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-June-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("30-June-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-June-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("30-June-2011")), bill.billingPeriodEndDate().getValue());
@@ -126,8 +125,8 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Bill Sequence Number", 6, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 5, (int) bill.previousBill().billSequenceNumber().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("1-July-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("31-July-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-July-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-July-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-Jul-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("31-July-2011")), bill.billingPeriodEndDate().getValue());
@@ -141,8 +140,8 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Bill Sequence Number", 7, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 6, (int) bill.previousBill().billSequenceNumber().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("1-Aug-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("31-Aug-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-Aug-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-Aug-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-Aug-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("3-Aug-2011")), bill.billingPeriodEndDate().getValue());
@@ -159,7 +158,6 @@ public class BillingPeriodsTest extends BillingTestBase {
 
     }
 
-    @Ignore
     public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay() throws ParseException {
         preloadData();
         createAgreement(new LogicalDate(formatter.parse("23-Mar-2011")), new LogicalDate(formatter.parse("3-Aug-2011")), null);
@@ -172,9 +170,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertTrue("Previous Bill Sequence number", bill.previousBill().billSequenceNumber().isNull());
 
         assertEquals("Billing Cycle Period Start Day", 23, (int) bill.billingRun().billingCycle().billingPeriodStartDay().getValue());
+        assertEquals("Billing Cycle Period Run Target Day", 9, (int) bill.billingRun().billingCycle().billingRunTargetDay().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("23-Mar-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("22-Apr-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-Mar-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-Apr-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-Mar-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("22-Apr-2011")), bill.billingPeriodEndDate().getValue());
@@ -187,8 +186,8 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Bill Sequence Number", 2, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 1, (int) bill.previousBill().billSequenceNumber().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("23-Apr-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("22-May-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-Apr-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-May-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-Apr-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("22-May-2011")), bill.billingPeriodEndDate().getValue());
@@ -202,8 +201,8 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Bill Sequence Number", 3, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 2, (int) bill.previousBill().billSequenceNumber().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("23-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("22-Jun-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-Jun-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-May-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("22-Jun-2011")), bill.billingPeriodEndDate().getValue());
@@ -215,8 +214,8 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Bill Sequence Number", 4, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 2, (int) bill.previousBill().billSequenceNumber().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("23-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("22-Jun-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-Jun-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-May-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("22-Jun-2011")), bill.billingPeriodEndDate().getValue());
@@ -230,8 +229,8 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Bill Sequence Number", 5, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 4, (int) bill.previousBill().billSequenceNumber().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("23-Jun-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("22-Jul-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-Jun-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-Jul-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-Jun-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("22-Jul-2011")), bill.billingPeriodEndDate().getValue());
@@ -245,8 +244,8 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Bill Sequence Number", 6, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 5, (int) bill.previousBill().billSequenceNumber().getValue());
 
-        assertEquals("Billling Run Start Day", new LogicalDate(formatter.parse("23-Jul-2011")), bill.billingRun().billingPeriodStartDate().getValue());
-        assertEquals("Billling Run End Day", new LogicalDate(formatter.parse("22-Aug-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-Jul-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-Aug-2011")), bill.billingRun().billingPeriodEndDate().getValue());
 
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-Jul-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("3-Aug-2011")), bill.billingPeriodEndDate().getValue());
@@ -254,6 +253,101 @@ public class BillingPeriodsTest extends BillingTestBase {
         assertEquals("Same Billing Cycle", billingCycleId, bill.billingRun().billingCycle().id().toString());
 
         //==================== RUN 6 ======================//
+
+        try {
+            bill = runBilling(true);
+            assertTrue("Billing outside billing lease dates", false);
+        } catch (Error e) {
+        }
+    }
+
+    public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDayOn29() throws ParseException {
+        testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay(29);
+    }
+
+    public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDayOn30() throws ParseException {
+        testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay(30);
+    }
+
+    public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDayOn31() throws ParseException {
+        testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay(31);
+    }
+
+    public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay(int day) throws ParseException {
+        preloadData();
+        createAgreement(new LogicalDate(formatter.parse(day + "-Mar-2011")), new LogicalDate(formatter.parse("3-Aug-2011")), null);
+
+        //==================== RUN 1 ======================//
+
+        Bill bill = runBilling(true);
+
+        assertEquals("Bill Sequence Number", 1, (int) bill.billSequenceNumber().getValue());
+        assertTrue("Previous Bill Sequence number", bill.previousBill().billSequenceNumber().isNull());
+
+        assertEquals("Billing Cycle Period Start Day", 1, (int) bill.billingRun().billingCycle().billingPeriodStartDay().getValue());
+        assertEquals("Billing Cycle Period Run Target Day", 15, (int) bill.billingRun().billingCycle().billingRunTargetDay().getValue());
+
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-Mar-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-Mar-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+
+        assertEquals("Bill Start Day", new LogicalDate(formatter.parse(day + "-Mar-2011")), bill.billingPeriodStartDate().getValue());
+        assertEquals("Bill End Day", new LogicalDate(formatter.parse("31-Mar-2011")), bill.billingPeriodEndDate().getValue());
+        String billingCycleId = bill.billingRun().billingCycle().id().toString();
+
+        //==================== RUN 2 ======================//
+
+        bill = runBilling(true);
+
+        assertEquals("Bill Sequence Number", 2, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Previous Bill Sequence number", 1, (int) bill.previousBill().billSequenceNumber().getValue());
+
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-Apr-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("30-Apr-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+
+        assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-Apr-2011")), bill.billingPeriodStartDate().getValue());
+        assertEquals("Bill End Day", new LogicalDate(formatter.parse("30-Apr-2011")), bill.billingPeriodEndDate().getValue());
+
+        assertEquals("Same Billing Cycle", billingCycleId, bill.billingRun().billingCycle().id().toString());
+
+        //==================== RUN 3 ======================//
+
+        bill = runBilling(true);
+
+        //==================== RUN 4 ======================//
+
+        bill = runBilling(true);
+
+        //==================== RUN 5 ======================//
+
+        bill = runBilling(true);
+
+        assertEquals("Bill Sequence Number", 5, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Previous Bill Sequence number", 4, (int) bill.previousBill().billSequenceNumber().getValue());
+
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("01-Jul-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-Jul-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+
+        assertEquals("Bill Start Day", new LogicalDate(formatter.parse("01-Jul-2011")), bill.billingPeriodStartDate().getValue());
+        assertEquals("Bill End Day", new LogicalDate(formatter.parse("31-Jul-2011")), bill.billingPeriodEndDate().getValue());
+
+        assertEquals("Same Billing Cycle", billingCycleId, bill.billingRun().billingCycle().id().toString());
+
+        //==================== RUN 6 ======================//
+
+        bill = runBilling(true);
+
+        assertEquals("Bill Sequence Number", 6, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Previous Bill Sequence number", 5, (int) bill.previousBill().billSequenceNumber().getValue());
+
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("01-Aug-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-Aug-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+
+        assertEquals("Bill Start Day", new LogicalDate(formatter.parse("01-Aug-2011")), bill.billingPeriodStartDate().getValue());
+        assertEquals("Bill End Day", new LogicalDate(formatter.parse("3-Aug-2011")), bill.billingPeriodEndDate().getValue());
+
+        assertEquals("Same Billing Cycle", billingCycleId, bill.billingRun().billingCycle().id().toString());
+
+        //==================== RUN 7 ======================//
 
         try {
             bill = runBilling(true);

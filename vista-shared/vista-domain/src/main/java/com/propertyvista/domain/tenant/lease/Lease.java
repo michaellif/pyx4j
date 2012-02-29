@@ -104,16 +104,23 @@ public interface Lease extends IEntity {
     @I18n(context = "Payment Frequency")
     @XmlType(name = "PaymentFrequency")
     public enum PaymentFrequency {
-        Monthly(28), Weekly(7), SemiMonthly(14), BiWeekly(14), SemiAnnyally(182), Annually(365);
+        Monthly(28, 14), Weekly(7, 2), SemiMonthly(14, 4), BiWeekly(14, 4), SemiAnnyally(182, -1), Annually(365, -1);
 
         private final int numOfCycles;
 
-        PaymentFrequency(int numOfCycles) {
+        private final int billRunTargetDayOffset;
+
+        PaymentFrequency(int numOfCycles, int billRunTargetDayOffset) {
             this.numOfCycles = numOfCycles;
+            this.billRunTargetDayOffset = billRunTargetDayOffset;
         }
 
         public int getNumOfCycles() {
             return numOfCycles;
+        }
+
+        public int getBillRunTargetDayOffset() {
+            return billRunTargetDayOffset;
         }
 
         @Override

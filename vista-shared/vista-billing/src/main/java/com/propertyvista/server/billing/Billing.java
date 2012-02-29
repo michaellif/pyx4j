@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 
 class Billing {
 
@@ -59,22 +60,30 @@ class Billing {
 
         Persistence.service().persist(bill);
 
-        if (billingAccount.leaseFinancial().lease().leaseFrom().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) <= 0) {
-            bill.billingPeriodStartDate().setValue(billingRun.billingPeriodStartDate().getValue());
-        } else if (billingAccount.leaseFinancial().lease().leaseFrom().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) <= 0) {
-            bill.billingPeriodStartDate().setValue(billingAccount.leaseFinancial().lease().leaseFrom().getValue());
-        } else {
-            throw new Error("Lease didn't start yet");
-        }
+        if (Status.Completed.equals(billingAccount.leaseFinancial().lease().status().getValue())) {// final bill should be issued
+            bill.billType().setValue(Bill.BillType.Final);
 
-        if (billingAccount.leaseFinancial().lease().leaseTo().isNull()
-                || (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
-            bill.billingPeriodEndDate().setValue(billingRun.billingPeriodEndDate().getValue());
-        } else if (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) >= 0) {
-            bill.billingPeriodEndDate().setValue(billingAccount.leaseFinancial().lease().leaseTo().getValue());
+        } else if (Status.Draft.equals(billingAccount.leaseFinancial().lease().status().getValue())) {// draft bill should be issued
+            bill.billType().setValue(Bill.BillType.Draft);
         } else {
-            //TODO add final bill handler
-            throw new Error("Lease already ended");
+            bill.billType().setValue(Bill.BillType.Regular);
+
+            if (billingAccount.leaseFinancial().lease().leaseFrom().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) <= 0) {
+                bill.billingPeriodStartDate().setValue(billingRun.billingPeriodStartDate().getValue());
+            } else if (billingAccount.leaseFinancial().lease().leaseFrom().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) <= 0) {
+                bill.billingPeriodStartDate().setValue(billingAccount.leaseFinancial().lease().leaseFrom().getValue());
+            } else {
+                throw new Error("Lease didn't start yet");
+            }
+
+            if (billingAccount.leaseFinancial().lease().leaseTo().isNull()
+                    || (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
+                bill.billingPeriodEndDate().setValue(billingRun.billingPeriodEndDate().getValue());
+            } else if (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) >= 0) {
+                bill.billingPeriodEndDate().setValue(billingAccount.leaseFinancial().lease().leaseTo().getValue());
+            } else {
+                throw new Error("Lease already ended");
+            }
         }
 
         try {

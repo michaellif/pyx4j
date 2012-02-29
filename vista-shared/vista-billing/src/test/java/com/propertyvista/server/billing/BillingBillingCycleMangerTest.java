@@ -25,12 +25,11 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
-public class BillingCycleStartDayTest extends TestCase {
+public class BillingBillingCycleMangerTest extends TestCase {
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
 
     public void testBillingPeriodStartDate() throws ParseException {
-
         BillingRun billingRun = createFirstBillingRun(new LogicalDate(formatter.parse("23-Feb-2012")), null, false);
 
         assertEquals("Billing Period Start Date", new LogicalDate(formatter.parse("23-Feb-2012")), billingRun.billingPeriodStartDate().getValue());
@@ -42,7 +41,6 @@ public class BillingCycleStartDayTest extends TestCase {
 
         assertEquals("Billing Period Start Date", new LogicalDate(formatter.parse("1-Mar-2012")), billingRun.billingPeriodStartDate().getValue());
         assertEquals("Billing Period End Date", new LogicalDate(formatter.parse("31-Mar-2012")), billingRun.billingPeriodEndDate().getValue());
-
     }
 
     private BillingRun createFirstBillingRun(LogicalDate leaseStartDate, Integer billingCycleStartDate, boolean useCycleLeaseDay) {
