@@ -20,20 +20,23 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@ToStringFormat("{0} ({1})")
 public interface GlCodeCategory extends IEntity {
 
     @NotNull
-    @ToString
+    @ToString(index = 0)
     IPrimitive<Integer> categoryId();
 
     @NotNull
     @Length(100)
+    @ToString(index = 1)
     @Editor(type = EditorType.text)
     IPrimitive<String> description();
 
