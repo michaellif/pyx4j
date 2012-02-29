@@ -20,13 +20,11 @@ import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.tenant.lease.LeaseFinancial;
+
 public class ProrationUtils {
 
-    enum Method {
-        Actual, Standard, Annual
-    }
-
-    public static BigDecimal prorate(LogicalDate date, Method method) {
+    public static BigDecimal prorate(LogicalDate date, LeaseFinancial.ProrationMethod method) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);

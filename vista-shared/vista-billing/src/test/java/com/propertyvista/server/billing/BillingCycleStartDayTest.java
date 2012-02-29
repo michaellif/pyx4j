@@ -19,19 +19,39 @@ import java.text.SimpleDateFormat;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
-public class BillingCycleMangerTest extends TestCase {
+public class BillingCycleStartDayTest extends TestCase {
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
 
     public void testBillingPeriodStartDate() throws ParseException {
-        assertEquals("Billing Period Start Date", new LogicalDate(formatter.parse("23-Mar-2012")),
-                BillingCycleManger.calculateBillingPeriodStartDate(PaymentFrequency.Monthly, new LogicalDate(formatter.parse("23-Feb-2012"))));
-        assertEquals("Billing Period Start Date", new LogicalDate(formatter.parse("23-Apr-2012")),
-                BillingCycleManger.calculateBillingPeriodStartDate(PaymentFrequency.Monthly, new LogicalDate(formatter.parse("23-Mar-2012"))));
 
+        BillingRun billingRun = createFirstBillingRun(new LogicalDate(formatter.parse("23-Feb-2012")), null, false);
+
+        assertEquals("Billing Period Start Date", new LogicalDate(formatter.parse("23-Feb-2012")), billingRun.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", new LogicalDate(formatter.parse("22-Mar-2012")), billingRun.billingPeriodEndDate().getValue());
+    }
+
+    public void testBillingPeriodStartDateForEndOfMonth() throws ParseException {
+        BillingRun billingRun = createFirstBillingRun(new LogicalDate(formatter.parse("29-Mar-2012")), null, false);
+
+        assertEquals("Billing Period Start Date", new LogicalDate(formatter.parse("1-Mar-2012")), billingRun.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", new LogicalDate(formatter.parse("31-Mar-2012")), billingRun.billingPeriodEndDate().getValue());
+
+    }
+
+    private BillingRun createFirstBillingRun(LogicalDate leaseStartDate, Integer billingCycleStartDate, boolean useCycleLeaseDay) {
+        BillingCycle billingCycle = EntityFactory.create(BillingCycle.class);
+        billingCycle.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        billingCycle.billingPeriodStartDay().setValue(billingCycleStartDate);
+
+        BillingRun billingRun = BillingCycleManger.createFirstBillingRun(billingCycle, leaseStartDate, useCycleLeaseDay);
+        return billingRun;
     }
 
     public void testBillingCycleStartDayForMonthlyFrequency() throws ParseException {

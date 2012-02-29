@@ -20,7 +20,7 @@
  */
 package com.propertyvista.server.billing;
 
-import com.pyx4j.commons.LogicalDate;
+import org.junit.Ignore;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.server.billing.preload.BuildingDataModel;
@@ -31,11 +31,10 @@ import com.propertyvista.server.billing.preload.ProductTaxPolicyDataModel;
 import com.propertyvista.server.billing.preload.TaxesDataModel;
 import com.propertyvista.server.billing.preload.TenantDataModel;
 
+@Ignore
 public class BillingTestBase extends VistaDBTestBase {
 
     LeaseDataModel leaseDataModel;
-
-    LogicalDate leaseDateFrom = new LogicalDate(111, 1, 25);
 
     protected void preloadData() {
 
@@ -58,7 +57,6 @@ public class BillingTestBase extends VistaDBTestBase {
         tenantDataModel.generate(true);
 
         leaseDataModel = new LeaseDataModel(buildingDataModel, tenantDataModel);
-        leaseDataModel.setLeaseDateFrom(leaseDateFrom);
         leaseDataModel.generate(true);
 
     }

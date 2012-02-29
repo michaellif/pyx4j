@@ -19,8 +19,11 @@ import java.util.GregorianCalendar;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
@@ -36,17 +39,35 @@ public class BillingCycleManger {
     static BillingCycle ensureBillingCycle(Lease lease) {
         BillingCycle billingCycle = lease.leaseFinancial().billingAccount().billingCycle();
 
-        // Auto Create BillingCycle for now. 
         if (billingCycle.isNull()) {
-            billingCycle = EntityFactory.create(BillingCycle.class);
-            billingCycle.billingPeriodStartDay().setValue(calculateBillingCycleStartDay(lease.paymentFrequency().getValue(), lease.leaseFrom().getValue()));
-            billingCycle.paymentFrequency().setValue(lease.paymentFrequency().getValue());
-            Persistence.service().persist(billingCycle);
+            PaymentFrequency paymentFrequency = lease.paymentFrequency().getValue();
+            Integer billingPeriodStartDay = null;
+            if (lease.leaseFinancial().billingPeriodStartDate().isNull()) {
+                billingPeriodStartDay = calculateBillingCycleStartDay(lease.paymentFrequency().getValue(), lease.leaseFrom().getValue());
+            } else {
+                billingPeriodStartDay = lease.leaseFinancial().billingPeriodStartDate().getValue();
+            }
+
+            //try to find existing billing cycle    
+            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().paymentFrequency(), paymentFrequency));
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingPeriodStartDay(), billingPeriodStartDay));
+            billingCycle = Persistence.service().retrieve(criteria);
+
+            if (billingCycle == null) {
+                billingCycle = EntityFactory.create(BillingCycle.class);
+                billingCycle.paymentFrequency().setValue(paymentFrequency);
+                billingCycle.billingPeriodStartDay().setValue(billingPeriodStartDay);
+
+                Persistence.service().persist(billingCycle);
+            }
         }
         return billingCycle;
     }
 
     /**
+     * For {@see BillingPeriodCorrelationMethod.LeaseStart}
+     * 
      * When billing period required to start on lease start date we have one special case:
      * - for 'monthly' or 'semimonthly' PaymentFrequency and if lease date starts on 29, 30, or 31 we correspond this lease to cycle
      * with billingPeriodStartDay = 1 and prorate days of 29/30/31.
@@ -86,10 +107,64 @@ public class BillingCycleManger {
         return billingPeriodStartDay;
     }
 
-    static LogicalDate calculateBillingPeriodStartDate(PaymentFrequency frequency, LogicalDate previousBillingPeriodStartDate) {
+    static BillingRun createFirstBillingRun(BillingCycle cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
+        BillingRun billingRun = EntityFactory.create(BillingRun.class);
+        billingRun.status().setValue(BillingRun.BillingRunStatus.Scheduled);
+        billingRun.billingCycle().set(cycle);
+
+        LogicalDate billingRunStartDate = null;
+        if (useCyclePeriodStartDay) {
+            switch (cycle.paymentFrequency().getValue()) {
+            case Monthly:
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(leaseStartDate);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                if (cycle.billingPeriodStartDay().getValue() < 1 || cycle.billingPeriodStartDay().getValue() > 31) {
+                    throw new Error("Wrong billingPeriodStartDay");
+                }
+                while (dayOfMonth != cycle.billingPeriodStartDay().getValue()) {
+                    calendar.add(Calendar.DATE, -1);
+                    dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                }
+                billingRunStartDate = new LogicalDate(calendar.getTime());
+                break;
+            case Weekly:
+            case BiWeekly:
+            case SemiMonthly:
+            case SemiAnnyally:
+            case Annually:
+                throw new Error("Not implemented");
+            }
+        } else {
+            if (PaymentFrequency.Monthly.equals(cycle.paymentFrequency().getValue())) {
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(leaseStartDate);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                if (dayOfMonth > 28) {
+                    calendar.add(Calendar.DATE, -dayOfMonth + 1);
+                }
+                billingRunStartDate = new LogicalDate(calendar.getTime());
+            } else {
+                billingRunStartDate = leaseStartDate;
+            }
+        }
+
+        billingRun.billingPeriodStartDate().setValue(billingRunStartDate);
+
+        billingRun.billingPeriodEndDate().setValue(calculateBillingRunEndDate(cycle.paymentFrequency().getValue(), billingRunStartDate));
+
+        return billingRun;
+
+    }
+
+    static BillingRun createSubsiquentBillingRun(BillingCycle cycle, BillingRun previousRun) {
+        BillingRun billingRun = EntityFactory.create(BillingRun.class);
+        billingRun.status().setValue(BillingRun.BillingRunStatus.Scheduled);
+        billingRun.billingCycle().set(cycle);
+
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(previousBillingPeriodStartDate);
-        switch (frequency) {
+        calendar.setTime(previousRun.billingPeriodStartDate().getValue());
+        switch (cycle.paymentFrequency().getValue()) {
         case Monthly:
             // TODO use proper bill day
             calendar.add(Calendar.MONTH, 1);
@@ -100,10 +175,17 @@ public class BillingCycleManger {
         case Annually:
             throw new Error("Not implemented");
         }
-        return new LogicalDate(calendar.getTime());
+        LogicalDate billingRunStartDate = new LogicalDate(calendar.getTime());
+
+        billingRun.billingPeriodStartDate().setValue(billingRunStartDate);
+
+        billingRun.billingPeriodEndDate().setValue(calculateBillingRunEndDate(cycle.paymentFrequency().getValue(), billingRunStartDate));
+
+        return billingRun;
+
     }
 
-    static LogicalDate calculateBillingPeriodEndDate(PaymentFrequency frequency, LogicalDate billingPeriodStartDate) {
+    private static LogicalDate calculateBillingRunEndDate(PaymentFrequency frequency, LogicalDate billingPeriodStartDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingPeriodStartDate);
         switch (frequency) {

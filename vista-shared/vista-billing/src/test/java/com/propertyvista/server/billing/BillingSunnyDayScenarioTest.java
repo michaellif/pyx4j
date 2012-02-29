@@ -43,93 +43,9 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
-public class BillingRunTest extends BillingTestBase {
+public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
     private String billingCycleId;
-
-    private void createAgreement() {
-        Lease lease = leaseDataModel.getLease();
-        ProductItem serviceItem = leaseDataModel.getServiceItem();
-
-        lease.serviceAgreement().serviceItem().item().set(serviceItem);
-
-        Service service = serviceItem.product().cast();
-
-        for (Feature feature : service.features()) {
-            if (feature.items().size() == 0) {
-                continue;
-            }
-            if (Type.addOn.equals(feature.type().getValue())) {
-                BillableItem billableItem = EntityFactory.create(BillableItem.class);
-                Calendar calendar = new GregorianCalendar();
-                calendar.setTime(leaseDateFrom);
-                calendar.add(Calendar.MONTH, 4);
-                calendar.add(Calendar.DATE, 5);
-                billableItem.effectiveDate().setValue(new LogicalDate(calendar.getTime()));
-                calendar.add(Calendar.DATE, 15);
-                billableItem.expirationDate().setValue(new LogicalDate(calendar.getTime()));
-
-                billableItem.item().set(feature.items().get(0));
-                lease.serviceAgreement().featureItems().add(billableItem);
-
-            } else if (feature.type().getValue().isInAgreement()) {
-                BillableItem billableItem = EntityFactory.create(BillableItem.class);
-                billableItem.item().set(feature.items().get(0));
-
-                //One time adjustment(discount) on parking for second billing run
-                if (Type.parking.equals(feature.type().getValue())) {
-                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    Calendar calendar = new GregorianCalendar();
-                    calendar.setTime(leaseDateFrom);
-                    calendar.add(Calendar.MONTH, 1);
-                    calendar.add(Calendar.DATE, 5);
-                    adjustment.effectiveDate().setValue(new LogicalDate(calendar.getTime()));
-                    adjustment.value().setValue(new BigDecimal("-10.00"));
-                    adjustment.adjustmentType().setValue(AdjustmentType.monetary);
-                    adjustment.chargeType().setValue(ChargeType.discount);
-                    adjustment.termType().setValue(TermType.oneTime);
-                    billableItem.adjustments().add(adjustment);
-                }
-
-                //Full term adjustment(discount) on parking
-                if (Type.parking.equals(feature.type().getValue())) {
-                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    adjustment.effectiveDate().setValue(new LogicalDate(leaseDateFrom));
-                    adjustment.value().setValue(new BigDecimal("-5.00"));
-                    adjustment.adjustmentType().setValue(AdjustmentType.monetary);
-                    adjustment.chargeType().setValue(ChargeType.discount);
-                    adjustment.termType().setValue(TermType.inLease);
-                    billableItem.adjustments().add(adjustment);
-                }
-
-                //Full term adjustment(discount) on locker
-                if (Type.locker.equals(feature.type().getValue())) {
-                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    adjustment.effectiveDate().setValue(new LogicalDate(leaseDateFrom));
-                    adjustment.value().setValue(new BigDecimal("-0.05"));
-                    adjustment.adjustmentType().setValue(AdjustmentType.percentage);
-                    adjustment.chargeType().setValue(ChargeType.discount);
-                    adjustment.termType().setValue(TermType.inLease);
-                    billableItem.adjustments().add(adjustment);
-                }
-
-                //Full term adjustment(discount) on locker (%)
-                if (Type.pet.equals(feature.type().getValue())) {
-                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-                    adjustment.effectiveDate().setValue(new LogicalDate(leaseDateFrom));
-                    adjustment.adjustmentType().setValue(AdjustmentType.free);
-                    adjustment.chargeType().setValue(ChargeType.discount);
-                    adjustment.termType().setValue(TermType.inLease);
-                    billableItem.adjustments().add(adjustment);
-                }
-
-                lease.serviceAgreement().featureItems().add(billableItem);
-            }
-        }
-
-        Persistence.service().persist(lease);
-
-    }
 
     public void testSequentialBillingRun() {
         preloadData();
@@ -235,6 +151,88 @@ public class BillingRunTest extends BillingTestBase {
         }
     }
 
+    private void createAgreement() {
+        Lease lease = leaseDataModel.getLease();
+        ProductItem serviceItem = leaseDataModel.getServiceItem();
+
+        Service service = serviceItem.product().cast();
+
+        for (Feature feature : service.features()) {
+            if (feature.items().size() == 0) {
+                continue;
+            }
+            if (Type.addOn.equals(feature.type().getValue())) {
+                BillableItem billableItem = EntityFactory.create(BillableItem.class);
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(lease.leaseFrom().getValue());
+                calendar.add(Calendar.MONTH, 4);
+                calendar.add(Calendar.DATE, 5);
+                billableItem.effectiveDate().setValue(new LogicalDate(calendar.getTime()));
+                calendar.add(Calendar.DATE, 15);
+                billableItem.expirationDate().setValue(new LogicalDate(calendar.getTime()));
+
+                billableItem.item().set(feature.items().get(0));
+                lease.serviceAgreement().featureItems().add(billableItem);
+
+            } else if (feature.type().getValue().isInAgreement()) {
+                BillableItem billableItem = EntityFactory.create(BillableItem.class);
+                billableItem.item().set(feature.items().get(0));
+
+                //One time adjustment(discount) on parking for second billing run
+                if (Type.parking.equals(feature.type().getValue())) {
+                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
+                    Calendar calendar = new GregorianCalendar();
+                    calendar.setTime(lease.leaseFrom().getValue());
+                    calendar.add(Calendar.MONTH, 1);
+                    calendar.add(Calendar.DATE, 5);
+                    adjustment.effectiveDate().setValue(new LogicalDate(calendar.getTime()));
+                    adjustment.value().setValue(new BigDecimal("-10.00"));
+                    adjustment.adjustmentType().setValue(AdjustmentType.monetary);
+                    adjustment.chargeType().setValue(ChargeType.discount);
+                    adjustment.termType().setValue(TermType.oneTime);
+                    billableItem.adjustments().add(adjustment);
+                }
+
+                //Full term adjustment(discount) on parking
+                if (Type.parking.equals(feature.type().getValue())) {
+                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
+                    adjustment.effectiveDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));
+                    adjustment.value().setValue(new BigDecimal("-5.00"));
+                    adjustment.adjustmentType().setValue(AdjustmentType.monetary);
+                    adjustment.chargeType().setValue(ChargeType.discount);
+                    adjustment.termType().setValue(TermType.inLease);
+                    billableItem.adjustments().add(adjustment);
+                }
+
+                //Full term adjustment(discount) on locker
+                if (Type.locker.equals(feature.type().getValue())) {
+                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
+                    adjustment.effectiveDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));
+                    adjustment.value().setValue(new BigDecimal("-0.05"));
+                    adjustment.adjustmentType().setValue(AdjustmentType.percentage);
+                    adjustment.chargeType().setValue(ChargeType.discount);
+                    adjustment.termType().setValue(TermType.inLease);
+                    billableItem.adjustments().add(adjustment);
+                }
+
+                //Full term adjustment(discount) on locker (%)
+                if (Type.pet.equals(feature.type().getValue())) {
+                    BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
+                    adjustment.effectiveDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));
+                    adjustment.adjustmentType().setValue(AdjustmentType.free);
+                    adjustment.chargeType().setValue(ChargeType.discount);
+                    adjustment.termType().setValue(TermType.inLease);
+                    billableItem.adjustments().add(adjustment);
+                }
+
+                lease.serviceAgreement().featureItems().add(billableItem);
+            }
+        }
+
+        Persistence.service().persist(lease);
+
+    }
+
     private Bill runBilling(int billNumber, boolean confirm) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
         BillingFacade.runBilling(lease);
@@ -258,7 +256,7 @@ public class BillingRunTest extends BillingTestBase {
 
         int billingPeriodStartDay = bill.billingRun().billingCycle().billingPeriodStartDay().getValue();
         if (billingPeriodStartDay <= 28) {
-            assertEquals("Billing Cycle Period Start Day", leaseDateFrom.getDate(), billingPeriodStartDay);
+            assertEquals("Billing Cycle Period Start Day", lease.leaseFrom().getValue().getDate(), billingPeriodStartDay);
         } else {
             assertEquals("Billing Cycle Period Start Day", 1, billingPeriodStartDay);
         }

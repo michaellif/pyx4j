@@ -21,10 +21,15 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.BillingAccount;
 
 public interface LeaseFinancial extends IEntity {
+
+    enum ProrationMethod {
+        Actual, Standard, Annual
+    }
 
     @Owner
     @Detached
@@ -38,4 +43,9 @@ public interface LeaseFinancial extends IEntity {
     @Owned
     @Caption(name = "Lease Adjustments")
     IList<LeaseAdjustment> adjustments();
+
+    IPrimitive<ProrationMethod> prorationMethod();
+
+    IPrimitive<Integer> billingPeriodStartDate();
+
 }

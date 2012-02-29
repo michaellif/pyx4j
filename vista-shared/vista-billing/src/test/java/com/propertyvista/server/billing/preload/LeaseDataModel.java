@@ -36,16 +36,10 @@ public class LeaseDataModel {
 
     private final BuildingDataModel buildingDataModel;
 
-    private LogicalDate leaseDateFrom = new LogicalDate();
-
     public LeaseDataModel(BuildingDataModel buildingDataModel, TenantDataModel tenantDataModel) {
         this.buildingDataModel = buildingDataModel;
         this.tenantDataModel = tenantDataModel;
 
-    }
-
-    public void setLeaseDateFrom(LogicalDate leaseDateFrom) {
-        this.leaseDateFrom = leaseDateFrom;
     }
 
     public void generate(boolean persist) {
@@ -55,11 +49,14 @@ public class LeaseDataModel {
         lease = EntityFactory.create(Lease.class);
 
         lease.unit().set(serviceItem.element());
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(leaseDateFrom);
-        lease.leaseFrom().setValue(new LogicalDate(calendar.getTime()));
+
+        lease.serviceAgreement().serviceItem().item().set(serviceItem);
+
+        lease.leaseFrom().setValue(new LogicalDate(111, 1, 25));
         lease.approvalDate().setValue(lease.leaseFrom().getValue());
 
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(lease.leaseFrom().getValue());
         calendar.add(Calendar.MONTH, 6);
         calendar.add(Calendar.DATE, -1);
         lease.leaseTo().setValue(new LogicalDate(calendar.getTime()));

@@ -61,7 +61,7 @@ class Billing {
 
         if (billingAccount.leaseFinancial().lease().leaseFrom().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) <= 0) {
             bill.billingPeriodStartDate().setValue(billingRun.billingPeriodStartDate().getValue());
-        } else if (billingAccount.leaseFinancial().lease().leaseFrom().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0) {
+        } else if (billingAccount.leaseFinancial().lease().leaseFrom().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) <= 0) {
             bill.billingPeriodStartDate().setValue(billingAccount.leaseFinancial().lease().leaseFrom().getValue());
         } else {
             throw new Error("Lease didn't start yet");
@@ -70,7 +70,7 @@ class Billing {
         if (billingAccount.leaseFinancial().lease().leaseTo().isNull()
                 || (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
             bill.billingPeriodEndDate().setValue(billingRun.billingPeriodEndDate().getValue());
-        } else if (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) <= 0) {
+        } else if (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) >= 0) {
             bill.billingPeriodEndDate().setValue(billingAccount.leaseFinancial().lease().leaseTo().getValue());
         } else {
             //TODO add final bill handler

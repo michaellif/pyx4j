@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -52,16 +51,9 @@ public class BillingLifecycle {
         if (!billingAccount.currentBillingRun().isNull()) {
             throw new UserRuntimeException("Can't run billing on Account with non-confirmed bills");
         }
-        BillingRun billingRun = EntityFactory.create(BillingRun.class);
-        billingRun.status().setValue(BillingRunStatus.Scheduled);
-        billingRun.billingCycle().set(billingAccount.billingCycle());
+        BillingRun billingRun = createBillingRun(lease.leaseFinancial());
         Persistence.service().retrieve(lease.unit());
         billingRun.building().set(lease.unit().belongsTo());
-
-        LogicalDate startDate = getNextBillingPeriodStartDate(billingAccount);
-        billingRun.billingPeriodStartDate().setValue(startDate);
-        billingRun.billingPeriodEndDate().setValue(
-                BillingCycleManger.calculateBillingPeriodEndDate(billingAccount.billingCycle().paymentFrequency().getValue(), startDate));
 
         Persistence.service().persist(billingRun);
 
@@ -121,13 +113,13 @@ public class BillingLifecycle {
         }
     }
 
-    static LogicalDate getNextBillingPeriodStartDate(BillingAccount billingAccount) {
-        Bill previousBill = getLatestConfirmedBill(billingAccount);
-        if (previousBill != null) {
-            return BillingCycleManger.calculateBillingPeriodStartDate(billingAccount.billingCycle().paymentFrequency().getValue(), previousBill.billingRun()
-                    .billingPeriodStartDate().getValue());
+    static BillingRun createBillingRun(LeaseFinancial leaseFinancial) {
+        Bill previousBill = getLatestConfirmedBill(leaseFinancial.billingAccount());
+        if (previousBill == null) {
+            return BillingCycleManger.createFirstBillingRun(leaseFinancial.billingAccount().billingCycle(), leaseFinancial.lease().leaseFrom().getValue(),
+                    !leaseFinancial.billingPeriodStartDate().isNull());
         } else {
-            return billingAccount.leaseFinancial().lease().leaseFrom().getValue();
+            return BillingCycleManger.createSubsiquentBillingRun(leaseFinancial.billingAccount().billingCycle(), previousBill.billingRun());
         }
     }
 
