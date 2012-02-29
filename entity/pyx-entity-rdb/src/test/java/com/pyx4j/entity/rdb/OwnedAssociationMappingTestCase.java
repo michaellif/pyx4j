@@ -24,6 +24,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -134,6 +135,18 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             UnidirectionalOneToOneParent parent = srv.retrieve(UnidirectionalOneToOneParent.class, o.getPrimaryKey());
             Assert.assertTrue("child update", parent.child().name().getValue().endsWith("#"));
 
+        }
+
+        // remove child and update owner
+        Key oldchildKey = o.child().getPrimaryKey();
+        o.child().set(null);
+        srvSave(o, testCaseMethod);
+
+        // See that Child was removed
+        {
+            UnidirectionalOneToOneChild child = srv.retrieve(UnidirectionalOneToOneChild.class, oldchildKey);
+            //TODO persist
+            // Assert.assertNull("child removed", child);
         }
 
     }

@@ -796,6 +796,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             fireModificationAdapters(tm, entity);
             updated = true;
         }
+        List<IEntity> cascadeRemove = new Vector<IEntity>();
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
             IEntity childEntity = (IEntity) member.getMember(entity);
@@ -811,7 +812,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         }
                     } else if (baseChildEntity.getPrimaryKey() != null) {
                         // Cascade delete
-                        cascadeDelete(baseChildEntity.getEntityMeta(), baseChildEntity.getPrimaryKey(), baseChildEntity);
+                        cascadeRemove.add(baseChildEntity);
                     }
                 }
                 if (!childEntity.isValueDetached() && (!childEntity.isNull())) {
@@ -833,6 +834,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 if (!update(tm, entity, true)) {
                     throw new RuntimeException("Entity '" + tm.entityMeta().getCaption() + "' " + entity.getPrimaryKey() + " NotFound");
                 }
+            }
+            for (IEntity ce : cascadeRemove) {
+                cascadeDelete(ce.getEntityMeta(), ce.getPrimaryKey(), ce);
             }
             CacheService.entityCache().put(entity);
         }
