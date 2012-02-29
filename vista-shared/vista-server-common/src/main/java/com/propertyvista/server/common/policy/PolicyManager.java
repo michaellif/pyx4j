@@ -99,8 +99,10 @@ public class PolicyManager {
         if (node == null || node.isNull()) {
             throw new IllegalArgumentException("node must not be null");
         }
-        PolicyNode currentNode = node;
-
+        PolicyNode currentNode = node.duplicate();
+        if (currentNode.isValueDetached()) {
+            Persistence.service().retrieve(currentNode);
+        }
         do {
             EntityQueryCriteria<POLICY> criteria = EntityQueryCriteria.create(policyClass);
             criteria.add(PropertyCriterion.eq(criteria.proto().node(), currentNode));
@@ -149,7 +151,6 @@ public class PolicyManager {
     public static PolicyNode parentOf(PolicyNode node) {
         Class<? extends PolicyNode> nodeClass = (Class<? extends PolicyNode>) node.getInstanceValueClass();
         if (AptUnit.class.equals(nodeClass)) {
-
             return Persistence.service().retrieve(Floorplan.class, ((AptUnit) node.cast()).floorplan().getPrimaryKey());
 
         } else if (Floorplan.class.equals(nodeClass)) {
