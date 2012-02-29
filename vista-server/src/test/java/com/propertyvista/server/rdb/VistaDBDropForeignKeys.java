@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.RDBUtils;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 
@@ -31,7 +32,12 @@ public class VistaDBDropForeignKeys {
         log.info("Remove All ForeignKeys");
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
-        RDBUtils.dropAllForeignKeys();
+        Persistence.service().startBackgroundProcessTransaction();
+        try {
+            RDBUtils.dropAllForeignKeys();
+        } finally {
+            Persistence.service().endTransaction();
+        }
         log.info("Total time: " + TimeUtils.secSince(start));
     }
 

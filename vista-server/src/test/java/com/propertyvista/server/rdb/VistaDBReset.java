@@ -39,31 +39,37 @@ public class VistaDBReset {
         long totalStart = System.currentTimeMillis();
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
-        NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
-        RDBUtils.dropAllEntityTables();
-        SchedulerHelper.dbReset();
-        RDBUtils.initAllEntityTables();
-        log.info("Generating new Data...");
-        long start = System.currentTimeMillis();
-        //log.info(conf.getDataPreloaders().preloadAll());
+        Persistence.service().startBackgroundProcessTransaction();
+        try {
+            NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
+            RDBUtils.dropAllEntityTables();
+            SchedulerHelper.dbReset();
+            RDBUtils.initAllEntityTables();
+            log.info("Generating new Data...");
+            long start = System.currentTimeMillis();
+            //log.info(conf.getDataPreloaders().preloadAll());
 
-        DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
-        if ((args != null) && (args.length > 0)) {
-            VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
-            if (args[0].equals("--mockup")) {
-                cfg.mockupData = true;
-                preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
+            DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
+            if ((args != null) && (args.length > 0)) {
+                VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
+                if (args[0].equals("--mockup")) {
+                    cfg.mockupData = true;
+                    preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
+                }
             }
+            log.info(preloaders.preloadAll());
+
+            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            Pmc pmc = EntityFactory.create(Pmc.class);
+            pmc.name().setValue("Vista Demo");
+            pmc.dnsName().setValue(VistaNamespaceResolver.demoNamespace);
+            Persistence.service().persist(pmc);
+            Persistence.service().commit();
+
+            log.info("Preload time: " + TimeUtils.secSince(start));
+            log.info("Total time: " + TimeUtils.secSince(totalStart));
+        } finally {
+            Persistence.service().endTransaction();
         }
-        log.info(preloaders.preloadAll());
-
-        NamespaceManager.setNamespace(Pmc.adminNamespace);
-        Pmc pmc = EntityFactory.create(Pmc.class);
-        pmc.name().setValue("Vista Demo");
-        pmc.dnsName().setValue(VistaNamespaceResolver.demoNamespace);
-        Persistence.service().persist(pmc);
-
-        log.info("Preload time: " + TimeUtils.secSince(start));
-        log.info("Total time: " + TimeUtils.secSince(totalStart));
     }
 }

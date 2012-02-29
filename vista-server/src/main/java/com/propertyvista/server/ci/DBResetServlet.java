@@ -138,49 +138,55 @@ public class DBResetServlet extends HttpServlet {
                     buf.append("</table>");
                 } else {
                     buf.append("Requested : '" + type.name() + "' " + type.toString());
-                    if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
-                        SchedulerHelper.shutdown();
-                        RDBUtils.dropAllEntityTables();
-                        SchedulerHelper.dbReset();
-                        SchedulerHelper.init();
-                    }
-                    CacheService.reset();
-
-                    switch (type) {
-                    case all:
-                    case allWithMockup:
-                    case allAddMockup:
-                    case allMini:
-                        for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
-                            preloadPmc(req, buf, demoPmc.name(), type);
+                    Persistence.service().startBackgroundProcessTransaction();
+                    try {
+                        if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
+                            SchedulerHelper.shutdown();
+                            RDBUtils.dropAllEntityTables();
+                            SchedulerHelper.dbReset();
+                            SchedulerHelper.init();
                         }
-                        break;
-                    case addPmcMockup:
-                    case addPmcMockupTest1:
-                    case preloadPmcWithMockup:
-                    case preloadPmc:
-                        preloadPmc(req, buf, NamespaceManager.getNamespace(), type);
-                        break;
-                    case clearPmc: {
-                        String thisPmcName = NamespaceManager.getNamespace();
-                        buf.append("\n--- PMC  '" + thisPmcName + "' ---\n");
-                        RDBUtils.deleteFromAllEntityTables();
-                        NamespaceManager.setNamespace(Pmc.adminNamespace);
-                        EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                        criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), thisPmcName));
-                        Persistence.service().delete(criteria);
-                    }
-                        break;
-                    case dropForeignKeys:
-                        RDBUtils.dropAllForeignKeys();
-                        break;
-                    default:
-                        throw new Error("unimplemented: " + type);
-                    }
+                        CacheService.reset();
 
-                    buf.append("\nTotal time: " + TimeUtils.secSince(start));
-                    log.info("DB reset {} {}", type, TimeUtils.secSince(start));
-                    buf.insert(0, "Processing total time: " + TimeUtils.secSince(start) + "\n");
+                        switch (type) {
+                        case all:
+                        case allWithMockup:
+                        case allAddMockup:
+                        case allMini:
+                            for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
+                                preloadPmc(req, buf, demoPmc.name(), type);
+                            }
+                            break;
+                        case addPmcMockup:
+                        case addPmcMockupTest1:
+                        case preloadPmcWithMockup:
+                        case preloadPmc:
+                            preloadPmc(req, buf, NamespaceManager.getNamespace(), type);
+                            break;
+                        case clearPmc: {
+                            String thisPmcName = NamespaceManager.getNamespace();
+                            buf.append("\n--- PMC  '" + thisPmcName + "' ---\n");
+                            RDBUtils.deleteFromAllEntityTables();
+                            NamespaceManager.setNamespace(Pmc.adminNamespace);
+                            EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                            criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), thisPmcName));
+                            Persistence.service().delete(criteria);
+                            Persistence.service().commit();
+                        }
+                            break;
+                        case dropForeignKeys:
+                            RDBUtils.dropAllForeignKeys();
+                            break;
+                        default:
+                            throw new Error("unimplemented: " + type);
+                        }
+
+                        buf.append("\nTotal time: " + TimeUtils.secSince(start));
+                        log.info("DB reset {} {}", type, TimeUtils.secSince(start));
+                        buf.insert(0, "Processing total time: " + TimeUtils.secSince(start) + "\n");
+                    } finally {
+                        Persistence.service().endTransaction();
+                    }
                 }
 
             } catch (Throwable t) {
@@ -217,6 +223,7 @@ public class DBResetServlet extends HttpServlet {
         pmc.dnsName().setValue(demoPmcName);
 
         Persistence.service().persist(pmc);
+        Persistence.service().commit();
 
         NamespaceManager.setNamespace(demoPmcName);
         buf.append("\n--- Preload  " + demoPmcName + " ---\n");
