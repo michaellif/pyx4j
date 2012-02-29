@@ -55,7 +55,7 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
     @Override
     protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm.TabDescriptor> createCustomTabPanels() {
         return Arrays.asList(//@formatter:off
-                new TabDescriptor(createItemsPanel(), i18n.tr("Taxes"))
+                new TabDescriptor(createItemsPanel(), i18n.tr("Items"))
         );//@formatter:on
     }
 
@@ -104,7 +104,7 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productItemType())).build());
                 get(proto().productItemType()).setViewable(true);
 
-                content.setH2(++row, 0, 1, proto().taxes().getMeta().getCaption());
+                content.setH3(++row, 0, 1, proto().taxes().getMeta().getCaption());
                 content.setWidget(++row, 0, inject(proto().taxes(), new TaxFolder(isEditable())));
 
                 return content;
