@@ -20,6 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -68,14 +69,17 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
             throw new Error("unable to persist policy, the scope (a node in organizatonal hierarchy) was not set");
         }
 
-        EntityQueryCriteria<POLICY> criteria = new EntityQueryCriteria<POLICY>(dboClass);
-        criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
-        POLICY oldPolicyAtTheSameNode = Persistence.service().retrieve(criteria);
+        boolean isNewPolicy = in.getPrimaryKey() == null;
+        if (isNewPolicy) {
+            EntityQueryCriteria<POLICY> criteria = new EntityQueryCriteria<POLICY>(dboClass);
+            criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
+            POLICY oldPolicyAtTheSameNode = Persistence.service().retrieve(criteria);
 
-        if (oldPolicyAtTheSameNode != null) {
-            throw new Error(i18n.tr("not allowed to override existing policy"));
+            if (oldPolicyAtTheSameNode != null) {
+                throw new UserRuntimeException(i18n.tr("Overriding existing policy is forbidden!"));
+            }
+
         }
-
         super.persistDBO(dbo, in);
     }
 
