@@ -1,4 +1,4 @@
-glCodeCategory.glCategoryId,glId,description
+glCodeCategory.categoryId,codeId,description
 1800,1820,Security Deposit Receivable
 1800,1861,Rental Revenue Receivable
 1800,1862,Late Fee Receivable
