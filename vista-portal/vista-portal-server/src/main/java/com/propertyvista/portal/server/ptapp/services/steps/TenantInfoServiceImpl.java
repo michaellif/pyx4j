@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
@@ -52,6 +53,7 @@ public class TenantInfoServiceImpl implements TenantInfoService {
         entity.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
 
         DigitalSignatureMgr.reset(tr.getTenant());
+        Persistence.service().commit();
 
         // we do not use return value, so return the same as input one:        
         callback.onSuccess(entity);

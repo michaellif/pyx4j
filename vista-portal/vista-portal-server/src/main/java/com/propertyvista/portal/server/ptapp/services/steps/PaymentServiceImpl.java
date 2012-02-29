@@ -102,6 +102,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
             throw new UserRuntimeException(i18n.tr("Your Card Has Been Declined"));
         }
 
+        Persistence.service().commit();
         callback.onSuccess(payment);
     }
 

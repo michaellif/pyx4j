@@ -80,6 +80,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         }
 
         saveApplicationEntity(summary);
+        Persistence.service().commit();
 
         // we do not use return value, so return the same as input one:        
         callback.onSuccess(entity);

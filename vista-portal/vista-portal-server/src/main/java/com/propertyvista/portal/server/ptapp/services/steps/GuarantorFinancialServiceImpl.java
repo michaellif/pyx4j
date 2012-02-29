@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.GuarantorFinancialService;
@@ -47,6 +48,7 @@ public class GuarantorFinancialServiceImpl extends ApplicationEntityServiceImpl 
         tr.saveScreening();
 
         DigitalSignatureMgr.reset(tr.getGuarantor());
+        Persistence.service().commit();
 
         // we do not use return value, so return the same as input one:        
         callback.onSuccess(entity);

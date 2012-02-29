@@ -59,6 +59,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
         saveApplicationEntity(entity);
 
         DigitalSignatureMgr.resetAll();
+        Persistence.service().commit();
 
         // we do not use return value, so return the same as input one:        
         callback.onSuccess(entity);
@@ -79,7 +80,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.tenants());
         }
 
-        MiscPolicy miscPolicy = (MiscPolicy) PolicyManager.effectivePolicy(lease.unit(), MiscPolicy.class);
+        MiscPolicy miscPolicy = PolicyManager.effectivePolicy(lease.unit(), MiscPolicy.class);
         if (miscPolicy == null) {
             throw new Error("There is no MiscPolicy for the Unit!?.");
         }

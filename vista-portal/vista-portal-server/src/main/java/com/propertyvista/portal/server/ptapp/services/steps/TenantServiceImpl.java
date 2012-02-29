@@ -117,6 +117,8 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             }
         }
 
+        Persistence.service().commit();
+
 //        CampaignManager.fireEvent(CampaignTriger.Registration, tenants);
 
         // we do not use return value, so return the same as input one:        
@@ -135,7 +137,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             tenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }
 
-        MiscPolicy miscPolicy = (MiscPolicy) PolicyManager.effectivePolicy(lease.unit(), MiscPolicy.class);
+        MiscPolicy miscPolicy = PolicyManager.effectivePolicy(lease.unit(), MiscPolicy.class);
         if (miscPolicy == null) {
             throw new Error("There is no MiscPolicy for the Unit!?.");
         }
