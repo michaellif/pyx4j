@@ -81,7 +81,7 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof BillableItem) {
-            return new BillableItemEditor(lease);
+            return new BillableItemEditor();
         }
         return super.create(member);
     }

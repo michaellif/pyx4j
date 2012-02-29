@@ -14,6 +14,7 @@
 package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -27,13 +28,15 @@ import com.propertyvista.domain.financial.tax.Tax;
  * Corporate-wide reasons (AS defined 20 major)
  * 
  */
+@ToStringFormat("{0}, GlCode: {1}")
 public interface LeaseAdjustmentReason extends IEntity {
 
-    @ToString
+    @ToString(index = 0)
     IPrimitive<String> name();
 
     IPrimitive<Boolean> precalculatedTax();
 
+    @ToString(index = 1)
     GlCode glCode();
 
     /**

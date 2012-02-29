@@ -22,16 +22,19 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@ToStringFormat("{0} ({1})")
 public interface GlCode extends IEntity {
 
     @NotNull
-    @ToString
+    @ToString(index = 0)
     IPrimitive<Integer> glId();
 
+    @ToString(index = 0)
     @Editor(type = EditorType.textarea)
     IPrimitive<String> description();
 

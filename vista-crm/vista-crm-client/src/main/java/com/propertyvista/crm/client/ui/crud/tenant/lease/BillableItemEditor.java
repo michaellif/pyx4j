@@ -39,7 +39,6 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
-import com.propertyvista.dto.LeaseDTO;
 
 class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
@@ -49,11 +48,8 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
 
-    private final CEntityEditor<LeaseDTO> lease;
-
-    public BillableItemEditor(CEntityEditor<LeaseDTO> lease) {
+    public BillableItemEditor() {
         super(BillableItem.class);
-        this.lease = lease;
     }
 
     @Override
@@ -71,7 +67,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().expirationDate()), 9).build());
 
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().exemptFromTax())).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().exemptFromTax()), 5).build());
 
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);

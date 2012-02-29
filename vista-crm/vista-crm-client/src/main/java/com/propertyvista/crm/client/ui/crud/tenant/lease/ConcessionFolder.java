@@ -44,7 +44,6 @@ class ConcessionFolder extends VistaBoxFolder<Concession> {
             return new ConcessionEditorForm(true);
         }
         return super.create(member);
-
     }
 
     @Override

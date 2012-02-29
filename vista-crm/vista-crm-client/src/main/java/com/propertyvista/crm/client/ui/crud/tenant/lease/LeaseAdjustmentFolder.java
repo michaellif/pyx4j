@@ -13,30 +13,22 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
-public class LeaseAdjustmentFolder extends VistaTableFolder<LeaseAdjustment> {
+public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
 
     public LeaseAdjustmentFolder(boolean modifyable) {
         super(LeaseAdjustment.class, modifyable);
-    }
-
-    @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().reason(), "15em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().amount(), "8em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "9em"));
-        return columns;
     }
 
     @Override
@@ -45,5 +37,38 @@ public class LeaseAdjustmentFolder extends VistaTableFolder<LeaseAdjustment> {
             newEntity.effectiveDate().setValue(new LogicalDate());
         }
         super.addItem(newEntity);
+    }
+
+    @Override
+    public CComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof LeaseAdjustment) {
+            return new LeaseAdjustmentEditor();
+        }
+        return super.create(member);
+    }
+
+    private class LeaseAdjustmentEditor extends CEntityDecoratableEditor<LeaseAdjustment> {
+
+        public LeaseAdjustmentEditor() {
+            super(LeaseAdjustment.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel main = new FormFlexPanel();
+
+            int row = -1;
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reason()), 35).build());
+
+            HorizontalPanel dates = new HorizontalPanel();
+            dates.add(new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());
+            dates.add(new DecoratorBuilder(inject(proto().expirationDate()), 9).build());
+            main.setWidget(++row, 0, dates);
+
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 9).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
+
+            return main;
+        }
     }
 }

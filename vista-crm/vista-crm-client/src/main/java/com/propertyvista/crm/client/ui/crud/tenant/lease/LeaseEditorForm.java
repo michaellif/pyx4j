@@ -232,7 +232,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
-        serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new BillableItemEditor(this)));
+        serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new BillableItemEditor()));
         if (isEditable()) {
             serviceItemPanel.add(serviceselector = new AnchorButton("Select...", new ClickHandler() {
                 @Override
