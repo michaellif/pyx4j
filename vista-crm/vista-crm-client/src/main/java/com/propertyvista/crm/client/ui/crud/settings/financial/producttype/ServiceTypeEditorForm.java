@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.boxes.GlCodeSelectorDialog;
@@ -32,8 +31,6 @@ import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
 public class ServiceTypeEditorForm extends CrmEntityForm<ProductItemType> {
-
-    private static final I18n i18n = I18n.get(ServiceTypeEditorForm.class);
 
     private Widget serviceType;
 

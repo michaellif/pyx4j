@@ -13,17 +13,26 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
+import com.propertyvista.crm.client.ui.components.AnchorButton;
+import com.propertyvista.crm.client.ui.components.boxes.GlCodeSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class LeaseAdjustmentReasonEditorForm extends CrmEntityForm<LeaseAdjustmentReason> {
+
+    private Widget glCodeSelector;
 
     public LeaseAdjustmentReasonEditorForm() {
         this(false);
@@ -39,8 +48,38 @@ public class LeaseAdjustmentReasonEditorForm extends CrmEntityForm<LeaseAdjustme
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntityComboBox<GlCode>(GlCode.class)), 25).build());
+
+        HorizontalPanel glCodePanel = new HorizontalPanel();
+        glCodePanel.add(new DecoratorBuilder(inject(proto().glCode(), new CEntityLabel<GlCode>()), 25).build());
+        if (isEditable()) {
+            glCodePanel.add(glCodeSelector = new AnchorButton("Select...", new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    new GlCodeSelectorDialog() {
+                        @Override
+                        public boolean onClickOk() {
+                            if (!getSelectedItems().isEmpty()) {
+                                get(LeaseAdjustmentReasonEditorForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
+                            }
+                            return !getSelectedItems().isEmpty();
+                        }
+                    }.show();
+                }
+            }));
+            glCodeSelector.getElement().getStyle().setMarginLeft(4, Unit.EM);
+        }
+
+        main.setWidget(++row, 0, glCodePanel);
 
         return new CrmScrollPanel(main);
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        if (glCodeSelector != null) {
+            glCodeSelector.setVisible(isEditable());
+        }
     }
 }
