@@ -40,8 +40,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 
 /**
  * 
- * Actual payment record. {@link com.propertyvista.domain.financial.billing.BillPayment}
- * captures payment portion for particular charge (in future version)
+ * Actual payment record. {@link com.propertyvista.domain.financial.billing.BillPayment} captures payment portion for particular charge (in future version)
  * Deposit is considered as payment and presented by this class.
  * 
  */
@@ -55,6 +54,21 @@ public interface Payment extends IEntity {
         Check,
 
         Other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    };
+
+    @I18n
+    enum PaymentStatus {
+
+        Accepted,
+
+        Posted,
+
+        Rejected;
 
         @Override
         public String toString() {
@@ -77,6 +91,8 @@ public interface Payment extends IEntity {
     @NotNull
     @MemberColumn(name = "paymentType")
     IPrimitive<Type> type();
+
+    IPrimitive<PaymentStatus> paymentStatus();
 
     @JoinTable(value = BillPayment.class, cascade = false)
     BillPayment billPayment();

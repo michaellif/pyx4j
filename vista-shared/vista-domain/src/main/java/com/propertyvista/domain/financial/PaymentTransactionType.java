@@ -15,5 +15,7 @@ package com.propertyvista.domain.financial;
 
 public enum PaymentTransactionType {
 
+    // DBD security deposit, last month rent, pet deposit, e,g, different deposit types
+
     billPayments, deposit, oneTime
 }
