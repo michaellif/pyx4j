@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial.offering;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
@@ -47,6 +48,7 @@ public interface ProductItemType extends IEntity {
     IPrimitive<Type> type();
 
     @ToString
+    @Length(25)
     IPrimitive<String> name();
 
     IPrimitive<Service.Type> serviceType();

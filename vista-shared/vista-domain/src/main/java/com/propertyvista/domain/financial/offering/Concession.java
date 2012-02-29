@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -107,6 +108,7 @@ public interface Concession extends IEntity {
     @ToString(index = 1)
     IPrimitive<Term> term();
 
+    @Length(25)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 

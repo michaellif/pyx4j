@@ -16,6 +16,7 @@ package com.propertyvista.domain.charges;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -49,6 +50,7 @@ public interface ChargeLine extends Charge_OLD {
     @MemberColumn(name = "tp")
     IPrimitive<ChargeType> type();
 
+    @Length(100)
     @Editor(type = EditorType.label)
     @ToString(index = 1)
     @MemberColumn(name = "lbl")

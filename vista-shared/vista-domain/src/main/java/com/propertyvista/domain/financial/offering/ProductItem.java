@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -55,6 +56,8 @@ public interface ProductItem extends IEntity {
     @NotNull
     IPrimitive<BigDecimal> price();
 
+    @Length(100)
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
     @Detached

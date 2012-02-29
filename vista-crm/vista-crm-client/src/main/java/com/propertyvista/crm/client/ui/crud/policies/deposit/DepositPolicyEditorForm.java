@@ -86,12 +86,17 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
                 FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().valueType())).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositValue())).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().appliedTo())).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().repaymentMode())).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().applyToRepayAt())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().value()), 10).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().valueType()), 10).build());
+
+                row = -1;
+                content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appliedTo()), 20).build());
+                content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().repaymentMode()), 10).build());
+                content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().applyToRepayAt()), 10).build());
+
+                content.getColumnFormatter().setWidth(0, "50%");
+                content.getColumnFormatter().setWidth(1, "50%");
 
                 return content;
             }

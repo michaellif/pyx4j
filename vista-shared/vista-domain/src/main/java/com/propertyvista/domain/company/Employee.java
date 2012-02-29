@@ -15,6 +15,7 @@ package com.propertyvista.domain.company;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -32,6 +33,7 @@ public interface Employee extends Person {
     @ToString(index = 10)
     IPrimitive<String> title();
 
+    @Length(100)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.company;
 
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -20,5 +21,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface ContactRole extends IEntity {
 
     @ToString
+    @Length(25)
     IPrimitive<String> name();
 }

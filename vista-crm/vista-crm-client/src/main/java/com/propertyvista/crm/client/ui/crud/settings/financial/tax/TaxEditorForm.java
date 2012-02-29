@@ -38,8 +38,8 @@ public class TaxEditorForm extends CrmEntityForm<Tax> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().authority()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rate()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().compound()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rate()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().compound()), 5).build());
 
         return new CrmScrollPanel(main);
     }

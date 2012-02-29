@@ -17,8 +17,10 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -89,6 +91,8 @@ public interface Bill extends IEntity {
 
     IPrimitive<BillType> billType();
 
+    @Length(50)
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> rejectReason();
 
     @ReadOnly
@@ -117,14 +121,16 @@ public interface Bill extends IEntity {
     IPrimitive<BigDecimal> previousBalanceAmount();
 
     /**
-     * The total amount of payments received since the previous bill, up to the current Bill day.
+     * The total amount of payments received since the previous bill, up to the current
+     * Bill day.
      */
     IPrimitive<BigDecimal> paymentReceivedAmount();
 
     IPrimitive<BigDecimal> immediateAdjustments();
 
     /**
-     * pastDueAmount = previousBalanceAmount - paymentReceivedAmount - immediateAdjustments
+     * pastDueAmount = previousBalanceAmount - paymentReceivedAmount -
+     * immediateAdjustments
      */
     IPrimitive<BigDecimal> pastDueAmount();
 
@@ -146,7 +152,8 @@ public interface Bill extends IEntity {
     IPrimitive<BigDecimal> latePaymentCharges();
 
     /**
-     * currentAmount = pastDueAmount + serviceCharge + recurringFeatureCharges + oneTimeFeatureCharges + totalAdjustments - depositPaidAmount +
+     * currentAmount = pastDueAmount + serviceCharge + recurringFeatureCharges +
+     * oneTimeFeatureCharges + totalAdjustments - depositPaidAmount +
      * latePaymentCharges
      */
     IPrimitive<BigDecimal> currentAmount();

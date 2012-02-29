@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,5 +23,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface Currency extends IEntity {
 
     @ToString
+    @Length(25)
     IPrimitive<String> name();
 }

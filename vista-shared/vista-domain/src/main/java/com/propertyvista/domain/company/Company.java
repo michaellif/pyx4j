@@ -16,6 +16,7 @@ package com.propertyvista.domain.company;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -27,6 +28,7 @@ import com.propertyvista.domain.media.Media;
 public interface Company extends IEntity {
 
     @ToString
+    @Length(25)
     IPrimitive<String> name();
 
     IList<AddressStructured> addresses();

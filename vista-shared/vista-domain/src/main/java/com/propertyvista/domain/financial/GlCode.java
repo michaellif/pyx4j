@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -34,6 +35,7 @@ public interface GlCode extends IEntity {
     @ToString(index = 0)
     IPrimitive<Integer> glId();
 
+    @Length(100)
     @ToString(index = 0)
     @Editor(type = EditorType.textarea)
     IPrimitive<String> description();

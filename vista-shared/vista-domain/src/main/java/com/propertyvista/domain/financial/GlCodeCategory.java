@@ -14,6 +14,9 @@
 package com.propertyvista.domain.financial;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -27,6 +30,8 @@ public interface GlCodeCategory extends IEntity {
     @ToString
     IPrimitive<Integer> glCategoryId();
 
+    @Length(100)
+    @Editor(type = EditorType.textarea)
     IPrimitive<String> glCategoryDescription();
 
     @Owned
