@@ -51,7 +51,7 @@ public interface Product extends IEntity {
     @ToString(index = 1)
     IPrimitive<String> name();
 
-    @Length(100)
+    @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 

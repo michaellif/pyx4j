@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -49,6 +50,7 @@ public interface MaintenanceRequest extends IEntity {
     @Caption(name = "Last Updated")
     IPrimitive<LogicalDate> updated();
 
+    @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 

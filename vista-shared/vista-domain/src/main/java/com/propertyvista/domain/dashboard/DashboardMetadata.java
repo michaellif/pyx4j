@@ -15,6 +15,7 @@ package com.propertyvista.domain.dashboard;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -78,7 +79,8 @@ public interface DashboardMetadata extends ISharedUserEntity {
     IPrimitive<String> name();
 
     /**
-     * For {@link DashboardType#building} kind of gadget this property is filled on retrieval in server and represents the set of buildings this dashboard
+     * For {@link DashboardType#building} kind of gadget this property is filled on
+     * retrieval in server and represents the set of buildings this dashboard
      * displays
      * 
      * @return
@@ -87,6 +89,7 @@ public interface DashboardMetadata extends ISharedUserEntity {
     @Transient
     IPrimitive<String> buildingsStringView();
 
+    @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 

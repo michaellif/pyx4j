@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -150,6 +151,7 @@ public interface AptUnitItem extends IEntity {
     IPrimitive<Type> type();
 
     @ToString(index = 1)
+    @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 

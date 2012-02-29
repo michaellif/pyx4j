@@ -15,6 +15,7 @@ package com.propertyvista.domain.property.asset.unit;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -45,6 +46,7 @@ public interface AptUnitInfo extends IEntity {
 
     IPrimitive<EconomicStatus> economicStatus();
 
+    @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> economicStatusDescription();
 

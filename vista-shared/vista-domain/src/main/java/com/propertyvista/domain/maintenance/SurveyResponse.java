@@ -14,11 +14,13 @@
 package com.propertyvista.domain.maintenance;
 
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface SurveyResponse extends IEntity {
 
+    @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 

@@ -36,9 +36,9 @@ public class ProductItemTypesGenerator {
         gdo = new ProductItemTypesGDO();
 
         // preload types:
-        createChargeItemType("Regular Residential Unit", Service.Type.residentialUnit);
-        createChargeItemType("Regular Commercial Unit", Service.Type.commercialUnit);
-        createChargeItemType("Regular Short Term Residential Unit", Service.Type.residentialShortTermUnit);
+        createChargeItemType("Residential Unit", Service.Type.residentialUnit);
+        createChargeItemType("Commercial Unit", Service.Type.commercialUnit);
+        createChargeItemType("Short Term Residential Unit", Service.Type.residentialShortTermUnit);
         createChargeItemType("Roof Spot", Service.Type.roof);
         createChargeItemType("Billboard", Service.Type.sundry);
         createChargeItemType("Garage", Service.Type.garage);

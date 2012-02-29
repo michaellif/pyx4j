@@ -50,7 +50,7 @@ public interface ChargeLine extends Charge_OLD {
     @MemberColumn(name = "tp")
     IPrimitive<ChargeType> type();
 
-    @Length(100)
+    @Length(250)
     @Editor(type = EditorType.label)
     @ToString(index = 1)
     @MemberColumn(name = "lbl")

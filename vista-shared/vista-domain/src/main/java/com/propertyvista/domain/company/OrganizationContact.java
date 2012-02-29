@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface OrganizationContact extends IEntity {
 
-    @Length(100)
+    @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 

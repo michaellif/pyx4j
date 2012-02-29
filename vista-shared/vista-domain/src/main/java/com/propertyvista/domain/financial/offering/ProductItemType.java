@@ -48,7 +48,7 @@ public interface ProductItemType extends IEntity {
     IPrimitive<Type> type();
 
     @ToString
-    @Length(25)
+    @Length(50)
     IPrimitive<String> name();
 
     IPrimitive<Service.Type> serviceType();

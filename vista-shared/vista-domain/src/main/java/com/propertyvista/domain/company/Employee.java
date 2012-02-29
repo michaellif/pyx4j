@@ -33,7 +33,7 @@ public interface Employee extends Person {
     @ToString(index = 10)
     IPrimitive<String> title();
 
-    @Length(100)
+    @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 

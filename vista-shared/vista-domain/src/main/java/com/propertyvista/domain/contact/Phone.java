@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -67,5 +68,7 @@ public interface Phone extends IEntity {
     @ToString(index = 1)
     IPrimitive<Integer> extension();
 
+    @Length(100)
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 }

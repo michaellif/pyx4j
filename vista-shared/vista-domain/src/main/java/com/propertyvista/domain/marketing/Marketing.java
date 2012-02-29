@@ -16,6 +16,7 @@ package com.propertyvista.domain.marketing;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -27,8 +28,10 @@ public interface Marketing extends IEntity {
     IPrimitive<PublicVisibilityType> visibility();
 
     @ToString
+    @Length(25)
     IPrimitive<String> name();
 
+    @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 

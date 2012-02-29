@@ -30,7 +30,7 @@ public interface Portfolio extends IEntity {
     @Length(25)
     IPrimitive<String> name();
 
-    @Length(100)
+    @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 

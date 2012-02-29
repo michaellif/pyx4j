@@ -108,7 +108,7 @@ public interface Concession extends IEntity {
     @ToString(index = 1)
     IPrimitive<Term> term();
 
-    @Length(25)
+    @Length(100)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
