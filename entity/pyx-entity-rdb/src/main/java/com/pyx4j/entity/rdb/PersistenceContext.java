@@ -22,6 +22,7 @@ package com.pyx4j.entity.rdb;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -45,6 +46,8 @@ public class PersistenceContext {
     private Date timeNow;
 
     private int savepoints = 0;
+
+    private long transactionStart = -1;
 
     public static enum TransactionType {
 
@@ -82,6 +85,8 @@ public class PersistenceContext {
             } else {
                 connection = connectionProvider.getConnection();
             }
+            uncommittedChanges = false;
+            transactionStart = -1;
             if (isExplicitTransaction()) {
                 try {
                     connection.setAutoCommit(false);
@@ -101,6 +106,7 @@ public class PersistenceContext {
 
     public void setUncommittedChanges() {
         this.uncommittedChanges = true;
+        this.transactionStart = System.currentTimeMillis();
     }
 
     public Dialect getDialect() {
@@ -133,6 +139,7 @@ public class PersistenceContext {
             try {
                 connection.commit();
                 uncommittedChanges = false;
+                transactionStart = -1;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -142,8 +149,10 @@ public class PersistenceContext {
     void rollback() {
         if (connection != null) {
             try {
+                log.warn("rollback transaction changes since {}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date(transactionStart)));
                 connection.rollback();
                 uncommittedChanges = false;
+                transactionStart = -1;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
