@@ -30,12 +30,12 @@ public interface GlCodeCategory extends IEntity {
 
     @NotNull
     @ToString
-    IPrimitive<Integer> glCategoryId();
+    IPrimitive<Integer> categoryId();
 
     @NotNull
     @Length(100)
     @Editor(type = EditorType.text)
-    IPrimitive<String> glCategoryDescription();
+    IPrimitive<String> description();
 
     @Owned
     @OrderBy(GlCode.OrderId.class)

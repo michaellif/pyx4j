@@ -33,7 +33,7 @@ public interface GlCode extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    IPrimitive<Integer> glId();
+    IPrimitive<Integer> codeId();
 
     @NotNull
     @Length(100)

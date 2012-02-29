@@ -57,7 +57,7 @@ public abstract class GlCodeSelectorDialog extends EntitySelectorDialog<GlCode> 
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().description(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().glId(), true).build()
+                new MemberColumnDescriptor.Builder(proto().codeId(), true).build()
 
         ); //@formatter:on
     }

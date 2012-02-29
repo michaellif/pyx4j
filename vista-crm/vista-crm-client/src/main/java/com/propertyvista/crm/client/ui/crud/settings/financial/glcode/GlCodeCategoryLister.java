@@ -43,8 +43,8 @@ public class GlCodeCategoryLister extends ListerBase<GlCodeCategory> {
         }));
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().glCategoryId()).build(),
-            new MemberColumnDescriptor.Builder(proto().glCategoryDescription()).build()
+            new MemberColumnDescriptor.Builder(proto().categoryId()).build(),
+            new MemberColumnDescriptor.Builder(proto().description()).build()
         );//@formatter:on
     }
 }

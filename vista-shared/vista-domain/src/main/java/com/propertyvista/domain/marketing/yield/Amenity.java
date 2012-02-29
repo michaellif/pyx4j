@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.marketing.yield;
 
-import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -26,6 +25,5 @@ public interface Amenity extends IEntity {
     IPrimitive<String> name();
 
     @Length(250)
-    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 }

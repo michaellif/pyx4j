@@ -33,9 +33,9 @@ public class GlCodeFolder extends VistaTableFolder<GlCode> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().glId(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().glCodeCategory().glCategoryId(), "7em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().codeId(), "7em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().description(), "30em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().glCodeCategory().categoryId(), "7em"));
         return columns;
     }
 }

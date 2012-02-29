@@ -54,8 +54,8 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
         for (GlCodeCategory category : glcodeCategories) {
             for (GlCode code : glcodes) {
 
-                int id = code.glCodeCategory().glCategoryId().getValue();
-                if (category.glCategoryId().getValue() == id) {
+                int id = code.glCodeCategory().categoryId().getValue();
+                if (category.categoryId().getValue() == id) {
                     category.glCodes().add(code);
                 }
             }

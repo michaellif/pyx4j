@@ -35,8 +35,10 @@ public class GlCodeCategoryEditorForm extends CrmEntityForm<GlCodeCategory> {
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
         int row = 0;
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().glCategoryId()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().glCategoryDescription()), 15).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().categoryId()), 7).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
+
+        main.setH3(row++, 0, 1, proto().glCodes().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().glCodes(), new GlCodeFolder(isEditable())));
 
         return new CrmScrollPanel(main);

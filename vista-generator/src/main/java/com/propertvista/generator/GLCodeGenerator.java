@@ -25,7 +25,7 @@ public class GLCodeGenerator { //currently not used, data is preloaded from csv 
         GlCode glCode = EntityFactory.create(GlCode.class);
         Random randomGenerator = new Random();
 
-        glCode.glId().setValue(Integer.valueOf((int) (randomGenerator.nextDouble() * 10000)));
+        glCode.codeId().setValue(Integer.valueOf((int) (randomGenerator.nextDouble() * 10000)));
         glCode.description().setValue("description...");
         return glCode;
     }

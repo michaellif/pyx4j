@@ -83,7 +83,7 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().description(), "30em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().description(), "45em"));
                 return columns;
             }
         };
