@@ -49,7 +49,9 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
         boolean isCreate = dbo.id().isNull();
 
         if (dbo.counters().id().isNull()) {
-            Persistence.service().persist(dbo.counters());
+            // initialize unit counters
+            dbo.counters()._unitCount().setValue(0);
+            dbo.counters()._marketingUnitCount().setValue(0);
         }
 
         String origMarketingName = null;
