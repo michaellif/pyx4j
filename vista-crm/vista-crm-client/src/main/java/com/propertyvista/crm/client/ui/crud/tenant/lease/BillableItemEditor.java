@@ -107,7 +107,9 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 break;
             }
 
-            if (!isEditable()) {
+            if (isEditable()) {
+                adjustmentPanel.setVisible(true);
+            } else {
                 adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
             }
 
@@ -139,6 +141,8 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 editor.populate(extraData.cast());
                 extraDataPanel.setWidget(editor);
             }
+        } else {// tweak UI for empty ProductItem:  
+            adjustmentPanel.setVisible(false);
         }
     }
 
