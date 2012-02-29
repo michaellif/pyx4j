@@ -108,6 +108,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             }
 
             if (isEditable()) {
+                get(proto().exemptFromTax()).setVisible(true);
                 adjustmentPanel.setVisible(true);
             } else {
                 adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
@@ -142,6 +143,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 extraDataPanel.setWidget(editor);
             }
         } else {// tweak UI for empty ProductItem:  
+            get(proto().exemptFromTax()).setVisible(false);
             adjustmentPanel.setVisible(false);
         }
     }
