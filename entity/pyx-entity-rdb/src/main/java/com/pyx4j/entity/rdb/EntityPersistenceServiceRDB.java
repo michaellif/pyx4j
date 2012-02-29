@@ -796,6 +796,27 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             fireModificationAdapters(tm, entity);
             updated = true;
         }
+        for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembersSecondPass()) {
+            // Relationship is managed in CHILD table using PARENT column.
+            MemberMeta memberMeta = member.getMemberMeta();
+            if (memberMeta.isOwnedRelationships()) {
+                IEntity childEntity = (IEntity) member.getMember(entity);
+                IEntity baseChildEntity = (IEntity) member.getMember(baseEntity);
+                if (!EqualsHelper.equals(childEntity.getPrimaryKey(), baseChildEntity.getPrimaryKey())) {
+                    if (childEntity.getPrimaryKey() != null) {
+                        if (ApplicationMode.isDevelopment()) {
+                            throw new SecurityViolationException(ApplicationMode.DEV + "owned entity should not be attached to different entity graph, "
+                                    + childEntity.getDebugExceptionInfoString());
+                        } else {
+                            throw new SecurityViolationException("Permission denied");
+                        }
+                    } else if (baseChildEntity.getPrimaryKey() != null) {
+                        // Cascade delete
+                        cascadeDelete(baseChildEntity.getEntityMeta(), baseChildEntity.getPrimaryKey(), baseChildEntity);
+                    }
+                }
+            }
+        }
         List<IEntity> cascadeRemove = new Vector<IEntity>();
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();

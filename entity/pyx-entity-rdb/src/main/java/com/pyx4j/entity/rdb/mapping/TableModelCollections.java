@@ -273,7 +273,7 @@ public class TableModelCollections {
                 } else {
                     persistenceContext.setUncommittedChanges();
                     rs.deleteRow();
-                    if ((value instanceof IEntity) && (member.getMemberMeta().isOwnedRelationships())) {
+                    if ((value instanceof IEntity) && (member.getMemberMeta().isOwnedRelationships()) && (!member.isJoinTableSameAsTarget())) {
                         if (EntityPersistenceServiceRDB.trace) {
                             log.info(Trace.id() + "add cascadeRemove " + ((IEntity) value).getDebugExceptionInfoString());
                         }

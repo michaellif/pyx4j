@@ -145,8 +145,14 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         // See that Child was removed
         {
             UnidirectionalOneToOneChild child = srv.retrieve(UnidirectionalOneToOneChild.class, oldchildKey);
-            //TODO persist
-            // Assert.assertNull("child removed", child);
+            //TODO The persist method is inconsistent for now
+            switch (testCaseMethod) {
+            case Merge:
+                Assert.assertNull("child NOT removed", child);
+                break;
+            case Persist:
+                Assert.assertNotNull("child removed", child);
+            }
         }
 
     }
@@ -262,6 +268,24 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             BidirectionalOneToOneParent parent = srv.retrieve(BidirectionalOneToOneParent.class, o.getPrimaryKey());
             Assert.assertTrue("child update", parent.child().name().getValue().endsWith("#"));
 
+        }
+
+        // remove child and update owner
+        Key oldchildKey = o.child().getPrimaryKey();
+        o.child().set(null);
+        srvSave(o, testCaseMethod);
+
+        // See that Child was removed
+        {
+            BidirectionalOneToOneChild child = srv.retrieve(BidirectionalOneToOneChild.class, oldchildKey);
+            //TODO The persist method is inconsistent for now
+            switch (testCaseMethod) {
+            case Merge:
+                Assert.assertNull("child NOT removed", child);
+                break;
+            case Persist:
+                Assert.assertNotNull("child removed", child);
+            }
         }
     }
 
@@ -386,6 +410,24 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             Assert.assertTrue("child update", parent.child().name().getValue().endsWith("#"));
 
         }
+
+        // remove child and update owner
+        Key oldchildKey = o.child().getPrimaryKey();
+        o.child().set(null);
+        srvSave(o, testCaseMethod);
+
+        // See that Child was removed
+        {
+            BidirectionalOneToOneInversedChild child = srv.retrieve(BidirectionalOneToOneInversedChild.class, oldchildKey);
+            //TODO The persist method is inconsistent for now
+            switch (testCaseMethod) {
+            case Merge:
+                Assert.assertNull("child NOT removed", child);
+                break;
+            case Persist:
+                Assert.assertNotNull("child removed", child);
+            }
+        }
     }
 
     //================================================ Unidirectional One-to-Many =========================================================//
@@ -484,7 +526,17 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
             UnidirectionalOneToManyParent parent = srv.retrieve(UnidirectionalOneToManyParent.class, o.getPrimaryKey());
             Assert.assertTrue("child update", parent.children().get(1).name().getValue().endsWith("#"));
+        }
 
+        // remove child and update owner
+        Key oldchildKey = o.children().get(0).getPrimaryKey();
+        o.children().remove(o.children().get(0));
+        srvSave(o, testCaseMethod);
+
+        // See that Child was removed
+        {
+            UnidirectionalOneToManyChild child = srv.retrieve(UnidirectionalOneToManyChild.class, oldchildKey);
+            Assert.assertNull("child NOT removed", child);
         }
     }
 
@@ -661,6 +713,17 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             BidirectionalOneToManyParent parentR1 = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
             Assert.assertEquals("child update", child.name(), parentR1.children().get(1).name());
         }
+
+        // remove child and update owner
+        Key oldchildKey = o.children().get(1).getPrimaryKey();
+        o.children().remove(o.children().get(1));
+        srvSave(o, testCaseMethod);
+
+        // See that Child was removed
+        {
+            BidirectionalOneToManyParent child = srv.retrieve(BidirectionalOneToManyParent.class, oldchildKey);
+            Assert.assertNull("child NOT removed", child);
+        }
     }
 
     //================================================ Bidirectional One-to-Many (Join Table) =========================================================//
@@ -782,6 +845,17 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
             BidirectionalOneToManyAutoParent parent = srv.retrieve(BidirectionalOneToManyAutoParent.class, o.getPrimaryKey());
             Assert.assertEquals("child update", child.name(), parent.children().get(1).name());
+        }
+
+        // remove child and update owner
+        Key oldchildKey = o.children().get(1).getPrimaryKey();
+        o.children().remove(o.children().get(1));
+        srvSave(o, testCaseMethod);
+
+        // See that Child was removed
+        {
+            BidirectionalOneToManyAutoChild child = srv.retrieve(BidirectionalOneToManyAutoChild.class, oldchildKey);
+            Assert.assertNull("child NOT removed", child);
         }
     }
 }
