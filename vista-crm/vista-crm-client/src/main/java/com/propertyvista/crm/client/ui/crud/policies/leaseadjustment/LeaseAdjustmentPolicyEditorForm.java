@@ -55,7 +55,7 @@ public class LeaseAdjustmentPolicyEditorForm extends PolicyDTOTabPanelBasedEdito
     @Override
     protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm.TabDescriptor> createCustomTabPanels() {
         return Arrays.asList(//@formatter:off
-                new TabDescriptor(createItemsPanel(), i18n.tr("Items"))
+                new TabDescriptor(createItemsPanel(), i18n.tr("Taxes"))
         );//@formatter:on
     }
 

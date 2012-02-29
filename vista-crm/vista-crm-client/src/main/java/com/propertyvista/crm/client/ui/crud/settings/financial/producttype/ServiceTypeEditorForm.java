@@ -46,7 +46,7 @@ public class ServiceTypeEditorForm extends CrmEntityForm<ProductItemType> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
         main.setWidget(++row, 0, serviceType = new DecoratorBuilder(inject(proto().serviceType()), 25).build());
         main.setWidget(++row, 0, featureType = new DecoratorBuilder(inject(proto().featureType()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntityComboBox<GlCode>(GlCode.class)), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntityComboBox<GlCode>(GlCode.class)), 25).build());
 
         return new CrmScrollPanel(main);
     }

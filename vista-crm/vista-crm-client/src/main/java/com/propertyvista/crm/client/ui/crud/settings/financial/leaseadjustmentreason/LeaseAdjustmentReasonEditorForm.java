@@ -38,9 +38,8 @@ public class LeaseAdjustmentReasonEditorForm extends CrmEntityForm<LeaseAdjustme
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntityComboBox<GlCode>(GlCode.class)), 10).build());
-        main.setWidget(++row, 0, inject(proto().taxes(), new LeaseAdjustmentReasonTaxFolder(isEditable())));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntityComboBox<GlCode>(GlCode.class)), 25).build());
 
         return new CrmScrollPanel(main);
     }

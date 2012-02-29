@@ -53,6 +53,7 @@ public interface ProductItemType extends IEntity {
 
     IPrimitive<Feature.Type> featureType();
 
+    @NotNull
     GlCode glCode();
 
     /**

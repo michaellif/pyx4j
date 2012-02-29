@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@ToStringFormat("{0}, ${1}")
+@ToStringFormat("{0}, {1}, ${2}")
 public interface Concession extends IEntity {
 
     @I18n(context = "Concession Type")
@@ -104,6 +104,7 @@ public interface Concession extends IEntity {
     @MemberColumn(name = "concessionType")
     IPrimitive<Type> type();
 
+    @ToString(index = 1)
     IPrimitive<Term> term();
 
     @Editor(type = Editor.EditorType.textarea)
@@ -115,7 +116,7 @@ public interface Concession extends IEntity {
      * for monetaryOff - amount
      * for skipFirstPayment - number of terms
      */
-    @ToString(index = 1)
+    @ToString(index = 2)
     @Format("#0.00")
     @MemberColumn(name = "val")
     IPrimitive<Double> value();

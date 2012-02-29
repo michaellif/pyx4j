@@ -16,6 +16,7 @@ package com.propertyvista.domain.tenant.lease;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -36,6 +37,7 @@ public interface LeaseAdjustmentReason extends IEntity {
 
     IPrimitive<Boolean> precalculatedTax();
 
+    @NotNull
     @ToString(index = 1)
     GlCode glCode();
 
