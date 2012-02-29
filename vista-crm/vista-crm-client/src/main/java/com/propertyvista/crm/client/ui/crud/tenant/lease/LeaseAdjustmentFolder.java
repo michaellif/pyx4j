@@ -17,6 +17,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -29,6 +31,13 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
 
     public LeaseAdjustmentFolder(boolean modifyable) {
         super(LeaseAdjustment.class, modifyable);
+    }
+
+    @Override
+    public IFolderItemDecorator<LeaseAdjustment> createItemDecorator() {
+        BoxFolderItemDecorator<LeaseAdjustment> decor = (BoxFolderItemDecorator<LeaseAdjustment>) super.createItemDecorator();
+        decor.setExpended(false);
+        return decor;
     }
 
     @Override
