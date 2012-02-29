@@ -58,7 +58,7 @@ public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelB
     private Widget createEdtorFormTab() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().allowedIDs(), new IdentificationDocumentFolder())).componentWidth(20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().allowedIDs(), new IdentificationDocumentFolder())).componentWidth(30).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfRequiredIDs())).componentWidth(3).build());
         get(proto().numberOfRequiredIDs()).addValueValidator(new EditableValueValidator<Integer>() {
             @Override
@@ -83,7 +83,7 @@ public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelB
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(new EntityFolderColumnDescriptor(proto().name(), "20em"));
+            return Arrays.asList(new EntityFolderColumnDescriptor(proto().name(), "30em"));
         }
 
         @Override
@@ -103,9 +103,10 @@ public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelB
 
             @Override
             public IsWidget createContent() {
-                return inject(proto().name());
+                Widget w = inject(proto().name()).asWidget();
+                w.setWidth("30em");
+                return w;
             }
-
         }
 
     }

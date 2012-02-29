@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -29,6 +30,7 @@ import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 
 public interface ProductTaxPolicyItem extends IEntity {
 
+    @ToString
     ProductItemType productItemType();
 
     IList<Tax> taxes();

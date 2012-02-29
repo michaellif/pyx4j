@@ -16,6 +16,8 @@ package com.propertyvista.domain.financial.tax;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -23,16 +25,20 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 
 //TODO add IVersionedEntity which will have effective date, expiration date
+@ToStringFormat("{0}, {1}, {2}")
 public interface Tax extends IEntity {
 
     @NotNull
     @Length(25)
+    @ToString(index = 0)
     IPrimitive<String> name();
 
     @Length(50)
+    @ToString(index = 1)
     IPrimitive<String> authority();
 
     @NotNull
+    @ToString(index = 2)
     //TODO rate for particular period
     IPrimitive<BigDecimal> rate();
 

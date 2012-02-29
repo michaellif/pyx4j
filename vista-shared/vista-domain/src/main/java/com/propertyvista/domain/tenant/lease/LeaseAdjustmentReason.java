@@ -29,7 +29,7 @@ import com.propertyvista.domain.financial.tax.Tax;
  * Corporate-wide reasons (AS defined 20 major)
  * 
  */
-@ToStringFormat("{0}, GlCode: {1}")
+@ToStringFormat("{0}, GL Code: {1}")
 public interface LeaseAdjustmentReason extends IEntity {
 
     @ToString(index = 0)

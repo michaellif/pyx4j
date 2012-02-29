@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
@@ -21,6 +22,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public interface LeaseAdjustmentPolicyItem extends IEntity {
 
+    @ToString
     LeaseAdjustmentReason leaseAdjustmentReason();
 
     IList<Tax> taxes();
