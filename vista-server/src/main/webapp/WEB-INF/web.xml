@@ -108,7 +108,7 @@
         </init-param>
         <init-param>
             <param-name>ignoreUrls</param-name>
-            <param-value>/o/,/public/,/media/site-resource/,/site-imageresource/,/admin/,/crm/,/portal/,/ptapp/,/rest/,/demo/,*.siteimgrc</param-value>
+            <param-value>/o/*,/public/*,/media/site-resource/*,/admin/*,/crm/*,/portal/*,/ptapp/*,/rest/*,/demo/*,*.siteimgrc</param-value>
         </init-param>
     </filter>
 
