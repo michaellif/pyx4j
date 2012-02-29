@@ -7,15 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on 2011-05-21
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.selections;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.domain.financial.GlCode;
 
-public interface SelectLeaseAdjustmentReasonCrudService extends AbstractListService<LeaseAdjustmentReason> {
+public interface SelectGlCodeListService extends AbstractListService<GlCode> {
+
 }

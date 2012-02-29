@@ -11,16 +11,11 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.selections;
+package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.crm.rpc.services.selections.SelectTenantCrudService;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Guarantor;
 
-public class SelectTenantCrudServiceImpl extends AbstractListServiceImpl<Tenant> implements SelectTenantCrudService {
-
-    public SelectTenantCrudServiceImpl() {
-        super(Tenant.class);
-    }
+public interface SelectGuarantorListService extends AbstractListService<Guarantor> {
 }

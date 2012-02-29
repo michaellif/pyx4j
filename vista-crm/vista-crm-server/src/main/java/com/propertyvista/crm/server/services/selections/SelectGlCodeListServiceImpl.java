@@ -14,13 +14,19 @@
 package com.propertyvista.crm.server.services.selections;
 
 import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.crm.rpc.services.selections.SelectProductItemTypeCrudService;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.crm.rpc.services.selections.SelectGlCodeListService;
+import com.propertyvista.domain.financial.GlCode;
 
-public class SelectProductItemTypeCrudServiceImpl extends AbstractListServiceImpl<ProductItemType> implements SelectProductItemTypeCrudService {
+public class SelectGlCodeListServiceImpl extends AbstractListServiceImpl<GlCode> implements SelectGlCodeListService {
 
-    public SelectProductItemTypeCrudServiceImpl() {
-        super(ProductItemType.class);
+    public SelectGlCodeListServiceImpl() {
+        super(GlCode.class);
+    }
+
+    @Override
+    protected void enhanceListRetrieved(GlCode entity) {
+        Persistence.service().retrieve(entity.glCodeCategory());
     }
 }

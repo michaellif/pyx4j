@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.rpc.services.selections.SelectTaxCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectTaxListService;
 import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxFolder extends VistaTableFolder<Tax> {
@@ -109,7 +109,7 @@ public class TaxFolder extends VistaTableFolder<Tax> {
 
         @Override
         protected AbstractListService<Tax> getSelectService() {
-            return GWT.<AbstractListService<Tax>> create(SelectTaxCrudService.class);
+            return GWT.<AbstractListService<Tax>> create(SelectTaxListService.class);
         }
 
     }

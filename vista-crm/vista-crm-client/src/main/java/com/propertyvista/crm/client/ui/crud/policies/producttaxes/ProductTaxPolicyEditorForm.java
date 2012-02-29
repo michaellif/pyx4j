@@ -35,7 +35,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxFolder;
-import com.propertyvista.crm.rpc.services.selections.SelectProductItemTypeCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectProductItemTypeListService;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
@@ -154,7 +154,7 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
 
             @Override
             protected AbstractListService<ProductItemType> getSelectService() {
-                return GWT.<AbstractListService<ProductItemType>> create(SelectProductItemTypeCrudService.class);
+                return GWT.<AbstractListService<ProductItemType>> create(SelectProductItemTypeListService.class);
             }
         }
     }

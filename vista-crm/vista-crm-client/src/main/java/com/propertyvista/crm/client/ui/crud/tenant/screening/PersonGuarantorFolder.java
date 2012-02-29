@@ -34,7 +34,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
-import com.propertyvista.crm.rpc.services.selections.SelectGuarantorCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectGuarantorListService;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 
@@ -140,7 +140,7 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
 
         @Override
         protected AbstractListService<Guarantor> getSelectService() {
-            return GWT.<AbstractListService<Guarantor>> create(SelectGuarantorCrudService.class);
+            return GWT.<AbstractListService<Guarantor>> create(SelectGuarantorListService.class);
         }
     }
 }

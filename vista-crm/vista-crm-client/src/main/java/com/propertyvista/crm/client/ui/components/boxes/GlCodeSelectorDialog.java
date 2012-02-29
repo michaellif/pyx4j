@@ -25,7 +25,7 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
-import com.propertyvista.crm.rpc.services.selections.SelectBuildingCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectGlCodeListService;
 import com.propertyvista.domain.financial.GlCode;
 
 public abstract class GlCodeSelectorDialog extends EntitySelectorDialog<GlCode> {
@@ -45,7 +45,7 @@ public abstract class GlCodeSelectorDialog extends EntitySelectorDialog<GlCode> 
     }
 
     public GlCodeSelectorDialog(boolean isMultiselect, List<GlCode> alreadySelected) {
-        this(isMultiselect, alreadySelected, i18n.tr("Select Buildings"));
+        this(isMultiselect, alreadySelected, i18n.tr("Select GL Code"));
     }
 
     public GlCodeSelectorDialog(boolean isMultiselect, List<GlCode> alreadySelected, String caption) {
@@ -56,14 +56,14 @@ public abstract class GlCodeSelectorDialog extends EntitySelectorDialog<GlCode> 
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().codeId(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().description(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().codeId(), true).build()
-
+                new MemberColumnDescriptor.Builder(proto().glCodeCategory(), true).build()
         ); //@formatter:on
     }
 
     @Override
     protected AbstractListService<GlCode> getSelectService() {
-        return GWT.<AbstractListService<GlCode>> create(SelectBuildingCrudService.class);
+        return GWT.<AbstractListService<GlCode>> create(SelectGlCodeListService.class);
     }
 }

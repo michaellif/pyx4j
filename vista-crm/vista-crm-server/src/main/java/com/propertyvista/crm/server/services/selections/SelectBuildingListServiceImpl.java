@@ -7,15 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on 2011-05-21
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.selections;
+package com.propertyvista.crm.server.services.selections;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.server.AbstractListServiceImpl;
 
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
+import com.propertyvista.domain.property.asset.building.Building;
 
-public interface SelectUnitCrudService extends AbstractCrudService<AptUnit> {
+public class SelectBuildingListServiceImpl extends AbstractListServiceImpl<Building> implements SelectBuildingListService {
+
+    public SelectBuildingListServiceImpl() {
+        super(Building.class);
+    }
 }

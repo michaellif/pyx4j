@@ -35,7 +35,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxFolder;
-import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonListService;
 import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
@@ -153,7 +153,7 @@ public class LeaseAdjustmentPolicyEditorForm extends PolicyDTOTabPanelBasedEdito
 
             @Override
             protected AbstractListService<LeaseAdjustmentReason> getSelectService() {
-                return GWT.<AbstractListService<LeaseAdjustmentReason>> create(SelectLeaseAdjustmentReasonCrudService.class);
+                return GWT.<AbstractListService<LeaseAdjustmentReason>> create(SelectLeaseAdjustmentReasonListService.class);
             }
         }
     }

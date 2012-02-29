@@ -25,7 +25,7 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
-import com.propertyvista.crm.rpc.services.selections.SelectUnitCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public abstract class UnitSelectorDialog extends EntitySelectorDialog<AptUnit> {
@@ -108,6 +108,6 @@ public abstract class UnitSelectorDialog extends EntitySelectorDialog<AptUnit> {
 
     @Override
     protected AbstractListService<AptUnit> getSelectService() {
-        return GWT.<AbstractListService<AptUnit>> create(SelectUnitCrudService.class);
+        return GWT.<AbstractListService<AptUnit>> create(SelectUnitListService.class);
     }
 }

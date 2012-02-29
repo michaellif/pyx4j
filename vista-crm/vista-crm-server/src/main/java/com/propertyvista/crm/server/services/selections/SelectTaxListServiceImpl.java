@@ -7,21 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on 2011-05-21
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.crm.server.services.selections;
 
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 
-import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonCrudService;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.crm.rpc.services.selections.SelectTaxListService;
+import com.propertyvista.domain.financial.tax.Tax;
 
-public class SelectLeaseAdjustmentReasonCrudServiceImpl extends AbstractListServiceImpl<LeaseAdjustmentReason> implements
-        SelectLeaseAdjustmentReasonCrudService {
+public class SelectTaxListServiceImpl extends AbstractListServiceImpl<Tax> implements SelectTaxListService {
 
-    public SelectLeaseAdjustmentReasonCrudServiceImpl() {
-        super(LeaseAdjustmentReason.class);
+    public SelectTaxListServiceImpl() {
+        super(Tax.class);
     }
 }

@@ -13,27 +13,24 @@
  */
 package com.propertyvista.crm.server.services.selections;
 
+import com.pyx4j.entity.server.AbstractListServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.crm.rpc.services.selections.SelectUnitCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public class SelectUnitCrudServiceImpl extends GenericCrudServiceImpl<AptUnit> implements SelectUnitCrudService {
+public class SelectUnitListServiceImpl extends AbstractListServiceImpl<AptUnit> implements SelectUnitListService {
 
-    public SelectUnitCrudServiceImpl() {
+    public SelectUnitListServiceImpl() {
         super(AptUnit.class);
     }
 
     @Override
-    protected void enhanceRetrieved(AptUnit entity, boolean fromList) {
-        // load detached entities (temporary):
+    protected void enhanceListRetrieved(AptUnit entity) {
         Persistence.service().retrieve(entity.belongsTo());
         Persistence.service().retrieve(entity.floorplan());
         // TODO actually just this is necessary, but it' doesn't implemented still:
         //Persistence.service().retrieve(entity.floorplan().name());
         //Persistence.service().retrieve(entity.floorplan().marketingName());
-
-        super.enhanceRetrieved(entity, fromList);
     }
 }

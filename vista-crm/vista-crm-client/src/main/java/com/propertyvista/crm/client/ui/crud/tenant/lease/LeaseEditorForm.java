@@ -58,7 +58,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
-    private Widget unitSelector, serviceselector;
+    private Widget unitSelector, serviceSelector;
 
     public LeaseEditorForm() {
         this(false);
@@ -111,7 +111,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             get(proto().actualMoveOut()).setEditable(getValue().actualMoveOut().isNull());
 
             unitSelector.setVisible(!isLeaseSigned);
-            serviceselector.setVisible(!isLeaseSigned);
+            serviceSelector.setVisible(!isLeaseSigned);
         }
     }
 
@@ -234,7 +234,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
         serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new BillableItemEditor()));
         if (isEditable()) {
-            serviceItemPanel.add(serviceselector = new AnchorButton("Select...", new ClickHandler() {
+            serviceItemPanel.add(serviceSelector = new AnchorButton("Select...", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
@@ -265,7 +265,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 }
             }));
-            serviceselector.getElement().getStyle().setMarginLeft(4, Unit.EM);
+            serviceSelector.getElement().getStyle().setMarginLeft(4, Unit.EM);
         }
 
         int row = -1;

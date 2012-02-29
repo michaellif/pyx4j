@@ -7,15 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on 2011-05-21
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.selections;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.property.asset.building.Building;
 
-public interface SelectProductItemTypeCrudService extends AbstractListService<ProductItemType> {
+public interface SelectBuildingListService extends AbstractListService<Building> {
+
 }

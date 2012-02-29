@@ -7,21 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 18, 2012
- * @author ArtyomB
+ * Created on 2011-05-09
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.selections;
+package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
-import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public class SelectEmployeeListServiceImpl extends AbstractListServiceImpl<Employee> implements SelectEmployeeListService {
-
-    public SelectEmployeeListServiceImpl() {
-        super(Employee.class);
-    }
-
+public interface SelectUnitListService extends AbstractListService<AptUnit> {
 }

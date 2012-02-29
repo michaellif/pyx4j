@@ -41,7 +41,7 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.rpc.services.selections.SelectFloorplanCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.lead.Lead;
 
@@ -227,7 +227,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
 
         @Override
         protected AbstractListService<Floorplan> getSelectService() {
-            return GWT.<AbstractListService<Floorplan>> create(SelectFloorplanCrudService.class);
+            return GWT.<AbstractListService<Floorplan>> create(SelectFloorplanListService.class);
         }
     }
 }

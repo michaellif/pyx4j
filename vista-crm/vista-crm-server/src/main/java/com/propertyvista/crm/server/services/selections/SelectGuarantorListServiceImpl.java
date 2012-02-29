@@ -7,19 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-21
- * @author vlads
+ * Created on 2011-05-09
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.server.services.selections;
 
-import com.propertyvista.crm.rpc.services.selections.SelectBuildingCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.pyx4j.entity.server.AbstractListServiceImpl;
 
-public class SelectBuildingCrudServiceImpl extends GenericCrudServiceImpl<Building> implements SelectBuildingCrudService {
+import com.propertyvista.crm.rpc.services.selections.SelectGuarantorListService;
+import com.propertyvista.domain.tenant.Guarantor;
 
-    public SelectBuildingCrudServiceImpl() {
-        super(Building.class);
+public class SelectGuarantorListServiceImpl extends AbstractListServiceImpl<Guarantor> implements SelectGuarantorListService {
+
+    public SelectGuarantorListServiceImpl() {
+        super(Guarantor.class);
     }
 }
