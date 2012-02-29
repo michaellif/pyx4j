@@ -17,11 +17,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerService {
@@ -30,24 +32,28 @@ public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerServ
     public void scopeOffMarket(AsyncCallback<VoidSerializable> callback, Key unitPk, OffMarketType type) {
         new AptUnitOccupancyManagerImpl(unitPk).scopeOffMarket(type);
         callback.onSuccess(null);
+        Persistence.service().commit();
     }
 
     @Override
     public void scopeRenovation(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate renovationEndDate) {
         new AptUnitOccupancyManagerImpl(unitPk).scopeRenovation(renovationEndDate);
         callback.onSuccess(null);
+        Persistence.service().commit();
     }
 
     @Override
     public void scopeAvailable(AsyncCallback<VoidSerializable> callback, Key unitPk) {
         new AptUnitOccupancyManagerImpl(unitPk).scopeAvailable();
         callback.onSuccess(null);
+        Persistence.service().commit();
     }
 
     @Override
     public void makeVacant(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate vacantFrom) {
         new AptUnitOccupancyManagerImpl(unitPk).makeVacant(vacantFrom);
         callback.onSuccess(null);
+        Persistence.service().commit();
     }
 
     @Override
@@ -68,6 +74,30 @@ public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerServ
     @Override
     public void getMakeVacantConstraints(AsyncCallback<MakeVacantConstraintsDTO> callback, Key unitPk) {
         callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).getMakeVacantConstraints());
+    }
+
+    @Override
+    public void reserve(AsyncCallback<VoidSerializable> callback, Key unitPk, Lease lease) {
+        new AptUnitOccupancyManagerImpl(unitPk).reserve(lease);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void canReserve(AsyncCallback<LogicalDate> callback, Key unitPk) {
+        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isReserveAvailable());
+    }
+
+    @Override
+    public void approveLease(AsyncCallback<VoidSerializable> callback, Key unitPk) {
+        new AptUnitOccupancyManagerImpl(unitPk).approveLease();
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void canApproveLease(AsyncCallback<Boolean> callback, Key unitPk) {
+        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isApproveLeaseAvaialble());
     }
 
 }

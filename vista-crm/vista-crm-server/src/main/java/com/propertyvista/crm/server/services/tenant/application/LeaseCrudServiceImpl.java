@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
@@ -45,6 +46,7 @@ import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
 
@@ -96,6 +98,36 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
         updateAdjustments(dbo);
 
+        // occupacny system related stuff: here we decide if we reserve lease or cancel it
+        boolean isNewLease = dbo.getPrimaryKey() != null;
+        boolean isChanged = isNewLease;
+        boolean doReserve = false;
+        boolean doUnreserve = false;
+        Lease oldLease = null;
+        if (!isNewLease) {
+            oldLease = Persistence.secureRetrieve(Lease.class, dbo.getPrimaryKey());
+            if (!EqualsHelper.equals(oldLease.unit().id().getValue(), dbo.unit().id().getValue())) {
+                isChanged = true;
+                // old lease has unit: o
+                // new lease has a unit: n
+
+                // !o & !n is impossible here,
+                // then we have:
+                // !o & n -> reserve
+                // o & n -> reserve           
+                //  o & !n -> unreserve
+                // o & n -> unreserve                
+                // hence:
+                // o -> unreserve                
+                // n -> reseve
+                doUnreserve = oldLease.unit().getPrimaryKey() != null;
+                doReserve = dbo.unit().getPrimaryKey() != null;
+            }
+        } else {
+            doReserve = dbo.unit().getPrimaryKey() != null;
+        }
+        // end of occupancy system related stuff
+
         Persistence.service().merge(dbo);
 
         int no = 0;
@@ -103,6 +135,16 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             item.lease().set(dbo);
             item.orderInLease().setValue(no++);
             Persistence.service().merge(item);
+        }
+
+        // now update occupancy if needed
+        if (isChanged) {
+            if (doUnreserve) {
+                new AptUnitOccupancyManagerImpl(oldLease.unit().getPrimaryKey()).unreserve();
+            }
+            if (doReserve) {
+                new AptUnitOccupancyManagerImpl(dbo.unit().getPrimaryKey()).reserve(dbo);
+            }
         }
     }
 
@@ -219,6 +261,8 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         lease.moveOutNotice().setValue(date);
         lease.expectedMoveOut().setValue(moveOut);
         Persistence.secureSave(lease);
+        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).endLease();
+        Persistence.service().commit();
         callback.onSuccess(null);
     }
 
@@ -229,7 +273,9 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);
+        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).cancelEndLease();
         callback.onSuccess(null);
+
     }
 
     @Override
@@ -239,7 +285,10 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         lease.moveOutNotice().setValue(date);
         lease.expectedMoveOut().setValue(moveOut);
         Persistence.secureSave(lease);
+        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).endLease();
+        Persistence.service().commit();
         callback.onSuccess(null);
+
     }
 
     @Override
@@ -249,6 +298,8 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);
+        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).cancelEndLease();
+        Persistence.service().commit();
         callback.onSuccess(null);
     }
 }

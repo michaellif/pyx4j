@@ -47,7 +47,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     private final AptUnit unit;
 
-    private final AvailabilityReportManager availabilityManager;
+    private final AvailabilityReportManager availabilityReportManager;
 
     public AptUnitOccupancyManagerImpl(Key unitPk) {
         this(Persistence.secureRetrieve(AptUnit.class, unitPk));
@@ -68,7 +68,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         if (unit == null) {
             throw new IllegalArgumentException("unit cannot be null");
         }
-        this.availabilityManager = new AvailabilityReportManager(unit);
+        this.availabilityReportManager = new AvailabilityReportManager(unit);
     }
 
     @Override
@@ -94,6 +94,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
                 segment.status().setValue(AptUnitOccupancySegment.Status.available);
                 segment.lease().setValue(null);
+                updateUnitAvailableFrom(segment.dateFrom().getValue());
 
                 Persistence.service().merge(segment);
                 isSucceeded = true;
@@ -101,7 +102,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
             }
         }
         if (isSucceeded) {
-            availabilityManager.generateUnitAvailablity(now);
+            availabilityReportManager.generateUnitAvailablity(now);
         } else {
             throw new IllegalStateException("" + AptUnitOccupancySegment.Status.vacant + " segment was not found 'scope available' operation is impossible!!!!");
         }
@@ -127,7 +128,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                         segment.lease().setValue(null);
                     }
                 });
-                availabilityManager.generateUnitAvailablity(nowProvider.getNow());
+                availabilityReportManager.generateUnitAvailablity(nowProvider.getNow());
                 return;
             }
         }
@@ -168,7 +169,8 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                         segment.status().setValue(Status.available);
                     }
                 });
-                availabilityManager.generateUnitAvailablity(now);
+                updateUnitAvailableFrom(addDay(renovationEndDate));
+                availabilityReportManager.generateUnitAvailablity(now);
                 return;
             }
         }
@@ -212,7 +214,8 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         deleteCriteria.add(PropertyCriterion.ne(deleteCriteria.proto().id(), vacantSegment.id().getValue()));
         Persistence.service().delete(deleteCriteria);
 
-        availabilityManager.generateUnitAvailablity(nowProvider.getNow());
+        updateUnitAvailableFrom(null);
+        availabilityReportManager.generateUnitAvailablity(nowProvider.getNow());
     }
 
     @Override
@@ -237,7 +240,8 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                 segment.lease().set(lease);
             }
         });
-        availabilityManager.generateUnitAvailablity(now);
+        updateUnitAvailableFrom(null);
+        availabilityReportManager.generateUnitAvailablity(now);
     }
 
     @Override
@@ -270,8 +274,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                 return true;
             }
         });
-
-        availabilityManager.generateUnitAvailablity(now);
+        availabilityReportManager.generateUnitAvailablity(now);
     }
 
     @Override
@@ -315,7 +318,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                 segment.lease().setValue(null);
             }
         });
-        availabilityManager.generateUnitAvailablity(now);
+        availabilityReportManager.generateUnitAvailablity(now);
     }
 
     @Override
@@ -326,7 +329,6 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     @Override
     public boolean isScopeOffMarketAvailable() {
-        LogicalDate now = nowProvider.getNow();
 
         LogicalDate start = nowProvider.getNow();
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unit, start);
@@ -467,6 +469,12 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         } else {
             return false;
         }
+    }
+
+    private void updateUnitAvailableFrom(LogicalDate newAvaialbleFrom) {
+        Persistence.service().retrieve(unit);
+        unit.availableForRent().setValue(newAvaialbleFrom);
+        Persistence.secureSave(unit);
     }
 
     public interface NowSource {

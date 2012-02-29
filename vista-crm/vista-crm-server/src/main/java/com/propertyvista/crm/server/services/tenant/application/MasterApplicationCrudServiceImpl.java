@@ -39,6 +39,7 @@ import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<MasterApplication, MasterApplicationDTO> implements
         MasterApplicationCrudService {
@@ -154,6 +155,21 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
 
         MasterApplicationDTO dto2 = GenericConverter.convertDBO2DTO(dbo, dtoClass);
         enhanceDTO(dbo, dto2, false);
+
+        // update occupancy
+        switch (actionDTO.status().getValue()) {
+        case Approved:
+            new AptUnitOccupancyManagerImpl(dbo.lease().unit().getPrimaryKey()).approveLease();
+            break;
+        case Declined:
+            new AptUnitOccupancyManagerImpl(dbo.lease().unit().getPrimaryKey()).unreserve();
+            break;
+        case Cancelled:
+            new AptUnitOccupancyManagerImpl(dbo.lease().unit().getPrimaryKey()).unreserve();
+            break;
+        }
+
+        Persistence.service().commit();
         callback.onSuccess(dto2);
     }
 }

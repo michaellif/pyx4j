@@ -22,6 +22,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface UnitOccupancyManagerService extends IService {
 
@@ -42,11 +43,13 @@ public interface UnitOccupancyManagerService extends IService {
 
     void makeVacant(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate vacantFrom);
 
-    /**
-     * callback holds value of minimal vacant from date
-     * 
-     * @param callback
-     * @param unitPk
-     */
     void getMakeVacantConstraints(AsyncCallback<MakeVacantConstraintsDTO> callback, Key unitPk);
+
+    void reserve(AsyncCallback<VoidSerializable> callback, Key unitPk, Lease lease);
+
+    void canReserve(AsyncCallback<LogicalDate> callback, Key unitPk);
+
+    void approveLease(AsyncCallback<VoidSerializable> callback, Key unitPk);
+
+    void canApproveLease(AsyncCallback<Boolean> callback, Key unitPk);
 }
