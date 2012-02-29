@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface LegalTermsDescriptor extends IEntity {
 
     @NotNull
-    @Length(25)
+    @Length(50)
     @ToString(index = 0)
     IPrimitive<String> name();
 
