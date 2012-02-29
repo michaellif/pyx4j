@@ -7,25 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-13
+ * Created on Feb 29, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.payment;
+package com.propertyvista.payment.pad;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
+public class CaledonPadSftpClient {
 
-@Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PaymentRequest extends IEntity {
-
-    PaymentInstrument paymentInstrument();
-
-    IPrimitive<Float> amount();
-
-    IPrimitive<String> referenceNumber();
+    private final String hostProd = "apato.caledoncard.com";
 
 }
