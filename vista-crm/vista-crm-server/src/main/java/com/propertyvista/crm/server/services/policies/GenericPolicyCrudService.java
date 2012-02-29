@@ -17,7 +17,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -25,7 +24,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
-import com.propertyvista.domain.policy.framework.PolicyAtNode;
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 
@@ -64,6 +62,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
             if (node == null) {
                 throw new Error("failed to retrieve instance of " + OrganizationPoliciesNode.class.getSimpleName() + " from the DB");
             }
+            dbo.node().set(node);
         }
         if (node.isNull() || node.id().isNull()) {
             throw new Error("unable to persist policy, the scope (a node in organizatonal hierarchy) was not set");
@@ -82,14 +81,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().policy(), dboClass));
-
-        Policy deletedNodeGhost = EntityFactory.create(dboClass);
-        deletedNodeGhost.id().setValue(entityId);
-        criteria.add(PropertyCriterion.eq(criteria.proto().policy(), deletedNodeGhost));
-        Persistence.service().delete(criteria);
-
         super.delete(callback, entityId);
+        Persistence.service().commit();
     }
 }
