@@ -21,6 +21,7 @@
 package com.pyx4j.i18n.gettext;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,12 +51,18 @@ public class POCatalog implements Translator {
     }
 
     public POCatalog(Locale locale) throws IOException {
-        this.lang = locale.getLanguage();
         poDirectory = null;
-        POFile po;
-        po = new POFileReader().readResource("translations/" + this.lang + ".po");
-        if (po == null) {
-            throw new IOException();
+        String fullLangName = locale.getLanguage() + "_" + locale.getCountry();
+        POFile po = new POFileReader().readResource("translations/" + fullLangName + ".po");
+        if (po != null) {
+            this.lang = fullLangName;
+        } else {
+            this.lang = locale.getLanguage();
+            po = new POFileReader().readResource("translations/" + this.lang + ".po");
+            if (po == null) {
+                throw new FileNotFoundException("translation file not found");
+            }
+
         }
         buildTranslations(po);
     }
