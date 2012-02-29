@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 12, 2012
+ * Created on Jan 11, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -17,18 +17,23 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
-import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.admin.GlCodeCrudService;
-import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
+import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeViewerActivity extends CrmViewerActivity<GlCode> {
+public class GlCodeCategoryEditorActivity extends EditorActivityBase<GlCodeCategory> {
 
-    public GlCodeViewerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(GlCodeViewerView.class),
+    public GlCodeCategoryEditorActivity(Place place) {
+        super(place,
 
-        GWT.<AbstractCrudService<GlCode>> create(GlCodeCrudService.class));
+        SettingsViewFactory.instance(GlCodeCategoryEditorView.class),
+
+        GWT.<AbstractCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class),
+
+        GlCodeCategory.class);
     }
+
 }

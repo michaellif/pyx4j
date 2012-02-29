@@ -393,9 +393,9 @@ public class CrmSiteMap implements SiteMap {
         public static class Tax extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "GlCode")
+        @PlaceProperties(caption = "GlCode Category")
         @NavigationItem(navigLabel = "GlCodes")
-        public static class GlCode extends CrudAppPlace {
+        public static class GlCodeCategory extends CrudAppPlace {
         }
 
         @PlaceProperties(caption = "Lease Adjustment Reason")

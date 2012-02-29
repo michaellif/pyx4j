@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 11, 2012
+ * Created on Jan 12, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -16,24 +16,19 @@ package com.propertyvista.crm.client.activity.crud.settings.tax;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeListerView;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.admin.GlCodeCrudService;
-import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
+import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeListerActivity extends ListerActivityBase<GlCode> {
+public class GlCodeCategoryViewerActivity extends CrmViewerActivity<GlCodeCategory> {
 
-    public GlCodeListerActivity(Place place) {
-        super(place,
+    public GlCodeCategoryViewerActivity(Place place) {
+        super(place, SettingsViewFactory.instance(GlCodeCategoryViewerView.class),
 
-        SettingsViewFactory.instance(GlCodeListerView.class),
-
-        GWT.<AbstractListService<GlCode>> create(GlCodeCrudService.class),
-
-        GlCode.class);
+        GWT.<AbstractCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class));
     }
-
 }

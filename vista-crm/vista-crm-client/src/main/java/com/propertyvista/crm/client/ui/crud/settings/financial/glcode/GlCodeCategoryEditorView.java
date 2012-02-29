@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 11, 2012
- * @author ArtyomB
+ * Created on 2011-05-25
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.admin;
+package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.domain.financial.GlCodeCategory;
 
-public interface GlCodeCrudService extends AbstractCrudService<GlCode> {
+public interface GlCodeCategoryEditorView extends IEditorView<GlCodeCategory> {
 
 }

@@ -35,9 +35,10 @@ public interface GlCode extends IEntity {
     @ToString(index = 0)
     IPrimitive<Integer> glId();
 
+    @NotNull
     @Length(100)
     @ToString(index = 0)
-    @Editor(type = EditorType.textarea)
+    @Editor(type = EditorType.text)
     IPrimitive<String> description();
 
     @Owner

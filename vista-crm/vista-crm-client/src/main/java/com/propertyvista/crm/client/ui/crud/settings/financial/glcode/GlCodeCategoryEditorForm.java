@@ -19,25 +19,25 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeEditorForm extends CrmEntityForm<GlCode> {
+public class GlCodeCategoryEditorForm extends CrmEntityForm<GlCodeCategory> {
 
-    public GlCodeEditorForm() {
+    public GlCodeCategoryEditorForm() {
         this(false);
     }
 
-    public GlCodeEditorForm(boolean viewMode) {
-        super(GlCode.class, viewMode);
+    public GlCodeCategoryEditorForm(boolean viewMode) {
+        super(GlCodeCategory.class, viewMode);
     }
 
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
-
-        int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glId()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
+        int row = 0;
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().glCategoryId()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().glCategoryDescription()), 15).build());
+        main.setWidget(row++, 0, inject(proto().glCodes(), new GlCodeFolder(isEditable())));
 
         return new CrmScrollPanel(main);
     }

@@ -93,9 +93,9 @@ import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceIte
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeListerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeCategoryEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeCategoryListerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeCategoryViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.LeaseAdjustmentReasonEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.LeaseAdjustmentReasonListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.LeaseAdjustmentReasonViewerActivity;
@@ -657,16 +657,16 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     }
 
-                } else if (place instanceof CrmSiteMap.Settings.GlCode) {
+                } else if (place instanceof CrmSiteMap.Settings.GlCodeCategory) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
-                        activity = new GlCodeEditorActivity(place);
+                        activity = new GlCodeCategoryEditorActivity(place);
                         break;
                     case viewer:
-                        activity = new GlCodeViewerActivity(place);
+                        activity = new GlCodeCategoryViewerActivity(place);
                         break;
                     case lister:
-                        activity = new GlCodeListerActivity(place);
+                        activity = new GlCodeCategoryListerActivity(place);
                         break;
 
                     }

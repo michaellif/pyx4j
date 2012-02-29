@@ -24,12 +24,12 @@ import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewer;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewerImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeEditorView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeListerView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeViewerView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryListerView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonEditorView;
 import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonListerView;
@@ -97,12 +97,12 @@ public class SettingsViewFactory extends ViewFactoryBase {
             } else if (TaxViewerView.class.equals(type)) {
                 map.put(type, new TaxViewerViewImpl());
 
-            } else if (GlCodeListerView.class.equals(type)) {
-                map.put(type, new GlCodeListerViewImpl());
-            } else if (GlCodeEditorView.class.equals(type)) {
-                map.put(type, new GlCodeEditorViewImpl());
-            } else if (GlCodeViewerView.class.equals(type)) {
-                map.put(type, new GlCodeViewerViewImpl());
+            } else if (GlCodeCategoryListerView.class.equals(type)) {
+                map.put(type, new GlCodeCategoryListerViewImpl());
+            } else if (GlCodeCategoryEditorView.class.equals(type)) {
+                map.put(type, new GlCodeCategoryEditorViewImpl());
+            } else if (GlCodeCategoryViewerView.class.equals(type)) {
+                map.put(type, new GlCodeCategoryViewerViewImpl());
 
             } else if (LeaseAdjustmentReasonListerView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentReasonListerViewImpl());

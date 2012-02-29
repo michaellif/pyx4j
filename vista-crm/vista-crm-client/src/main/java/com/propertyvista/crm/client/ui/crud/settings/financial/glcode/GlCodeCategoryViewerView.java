@@ -13,13 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 
-import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.GlCode;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-public class GlCodeViewerViewImpl extends CrmViewerViewImplBase<GlCode> implements GlCodeViewerView {
+import com.propertyvista.domain.financial.GlCodeCategory;
 
-    public GlCodeViewerViewImpl() {
-        super(CrmSiteMap.Settings.GlCode.class, new GlCodeEditorForm(true));
-    }
+public interface GlCodeCategoryViewerView extends IViewerView<GlCodeCategory> {
+
 }

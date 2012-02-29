@@ -7,16 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.financial.GlCodeCategory;
 
-import com.propertyvista.domain.financial.GlCode;
+public class GlCodeCategoryViewerViewImpl extends CrmViewerViewImplBase<GlCodeCategory> implements GlCodeCategoryViewerView {
 
-public interface GlCodeEditorView extends IEditorView<GlCode> {
-
+    public GlCodeCategoryViewerViewImpl() {
+        super(CrmSiteMap.Settings.GlCodeCategory.class, new GlCodeCategoryEditorForm(true));
+    }
 }

@@ -22,29 +22,29 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeLister extends ListerBase<GlCode> {
+public class GlCodeCategoryLister extends ListerBase<GlCodeCategory> {
 
-    private static final I18n i18n = I18n.get(GlCodeLister.class);
+    private static final I18n i18n = I18n.get(GlCodeCategoryLister.class);
 
-    public GlCodeLister() {
-        super(GlCode.class, CrmSiteMap.Settings.GlCode.class, false, true);
+    public GlCodeCategoryLister() {
+        super(GlCodeCategory.class, CrmSiteMap.Settings.GlCodeCategory.class, false, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 
         addActionItem(new Button(i18n.tr("Delete Checked"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                for (GlCode item : getDataTablePanel().getDataTable().getCheckedItems()) {
+                for (GlCodeCategory item : getDataTablePanel().getDataTable().getCheckedItems()) {
                     getPresenter().delete(item.getPrimaryKey());
                 }
             }
         }));
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().glId()).build(),
-            new MemberColumnDescriptor.Builder(proto().description()).build()
+            new MemberColumnDescriptor.Builder(proto().glCategoryId()).build(),
+            new MemberColumnDescriptor.Builder(proto().glCategoryDescription()).build()
         );//@formatter:on
     }
 }

@@ -16,24 +16,24 @@ package com.propertyvista.crm.client.activity.crud.settings.tax;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.admin.GlCodeCrudService;
-import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
+import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeEditorActivity extends EditorActivityBase<GlCode> {
+public class GlCodeCategoryListerActivity extends ListerActivityBase<GlCodeCategory> {
 
-    public GlCodeEditorActivity(Place place) {
+    public GlCodeCategoryListerActivity(Place place) {
         super(place,
 
-        SettingsViewFactory.instance(GlCodeEditorView.class),
+        SettingsViewFactory.instance(GlCodeCategoryListerView.class),
 
-        GWT.<AbstractCrudService<GlCode>> create(GlCodeCrudService.class),
+        GWT.<AbstractListService<GlCodeCategory>> create(GlCodeCategoryCrudService.class),
 
-        GlCode.class);
+        GlCodeCategory.class);
     }
 
 }
