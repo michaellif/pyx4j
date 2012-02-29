@@ -98,7 +98,7 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
                     if (TimeUtils.since(start) > 4 * Consts.SEC2MSEC) {
                         warn = " ***";
                     }
-                    b.append("\t").append(preloader.getClass().getSimpleName()).append(" ").append(TimeUtils.secSince(start)).append(warn).append("\n");
+                    b.append("\t\t").append(preloader.getClass().getSimpleName()).append(" ").append(TimeUtils.secSince(start)).append(warn).append("\n");
                     break findPreloader;
                 }
             }
@@ -165,7 +165,7 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             if (TimeUtils.since(start) > 4 * Consts.SEC2MSEC) {
                 warn = " ***";
             }
-            b.append("\t").append(preloader.getClass().getSimpleName()).append(" ").append(TimeUtils.secSince(start)).append(warn).append("\n");
+            b.append("\t\t").append(preloader.getClass().getSimpleName()).append(" ").append(TimeUtils.secSince(start)).append(warn).append("\n");
         }
         return b.toString();
     }
