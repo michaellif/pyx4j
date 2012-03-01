@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.ISet;
 public interface CrmRole extends IEntity {
 
     @ToString
-    @Length(25)
+    @Length(50)
     IPrimitive<String> name();
 
     @Length(100)
