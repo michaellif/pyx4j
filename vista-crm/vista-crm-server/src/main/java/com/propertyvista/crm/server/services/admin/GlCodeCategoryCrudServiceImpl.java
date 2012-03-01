@@ -15,17 +15,25 @@ package com.propertyvista.crm.server.services.admin;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
+import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryCrudServiceImpl extends AbstractCrudServiceImpl<GlCodeCategory> implements GlCodeCategoryCrudService {
 
     @Override
     protected void enhanceRetrieved(GlCodeCategory entity) {
-        super.enhanceRetrieved(entity);
-
         Persistence.service().retrieveMember(entity.glCodes());
+    }
+
+    @Override
+    protected void enhanceListRetrieved(GlCodeCategory entity) {
+        Persistence.service().retrieveMember(entity.glCodes());
+        for (GlCode code : entity.glCodes()) {
+            code.setAttachLevel(AttachLevel.ToStringMembers);
+        }
     }
 
     public GlCodeCategoryCrudServiceImpl() {

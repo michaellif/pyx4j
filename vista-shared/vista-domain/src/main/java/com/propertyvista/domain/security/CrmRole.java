@@ -16,7 +16,9 @@ package com.propertyvista.domain.security;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -27,8 +29,11 @@ import com.pyx4j.entity.shared.ISet;
 @Caption(name = "Role")
 public interface CrmRole extends IEntity {
 
+    @ToString
+    @Length(25)
     IPrimitive<String> name();
 
+    @Length(100)
     @Editor(type = EditorType.textarea)
     IPrimitive<String> description();
 
@@ -40,5 +45,4 @@ public interface CrmRole extends IEntity {
 
     @MemberColumn(name = "rls")
     ISet<CrmRole> roles();
-
 }
