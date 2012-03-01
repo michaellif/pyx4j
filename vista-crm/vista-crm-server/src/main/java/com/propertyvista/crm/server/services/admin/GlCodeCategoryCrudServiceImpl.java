@@ -18,7 +18,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
-import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryCrudServiceImpl extends AbstractCrudServiceImpl<GlCodeCategory> implements GlCodeCategoryCrudService {
@@ -30,10 +29,7 @@ public class GlCodeCategoryCrudServiceImpl extends AbstractCrudServiceImpl<GlCod
 
     @Override
     protected void enhanceListRetrieved(GlCodeCategory entity) {
-        Persistence.service().retrieveMember(entity.glCodes());
-        for (GlCode code : entity.glCodes()) {
-            code.setAttachLevel(AttachLevel.ToStringMembers);
-        }
+        Persistence.service().retrieveMember(entity.glCodes(), AttachLevel.ToStringMembers);
     }
 
     public GlCodeCategoryCrudServiceImpl() {
