@@ -26,7 +26,6 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -41,8 +40,10 @@ import com.propertyvista.domain.financial.BillingAccount;
 /**
  * 
  * Actual payment record. {@link com.propertyvista.domain.financial.billing.BillPayment} captures payment portion for particular charge (in future version)
- * Deposit is considered as payment and presented by this class.
+ * Deposit is considered as payment and presented by this class (this statement requires review, Alex S, see deposit properties in
+ * com.propertyvista.domain.financial.payment.java)
  * 
+ * @author Alexs
  */
 public interface Payment extends IEntity {
 
