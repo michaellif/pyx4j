@@ -20,12 +20,8 @@
  */
 package com.pyx4j.commons.css;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ColorUtil {
-
-    private static final Logger log = LoggerFactory.getLogger(ColorUtil.class);
 
     public static int hsbToRgb(float hue, float saturation, float brightness) {
         int r = 0, g = 0, b = 0;

@@ -65,7 +65,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
 
     private final static Logger log = LoggerFactory.getLogger(AbstractUploadServlet.class);
 
-    private final Map<Class<UploadService<?, ?>>, Class<? extends UploadReciver>> mappedUploads = new HashMap<Class<UploadService<?, ?>>, Class<? extends UploadReciver>>();
+    private final Map<Class<UploadService<?, ?>>, Class<? extends UploadReciver<?, ?>>> mappedUploads = new HashMap<Class<UploadService<?, ?>>, Class<? extends UploadReciver<?, ?>>>();
 
     /**
      * Used for development tests
@@ -73,10 +73,10 @@ public abstract class AbstractUploadServlet extends HttpServlet {
     protected int slowUploadSeconds = 0;
 
     @SuppressWarnings("unchecked")
-    protected <T extends UploadReciver & UploadService<?, ?>> void bind(Class<T> serviceImpClass) {
+    protected <T extends UploadReciver<?, ?> & UploadService<?, ?>> void bind(Class<T> serviceImpClass) {
         for (Class<?> itf : serviceImpClass.getInterfaces()) {
             if (UploadService.class.isAssignableFrom(itf)) {
-                mappedUploads.put((Class<UploadService<?, ?>>) itf, (Class<? extends UploadReciver>) serviceImpClass);
+                mappedUploads.put((Class<UploadService<?, ?>>) itf, (Class<? extends UploadReciver<?, ?>>) serviceImpClass);
                 return;
             }
         }
@@ -110,13 +110,13 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             //TODO use "pyx.ServicePolicy", @see com.pyx4j.rpc.serve.RemoteServiceServlet
             Class<UploadService<?, ?>> serviceClass = (Class<UploadService<?, ?>>) Class.forName(serviceClassId);
             SecurityController.assertPermission(new IServiceExecutePermission(serviceClass));
-            Class<? extends UploadReciver> reciverClass = mappedUploads.get(serviceClass);
+            Class<? extends UploadReciver<?, ?>> reciverClass = mappedUploads.get(serviceClass);
             if (reciverClass == null) {
                 log.error("unmapped upload {}", serviceClassId);
                 out.println("Invalid request");
                 return;
             }
-            UploadReciver reciver = reciverClass.newInstance();
+            UploadReciver<?, ?> reciver = reciverClass.newInstance();
 
             ServletFileUpload fileUpload = new ServletFileUpload();
             long maxSize = reciver.getMaxSize();

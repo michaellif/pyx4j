@@ -25,12 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Theme {
-
-    private static final Logger log = LoggerFactory.getLogger(Theme.class);
 
     private final String discriminator;
 

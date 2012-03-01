@@ -141,12 +141,12 @@ public class DeepToStringStyle extends ToStringStyle {
     }
 
     @Override
-    protected void appendDetail(StringBuffer buffer, String fieldName, Collection coll) {
+    protected void appendDetail(StringBuffer buffer, String fieldName, @SuppressWarnings("rawtypes") Collection coll) {
         this.appendDetail(buffer, fieldName, (Object) coll);
     }
 
     @Override
-    protected void appendDetail(StringBuffer buffer, String fieldName, Map map) {
+    protected void appendDetail(StringBuffer buffer, String fieldName, @SuppressWarnings("rawtypes") Map map) {
         this.appendDetail(buffer, fieldName, (Object) map);
     }
 

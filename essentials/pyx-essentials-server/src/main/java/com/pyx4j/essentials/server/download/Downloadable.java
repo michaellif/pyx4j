@@ -80,7 +80,7 @@ public class Downloadable implements Serializable {
             Map<String, Downloadable> map = (Map<String, Downloadable>) Context.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
             if (map == null) {
                 map = new HashMap<String, Downloadable>();
-                Context.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (HashMap) map);
+                Context.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
             } else {
                 cleanOld(map);
             }
@@ -95,7 +95,7 @@ public class Downloadable implements Serializable {
             Map<String, Downloadable> map = (Map<String, Downloadable>) Context.getVisit().getAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE);
             if (map != null) {
                 map.values().remove(this);
-                Context.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (HashMap) map);
+                Context.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
             }
         }
     }
@@ -124,7 +124,7 @@ public class Downloadable implements Serializable {
                 iterator.remove();
             }
         }
-        Context.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (HashMap) map);
+        Context.getVisit().setAttribute(DOWNLOADABLE_LIST_SESSION_ATTRIBUTE, (Serializable) map);
     }
 
     @SuppressWarnings("unchecked")

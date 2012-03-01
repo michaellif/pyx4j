@@ -40,11 +40,10 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
 
     /**
      * <p>
-     * A registry of objects used by <code>reflectionToString</code> methods
-     * to detect cyclical object references and avoid infinite loops.
+     * A registry of objects used by <code>reflectionToString</code> methods to detect cyclical object references and avoid infinite loops.
      * </p>
      */
-    private Set registry = new HashSet();
+    private final Set<Object> registry = new HashSet<Object>();
 
     private static final String DUPLICATE_OBBJECT = "->{...}";
 
@@ -52,20 +51,18 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
 
     /**
      * <p>
-     * Returns the registry of objects being traversed by the
-     * <code>reflectionToString</code> methods in the current thread.
+     * Returns the registry of objects being traversed by the <code>reflectionToString</code> methods in the current thread.
      * </p>
      * 
      * @return Set the registry of objects being traversed
      */
-    private Set getRegistry() {
+    private Set<Object> getRegistry() {
         return registry;
     }
 
     /**
      * <p>
-     * Returns <code>true</code> if the registry contains the given object.
-     * Used by the reflection methods to avoid infinite loops.
+     * Returns <code>true</code> if the registry contains the given object. Used by the reflection methods to avoid infinite loops.
      * </p>
      * 
      * @param value
@@ -79,8 +76,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
 
     /**
      * <p>
-     * Registers the given object. Used by the reflection methods to avoid
-     * infinite loops.
+     * Registers the given object. Used by the reflection methods to avoid infinite loops.
      * </p>
      * 
      * @param value
@@ -92,20 +88,16 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
 
     /**
      * <p>
-     * Builds a <code>toString</code> value using the default
-     * <code>ToStringStyle</code> through reflection.
+     * Builds a <code>toString</code> value using the default <code>ToStringStyle</code> through reflection.
      * </p>
      * 
      * <p>
-     * It uses <code>AccessibleObject.setAccessible</code> to gain access to
-     * private fields. This means that it will throw a security exception if run
-     * under a security manager, if the permissions are not set up correctly. It
-     * is also not as efficient as testing explicitly.
+     * It uses <code>AccessibleObject.setAccessible</code> to gain access to private fields. This means that it will throw a security exception if run under a
+     * security manager, if the permissions are not set up correctly. It is also not as efficient as testing explicitly.
      * </p>
      * 
      * <p>
-     * Transient members will be not be included, as they are likely derived.
-     * Static fields will not be included. Superclass fields will be appended.
+     * Transient members will be not be included, as they are likely derived. Static fields will not be included. Superclass fields will be appended.
      * </p>
      * 
      * @param object
@@ -124,31 +116,25 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * </p>
      * 
      * <p>
-     * It uses <code>AccessibleObject.setAccessible</code> to gain access to
-     * private fields. This means that it will throw a security exception if run
-     * under a security manager, if the permissions are not set up correctly. It
-     * is also not as efficient as testing explicitly.
+     * It uses <code>AccessibleObject.setAccessible</code> to gain access to private fields. This means that it will throw a security exception if run under a
+     * security manager, if the permissions are not set up correctly. It is also not as efficient as testing explicitly.
      * </p>
      * 
      * <p>
-     * Transient members will be not be included, as they are likely derived.
-     * Static fields will not be included. Superclass fields will be appended.
+     * Transient members will be not be included, as they are likely derived. Static fields will not be included. Superclass fields will be appended.
      * </p>
      * 
      * <p>
-     * If the style is <code>null</code>, the default
-     * <code>ToStringStyle</code> is used.
+     * If the style is <code>null</code>, the default <code>ToStringStyle</code> is used.
      * </p>
      * 
      * @param object
      *            the Object to be output
      * @param style
-     *            the style of the <code>toString</code> to create, may be
-     *            <code>null</code>
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
      * @return the String result
      * @throws IllegalArgumentException
-     *             if the Object or <code>ToStringStyle</code> is
-     *             <code>null</code>
+     *             if the Object or <code>ToStringStyle</code> is <code>null</code>
      */
     public static String toString(Object object, ToStringStyle style) {
         if (object == null) {
@@ -166,16 +152,13 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * </p>
      * 
      * <p>
-     * It uses <code>AccessibleObject.setAccessible</code> to gain access to
-     * private fields. This means that it will throw a security exception if run
-     * under a security manager, if the permissions are not set up correctly. It
-     * is also not as efficient as testing explicitly.
+     * It uses <code>AccessibleObject.setAccessible</code> to gain access to private fields. This means that it will throw a security exception if run under a
+     * security manager, if the permissions are not set up correctly. It is also not as efficient as testing explicitly.
      * </p>
      * 
      * <p>
-     * If the <code>outputTransients</code> is <code>true</code>, transient
-     * members will be output, otherwise they are ignored, as they are likely
-     * derived fields, and not part of the value of the Object.
+     * If the <code>outputTransients</code> is <code>true</code>, transient members will be output, otherwise they are ignored, as they are likely derived
+     * fields, and not part of the value of the Object.
      * </p>
      * 
      * <p>
@@ -183,15 +166,13 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * </p>
      * 
      * <p>
-     * If the style is <code>null</code>, the default
-     * <code>ToStringStyle</code> is used.
+     * If the style is <code>null</code>, the default <code>ToStringStyle</code> is used.
      * </p>
      * 
      * @param object
      *            the Object to be output
      * @param style
-     *            the style of the <code>toString</code> to create, may be
-     *            <code>null</code>
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
      * @param outputTransients
      *            whether to include transient fields
      * @return the String result
@@ -208,21 +189,17 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * </p>
      * 
      * <p>
-     * It uses <code>AccessibleObject.setAccessible</code> to gain access to
-     * private fields. This means that it will throw a security exception if run
-     * under a security manager, if the permissions are not set up correctly. It
-     * is also not as efficient as testing explicitly.
+     * It uses <code>AccessibleObject.setAccessible</code> to gain access to private fields. This means that it will throw a security exception if run under a
+     * security manager, if the permissions are not set up correctly. It is also not as efficient as testing explicitly.
      * </p>
      * 
      * <p>
-     * If the <code>outputTransients</code> is <code>true</code>, transient
-     * fields will be output, otherwise they are ignored, as they are likely
-     * derived fields, and not part of the value of the Object.
+     * If the <code>outputTransients</code> is <code>true</code>, transient fields will be output, otherwise they are ignored, as they are likely derived
+     * fields, and not part of the value of the Object.
      * </p>
      * 
      * <p>
-     * If the <code>outputStatics</code> is <code>true</code>, static
-     * fields will be output, otherwise they are ignored.
+     * If the <code>outputStatics</code> is <code>true</code>, static fields will be output, otherwise they are ignored.
      * </p>
      * 
      * <p>
@@ -230,15 +207,13 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * </p>
      * 
      * <p>
-     * If the style is <code>null</code>, the default
-     * <code>ToStringStyle</code> is used.
+     * If the style is <code>null</code>, the default <code>ToStringStyle</code> is used.
      * </p>
      * 
      * @param object
      *            the Object to be output
      * @param style
-     *            the style of the <code>toString</code> to create, may be
-     *            <code>null</code>
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
      * @param outputTransients
      *            whether to include transient fields
      * @param outputStatics
@@ -258,54 +233,44 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * </p>
      * 
      * <p>
-     * It uses <code>AccessibleObject.setAccessible</code> to gain access to
-     * private fields. This means that it will throw a security exception if run
-     * under a security manager, if the permissions are not set up correctly. It
-     * is also not as efficient as testing explicitly.
+     * It uses <code>AccessibleObject.setAccessible</code> to gain access to private fields. This means that it will throw a security exception if run under a
+     * security manager, if the permissions are not set up correctly. It is also not as efficient as testing explicitly.
      * </p>
      * 
      * <p>
-     * If the <code>outputTransients</code> is <code>true</code>, transient
-     * fields will be output, otherwise they are ignored, as they are likely
-     * derived fields, and not part of the value of the Object.
+     * If the <code>outputTransients</code> is <code>true</code>, transient fields will be output, otherwise they are ignored, as they are likely derived
+     * fields, and not part of the value of the Object.
      * </p>
      * 
      * <p>
-     * If the <code>outputStatics</code> is <code>true</code>, static
-     * fields will be output, otherwise they are ignored.
+     * If the <code>outputStatics</code> is <code>true</code>, static fields will be output, otherwise they are ignored.
      * </p>
      * 
      * <p>
-     * Superclass fields will be appended up to and including the specified
-     * superclass. A null superclass is treated as <code>java.lang.Object</code>.
+     * Superclass fields will be appended up to and including the specified superclass. A null superclass is treated as <code>java.lang.Object</code>.
      * </p>
      * 
      * <p>
-     * If the style is <code>null</code>, the default
-     * <code>ToStringStyle</code> is used.
+     * If the style is <code>null</code>, the default <code>ToStringStyle</code> is used.
      * </p>
      * 
      * @param object
      *            the Object to be output
      * @param style
-     *            the style of the <code>toString</code> to create, may be
-     *            <code>null</code>
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
      * @param outputTransients
      *            whether to include transient fields
      * @param outputStatics
      *            whether to include static fields
      * @param reflectUpToClass
-     *            the superclass to reflect up to (inclusive), may be
-     *            <code>null</code>
+     *            the superclass to reflect up to (inclusive), may be <code>null</code>
      * @return the String result
      * @throws IllegalArgumentException
      *             if the Object is <code>null</code>
      * @since 2.1
      */
-    public static String toString(Object object, ToStringStyle style, boolean outputTransients, boolean outputStatics,
-            Class reflectUpToClass) {
-        DeepReflectionToStringBuilder b = new DeepReflectionToStringBuilder(object, style, null, reflectUpToClass,
-                outputTransients, outputStatics);
+    public static String toString(Object object, ToStringStyle style, boolean outputTransients, boolean outputStatics, Class<?> reflectUpToClass) {
+        DeepReflectionToStringBuilder b = new DeepReflectionToStringBuilder(object, style, null, reflectUpToClass, outputTransients, outputStatics);
         try {
             builder.set(b);
             return b.toString();
@@ -340,21 +305,20 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      *            The field names to exclude. Null excludes nothing.
      * @return The toString value.
      */
-    public static String toStringExclude(Object object, Collection /* String */excludeFieldNames) {
+    public static String toStringExclude(Object object, Collection<String> excludeFieldNames) {
         return toStringExclude(object, toNoNullStringArray(excludeFieldNames));
     }
 
     /**
      * Converts the given Collection into an array of Strings. The returned
-     * array does not contain <code>null</code> entries. Note that
-     * {@link Arrays#sort(Object[])} will throw an {@link NullPointerException}
-     * if an array element is <code>null</code>.
+     * array does not contain <code>null</code> entries. Note that {@link Arrays#sort(Object[])} will throw an {@link NullPointerException} if an array element
+     * is <code>null</code>.
      * 
      * @param collection
      *            The collection to convert
      * @return A new array of Strings.
      */
-    static String[] toNoNullStringArray(Collection collection) {
+    static String[] toNoNullStringArray(Collection<?> collection) {
         if (collection == null) {
             return ArrayUtils.EMPTY_STRING_ARRAY;
         }
@@ -363,23 +327,22 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
 
     /**
      * Returns a new array of Strings without null elements. Internal method
-     * used to normalize exclude lists (arrays and collections). Note that
-     * {@link Arrays#sort(Object[])} will throw an {@link NullPointerException}
-     * if an array element is <code>null</code>.
+     * used to normalize exclude lists (arrays and collections). Note that {@link Arrays#sort(Object[])} will throw an {@link NullPointerException} if an array
+     * element is <code>null</code>.
      * 
      * @param array
      *            The array to check
      * @return The given array or a new array without null.
      */
     static String[] toNoNullStringArray(Object[] array) {
-        ArrayList list = new ArrayList(array.length);
+        ArrayList<String> list = new ArrayList<String>(array.length);
         for (int i = 0; i < array.length; i++) {
             Object e = array[i];
             if (e != null) {
                 list.add(e.toString());
             }
         }
-        return (String[]) list.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+        return list.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
     /**
@@ -422,15 +385,14 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
     private boolean appendTransients = false;
 
     /**
-     * Which field names to exclude from output. Intended for fields like
-     * <code>"password"</code>.
+     * Which field names to exclude from output. Intended for fields like <code>"password"</code>.
      */
     private String[] excludeFieldNames;
 
     /**
      * The last super class to stop appending fields for.
      */
-    private Class upToClass = null;
+    private Class<?> upToClass = null;
 
     /**
      * The object being output.
@@ -443,13 +405,11 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * </p>
      * 
      * <p>
-     * This constructor outputs using the default style set with
-     * <code>setDefaultStyle</code>.
+     * This constructor outputs using the default style set with <code>setDefaultStyle</code>.
      * </p>
      * 
      * @param object
-     *            the Object to build a <code>toString</code> for, must not be
-     *            <code>null</code>
+     *            the Object to build a <code>toString</code> for, must not be <code>null</code>
      * @throws IllegalArgumentException
      *             if the Object passed in is <code>null</code>
      */
@@ -468,11 +428,9 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * </p>
      * 
      * @param object
-     *            the Object to build a <code>toString</code> for, must not be
-     *            <code>null</code>
+     *            the Object to build a <code>toString</code> for, must not be <code>null</code>
      * @param style
-     *            the style of the <code>toString</code> to create, may be
-     *            <code>null</code>
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
      * @throws IllegalArgumentException
      *             if the Object passed in is <code>null</code>
      */
@@ -497,11 +455,9 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * @param object
      *            the Object to build a <code>toString</code> for
      * @param style
-     *            the style of the <code>toString</code> to create, may be
-     *            <code>null</code>
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
      * @param buffer
-     *            the <code>StringBuffer</code> to populate, may be
-     *            <code>null</code>
+     *            the <code>StringBuffer</code> to populate, may be <code>null</code>
      * @throws IllegalArgumentException
      *             if the Object passed in is <code>null</code>
      */
@@ -513,26 +469,21 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
     /**
      * Constructor.
      * 
-     * @deprecated Use
-     *             {@link #ReflectionToStringBuilder(Object,ToStringStyle,StringBuffer,Class,boolean,boolean)}.
+     * @deprecated Use {@link #ReflectionToStringBuilder(Object,ToStringStyle,StringBuffer,Class,boolean,boolean)}.
      * 
      * @param object
      *            the Object to build a <code>toString</code> for
      * @param style
-     *            the style of the <code>toString</code> to create, may be
-     *            <code>null</code>
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
      * @param buffer
-     *            the <code>StringBuffer</code> to populate, may be
-     *            <code>null</code>
+     *            the <code>StringBuffer</code> to populate, may be <code>null</code>
      * @param reflectUpToClass
-     *            the superclass to reflect up to (inclusive), may be
-     *            <code>null</code>
+     *            the superclass to reflect up to (inclusive), may be <code>null</code>
      * @param outputTransients
      *            whether to include transient fields
      */
     @Deprecated
-    public DeepReflectionToStringBuilder(Object object, ToStringStyle style, StringBuffer buffer,
-            Class reflectUpToClass, boolean outputTransients) {
+    public DeepReflectionToStringBuilder(Object object, ToStringStyle style, StringBuffer buffer, Class<?> reflectUpToClass, boolean outputTransients) {
         super(object, style, buffer);
         this.setCurrentObject(object);
         this.setUpToClass(reflectUpToClass);
@@ -545,22 +496,19 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * @param object
      *            the Object to build a <code>toString</code> for
      * @param style
-     *            the style of the <code>toString</code> to create, may be
-     *            <code>null</code>
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
      * @param buffer
-     *            the <code>StringBuffer</code> to populate, may be
-     *            <code>null</code>
+     *            the <code>StringBuffer</code> to populate, may be <code>null</code>
      * @param reflectUpToClass
-     *            the superclass to reflect up to (inclusive), may be
-     *            <code>null</code>
+     *            the superclass to reflect up to (inclusive), may be <code>null</code>
      * @param outputTransients
      *            whether to include transient fields
      * @param outputStatics
      *            whether to include static fields
      * @since 2.1
      */
-    public DeepReflectionToStringBuilder(Object object, ToStringStyle style, StringBuffer buffer,
-            Class reflectUpToClass, boolean outputTransients, boolean outputStatics) {
+    public DeepReflectionToStringBuilder(Object object, ToStringStyle style, StringBuffer buffer, Class<?> reflectUpToClass, boolean outputTransients,
+            boolean outputStatics) {
         super(object, style, buffer);
         this.setCurrentObject(object);
         this.setUpToClass(reflectUpToClass);
@@ -580,10 +528,8 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
     /**
      * Returns whether or not to append the given <code>Field</code>.
      * <ul>
-     * <li>Transient fields are appended only if {@link #isAppendTransients()}
-     * returns <code>true</code>.
-     * <li>Static fields are appended only if {@link #isAppendStatics()}
-     * returns <code>true</code>.
+     * <li>Transient fields are appended only if {@link #isAppendTransients()} returns <code>true</code>.
+     * <li>Static fields are appended only if {@link #isAppendStatics()} returns <code>true</code>.
      * <li>Inner class fields are not appened.</li>
      * </ul>
      * 
@@ -604,8 +550,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
             // Rject static fields.
             return false;
         }
-        if (this.getExcludeFieldNames() != null
-                && Arrays.binarySearch(this.getExcludeFieldNames(), field.getName()) >= 0) {
+        if (this.getExcludeFieldNames() != null && Arrays.binarySearch(this.getExcludeFieldNames(), field.getName()) >= 0) {
             // Reject fields from the getExcludeFieldNames list.
             return false;
         }
@@ -621,20 +566,19 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
 
     /**
      * <p>
-     * Appends the fields and values defined by the given object of the given
-     * Class.
+     * Appends the fields and values defined by the given object of the given Class.
      * </p>
      * 
      * <p>
-     * If a cycle is detected as an object is &quot;toString()'ed&quot;, such an
-     * object is rendered as if <code>Object.toString()</code> had been called
-     * and not implemented by the object.
+     * If a cycle is detected as an object is &quot;toString()'ed&quot;, such an object is rendered as if <code>Object.toString()</code> had been called and not
+     * implemented by the object.
      * </p>
      * 
      * @param clazz
      *            The class of object parameter
      */
-    protected boolean appendFieldsIn(Class clazz) {
+    @SuppressWarnings("unchecked")
+    protected boolean appendFieldsIn(Class<?> clazz) {
         try {
             this.registerObject();
             if (clazz.isArray()) {
@@ -659,8 +603,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
                         // Warning: Field.get(Object) creates wrappers objects
                         // for primitive types.
                         Object fieldValue = this.getValue(field);
-                        if (isRegistered(fieldValue) && !field.getType().isPrimitive()
-                                && !isEmptyCollection(fieldValue)) {
+                        if (isRegistered(fieldValue) && !field.getType().isPrimitive() && !isEmptyCollection(fieldValue)) {
                             // A known field value has already been appended,
                             // therefore we have an object cycle,
                             // append a simple Object.toString style string.
@@ -697,7 +640,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
 
     boolean isEmptyCollection(Object value) {
         if (value instanceof Collection) {
-            return ((Collection) value).isEmpty();
+            return ((Collection<?>) value).isEmpty();
         }
         return false;
     }
@@ -716,7 +659,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * 
      * @return The last super class to stop appending fields for.
      */
-    public Class getUpToClass() {
+    public Class<?> getUpToClass() {
         return this.upToClass;
     }
 
@@ -790,8 +733,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
 
     /**
      * <p>
-     * Registers this builder's source object to avoid infinite loops when
-     * processing circular object references.
+     * Registers this builder's source object to avoid infinite loops when processing circular object references.
      * </p>
      */
     void registerObject() {
@@ -827,8 +769,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * Sets the field names to exclude.
      * 
      * @param excludeFieldNamesParam
-     *            The excludeFieldNames to excluding from toString or
-     *            <code>null</code>.
+     *            The excludeFieldNames to excluding from toString or <code>null</code>.
      * @return <code>this</code>
      */
     public DeepReflectionToStringBuilder setExcludeFieldNames(String[] excludeFieldNamesParam) {
@@ -849,7 +790,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
      * @param clazz
      *            The last super class to stop appending fields for.
      */
-    public void setUpToClass(Class clazz) {
+    public void setUpToClass(Class<?> clazz) {
         this.upToClass = clazz;
     }
 
@@ -865,7 +806,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
         if (this.getObject() == null) {
             return this.getStyle().getNullText();
         }
-        Class clazz = this.getObject().getClass();
+        Class<?> clazz = this.getObject().getClass();
         if (this.appendFieldsIn(clazz)) {
             while (clazz.getSuperclass() != null && clazz != this.getUpToClass()) {
                 clazz = clazz.getSuperclass();
@@ -879,7 +820,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
         }
         return super.toString();
     }
-    
+
     void appendDetail(Object object) {
         if (isRegistered(object) && !isEmptyCollection(object)) {
             // The object has already been appended, therefore we have an
@@ -896,7 +837,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
         try {
             this.setCurrentObject(object);
             this.getStyle().appendStart(this.getStringBuffer(), object);
-            Class clazz = object.getClass();
+            Class<?> clazz = object.getClass();
             if (this.appendFieldsIn(clazz)) {
                 while (clazz.getSuperclass() != null && clazz != this.getUpToClass()) {
                     clazz = clazz.getSuperclass();
@@ -917,8 +858,7 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
 
     /**
      * <p>
-     * Unregisters this builder's source object to avoid infinite loops when
-     * processing circular object references.
+     * Unregisters this builder's source object to avoid infinite loops when processing circular object references.
      * </p>
      */
     void unregisterObject() {

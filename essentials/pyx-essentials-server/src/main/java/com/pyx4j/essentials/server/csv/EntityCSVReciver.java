@@ -200,6 +200,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         int i = 0;
         for (Path path : headersPath) {
             if (path != null) {
+                @SuppressWarnings("rawtypes")
                 IPrimitive primitive = (IPrimitive<?>) entity.getMember(path);
                 primitive.setValue(parsValue(primitive, value[i]));
             }
