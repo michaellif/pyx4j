@@ -151,7 +151,7 @@ public class EntityValueMap extends HashMap<String, Object> {
 
         appendFiled(b, ident, SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, map.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR));
         if (map.containsKey(SharedEntityHandler.DETACHED_ATTR)) {
-            appendFiled(b, ident, SharedEntityHandler.DETACHED_ATTR, Boolean.TRUE);
+            appendFiled(b, ident, SharedEntityHandler.DETACHED_ATTR, map.get(SharedEntityHandler.DETACHED_ATTR));
         }
 
         processed.add(map);

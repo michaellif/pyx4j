@@ -977,8 +977,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
         TableModel tm = tableModel(entity.getEntityMeta());
         if (tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), entity)) {
-            entity.setAttachLevel(attachLevel);
             entity = cascadeRetrieveMembers(tm, entity, attachLevel);
+            entity.setAttachLevel(attachLevel);
             CacheService.entityCache().put(entity);
             return entity;
         } else {

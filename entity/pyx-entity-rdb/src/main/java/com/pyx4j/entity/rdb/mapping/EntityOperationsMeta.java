@@ -260,6 +260,7 @@ public class EntityOperationsMeta {
                         switch (memberMeta.getAttachLevel()) {
                         case ToStringMembers:
                             cascadeRetrieveMembers.add(member);
+                            break;
                         case Attached:
                             cascadeRetrieveMembers.add(member);
                             break;
