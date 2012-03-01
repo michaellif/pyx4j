@@ -49,7 +49,6 @@ import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -105,10 +104,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
             unitSelector.setVisible(!isLeaseSigned);
             serviceSelector.setVisible(!isLeaseSigned);
-        } else {
-            boolean isDraftLease = (getValue().status().getValue() == Status.Draft);
-            tabPanel.setTabDisabled(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), isDraftLease);
-            tabPanel.setTabDisabled(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), isDraftLease);
         }
     }
 
