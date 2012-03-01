@@ -306,4 +306,28 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         Assert.assertTrue(getUOM().isEndLeaseAvailable());
     }
 
+    @Test
+    public void testIsCancelEndLeaseAvaialbleWhenAvaialble() {
+        Lease lease = createLease("2010-01-11", "2011-11-11");
+        setup().from("2010-01-01").to("2010-01-10").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2010-01-11").to("2011-11-11").status(Status.leased).withLease(lease).x();
+        setup().from("2010-01-12").toTheEndOfTime().status(Status.available).x();
+
+        now("2010-01-12");
+        Assert.assertTrue(getUOM().isCancelEndLeaseAvaialble());
+    }
+
+    @Test
+    public void testIsCancelEndLeaseAvaialbleWhenNotAvaialble() {
+        Lease lease = createLease("2010-01-11", "2011-11-11");
+        Lease lease2 = createLease("2011-01-12", "2012-01-01");
+
+        setup().from("2010-01-01").to("2010-01-10").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2010-01-11").to("2011-11-11").status(Status.leased).withLease(lease).x();
+        setup().from("2011-01-12").toTheEndOfTime().status(Status.leased).withLease(lease2).x();
+
+        now("2010-01-12");
+        Assert.assertFalse(getUOM().isCancelEndLeaseAvaialble());
+    }
+
 }

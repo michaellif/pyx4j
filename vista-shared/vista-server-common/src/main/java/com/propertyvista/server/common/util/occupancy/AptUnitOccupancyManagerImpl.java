@@ -323,8 +323,19 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     @Override
     public void cancelEndLease() {
-        // TODO Auto-generated method stub
+        if (!isCancelEndLeaseAvaialble()) {
+            throw new IllegalStateException("cancel end lease operation is impossible in the current state of occupancy");
+        }
 
+        LogicalDate now = nowProvider.getNow();
+        AptUnitOccupancySegment leasedSegment = retrieveOccupancySegment(unit, now);
+        EntityQueryCriteria<AptUnitOccupancySegment> delete = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+        delete.add(PropertyCriterion.ge(delete.proto().dateFrom(), addDay(leasedSegment.dateTo().getValue())));
+        Persistence.service().delete(delete);
+        leasedSegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+        Persistence.secureSave(leasedSegment);
+        updateUnitAvailableFrom(null);
+        availabilityReportManager.generateUnitAvailablity(now);
     }
 
     @Override
@@ -464,7 +475,21 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
     public boolean isEndLeaseAvailable() {
         LogicalDate start = nowProvider.getNow();
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unit, start);
-        if (segment != null && segment.status().getValue() == Status.leased) {
+        return segment != null && segment.status().getValue() == Status.leased && segment.dateTo().getValue().equals(AptUnitOccupancyManagerHelper.MAX_DATE);
+
+    }
+
+    @Override
+    public boolean isCancelEndLeaseAvaialble() {
+        LogicalDate start = nowProvider.getNow();
+        AptUnitOccupancySegment segment = retrieveOccupancySegment(unit, start);
+        if (segment != null && segment.status().getValue() == Status.leased && !segment.dateTo().getValue().equals(AptUnitOccupancyManagerHelper.MAX_DATE)) {
+            List<AptUnitOccupancySegment> rest = retrieveOccupancy(unit, addDay(segment.dateTo().getValue()));
+            for (AptUnitOccupancySegment seg : rest) {
+                if (seg.status().getValue() == Status.leased | seg.status().getValue() == Status.reserved) {
+                    return false;
+                }
+            }
             return true;
         } else {
             return false;
@@ -482,4 +507,5 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
         LogicalDate getNow();
 
     }
+
 }

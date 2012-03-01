@@ -95,4 +95,7 @@ public interface AptUnitOccupancyManager {
     boolean isEndLeaseAvailable();
 
     void cancelEndLease();
+
+    boolean isCancelEndLeaseAvaialble();
+
 }
