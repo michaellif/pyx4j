@@ -99,14 +99,26 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
         {
             EntityQueryCriteria<UnidirectionalOneToOnePlmParent> criteria = EntityQueryCriteria.create(UnidirectionalOneToOnePlmParent.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.eq(criteria.proto().child(), UnidirectionalOneToOnePlmChildA.class));
-            criteria.add(PropertyCriterion.eq(criteria.proto().child().name(), o.child().name()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().child(), a));
+            // This can't be done generally
+            //criteria.add(PropertyCriterion.eq(criteria.proto().child().name(), o.child().name()));
 
-            if (POLYMORPHIC_TODO) {
-                List<UnidirectionalOneToOnePlmParent> parents = srv.query(criteria);
-                Assert.assertEquals("result set size", 1, parents.size());
-                Assert.assertEquals("correct data retrieved", o.child().name(), parents.get(0).child().name());
-            }
+            List<UnidirectionalOneToOnePlmParent> parents = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, parents.size());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parents.get(0).child().name());
+        }
+
+        // Query Parent By Child Class
+        {
+            EntityQueryCriteria<UnidirectionalOneToOnePlmParent> criteria = EntityQueryCriteria.create(UnidirectionalOneToOnePlmParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().child(), UnidirectionalOneToOnePlmChildA.class));
+            // This can't be done generally
+            //criteria.add(PropertyCriterion.eq(criteria.proto().child().name(), o.child().name()));
+
+            List<UnidirectionalOneToOnePlmParent> parents = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, parents.size());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parents.get(0).child().name());
         }
 
         // Get Child, change and save independently
@@ -130,11 +142,23 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
             child.testId().setValue(testId);
             child.name().setValue(uniqueString());
             parent.child().set(child);
-            if (POLYMORPHIC_TODO) {
-                srvSave(parent, testCaseMethod);
 
-                parent = srv.retrieve(UnidirectionalOneToOnePlmParent.class, o.getPrimaryKey());
-                Assert.assertEquals("correct data retrieved", parent.child().name(), child.name());
+            srvSave(parent, testCaseMethod);
+
+            parent = srv.retrieve(UnidirectionalOneToOnePlmParent.class, o.getPrimaryKey());
+            Assert.assertEquals("correct data retrieved", parent.child().name(), child.name());
+
+            // See that Child was removed
+            {
+                UnidirectionalOneToOnePlmChildA childVerify = srv.retrieve(UnidirectionalOneToOnePlmChildA.class, a.getPrimaryKey());
+                //TODO The persist method is inconsistent for now
+                switch (testCaseMethod) {
+                case Merge:
+                    Assert.assertNull("child NOT removed", childVerify);
+                    break;
+                case Persist:
+                    Assert.assertNotNull("child removed", childVerify);
+                }
             }
 
         }

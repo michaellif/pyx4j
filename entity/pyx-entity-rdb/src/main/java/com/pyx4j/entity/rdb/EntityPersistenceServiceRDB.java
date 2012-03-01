@@ -856,8 +856,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     throw new RuntimeException("Entity '" + tm.entityMeta().getCaption() + "' " + entity.getPrimaryKey() + " NotFound");
                 }
             }
-            for (IEntity ce : cascadeRemove) {
-                cascadeDelete(ce.getEntityMeta(), ce.getPrimaryKey(), ce);
+            for (IEntity childEntity : cascadeRemove) {
+                IEntity childEntityActual = childEntity.cast();
+                cascadeDelete(childEntityActual.getEntityMeta(), childEntityActual.getPrimaryKey(), childEntityActual);
             }
             CacheService.entityCache().put(entity);
         }

@@ -30,9 +30,6 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 
 public abstract class AssociationMappingTestCase extends DatastoreTestBase {
 
-    // TODO POLYMORPHIC
-    public static boolean POLYMORPHIC_TODO = false;
-
     protected void resetTables(Class<? extends IEntity>... types) {
         EntityPersistenceServiceRDB service = ((EntityPersistenceServiceRDB) srv);
         for (Class<? extends IEntity> type : types) {
