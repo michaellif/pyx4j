@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -32,6 +31,17 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
+
+/**
+ * Concessions needs to be versioned with service catalog.
+ * if for concession instance within service_agreement effective and expiration dates are required, we may want
+ * to introduce the new interface under com.propertyvista.domain.tenant.lease called LeaseConcession to align with
+ * ProductCatalog.service.productItem -> ServiceAgreement.billableItem
+ * ProductCatalog.concession -> ServiceAgreement.leaseConcession
+ * 
+ * @author Alex
+ * 
+ */
 
 @ToStringFormat("{0}, {1}, ${2}")
 public interface Concession extends IEntity {
