@@ -58,7 +58,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
-    private Widget unitSelector, serviceSelector;
+    private Widget detailsTab, unitSelector, serviceSelector;
 
     public LeaseEditorForm() {
         this(false);
@@ -71,7 +71,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
+        tabPanel.add(detailsTab = createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
         tabPanel.add(createServiceAgreementTab(), i18n.tr("Service Agreement"));
         tabPanel.addDisable(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
@@ -100,15 +100,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         if (isEditable()) {
             boolean isLeaseSigned = !getValue().approvalDate().isNull();
 
-            get(proto().leaseFrom()).setEditable(!isLeaseSigned);
-            get(proto().leaseTo()).setEditable(!isLeaseSigned);
-
-            get(proto().serviceAgreement().serviceItem()).setEditable(!isLeaseSigned);
-
-            // set one-time editing:
-            get(proto().expectedMoveIn()).setEditable(getValue().expectedMoveIn().isNull());
-            get(proto().actualMoveIn()).setEditable(getValue().actualMoveIn().isNull());
-            get(proto().actualMoveOut()).setEditable(getValue().actualMoveOut().isNull());
+            tabPanel.setTabDisabled(detailsTab, isLeaseSigned);
 
             unitSelector.setVisible(!isLeaseSigned);
             serviceSelector.setVisible(!isLeaseSigned);

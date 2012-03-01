@@ -39,7 +39,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
             @Override
             public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
                 if (disableMode) {
-                    if (isDisabledTab(event.getItem())) {
+                    if (isTabDisabled(event.getItem())) {
                         event.cancel();
                     }
                 }
@@ -61,7 +61,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
             @Override
             public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
                 if (disableCriterion.isDisable()) {
-                    if (isDisabledTab(event.getItem())) {
+                    if (isTabDisabled(event.getItem())) {
                         event.cancel();
                     }
                 }
@@ -72,17 +72,11 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
     public void setDisableMode(boolean disable) {
         disableMode = disable;
         for (IsWidget w : disableTabs) {
-            if (disable) {
-//                getTabWidget(w).asWidget().addStyleName(TAB_DIASBLED_STYLE);
-                getTabWidget(w).asWidget().getParent().addStyleName(TAB_DIASBLED_STYLE);
-            } else {
-//                getTabWidget(w).asWidget().removeStyleName(TAB_DIASBLED_STYLE);
-                getTabWidget(w).asWidget().getParent().removeStyleName(TAB_DIASBLED_STYLE);
-            }
+            setTabDisabledStyles(w, disable);
         }
 
         try {
-            if (disable && isDisabledTab(getSelectedIndex())) {
+            if (disable && isTabDisabled(getSelectedIndex())) {
                 selectFirstAvailableTab(false);
             }
         } catch (IndexOutOfBoundsException e) {
@@ -92,7 +86,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
 
     @Override
     public void selectTab(int index, boolean fireEvents) {
-        if (disableMode && isDisabledTab(index)) {
+        if (disableMode && isTabDisabled(index)) {
             selectFirstAvailableTab(fireEvents);
         } else {
             super.selectTab(index, fireEvents);
@@ -101,7 +95,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
 
     @Override
     public void selectTab(Widget child) {
-        if (disableMode && isDisabledTab(child)) {
+        if (disableMode && isTabDisabled(child)) {
             return; // ignore mouse click selection of disabled tabs
         } else {
             super.selectTab(child);
@@ -111,7 +105,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
     protected void selectFirstAvailableTab(boolean fireEvents) {
         if (disableMode) {
             for (int i = getWidgetCount() - 1; i >= 0; --i) { // iterate backward! - the tabs stored in reverse order!?
-                if (!isDisabledTab(i)) {
+                if (!isTabDisabled(i)) {
                     super.selectTab(i, false);
                 }
             }
@@ -120,12 +114,33 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
         }
     }
 
-    protected boolean isDisabledTab(Widget widget) {
+    public boolean isTabDisabled(Widget widget) {
         return disableTabs.contains(widget);
     }
 
-    protected boolean isDisabledTab(int index) {
-        return isDisabledTab(getWidget(index).asWidget());
+    public boolean isTabDisabled(int index) {
+        return isTabDisabled(getWidget(index).asWidget());
+    }
+
+    public void setTabDisabled(int index, boolean disable) {
+        setTabDisabled(getWidget(index).asWidget(), disable);
+    }
+
+    public void setTabDisabled(Widget widget, boolean disable) {
+        if (disable) {
+            disableTabs.add(widget);
+        } else {
+            disableTabs.remove(widget);
+        }
+        setTabDisabledStyles(widget, disable);
+    }
+
+    private void setTabDisabledStyles(IsWidget widget, boolean disable) {
+        if (disable) {
+            getTabWidget(widget).asWidget().getParent().addStyleName(TAB_DIASBLED_STYLE);
+        } else {
+            getTabWidget(widget).asWidget().getParent().removeStyleName(TAB_DIASBLED_STYLE);
+        }
     }
 
     //
@@ -229,9 +244,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
 
     @Override
     public boolean remove(int index) {
-        if (index < disableTabs.size()) {
-            disableTabs.remove(index);
-        }
+        disableTabs.remove(getWidget(index).asWidget());
         return super.remove(index);
     }
 

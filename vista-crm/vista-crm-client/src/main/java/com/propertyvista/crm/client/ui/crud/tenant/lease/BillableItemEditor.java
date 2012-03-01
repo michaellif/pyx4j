@@ -17,14 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -107,11 +112,11 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 break;
             }
 
-            if (isEditable()) {
+            if (isViewable()) {
+                adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
+            } else {
                 get(proto().exemptFromTax()).setVisible(true);
                 adjustmentPanel.setVisible(true);
-            } else {
-                adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
             }
 
             CEntityEditor editor = null;
@@ -149,17 +154,19 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
     }
 
     @Override
-    public void setEditable(boolean editable) {
-        super.setEditable(editable);
-        if (!isEditable() && !getValue().isNull()) {
+    public void setViewable(boolean viewable) {
+        super.setViewable(viewable);
+        if (viewable && !getValue().isNull()) {
             adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
+        } else {
+            adjustmentPanel.setVisible(true);
         }
     }
 
     private class ChargeItemAdjustmentFolder extends VistaTableFolder<BillableItemAdjustment> {
 
         public ChargeItemAdjustmentFolder() {
-            super(BillableItemAdjustment.class, BillableItemEditor.this.isEditable());
+            super(BillableItemAdjustment.class, !BillableItemEditor.this.isViewable());
         }
 
         @Override
@@ -180,6 +187,37 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 newEntity.effectiveDate().setValue(new LogicalDate());
             }
             super.addItem(newEntity);
+        }
+
+        @Override
+        protected void removeItem(CEntityFolderItem<BillableItemAdjustment> item) {
+            item.getValue().expirationDate().setValue(new LogicalDate());
+            item.setValue(item.getValue(), false);
+            item.setEditable(false);
+            ValueChangeEvent.fire(this, getValue());
+        }
+
+        @Override
+        protected CEntityFolderItem<BillableItemAdjustment> createItem(boolean first) {
+            final CEntityFolderItem<BillableItemAdjustment> item = super.createItem(first);
+            item.addPropertyChangeHandler(new PropertyChangeHandler() {
+                @Override
+                public void onPropertyChange(PropertyChangeEvent event) {
+                    if (event.getPropertyName() == PropertyName.repopulated) {
+                        if (isModifiable()) {
+                            LogicalDate value = item.getValue().expirationDate().getValue();
+                            if ((value != null) && !value.after(TimeUtils.today())) {
+                                item.setViewable(true);
+                                item.inheritViewable(false);
+
+                                item.setMovable(false);
+                                item.setRemovable(false);
+                            }
+                        }
+                    }
+                }
+            });
+            return item;
         }
     }
 }
