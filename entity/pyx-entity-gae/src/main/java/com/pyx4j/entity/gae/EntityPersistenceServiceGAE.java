@@ -1230,7 +1230,19 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public <T extends IEntity> void retrieveMember(T entityMember, AttachLevel attachLevel) {
+        //TODO implement this
+        throw new Error("implement this");
+    }
+
+    @Override
     public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember) {
+        //TODO implement this
+        throw new Error("implement this");
+    }
+
+    @Override
+    public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember, AttachLevel attachLevel) {
         //TODO implement this
         throw new Error("implement this");
     }

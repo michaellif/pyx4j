@@ -86,12 +86,16 @@ public interface IEntityPersistenceService {
     //TODO make @Deprecated and use retrieve
     public <T extends IEntity> void retrieveMember(T entityMember);
 
+    public <T extends IEntity> void retrieveMember(T entityMember, AttachLevel attachLevel);
+
     public <T extends IEntity> void retrieve(Iterable<T> entityIterable);
 
     public <T extends IEntity> void retrieve(Iterable<T> entityIterable, AttachLevel attachLevel);
 
     //TODO make @Deprecated and use retrieve
     public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember);
+
+    public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember, AttachLevel attachLevel);
 
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria);
 

@@ -897,12 +897,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> void retrieveMember(T entityMember) {
+        retrieveMember(entityMember, AttachLevel.Attached);
+    }
+
+    @Override
+    public <T extends IEntity> void retrieveMember(T entityMember, AttachLevel attachLevel) {
         switch (entityMember.getAttachLevel()) {
         case Attached:
             throw new RuntimeException("Values of " + entityMember.getPath() + " already Attached");
         case IdOnly:
         case ToStringMembers:
-            retrieve(entityMember);
+            retrieve(entityMember, attachLevel);
             break;
         case Detached:
             assert (entityMember.getOwner().getPrimaryKey() != null);
@@ -910,7 +915,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             try {
                 TableModel tm = tableModel(entityMember.getOwner().getEntityMeta());
                 tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
-                if (cascadeRetrieve(entityMember, AttachLevel.Attached) == null) {
+                if (cascadeRetrieve(entityMember, attachLevel) == null) {
                     throw new RuntimeException("Entity '" + entityMember.getEntityMeta().getCaption() + "' " + entityMember.getPrimaryKey() + " "
                             + entityMember.getPath() + " NotFound");
                 }
@@ -922,6 +927,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember) {
+        retrieveMember(collectionMember, AttachLevel.Attached);
+    }
+
+    @Override
+    public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember, AttachLevel attachLevel) {
         switch (collectionMember.getAttachLevel()) {
         case Attached:
             // There are no distinction in IdOnly/Attached  for now  
@@ -930,7 +940,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
         case IdOnly: // This is not implemented now.
         case ToStringMembers:
-            retrieve(collectionMember);
+            retrieve(collectionMember, attachLevel);
             collectionMember.setAttachLevel(AttachLevel.Attached);
             break;
 
@@ -943,12 +953,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 collectionMember.setAttachLevel(AttachLevel.Attached);
                 tm.retrieveMember(getPersistenceContext(), collectionMember.getOwner(), collectionMember);
                 for (IEntity childEntity : collectionMember) {
-                    if (cascadeRetrieve(childEntity, AttachLevel.Attached) == null) {
+                    if (cascadeRetrieve(childEntity, attachLevel) == null) {
                         throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
                                 + childEntity.getPath() + " NotFound");
                     }
                 }
-                collectionMember.setAttachLevel(AttachLevel.Attached);
             } finally {
                 endContext();
             }
