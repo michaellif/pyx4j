@@ -14,6 +14,8 @@
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -423,8 +425,9 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         BigDecimal marketRent = unit.marketRent().getValue();
 
-        if (marketRent != null && !marketRent.equals(BigDecimal.ZERO)) {
-            BigDecimal revenueLost = marketRent.multiply(new BigDecimal(daysVacant).divide(new BigDecimal(30)));
+        MathContext ctx = new MathContext(2, RoundingMode.UP);
+        if (marketRent != null && marketRent.compareTo(BigDecimal.ZERO) != 0) {
+            BigDecimal revenueLost = marketRent.multiply(new BigDecimal(daysVacant).divide(new BigDecimal(30), ctx), ctx);
             unit.revenueLost().setValue(revenueLost);
         }
     }
