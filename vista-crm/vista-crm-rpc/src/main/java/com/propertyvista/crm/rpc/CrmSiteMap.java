@@ -344,6 +344,12 @@ public class CrmSiteMap implements SiteMap {
             public static class Deposits extends CrudAppPlace {
 
             }
+
+            @PlaceProperties(caption = "Background Check")
+            @NavigationItem(navigLabel = "Background Check")
+            public static class BackgroundCheck extends CrudAppPlace {
+
+            }
         }
 
         @PlaceProperties(caption = "Lease Terms")

@@ -20,6 +20,12 @@ import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.Ap
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyEdtiorView;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyListerView;
@@ -115,8 +121,14 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(DepositPolicyEditorView.class, new DepositPolicyEditorViewImpl());
             } else if (DepositPolicyViewerView.class.equals(type)) {
                 map.put(DepositPolicyViewerView.class, new DepositPolicyViewerViewImpl());
-            }
 
+            } else if (BackgroundCheckPolicyListerView.class.equals(type)) {
+                map.put(BackgroundCheckPolicyListerView.class, new BackgroundCheckPolicyListerViewImpl());
+            } else if (BackgroundCheckPolicyEditorView.class.equals(type)) {
+                map.put(BackgroundCheckPolicyEditorView.class, new BackgroundCheckPolicyEditorViewImpl());
+            } else if (BackgroundCheckPolicyViewerView.class.equals(type)) {
+                map.put(BackgroundCheckPolicyViewerView.class, new BackgroundCheckPolicyViewerViewImpl());
+            }
         }
         @SuppressWarnings("unchecked")
         T impl = (T) map.get(type);

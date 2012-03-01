@@ -132,6 +132,9 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.deposit.DepositPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.deposit.DepositPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.deposit.DepositPolicyViewerActivity;
@@ -812,6 +815,18 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case viewer:
                         activity = new DepositPolicyViewerActivity(place);
+                        break;
+                    }
+                } else if (place instanceof CrmSiteMap.Settings.Policies.BackgroundCheck) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case lister:
+                        activity = new BackgroundCheckPolicyListerActivity(place);
+                        break;
+                    case editor:
+                        activity = new BackgroundCheckPolicyEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new BackgroundCheckPolicyViewerActivity(place);
                         break;
                     }
                 }
