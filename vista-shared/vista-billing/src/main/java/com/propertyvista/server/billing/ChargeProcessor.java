@@ -40,7 +40,7 @@ public class ChargeProcessor {
 
     private void createCharge(BillableItem billableItem) {
         if (billableItem.isNull()) {
-            throw new Error("Service Item is mandatory in lease");
+            throw new BillingException("Service Item is mandatory in lease");
         }
 
         Persistence.service().retrieve(billableItem.item().product());
@@ -82,7 +82,7 @@ public class ChargeProcessor {
      */
     private boolean isBillableItemEligibaleForCharge(BillableItem item) {
 //        if (item.billingPeriodNumber().isNull()) {
-//            throw new Error("billingPeriodNumber should not be null");
+//            throw new BillingException("billingPeriodNumber should not be null");
 //        } else if (bill.billingPeriodNumber().getValue() >= item.billingPeriodNumber().getValue()) {
 //            if (BillingUtils.isFeature(item.item().product()) && !BillingUtils.isRecurringFeature(item.item().product())) {
 //                return bill.billingPeriodNumber().getValue() == item.billingPeriodNumber().getValue();

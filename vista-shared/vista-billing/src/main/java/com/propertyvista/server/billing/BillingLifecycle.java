@@ -27,7 +27,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -49,13 +48,18 @@ public class BillingLifecycle {
         BillingAccount billingAccount = ensureBillingAccount(lease);
 
         if (!billingAccount.currentBillingRun().isNull()) {
-            throw new UserRuntimeException("Can't run billing on Account with non-confirmed bills");
+            throw new BillingException("Can't run billing on Account with non-confirmed bills");
         }
+
         BillingRun billingRun = createBillingRun(lease.leaseFinancial());
         Persistence.service().retrieve(lease.unit());
         billingRun.building().set(lease.unit().belongsTo());
-
         Persistence.service().persist(billingRun);
+
+        Bill previousBill = BillingLifecycle.getLatestConfirmedBill(billingAccount);
+        if (previousBill != null && Bill.BillType.Final.equals(previousBill.billType().getValue())) {
+            throw new BillingException("Final bill has been issued");
+        }
 
         billingAccount.currentBillingRun().set(billingRun);
         Persistence.service().persist(billingAccount);
@@ -108,8 +112,13 @@ public class BillingLifecycle {
             bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
 
             Persistence.service().persist(bill.billingAccount());
+        } else if (BillStatus.Erred.equals(bill.billStatus().getValue())) {
+            bill.billingAccount().currentBillingRun().setValue(null);
+            bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
+
+            Persistence.service().persist(bill.billingAccount());
         } else {
-            throw new Error("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
+            throw new BillingException("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
         }
     }
 
@@ -128,7 +137,7 @@ public class BillingLifecycle {
      */
     static BillingAccount ensureBillingAccount(Lease lease) {
         if (lease.leaseFrom().isNull()) {
-            throw new Error("'Lease from' date is not set");
+            throw new BillingException("'Lease from' date is not set");
         }
         LeaseFinancial leaseFinancial = lease.leaseFinancial();
         if (leaseFinancial.isValueDetached()) {
@@ -164,5 +173,9 @@ public class BillingLifecycle {
         } else {
             return new LogicalDate();
         }
+    }
+
+    static void setSysDate(LogicalDate date) {
+        sysDate = date;
     }
 }

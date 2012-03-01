@@ -28,7 +28,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.dev.DataDump;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
@@ -44,6 +43,11 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 1 ======================//
 
+        BillingLifecycle.setSysDate(new LogicalDate(formatter.parse("18-Mar-2011")));
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
+        lease.status().setValue(Lease.Status.Approved);
+        Persistence.service().persist(lease);
+
         Bill bill = runBilling(true);
 
         assertEquals("Bill Sequence Number", 1, (int) bill.billSequenceNumber().getValue());
@@ -54,7 +58,9 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-Mar-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-Mar-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("15-Mar-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.First, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-Mar-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("31-Mar-2011")), bill.billingPeriodEndDate().getValue());
 
@@ -62,14 +68,27 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 2 ======================//
 
+        lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
+        lease.status().setValue(Lease.Status.Active);
+        Persistence.service().persist(lease);
+
+        BillingLifecycle.setSysDate(new LogicalDate(formatter.parse("10-Apr-2011")));
+
+        bill = runBilling(false);
+        assertEquals("Ran billing before target date", Bill.BillStatus.Erred, bill.billStatus().getValue());
+
+        BillingLifecycle.setSysDate(new LogicalDate(formatter.parse("16-Apr-2011")));
+
         bill = runBilling(true);
 
-        assertEquals("Bill Sequence Number", 2, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Bill Sequence Number", 3, (int) bill.billSequenceNumber().getValue());
         assertEquals("Previous Bill Sequence number", 1, (int) bill.previousBill().billSequenceNumber().getValue());
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-Apr-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("30-Apr-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("15-Apr-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.Regular, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-Apr-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("30-Apr-2011")), bill.billingPeriodEndDate().getValue());
 
@@ -77,14 +96,18 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 3 ======================//
 
+        BillingLifecycle.setSysDate(new LogicalDate(formatter.parse("15-May-2011")));
+
         bill = runBilling(false);
 
-        assertEquals("Bill Sequence Number", 3, (int) bill.billSequenceNumber().getValue());
-        assertEquals("Previous Bill Sequence number", 2, (int) bill.previousBill().billSequenceNumber().getValue());
+        assertEquals("Bill Sequence Number", 4, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Previous Bill Sequence number", 3, (int) bill.previousBill().billSequenceNumber().getValue());
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-May-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("15-May-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.Regular, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-May-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("31-May-2011")), bill.billingPeriodEndDate().getValue());
 
@@ -92,12 +115,14 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         bill = runBilling(true);
 
-        assertEquals("Bill Sequence Number", 4, (int) bill.billSequenceNumber().getValue());
-        assertEquals("Previous Bill Sequence number", 2, (int) bill.previousBill().billSequenceNumber().getValue());
+        assertEquals("Bill Sequence Number", 5, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Previous Bill Sequence number", 3, (int) bill.previousBill().billSequenceNumber().getValue());
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-May-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("15-May-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.Regular, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-May-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("31-May-2011")), bill.billingPeriodEndDate().getValue());
 
@@ -105,14 +130,18 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 4 ======================//
 
+        BillingLifecycle.setSysDate(new LogicalDate(formatter.parse("15-June-2011")));
+
         bill = runBilling(true);
 
-        assertEquals("Bill Sequence Number", 5, (int) bill.billSequenceNumber().getValue());
-        assertEquals("Previous Bill Sequence number", 4, (int) bill.previousBill().billSequenceNumber().getValue());
+        assertEquals("Bill Sequence Number", 6, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Previous Bill Sequence number", 5, (int) bill.previousBill().billSequenceNumber().getValue());
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-June-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("30-June-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("15-June-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.Regular, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-June-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("30-June-2011")), bill.billingPeriodEndDate().getValue());
 
@@ -120,14 +149,18 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 5 ======================//
 
+        BillingLifecycle.setSysDate(new LogicalDate(formatter.parse("15-July-2011")));
+
         bill = runBilling(true);
 
-        assertEquals("Bill Sequence Number", 6, (int) bill.billSequenceNumber().getValue());
-        assertEquals("Previous Bill Sequence number", 5, (int) bill.previousBill().billSequenceNumber().getValue());
+        assertEquals("Bill Sequence Number", 7, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Previous Bill Sequence number", 6, (int) bill.previousBill().billSequenceNumber().getValue());
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-July-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-July-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("15-July-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.Regular, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-Jul-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("31-July-2011")), bill.billingPeriodEndDate().getValue());
 
@@ -135,16 +168,24 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 6 ======================//
 
+        BillingLifecycle.setSysDate(new LogicalDate(formatter.parse("5-Aug-2011")));
+
+        lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
+        lease.status().setValue(Lease.Status.Completed);
+        Persistence.service().persist(lease);
+
         bill = runBilling(true);
 
-        assertEquals("Bill Sequence Number", 7, (int) bill.billSequenceNumber().getValue());
-        assertEquals("Previous Bill Sequence number", 6, (int) bill.previousBill().billSequenceNumber().getValue());
+        assertEquals("Bill Sequence Number", 8, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Previous Bill Sequence number", 7, (int) bill.previousBill().billSequenceNumber().getValue());
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("1-Aug-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("31-Aug-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("15-Aug-2011")), bill.billingRun().executionTargetDate().getValue());
 
-        assertEquals("Bill Start Day", new LogicalDate(formatter.parse("1-Aug-2011")), bill.billingPeriodStartDate().getValue());
-        assertEquals("Bill End Day", new LogicalDate(formatter.parse("3-Aug-2011")), bill.billingPeriodEndDate().getValue());
+        assertEquals("Bill Type", Bill.BillType.Final, bill.billType().getValue());
+        assertEquals("Bill Start Day", null, bill.billingPeriodStartDate().getValue());
+        assertEquals("Bill End Day", null, bill.billingPeriodEndDate().getValue());
 
         assertEquals("Same Billing Cycle", billingCycleId, bill.billingRun().billingCycle().id().toString());
 
@@ -152,17 +193,22 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         try {
             bill = runBilling(true);
-            assertTrue("Billing outside billing lease dates", false);
-        } catch (Error e) {
+            assertTrue("No bills are expected after final bill", false);
+        } catch (BillingException e) {
         }
-
     }
 
     public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay() throws ParseException {
+        BillingLifecycle.setSysDate(null);
+
         preloadData();
         createAgreement(new LogicalDate(formatter.parse("23-Mar-2011")), new LogicalDate(formatter.parse("3-Aug-2011")), null);
 
         //==================== RUN 1 ======================//
+
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
+        lease.status().setValue(Lease.Status.Approved);
+        Persistence.service().persist(lease);
 
         Bill bill = runBilling(true);
 
@@ -174,12 +220,18 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-Mar-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-Apr-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("6-Apr-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.First, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-Mar-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("22-Apr-2011")), bill.billingPeriodEndDate().getValue());
         String billingCycleId = bill.billingRun().billingCycle().id().toString();
 
         //==================== RUN 2 ======================//
+
+        lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
+        lease.status().setValue(Lease.Status.Active);
+        Persistence.service().persist(lease);
 
         bill = runBilling(true);
 
@@ -188,7 +240,9 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-Apr-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-May-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("7-May-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.Regular, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-Apr-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("22-May-2011")), bill.billingPeriodEndDate().getValue());
 
@@ -203,7 +257,9 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-Jun-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("6-Jun-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.Regular, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-May-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("22-Jun-2011")), bill.billingPeriodEndDate().getValue());
 
@@ -216,7 +272,9 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-May-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-Jun-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("6-Jun-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.Regular, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-May-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("22-Jun-2011")), bill.billingPeriodEndDate().getValue());
 
@@ -231,7 +289,9 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-Jun-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-Jul-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("7-Jul-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.Regular, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-Jun-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("22-Jul-2011")), bill.billingPeriodEndDate().getValue());
 
@@ -246,19 +306,43 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-Jul-2011")), bill.billingRun().billingPeriodStartDate().getValue());
         assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-Aug-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("6-Aug-2011")), bill.billingRun().executionTargetDate().getValue());
 
+        assertEquals("Bill Type", Bill.BillType.Regular, bill.billType().getValue());
         assertEquals("Bill Start Day", new LogicalDate(formatter.parse("23-Jul-2011")), bill.billingPeriodStartDate().getValue());
         assertEquals("Bill End Day", new LogicalDate(formatter.parse("3-Aug-2011")), bill.billingPeriodEndDate().getValue());
 
         assertEquals("Same Billing Cycle", billingCycleId, bill.billingRun().billingCycle().id().toString());
 
-        //==================== RUN 6 ======================//
+        //==================== RUN Final ======================//
+
+        lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
+        lease.status().setValue(Lease.Status.Completed);
+        Persistence.service().persist(lease);
+
+        bill = runBilling(true);
+
+        assertEquals("Bill Sequence Number", 7, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Previous Bill Sequence number", 6, (int) bill.previousBill().billSequenceNumber().getValue());
+
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("23-Aug-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("22-Sep-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Execution Target Day", new LogicalDate(formatter.parse("6-Sep-2011")), bill.billingRun().executionTargetDate().getValue());
+
+        assertEquals("Bill Type", Bill.BillType.Final, bill.billType().getValue());
+        assertEquals("Bill Start Day", null, bill.billingPeriodStartDate().getValue());
+        assertEquals("Bill End Day", null, bill.billingPeriodEndDate().getValue());
+
+        assertEquals("Same Billing Cycle", billingCycleId, bill.billingRun().billingCycle().id().toString());
+
+        //==================== RUN after Final ======================//
 
         try {
             bill = runBilling(true);
-            assertTrue("Billing outside billing lease dates", false);
-        } catch (Error e) {
+            assertTrue("No bills are expected after final bill", false);
+        } catch (BillingException e) {
         }
+
     }
 
     public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDayOn29() throws ParseException {
@@ -274,10 +358,15 @@ public class BillingPeriodsTest extends BillingTestBase {
     }
 
     public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay(int day) throws ParseException {
+        BillingLifecycle.setSysDate(null);
         preloadData();
         createAgreement(new LogicalDate(formatter.parse(day + "-Mar-2011")), new LogicalDate(formatter.parse("3-Aug-2011")), null);
 
         //==================== RUN 1 ======================//
+
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
+        lease.status().setValue(Lease.Status.Approved);
+        Persistence.service().persist(lease);
 
         Bill bill = runBilling(true);
 
@@ -295,6 +384,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         String billingCycleId = bill.billingRun().billingCycle().id().toString();
 
         //==================== RUN 2 ======================//
+
+        lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
+        lease.status().setValue(Lease.Status.Active);
+        Persistence.service().persist(lease);
 
         bill = runBilling(true);
 
@@ -347,13 +440,33 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         assertEquals("Same Billing Cycle", billingCycleId, bill.billingRun().billingCycle().id().toString());
 
-        //==================== RUN 7 ======================//
+        //==================== RUN final ======================//
+
+        lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
+        lease.status().setValue(Lease.Status.Completed);
+        Persistence.service().persist(lease);
+
+        bill = runBilling(true);
+
+        assertEquals("Bill Sequence Number", 7, (int) bill.billSequenceNumber().getValue());
+        assertEquals("Previous Bill Sequence number", 6, (int) bill.previousBill().billSequenceNumber().getValue());
+
+        assertEquals("Billing Run Start Day", new LogicalDate(formatter.parse("01-Sep-2011")), bill.billingRun().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run End Day", new LogicalDate(formatter.parse("30-Sep-2011")), bill.billingRun().billingPeriodEndDate().getValue());
+
+        assertEquals("Bill Start Day", null, bill.billingPeriodStartDate().getValue());
+        assertEquals("Bill End Day", null, bill.billingPeriodEndDate().getValue());
+
+        assertEquals("Same Billing Cycle", billingCycleId, bill.billingRun().billingCycle().id().toString());
+
+        //==================== RUN after final ======================//
 
         try {
             bill = runBilling(true);
-            assertTrue("Billing outside billing lease dates", false);
-        } catch (Error e) {
+            assertTrue("No bills are expected after final bill", false);
+        } catch (BillingException e) {
         }
+
     }
 
     private void createAgreement(LogicalDate leaseDateFrom, LogicalDate leaseDateTo, Integer billingPeriodStartDate) {
@@ -373,6 +486,7 @@ public class BillingPeriodsTest extends BillingTestBase {
         BillingFacade.runBilling(lease);
 
         Bill bill = BillingFacade.getLatestBill(lease.leaseFinancial().billingAccount());
+
         if (confirm) {
             BillingFacade.confirmBill(bill);
         } else {
@@ -393,7 +507,6 @@ public class BillingPeriodsTest extends BillingTestBase {
         } else {
             assertEquals("Billing Cycle Id", billingCycleId, bill.billingRun().billingCycle().id().getValue().toString());
         }
-        assertEquals("Bill Confirmation Status", confirm ? BillStatus.Confirmed : BillStatus.Rejected, bill.billStatus().getValue());
 
         return bill;
     }

@@ -60,6 +60,10 @@ public interface BillingRun extends IEntity {
 
     @ReadOnly
     @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> executionTargetDate();
+
+    @ReadOnly
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> executionDate();
 
 }

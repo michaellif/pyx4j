@@ -59,6 +59,8 @@ public interface Bill extends IEntity {
     @I18n
     enum BillType {
 
+        First,
+
         Regular,
 
         Final,

@@ -111,10 +111,6 @@ public class BillingCycleManger {
     }
 
     static BillingRun createFirstBillingRun(BillingCycle cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
-        BillingRun billingRun = EntityFactory.create(BillingRun.class);
-        billingRun.status().setValue(BillingRun.BillingRunStatus.Scheduled);
-        billingRun.billingCycle().set(cycle);
-
         LogicalDate billingRunStartDate = null;
         if (useCyclePeriodStartDay) {
             switch (cycle.paymentFrequency().getValue()) {
@@ -123,7 +119,7 @@ public class BillingCycleManger {
                 calendar.setTime(leaseStartDate);
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
                 if (cycle.billingPeriodStartDay().getValue() < 1 || cycle.billingPeriodStartDay().getValue() > 31) {
-                    throw new Error("Wrong billingPeriodStartDay");
+                    throw new BillingException("Wrong billingPeriodStartDay");
                 }
                 while (dayOfMonth != cycle.billingPeriodStartDay().getValue()) {
                     calendar.add(Calendar.DATE, -1);
@@ -152,19 +148,10 @@ public class BillingCycleManger {
             }
         }
 
-        billingRun.billingPeriodStartDate().setValue(billingRunStartDate);
-
-        billingRun.billingPeriodEndDate().setValue(calculateBillingRunEndDate(cycle.paymentFrequency().getValue(), billingRunStartDate));
-
-        return billingRun;
-
+        return createBillingRun(cycle, billingRunStartDate);
     }
 
     static BillingRun createSubsiquentBillingRun(BillingCycle cycle, BillingRun previousRun) {
-        BillingRun billingRun = EntityFactory.create(BillingRun.class);
-        billingRun.status().setValue(BillingRun.BillingRunStatus.Scheduled);
-        billingRun.billingCycle().set(cycle);
-
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(previousRun.billingPeriodStartDate().getValue());
         switch (cycle.paymentFrequency().getValue()) {
@@ -178,19 +165,23 @@ public class BillingCycleManger {
         case Annually:
             throw new Error("Not implemented");
         }
-        LogicalDate billingRunStartDate = new LogicalDate(calendar.getTime());
+        return createBillingRun(cycle, new LogicalDate(calendar.getTime()));
+    }
 
+    private static BillingRun createBillingRun(BillingCycle cycle, LogicalDate billingRunStartDate) {
+        BillingRun billingRun = EntityFactory.create(BillingRun.class);
+        billingRun.status().setValue(BillingRun.BillingRunStatus.Scheduled);
+        billingRun.billingCycle().set(cycle);
         billingRun.billingPeriodStartDate().setValue(billingRunStartDate);
-
         billingRun.billingPeriodEndDate().setValue(calculateBillingRunEndDate(cycle.paymentFrequency().getValue(), billingRunStartDate));
-
+        billingRun.executionTargetDate().setValue(calculateBillingRunTargetExecutionDate(cycle, billingRunStartDate));
         return billingRun;
 
     }
 
-    private static LogicalDate calculateBillingRunEndDate(PaymentFrequency frequency, LogicalDate billingPeriodStartDate) {
+    private static LogicalDate calculateBillingRunEndDate(PaymentFrequency frequency, LogicalDate billingRunStartDate) {
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(billingPeriodStartDate);
+        calendar.setTime(billingRunStartDate);
         switch (frequency) {
         case Monthly:
             calendar.add(Calendar.MONTH, 1);
@@ -202,6 +193,13 @@ public class BillingCycleManger {
             throw new Error("Not implemented");
         }
         calendar.add(Calendar.DAY_OF_MONTH, -1);
+        return new LogicalDate(calendar.getTime());
+    }
+
+    private static LogicalDate calculateBillingRunTargetExecutionDate(BillingCycle cycle, LogicalDate billingRunStartDate) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(billingRunStartDate);
+        calendar.add(Calendar.DATE, cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());
         return new LogicalDate(calendar.getTime());
     }
 }
