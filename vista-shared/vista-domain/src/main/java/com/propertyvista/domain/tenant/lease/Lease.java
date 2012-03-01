@@ -75,7 +75,9 @@ public interface Lease extends IEntity {
 
         Notice,
 
-        Termination,
+        LegalVacate,
+
+        Skip,
 
         Eviction;
 
@@ -155,8 +157,6 @@ public interface Lease extends IEntity {
     IList<TenantInLease> tenants();
 
     IPrimitive<PaymentFrequency> paymentFrequency();
-
-    IPrimitive<Integer> numberOfPeriods();
 
     // or by dates:
     @Format("MM/dd/yyyy")

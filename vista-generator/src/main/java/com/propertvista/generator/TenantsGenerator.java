@@ -114,7 +114,7 @@ public class TenantsGenerator {
                 date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000L);
                 summary.lease().expectedMoveOut().setValue(date);
 
-                summary.lease().completion().setValue(Lease.CompletionType.Termination);
+                summary.lease().completion().setValue(Lease.CompletionType.Skip);
             }
             if (RandomUtil.randomBoolean()) {
                 LogicalDate date = new LogicalDate(summary.lease().leaseTo().getValue());

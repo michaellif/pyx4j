@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentTy
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class BillingSunnyDayScenarioTest extends BillingTestBase {
+public class BillingFeatureLoverScenarioTest extends BillingTestBase {
 
     public void testSequentialBillingRun() {
         preloadData();
