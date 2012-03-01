@@ -119,5 +119,6 @@ public abstract class DDLTestCase extends DatastoreTestBase {
 
         // retrieve original Set as List
         TaskAlt2 task12 = srv.retrieve(TaskAlt2.class, task1.getPrimaryKey());
+        Assert.assertNotNull("can get it", task12);
     }
 }

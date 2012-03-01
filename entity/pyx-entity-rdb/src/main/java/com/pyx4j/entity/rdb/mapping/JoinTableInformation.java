@@ -75,6 +75,7 @@ class JoinTableInformation extends JoinInformation {
                     + memberMeta.getFieldName() + "' in " + entityMeta.getEntityClass().getName());
         } else if (orderMemberMeta != null) {
             sqlOrderColumnName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(orderMemberMeta));
+            orderMemeberName = orderMemberMeta.getFieldName();
         }
     }
 

@@ -578,16 +578,18 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         o.children().add(EntityFactory.create(BidirectionalOneToManyChild.class));
 
         o.children().get(0).testId().setValue(testId);
-        o.children().get(0).name().setValue(uniqueString());
+        o.children().get(0).name().setValue("c0-" + uniqueString());
 
         o.children().get(1).testId().setValue(testId);
-        o.children().get(1).name().setValue(uniqueString());
+        o.children().get(1).name().setValue("c1-" + uniqueString());
 
         // Save child and owner
         srvSave(o, testCaseMethod);
 
         Assert.assertNotNull("Id Assigned", o.children().get(0).getPrimaryKey());
         Assert.assertNotNull("Id Assigned", o.children().get(1).getPrimaryKey());
+        Assert.assertEquals("order is set", Integer.valueOf(0), o.children().get(0).orderInParent().getValue());
+        Assert.assertEquals("order is set", Integer.valueOf(1), o.children().get(1).orderInParent().getValue());
 
         // Get Parent and see that Child is retrieved, then verify values
         {
@@ -613,7 +615,7 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
         // update child and owner
         o.name().setValue(uniqueString());
-        o.children().get(0).name().setValue(uniqueString());
+        o.children().get(0).name().setValue("c0u-" + uniqueString());
         srvSave(o, testCaseMethod);
 
         // Get Parent and see that Child is retrieved, then verify values
@@ -638,7 +640,7 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         BidirectionalOneToManyChild c2 = EntityFactory.create(BidirectionalOneToManyChild.class);
         c2.parent().set(o);
         c2.testId().setValue(testId);
-        c2.name().setValue(uniqueString());
+        c2.name().setValue("c2-" + uniqueString());
         o.children().add(c2);
         srvSave(o, testCaseMethod);
 
@@ -655,7 +657,8 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         BidirectionalOneToManyChild c3 = EntityFactory.create(BidirectionalOneToManyChild.class);
         c3.parent().set(o);
         c3.testId().setValue(testId);
-        c3.name().setValue(uniqueString());
+        c3.name().setValue("c3" + uniqueString());
+        c3.orderInParent().setValue(4);
         srvSave(c3, testCaseMethod);
 
         {
@@ -714,7 +717,19 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             Assert.assertEquals("child update", child.name(), parentR1.children().get(1).name());
         }
 
+        // Verify number of children
+        {
+            BidirectionalOneToManyParent parent = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
+            Assert.assertEquals("child data size", 4, parent.children().size());
+
+            EntityQueryCriteria<BidirectionalOneToManyChild> criteria = EntityQueryCriteria.create(BidirectionalOneToManyChild.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().parent(), o));
+            List<BidirectionalOneToManyChild> children = srv.query(criteria);
+            Assert.assertEquals("result set size", 4, children.size());
+        }
+
         // remove child and update owner
+        o = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
         Key oldchildKey = o.children().get(1).getPrimaryKey();
         o.children().remove(o.children().get(1));
         srvSave(o, testCaseMethod);
@@ -723,6 +738,17 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         {
             BidirectionalOneToManyParent child = srv.retrieve(BidirectionalOneToManyParent.class, oldchildKey);
             Assert.assertNull("child NOT removed", child);
+        }
+
+        // Verify number of children
+        {
+            BidirectionalOneToManyParent parent = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
+            Assert.assertEquals("child data size", 3, parent.children().size());
+
+            EntityQueryCriteria<BidirectionalOneToManyChild> criteria = EntityQueryCriteria.create(BidirectionalOneToManyChild.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().parent(), o));
+            List<BidirectionalOneToManyChild> children = srv.query(criteria);
+            Assert.assertEquals("result set size", 3, children.size());
         }
     }
 

@@ -49,6 +49,8 @@ abstract class JoinInformation {
 
     String sqlOrderColumnName = null;
 
+    String orderMemeberName = null;
+
     ValueAdapter ownerValueAdapter;
 
     static JoinInformation build(Dialect dialect, NamingConvention namingConvention, EntityMeta rootEntityMeta, EntityMeta entityMeta, MemberMeta memberMeta) {
