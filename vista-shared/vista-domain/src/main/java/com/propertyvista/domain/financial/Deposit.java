@@ -25,6 +25,8 @@ public interface Deposit extends IEntity {
      * GL (Deposits may have separate GLcode)
      * Tax (as for PIT or LeaseAdjReasons)
      * 
+     * @author Alexs
+     * 
      */
 
 }
