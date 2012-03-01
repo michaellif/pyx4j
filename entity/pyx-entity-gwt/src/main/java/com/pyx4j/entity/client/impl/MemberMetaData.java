@@ -61,6 +61,8 @@ public class MemberMetaData {
 
     public String nullString;
 
+    public boolean isToStringMember;
+
     public MemberMetaData() {
 
     }
@@ -75,6 +77,7 @@ public class MemberMetaData {
         this.valueClassIsNumber = isNumber;
         this.attachLevel = AttachLevel.Attached;
         this.cascadePersist = true;
+        this.isToStringMember = false;
     }
 
     // Most commonly used definitions are shared here for code size and memory optimization.

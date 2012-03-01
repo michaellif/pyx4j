@@ -29,6 +29,7 @@ import junit.framework.Assert;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -176,7 +177,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
             emps = srv.query(criteria);
         } else {
             emps = new Vector<Employee>();
-            ICursorIterator<Employee> empsC = srv.query(null, criteria);
+            ICursorIterator<Employee> empsC = srv.query(null, criteria, AttachLevel.Attached);
             while (empsC.hasNext()) {
                 emps.add(empsC.next());
             }

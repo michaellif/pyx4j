@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -53,7 +54,7 @@ public abstract class QueryLimitsTestCase extends DatastoreTestBase {
         criteria.setPageSize(10);
         criteria.add(PropertyCriterion.eq(criteria.proto().manager(), mgr));
 
-        ICursorIterator<Employee> emps0 = srv.query(null, criteria);
+        ICursorIterator<Employee> emps0 = srv.query(null, criteria, AttachLevel.Attached);
         try {
             int cnt = 0;
             while (cnt < criteria.getPageSize()) {
@@ -68,7 +69,7 @@ public abstract class QueryLimitsTestCase extends DatastoreTestBase {
         }
 
         criteria.setPageNumber(2);
-        ICursorIterator<Employee> emps2 = srv.query(null, criteria);
+        ICursorIterator<Employee> emps2 = srv.query(null, criteria, AttachLevel.Attached);
         try {
             int cnt = 0;
             while (cnt < 5) {

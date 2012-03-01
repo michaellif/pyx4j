@@ -63,7 +63,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
     public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, Class<?> valueClass,
             @SuppressWarnings("rawtypes") Class<? extends IObject> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber,
             boolean persistenceTransient, boolean rpcTransient, AttachLevel attachLevel, boolean ownedRelationships, boolean cascadePersist, boolean owner,
-            boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat, String nullString) {
+            boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat, String nullString, boolean isToStringMember) {
         super();
         this.data = new MemberMetaData();
         this.data.valueClass = valueClass;
@@ -89,6 +89,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.data.format = format;
         this.data.useMessageFormat = useMessageFormat;
         this.data.nullString = nullString;
+        this.data.isToStringMember = isToStringMember;
     }
 
     public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, boolean indexed, MemberMetaData data) {
@@ -217,6 +218,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public String getNullString() {
         return data.nullString;
+    }
+
+    @Override
+    public boolean isToStringMember() {
+        return data.isToStringMember;
     }
 
     @Override

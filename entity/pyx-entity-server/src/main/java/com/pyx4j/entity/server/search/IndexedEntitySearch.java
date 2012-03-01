@@ -48,6 +48,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -346,7 +347,8 @@ public class IndexedEntitySearch<E extends IEntity> {
     }
 
     public SearchResultIterator<E> getResult(final String encodedCursorReference) {
-        final ICursorIterator<E> unfiltered = PersistenceServicesFactory.getPersistenceService().query(encodedCursorReference, queryCriteria);
+        final ICursorIterator<E> unfiltered = PersistenceServicesFactory.getPersistenceService().query(encodedCursorReference, queryCriteria,
+                AttachLevel.Attached);
         final int maxResults;
         final int firstResult;
         if ((searchCriteria.getPageSize() > 0) && (encodedCursorReference == null)) {

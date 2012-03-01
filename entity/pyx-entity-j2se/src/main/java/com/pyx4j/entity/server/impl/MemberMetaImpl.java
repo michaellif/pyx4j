@@ -40,6 +40,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -99,6 +100,8 @@ public class MemberMetaImpl implements MemberMeta {
      * See com.pyx4j.entity.annotations.Length
      */
     private final int length;
+
+    private final boolean isToStringMember;
 
     @SuppressWarnings("unchecked")
     public MemberMetaImpl(Class<? extends IEntity> interfaceClass, Method method) {
@@ -210,6 +213,8 @@ public class MemberMetaImpl implements MemberMeta {
 
         Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
         indexed = (indexedAnnotation != null) && (indexedAnnotation.indexPrimaryValue());
+
+        isToStringMember = (method.getAnnotation(ToString.class) != null);
     }
 
     @Override
@@ -341,6 +346,11 @@ public class MemberMetaImpl implements MemberMeta {
         } else {
             return "";
         }
+    }
+
+    @Override
+    public boolean isToStringMember() {
+        return isToStringMember;
     }
 
     @Override

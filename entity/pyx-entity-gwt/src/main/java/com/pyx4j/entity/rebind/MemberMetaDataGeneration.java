@@ -54,6 +54,8 @@ public class MemberMetaDataGeneration extends MemberMetaData {
 
         && (CommonsStringUtils.equals(nullString, other.nullString))
 
+        && (isToStringMember == other.isToStringMember)
+
         && (valueClassIsNumber == other.valueClassIsNumber)
 
         && (isSameClass(valueClassSourceName, other.valueClass)));

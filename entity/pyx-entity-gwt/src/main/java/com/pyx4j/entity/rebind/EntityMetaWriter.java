@@ -413,6 +413,7 @@ public class EntityMetaWriter {
             } else {
                 data.nullString = "";
             }
+            data.isToStringMember = (method.getAnnotation(ToString.class) != null);
 
             String useDefaultData = selectDefaultData(data);
 
@@ -511,6 +512,7 @@ public class EntityMetaWriter {
         writer.print(data.stringLength + ", ");
         writer.print(i18nEscapeSourceString(data.format) + ", ");
         writer.print(Boolean.valueOf(data.useMessageFormat).toString() + ", ");
-        writer.print(i18nEscapeSourceString(data.nullString));
+        writer.print(i18nEscapeSourceString(data.nullString) + ", ");
+        writer.print(Boolean.valueOf(data.isToStringMember).toString());
     }
 }

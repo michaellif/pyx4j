@@ -136,6 +136,8 @@ public interface MemberMeta {
 
     public String getNullString();
 
+    public boolean isToStringMember();
+
     public EditorType getEditorType();
 
     public List<Validator> getValidators();

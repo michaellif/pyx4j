@@ -30,6 +30,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -52,7 +53,7 @@ public class Persistence {
             }
         }
         EntitySearchResult<T> r = new EntitySearchResult<T>();
-        final ICursorIterator<T> unfiltered = service().query(null, criteria);
+        final ICursorIterator<T> unfiltered = service().query(null, criteria, AttachLevel.Attached);
         try {
             while (unfiltered.hasNext()) {
                 T ent = unfiltered.next();

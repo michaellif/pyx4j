@@ -31,6 +31,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -102,7 +103,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
 
                 }
                 @SuppressWarnings("unchecked")
-                ICursorIterator<E> it = (ICursorIterator<E>) Persistence.service().query(encodedCursorReference, request.getCriteria());
+                ICursorIterator<E> it = (ICursorIterator<E>) Persistence.service().query(encodedCursorReference, request.getCriteria(), AttachLevel.Attached);
                 try {
                     int currentFetchCount = 0;
                     while (it.hasNext()) {

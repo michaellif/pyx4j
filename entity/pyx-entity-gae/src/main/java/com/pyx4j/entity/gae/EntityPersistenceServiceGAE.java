@@ -71,6 +71,7 @@ import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -1138,9 +1139,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, com.pyx4j.commons.Key primaryKey) {
+        return retrieve(entityClass, primaryKey, AttachLevel.Attached);
+    }
+
+    @Override
+    public <T extends IEntity> T retrieve(Class<T> entityClass, com.pyx4j.commons.Key primaryKey, AttachLevel attachLevel) {
         T iEntity = EntityFactory.create(entityClass);
         iEntity.setPrimaryKey(primaryKey);
-        if (retrieve(iEntity)) {
+        if (retrieve(iEntity, attachLevel)) {
             return iEntity;
         } else {
             return null;
@@ -1148,7 +1154,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> boolean retrieve(final T iEntity) {
+    public <T extends IEntity> boolean retrieve(T entity) {
+        return retrieve(entity, AttachLevel.Attached);
+    }
+
+    @Override
+    public <T extends IEntity> boolean retrieve(final T iEntity, AttachLevel attachLevel) {
         RetrieveRequestsAggregator globalAggregator = requestAggregator.get();
         final RetrieveRequestsAggregator aggregator = (globalAggregator != null) ? globalAggregator : new RetrieveRequestsAggregator(this);
 
@@ -1198,8 +1209,18 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> void retrieve(Iterable<T> entityIterable) {
-        //TODO implement this
-        throw new Error("implement this");
+        //TODO proper impl
+        for (T e : entityIterable) {
+            retrieve(e, AttachLevel.Attached);
+        }
+    }
+
+    @Override
+    public <T extends IEntity> void retrieve(Iterable<T> entityIterable, AttachLevel attachLevel) {
+        //TODO proper impl
+        for (T e : entityIterable) {
+            retrieve(e, attachLevel);
+        }
     }
 
     @Override
@@ -1384,6 +1405,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria) {
+        return retrieve(criteria, AttachLevel.Attached);
+    }
+
+    @Override
+    public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria, AttachLevel attachLevel) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
         Class<T> entityClass = criteria.getEntityClass();
@@ -1417,6 +1443,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria) {
+        return query(criteria, AttachLevel.Attached);
+    }
+
+    @Override
+    public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria, AttachLevel attachLevel) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
         Class<T> entityClass = criteria.getEntityClass();
@@ -1448,7 +1479,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> ICursorIterator<T> query(String encodedCursorReference, EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> ICursorIterator<T> query(String encodedCursorReference, EntityQueryCriteria<T> criteria, final AttachLevel attachLevel) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
         final Class<T> entityClass = criteria.getEntityClass();
