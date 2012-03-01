@@ -224,13 +224,6 @@ public class RentRollAdaptor implements ImportAdapter {
             for (AptUnitIO u : it.next().units()) {
                 if (u.number().getValue().contains("-")) {
                     String[] t = u.number().getValue().split("-");
-
-                    try {
-                        Integer.parseInt(t[1]);
-                    } catch (NumberFormatException e) {
-                        throw new Error("Illegal apartment number: " + e);
-                    }
-
                     u.number().setValue(t[1]); // sets proper unit number, removes t[0] (building number) from it
                 }
             }
