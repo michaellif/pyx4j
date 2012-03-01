@@ -49,7 +49,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             Persistence.service().retrieve(dto.media());
             Persistence.service().retrieve(dto.productCatalog());
             Persistence.service().retrieve(dto.contacts().propertyContacts());
-            Persistence.service().retrieve(dto.contacts().contacts());
+            Persistence.service().retrieve(dto.contacts().organizationContacts());
             Persistence.service().retrieve(dto.marketing().adBlurbs());
             Persistence.service().retrieve(dto.dashboard());
 

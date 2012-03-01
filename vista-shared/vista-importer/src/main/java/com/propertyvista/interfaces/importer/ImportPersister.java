@@ -72,7 +72,7 @@ class ImportPersister {
         setBuildingDfaults(building);
 
         // Save Employee or find existing one
-        for (OrganizationContact organisationContact : building.contacts().contacts()) {
+        for (OrganizationContact organisationContact : building.contacts().organizationContacts()) {
             if (!organisationContact.person().isNull()) {
                 // Find existing Employee
                 EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);

@@ -16,10 +16,14 @@ package com.propertyvista.server.common.mail.templates;
 import java.text.SimpleDateFormat;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.CompanyEmail;
 import com.propertyvista.domain.company.CompanyPhone;
@@ -31,6 +35,7 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.common.mail.templates.model.ApplicationT;
 import com.propertyvista.server.common.mail.templates.model.BuildingT;
 import com.propertyvista.server.common.mail.templates.model.CompanyT;
@@ -40,16 +45,23 @@ import com.propertyvista.server.common.mail.templates.model.TenantT;
 
 public class EmailTemplateRootObjectLoader {
 
-    public static <T extends IEntity> T loadRootObject(T tObj, CrmUser context) {
-        if (tObj == null) {
-            throw new Error("Loading object cannot be null");
-        }
+    public static NewPasswordT loadNewPassword(CrmUser context, String token) {
         CrmUser user = context;
-        if (tObj instanceof NewPasswordT) {
-            NewPasswordT t = (NewPasswordT) tObj;
-            t.requestorName().set(user.name());
-            // passwordResetUrl must be set by the service
-        }
+        NewPasswordT tObj = EntityFactory.create(NewPasswordT.class);
+        tObj.requestorName().set(user.name());
+        tObj.passwordResetUrl().setValue(
+                ServerSideConfiguration.instance().getMainApplicationURL()
+                        + AppPlaceInfo.absoluteUrl(DeploymentConsts.CRM_URL, CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token));
+        return tObj;
+    }
+
+    public static NewPasswordT loadNewPassword(TenantInLease context, String token) {
+        TenantInLease til = context;
+        NewPasswordT tObj = EntityFactory.create(NewPasswordT.class);
+        tObj.requestorName().set(til.tenant().user().name());
+        tObj.passwordResetUrl().setValue(
+                ServerSideConfiguration.instance().getMainApplicationURL() + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
+                        + token);
         return tObj;
     }
 
@@ -61,17 +73,12 @@ public class EmailTemplateRootObjectLoader {
         if (tObj instanceof TenantT) {
             TenantT t = (TenantT) tObj;
             t.name().setValue(Formatter.fullName(til.tenant().person().name()));
-        } else if (tObj instanceof NewPasswordT) {
-            NewPasswordT t = (NewPasswordT) tObj;
-            t.requestorName().set(til.tenant().user().name());
-            // passwordResetUrl must be set by the service
         } else if (tObj instanceof BuildingT) {
             BuildingT t = (BuildingT) tObj;
             Building bld = getBuilding(context);
             t.propertyCode().set(bld.propertyCode());
             t.legalName().set(bld.marketing().name());
             t.website().set(bld.contacts().website());
-            t.email().set(bld.contacts().email());
         } else if (tObj instanceof ApplicationT) {
             ApplicationT t = (ApplicationT) tObj;
             t.applicant().setValue(Formatter.fullName(til.tenant().person().name()));

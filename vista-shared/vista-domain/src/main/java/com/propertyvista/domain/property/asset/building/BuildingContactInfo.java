@@ -34,5 +34,5 @@ public interface BuildingContactInfo extends IEntity {
 
     @Owned
     @Detached
-    IList<OrganizationContact> contacts();
+    IList<OrganizationContact> organizationContacts();
 }

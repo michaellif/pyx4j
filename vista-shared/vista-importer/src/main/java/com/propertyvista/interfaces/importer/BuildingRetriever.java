@@ -47,8 +47,8 @@ public class BuildingRetriever {
 
     public BuildingIO getModel(Building building, MediaConfig mediaConfig) {
 
-        if (building.contacts().contacts().getMeta().isDetached()) {
-            Persistence.service().retrieve(building.contacts().contacts());
+        if (building.contacts().organizationContacts().getMeta().isDetached()) {
+            Persistence.service().retrieve(building.contacts().organizationContacts());
         }
         if (building.marketing().adBlurbs().getMeta().isDetached()) {
             Persistence.service().retrieve(building.marketing().adBlurbs());
