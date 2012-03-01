@@ -14,8 +14,6 @@
 package com.propertyvista.domain.property.asset.building;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
@@ -23,19 +21,16 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.company.OrganizationContact;
-import com.propertyvista.domain.property.PropertyPhone;
+import com.propertyvista.domain.property.PropertyContact;
 
 public interface BuildingContactInfo extends IEntity {
 
     @Length(100)
     IPrimitive<String> website();
 
-    @Editor(type = EditorType.email)
-    IPrimitive<String> email(); // email business is not clear at the moment, we need a bit more detail on this
-
     @Owned
     @Detached
-    IList<PropertyPhone> phones();
+    IList<PropertyContact> propertyContacts();
 
     @Owned
     @Detached

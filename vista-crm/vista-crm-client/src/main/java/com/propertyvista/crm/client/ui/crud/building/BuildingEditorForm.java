@@ -50,6 +50,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -289,23 +290,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         int row = -1;
         main.setWidget(++row, 0, inject(proto().marketing(), new MarketingEditor()));
 
-        if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().email()), 30).customLabel(i18n.tr("Email Address")).build());
-        } else {
-
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().email(), new CHyperlink(new Command() {
-                @Override
-                public void execute() {
-                    String mail = getValue().contacts().email().getValue();
-                    mail = "mailto:" + mail;
-                    Window.open(mail, proto().contacts().email().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
-                }
-            })), 50).build());
-
-        }
-
-        main.setH1(++row, 0, 2, proto().contacts().phones().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().contacts().phones(), new PropertyPhoneFolder()));
+        main.setH1(++row, 0, 2, proto().contacts().propertyContacts().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setH1(++row, 0, 2, i18n.tr("Media"));
@@ -338,6 +324,25 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
             columns.add(new EntityFolderColumnDescriptor(proto().designation(), "10em"));
             columns.add(new EntityFolderColumnDescriptor(proto().provider(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
+            return columns;
+        }
+    }
+
+    private class PropertyContactFolder extends VistaTableFolder<PropertyContact> {
+
+        public PropertyContactFolder() {
+            super(PropertyContact.class, BuildingEditorForm.this.isEditable());
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().type(), "9em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().name(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().phone(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().email(), "15em"));
             columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
             return columns;
         }

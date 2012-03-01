@@ -127,19 +127,18 @@ public class BuildingsGenerator {
         building.marketing().visibility().setValue(PublicVisibilityType.global);
         building.marketing().name().setValue(building.info().name().getStringView() + " mkt" + RandomUtil.randomLetters(2));
         building.marketing().description().setValue(CommonsGenerator.lipsum());
-        for (int i = 0; 1 < RandomUtil.randomInt(3); i++) {
+        for (int i = 0; i < RandomUtil.randomInt(3); i++) {
             AdvertisingBlurb item = EntityFactory.create(AdvertisingBlurb.class);
             item.content().setValue(CommonsGenerator.lipsum());
             building.marketing().adBlurbs().add(item);
         }
 
-        for (int i = 0; i <= RandomUtil.randomInt(3); i++) {
-            building.contacts().phones().add(CommonsGenerator.createPropertyPhone());
+        for (int i = 0; i <= 1 + RandomUtil.randomInt(3); i++) {
+            building.contacts().propertyContacts().add(CommonsGenerator.createPropertyContact());
         }
 
         building.contacts().website().setValue(website);
-        building.contacts().email().setValue(email); // not sure yet what to do about
-        // the email and its type
+
         return building;
     }
 

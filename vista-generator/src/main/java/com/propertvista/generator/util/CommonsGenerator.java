@@ -31,6 +31,7 @@ import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.common.reference.SharedData;
@@ -155,6 +156,18 @@ public class CommonsGenerator {
         phone.visibility().setValue(RandomUtil.randomEnum(PublicVisibilityType.class));
         phone.description().setValue(lipsumShort());
         return phone;
+    }
+
+    public static PropertyContact createPropertyContact() {
+        PropertyContact contact = EntityFactory.create(PropertyContact.class);
+        Name name = createName();
+        contact.type().setValue(RandomUtil.randomEnum(PropertyContact.Type.class));
+        contact.name().setValue(name.getStringView());
+        contact.description().setValue(lipsumShort());
+        contact.phone().setValue(DataGenerator.randomPhone(RandomUtil.randomBoolean() ? "416" : "905"));
+        contact.email().setValue(createEmail(name));
+        contact.visibility().setValue(RandomUtil.randomEnum(PublicVisibilityType.class));
+        return contact;
     }
 
     public static AddressStructured createAddress() {

@@ -84,7 +84,6 @@ public abstract class BuildingSelectorDialog extends EntitySelectorDialog<Buildi
                 new MemberColumnDescriptor.Builder(proto().info().centralAir(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().info().centralHeat(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().contacts().website(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().contacts().email(), false).title(proto().contacts().email()).build(),
                 new MemberColumnDescriptor.Builder(proto().financial().dateAcquired(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().financial().purchasePrice(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().financial().marketPrice(), false).build(),

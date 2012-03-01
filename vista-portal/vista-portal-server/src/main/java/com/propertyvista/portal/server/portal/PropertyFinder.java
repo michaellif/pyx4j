@@ -229,7 +229,7 @@ public class PropertyFinder {
             return null;
         }
         // attach phone info
-        Persistence.service().retrieve(bld.contacts().phones());
+        Persistence.service().retrieve(bld.contacts().propertyContacts());
         return bld;
     }
 

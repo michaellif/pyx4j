@@ -39,7 +39,7 @@ import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.property.PropertyPhone;
+import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Parking;
@@ -72,15 +72,13 @@ public class Converter {
         to.propertyCode = from.propertyCode().getStringView();
 
         to.propertyManager = from.propertyManager().name().getStringView();
-        to.contactEmail = from.contacts().email().getStringView();
 
         to.info = convertBuildingInfo(from.info());
         to.marketing = convertMarketing(from.marketing());
 
-        for (PropertyPhone phone : from.contacts().phones()) {
-            if (PublicVisibilityType.global.equals(phone.visibility().getValue())) {
-                to.contactPhones.add(phone.getStringView());
-                to.marketing.phones.add(convertPropertyPhone(phone));
+        for (PropertyContact contact : from.contacts().propertyContacts()) {
+            if (PublicVisibilityType.global.equals(contact.visibility().getValue()) && !contact.phone().isNull()) {
+                to.marketing.phones.add(convertPropertyContact(contact));
             }
 
         }
@@ -108,10 +106,10 @@ public class Converter {
         return to;
     }
 
-    public static PhoneRS convertPropertyPhone(PropertyPhone propertyPhone) {
+    public static PhoneRS convertPropertyContact(PropertyContact propertyContact) {
         PhoneRS to = new PhoneRS();
-        to.number = propertyPhone.getStringView();
-        to.description = propertyPhone.description().getStringView();
+        to.number = propertyContact.phone().getStringView();
+        to.description = propertyContact.description().getStringView();
         return to;
     }
 

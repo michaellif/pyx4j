@@ -148,8 +148,8 @@ public class BuildingUpdater extends ImportPersister {
                 if (building.marketing().adBlurbs().getMeta().isDetached()) {
                     Persistence.service().retrieve(building.marketing().adBlurbs());
                 }
-                if (building.contacts().phones().getMeta().isDetached()) {
-                    Persistence.service().retrieve(building.contacts().phones());
+                if (building.contacts().propertyContacts().getMeta().isDetached()) {
+                    Persistence.service().retrieve(building.contacts().propertyContacts());
                 }
 
                 boolean buildingUpdated = new BuildingConverter().updateDBO(buildingIO, building);

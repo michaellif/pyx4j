@@ -83,8 +83,6 @@ public abstract class UnitSelectorDialog extends EntitySelectorDialog<AptUnit> {
                 new MemberColumnDescriptor.Builder(proto().belongsTo().info().centralAir(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().belongsTo().info().centralHeat(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().belongsTo().contacts().website(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().belongsTo().contacts().email(), false).title(proto().belongsTo().contacts().email())
-                        .build(),
                 new MemberColumnDescriptor.Builder(proto().belongsTo().financial().dateAcquired(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().belongsTo().financial().purchasePrice(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().belongsTo().financial().marketPrice(), false).build(),

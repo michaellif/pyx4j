@@ -213,7 +213,6 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
                     new MemberColumnDescriptor.Builder(proto().building().info().address(), false).build(),
 
                     new MemberColumnDescriptor.Builder(proto().building().contacts().website(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().contacts().email(), false).title(i18n.tr("Email")).build(),
                     
                     // floorplan columns
                     new MemberColumnDescriptor.Builder(proto().name(), false).build(),

@@ -48,7 +48,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             // load detached entities/lists. Update other places: BuildingsResource and BuildingRetriever
             Persistence.service().retrieve(dto.media());
             Persistence.service().retrieve(dto.productCatalog());
-            Persistence.service().retrieve(dto.contacts().phones());
+            Persistence.service().retrieve(dto.contacts().propertyContacts());
             Persistence.service().retrieve(dto.contacts().contacts());
             Persistence.service().retrieve(dto.marketing().adBlurbs());
             Persistence.service().retrieve(dto.dashboard());

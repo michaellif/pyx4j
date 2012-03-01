@@ -30,7 +30,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.property.PropertyPhone;
+import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -93,9 +93,9 @@ public class FloorplanInfoPanel extends Panel {
         add(new Label("priceRange", priceFmt));
         // phone
         String phone = "Not Available";
-        for (PropertyPhone ph : bld.contacts().phones()) {
-            if (ph.visibility().getValue() == PublicVisibilityType.global) {
-                phone = ph.number().getValue();
+        for (PropertyContact contact : bld.contacts().propertyContacts()) {
+            if (contact.visibility().getValue() == PublicVisibilityType.global && !contact.phone().isNull()) {
+                phone = contact.phone().getValue();
                 break;
             }
         }

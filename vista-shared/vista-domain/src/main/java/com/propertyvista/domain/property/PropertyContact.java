@@ -72,7 +72,7 @@ public interface PropertyContact extends IEntity {
     @MemberColumn(name = "phoneNumber")
     @Editor(type = EditorType.phone)
     @BusinessEqualValue
-    IPrimitive<String> number();
+    IPrimitive<String> phone();
 
     @Editor(type = EditorType.email)
     IPrimitive<String> email();
