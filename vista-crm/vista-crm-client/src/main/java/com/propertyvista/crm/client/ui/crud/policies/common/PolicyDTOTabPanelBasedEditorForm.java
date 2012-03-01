@@ -154,6 +154,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                             throw new Error("got unsupported or unknown policy scope:" + getValue().getInstanceValueClass().getName());
                         }
                     }
+                    policyScope = isNewEntity() ? new NodeType.Builder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build() : policyScope;
                     selectPolicyScopeBox.setValue(policyScope, true);
                     selectPolicyScopeBox.setViewable(!isNewEntity());
                     get(proto().node()).setViewable(!isNewEntity());
@@ -162,6 +163,15 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         });
 
         return content;
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+        if (isNewEntity()) {
+            get(proto().node()).setValue(EntityFactory.create(OrganizationPoliciesNode.class));
+            get(proto().node()).populate(EntityFactory.create(OrganizationPoliciesNode.class));
+        }
     }
 
     private boolean isNewEntity() {
