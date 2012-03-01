@@ -49,6 +49,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -104,6 +105,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
             unitSelector.setVisible(!isLeaseSigned);
             serviceSelector.setVisible(!isLeaseSigned);
+        } else {
+            boolean isDraftLease = (getValue().status().getValue() == Status.Draft);
+            tabPanel.setTabDisabled(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), isDraftLease);
+            tabPanel.setTabDisabled(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), isDraftLease);
         }
     }
 
@@ -123,15 +128,15 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     new DecoratorBuilder(inject(proto().application(),
                             new CEntityCrudHyperlink<MasterApplication>(MainActivityMapper.getCrudAppPlace(MasterApplication.class))), 20).build());
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().application(), new CEntityLabel()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().application(), new CEntityLabel<MasterApplication>()), 20).build());
         }
 
         main.setBR(++row, 0, 1);
         if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding(), new CEntityLabel()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding(), new CEntityLabel<Building>()), 20).build());
 
             HorizontalPanel unitPanel = new HorizontalPanel();
-            unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 20).build());
+            unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel<AptUnit>()), 20).build());
             unitPanel.add(unitSelector = new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -224,7 +229,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
-        serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new BillableItemEditor()));
+        serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new BillableItemEditor(this)));
         if (isEditable()) {
             serviceItemPanel.add(serviceSelector = new AnchorButton("Select...", new ClickHandler() {
                 @Override
@@ -270,7 +275,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, inject(proto().serviceAgreement().concessions(), new ConcessionFolder(isEditable(), this)));
 
         main.setH1(++row, 0, 2, proto().leaseFinancial().adjustments().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().leaseFinancial().adjustments(), new LeaseAdjustmentFolder(isEditable())));
+        main.setWidget(++row, 0, inject(proto().leaseFinancial().adjustments(), new LeaseAdjustmentFolder(isEditable(), this)));
 
         return new CrmScrollPanel(main);
     }

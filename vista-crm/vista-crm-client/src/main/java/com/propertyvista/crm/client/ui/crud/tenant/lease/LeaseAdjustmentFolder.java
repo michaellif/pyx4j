@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
@@ -32,11 +36,17 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
 
-    public LeaseAdjustmentFolder(boolean modifyable) {
+    private final List<LeaseAdjustment> populatedValues = new LinkedList<LeaseAdjustment>();
+
+    private final CEntityEditor<LeaseDTO> lease;
+
+    public LeaseAdjustmentFolder(boolean modifyable, CEntityEditor<LeaseDTO> lease) {
         super(LeaseAdjustment.class, modifyable);
+        this.lease = lease;
     }
 
     @Override
@@ -44,6 +54,15 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
         BoxFolderItemDecorator<LeaseAdjustment> decor = (BoxFolderItemDecorator<LeaseAdjustment>) super.createItemDecorator();
         decor.setExpended(false);
         return decor;
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        // memorize populated values: 
+        populatedValues.clear();
+        populatedValues.addAll(getValue());
     }
 
     @Override
@@ -55,19 +74,23 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
     }
 
     @Override
+    protected void removeItem(CEntityFolderItem<LeaseAdjustment> item) {
+        if (!lease.getValue().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
+            item.getValue().expirationDate().setValue(new LogicalDate());
+            item.setValue(item.getValue(), false);
+            item.setEditable(false);
+            ValueChangeEvent.fire(this, getValue());
+        } else {
+            super.removeItem(item);
+        }
+    }
+
+    @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LeaseAdjustment) {
             return new LeaseAdjustmentEditor();
         }
         return super.create(member);
-    }
-
-    @Override
-    protected void removeItem(CEntityFolderItem<LeaseAdjustment> item) {
-        item.getValue().expirationDate().setValue(new LogicalDate());
-        item.setValue(item.getValue(), false);
-        item.setEditable(false);
-        ValueChangeEvent.fire(this, getValue());
     }
 
     @Override
@@ -77,7 +100,7 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName() == PropertyName.repopulated) {
-                    if (isModifiable()) {
+                    if (isModifiable() && !lease.getValue().approvalDate().isNull()) {
                         LogicalDate value = item.getValue().expirationDate().getValue();
                         if ((value != null) && !value.after(TimeUtils.today())) {
                             item.setViewable(true);

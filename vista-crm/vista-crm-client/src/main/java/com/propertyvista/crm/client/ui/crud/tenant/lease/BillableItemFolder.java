@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 
 import com.pyx4j.commons.LogicalDate;
@@ -40,6 +43,8 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
     private static final I18n i18n = I18n.get(BillableItemFolder.class);
 
+    private final List<BillableItem> populatedValues = new LinkedList<BillableItem>();
+
     private final CEntityEditor<LeaseDTO> lease;
 
     public BillableItemFolder(boolean modifyable, CEntityEditor<LeaseDTO> lease) {
@@ -52,6 +57,15 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
         BoxFolderItemDecorator<BillableItem> decor = (BoxFolderItemDecorator<BillableItem>) super.createItemDecorator();
         decor.setExpended(false);
         return decor;
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        // memorize populated values: 
+        populatedValues.clear();
+        populatedValues.addAll(getValue());
     }
 
     @Override
@@ -87,10 +101,14 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
     @Override
     protected void removeItem(CEntityFolderItem<BillableItem> item) {
-        item.getValue().expirationDate().setValue(new LogicalDate());
-        item.setValue(item.getValue(), false);
-        item.setEditable(false);
-        ValueChangeEvent.fire(this, getValue());
+        if (!lease.getValue().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
+            item.getValue().expirationDate().setValue(new LogicalDate());
+            item.setValue(item.getValue(), false);
+            item.setEditable(false);
+            ValueChangeEvent.fire(this, getValue());
+        } else {
+            super.removeItem(item);
+        }
     }
 
     @Override
@@ -100,7 +118,7 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName() == PropertyName.repopulated) {
-                    if (isModifiable()) {
+                    if (isModifiable() && !lease.getValue().approvalDate().isNull()) {
                         LogicalDate value = item.getValue().expirationDate().getValue();
                         if ((value != null) && !value.after(TimeUtils.today())) {
                             item.setViewable(true);
@@ -124,7 +142,7 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof BillableItem) {
-            return new BillableItemEditor();
+            return new BillableItemEditor(lease);
         }
         return super.create(member);
     }

@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -44,6 +45,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
+import com.propertyvista.dto.LeaseDTO;
 
 class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
@@ -53,8 +55,11 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
 
-    public BillableItemEditor() {
+    private final CEntityEditor<LeaseDTO> lease;
+
+    public BillableItemEditor(CEntityEditor<LeaseDTO> lease) {
         super(BillableItem.class);
+        this.lease = lease;
     }
 
     @Override
@@ -84,7 +89,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         main.getColumnFormatter().setWidth(1, "50%");
 
         adjustmentPanel.setH3(0, 0, 1, i18n.tr("Adjustments"));
-        adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new ChargeItemAdjustmentFolder()));
+        adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
 
         return main;
     }
@@ -163,9 +168,11 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         }
     }
 
-    private class ChargeItemAdjustmentFolder extends VistaTableFolder<BillableItemAdjustment> {
+    private class AdjustmentFolder extends VistaTableFolder<BillableItemAdjustment> {
 
-        public ChargeItemAdjustmentFolder() {
+        private final List<BillableItemAdjustment> populatedValues = new LinkedList<BillableItemAdjustment>();
+
+        public AdjustmentFolder() {
             super(BillableItemAdjustment.class, !BillableItemEditor.this.isViewable());
         }
 
@@ -182,6 +189,15 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         }
 
         @Override
+        protected void onPopulate() {
+            super.onPopulate();
+
+            // memorize populated values: 
+            populatedValues.clear();
+            populatedValues.addAll(getValue());
+        }
+
+        @Override
         protected void addItem(BillableItemAdjustment newEntity) {
             if (newEntity.isEmpty()) {
                 newEntity.effectiveDate().setValue(new LogicalDate());
@@ -191,10 +207,14 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
         @Override
         protected void removeItem(CEntityFolderItem<BillableItemAdjustment> item) {
-            item.getValue().expirationDate().setValue(new LogicalDate());
-            item.setValue(item.getValue(), false);
-            item.setEditable(false);
-            ValueChangeEvent.fire(this, getValue());
+            if (!lease.getValue().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
+                item.getValue().expirationDate().setValue(new LogicalDate());
+                item.setValue(item.getValue(), false);
+                item.setEditable(false);
+                ValueChangeEvent.fire(this, getValue());
+            } else {
+                super.removeItem(item);
+            }
         }
 
         @Override
@@ -204,7 +224,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 @Override
                 public void onPropertyChange(PropertyChangeEvent event) {
                     if (event.getPropertyName() == PropertyName.repopulated) {
-                        if (isModifiable()) {
+                        if (isModifiable() && !lease.getValue().approvalDate().isNull()) {
                             LogicalDate value = item.getValue().expirationDate().getValue();
                             if ((value != null) && !value.after(TimeUtils.today())) {
                                 item.setViewable(true);

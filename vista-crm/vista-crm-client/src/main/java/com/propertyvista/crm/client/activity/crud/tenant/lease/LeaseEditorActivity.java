@@ -31,6 +31,8 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Concession.Status;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -187,6 +189,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             utilitiesToExclude.addAll(catalog.includedUtilities());
             utilitiesToExclude.addAll(catalog.externalUtilities());
 
+            // fill features:
             for (Feature feature : selectedService.features()) {
                 for (ProductItem item : feature.items()) {
                     switch (feature.type().getValue()) {
@@ -201,8 +204,13 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
                     }
                 }
             }
-            // fill concessions:
-            currentValue.selectedConcessions().addAll(selectedService.concessions());
+
+            // fill relevant concessions:
+            for (Concession concession : selectedService.concessions()) {
+                if (concession.status().getValue() == Status.approved) {
+                    currentValue.selectedConcessions().add(concession);
+                }
+            }
         }
 
         return (selectedService != null);
