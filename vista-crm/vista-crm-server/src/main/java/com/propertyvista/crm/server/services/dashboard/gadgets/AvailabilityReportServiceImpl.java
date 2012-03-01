@@ -406,7 +406,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
     private static boolean isRevenueLost(final UnitAvailabilityStatus unit) {
         // TODO review: why the check "(moveOutDay != null)" is performed here? isn't VACANT status a sufficient condition for it? 
-        return Vacancy.Vacant.equals(unit.vacancyStatus().getValue()) & unit.moveOutDay().getValue() != null;
+        return Vacancy.Vacant.equals(unit.vacancyStatus().getValue()) & unit.rentEndDay().getValue() != null;
     }
 
     /**
@@ -416,7 +416,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     private static void computeDaysVacantAndRevenueLost(final UnitAvailabilityStatus unit, final long reportTime) {
 
         final long MILLIS_IN_DAY = 1000L * 60L * 60L * 24L;
-        final long avaialbleFrom = unit.moveOutDay().getValue().getTime() + MILLIS_IN_DAY;
+        final long avaialbleFrom = unit.rentEndDay().getValue().getTime() + MILLIS_IN_DAY;
         final long millisecondsVacant = reportTime - avaialbleFrom;
 
         int daysVacant = (int) (millisecondsVacant / MILLIS_IN_DAY);

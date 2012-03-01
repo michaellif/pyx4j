@@ -84,13 +84,13 @@ public class AvailabilityReportManager {
 
             switch (current.status().getValue()) {
             case vacant:
-                vacant(status);
+                vacant(status, current.dateFrom().getValue());
                 break;
             case available:
-                available(status, future);
+                available(status, future, current.dateFrom().getValue());
                 break;
             case reserved:
-                reserved(status, current);
+                reserved(status, current, current.dateFrom().getValue());
                 break;
             case leased:
                 leased(status, current, future);
@@ -111,8 +111,9 @@ public class AvailabilityReportManager {
         }
     }
 
-    private void vacant(UnitAvailabilityStatus status) {
+    private void vacant(UnitAvailabilityStatus status, LogicalDate vacantSince) {
         status.vacancyStatus().setValue(Vacancy.Vacant);
+        status.vacantSince().setValue(vacantSince);
         // implicit: status.moveOutDay().setValue(null);
 
         status.scoping().setValue(Scoping.Unscoped);
@@ -122,8 +123,9 @@ public class AvailabilityReportManager {
         // implicit: status.rentedFromDate().setValue(null);
     }
 
-    private void available(UnitAvailabilityStatus status, List<AptUnitOccupancySegment> future) {
+    private void available(UnitAvailabilityStatus status, List<AptUnitOccupancySegment> future, LogicalDate vacantSince) {
         status.vacancyStatus().setValue(Vacancy.Vacant);
+        status.vacantSince().setValue(vacantSince);
         // implicit: status.moveOutDay().setValue(null);
 
         status.scoping().setValue(Scoping.Scoped);
@@ -135,21 +137,24 @@ public class AvailabilityReportManager {
         for (AptUnitOccupancySegment segment : future) {
             if (segment.status().getValue() == Status.leased | segment.status().getValue() == Status.reserved) {
                 status.rentedStatus().setValue(RentedStatus.Rented);
-                status.rentedFromDate().setValue(segment.lease().leaseFrom().getValue());
+                status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
+                status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
                 break;
             }
         }
     }
 
-    private void reserved(UnitAvailabilityStatus status, AptUnitOccupancySegment current) {
+    private void reserved(UnitAvailabilityStatus status, AptUnitOccupancySegment current, LogicalDate vacantSince) {
         status.vacancyStatus().setValue(Vacancy.Vacant);
+        status.vacantSince().setValue(vacantSince);
         // implicit: status.moveOutDay().setValue(null)
 
         status.scoping().setValue(Scoping.Scoped);
         status.rentReadinessStatus().setValue(RentReadiness.RentReady);
 
         status.rentedStatus().setValue(RentedStatus.Rented);
-        status.rentedFromDate().setValue(current.lease().leaseFrom().getValue());
+        status.rentedFromDay().setValue(current.lease().leaseFrom().getValue());
+        status.moveInDay().setValue(current.lease().expectedMoveIn().getValue());
     }
 
     private void leased(UnitAvailabilityStatus status, AptUnitOccupancySegment current, List<AptUnitOccupancySegment> future) {
@@ -161,7 +166,7 @@ public class AvailabilityReportManager {
             segment = segments.next();
 
             status.vacancyStatus().setValue(Vacancy.Notice);
-            status.moveOutDay().setValue(current.dateTo().getValue());
+            status.rentEndDay().setValue(current.dateTo().getValue());
 
             status.rentedStatus().setValue(RentedStatus.Unrented);
             // implicit: status.rentedFromDate().setValue(null);
@@ -199,7 +204,8 @@ public class AvailabilityReportManager {
                         status.rentReadinessStatus().setValue(RentReadiness.RentReady);
                     }
                     status.rentedStatus().setValue(RentedStatus.Rented);
-                    status.rentedFromDate().setValue(segment.lease().leaseFrom().getValue());
+                    status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
+                    status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
                 }
                 break;
             default:
@@ -223,7 +229,8 @@ public class AvailabilityReportManager {
         for (AptUnitOccupancySegment segment : future) {
             if (segment.status().getValue() == Status.leased | segment.status().getValue() == Status.reserved) {
                 status.rentedStatus().setValue(RentedStatus.Rented);
-                status.rentedFromDate().setValue(segment.lease().leaseFrom().getValue());
+                status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
+                status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
                 break;
             }
         }

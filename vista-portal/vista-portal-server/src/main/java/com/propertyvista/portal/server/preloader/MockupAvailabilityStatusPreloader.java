@@ -217,11 +217,11 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         status.vacancyStatus().setValue(Vacancy.Notice);
         status.rentedStatus().setValue(RentedStatus.Unrented);
         status.scoping().setValue(Scoping.Unscoped);
-        status.moveOutDay().setValue(new LogicalDate(eventDate.getTime() + rand(MIN_STAY_AFTER_NOTICE, MAX_STAY_AFTER_NOTICE)));
+        status.rentEndDay().setValue(new LogicalDate(eventDate.getTime() + rand(MIN_STAY_AFTER_NOTICE, MAX_STAY_AFTER_NOTICE)));
     }
 
     private static void moveOut(UnitAvailabilityStatus status) {
-        status.statusDate().setValue(status.moveOutDay().getValue());
+        status.statusDate().setValue(status.rentEndDay().getValue());
         status.unitRent().setValue(null);
         status.rentDeltaAbsolute().setValue(null);
         status.rentDeltaRelative().setValue(null);
@@ -234,8 +234,8 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         status.scoping().setValue(null);
         status.rentReadinessStatus().setValue(null);
         status.rentedStatus().setValue(null);
-        status.rentedFromDate().setValue(null);
-        status.moveOutDay().setValue(null);
+        status.rentedFromDay().setValue(null);
+        status.rentEndDay().setValue(null);
         status.moveInDay().setValue(null);
     }
 
@@ -244,9 +244,9 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         long maxScopingTime;
         if (status.vacancyStatus().equals(Vacancy.Notice)) {
             minScopingTime = status.statusDate().getValue().getTime() + MIN_EVENT_DELTA;
-            maxScopingTime = status.moveOutDay().getValue().getTime() - MIN_EVENT_DELTA;
+            maxScopingTime = status.rentEndDay().getValue().getTime() - MIN_EVENT_DELTA;
         } else { // Vacant
-            minScopingTime = status.moveOutDay().getValue().getTime() + MIN_EVENT_DELTA;
+            minScopingTime = status.rentEndDay().getValue().getTime() + MIN_EVENT_DELTA;
             maxScopingTime = minScopingTime + MAX_WAIT_UNTIL_SCOPED;
         }
         if (minScopingTime < maxScopingTime) {
@@ -263,9 +263,9 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         LogicalDate moveInDay = null;
         if (Vacancy.Notice.equals(status.vacancyStatus().getValue())) {
             minRentedTime = status.statusDate().getValue().getTime() + MIN_EVENT_DELTA;
-            maxRentedTime = status.moveOutDay().getValue().getTime() - MIN_EVENT_DELTA;
+            maxRentedTime = status.rentEndDay().getValue().getTime() - MIN_EVENT_DELTA;
 
-            moveInDay = new LogicalDate(rand(status.moveOutDay().getValue().getTime() + MIN_EVENT_DELTA, MAX_VACANT_TIME));
+            moveInDay = new LogicalDate(rand(status.rentEndDay().getValue().getTime() + MIN_EVENT_DELTA, MAX_VACANT_TIME));
 
         } else { // VacancyStatus == Vacant
             minRentedTime = status.statusDate().getValue().getTime() + MIN_VACANT_TIME;
@@ -273,12 +273,12 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         }
         if (minRentedTime < maxRentedTime) {
             status.statusDate().setValue((new LogicalDate(rand(minRentedTime, maxRentedTime))));
-            status.rentedFromDate().setValue(status.statusDate().getValue());
+            status.rentedFromDay().setValue(status.statusDate().getValue());
             status.rentedStatus().setValue(RentedStatus.Rented);
             if (moveInDay == null) {
-                moveInDay = new LogicalDate(rand(status.rentedFromDate().getValue().getTime() + MIN_EVENT_DELTA, status.rentedFromDate().getValue().getTime()
+                moveInDay = new LogicalDate(rand(status.rentedFromDay().getValue().getTime() + MIN_EVENT_DELTA, status.rentedFromDay().getValue().getTime()
                         + MAX_WAIT_UNTIL_MOVEIN));
-                status.moveOutDay().setValue(null);
+                status.rentEndDay().setValue(null);
             }
             status.moveInDay().setValue(moveInDay);
         }

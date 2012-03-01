@@ -211,9 +211,9 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                     new MemberColumnDescriptor.Builder(proto().marketRent()).build(),
                     new MemberColumnDescriptor.Builder(proto().rentDeltaAbsolute()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().rentDeltaRelative()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().moveOutDay()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentEndDay()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().moveInDay()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().rentedFromDate()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentedFromDay()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().daysVacant()).build(),
                     new MemberColumnDescriptor.Builder(proto().revenueLost()).build()
             );//@formatter:on

@@ -43,10 +43,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
-import com.propertyvista.server.common.util.occupancy.AvailabilityReportManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
 
 public class AvailabilityReportManagerTestBase {
@@ -111,11 +107,12 @@ public class AvailabilityReportManagerTestBase {
         return manager;
     }
 
-    protected Lease createLease(String leaseFrom, String leaseTo) {
+    protected Lease createLease(String leaseFrom, String moveIn, String leaseTo) {
         if (unit != null) {
             Lease lease = EntityFactory.create(Lease.class);
             lease.unit().set(unit);
             lease.leaseFrom().setValue(asDate(leaseFrom));
+            lease.expectedMoveIn().setValue(asDate(moveIn));
             lease.leaseTo().setValue(asDate(leaseTo));
             Persistence.service().merge(lease);
             return lease;
@@ -253,12 +250,22 @@ public class AvailabilityReportManagerTestBase {
 
         private LogicalDate rentEndsOn = null;
 
+        private LogicalDate moveinDay;
+
+        private LogicalDate vacantSince;
+
         public AvailabilityStatusBuilder on(String dateRepr) {
             statusDate = asDate(dateRepr);
             return this;
         }
 
         public AvailabilityStatusBuilder occupied() {
+            return this;
+        }
+
+        public AvailabilityStatusBuilder vacant(String vacantSince) {
+            this.vacancy = Vacancy.Vacant;
+            this.vacantSince = asDate(vacantSince);
             return this;
         }
 
@@ -284,9 +291,10 @@ public class AvailabilityReportManagerTestBase {
             return this;
         }
 
-        public AvailabilityStatusBuilder rented(String rentStartsOn) {
+        public AvailabilityStatusBuilder rented(String rentStartsOn, String moveInDay) {
             this.rented = RentedStatus.Rented;
             this.rentStartsOn = asDate(rentStartsOn);
+            this.moveinDay = asDate(moveInDay);
             return this;
         }
 
@@ -306,20 +314,24 @@ public class AvailabilityReportManagerTestBase {
             UnitAvailabilityStatus expected = EntityFactory.create(UnitAvailabilityStatus.class);
             expected.statusDate().setValue(statusDate);
             expected.vacancyStatus().setValue(vacancy);
-            expected.moveOutDay().setValue(rentEndsOn);
+            expected.vacantSince().setValue(vacantSince);
+            expected.rentEndDay().setValue(rentEndsOn);
             expected.scoping().setValue(scoping);
             expected.rentReadinessStatus().setValue(readiness);
             expected.rentedStatus().setValue(rented);
-            expected.rentedFromDate().setValue(rentStartsOn);
+            expected.moveInDay().setValue(moveinDay);
+            expected.rentedFromDay().setValue(rentStartsOn);
 
             EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().statusDate(), statusDate));
             criteria.add(PropertyCriterion.eq(criteria.proto().vacancyStatus(), vacancy));
-            criteria.add(PropertyCriterion.eq(criteria.proto().moveOutDay(), rentEndsOn));
+            criteria.add(PropertyCriterion.eq(criteria.proto().vacantSince(), vacantSince));
+            criteria.add(PropertyCriterion.eq(criteria.proto().rentEndDay(), rentEndsOn));
             criteria.add(PropertyCriterion.eq(criteria.proto().scoping(), scoping));
             criteria.add(PropertyCriterion.eq(criteria.proto().rentReadinessStatus(), readiness));
             criteria.add(PropertyCriterion.eq(criteria.proto().rentedStatus(), rented));
-            criteria.add(PropertyCriterion.eq(criteria.proto().rentedFromDate(), rentStartsOn));
+            criteria.add(PropertyCriterion.eq(criteria.proto().moveInDay(), moveinDay));
+            criteria.add(PropertyCriterion.eq(criteria.proto().rentedFromDay(), rentStartsOn));
 
             UnitAvailabilityStatus actual = Persistence.service().retrieve(criteria);
             Assert.assertNotNull("Expected status " + expected.toString() + " was not found in the DB", actual);

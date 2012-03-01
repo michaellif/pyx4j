@@ -89,6 +89,8 @@ public interface UnitAvailabilityStatus extends IEntity {
 
     IPrimitive<String> buildingName();
 
+    IPrimitive<String> province();
+
     IPrimitive<String> address();
 
     IPrimitive<String> region();
@@ -135,23 +137,31 @@ public interface UnitAvailabilityStatus extends IEntity {
     @Format("#0.00")
     IPrimitive<BigDecimal> rentDeltaRelative();
 
-    /** {@link AptUnit#availableForRent()} - 1 */
+    /**
+     * Applicable for 'Notice'
+     */
     @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> moveOutDay();
+    @Caption(name = "Rent End")
+    IPrimitive<LogicalDate> rentEndDay();
 
     /**
-     * Applicable only for rented
-     * 
-     * @deprecated use {@link #rentedFromDate()} instead
+     * Applicable for 'Vacant', must be the same as {@link AptUnit#availableForRent()} but stored here for efficiency. used to calculate days vacant
      */
-    @Deprecated
     @Format("MM/dd/yyyy")
-    @Caption(name = "Move In Date")
-    IPrimitive<LogicalDate> moveInDay();
+    @Caption(name = "Vacant Since")
+    IPrimitive<LogicalDate> vacantSince();
 
-    /** Applicable only for rented; maybe different than move out date */
+    /** Applicable only for 'Rented': denotes lease start of the following tenant, maybe different than move in date */
     @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> rentedFromDate();
+    @Caption(name = "Rented From")
+    IPrimitive<LogicalDate> rentedFromDay();
+
+    /**
+     * Applicable only for 'Rented': denotes move in day of the following tenant
+     */
+    @Format("MM/dd/yyyy")
+    @Caption(name = "Move In")
+    IPrimitive<LogicalDate> moveInDay();
 
     @Caption(name = "Days Vacant")
     /** For Vacant units numberOfDays between today and availableForRent date */
