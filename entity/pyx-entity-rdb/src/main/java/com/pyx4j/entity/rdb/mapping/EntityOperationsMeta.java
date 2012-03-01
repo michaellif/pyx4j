@@ -182,7 +182,8 @@ public class EntityOperationsMeta {
                     collectionMembers.add(member);
                     switch (memberMeta.getAttachLevel()) {
                     case ToStringMembers:
-                        //TODO implement
+                        cascadeRetrieveMembers.add(member);
+                        break;
                     case Attached:
                         cascadeRetrieveMembers.add(member);
                         break;
@@ -213,7 +214,8 @@ public class EntityOperationsMeta {
 
                         switch (memberMeta.getAttachLevel()) {
                         case ToStringMembers:
-                            //TODO implement
+                            cascadeRetrieveMembers.add(member);
+                            break;
                         case Attached:
                             cascadeRetrieveMembers.add(member);
                             break;
@@ -256,6 +258,8 @@ public class EntityOperationsMeta {
                             cascadePersistMembers.add(member);
                         }
                         switch (memberMeta.getAttachLevel()) {
+                        case ToStringMembers:
+                            cascadeRetrieveMembers.add(member);
                         case Attached:
                             cascadeRetrieveMembers.add(member);
                             break;

@@ -14,28 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 6, 2012
+ * Created on Feb 29, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.version;
+package com.pyx4j.entity.rdb.hsql;
 
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Versioned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.rdb.AttachToStringTestCase;
+import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-@Table(prefix = "test")
-public interface RefToVersioned extends IEntity {
+public class AttachToStringTest extends AttachToStringTestCase {
 
-    IPrimitive<String> testId();
-
-    IPrimitive<String> name();
-
-    @Versioned
-    ItemA itemA(); //-> item.id and item.forDate
-
-    @Versioned
-    ItemB itemB();
+    @Override
+    protected PersistenceEnvironment getPersistenceEnvironment() {
+        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
+    }
 
 }

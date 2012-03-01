@@ -14,28 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 6, 2012
+ * Created on Feb 29, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.version;
+package com.pyx4j.entity.test.shared.domain.attach;
 
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Versioned;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
-public interface RefToVersioned extends IEntity {
+public interface AttachToStringOneChild extends IEntity {
 
     IPrimitive<String> testId();
 
+    @ToString(index = 0)
     IPrimitive<String> name();
-
-    @Versioned
-    ItemA itemA(); //-> item.id and item.forDate
-
-    @Versioned
-    ItemB itemB();
-
 }

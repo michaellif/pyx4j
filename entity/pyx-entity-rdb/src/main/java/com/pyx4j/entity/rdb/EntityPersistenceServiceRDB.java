@@ -980,6 +980,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         throw new RuntimeException("Entity '" + memberMeta.getCaption() + "' [primary key =  " + childEntity.getPrimaryKey() + "; path = "
                                 + childEntity.getPath() + "] is not found");
                     }
+                    if (memberMeta.getAttachLevel() == AttachLevel.ToStringMembers) {
+                        childEntity.setAttachLevel(AttachLevel.ToStringMembers);
+                    }
                 }
             } else {
                 @SuppressWarnings("unchecked")
@@ -988,6 +991,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     if (cascadeRetrieve(childEntity) == null) {
                         throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
                                 + childEntity.getPath() + " NotFound");
+                    }
+                    if (memberMeta.getAttachLevel() == AttachLevel.ToStringMembers) {
+                        childEntity.setAttachLevel(AttachLevel.ToStringMembers);
                     }
                 }
             }

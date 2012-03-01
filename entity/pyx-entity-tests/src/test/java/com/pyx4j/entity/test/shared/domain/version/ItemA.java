@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.version;
 
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,6 +29,7 @@ import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
 
 @ToStringFormat("{0} - {1}")
+@Table(prefix = "test")
 public interface ItemA extends IVersionedEntity<ItemAVersion> {
 
     IPrimitive<String> testId();

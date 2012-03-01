@@ -475,6 +475,16 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     public void setAttachLevel(AttachLevel level) {
         if (level == AttachLevel.Attached) {
             ensureValue(false).remove(DETACHED_ATTR);
+        } else if (level == AttachLevel.ToStringMembers) {
+            String stringView = this.getStringView();
+            Key key = this.getPrimaryKey();
+            Map<String, Object> thisValue = ensureValue(false);
+            thisValue.clear();
+            if (key != null) {
+                thisValue.put(IEntity.PRIMARY_KEY, key);
+            }
+            thisValue.put(TO_STRING_ATTR, stringView);
+            thisValue.put(DETACHED_ATTR, level);
         } else {
             ensureValue(false).put(DETACHED_ATTR, level);
         }
@@ -650,6 +660,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             return getEntityMeta().getNullString();
         } else if (!isObjectClassSameAsDef()) {
             return this.cast().getStringView();
+        }
+        Map<String, Object> thisValue = getValue(false);
+        if ((thisValue != null) && thisValue.containsKey(TO_STRING_ATTR)) {
+            return (String) thisValue.get(TO_STRING_ATTR);
         }
         List<String> sm = getEntityMeta().getToStringMemberNames();
         String format = getEntityMeta().getToStringFormat();
