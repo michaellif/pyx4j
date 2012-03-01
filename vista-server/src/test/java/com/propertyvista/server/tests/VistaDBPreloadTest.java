@@ -32,7 +32,6 @@ public class VistaDBPreloadTest extends VistaDBTestBase {
         long start = System.currentTimeMillis();
         DataPreloaderCollection dp = new VistaDataPreloaders(VistaDevPreloadConfig.createTest());
         dp.setParameterValue(VistaDataPreloaderParameter.attachMedia.name(), Boolean.FALSE);
-        //TODO uncomment after fixing preload
         log.info(dp.preloadAll());
 
         log.info("Preload time {}", TimeUtils.secSince(start));
