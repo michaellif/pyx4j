@@ -13,6 +13,9 @@
  */
 package com.propertyvista.server.common.util.occupancy;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -266,8 +269,29 @@ public class AvailabilityReportManager {
         status.floorplanName().setValue(unit.floorplan().name().getValue());
         status.floorplanMarketingName().setValue(unit.floorplan().marketingName().getValue());
 
-        if (status.rentedStatus().getValue() == RentedStatus.Rented) {
-            // TODO set the rest of stuff - fill unit rent and market rent
+        // TODO fill unit rent and market rent
+
+        // unit rent: get from the latest lease
+//            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+//            criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
+//            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.Approved, Lease.Status.Active, Lease.Status.Completed,
+//                    Lease.Status.Finalised, Lease.Status.Closed));
+//            criteria.desc(criteria.proto().leaseFrom());
+//            
+//            Lease lease = Persistence.secureRetrieve(criteria);
+//            lease.
+
+        BigDecimal unitRent = new BigDecimal("1000"); // FIXME use real values      
+        BigDecimal marketRent = new BigDecimal("1100");
+
+        MathContext ctx = new MathContext(2, RoundingMode.UP);
+        status.unitRent().setValue(unitRent);
+        status.marketRent().setValue(marketRent);
+        if (unitRent != null & marketRent != null) {
+            status.rentDeltaAbsolute().setValue(unitRent.subtract(marketRent, ctx));
+            if (marketRent.compareTo(BigDecimal.ZERO) != 0) {
+                status.rentDeltaRelative().setValue(status.rentDeltaAbsolute().getValue().divide(marketRent, ctx));
+            }
         }
 
     }

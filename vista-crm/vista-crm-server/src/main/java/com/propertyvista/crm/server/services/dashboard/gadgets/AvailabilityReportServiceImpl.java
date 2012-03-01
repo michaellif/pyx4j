@@ -397,16 +397,15 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         callback.onSuccess(results);
     }
 
-    private static UnitAvailabilityStatus computeTransientFields(final UnitAvailabilityStatus unitStatus, final LogicalDate toDate) {
-//        if (isRevenueLost(unitStatus)) {
-//            computeDaysVacantAndRevenueLost(unitStatus, toDate.getTime());
-//        }
+    private static UnitAvailabilityStatus computeTransientFields(final UnitAvailabilityStatus unitStatus, final LogicalDate now) {
+        if (isRevenueLost(unitStatus)) {
+            computeDaysVacantAndRevenueLost(unitStatus, now.getTime());
+        }
         return unitStatus;
     }
 
     private static boolean isRevenueLost(final UnitAvailabilityStatus unit) {
-        // TODO review: why the check "(moveOutDay != null)" is performed here? isn't VACANT status a sufficient condition for it? 
-        return Vacancy.Vacant.equals(unit.vacancyStatus().getValue()) & unit.rentEndDay().getValue() != null;
+        return unit.vacancyStatus().getValue() == Vacancy.Vacant & unit.vacantSince().getValue() != null;
     }
 
     /**
@@ -416,15 +415,15 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     private static void computeDaysVacantAndRevenueLost(final UnitAvailabilityStatus unit, final long reportTime) {
 
         final long MILLIS_IN_DAY = 1000L * 60L * 60L * 24L;
-        final long avaialbleFrom = unit.rentEndDay().getValue().getTime() + MILLIS_IN_DAY;
+        final long avaialbleFrom = unit.vacantSince().getValue().getTime();
         final long millisecondsVacant = reportTime - avaialbleFrom;
 
-        int daysVacant = (int) (millisecondsVacant / MILLIS_IN_DAY);
+        int daysVacant = (int) (millisecondsVacant / MILLIS_IN_DAY) + 1;
         unit.daysVacant().setValue(daysVacant);
 
         BigDecimal marketRent = unit.marketRent().getValue();
 
-        if (marketRent != null) {
+        if (marketRent != null && !marketRent.equals(BigDecimal.ZERO)) {
             BigDecimal revenueLost = marketRent.multiply(new BigDecimal(daysVacant).divide(new BigDecimal(30)));
             unit.revenueLost().setValue(revenueLost);
         }
