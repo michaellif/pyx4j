@@ -50,7 +50,11 @@ public class XMLEntityWriter {
 
     private boolean emitOnlyOwnedReferences = false;
 
+    private boolean emitAttachLevel = false;
+
     private final XMLEntityName entityName;
+
+    private final Map<String, String> detachedEntityAttributes = new LinkedHashMap<String, String>();
 
     private static class GlobalGraph {
 
@@ -112,6 +116,7 @@ public class XMLEntityWriter {
     public XMLEntityWriter(XMLStringWriter xml, XMLEntityName entityName) {
         this.xml = xml;
         this.entityName = entityName;
+        detachedEntityAttributes.put("attachLevel", AttachLevel.Detached.name());
     }
 
     public boolean isEmitId() {
@@ -128,6 +133,14 @@ public class XMLEntityWriter {
 
     public boolean isEmitOnlyOwnedReferences() {
         return emitOnlyOwnedReferences;
+    }
+
+    public boolean isEmitAttachLevel() {
+        return emitAttachLevel;
+    }
+
+    public void setEmitAttachLevel(boolean emitAttachLevel) {
+        this.emitAttachLevel = emitAttachLevel;
     }
 
     public void writeRoot(IEntity entity, Map<String, String> attributes) {
@@ -184,11 +197,19 @@ public class XMLEntityWriter {
             }
         }
 
+        if (isEmitAttachLevel()) {
+            AttachLevel level = entity.getAttachLevel();
+            if (level != AttachLevel.Attached) {
+                entityAttributes.put("attachLevel", level.name());
+            }
+        }
+
         if (emitted) {
             xml.writeEmpty(name, entityAttributes);
             return;
         }
         graph.emitting(entity);
+
         xml.startIdented(name, entityAttributes);
 
         EntityMeta em = entity.getEntityMeta();
@@ -198,6 +219,13 @@ public class XMLEntityWriter {
                 continue;
             }
             IObject<?> member = entity.getMember(memberName);
+            if (member.getAttachLevel() == AttachLevel.Detached) {
+                if (isEmitAttachLevel()) {
+                    xml.writeEmpty(memberName, detachedEntityAttributes);
+                }
+                continue;
+            }
+
             if (!emitMemeber(entity, memberName, member)) {
                 continue;
             }
@@ -247,11 +275,7 @@ public class XMLEntityWriter {
     }
 
     protected boolean emitMemeber(IEntity entity, String memberName, IObject<?> member) {
-        if (member.getAttachLevel() == AttachLevel.Detached) {
-            return false;
-        } else {
-            return !member.isNull();
-        }
+        return !member.isNull();
     }
 
     protected String getValueAsString(Object value) {

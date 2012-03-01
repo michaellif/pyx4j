@@ -95,7 +95,7 @@ public class DataDump {
         NumberFormat nf = new DecimalFormat("0000");
         StringBuffer name = new StringBuffer(nf.format(id));
         name.append('-').append(type).append('-');
-        String ext = ".xml";
+        String ext = ".log";
         {
             IEntity ent = null;
             switch (dataType) {
@@ -104,11 +104,12 @@ public class DataDump {
                 if (!((List<?>) item).isEmpty()) {
                     ent = (IEntity) ((List<?>) item).get(0);
                 }
+                ext = ".xml";
                 break;
             case Entity:
                 ent = (IEntity) item;
+                ext = ".xml";
             default:
-                ext = ".log";
                 if (item != null) {
                     name.append(item.getClass().getSimpleName());
                     if (item instanceof IHaveServiceCallMarker) {
@@ -148,6 +149,7 @@ public class DataDump {
             default:
                 XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
                 DumpXMLEntityWriter xmlWriter = new DumpXMLEntityWriter(xml);
+                xmlWriter.setEmitAttachLevel(true);
                 if (item instanceof List) {
                     xml.start("list");
                     for (IEntity ent : (List<IEntity>) item) {
