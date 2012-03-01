@@ -64,7 +64,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
         public static enum DebugIds implements IDebugId {
 
-            allFilter, vacantFilter, noticeFilter, vacantAndNoticeFilter, rentedFilter, netExposureFilter;
+            vacantFilter, noticeFilter, vacantAndNoticeFilter, rentedFilter, netExposureFilter;
 
             @Override
             public String debugId() {
@@ -91,7 +91,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         @Override
         protected UnitAvailability createDefaultSettings(Class<UnitAvailability> metadataClass) {
             UnitAvailability settings = super.createDefaultSettings(metadataClass);
-            settings.defaultFilteringPreset().setValue(FilterPreset.All);
+            settings.defaultFilteringPreset().setValue(FilterPreset.VacantAndNotice);
             return settings;
         }
 
@@ -151,10 +151,9 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
             controlsPanel = new FlexTable();
 
             filteringButtons = Arrays.asList(//@formatter:off
-            		new FilterButton(FilterPreset.All, DebugIds.allFilter),
+                    new FilterButton(FilterPreset.VacantAndNotice, DebugIds.vacantAndNoticeFilter),
             		new FilterButton(FilterPreset.Vacant, DebugIds.vacantFilter),
-            		new FilterButton(FilterPreset.Notice, DebugIds.noticeFilter),
-            		new FilterButton(FilterPreset.VacantAndNotice, DebugIds.vacantAndNoticeFilter),
+            		new FilterButton(FilterPreset.Notice, DebugIds.noticeFilter),            
             		new FilterButton(FilterPreset.Rented, DebugIds.rentedFilter),
             		new FilterButton(FilterPreset.NetExposure, DebugIds.netExposureFilter)
             );//@formatter:on
@@ -169,8 +168,8 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
         @Override
         public void start() {
-            setupFilteringButtons();
             super.start();
+            setupFilteringButtons();
         }
 
         /**

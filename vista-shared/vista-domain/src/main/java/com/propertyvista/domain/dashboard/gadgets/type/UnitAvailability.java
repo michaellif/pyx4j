@@ -21,7 +21,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @DiscriminatorValue("UnitAvailability")
 public interface UnitAvailability extends ListerGadgetBaseMetadata {
     enum FilterPreset {
-        All,
 
         Vacant,
 

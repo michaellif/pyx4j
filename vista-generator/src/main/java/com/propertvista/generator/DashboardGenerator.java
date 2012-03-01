@@ -90,7 +90,7 @@ public class DashboardGenerator extends Dashboards {
         unitAvailabilityReport.refreshInterval().setValue(RefreshInterval.Never);
         unitAvailabilityReport.pageSize().setValue(10);
         unitAvailabilityReport.pageNumber().setValue(0);
-        unitAvailabilityReport.defaultFilteringPreset().setValue(FilterPreset.All);
+        unitAvailabilityReport.defaultFilteringPreset().setValue(FilterPreset.VacantAndNotice);
         unitAvailabilityReport.docking().column().setValue(0);
         dmd.gadgets().add(unitAvailabilityReport);
 

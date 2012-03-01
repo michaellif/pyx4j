@@ -133,13 +133,6 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
     private StatusFilter filterFor(FilterPreset filterPreset) {
         switch (filterPreset) {
-        case All:
-            return new StatusFilter() {
-                @Override
-                public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return true;
-                }
-            };
         case NetExposure:
             return new StatusFilter() {
                 @Override
