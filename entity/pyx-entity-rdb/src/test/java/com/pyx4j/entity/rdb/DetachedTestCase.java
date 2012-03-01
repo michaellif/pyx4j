@@ -182,20 +182,18 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
     }
 
     public void testDetachedOwnerMemeber() {
-        MainHolderEnity main = EntityFactory.create(MainHolderEnity.class);
-        main.name().setValue("m1 " + uniqueString());
-        // TODO fix the first recurcive save
-        srv.persist(main);
-        main.ownedWithBackReference().name().setValue("c1 " + uniqueString());
+        MainHolderEnity main1 = EntityFactory.create(MainHolderEnity.class);
+        main1.name().setValue("m1 " + uniqueString());
+        main1.ownedWithBackReference().name().setValue("c1 " + uniqueString());
 
-        srv.persist(main);
+        srv.persist(main1);
 
-        MainHolderEnity mainR = srv.retrieve(MainHolderEnity.class, main.getPrimaryKey());
+        MainHolderEnity main1R1 = srv.retrieve(MainHolderEnity.class, main1.getPrimaryKey());
 
-        Assert.assertFalse("is detached", mainR.ownedWithBackReference().detachedOwner().isValueDetached());
-        Assert.assertEquals(main.name().getValue(), mainR.ownedWithBackReference().detachedOwner().name().getValue());
+        Assert.assertFalse("is detached", main1R1.ownedWithBackReference().detachedOwner().isValueDetached());
+        Assert.assertEquals(main1.name().getValue(), main1R1.ownedWithBackReference().detachedOwner().name().getValue());
 
-        OwnedWithBackReference ownedDetachedR = srv.retrieve(OwnedWithBackReference.class, mainR.ownedWithBackReference().getPrimaryKey());
+        OwnedWithBackReference ownedDetachedR = srv.retrieve(OwnedWithBackReference.class, main1R1.ownedWithBackReference().getPrimaryKey());
         Assert.assertTrue("is detached", ownedDetachedR.detachedOwner().isValueDetached());
 
         // Test data corruption error
@@ -203,22 +201,15 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         main2.name().setValue("m2 " + uniqueString());
         srv.persist(main2);
 
-        OwnedWithBackReference ownedDetached = mainR.ownedWithBackReference().detach();
+        // Try Move do different owner
+        OwnedWithBackReference ownedDetached = main1R1.ownedWithBackReference().detach();
         ownedDetached.detachedOwner().set(main2);
         srv.persist(ownedDetached);
 
-        boolean retrived = false;
-        try {
-            srv.retrieve(MainHolderEnity.class, main.getPrimaryKey());
-            retrived = true;
-        } catch (RuntimeException ok) {
-        }
-        // TODO find why it is failing and what we are testing
-        if (false) {
-            if (retrived) {
-                Assert.fail("Back Reference test failed");
-            }
+        // verify that child is still with the same owner
+        {
+            MainHolderEnity main1r2 = srv.retrieve(MainHolderEnity.class, main1.getPrimaryKey());
+            Assert.assertEquals(main1.name().getValue(), main1r2.ownedWithBackReference().detachedOwner().name().getValue());
         }
     }
-
 }
