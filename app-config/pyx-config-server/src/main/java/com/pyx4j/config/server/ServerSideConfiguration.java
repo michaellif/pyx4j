@@ -77,7 +77,7 @@ public class ServerSideConfiguration {
 
     public static final void setInstance(ServerSideConfiguration instance) {
         if (ServerSideConfiguration.instance != null) {
-            if (ServerSideConfiguration.instance != instance) {
+            if (ServerSideConfiguration.instance == instance) {
                 return;
             }
             throw new Error("Can't redefine ServerSideConfiguration", instanceDefinedFrom);
