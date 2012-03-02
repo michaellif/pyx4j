@@ -19,8 +19,6 @@ import java.text.SimpleDateFormat;
 
 import junit.framework.TestCase;
 
-import com.pyx4j.commons.LogicalDate;
-
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class ProrationTest extends TestCase {
@@ -30,25 +28,31 @@ public class ProrationTest extends TestCase {
     public void testProration() throws ParseException {
 
         assertEquals("Prorate 23/02/2012", new BigDecimal("0.24138"),
-                ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Feb-2012")), LeaseFinancial.ProrationMethod.Actual));
+                ProrationUtils.prorate(BillingTestUtils.getDate("23-Feb-2012"), BillingTestUtils.getDate("29-Feb-2012"), LeaseFinancial.ProrationMethod.Actual));
         assertEquals("Prorate 23/03/2012", new BigDecimal("0.29032"),
-                ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Mar-2012")), LeaseFinancial.ProrationMethod.Actual));
+                ProrationUtils.prorate(BillingTestUtils.getDate("23-Mar-2012"), BillingTestUtils.getDate("31-Mar-2012"), LeaseFinancial.ProrationMethod.Actual));
         assertEquals("Prorate 23/04/2012", new BigDecimal("0.26667"),
-                ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Apr-2012")), LeaseFinancial.ProrationMethod.Actual));
+                ProrationUtils.prorate(BillingTestUtils.getDate("23-Apr-2012"), BillingTestUtils.getDate("30-Apr-2012"), LeaseFinancial.ProrationMethod.Actual));
 
-        assertEquals("Prorate 23/02/2012", new BigDecimal("0.24138"),
-                ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Feb-2012")), LeaseFinancial.ProrationMethod.Standard));
-        assertEquals("Prorate 23/03/2012", new BigDecimal("0.30000"),
-                ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Mar-2012")), LeaseFinancial.ProrationMethod.Standard));
-        assertEquals("Prorate 23/04/2012", new BigDecimal("0.26667"),
-                ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Apr-2012")), LeaseFinancial.ProrationMethod.Standard));
+        assertEquals("Prorate 23/02/2012", new BigDecimal("0.24138"), ProrationUtils.prorate(BillingTestUtils.getDate("23-Feb-2012"),
+                BillingTestUtils.getDate("29-Feb-2012"), LeaseFinancial.ProrationMethod.Standard));
+        assertEquals("Prorate 23/03/2012", new BigDecimal("0.30000"), ProrationUtils.prorate(BillingTestUtils.getDate("23-Mar-2012"),
+                BillingTestUtils.getDate("31-Mar-2012"), LeaseFinancial.ProrationMethod.Standard));
+        assertEquals("Prorate 23/04/2012", new BigDecimal("0.26667"), ProrationUtils.prorate(BillingTestUtils.getDate("23-Apr-2012"),
+                BillingTestUtils.getDate("30-Apr-2012"), LeaseFinancial.ProrationMethod.Standard));
 
         assertEquals("Prorate 23/02/2012", new BigDecimal("0.23014"),
-                ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Feb-2012")), LeaseFinancial.ProrationMethod.Annual));
+                ProrationUtils.prorate(BillingTestUtils.getDate("23-Feb-2012"), BillingTestUtils.getDate("29-Feb-2012"), LeaseFinancial.ProrationMethod.Annual));
         assertEquals("Prorate 23/03/2012", new BigDecimal("0.29589"),
-                ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Mar-2012")), LeaseFinancial.ProrationMethod.Annual));
+                ProrationUtils.prorate(BillingTestUtils.getDate("23-Mar-2012"), BillingTestUtils.getDate("31-Mar-2012"), LeaseFinancial.ProrationMethod.Annual));
         assertEquals("Prorate 23/04/2012", new BigDecimal("0.26301"),
-                ProrationUtils.prorate(new LogicalDate(formatter.parse("23-Apr-2012")), LeaseFinancial.ProrationMethod.Annual));
+                ProrationUtils.prorate(BillingTestUtils.getDate("23-Apr-2012"), BillingTestUtils.getDate("30-Apr-2012"), LeaseFinancial.ProrationMethod.Annual));
+
+        try {
+            ProrationUtils.prorate(BillingTestUtils.getDate("23-Feb-2012"), BillingTestUtils.getDate("23-Mar-2012"), LeaseFinancial.ProrationMethod.Actual);
+            assertTrue("Prorate more than month didn't fail", false);
+        } catch (BillingException e) {
+        }
 
     }
 }

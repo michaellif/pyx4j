@@ -123,7 +123,7 @@ public class BillTester extends Tester {
             return null;
         }
         try {
-            return BillingTestBase.getDate(date);
+            return BillingTestUtils.getDate(date);
         } catch (Exception e) {
             throw new Error("Failed to parse date " + date);
         }

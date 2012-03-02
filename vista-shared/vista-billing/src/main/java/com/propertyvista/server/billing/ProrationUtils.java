@@ -24,29 +24,46 @@ import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class ProrationUtils {
 
-    public static BigDecimal prorate(LogicalDate date, LeaseFinancial.ProrationMethod method) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        BigDecimal proration = null;
-        switch (method) {
-        case Actual:
-            proration = new BigDecimal(daysInMonth);
-            break;
-        case Standard:
-            proration = new BigDecimal(30);
-            if (daysInMonth < 30) {
+    public static BigDecimal prorate(LogicalDate from, LogicalDate to, LeaseFinancial.ProrationMethod method) {
+        Calendar calendarFrom = new GregorianCalendar();
+        calendarFrom.setTime(from);
+        int daysInMonth = calendarFrom.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int monthFrom = calendarFrom.get(Calendar.MONTH);
+        int dayOfMonthFrom = calendarFrom.get(Calendar.DAY_OF_MONTH);
+
+        Calendar calendarTo = new GregorianCalendar();
+        calendarTo.setTime(to);
+        int monthTo = calendarTo.get(Calendar.MONTH);
+        int dayOfMonthTo = calendarTo.get(Calendar.DAY_OF_MONTH);
+
+        int between = daysBetween(from, to);
+
+        if (((monthTo - monthFrom == 0) && (dayOfMonthFrom <= dayOfMonthTo)) || ((monthTo - monthFrom == 1) && (dayOfMonthFrom > dayOfMonthTo))) {
+            BigDecimal proration = null;
+            switch (method) {
+            case Actual:
                 proration = new BigDecimal(daysInMonth);
+                break;
+            case Standard:
+                proration = new BigDecimal(30);
+                if (daysInMonth < 30) {
+                    proration = new BigDecimal(daysInMonth);
+                }
+                break;
+            case Annual:
+                proration = new BigDecimal(365).divide(new BigDecimal(12), 5, RoundingMode.HALF_UP);
+                break;
+            default:
+
             }
-            break;
-        case Annual:
-            proration = new BigDecimal(365).divide(new BigDecimal(12), 5, RoundingMode.HALF_UP);
-            break;
-        default:
-
+            return new BigDecimal(daysBetween(from, to)).divide(proration, 5, RoundingMode.HALF_UP);
+        } else {
+            throw new BillingException("proration can be calculated for a period of month");
         }
-        return new BigDecimal(daysInMonth - dayOfMonth + 1).divide(proration, 5, RoundingMode.HALF_UP);
 
+    }
+
+    public static int daysBetween(LogicalDate d1, LogicalDate d2) {
+        return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24)) + 1;
     }
 }

@@ -21,8 +21,6 @@
 package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import org.junit.Ignore;
 
@@ -52,8 +50,6 @@ import com.propertyvista.server.billing.preload.TenantDataModel;
 
 @Ignore
 public class BillingTestBase extends VistaDBTestBase {
-
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
 
     protected LeaseDataModel leaseDataModel;
 
@@ -104,26 +100,15 @@ public class BillingTestBase extends VistaDBTestBase {
         return bill;
     }
 
-    protected static LogicalDate getDate(String date) {
-        if (date == null) {
-            return null;
-        }
-        try {
-            return new LogicalDate(formatter.parse(date));
-        } catch (ParseException e) {
-            throw new Error(e);
-        }
-    }
-
     protected static void setSysDate(String date) {
-        BillingLifecycle.setSysDate(getDate(date));
+        BillingLifecycle.setSysDate(BillingTestUtils.getDate(date));
     }
 
     protected void setLeaseConditions(String leaseDateFrom, String leaseDateTo, Integer billingPeriodStartDate) {
         Lease lease = leaseDataModel.getLease();
 
-        lease.leaseFrom().setValue(getDate(leaseDateFrom));
-        lease.leaseTo().setValue(getDate(leaseDateTo));
+        lease.leaseFrom().setValue(BillingTestUtils.getDate(leaseDateFrom));
+        lease.leaseTo().setValue(BillingTestUtils.getDate(leaseDateTo));
 
         lease.leaseFinancial().billingPeriodStartDate().setValue(billingPeriodStartDate);
 
@@ -137,12 +122,24 @@ public class BillingTestBase extends VistaDBTestBase {
         Persistence.service().persist(lease);
     }
 
+    protected BillableItem addParking(String effectiveDate, String expirationDate) {
+        return addBillableItem(Type.parking, effectiveDate, expirationDate);
+    }
+
     protected BillableItem addParking() {
         return addBillableItem(Type.parking);
     }
 
+    protected BillableItem addLocker(String effectiveDate, String expirationDate) {
+        return addBillableItem(Type.locker, effectiveDate, expirationDate);
+    }
+
     protected BillableItem addLocker() {
         return addBillableItem(Type.locker);
+    }
+
+    protected BillableItem addPet(String effectiveDate, String expirationDate) {
+        return addBillableItem(Type.pet, effectiveDate, expirationDate);
     }
 
     protected BillableItem addPet() {
@@ -150,6 +147,15 @@ public class BillingTestBase extends VistaDBTestBase {
     }
 
     private BillableItem addBillableItem(Feature.Type featureType) {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
+        return addBillableItem(featureType, lease.leaseFrom().getValue(), lease.leaseTo().getValue());
+    }
+
+    private BillableItem addBillableItem(Feature.Type featureType, String effectiveDate, String expirationDate) {
+        return addBillableItem(featureType, BillingTestUtils.getDate(effectiveDate), BillingTestUtils.getDate(expirationDate));
+    }
+
+    private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
         Lease lease = leaseDataModel.getLease();
 
         ProductItem serviceItem = leaseDataModel.getServiceItem();
@@ -158,6 +164,8 @@ public class BillingTestBase extends VistaDBTestBase {
             if (featureType.equals(feature.type().getValue()) && feature.items().size() != 0) {
                 BillableItem billableItem = EntityFactory.create(BillableItem.class);
                 billableItem.item().set(feature.items().get(0));
+                billableItem.effectiveDate().setValue(effectiveDate);
+                billableItem.expirationDate().setValue(expirationDate);
                 lease.serviceAgreement().featureItems().add(billableItem);
                 Persistence.service().persist(lease);
                 return billableItem;
@@ -167,6 +175,19 @@ public class BillingTestBase extends VistaDBTestBase {
     }
 
     protected BillableItemAdjustment addBillableItemAdjustment(BillableItem billableItem, String value, AdjustmentType adjustmentType, TermType termType) {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLease().getPrimaryKey());
+        return addBillableItemAdjustment(billableItem, value, adjustmentType, termType, lease.leaseFrom().getValue(), lease.leaseTo().getValue());
+
+    }
+
+    protected BillableItemAdjustment addBillableItemAdjustment(BillableItem billableItem, String value, AdjustmentType adjustmentType, TermType termType,
+            String effectiveDate, String expirationDate) {
+        return addBillableItemAdjustment(billableItem, value, adjustmentType, termType, BillingTestUtils.getDate(effectiveDate),
+                BillingTestUtils.getDate(expirationDate));
+    }
+
+    private BillableItemAdjustment addBillableItemAdjustment(BillableItem billableItem, String value, AdjustmentType adjustmentType, TermType termType,
+            LogicalDate effectiveDate, LogicalDate expirationDate) {
         Lease lease = leaseDataModel.getLease();
 
         BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
@@ -178,6 +199,8 @@ public class BillingTestBase extends VistaDBTestBase {
         }
         adjustment.adjustmentType().setValue(adjustmentType);
         adjustment.termType().setValue(termType);
+        adjustment.effectiveDate().setValue(effectiveDate);
+        adjustment.expirationDate().setValue(expirationDate);
         billableItem.adjustments().add(adjustment);
 
         Persistence.service().persist(billableItem);

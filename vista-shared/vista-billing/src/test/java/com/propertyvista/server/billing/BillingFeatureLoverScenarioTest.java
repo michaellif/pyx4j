@@ -39,7 +39,7 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         addBillableItemAdjustment(parking2, "-10", AdjustmentType.monetary, TermType.inLease);
 
         BillableItem locker1 = addLocker();
-        addBillableItemAdjustment(locker1, "-0.05", AdjustmentType.percentage, TermType.inLease);
+        addBillableItemAdjustment(locker1, "-0.2", AdjustmentType.percentage, TermType.inLease);
 
         BillableItem pet1 = addPet();
         addBillableItemAdjustment(pet1, null, AdjustmentType.free, TermType.inLease);
@@ -61,17 +61,16 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         numOfCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
-        serviceCharge("930.30").
-        recurringFeatureCharges("122.88").
-        totalAdjustments("-31.19").
+        serviceCharge("270.08").
+        recurringFeatureCharges("69.68").
+        totalAdjustments("-15.10").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
         //==================== RUN 2 ======================//
 
-        setLeaseStatus(Lease.Status.Active);
-
         setSysDate("16-Apr-2011");
+        setLeaseStatus(Lease.Status.Active);
 
         bill = runBilling(true);
 
@@ -86,8 +85,8 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("122.88").
-        totalAdjustments("-31.19").
+        recurringFeatureCharges("240.00").
+        totalAdjustments("-52.00").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
@@ -108,8 +107,8 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("122.88").
-        totalAdjustments("-31.19").
+        recurringFeatureCharges("240.00").
+        totalAdjustments("-52.00").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
@@ -130,8 +129,8 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("122.88").
-        totalAdjustments("-31.19").
+        recurringFeatureCharges("240.00").
+        totalAdjustments("-52.00").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
@@ -152,8 +151,8 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("122.88").
-        totalAdjustments("-31.19").
+        recurringFeatureCharges("240.00").
+        totalAdjustments("-52.00").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
@@ -169,16 +168,7 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         new BillTester(bill).
         billSequenceNumber(6).
         previousBillSequenceNumber(5).
-        billType(Bill.BillType.Final).
-        billingPeriodStartDate(null).
-        billingPeriodEndDate(null).
-        numOfCharges(5).
-        numOfChargeAdjustments(4).
-        numOfLeaseAdjustments(0).
-        serviceCharge("930.30").
-        recurringFeatureCharges("122.88").
-        totalAdjustments("-31.19").
-        oneTimeFeatureCharges("0.00");
+        billType(Bill.BillType.Final);
         // @formatter:on
     }
 

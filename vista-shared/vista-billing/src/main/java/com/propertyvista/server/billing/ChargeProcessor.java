@@ -22,6 +22,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillCharge;
 import com.propertyvista.domain.financial.billing.BillChargeTax;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class ChargeProcessor {
 
@@ -49,7 +50,19 @@ public class ChargeProcessor {
             BillCharge charge = EntityFactory.create(BillCharge.class);
             charge.bill().set(bill);
             charge.billableItem().set(billableItem);
-            charge.amount().setValue(billableItem.item().price().getValue());
+
+            if (Bill.BillType.Final.equals(bill.billType().getValue())) {
+                //TODO final bill
+                charge.amount().setValue(new BigDecimal("0.00"));
+            } else {
+                DateRange overlap = DateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate()
+                        .getValue()), new DateRange(billableItem.effectiveDate().getValue(), billableItem.expirationDate().getValue()));
+
+                //TODO use policy to determin proration type
+                BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), LeaseFinancial.ProrationMethod.Actual);
+                charge.amount().setValue(billableItem.item().price().getValue().multiply(proration));
+            }
+
             if (!charge.amount().isNull()) {
                 charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), billableItem.item().type(), bill.billingRun().building()));
             }

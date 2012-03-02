@@ -21,6 +21,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillChargeAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class ChargeAdjustmentProcessor {
 
@@ -53,12 +54,29 @@ public class ChargeAdjustmentProcessor {
         adjustment.bill().set(bill);
         adjustment.billableItemAdjustment().set(itemAdjustment);
 
+        BigDecimal amount = null;
+
         if (BillableItemAdjustment.AdjustmentType.percentage.equals(itemAdjustment.adjustmentType().getValue())) {
-            adjustment.amount().setValue(itemAdjustment.billableItem().item().price().getValue().multiply(itemAdjustment.value().getValue()));
+            amount = itemAdjustment.billableItem().item().price().getValue().multiply(itemAdjustment.value().getValue());
         } else if (BillableItemAdjustment.AdjustmentType.monetary.equals(itemAdjustment.adjustmentType().getValue())) {
-            adjustment.amount().setValue(itemAdjustment.value().getValue());
+            amount = itemAdjustment.value().getValue();
         } else if (BillableItemAdjustment.AdjustmentType.free.equals(itemAdjustment.adjustmentType().getValue())) {
-            adjustment.amount().setValue(itemAdjustment.billableItem().item().price().getValue().multiply(new BigDecimal(-1)));
+            amount = itemAdjustment.billableItem().item().price().getValue().multiply(new BigDecimal(-1));
+        }
+
+        if (Bill.BillType.Final.equals(bill.billType().getValue())) {
+            //TODO final bill
+            adjustment.amount().setValue(new BigDecimal("0.00"));
+        } else {
+            DateRange overlap = DateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate().getValue()),
+                    new DateRange(itemAdjustment.effectiveDate().getValue(), itemAdjustment.expirationDate().getValue()));
+
+            overlap = DateUtils.getOverlappingRange(overlap, new DateRange(itemAdjustment.billableItem().effectiveDate().getValue(), itemAdjustment
+                    .billableItem().expirationDate().getValue()));
+
+            //TODO use policy to determin proration type
+            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), LeaseFinancial.ProrationMethod.Actual);
+            adjustment.amount().setValue(amount.multiply(proration));
         }
 
         bill.chargeAdjustments().add(adjustment);

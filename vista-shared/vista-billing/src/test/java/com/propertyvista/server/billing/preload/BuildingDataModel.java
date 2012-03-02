@@ -208,7 +208,7 @@ public class BuildingDataModel {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(type);
         productItem.element().set(parking);
-        productItem.price().setValue(new BigDecimal("44.50"));
+        productItem.price().setValue(new BigDecimal("80.00"));
         feature.items().add(productItem);
     }
 
@@ -216,14 +216,7 @@ public class BuildingDataModel {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(type);
         productItem.element().set(lockerArea);
-        productItem.price().setValue(new BigDecimal("23.88"));
-        feature.items().add(productItem);
-    }
-
-    private void generatePetFeatureItem(Feature feature, ProductItemType type) {
-        ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.type().set(type);
-        productItem.price().setValue(new BigDecimal("10.00"));
+        productItem.price().setValue(new BigDecimal("60.00"));
         feature.items().add(productItem);
     }
 
@@ -231,6 +224,13 @@ public class BuildingDataModel {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(type);
         productItem.price().setValue(new BigDecimal("40.00"));
+        feature.items().add(productItem);
+    }
+
+    private void generatePetFeatureItem(Feature feature, ProductItemType type) {
+        ProductItem productItem = EntityFactory.create(ProductItem.class);
+        productItem.type().set(type);
+        productItem.price().setValue(new BigDecimal("20.00"));
         feature.items().add(productItem);
     }
 
