@@ -71,7 +71,8 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         if (on == null) {
             throw new IllegalArgumentException("the report date cannot be null");
         }
-        criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, on));
+        criteria.add(PropertyCriterion.le(criteria.proto().statusDate(), on));
+        criteria.add(PropertyCriterion.ne(criteria.proto().vacancyStatus(), null));
 
         // use descending order of the status date in order to select the most recent statuses first
         // use unit pk sorting in order to make tacking of already added unit statuses
@@ -170,7 +171,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             return new StatusFilter() {
                 @Override
                 public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return (status.vacancyStatus().getValue() != null) & (status.rentedStatus().getValue() != RentedStatus.Rented);
+                    return status.rentedStatus().getValue() != RentedStatus.Rented;
                 }
             };
         case Notice:
@@ -220,7 +221,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         if (toDate == null) {
             toDate = new LogicalDate();
         }
-        criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, toDate));
+        criteria.add(PropertyCriterion.le(criteria.proto().statusDate(), toDate));
         // use descending order of the status date in order to select the most recent statuses first
         criteria.desc(criteria.proto().statusDate().getPath().toString());
 

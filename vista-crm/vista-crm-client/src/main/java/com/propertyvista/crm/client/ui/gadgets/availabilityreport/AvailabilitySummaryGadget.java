@@ -25,10 +25,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.crm.client.ui.board.BoardView;
+import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
+import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
@@ -38,6 +40,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportSe
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummary> {
 
@@ -50,8 +53,6 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
         public Panel panel;
 
         private final AvailabilityReportService service;
-
-        private List<Key> buildings;
 
         public AvailabiltySummaryGadgetInstance(GadgetMetadata gmd) {
 
@@ -119,6 +120,17 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
         }
 
         @Override
+        public void setContainerBoard(BoardView board) {
+            super.setContainerBoard(board);
+            board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
+                @Override
+                public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
+                    populate();
+                }
+            });
+        }
+
+        @Override
         public boolean isSetupable() {
             return false;
         }
@@ -128,23 +140,24 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
         }
 
         private void doPopulate() {
-            if (buildings == null) {
-                setData(EntityFactory.create(UnitVacancyReportSummaryDTO.class));
-                populateSucceded();
-            } else {
-                service.summary(new AsyncCallback<UnitVacancyReportSummaryDTO>() {
-                    @Override
-                    public void onSuccess(UnitVacancyReportSummaryDTO result) {
-                        setData(result);
-                        populateSucceded();
-                    }
-
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        populateFailed(caught);
-                    }
-                }, new Vector<Key>(buildings), getStatusDate());
+            final Vector<Key> buildingPks = new Vector<Key>(containerBoard.getSelectedBuildings().size());
+            for (Building b : containerBoard.getSelectedBuildings()) {
+                buildingPks.add(b.getPrimaryKey());
             }
+
+            service.summary(new AsyncCallback<UnitVacancyReportSummaryDTO>() {
+                @Override
+                public void onSuccess(UnitVacancyReportSummaryDTO result) {
+                    setData(result);
+                    populateSucceded();
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    populateFailed(caught);
+                }
+            }, buildingPks, getStatusDate());
+
         }
 
     }
