@@ -22,8 +22,6 @@ package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -48,8 +46,7 @@ import com.propertyvista.server.billing.preload.ProductTaxPolicyDataModel;
 import com.propertyvista.server.billing.preload.TaxesDataModel;
 import com.propertyvista.server.billing.preload.TenantDataModel;
 
-@Ignore
-public class BillingTestBase extends VistaDBTestBase {
+abstract class BillingTestBase extends VistaDBTestBase {
 
     protected LeaseDataModel leaseDataModel;
 

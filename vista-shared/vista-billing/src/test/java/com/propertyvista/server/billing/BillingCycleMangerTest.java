@@ -16,16 +16,15 @@ package com.propertyvista.server.billing;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import junit.framework.TestCase;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
-public class BillingCycleMangerTest extends TestCase {
+public class BillingCycleMangerTest extends VistaDBTestBase {
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
 
