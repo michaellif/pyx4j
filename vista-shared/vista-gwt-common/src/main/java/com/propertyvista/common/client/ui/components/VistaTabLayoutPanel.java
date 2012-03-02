@@ -86,7 +86,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
 
     @Override
     public void selectTab(int index, boolean fireEvents) {
-        if (isTabDisabled(index)) {
+        if (disableMode && isTabDisabled(index)) {
             selectFirstAvailableTab(fireEvents);
         } else {
             super.selectTab(index, fireEvents);
@@ -95,7 +95,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
 
     @Override
     public void selectTab(Widget child) {
-        if (isTabDisabled(child)) {
+        if (disableMode && isTabDisabled(child)) {
             return; // ignore mouse click selection of disabled tabs
         } else {
             super.selectTab(child);
