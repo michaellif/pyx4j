@@ -47,6 +47,7 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         //==================== RUN 1 ======================//
 
         setSysDate("18-Mar-2011");
+
         setLeaseStatus(Lease.Status.Approved);
 
         Bill bill = runBilling(true);
@@ -94,6 +95,8 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
 
         setSysDate("15-May-2011");
 
+        BillableItem pet2 = addPet();
+
         bill = runBilling(true);
 
         // @formatter:off
@@ -103,11 +106,11 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
-        numOfCharges(5).
+        numOfCharges(6).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("240.00").
+        recurringFeatureCharges("260.00").
         totalAdjustments("-52.00").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
@@ -125,11 +128,11 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
-        numOfCharges(5).
+        numOfCharges(6).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("240.00").
+        recurringFeatureCharges("260.00").
         totalAdjustments("-52.00").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
@@ -147,11 +150,11 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
-        numOfCharges(5).
+        numOfCharges(6).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("240.00").
+        recurringFeatureCharges("260.00").
         totalAdjustments("-52.00").
         oneTimeFeatureCharges("0.00");
         // @formatter:on

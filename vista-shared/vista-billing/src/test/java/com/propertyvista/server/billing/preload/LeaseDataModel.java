@@ -16,6 +16,7 @@ package com.propertyvista.server.billing.preload;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -81,8 +82,8 @@ public class LeaseDataModel {
         return serviceItem;
     }
 
-    public Lease getLease() {
-        return lease;
+    public Key getLeaseKey() {
+        return lease.id().getValue();
     }
 
 }
