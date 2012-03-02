@@ -24,10 +24,15 @@ public interface BuildingT extends IEntity {
 
     IPrimitive<String> propertyCode();
 
-    IPrimitive<String> legalName();
+    IPrimitive<String> propertyName();
 
     IPrimitive<String> website();
 
-    IPrimitive<String> email();
+    IPrimitive<String> address();
 
+    PropertyContactT mainOffice();
+
+    PropertyContactT administrator();
+
+    PropertyContactT superintendent();
 }

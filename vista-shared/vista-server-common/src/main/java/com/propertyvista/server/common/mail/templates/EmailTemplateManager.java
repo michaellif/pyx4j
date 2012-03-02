@@ -32,24 +32,31 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.server.common.mail.templates.model.ApplicationT;
-import com.propertyvista.server.common.mail.templates.model.CompanyT;
-import com.propertyvista.server.common.mail.templates.model.NewPasswordT;
+import com.propertyvista.server.common.mail.templates.model.BuildingT;
+import com.propertyvista.server.common.mail.templates.model.LeaseT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestT;
+import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
 
 public class EmailTemplateManager {
     public static List<IEntity> getTemplateDataObjects(EmailTemplateType template) {
         List<IEntity> values = new Vector<IEntity>();
+        values.add(EntityFactory.create(PortalLinksT.class));
         switch (template) {
         case PasswordRetrievalCrm:
-        case PasswordRetrievalTenant:
-            values.add(EntityFactory.create(NewPasswordT.class));
+            values.add(EntityFactory.create(PasswordRequestCrmT.class));
             break;
+        case PasswordRetrievalTenant:
+            values.add(EntityFactory.create(PasswordRequestT.class));
+            break;
+        case ApplicationApproved:
+            values.add(EntityFactory.create(LeaseT.class));
         case ApplicationCreatedApplicant:
         case ApplicationCreatedCoApplicant:
         case ApplicationCreatedGuarantor:
-        case ApplicationApproved:
         case ApplicationDeclined:
             values.add(EntityFactory.create(ApplicationT.class));
-            values.add(EntityFactory.create(CompanyT.class));
+            values.add(EntityFactory.create(BuildingT.class));
             break;
         default:
             throw new Error("We missed it");
@@ -106,6 +113,20 @@ public class EmailTemplateManager {
         }
 
         return buffer.toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends IEntity> T getProto(EmailTemplateType type, Class<T> tClass) {
+        for (IEntity obj : getTemplateDataObjects(type)) {
+            if (tClass.isAssignableFrom(obj.getClass())) {
+                return (T) obj;
+            }
+        }
+        return null;
+    }
+
+    public static String getVarname(IObject<?> member) {
+        return "${" + pathToVarname(new Path(member).toString()) + "}";
     }
 
     private static int lowerPositive(final int i1, final int i2) {

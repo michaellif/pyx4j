@@ -15,167 +15,146 @@ package com.propertyvista.server.common.mail.templates;
 
 import java.text.SimpleDateFormat;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.company.Company;
-import com.propertyvista.domain.company.CompanyEmail;
-import com.propertyvista.domain.company.CompanyPhone;
-import com.propertyvista.domain.company.OrganizationContact;
-import com.propertyvista.domain.company.OrganizationContacts;
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
-import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.common.mail.templates.model.ApplicationT;
 import com.propertyvista.server.common.mail.templates.model.BuildingT;
-import com.propertyvista.server.common.mail.templates.model.CompanyT;
 import com.propertyvista.server.common.mail.templates.model.LeaseT;
-import com.propertyvista.server.common.mail.templates.model.NewPasswordT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestT;
+import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
+import com.propertyvista.server.common.mail.templates.model.EmailTemplateContext;
 import com.propertyvista.server.common.mail.templates.model.TenantT;
 
 public class EmailTemplateRootObjectLoader {
 
-    public static NewPasswordT loadNewPassword(CrmUser context, String token) {
-        CrmUser user = context;
-        NewPasswordT tObj = EntityFactory.create(NewPasswordT.class);
-        tObj.requestorName().set(user.name());
-        tObj.passwordResetUrl().setValue(
-                ServerSideConfiguration.instance().getMainApplicationURL()
-                        + AppPlaceInfo.absoluteUrl(DeploymentConsts.CRM_URL, CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token));
-        return tObj;
-    }
-
-    public static NewPasswordT loadNewPassword(TenantInLease context, String token) {
-        TenantInLease til = context;
-        NewPasswordT tObj = EntityFactory.create(NewPasswordT.class);
-        tObj.requestorName().set(til.tenant().user().name());
-        tObj.passwordResetUrl().setValue(
-                ServerSideConfiguration.instance().getMainApplicationURL() + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
-                        + token);
-        return tObj;
-    }
-
-    public static <T extends IEntity> T loadRootObject(T tObj, TenantInLease context) {
-        if (tObj == null) {
-            throw new Error("Loading object cannot be null");
+    public static <T extends IEntity> T loadRootObject(T tObj, EmailTemplateContext context) {
+        if (tObj == null || context == null) {
+            throw new Error("Loading object or Context cannot be null");
         }
-        TenantInLease til = context;
-        if (tObj instanceof TenantT) {
+        if (tObj instanceof PortalLinksT) {
+            PortalLinksT t = (PortalLinksT) tObj;
+            String portalBaseUrl = ServerSideConfiguration.instance().getMainApplicationURL();
+            t.portalHomeUrl().setValue(portalBaseUrl + DeploymentConsts.PORTAL_URL);
+            t.tenantHomeUrl().setValue(portalBaseUrl + DeploymentConsts.TENANT_URL);
+            t.ptappHomeUrl().setValue(portalBaseUrl + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, null));
+        } else if (tObj instanceof PasswordRequestT) {
+            PasswordRequestT t = (PasswordRequestT) tObj;
+            TenantUser tenant = context.tenant();
+            t.requestorName().set(tenant.name());
+            t.passwordResetUrl().setValue(
+                    ServerSideConfiguration.instance().getMainApplicationURL() + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
+                            + context.accessToken().getValue());
+        } else if (tObj instanceof PasswordRequestCrmT) {
+            PasswordRequestCrmT t = (PasswordRequestCrmT) tObj;
+            CrmUser user = context.crmUser();
+            t.requestorName().set(user.name());
+            t.passwordResetUrl().setValue(
+                    ServerSideConfiguration.instance().getMainApplicationURL()
+                            + AppPlaceInfo.absoluteUrl(DeploymentConsts.CRM_URL, CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, context
+                                    .accessToken().getValue()));
+        } else if (tObj instanceof TenantT) {
+            TenantUser tenant = context.tenant();
             TenantT t = (TenantT) tObj;
-            t.name().setValue(Formatter.fullName(til.tenant().person().name()));
+            t.name().set(tenant.name());
         } else if (tObj instanceof BuildingT) {
             BuildingT t = (BuildingT) tObj;
-            Building bld = getBuilding(context);
+            TenantUser tenant = context.tenant();
+            Application app = getApplication(tenant);
+            Lease lease = getLease(app);
+            Building bld = getBuilding(lease);
             t.propertyCode().set(bld.propertyCode());
-            t.legalName().set(bld.marketing().name());
+            t.propertyName().set(bld.marketing().name());
             t.website().set(bld.contacts().website());
-        } else if (tObj instanceof ApplicationT) {
-            ApplicationT t = (ApplicationT) tObj;
-            t.applicant().setValue(Formatter.fullName(til.tenant().person().name()));
-            t.refNumber().setValue(til.application().belongsTo().getPrimaryKey().toString());
-        } else if (tObj instanceof LeaseT) {
-            LeaseT t = (LeaseT) tObj;
-            t.applicant().setValue(Formatter.fullName(til.tenant().person().name()));
-            t.startDate().setValue(til.lease().leaseFrom().getStringView());
-            t.startDateWeekday().setValue(new SimpleDateFormat("EEEE").format(til.lease().leaseFrom().getValue()));
-        } else if (tObj instanceof CompanyT) {
-            CompanyT t = (CompanyT) tObj;
-            Company com = getCompany(context);
-            t.name().set(com.name());
-            AddressStructured as = com.addresses().get(0);
-            t.address().setValue(Formatter.addressShort(as));
-            t.phone().set(com.phones().get(0).phone());
-            t.website().set(com.website());
-            t.email().set(com.emails().get(0).email());
+            t.address().setValue(bld.info().address().getStringView());
             // set contact info
-            for (OrganizationContacts cont : com.contacts()) {
-                if (cont.companyRole().name().getValue().equalsIgnoreCase("administrator")) {
-                    t.administrator().name().setValue(Formatter.fullName(cont.contactList().get(0).person().name()));
-                    t.administrator().phone().set(cont.contactList().get(0).person().workPhone());
-                    t.administrator().email().set(cont.contactList().get(0).person().email());
-                } else if (cont.companyRole().name().getValue().equalsIgnoreCase("superintendent")) {
-                    t.superintendent().name().setValue(Formatter.fullName(cont.contactList().get(0).person().name()));
-                    t.superintendent().phone().set(cont.contactList().get(0).person().workPhone());
-                    t.superintendent().email().set(cont.contactList().get(0).person().email());
-                } else if (cont.companyRole().name().getValue().equalsIgnoreCase("office")) {
-                    t.mainOffice().name().setValue(Formatter.fullName(cont.contactList().get(0).person().name()));
-                    t.mainOffice().phone().set(cont.contactList().get(0).person().workPhone());
-                    t.mainOffice().email().set(cont.contactList().get(0).person().email());
+            for (PropertyContact cont : bld.contacts().propertyContacts()) {
+                if (cont.type().getValue().equals(PropertyContact.Type.administrator)) {
+                    t.administrator().name().set(cont.name());
+                    t.administrator().phone().set(cont.phone());
+                    t.administrator().email().set(cont.email());
+                } else if (cont.type().getValue().equals(PropertyContact.Type.superintendent)) {
+                    t.superintendent().name().set(cont.name());
+                    t.superintendent().phone().set(cont.phone());
+                    t.superintendent().email().set(cont.email());
+                } else if (cont.type().getValue().equals(PropertyContact.Type.mainOffice)) {
+                    t.mainOffice().name().set(cont.name());
+                    t.mainOffice().phone().set(cont.phone());
+                    t.mainOffice().email().set(cont.email());
                 }
             }
+        } else if (tObj instanceof ApplicationT) {
+            ApplicationT t = (ApplicationT) tObj;
+            TenantUser tenant = context.tenant();
+            Application app = getApplication(tenant);
+            t.applicant().set(tenant.name());
+            t.refNumber().setValue(app.belongsTo().getPrimaryKey().toString());
+        } else if (tObj instanceof LeaseT) {
+            LeaseT t = (LeaseT) tObj;
+            TenantUser tenant = context.tenant();
+            Application app = getApplication(tenant);
+            Lease lease = getLease(app);
+            t.applicant().set(tenant.name());
+            t.startDate().setValue(lease.leaseFrom().getStringView());
+            t.startDateWeekday().setValue(new SimpleDateFormat("EEEE").format(lease.leaseFrom().getValue()));
         }
         return tObj;
     }
 
-    private static Building getBuilding(TenantInLease context) {
-        if (context == null) {
+    private static Application getApplication(TenantUser tu) {
+        if (tu == null) {
             throw new Error("Context cannot be null");
         }
-        if (Persistence.service().retrieve(context.lease().unit().floorplan().building())) {
-            return context.lease().unit().floorplan().building();
+        EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), tu));
+        Application app = Persistence.service().retrieve(criteria);
+        if (app != null) {
+            return app;
+        } else {
+            throw new Error("Invalid context. No application found.");
+        }
+    }
+
+    private static Lease getLease(Application app) {
+        if (app == null) {
+            throw new Error("Context cannot be null");
+        }
+        if (app.lease().isValueDetached()) {
+            Persistence.service().retrieve(app.lease());
+        }
+        if (app.lease() != null) {
+            return app.lease();
+        } else {
+            throw new Error("Invalid context. No lease found.");
+        }
+    }
+
+    private static Building getBuilding(Lease lease) {
+        if (lease == null) {
+            throw new Error("Context cannot be null");
+        }
+        if (lease.unit().floorplan().building().isValueDetached()) {
+            Persistence.service().retrieve(lease.unit().floorplan().building());
+        }
+        Building bld = lease.unit().floorplan().building();
+        if (bld != null) {
+            return bld;
         } else {
             throw new Error("Invalid context. No building found.");
-        }
-    }
-
-    private static Company getCompany(TenantInLease context) {
-        if (context == null) {
-            throw new Error("Context cannot be null");
-        }
-        // TODO return real PMC Company object
-        Company com = EntityFactory.create(Company.class);
-        com.name().setValue("123PMC Inc");
-        com.website().setValue("123home.propertyvista.com");
-        CompanyPhone phone = EntityFactory.create(CompanyPhone.class);
-        phone.phone().setValue("1-888-123HOME");
-        com.phones().add(phone);
-        CompanyEmail email = EntityFactory.create(CompanyEmail.class);
-        email.email().setValue("123home@propertyvista.com");
-        com.emails().add(email);
-        AddressStructured addr = EntityFactory.create(AddressStructured.class);
-        addr.streetNumber().setValue("123");
-        addr.streetName().setValue("Main");
-        addr.streetType().setValue(StreetType.street);
-        addr.city().setValue("Toronto");
-        addr.province().name().setValue("Ontario");
-        addr.province().code().setValue("ON");
-        addr.country().name().setValue("Canada");
-        com.addresses().add(addr);
-        OrganizationContacts conts = EntityFactory.create(OrganizationContacts.class);
-        conts.companyRole().name().setValue("Administrator");
-        OrganizationContact cont = EntityFactory.create(OrganizationContact.class);
-        cont.person().name().firstName().setValue("John");
-        cont.person().name().lastName().setValue("Smith");
-        cont.person().email().setValue("john.smith@propertyvista.com");
-        cont.person().workPhone().setValue("987-654-3210 x.123");
-        conts.contactList().add(cont);
-        com.contacts().add(conts);
-        return com;
-    }
-
-    static class Formatter {
-        public static String addressShort(AddressStructured addr) {
-            // {123} {Main} {St}, {City}, {PR} {A1B 2C3} 
-            String fmt = "{0} {1} {2}, {3}, {4} {5}";
-            return SimpleMessageFormat.format(fmt, addr.streetNumber().getStringView(), addr.streetName().getStringView(), addr.streetType().getStringView(),
-                    addr.city().getStringView(), addr.province().code().getStringView(), addr.postalCode().getStringView());
-        }
-
-        public static String fullName(Name name) {
-            // Mr John D Smith Junior
-            String fmt = "{0} {1} {2} {3} {4}";
-            return SimpleMessageFormat.format(fmt, name.namePrefix().getStringView(), name.firstName().getStringView(), name.middleName().getStringView(), name
-                    .lastName().getStringView(), name.nameSuffix().getStringView());
         }
     }
 }

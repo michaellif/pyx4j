@@ -14,15 +14,17 @@
 package com.propertyvista.server.common.mail;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -33,11 +35,14 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.common.mail.templates.EmailTemplateManager;
+import com.propertyvista.server.common.mail.templates.EmailTemplateRootObjectLoader;
+import com.propertyvista.server.common.mail.templates.model.EmailTemplateContext;
 import com.propertyvista.server.common.policy.PolicyManager;
 
 public class MessageTemplates {
@@ -57,7 +62,7 @@ public class MessageTemplates {
      * @param building
      * @return
      */
-    public static EmailTemplate getEmailTEmplate(EmailTemplateType type, Building building) {
+    public static EmailTemplate getEmailTemplate(EmailTemplateType type, Building building) {
         EmailTemplatesPolicy policy = PolicyManager.effectivePolicy(building, EmailTemplatesPolicy.class).duplicate();
         if (policy == null) {
             return null;
@@ -71,38 +76,31 @@ public class MessageTemplates {
             if (emt.type().getValue() == type)
                 return emt;
         }
-
-        throw new Error("Something weird has just happened!!!");
+        return null;
     }
 
-    // TODO This is prototype!
-    public static String createApplicationApprovedEmial(Tenant tenant) {
-        Building building = null; // TODO  find tenant 
-        EmailTemplate emailTemplate = getEmailTEmplate(EmailTemplateType.ApplicationApproved, building);
+    public static String createApplicationApprovedEmail(TenantUser tenant) {
+        // get building policy node
+        EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), tenant));
+        Application app = Persistence.service().retrieve(criteria);
+        Persistence.service().retrieve(app.lease());
+        Building building = app.lease().unit().floorplan().building();
 
-        Collection<IEntity> data = new Vector<IEntity>();
-        data.add(building);
-        //data.add(new TenantTConvertor().createDTO(tenant));
+        EmailTemplateType type = EmailTemplateType.ApplicationApproved;
+        EmailTemplate emailTemplate = getEmailTemplate(type, building);
 
-        // Ideal 
-        {
-            List<IEntity> tObjects = EmailTemplateManager.getTemplateDataObjects(EmailTemplateType.ApplicationApproved);
-            for (IEntity ent : tObjects) {
-                // data.add(UniversalConvertor().createDTO(findDBOObject(ent.getValueClass(), tenant)));      
-            }
+        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+        // populate context properties required by template type
+        context.tenant().set(tenant);
+
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
+            // ObjectLoader will load required T-Objects using context data
+            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
-
+        // replace template variables with corresponding T-Object values
         return EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data);
-    }
-
-    public static String wrapHtml(String text) {
-        try {
-            String html = IOUtils.getTextResource("email/template-basic.html");
-            return html.replace("{MESSAGE}", text);
-        } catch (IOException e) {
-            log.error("template error", e);
-            return text;
-        }
     }
 
     public static String createPasswordResetEmail(VistaBasicBehavior application, String name, String token) {
@@ -136,5 +134,15 @@ public class MessageTemplates {
 
         return wrapHtml(i18n.tr("Dear {0},<br/>\n" + "This email was sent to you in response to your request to apply for Property Vista apartments.<br/>\n"
                 + "Click the link below to go to the Property Vista site:<br/>\n" + "    <a style=\"color:#929733\" href=\"{1}\">Application</a>", name, url));
+    }
+
+    public static String wrapHtml(String text) {
+        try {
+            String html = IOUtils.getTextResource("email/template-basic.html");
+            return html.replace("{MESSAGE}", text);
+        } catch (IOException e) {
+            log.error("template error", e);
+            return text;
+        }
     }
 }

@@ -20,6 +20,8 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface EmployeeT extends IEntity {
-    IPrimitive<String> name();
+public interface PasswordRequestT extends IEntity {
+    IPrimitive<String> requestorName();
+
+    IPrimitive<String> passwordResetUrl();
 }

@@ -18,10 +18,15 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.TenantUser;
+
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface NewPasswordT extends IEntity {
-    IPrimitive<String> requestorName();
+public interface EmailTemplateContext extends IEntity {
+    TenantUser tenant();
 
-    IPrimitive<String> passwordResetUrl();
+    CrmUser crmUser();
+
+    IPrimitive<String> accessToken();
 }
