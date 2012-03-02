@@ -54,11 +54,11 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
 
     @Override
     public IsWidget createContent() {
-        tabPanel.addDisable(isEditable() ? new HTML() : getParentComplexViewerView().getDashboardView(), i18n.tr("Dashboard"));
+        tabPanel.add(isEditable() ? new HTML() : getParentComplexViewerView().getDashboardView(), i18n.tr("Dashboard"));
+        tabPanel.setLastTabDisabled(isEditable());
         tabPanel.add(createGeneralPanel(), i18n.tr("General"));
         tabPanel.add(createBuildingsPanel(), i18n.tr("Buildings"));
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

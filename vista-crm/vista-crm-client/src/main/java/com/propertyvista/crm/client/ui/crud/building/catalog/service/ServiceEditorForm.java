@@ -46,7 +46,6 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         tabPanel.add(createGeneralTab(), i18n.tr("General"));
         tabPanel.add(createEligibilityTab(), i18n.tr("Eligibility"));
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

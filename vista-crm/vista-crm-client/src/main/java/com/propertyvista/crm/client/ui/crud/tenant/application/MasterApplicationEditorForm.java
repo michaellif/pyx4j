@@ -61,13 +61,13 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
     public IsWidget createContent() {
 
         tabPanel.add(createGeneralTab(), i18n.tr("Details"));
-        tabPanel.addDisable(isEditable() ? new HTML() : ((MasterApplicationViewerView) getParentView()).getTenantsView().asWidget(), i18n.tr("Tenants"));
+        tabPanel.add(isEditable() ? new HTML() : ((MasterApplicationViewerView) getParentView()).getTenantsView().asWidget(), i18n.tr("Tenants"));
+        tabPanel.setLastTabDisabled(isEditable());
         tabPanel.add(createInfoTab(), i18n.tr("Information"));
         tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
         tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
         tabPanel.add(createAppStatustab(), i18n.tr("Status Details"));
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

@@ -63,7 +63,6 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
     @Override
     public IsWidget createContent() {
         tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

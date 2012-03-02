@@ -63,9 +63,9 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
     public IsWidget createContent() {
 
         tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.addDisable(createAppointmentsTab(), i18n.tr("Appointments"));
+        tabPanel.add(createAppointmentsTab(), i18n.tr("Appointments"));
+        tabPanel.setLastTabDisabled(isEditable());
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

@@ -46,9 +46,9 @@ public class AppointmentEditorForm extends CrmEntityForm<Appointment> {
     public IsWidget createContent() {
 
         tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.addDisable(createShowingsTab(), i18n.tr("Showings"));
+        tabPanel.add(createShowingsTab(), i18n.tr("Showings"));
+        tabPanel.setLastTabDisabled(isEditable());
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

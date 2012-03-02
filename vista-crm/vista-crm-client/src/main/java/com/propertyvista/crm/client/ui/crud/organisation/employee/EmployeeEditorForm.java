@@ -57,9 +57,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         tabPanel.add(createInfoTab(), i18n.tr("Personal Information"));
         tabPanel.add(createPrivilegesTab(), i18n.tr("Privileges"));
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
-
         return tabPanel;
     }
 

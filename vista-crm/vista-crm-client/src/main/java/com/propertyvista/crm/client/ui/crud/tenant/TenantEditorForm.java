@@ -147,7 +147,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         switch (getValue().type().getValue()) {
         case person:
             tabPanel.add(new CrmScrollPanel(person), i18n.tr("Details"));
-            tabPanel.addDisable(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
+            tabPanel.add(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
+            tabPanel.setLastTabDisabled(isEditable());
             break;
         case company:
             tabPanel.add(new CrmScrollPanel(company), proto().company().getMeta().getCaption());
@@ -155,6 +156,5 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         }
 
         tabPanel.add(new ScrollPanel(contacts), proto().emergencyContacts().getMeta().getCaption());
-        tabPanel.setDisableMode(isEditable());
     }
 }

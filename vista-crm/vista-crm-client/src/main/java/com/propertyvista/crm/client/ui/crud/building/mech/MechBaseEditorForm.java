@@ -49,7 +49,6 @@ public abstract class MechBaseEditorForm<E extends LicensedWarrantedMaintained> 
         tabPanel.add(createWarrantyTab(), i18n.tr("Warranty"));
         tabPanel.add(createMaintenantceTab(), i18n.tr("Maintenance"));
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

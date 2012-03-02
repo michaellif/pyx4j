@@ -65,17 +65,18 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         tabPanel.add(createGeneralTab(), i18n.tr("General"));
 
-        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget()),
-                i18n.tr("Details"));
-        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget()),
+        tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget()), i18n.tr("Details"));
+        tabPanel.setLastTabDisabled(isEditable());
+        tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget()),
                 i18n.tr("Occupancy"));
+        tabPanel.setLastTabDisabled(isEditable());
 
-        tabPanel.addDisable(createFinancialsTab(), i18n.tr("Financial"));
+        tabPanel.add(createFinancialsTab(), i18n.tr("Financial"));
+        tabPanel.setLastTabDisabled(isEditable());
 // TODO Hided till further investigation:
 //        tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
         tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }
@@ -154,6 +155,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         if (isEditable() && comp instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")
             CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
+            combo.resetCriteria();
             combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), (Serializable) null));
             combo.addValueChangeHandler(new ValueChangeHandler<Floorplan>() {
                 @Override

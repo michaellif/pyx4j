@@ -86,7 +86,6 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         tabPanel.add(createAssetsTab(), i18n.tr("Assets"));
         guarantorsTabWidget = createGuarantorsTab();
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

@@ -74,10 +74,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         tabPanel.add(detailsTab = createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
         tabPanel.add(createServiceAgreementTab(), i18n.tr("Service Agreement"));
-        tabPanel.addDisable(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
-        tabPanel.addDisable(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
+        tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
+        tabPanel.setLastTabDisabled(isEditable());
+        tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
+        tabPanel.setLastTabDisabled(isEditable());
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

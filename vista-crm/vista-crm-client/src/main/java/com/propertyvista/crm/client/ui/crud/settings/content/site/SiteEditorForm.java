@@ -60,7 +60,6 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         tabPanel.add(createTestimonialsTab(), i18n.tr("Testimonials"));
         tabPanel.add(createNewsTab(), i18n.tr("News"));
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

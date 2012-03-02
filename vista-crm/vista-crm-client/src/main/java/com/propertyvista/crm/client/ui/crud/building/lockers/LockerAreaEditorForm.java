@@ -46,13 +46,13 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
     @Override
     public IsWidget createContent() {
 
-//        tabPanel.addDisable(isEditable() ? new HTML() : ((LockerAreaView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
+//        tabPanel.add(isEditable() ? new HTML() : ((LockerAreaView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
-        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((LockerAreaViewerView) getParentView()).getLockerView().asWidget()),
-                i18n.tr("Lockers"));
-        tabPanel.addDisable(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+        tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((LockerAreaViewerView) getParentView()).getLockerView().asWidget()), i18n.tr("Lockers"));
+        tabPanel.setLastTabDisabled(isEditable());
+        tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+        tabPanel.setLastTabDisabled(isEditable());
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

@@ -46,12 +46,13 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
     @Override
     public IsWidget createContent() {
 
-//        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((ParkingViewerView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
+//        tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((ParkingViewerView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
-        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((ParkingViewerView) getParentView()).getSpotView().asWidget()), i18n.tr("Spots"));
-        tabPanel.addDisable(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+        tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((ParkingViewerView) getParentView()).getSpotView().asWidget()), i18n.tr("Spots"));
+        tabPanel.setLastTabDisabled(isEditable());
+        tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+        tabPanel.setLastTabDisabled(isEditable());
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }

@@ -48,9 +48,9 @@ public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
     public IsWidget createContent() {
 
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
-        tabPanel.addDisable(isEditable() ? new HTML() : ((GuarantorViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
+        tabPanel.add(isEditable() ? new HTML() : ((GuarantorViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
+        tabPanel.setLastTabDisabled(isEditable());
 
-        tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }
