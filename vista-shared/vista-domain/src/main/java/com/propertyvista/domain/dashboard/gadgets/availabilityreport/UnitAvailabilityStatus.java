@@ -19,7 +19,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
@@ -27,14 +26,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 
-// TODO probably also must include Tenant Name/Contact Information
 public interface UnitAvailabilityStatus extends IEntity {
 
     public enum Vacancy {
@@ -85,23 +81,6 @@ public interface UnitAvailabilityStatus extends IEntity {
 
     @ReadOnly
     Complex complex();
-
-    // REFERENCED DATA
-    IPrimitive<String> propertyCode();
-
-    IPrimitive<String> buildingName();
-
-    @EmbeddedEntity
-    AddressStructured address();
-
-    IPrimitive<String> complexName();
-
-    /** {@link AptUnit#info()} -> {@link AptUnitInfo#number()} */
-    IPrimitive<String> unitName();
-
-    IPrimitive<String> floorplanName();
-
-    IPrimitive<String> floorplanMarketingName();
 
     // STATUS DATA    
     IPrimitive<LogicalDate> statusDate();

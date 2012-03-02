@@ -49,6 +49,9 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancy
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
 
@@ -123,12 +126,42 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             }
         }
 
+        clearUnrequiredData(unitsStatusPage);
+
         EntitySearchResult<UnitAvailabilityStatus> result = new EntitySearchResult<UnitAvailabilityStatus>();
+
         result.setData(unitsStatusPage);
         result.setTotalRows(totalRows);
         result.hasMoreData(hasMoreRows);
 
         callback.onSuccess(result);
+    }
+
+    private void clearUnrequiredData(Vector<UnitAvailabilityStatus> unitsStatusPage) {
+        for (UnitAvailabilityStatus status : unitsStatusPage) {
+            Building building = EntityFactory.create(Building.class);
+            building.id().setValue(status.building().id().getValue());
+            building.propertyCode().setValue(status.building().propertyCode().getValue());
+            building.externalId().setValue(status.building().externalId().getValue());
+            building.info().name().setValue(status.building().info().name().getValue());
+            building.info().address().setValue(status.building().info().address().getValue());
+            building.propertyManager().name().setValue(status.building().propertyManager().name().getValue());
+            building.complex().name().setValue(status.building().complex().name().getValue());
+            status.building().set(building);
+
+            AptUnit unit = EntityFactory.create(AptUnit.class);
+            unit.id().setValue(status.unit().id().getValue());
+            unit.info().number().setValue(status.unit().info().number().getValue());
+            status.unit().set(unit);
+
+            Floorplan floorplan = EntityFactory.create(Floorplan.class);
+            floorplan.id().setValue(status.floorplan().id().getValue());
+            floorplan.name().setValue(status.floorplan().name().getValue());
+            floorplan.marketingName().setValue(status.floorplan().marketingName().getValue());
+            status.floorplan().set(floorplan);
+
+        }
+
     }
 
     private StatusFilter filterFor(FilterPreset filterPreset) {

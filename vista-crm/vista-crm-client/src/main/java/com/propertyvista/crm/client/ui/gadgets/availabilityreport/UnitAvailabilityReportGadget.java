@@ -193,15 +193,18 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         @Override
         public List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().propertyCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().buildingName()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().address()).visible(false).build(),
-//                    new MemberColumnDescriptor.Builder(proto().common().owner().company().name()).title(i18n.tr("Owner")).visible(false).build(),
-//                    new MemberColumnDescriptor.Builder(proto().common().propertyManger().name()).title(i18n.tr("Property Manager")).build(),                
-                    new MemberColumnDescriptor.Builder(proto().complexName()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().unitName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().floorplanName()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().floorplanMarketingName()).visible(false).build(),
+                    // references
+                    new MemberColumnDescriptor.Builder(proto().building().propertyCode()).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().externalId()).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
+                    new MemberColumnDescriptor.Builder(proto().building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                    new MemberColumnDescriptor.Builder(proto().unit().info().number()).title(i18n.tr("Unit Name")).build(),
+                    new MemberColumnDescriptor.Builder(proto().floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
+                    new MemberColumnDescriptor.Builder(proto().floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
+                    
+                    // status
                     new MemberColumnDescriptor.Builder(proto().vacancyStatus()).build(),
                     new MemberColumnDescriptor.Builder(proto().rentedStatus()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().scoping()).visible(false).build(),

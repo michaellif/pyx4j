@@ -252,22 +252,7 @@ public class AvailabilityReportManager {
     private void setReferences(UnitAvailabilityStatus status) {
         status.unit().set(unit);
         status.building().set(unit.belongsTo());
-
-        // REFERENCED DATA
-        if (unit.belongsTo().isValueDetached()) {
-            Persistence.service().retrieveMember(unit.belongsTo());
-        }
-        status.propertyCode().setValue(unit.belongsTo().propertyCode().getValue());
-        status.buildingName().setValue(unit.belongsTo().info().name().getValue());
-        status.address().set(unit.belongsTo().info().address());
-        status.complexName().setValue(unit.belongsTo().complex().name().getValue());
-        status.unitName().setValue(unit.info().number().getValue());
-
-        if (unit.floorplan().isValueDetached()) {
-            Persistence.service().retrieveMember(unit.floorplan());
-        }
-        status.floorplanName().setValue(unit.floorplan().name().getValue());
-        status.floorplanMarketingName().setValue(unit.floorplan().marketingName().getValue());
+        status.floorplan().set(unit.floorplan());
 
         // TODO fill unit rent and market rent
 
@@ -281,7 +266,8 @@ public class AvailabilityReportManager {
 //            Lease lease = Persistence.secureRetrieve(criteria);
 //            lease.
 
-        BigDecimal unitRent = new BigDecimal("1000"); // FIXME use real values      
+        // FIXME use real values
+        BigDecimal unitRent = new BigDecimal("1000");
         BigDecimal marketRent = new BigDecimal("1100");
 
         MathContext ctx = new MathContext(2, RoundingMode.UP);
