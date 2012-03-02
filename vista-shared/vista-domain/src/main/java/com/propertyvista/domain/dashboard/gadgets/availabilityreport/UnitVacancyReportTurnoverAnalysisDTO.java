@@ -243,10 +243,10 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
     }
 
     @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> fromDate();
+    IPrimitive<AnalysisResolution> intervalSize();
 
     @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> toDate();
+    IPrimitive<LogicalDate> intervalEnd();
 
     /**
      * @return number of units turned over during time interval <code>[{@link #fromDate()}, {@link #toDate()})</code>.

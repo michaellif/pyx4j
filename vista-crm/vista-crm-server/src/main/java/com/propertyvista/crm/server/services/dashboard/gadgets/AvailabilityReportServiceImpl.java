@@ -19,11 +19,9 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -37,10 +35,10 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.util.SortingFactory;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.TurnoverSummary;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
@@ -290,142 +288,6 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         callback.onSuccess(summary);
     }
 
-    @Override
-    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<Key> buildings, LogicalDate fromDate,
-            LogicalDate toDate, AnalysisResolution resolution) {
-        if (resolution == null) {
-            callback.onFailure(new Error("resolution is required"));
-            return;
-        }
-        if (fromDate != null && toDate != null && fromDate.after(toDate)) {
-            callback.onFailure(new Error("end date is greater than from date"));
-            return;
-        }
-
-        // FIXME refactor this one: separate generic aggregation and intervals creation from the actual computations
-        // Definition: TURNOVER
-        //      the number of times the unit switched hands during the specified interval.
-        // 
-        // so then it's basically: number of 'moveins' during specified period minus 1        
-
-        EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-        // sort the results by unitKey and then date so that we can check data for each unit separately  
-        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), false), new Sort(criteria.proto().statusDate().getPath()
-                .toString(), false)));
-        if (fromDate != null) {
-            criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.GREATER_THAN_OR_EQUAL, fromDate));
-        }
-        if (toDate != null) {
-            criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, toDate));
-        }
-        if (!buildings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
-        }
-
-        List<UnitAvailabilityStatus> statuses = Persistence.service().query(criteria);
-
-        Map<Long, TurnoverStats> statsMap = new HashMap<Long, TurnoverStats>();
-
-        long intervalStart = fromDate == null ? 0 : fromDate.getTime();
-        long intervalEnd = resolution.intervalEnd(intervalStart);
-        int moveins = 0;
-        int total = 0;
-        int totalForUnit = 0;
-
-        Key unitPK = null;
-        Vacancy prevVacancy = null;
-        boolean skipFirstEmptyRange = fromDate != null ? false : true;
-
-        Iterator<UnitAvailabilityStatus> i = statuses.iterator();
-        while (i.hasNext()) {
-            UnitAvailabilityStatus status = i.next();
-            Key thisUnitPK = status.unit().getPrimaryKey();
-            Vacancy vacancy = status.vacancyStatus().getValue();
-            long statusTime = status.statusDate().getValue().getTime();
-
-            if (!thisUnitPK.equals(unitPK)) {
-                unitPK = thisUnitPK;
-                total += totalForUnit;
-                totalForUnit = 0;
-                moveins = 0;
-                prevVacancy = vacancy;
-
-                intervalStart = fromDate == null ? 0 : fromDate.getTime();
-                intervalEnd = resolution.intervalEnd(intervalStart);
-            }
-            if (statusTime >= intervalEnd) {
-                // add new/update interval with the collected statistics
-                int turnovers = moveins > 0 ? moveins - 1 : 0;
-                totalForUnit += turnovers;
-                moveins = 0;
-
-                if (skipFirstEmptyRange & (totalForUnit == 0)) {
-                    // skip to the interval that contains the next event
-                    intervalStart = resolution.intervalStart(statusTime);
-                    intervalEnd = resolution.addTo(intervalStart);
-                } else {
-                    updateIntervalStats(statsMap, intervalStart, intervalEnd, turnovers);
-                    intervalStart = intervalEnd;
-                    intervalEnd = resolution.addTo(intervalStart);
-
-                    // add new/update intervals with for the ranges that don't contain any statuses
-                    while (statusTime >= intervalEnd) {
-                        updateIntervalStats(statsMap, intervalStart, intervalEnd, 0);
-                        intervalStart = intervalEnd;
-                        intervalEnd = resolution.addTo(intervalStart);
-                    }
-                }
-            }
-
-            if (vacancy != prevVacancy) {
-                if (vacancy == null) {
-                    ++moveins;
-                }
-                prevVacancy = vacancy;
-            }
-        }
-
-        int turnovers = moveins > 0 ? moveins - 1 : 0;
-        totalForUnit += turnovers;
-        // update the last interval that collected some statistics if it did, or we have been explicitly asked for it 
-        if ((totalForUnit != 0) | (toDate != null)) {
-            updateIntervalStats(statsMap, intervalStart, intervalEnd, turnovers);
-            total += totalForUnit;
-            intervalStart = intervalEnd;
-            intervalEnd = resolution.addTo(intervalStart);
-
-            // now add some more intervals (empty) if we were requested to show them
-            if (toDate != null) {
-                Long queryEndTime = toDate.getTime();
-                while (intervalEnd <= queryEndTime) {
-                    updateIntervalStats(statsMap, intervalStart, intervalEnd, 0);
-
-                    intervalStart = intervalEnd;
-                    intervalEnd = resolution.addTo(intervalStart);
-                }
-            }
-        }
-
-        ArrayList<TurnoverStats> almostResuls = new ArrayList<TurnoverStats>(statsMap.values());
-        Collections.sort(almostResuls);
-        Vector<UnitVacancyReportTurnoverAnalysisDTO> results = new Vector<UnitVacancyReportTurnoverAnalysisDTO>(almostResuls.size());
-        if (total > 0) {
-            for (TurnoverStats stats : almostResuls) {
-                UnitVacancyReportTurnoverAnalysisDTO entityStats = stats.toEntity();
-                entityStats.unitsTurnedOverPct().setValue(((double) stats.turnovers) / total * 100);
-                results.add(entityStats);
-            }
-        } else {
-            for (TurnoverStats stats : almostResuls) {
-                UnitVacancyReportTurnoverAnalysisDTO entityStats = stats.toEntity();
-                entityStats.unitsTurnedOverPct().setValue(0.0);
-                results.add(entityStats);
-            }
-        }
-
-        callback.onSuccess(results);
-    }
-
     private static UnitAvailabilityStatus computeTransientFields(final UnitAvailabilityStatus unitStatus, final LogicalDate now) {
         if (isRevenueLost(unitStatus)) {
             computeDaysVacantAndRevenueLost(unitStatus, now.getTime());
@@ -465,77 +327,45 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
     }
 
-    private static void updateIntervalStats(Map<Long, TurnoverStats> statsMap, long intervalStart, long intervalEnd, int turnovers) {
-        TurnoverStats stats = statsMap.get(intervalStart);
-        if (stats != null) {
-            stats.turnovers += turnovers;
-        } else {
-            statsMap.put(intervalStart, new TurnoverStats(intervalStart, intervalEnd, turnovers));
+    @Override
+    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<Key> buidlings, LogicalDate fromDate,
+            LogicalDate toDate, AnalysisResolution resolution) {
+
+        LogicalDate tweleveMonthsAgo = new LogicalDate(toDate.getYear() - 1, toDate.getMonth(), 1);
+
+        EntityQueryCriteria<TurnoverSummary> criteria = EntityQueryCriteria.create(TurnoverSummary.class);
+        if (!buidlings.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buidlings));
         }
-    }
+        criteria.asc(criteria.proto().updatedOn());
+        criteria.add(PropertyCriterion.ge(criteria.proto().updatedOn(), tweleveMonthsAgo));
+        List<TurnoverSummary> summaries = Persistence.secureQuery(criteria);
 
-    private static class IntervalStats implements Comparable<IntervalStats> {
-        public final long intervalStart;
+        Vector<UnitVacancyReportTurnoverAnalysisDTO> result = new Vector<UnitVacancyReportTurnoverAnalysisDTO>(12);
+        UnitVacancyReportTurnoverAnalysisDTO accumulation = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
+        accumulation.unitsTurnedOverAbs().setValue(0);
 
-        public final long intervalEnd;
-
-        public final int hashCode;
-
-        public IntervalStats(long intervalStart, long intervalEnd) {
-            this.intervalStart = intervalStart;
-            this.intervalEnd = intervalEnd;
-
-            this.hashCode = (int) (intervalStart % Integer.MAX_VALUE); // I hope it's a right way to do it 
-        }
-
-        @Override
-        final public int hashCode() {
-            return hashCode;
-        }
-
-        @Override
-        final public boolean equals(Object obj) {
-            if (obj instanceof IntervalStats) {
-                IntervalStats other = (IntervalStats) obj;
-                return this.intervalStart == other.intervalStart & this.intervalEnd == other.intervalEnd;
-            } else {
-                return false;
+        LogicalDate prevDate = null;
+        LogicalDate date = null;
+        Iterator<TurnoverSummary> i = summaries.iterator();
+        TurnoverSummary summary = null;
+        while (i.hasNext()) {
+            summary = i.next();
+            date = summary.updatedOn().getValue();
+            if (!date.equals(prevDate)) {
+                // TODO add empty accumulations for months between current date and prevDate;
+                result.add(accumulation);
+                accumulation = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
+                accumulation.unitsTurnedOverAbs().setValue(0);
+                accumulation.intervalSize().setValue(AnalysisResolution.Month);
             }
+            accumulation.unitsTurnedOverAbs().setValue(accumulation.unitsTurnedOverAbs().getValue() + summary.turnovers().getValue());
         }
+        // TODO add empty accumulations for months between current date and prevDate;
+        result.add(accumulation);
 
-        @Override
-        final public int compareTo(IntervalStats o) {
-            // we don't use equals() to avoid instanceof check and casting
-            if (this.intervalStart < o.intervalStart) {
-                return -1;
-            } else if (this.intervalStart > o.intervalStart) {
-                return 1;
-            } else if (this.intervalEnd > o.intervalEnd) {
-                return 1;
-            } else if (this.intervalEnd < o.intervalEnd) {
-                return -1;
-            } else {
-                return 0;
-            }
-        }
+        callback.onSuccess(result);
 
     }
 
-    private static class TurnoverStats extends IntervalStats {
-        public int turnovers;
-
-        public TurnoverStats(long intervalStart, long intervalEnd, int turnovers) {
-            super(intervalStart, intervalEnd);
-            this.turnovers = turnovers;
-        }
-
-        public UnitVacancyReportTurnoverAnalysisDTO toEntity() {
-            UnitVacancyReportTurnoverAnalysisDTO entity = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
-            entity.fromDate().setValue(new LogicalDate(intervalStart));
-            entity.toDate().setValue(new LogicalDate(intervalEnd));
-            entity.unitsTurnedOverAbs().setValue(turnovers);
-            return entity;
-        }
-
-    }
 }
