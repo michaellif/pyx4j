@@ -46,33 +46,35 @@ public class ChargeProcessor {
 
         Persistence.service().retrieve(billableItem.item().product());
 
-        if (isBillableItemEligibaleForCharge(billableItem)) {
-            BillCharge charge = EntityFactory.create(BillCharge.class);
-            charge.bill().set(bill);
-            charge.billableItem().set(billableItem);
+        BillCharge charge = EntityFactory.create(BillCharge.class);
+        charge.bill().set(bill);
+        charge.billableItem().set(billableItem);
 
-            if (Bill.BillType.Final.equals(bill.billType().getValue())) {
-                //TODO final bill
-                charge.amount().setValue(new BigDecimal("0.00"));
-            } else {
-                DateRange overlap = DateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate()
-                        .getValue()), new DateRange(billableItem.effectiveDate().getValue(), billableItem.expirationDate().getValue()));
+        if (Bill.BillType.Final.equals(bill.billType().getValue())) {
+            //TODO final bill
+            charge.amount().setValue(new BigDecimal("0.00"));
+        } else {
+            DateRange overlap = DateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate().getValue()),
+                    new DateRange(billableItem.effectiveDate().getValue(), billableItem.expirationDate().getValue()));
 
-                //TODO use policy to determin proration type
-                BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), LeaseFinancial.ProrationMethod.Actual);
-                charge.amount().setValue(billableItem.item().price().getValue().multiply(proration));
+            if (overlap == null) {
+                return;
             }
 
-            if (!charge.amount().isNull()) {
-                charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), billableItem.item().type(), bill.billingRun().building()));
-            }
-            charge.taxTotal().setValue(new BigDecimal(0));
-            for (BillChargeTax chargeTax : charge.taxes()) {
-                charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
-            }
-
-            addCharge(charge);
+            //TODO use policy to determin proration type
+            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), LeaseFinancial.ProrationMethod.Actual);
+            charge.amount().setValue(billableItem.item().price().getValue().multiply(proration));
         }
+
+        if (!charge.amount().isNull()) {
+            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), billableItem.item().type(), bill.billingRun().building()));
+        }
+        charge.taxTotal().setValue(new BigDecimal(0));
+        for (BillChargeTax chargeTax : charge.taxes()) {
+            charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
+        }
+
+        addCharge(charge);
 
     }
 
@@ -88,23 +90,4 @@ public class ChargeProcessor {
         bill.taxes().setValue(bill.taxes().getValue().add(charge.taxTotal().getValue()));
     }
 
-    /**
-     * Billable Item is eligible for charge creation if it's expiration date equals or higher than bill period start date.
-     * 
-     * Advanced/arrears
-     */
-    private boolean isBillableItemEligibaleForCharge(BillableItem item) {
-//        if (item.billingPeriodNumber().isNull()) {
-//            throw new BillingException("billingPeriodNumber should not be null");
-//        } else if (bill.billingPeriodNumber().getValue() >= item.billingPeriodNumber().getValue()) {
-//            if (BillingUtils.isFeature(item.item().product()) && !BillingUtils.isRecurringFeature(item.item().product())) {
-//                return bill.billingPeriodNumber().getValue() == item.billingPeriodNumber().getValue();
-//            } else {
-//                return true;
-//            }
-//        } else {
-//            return false;
-//        }
-        return true;
-    }
 }

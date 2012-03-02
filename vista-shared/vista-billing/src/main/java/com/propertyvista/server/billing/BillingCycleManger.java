@@ -59,7 +59,8 @@ public class BillingCycleManger {
                 billingCycle.paymentFrequency().setValue(paymentFrequency);
                 billingCycle.billingPeriodStartDay().setValue(billingPeriodStartDay);
                 billingCycle.billingRunTargetDay().setValue(
-                        (billingPeriodStartDay + lease.paymentFrequency().getValue().getBillRunTargetDayOffset())
+                        (billingPeriodStartDay + lease.paymentFrequency().getValue().getNumOfCycles() - lease.paymentFrequency().getValue()
+                                .getBillRunTargetDayOffset())
                                 % lease.paymentFrequency().getValue().getNumOfCycles());
 
                 Persistence.service().persist(billingCycle);
@@ -199,7 +200,7 @@ public class BillingCycleManger {
     private static LogicalDate calculateBillingRunTargetExecutionDate(BillingCycle cycle, LogicalDate billingRunStartDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingRunStartDate);
-        calendar.add(Calendar.DATE, cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());
+        calendar.add(Calendar.DATE, -cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());
         return new LogicalDate(calendar.getTime());
     }
 }

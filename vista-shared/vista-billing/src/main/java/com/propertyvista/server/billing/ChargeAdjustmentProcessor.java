@@ -46,10 +46,6 @@ public class ChargeAdjustmentProcessor {
 
     private void createChargeAdjustment(BillableItemAdjustment itemAdjustment) {
 
-        if (!isBillableItemAdjustmentApplicable(itemAdjustment)) {
-            return;
-        }
-
         BillChargeAdjustment adjustment = EntityFactory.create(BillChargeAdjustment.class);
         adjustment.bill().set(bill);
         adjustment.billableItemAdjustment().set(itemAdjustment);
@@ -71,8 +67,16 @@ public class ChargeAdjustmentProcessor {
             DateRange overlap = DateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate().getValue()),
                     new DateRange(itemAdjustment.effectiveDate().getValue(), itemAdjustment.expirationDate().getValue()));
 
+            if (overlap == null) {
+                return;
+            }
+
             overlap = DateUtils.getOverlappingRange(overlap, new DateRange(itemAdjustment.billableItem().effectiveDate().getValue(), itemAdjustment
                     .billableItem().expirationDate().getValue()));
+
+            if (overlap == null) {
+                return;
+            }
 
             //TODO use policy to determin proration type
             BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), LeaseFinancial.ProrationMethod.Actual);
@@ -81,21 +85,6 @@ public class ChargeAdjustmentProcessor {
 
         bill.chargeAdjustments().add(adjustment);
         bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.amount().getValue()));
-    }
-
-    private boolean isBillableItemAdjustmentApplicable(BillableItemAdjustment adjustment) {
-//        if (BillableItemAdjustment.TermType.postLease.equals(adjustment.termType().getValue())) {
-//            return false;
-//        } else if (BillableItemAdjustment.TermType.oneTime.equals(adjustment.termType().getValue())
-//                && bill.billingPeriodNumber().getValue() == adjustment.billingPeriodNumber().getValue()) {
-//            return true;
-//        } else if (BillableItemAdjustment.TermType.inLease.equals(adjustment.termType().getValue())
-//                && bill.billingPeriodNumber().getValue() >= adjustment.billingPeriodNumber().getValue()) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-        return true;
     }
 
 }

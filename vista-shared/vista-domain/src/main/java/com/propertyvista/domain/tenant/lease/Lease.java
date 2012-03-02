@@ -106,7 +106,7 @@ public interface Lease extends IEntity {
     @I18n(context = "Payment Frequency")
     @XmlType(name = "PaymentFrequency")
     public enum PaymentFrequency {
-        Monthly(28, 14), Weekly(7, 2), SemiMonthly(14, 4), BiWeekly(14, 4), SemiAnnyally(182, -1), Annually(365, -1);
+        Monthly(28, 15), Weekly(7, 5), SemiMonthly(14, 10), BiWeekly(14, 10), SemiAnnyally(182, -1), Annually(365, -1);
 
         private final int numOfCycles;
 

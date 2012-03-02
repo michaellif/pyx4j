@@ -33,13 +33,13 @@ public class BillingCycleMangerTest extends VistaDBTestBase {
 
         assertEquals("Billing Period Start Date", new LogicalDate(formatter.parse("23-Feb-2012")), billingRun.billingPeriodStartDate().getValue());
         assertEquals("Billing Period End Date", new LogicalDate(formatter.parse("22-Mar-2012")), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", new LogicalDate(formatter.parse("08-Mar-2012")), billingRun.executionTargetDate().getValue());
+        assertEquals("Billing Execution Target Date", new LogicalDate(formatter.parse("08-Feb-2012")), billingRun.executionTargetDate().getValue());
 
         billingRun = createSubsiquentBillingRun(billingRun);
 
         assertEquals("Billing Period Start Date", new LogicalDate(formatter.parse("23-Mar-2012")), billingRun.billingPeriodStartDate().getValue());
         assertEquals("Billing Period End Date", new LogicalDate(formatter.parse("22-Apr-2012")), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", new LogicalDate(formatter.parse("06-Apr-2012")), billingRun.executionTargetDate().getValue());
+        assertEquals("Billing Execution Target Date", new LogicalDate(formatter.parse("08-Mar-2012")), billingRun.executionTargetDate().getValue());
     }
 
     public void testBillingPeriodStartDateForEndOfMonth() throws ParseException {
@@ -47,13 +47,13 @@ public class BillingCycleMangerTest extends VistaDBTestBase {
 
         assertEquals("Billing Period Start Date", new LogicalDate(formatter.parse("1-Mar-2012")), billingRun.billingPeriodStartDate().getValue());
         assertEquals("Billing Period End Date", new LogicalDate(formatter.parse("31-Mar-2012")), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", new LogicalDate(formatter.parse("15-Mar-2012")), billingRun.executionTargetDate().getValue());
+        assertEquals("Billing Execution Target Date", new LogicalDate(formatter.parse("15-Feb-2012")), billingRun.executionTargetDate().getValue());
 
         billingRun = createSubsiquentBillingRun(billingRun);
 
         assertEquals("Billing Period Start Date", new LogicalDate(formatter.parse("1-Apr-2012")), billingRun.billingPeriodStartDate().getValue());
         assertEquals("Billing Period End Date", new LogicalDate(formatter.parse("30-Apr-2012")), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", new LogicalDate(formatter.parse("15-Apr-2012")), billingRun.executionTargetDate().getValue());
+        assertEquals("Billing Execution Target Date", new LogicalDate(formatter.parse("17-Mar-2012")), billingRun.executionTargetDate().getValue());
     }
 
     private BillingRun createFirstBillingRun(LogicalDate leaseStartDate, Integer billingCycleStartDate, boolean useCycleLeaseDay) {

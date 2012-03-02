@@ -43,10 +43,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("01-Mar-2011").
         billingRunPeriodEndDate("31-Mar-2011").
-        billingRunExecutionTargetDate("15-Mar-2011").
+        billingRunExecutionTargetDate("14-Feb-2011").
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011");
@@ -58,27 +58,19 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         setLeaseStatus(Lease.Status.Active);
 
-        setSysDate("10-Apr-2011");
-
-        bill = runBilling(false);
-        // @formatter:off
-        new BillTester(bill).
-        billStatus(Bill.BillStatus.Erred);
-        // @formatter:on
-
         setSysDate("16-Apr-2011");
 
         bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
-        billSequenceNumber(3).
+        billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("1-Apr-2011").
         billingRunPeriodEndDate("30-Apr-2011").
-        billingRunExecutionTargetDate("15-Apr-2011").
+        billingRunExecutionTargetDate("17-Mar-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011");
@@ -94,13 +86,13 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         // @formatter:off
         new BillTester(bill).
-        billSequenceNumber(4).
-        previousBillSequenceNumber(3).
+        billSequenceNumber(3).
+        previousBillSequenceNumber(2).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("1-May-2011").
         billingRunPeriodEndDate("31-May-2011").
-        billingRunExecutionTargetDate("15-May-2011").
+        billingRunExecutionTargetDate("16-Apr-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
@@ -113,13 +105,13 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         // @formatter:off
         new BillTester(bill).
-        billSequenceNumber(5).
-        previousBillSequenceNumber(3).
+        billSequenceNumber(4).
+        previousBillSequenceNumber(2).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("1-May-2011").
         billingRunPeriodEndDate("31-May-2011").
-        billingRunExecutionTargetDate("15-May-2011").
+        billingRunExecutionTargetDate("16-Apr-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
@@ -136,13 +128,13 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         // @formatter:off
         new BillTester(bill).
-        billSequenceNumber(6).
-        previousBillSequenceNumber(5).
+        billSequenceNumber(5).
+        previousBillSequenceNumber(4).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("1-June-2011").
         billingRunPeriodEndDate("30-June-2011").
-        billingRunExecutionTargetDate("15-June-2011").
+        billingRunExecutionTargetDate("17-May-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011");
@@ -158,13 +150,13 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         // @formatter:off
         new BillTester(bill).
-        billSequenceNumber(7).
-        previousBillSequenceNumber(6).
+        billSequenceNumber(6).
+        previousBillSequenceNumber(5).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("1-July-2011").
         billingRunPeriodEndDate("31-July-2011").
-        billingRunExecutionTargetDate("15-July-2011").
+        billingRunExecutionTargetDate("16-Jun-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-July-2011");
@@ -182,13 +174,13 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         // @formatter:off
         new BillTester(bill).
-        billSequenceNumber(8).
-        previousBillSequenceNumber(7).
+        billSequenceNumber(7).
+        previousBillSequenceNumber(6).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("1-Aug-2011").
         billingRunPeriodEndDate("31-Aug-2011").
-        billingRunExecutionTargetDate("15-Aug-2011").
+        billingRunExecutionTargetDate("17-Jul-2011").
         billType(Bill.BillType.Final).
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
@@ -222,10 +214,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billingCyclePeriodStartDay(23).
-        billingCycleRunTargetDay(9).
+        billingCycleRunTargetDay(8).
         billingRunPeriodStartDate("23-Mar-2011").
         billingRunPeriodEndDate("22-Apr-2011").
-        billingRunExecutionTargetDate("6-Apr-2011").
+        billingRunExecutionTargetDate("8-Mar-2011").
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("22-Apr-2011");
@@ -242,10 +234,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billingCyclePeriodStartDay(23).
-        billingCycleRunTargetDay(9).
+        billingCycleRunTargetDay(8).
         billingRunPeriodStartDate("23-Apr-2011").
         billingRunPeriodEndDate("22-May-2011").
-        billingRunExecutionTargetDate("7-May-2011").
+        billingRunExecutionTargetDate("8-Apr-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-Apr-2011").
         billingPeriodEndDate("22-May-2011");
@@ -260,10 +252,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billingCyclePeriodStartDay(23).
-        billingCycleRunTargetDay(9).
+        billingCycleRunTargetDay(8).
         billingRunPeriodStartDate("23-May-2011").
         billingRunPeriodEndDate("22-Jun-2011").
-        billingRunExecutionTargetDate("6-Jun-2011").
+        billingRunExecutionTargetDate("8-May-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-May-2011").
         billingPeriodEndDate("22-Jun-2011");
@@ -276,10 +268,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(4).
         previousBillSequenceNumber(2).
         billingCyclePeriodStartDay(23).
-        billingCycleRunTargetDay(9).
+        billingCycleRunTargetDay(8).
         billingRunPeriodStartDate("23-May-2011").
         billingRunPeriodEndDate("22-Jun-2011").
-        billingRunExecutionTargetDate("6-Jun-2011").
+        billingRunExecutionTargetDate("8-May-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-May-2011").
         billingPeriodEndDate("22-Jun-2011");
@@ -294,10 +286,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(5).
         previousBillSequenceNumber(4).
         billingCyclePeriodStartDay(23).
-        billingCycleRunTargetDay(9).
+        billingCycleRunTargetDay(8).
         billingRunPeriodStartDate("23-Jun-2011").
         billingRunPeriodEndDate("22-Jul-2011").
-        billingRunExecutionTargetDate("7-Jul-2011").
+        billingRunExecutionTargetDate("8-Jun-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-Jun-2011").
         billingPeriodEndDate("22-Jul-2011");
@@ -312,10 +304,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(6).
         previousBillSequenceNumber(5).
         billingCyclePeriodStartDay(23).
-        billingCycleRunTargetDay(9).
+        billingCycleRunTargetDay(8).
         billingRunPeriodStartDate("23-Jul-2011").
         billingRunPeriodEndDate("22-Aug-2011").
-        billingRunExecutionTargetDate("6-Aug-2011").
+        billingRunExecutionTargetDate("8-Jul-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-Jul-2011").
         billingPeriodEndDate("3-Aug-2011");
@@ -332,10 +324,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(7).
         previousBillSequenceNumber(6).
         billingCyclePeriodStartDay(23).
-        billingCycleRunTargetDay(9).
+        billingCycleRunTargetDay(8).
         billingRunPeriodStartDate("23-Aug-2011").
         billingRunPeriodEndDate("22-Sep-2011").
-        billingRunExecutionTargetDate("6-Sep-2011").
+        billingRunExecutionTargetDate("8-Aug-2011").
         billType(Bill.BillType.Final).
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
@@ -379,10 +371,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("1-Mar-2011").
         billingRunPeriodEndDate("31-Mar-2011").
-        billingRunExecutionTargetDate("15-Mar-2011").
+        billingRunExecutionTargetDate("14-Feb-2011").
         billType(Bill.BillType.First).
         billingPeriodStartDate(day + "-Mar-2011").
         billingPeriodEndDate("31-Mar-2011");
@@ -401,10 +393,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("1-Apr-2011").
         billingRunPeriodEndDate("30-Apr-2011").
-        billingRunExecutionTargetDate("15-Apr-2011").
+        billingRunExecutionTargetDate("17-Mar-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011");
@@ -429,10 +421,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(5).
         previousBillSequenceNumber(4).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("1-Jul-2011").
         billingRunPeriodEndDate("31-Jul-2011").
-        billingRunExecutionTargetDate("15-Jul-2011").
+        billingRunExecutionTargetDate("16-Jun-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011");
@@ -449,10 +441,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(6).
         previousBillSequenceNumber(5).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("1-Aug-2011").
         billingRunPeriodEndDate("31-Aug-2011").
-        billingRunExecutionTargetDate("15-Aug-2011").
+        billingRunExecutionTargetDate("17-Jul-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Aug-2011").
         billingPeriodEndDate("3-Aug-2011");
@@ -471,10 +463,10 @@ public class BillingPeriodsTest extends BillingTestBase {
         billSequenceNumber(7).
         previousBillSequenceNumber(6).
         billingCyclePeriodStartDay(1).
-        billingCycleRunTargetDay(15).
+        billingCycleRunTargetDay(14).
         billingRunPeriodStartDate("1-Sep-2011").
         billingRunPeriodEndDate("30-Sep-2011").
-        billingRunExecutionTargetDate("15-Sep-2011").
+        billingRunExecutionTargetDate("17-Aug-2011").
         billType(Bill.BillType.Final).
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
