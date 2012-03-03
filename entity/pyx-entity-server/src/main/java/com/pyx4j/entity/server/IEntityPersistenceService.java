@@ -36,6 +36,7 @@ public interface IEntityPersistenceService {
 
     /**
      * Usually called when on startRequest from Lifecycle.beginRequest
+     * TODO rename to startTransactionContext
      */
     public void startTransaction();
 
