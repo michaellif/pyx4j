@@ -159,7 +159,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         return threadSessions.get();
     }
 
-    void setTimeNow(Date date) {
+    public void setTimeNow(Date date) {
         getPersistenceContext().setTimeNow(date);
     }
 
@@ -177,7 +177,15 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void startBackgroundProcessTransaction() {
-        endTransaction();
+        PersistenceContext persistenceContext = threadSessions.get();
+        if (persistenceContext != null) {
+            if (persistenceContext.isBackgroundProcessTransaction()) {
+                persistenceContext.savepointCreate();
+                return;
+            }
+            endTransaction();
+
+        }
         threadSessions.set(new PersistenceContext(connectionProvider, TransactionType.BackgroundProcess));
     }
 

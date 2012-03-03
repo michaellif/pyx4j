@@ -28,6 +28,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -42,6 +43,8 @@ public class PersistenceContext {
     private Connection connection = null;
 
     private boolean uncommittedChanges;
+
+    private String uncommittedChangesFrom;
 
     private Date timeNow;
 
@@ -65,6 +68,10 @@ public class PersistenceContext {
 
     public boolean isExplicitTransaction() {
         return transactionType != TransactionType.AutoCommit;
+    }
+
+    public boolean isBackgroundProcessTransaction() {
+        return transactionType == TransactionType.BackgroundProcess;
     }
 
     void setTimeNow(Date date) {
@@ -106,6 +113,7 @@ public class PersistenceContext {
 
     public void setUncommittedChanges() {
         this.uncommittedChanges = true;
+        this.uncommittedChangesFrom = Trace.getCallOrigin(EntityPersistenceServiceRDB.class);
         this.transactionStart = System.currentTimeMillis();
     }
 
@@ -162,7 +170,7 @@ public class PersistenceContext {
     void close() {
         if (connection != null) {
             if (isExplicitTransaction() && uncommittedChanges) {
-                log.error("There are uncommitted changes in Database");
+                log.error("There are uncommitted changes in Database. {}", uncommittedChangesFrom);
             }
             SQLUtils.closeQuietly(connection);
             connection = null;
