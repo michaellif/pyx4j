@@ -49,7 +49,7 @@ public class LandingPage extends BasePage {
         AvailableLocale locale = ((PMSiteWebRequest) getRequest()).getSiteLocale();
         SiteImageResource banner = cm.getSiteBanner(locale);
         if (banner != null) {
-            bannerImg.add(AttributeModifier.replace("style", "background:url(" + PMSiteContentManager.getSiteImageResourceUrl(banner) + ")"));
+            bannerImg.add(AttributeModifier.replace("style", "background-image:url(" + PMSiteContentManager.getSiteImageResourceUrl(banner) + ")"));
         }
         add(bannerImg);
         add(new NewsPanel("newsPanel"));

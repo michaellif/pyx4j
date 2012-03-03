@@ -10,9 +10,12 @@
 	background: ${contrast1_20};
 }
 .banner_img {
-	height: 375px;
 	width: 960px;
+	height: 375px;
 	position: absolute; bottom:0;
+	background-size:680px 375px;
+	background-position:right top;
+	background-repeat:no-repeat;
 }
 
 .quickSearchPanel {
