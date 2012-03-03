@@ -65,7 +65,7 @@ public class RichTextEditorViewImpl extends ScrollPanel implements RichTextEdito
         }
 
         public void addImage(String url) {
-            gallery.addImage(url);
+            gallery.addImage(url, url.substring(url.lastIndexOf('/') + 1));
         }
 
         @Override

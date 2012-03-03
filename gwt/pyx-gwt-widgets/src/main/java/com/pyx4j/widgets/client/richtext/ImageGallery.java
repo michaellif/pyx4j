@@ -20,9 +20,6 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Unit;
@@ -46,9 +43,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.widgets.client.ImageFactory;
 
 public abstract class ImageGallery implements IsWidget {
-
-    private static final Logger log = LoggerFactory.getLogger(ImageGallery.class);
-
     private final ScrollPanel contentPanel;
 
     private final FlowPanel mainPanel;
@@ -84,7 +78,7 @@ public abstract class ImageGallery implements IsWidget {
 
         Double frameWidth = 1.1 * imgSize;
 
-        public ImageFrame(final Image image) {
+        public ImageFrame(final Image image, String title) {
             setSize(frameWidth + "px", frameHeight + "px");
             setStyleName("ImageGallery-ImageFrame");
             getElement().getStyle().setMargin(2, Unit.PX);
@@ -116,8 +110,7 @@ public abstract class ImageGallery implements IsWidget {
             setCellVerticalAlignment(image, HorizontalPanel.ALIGN_MIDDLE);
             setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
 
-            String url = image.getUrl();
-            Label caption = new Label(url.substring(url.lastIndexOf('/') + 1), false);
+            Label caption = new Label(title, false);
             caption.setStyleName("ImageGallery-ImageFrameCaption");
             caption.setHeight(captionHeight + "px");
             caption.setWidth(captionWidth + "px");
@@ -169,9 +162,9 @@ public abstract class ImageGallery implements IsWidget {
         }
     }
 
-    public void addImage(String url) {
+    public void addImage(String url, String title) {
         final Image image = new Image(url);
-        mainPanel.add(new ImageFrame(image));
+        mainPanel.add(new ImageFrame(image, title));
     }
 
     public void removeImage(Image image) {
