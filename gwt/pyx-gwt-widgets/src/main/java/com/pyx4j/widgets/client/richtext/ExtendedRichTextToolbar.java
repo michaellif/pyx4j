@@ -15,6 +15,7 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -59,16 +60,12 @@ public class ExtendedRichTextToolbar extends Composite {
             Object sender = event.getSource();
             if (sender == backColors) {
                 formatter.setBackColor(backColors.getValue(backColors.getSelectedIndex()));
-                backColors.setSelectedIndex(0);
             } else if (sender == foreColors) {
                 formatter.setForeColor(foreColors.getValue(foreColors.getSelectedIndex()));
-                foreColors.setSelectedIndex(0);
             } else if (sender == fonts) {
                 formatter.setFontName(fonts.getValue(fonts.getSelectedIndex()));
-                fonts.setSelectedIndex(0);
             } else if (sender == fontSizes) {
                 formatter.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
-                fontSizes.setSelectedIndex(0);
             }
         }
 
@@ -287,8 +284,8 @@ public class ExtendedRichTextToolbar extends Composite {
         buttonBarTop.add(removeLink = createPushButton(images.removeLink(), "removeLink"));
         buttonBarTop.add(removeFormat = createPushButton(images.removeFormat(), "removeFormat"));
 
-        buttonBarBottom.add(backColors = createColorList("Background"));
-        buttonBarBottom.add(foreColors = createColorList("Foreground"));
+        buttonBarBottom.add(foreColors = createColorList("Font Color"));
+        buttonBarBottom.add(backColors = createColorList("Highlight"));
         buttonBarBottom.add(fonts = createFontList());
         buttonBarBottom.add(fontSizes = createFontSizes());
 
@@ -310,13 +307,15 @@ public class ExtendedRichTextToolbar extends Composite {
         lb.addBlurHandler(handler);
         lb.setVisibleItemCount(1);
 
-        lb.addItem(caption);
-        lb.addItem("white", "white");
-        lb.addItem("black", "black");
-        lb.addItem("red", "red");
-        lb.addItem("green", "green");
-        lb.addItem("yellow", "yellow");
-        lb.addItem("blue", "blue");
+        lb.addItem(caption, "");
+        lb.addItem("White", "white");
+        lb.addItem("Black", "black");
+        lb.addItem("Red", "red");
+        lb.addItem("Green", "green");
+        lb.addItem("Yellow", "yellow");
+        lb.addItem("Blue", "blue");
+
+        lb.getElement().getStyle().setMarginRight(4, Unit.PX);
         return lb;
     }
 
@@ -326,14 +325,16 @@ public class ExtendedRichTextToolbar extends Composite {
         lb.addBlurHandler(handler);
         lb.setVisibleItemCount(1);
 
-        lb.addItem("font", "");
-        lb.addItem("normal", "");
+        lb.addItem("Font Family", "");
+        lb.addItem("Normal", "");
         lb.addItem("Times New Roman", "Times New Roman");
         lb.addItem("Arial", "Arial");
         lb.addItem("Courier New", "Courier New");
         lb.addItem("Georgia", "Georgia");
         lb.addItem("Trebuchet", "Trebuchet");
         lb.addItem("Verdana", "Verdana");
+
+        lb.getElement().getStyle().setMarginRight(4, Unit.PX);
         return lb;
     }
 
@@ -343,14 +344,16 @@ public class ExtendedRichTextToolbar extends Composite {
         lb.addBlurHandler(handler);
         lb.setVisibleItemCount(1);
 
-        lb.addItem("size");
-        lb.addItem("xxsmall");
-        lb.addItem("xsmall");
-        lb.addItem("small");
+        lb.addItem("Font Size");
+        lb.addItem("XX-Small");
+        lb.addItem("X-Small");
+        lb.addItem("Small");
         lb.addItem("medium");
-        lb.addItem("large");
-        lb.addItem("xlarge");
-        lb.addItem("xxlarge");
+        lb.addItem("Large");
+        lb.addItem("X-Large");
+        lb.addItem("XX-Large");
+
+        lb.getElement().getStyle().setMarginRight(4, Unit.PX);
         return lb;
     }
 
@@ -380,6 +383,19 @@ public class ExtendedRichTextToolbar extends Composite {
         subscript.setDown(formatter.isSubscript());
         superscript.setDown(formatter.isSuperscript());
         strikethrough.setDown(formatter.isStrikethrough());
+        // set font properties
+        if (foreColors.getSelectedIndex() > 0) {
+            formatter.setForeColor(foreColors.getValue(foreColors.getSelectedIndex()));
+        }
+        if (backColors.getSelectedIndex() > 0) {
+            formatter.setBackColor(backColors.getValue(backColors.getSelectedIndex()));
+        }
+        if (fonts.getSelectedIndex() > 0) {
+            formatter.setFontName(fonts.getValue(fonts.getSelectedIndex()));
+        }
+        if (fontSizes.getSelectedIndex() > 0) {
+            formatter.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
+        }
     }
 
     public void onLinkUrl(String url) {
