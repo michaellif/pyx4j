@@ -22,8 +22,10 @@ package com.pyx4j.entity.server.impl;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Vector;
 
 import javassist.CannotCompileException;
@@ -37,15 +39,19 @@ import javassist.NotFoundException;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ConstPool;
 import javassist.bytecode.annotation.Annotation;
+import javassist.bytecode.annotation.AnnotationMemberValue;
 import javassist.bytecode.annotation.ArrayMemberValue;
+import javassist.bytecode.annotation.BooleanMemberValue;
 import javassist.bytecode.annotation.ClassMemberValue;
 import javassist.bytecode.annotation.MemberValue;
 import javassist.bytecode.annotation.StringMemberValue;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -54,6 +60,8 @@ import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.server.pojo.IPojoImpl;
@@ -131,22 +139,28 @@ public class EntityPojoWrapperGenerator {
     @SuppressWarnings("unchecked")
     private <T extends IEntity> CtClass getPojoCtClass(EntityMeta entityMeta) {
         String entityClassName = entityMeta.getEntityClass().getName();
-        String name = entityClassName + "Pojo";
+        String pojoClassName = entityClassName + "Pojo";
         try {
-            return pool.get(name);
+            return pool.get(pojoClassName);
         } catch (NotFoundException e) {
             // If not found then create one
         }
         try {
-            CtClass implClass = pool.makeClass(name);
+            CtClass implClass = pool.makeClass(pojoClassName);
             implClass.getClassFile().setVersionToJava5();
             XmlRootElement xmlRootElement = entityMeta.getAnnotation(XmlRootElement.class);
             if (xmlRootElement != null) {
-                addAnnotationValue(implClass, XmlRootElement.class, "name", xmlRootElement.name());
+                String name = xmlRootElement.name();
+                if ((name == null) || ("##default".equals(name))) {
+                    name = getXMLName(entityMeta.getEntityClass());
+                }
+                addAnnotationValue(implClass, XmlRootElement.class, "name", name);
             }
             if (entityMeta.getAnnotation(AbstractEntity.class) != null) {
-                ServerEntityFactory.getAllAssignableFrom(entityMeta.getEntityClass());
-                //addAnnotationValue(implClass, XmlSeeAlso.class, "value", null);
+                Map<String, String> pojoNames = createAssignableFromPojo(entityMeta.getEntityClass());
+                if (!pojoNames.isEmpty()) {
+                    addAnnotationClassValues(implClass, XmlSeeAlso.class, "value", pojoNames.values());
+                }
             }
 
             List<String> xmlMemberNames = new Vector<String>();
@@ -169,13 +183,16 @@ public class EntityPojoWrapperGenerator {
             for (String memberName : entityMeta.getMemberNames()) {
                 MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
                 CtClass ctValueClass;
+                Map<String, String> assignablePojoNames = null;
                 switch (memberMeta.getObjectClassType()) {
                 case Entity:
                     ctValueClass = getPojoCtClass(EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
+                    assignablePojoNames = createAssignableFromPojo((Class<IEntity>) memberMeta.getValueClass());
                     break;
                 case EntitySet:
                 case EntityList:
                     ctValueClass = getPojoCtClass(EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
+                    assignablePojoNames = createAssignableFromPojo((Class<IEntity>) memberMeta.getValueClass());
                     ctValueClass = pool.get(ctValueClass.getName() + "[]");
                     break;
                 case Primitive:
@@ -209,8 +226,14 @@ public class EntityPojoWrapperGenerator {
                     }
 
                     if (memberMeta.getObjectClassType() == ObjectClassType.EntityList) {
-                        addAnnotationValue(memberGet, XmlElement.class, "name", getXMLName(memberMeta.getValueClass()));
+                        if ((assignablePojoNames == null) || (assignablePojoNames.isEmpty())) {
+                            addAnnotationValue(memberGet, XmlElement.class, "name", getXMLName(memberMeta.getValueClass()));
+                        } else {
+                            addXmlElementsAnnotationValue(memberGet, assignablePojoNames);
+                        }
                         addAnnotationValue(memberGet, XmlElementWrapper.class, "name", memberName);
+                    } else if (memberMeta.isValidatorAnnotationPresent(NotNull.class)) {
+                        addAnnotationValue(memberGet, XmlElement.class, "required", true);
                     }
                 }
 
@@ -231,10 +254,24 @@ public class EntityPojoWrapperGenerator {
 
             return implClass;
         } catch (CannotCompileException e) {
-            throw new Error("Can't create class " + name, e);
+            throw new Error("Can't create class " + pojoClassName, e);
         } catch (NotFoundException e) {
-            throw new Error("Can't create class " + name, e);
+            throw new Error("Can't create class " + pojoClassName, e);
         }
+    }
+
+    private Map<String, String> createAssignableFromPojo(Class<? extends IEntity> valueClass) {
+        Map<String, String> pojoNames = new HashMap<String, String>();
+        if ((valueClass.getAnnotation(AbstractEntity.class) != null) || (valueClass.getAnnotation(Inheritance.class) != null)) {
+            for (Class<? extends IEntity> classValue : ServerEntityFactory.getAllAssignableFrom(valueClass)) {
+                if (classValue.getAnnotation(AbstractEntity.class) == null) {
+                    getPojoCtClass(EntityFactory.getEntityMeta(classValue));
+                    pojoNames.put(getXMLName(classValue), classValue.getName() + "Pojo");
+                    getXMLName(classValue);
+                }
+            }
+        }
+        return pojoNames;
     }
 
     private String createGetBody(CtClass ctValueClass, MemberMeta memberMeta, String entityClassName) {
@@ -370,6 +407,27 @@ public class EntityPojoWrapperGenerator {
         member.getMethodInfo().addAttribute(attr);
     }
 
+    private void addAnnotationValue(CtMethod member, Class<?> annotationClass, String name, boolean value) throws NotFoundException {
+        CtClass implClass = member.getDeclaringClass();
+        ConstPool constPool = implClass.getClassFile().getConstPool();
+        AnnotationsAttribute attr = (AnnotationsAttribute) member.getMethodInfo().getAttribute(AnnotationsAttribute.visibleTag);
+        if (attr == null) {
+            attr = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
+        }
+        Annotation annotation = new Annotation(constPool, pool.get(annotationClass.getName()));
+        annotation.addMemberValue(name, new BooleanMemberValue(value, constPool));
+
+        if (annotationClass == XmlElement.class) {
+            annotation.addMemberValue("name", new StringMemberValue("##default", constPool));
+            annotation.addMemberValue("namespace", new StringMemberValue("##default", constPool));
+            annotation.addMemberValue("defaultValue", new StringMemberValue("\u0000", constPool));
+            annotation.addMemberValue("type", new ClassMemberValue(XmlElement.class.getName() + "$DEFAULT", constPool));
+        }
+
+        attr.addAnnotation(annotation);
+        member.getMethodInfo().addAttribute(attr);
+    }
+
     private void addAnnotationValue(CtMethod member, Class<?> annotationClass, String name, Class<?> value) throws NotFoundException {
         CtClass implClass = member.getDeclaringClass();
         ConstPool constPool = implClass.getClassFile().getConstPool();
@@ -383,6 +441,50 @@ public class EntityPojoWrapperGenerator {
         if (annotationClass == XmlJavaTypeAdapter.class) {
             annotation.addMemberValue("type", new ClassMemberValue(XmlJavaTypeAdapter.class.getName() + "$DEFAULT", constPool));
         }
+
+        attr.addAnnotation(annotation);
+        member.getMethodInfo().addAttribute(attr);
+    }
+
+    private void addAnnotationClassValues(CtClass implClass, Class<?> annotationClass, String name, Collection<String> classNames) throws NotFoundException {
+        ConstPool constPool = implClass.getClassFile().getConstPool();
+        AnnotationsAttribute attr = (AnnotationsAttribute) implClass.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
+        if (attr == null) {
+            attr = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
+        }
+        Annotation annotation = new Annotation(constPool, pool.get(annotationClass.getName()));
+        ArrayMemberValue a = new ArrayMemberValue(constPool);
+        List<MemberValue> m = new Vector<MemberValue>();
+        for (String className : classNames) {
+            m.add(new ClassMemberValue(className, constPool));
+        }
+        a.setValue(m.toArray(new MemberValue[0]));
+        annotation.addMemberValue(name, a);
+
+        attr.addAnnotation(annotation);
+        implClass.getClassFile().addAttribute(attr);
+    }
+
+    private void addXmlElementsAnnotationValue(CtMethod member, Map<String, String> assignablePojoNames) throws NotFoundException {
+        CtClass implClass = member.getDeclaringClass();
+        ConstPool constPool = implClass.getClassFile().getConstPool();
+        AnnotationsAttribute attr = (AnnotationsAttribute) member.getMethodInfo().getAttribute(AnnotationsAttribute.visibleTag);
+        if (attr == null) {
+            attr = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
+        }
+        Annotation annotation = new Annotation(constPool, pool.get(XmlElements.class.getName()));
+        ArrayMemberValue a = new ArrayMemberValue(constPool);
+        List<MemberValue> m = new Vector<MemberValue>();
+        for (Map.Entry<String, String> me : assignablePojoNames.entrySet()) {
+            Annotation xmlElementAnnotation = new Annotation(constPool, pool.get(XmlElement.class.getName()));
+            xmlElementAnnotation.addMemberValue("name", new StringMemberValue(me.getKey(), constPool));
+            xmlElementAnnotation.addMemberValue("type", new ClassMemberValue(me.getValue(), constPool));
+            xmlElementAnnotation.addMemberValue("namespace", new StringMemberValue("##default", constPool));
+            xmlElementAnnotation.addMemberValue("defaultValue", new StringMemberValue("\u0000", constPool));
+            m.add(new AnnotationMemberValue(xmlElementAnnotation, constPool));
+        }
+        a.setValue(m.toArray(new MemberValue[0]));
+        annotation.addMemberValue("value", a);
 
         attr.addAnnotation(annotation);
         member.getMethodInfo().addAttribute(attr);
