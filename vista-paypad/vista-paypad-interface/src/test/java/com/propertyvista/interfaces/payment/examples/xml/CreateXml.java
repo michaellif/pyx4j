@@ -13,6 +13,9 @@
  */
 package com.propertyvista.interfaces.payment.examples.xml;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 import com.propertyvista.interfaces.payment.RequestMessage;
 import com.propertyvista.interfaces.payment.ResponseMessage;
 import com.propertyvista.interfaces.payment.examples.utils.MarshallUtil;
@@ -36,6 +39,7 @@ public class CreateXml {
 
         System.out.println("\n\n-- RequestMessage Schema --");
         MarshallUtil.printSchema(RequestMessage.class, System.out, false);
+        MarshallUtil.printSchema(RequestMessage.class, new FileOutputStream(new File("target", "RequestMessage-model.xsd")), true);
     }
 
     private static void responseExamples() throws Exception {
@@ -47,5 +51,6 @@ public class CreateXml {
 
         System.out.println("\n\n-- ResponseMessage Schema --");
         MarshallUtil.printSchema(ResponseMessage.class, System.out, false);
+        MarshallUtil.printSchema(ResponseMessage.class, new FileOutputStream(new File("target", "ResponseMessage-model.xsd")), true);
     }
 }
