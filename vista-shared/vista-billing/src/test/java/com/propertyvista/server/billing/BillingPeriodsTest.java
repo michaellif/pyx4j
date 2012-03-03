@@ -122,7 +122,7 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 4 ======================//
 
-        setSysDate("15-June-2011");
+        setSysDate("15-Jun-2011");
 
         bill = runBilling(true);
 
@@ -144,7 +144,7 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 5 ======================//
 
-        setSysDate("15-July-2011");
+        setSysDate("15-Jul-2011");
 
         bill = runBilling(true);
 
@@ -166,7 +166,7 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 6 ======================//
 
-        setSysDate("5-Aug-2011");
+        setSysDate("05-Aug-2011");
 
         setLeaseStatus(Lease.Status.Completed);
 

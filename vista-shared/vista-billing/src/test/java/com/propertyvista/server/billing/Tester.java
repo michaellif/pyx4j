@@ -21,7 +21,12 @@ public class Tester {
             return;
         if ((expected != null) && (expected.equals(actual)))
             return;
-        throw new AssertionFailedError(format(message, expected, actual));
+        if (false) {
+            System.out.println(format(message, expected, actual));
+            Thread.dumpStack();
+        } else {
+            throw new AssertionFailedError(format(message, expected, actual));
+        }
     }
 
     protected static String format(String message, Object expected, Object actual) {

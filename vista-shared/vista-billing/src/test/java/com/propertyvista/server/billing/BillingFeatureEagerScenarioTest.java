@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentTy
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class BillingFeatureLoverScenarioTest extends BillingTestBase {
+public class BillingFeatureEagerScenarioTest extends BillingTestBase {
 
     public void testSequentialBillingRun() {
         preloadData();
@@ -91,6 +91,8 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
+        changeBillableItem(parking1, null, "20-May-2011");
+
         //==================== RUN 3 ======================//
 
         setSysDate("18-Apr-2011");
@@ -110,10 +112,13 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("260.00").
-        totalAdjustments("-52.00").
+        recurringFeatureCharges("231.61").
+        totalAdjustments("-48.45").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
+
+        //TODO calculate arrears
+        changeBillableItem(parking1, null, "10-May-2011");
 
         //==================== RUN 4 ======================//
 
@@ -128,12 +133,12 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
-        numOfCharges(6).
-        numOfChargeAdjustments(4).
+        numOfCharges(5).
+        numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("260.00").
-        totalAdjustments("-52.00").
+        recurringFeatureCharges("180.00").
+        totalAdjustments("-42.00").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
@@ -150,18 +155,18 @@ public class BillingFeatureLoverScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
-        numOfCharges(6).
-        numOfChargeAdjustments(4).
+        numOfCharges(5).
+        numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("260.00").
-        totalAdjustments("-52.00").
+        recurringFeatureCharges("180.00").
+        totalAdjustments("-42.00").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
         //==================== RUN 6 ======================//
 
-        setSysDate("5-Aug-2011");
+        setSysDate("05-Aug-2011");
 
         setLeaseStatus(Lease.Status.Completed);
 

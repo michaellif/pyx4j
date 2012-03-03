@@ -21,11 +21,14 @@
 package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -49,6 +52,19 @@ import com.propertyvista.server.billing.preload.TenantDataModel;
 abstract class BillingTestBase extends VistaDBTestBase {
 
     protected LeaseDataModel leaseDataModel;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        Persistence.service().startBackgroundProcessTransaction();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        Persistence.service().commit();
+        Persistence.service().endTransaction();
+        super.tearDown();
+    }
 
     protected void preloadData() {
 
@@ -97,8 +113,15 @@ abstract class BillingTestBase extends VistaDBTestBase {
         return bill;
     }
 
-    protected static void setSysDate(String date) {
-        BillingLifecycle.setSysDate(BillingTestUtils.getDate(date));
+    protected static void setSysDate(String dateStr) {
+        BillingLifecycle.setSysDate(BillingTestUtils.getDate(dateStr));
+
+        EntityPersistenceServiceRDB service = ((EntityPersistenceServiceRDB) Persistence.service());
+        if (dateStr == null) {
+            service.setTimeNow(new Date());
+        } else {
+            service.setTimeNow(DateUtils.detectDateformat(dateStr));
+        }
     }
 
     protected void setLeaseConditions(String leaseDateFrom, String leaseDateTo, Integer billingPeriodStartDate) {
@@ -141,6 +164,12 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
     protected BillableItem addPet() {
         return addBillableItem(Type.pet);
+    }
+
+    protected void changeBillableItem(BillableItem billableItem, String effectiveDate, String expirationDate) {
+        billableItem.effectiveDate().setValue(BillingTestUtils.getDate(effectiveDate));
+        billableItem.expirationDate().setValue(BillingTestUtils.getDate(expirationDate));
+        Persistence.service().persist(billableItem);
     }
 
     private BillableItem addBillableItem(Feature.Type featureType) {

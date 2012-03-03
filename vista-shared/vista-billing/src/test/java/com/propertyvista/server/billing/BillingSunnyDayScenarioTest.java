@@ -30,7 +30,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
     public void testSequentialBillingRun() {
         preloadData();
-        setLeaseConditions("23-Mar-2011", "3-Aug-2011", 1);
+        setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1);
 
         BillableItem parking1 = addParking();
         addBillableItemAdjustment(parking1, "-10", AdjustmentType.monetary, TermType.inLease);
@@ -114,7 +114,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         //==================== RUN 4 ======================//
 
-        setSysDate("15-June-2011");
+        setSysDate("15-Jun-2011");
 
         bill = runBilling(true);
 
@@ -158,7 +158,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         //==================== RUN 6 ======================//
 
-        setSysDate("5-Aug-2011");
+        setSysDate("05-Aug-2011");
 
         setLeaseStatus(Lease.Status.Completed);
 
