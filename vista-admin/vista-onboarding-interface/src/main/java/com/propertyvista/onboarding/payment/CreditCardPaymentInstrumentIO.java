@@ -21,9 +21,13 @@
 package com.propertyvista.onboarding.payment;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface CreditCardPaymentInstrumentIO extends PaymentInstrumentIO {
 
     @NotNull
@@ -31,5 +35,7 @@ public interface CreditCardPaymentInstrumentIO extends PaymentInstrumentIO {
 
     @NotNull
     IPrimitive<LogicalDate> expiryDate();
+
+    IPrimitive<Boolean> saveOnFile();
 
 }

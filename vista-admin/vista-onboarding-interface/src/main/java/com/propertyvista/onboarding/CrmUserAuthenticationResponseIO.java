@@ -20,15 +20,20 @@
  */
 package com.propertyvista.onboarding;
 
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-public interface CrmUserAuthenticationResponseIO extends RequestIO {
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface CrmUserAuthenticationResponseIO extends ResponseIO {
 
     public enum AuthenticationStatusCode {
 
         OK,
 
-        Error,
+        PermissionDenied,
 
         AuthenticationFailed,
 
@@ -39,6 +44,7 @@ public interface CrmUserAuthenticationResponseIO extends RequestIO {
     /**
      * Status of the processing of complete request.
      */
+    @NotNull
     IPrimitive<AuthenticationStatusCode> status();
 
     /**

@@ -20,10 +20,18 @@
  */
 package com.propertyvista.onboarding;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
+@Transient
+@XmlRootElement
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface RequestMessageIO extends IEntity {
 
     @NotNull
@@ -38,8 +46,6 @@ public interface RequestMessageIO extends IEntity {
     @NotNull
     IPrimitive<String> pmcId();
 
-    //IList<RequestIO> requests();
-
-    RequestIO request();
+    IList<RequestIO> requests();
 
 }

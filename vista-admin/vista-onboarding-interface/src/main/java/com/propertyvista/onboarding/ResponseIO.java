@@ -20,10 +20,24 @@
  */
 package com.propertyvista.onboarding;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-@AbstractEntity
+@Inheritance
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ResponseIO extends IEntity {
+
+    @NotNull
+    IPrimitive<Boolean> success();
+
+    /**
+     * Contains the error message
+     */
+    IPrimitive<String> errorMessage();
 
 }

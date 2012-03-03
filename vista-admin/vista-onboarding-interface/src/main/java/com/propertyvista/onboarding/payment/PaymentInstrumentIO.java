@@ -21,9 +21,13 @@
 package com.propertyvista.onboarding.payment;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.annotations.I18n;
 
 @AbstractEntity
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PaymentInstrumentIO extends IEntity {
 
 }

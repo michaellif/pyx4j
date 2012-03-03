@@ -20,22 +20,28 @@
  */
 package com.propertyvista.onboarding;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.i18n.annotations.I18n;
 
 /**
  * Notifies and provides the detailed data about newly registered PMC.
  * 
  * Create user that can modify and activate this PMC
  */
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface CreatePMCRequestIO extends RequestIO {
 
     /**
      * Company name
      */
+    @NotNull
     IPrimitive<String> name();
 
+    @NotNull
     IPrimitiveSet<String> dnsNameAliases();
 
     @NotNull

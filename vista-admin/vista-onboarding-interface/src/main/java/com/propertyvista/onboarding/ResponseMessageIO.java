@@ -20,9 +20,18 @@
  */
 package com.propertyvista.onboarding;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+
+@Transient
+@XmlRootElement
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ResponseMessageIO extends IEntity {
 
     public enum StatusCode {
@@ -44,9 +53,8 @@ public interface ResponseMessageIO extends IEntity {
     /**
      * Status of the processing of complete request.
      */
+    @NotNull
     IPrimitive<StatusCode> status();
 
-    // Or ?
-    //IList<ResponseIO> responses();
-    ResponseIO response();
+    IList<ResponseIO> responses();
 }

@@ -60,7 +60,7 @@ public class OnboardingExample {
         RequestMessageIO r = EntityFactory.create(RequestMessageIO.class);
         r.interfaceEntity().setValue("rossul");
         r.interfaceEntityPassword().setValue("secret");
-        r.request().set(request);
+        r.requests().add(request);
         return r;
     }
 

@@ -20,18 +20,24 @@
  */
 package com.propertyvista.onboarding;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+/**
+ * Expects current password and new password for user.
+ */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface GetUsageRequestIO extends RequestIO {
+public interface CrmUserPasswordChangeRequestIO extends RequestIO {
 
-    IPrimitive<Date> from();
+    @NotNull
+    IPrimitive<String> email();
 
-    IPrimitive<Date> to();
+    @NotNull
+    IPrimitive<String> currentPassword();
 
+    @NotNull
+    IPrimitive<String> newPassword();
 }

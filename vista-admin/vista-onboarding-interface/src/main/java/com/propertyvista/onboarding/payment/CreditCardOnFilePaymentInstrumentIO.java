@@ -20,6 +20,11 @@
  */
 package com.propertyvista.onboarding.payment;
 
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.i18n.annotations.I18n;
+
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface CreditCardOnFilePaymentInstrumentIO extends PaymentInstrumentIO {
 
 }

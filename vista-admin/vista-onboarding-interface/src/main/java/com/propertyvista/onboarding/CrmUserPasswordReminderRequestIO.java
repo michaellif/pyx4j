@@ -20,18 +20,19 @@
  */
 package com.propertyvista.onboarding;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+/**
+ * Request E-mail to be sent to customer with 'token' for PasswordReset.
+ */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface GetUsageRequestIO extends RequestIO {
+public interface CrmUserPasswordReminderRequestIO extends RequestIO {
 
-    IPrimitive<Date> from();
-
-    IPrimitive<Date> to();
+    @NotNull
+    IPrimitive<String> email();
 
 }

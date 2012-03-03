@@ -20,13 +20,20 @@
  */
 package com.propertyvista.onboarding;
 
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.i18n.annotations.I18n;
 
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ProvisionPMCRequestIO extends RequestIO {
 
     public enum VistaFeature {
 
+        tbd1,
+
+        tbd2,
     }
 
     public enum VistaLicense {
@@ -41,8 +48,10 @@ public interface ProvisionPMCRequestIO extends RequestIO {
 
     }
 
+    @NotNull
     IPrimitive<VistaLicense> license();
 
-    IPrimitiveSet<VistaFeature> features();
+    @NotNull
+    IPrimitive<VistaFeature> feature();
 
 }
