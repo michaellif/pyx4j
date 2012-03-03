@@ -22,6 +22,8 @@ package com.pyx4j.entity.server;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -147,6 +149,16 @@ public class ServerEntityFactory implements IEntityFactory {
             allEntityClasses = Collections.unmodifiableSet(new HashSet<Class<? extends IEntity>>(impClasses.keySet()));
         }
         return allEntityClasses;
+    }
+
+    public static Collection<Class<? extends IEntity>> getAllAssignableFrom(Class<? extends IEntity> entityClass) {
+        List<Class<? extends IEntity>> allAssignableClasses = new ArrayList<Class<? extends IEntity>>();
+        for (Class<? extends IEntity> ec : ServerEntityFactory.getAllEntityClasses()) {
+            if (entityClass.isAssignableFrom(ec)) {
+                allAssignableClasses.add(ec);
+            }
+        }
+        return allAssignableClasses;
     }
 
     public static <T extends IEntity> Class<IPojo<T>> getPojoClass(Class<T> entityClass) {

@@ -54,24 +54,22 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         sqlTypeKey = dialect.getTargetSqlType(Long.class);
         sqlTypeDiscriminator = dialect.getTargetSqlType(String.class);
 
-        for (Class<? extends IEntity> ec : ServerEntityFactory.getAllEntityClasses()) {
-            if (entityClass.isAssignableFrom(ec)) {
-                if (ec.getAnnotation(Transient.class) != null) {
-                    continue;
+        for (Class<? extends IEntity> ec : ServerEntityFactory.getAllAssignableFrom(entityClass)) {
+            if (ec.getAnnotation(Transient.class) != null) {
+                continue;
+            }
+            DiscriminatorValue discriminator = ec.getAnnotation(DiscriminatorValue.class);
+            if (discriminator != null) {
+                if (CommonsStringUtils.isEmpty(discriminator.value())) {
+                    throw new Error("Missing value of @DiscriminatorValue annotation on class " + ec.getName());
                 }
-                DiscriminatorValue discriminator = ec.getAnnotation(DiscriminatorValue.class);
-                if (discriminator != null) {
-                    if (CommonsStringUtils.isEmpty(discriminator.value())) {
-                        throw new Error("Missing value of @DiscriminatorValue annotation on class " + ec.getName());
-                    }
-                    if (impClasses.containsKey(discriminator.value())) {
-                        throw new Error("Duplicate value of @DiscriminatorValue annotation on class " + ec.getName() + "; the same as in calss "
-                                + impClasses.get(discriminator.value()));
-                    }
-                    impClasses.put(discriminator.value(), ec);
-                } else if (ec.getAnnotation(AbstractEntity.class) == null) {
-                    throw new Error("Class " + ec.getName() + " require @AbstractEntity or @DiscriminatorValue annotation");
+                if (impClasses.containsKey(discriminator.value())) {
+                    throw new Error("Duplicate value of @DiscriminatorValue annotation on class " + ec.getName() + "; the same as in calss "
+                            + impClasses.get(discriminator.value()));
                 }
+                impClasses.put(discriminator.value(), ec);
+            } else if (ec.getAnnotation(AbstractEntity.class) == null) {
+                throw new Error("Class " + ec.getName() + " require @AbstractEntity or @DiscriminatorValue annotation");
             }
         }
     }

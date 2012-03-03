@@ -53,6 +53,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.server.pojo.IPojoImpl;
@@ -143,6 +144,11 @@ public class EntityPojoWrapperGenerator {
             if (xmlRootElement != null) {
                 addAnnotationValue(implClass, XmlRootElement.class, "name", xmlRootElement.name());
             }
+            if (entityMeta.getAnnotation(AbstractEntity.class) != null) {
+                ServerEntityFactory.getAllAssignableFrom(entityMeta.getEntityClass());
+                //addAnnotationValue(implClass, XmlSeeAlso.class, "value", null);
+            }
+
             List<String> xmlMemberNames = new Vector<String>();
 
             implClass.setSuperclass(pool.get(IPojoImpl.class.getName()));
