@@ -20,6 +20,7 @@
     <modules>
         <module>vista-admin-rpc</module>
         <module>vista-admin-client</module>
+        <module>vista-onboarding-interface</module>
         <module>vista-admin-server</module>
     </modules>
 
