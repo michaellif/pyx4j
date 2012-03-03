@@ -81,6 +81,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
                             @Override
                             public void onSuccess(SiteImageResource rc) {
                                 getValue().imageResource().set(rc);
+                                thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().imageResource()));
                             }
                         });
                     }

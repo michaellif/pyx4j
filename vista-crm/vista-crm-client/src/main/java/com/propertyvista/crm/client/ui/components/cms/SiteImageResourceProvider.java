@@ -125,7 +125,7 @@ public class SiteImageResourceProvider extends Dialog implements CloseOption, Ri
             protected void onUploadComplete(UploadResponse<SiteImageResource> serverUploadResponse) {
                 String url = MediaUtils.createSiteImageResourceUrl(serverUploadResponse.data);
                 imageResourceMap.put(url, serverUploadResponse.data);
-                gallery.addImage(url);
+                gallery.addImage(url, serverUploadResponse.data.fileName().getStringView());
 
                 SiteImageResourceProvider.this.getCloseButton().setEnabled(true);
                 submitButton.setEnabled(true);
@@ -168,7 +168,7 @@ public class SiteImageResourceProvider extends Dialog implements CloseOption, Ri
                 for (SiteImageResource rc : result.getData()) {
                     String url = MediaUtils.createSiteImageResourceUrl(rc);
                     imageResourceMap.put(url, rc);
-                    gallery.addImage(url);
+                    gallery.addImage(url, rc.fileName().getStringView());
                 }
             }
 
