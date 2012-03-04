@@ -15,11 +15,17 @@ package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -29,9 +35,20 @@ import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.shared.CompiledLocale;
 
 class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
+    private final Set<CompiledLocale> usedLocales = new HashSet<CompiledLocale>();
 
     public AvailableLocaleFolder(boolean modifyable) {
         super(AvailableLocale.class, modifyable);
+        this.addValueChangeHandler(new ValueChangeHandler<IList<AvailableLocale>>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<IList<AvailableLocale>> event) {
+                usedLocales.clear();
+                for (AvailableLocale al : event.getValue()) {
+                    usedLocales.add(al.lang().getValue());
+                }
+                applyEditabilityRules();
+            }
+        });
     }
 
     @Override
@@ -44,11 +61,31 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (proto().lang().getPath().equals(member.getPath())) {
-            CComboBox<CompiledLocale> langCombo = new CComboBox<CompiledLocale>();
-            langCombo.setOptions(EnumSet.allOf(CompiledLocale.class));
+            final CComboBox<CompiledLocale> langCombo = new CComboBox<CompiledLocale>() {
+                @Override
+                public void applyEditabilityRules() {
+                    super.applyEditabilityRules();
+                    if (isEditable()) {
+                        EnumSet<CompiledLocale> opts = EnumSet.allOf(CompiledLocale.class);
+                        opts.removeAll(usedLocales);
+                        if (getValue() != null) {
+                            opts.add(getValue());
+                        }
+                        setOptions(opts);
+                    }
+                }
+            };
             return langCombo;
         }
         return super.create(member);
+    }
+
+    @Override
+    protected void onPopulate() {
+        usedLocales.clear();
+        for (AvailableLocale al : getValue()) {
+            usedLocales.add(al.lang().getValue());
+        }
     }
 
     @Override
