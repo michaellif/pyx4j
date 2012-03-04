@@ -348,7 +348,7 @@ public class ExtendedRichTextToolbar extends Composite {
         lb.addItem("XX-Small");
         lb.addItem("X-Small");
         lb.addItem("Small");
-        lb.addItem("medium");
+        lb.addItem("Medium");
         lb.addItem("Large");
         lb.addItem("X-Large");
         lb.addItem("XX-Large");
