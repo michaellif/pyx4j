@@ -28,7 +28,6 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -90,7 +89,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         validationMessageHolder.getElement().getStyle().setColor("red");
         mainPanel.add(validationMessageHolder, DockPanel.SOUTH);
 
-        actionsPanel = new ItemActionsBar(true, Direction.RTL, images);
+        actionsPanel = new ItemActionsBar(true, images);
         mainPanel.add(actionsPanel, DockPanel.EAST);
 
         contentHolder = new SimplePanel();

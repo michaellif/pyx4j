@@ -27,7 +27,6 @@ import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleNa
 
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
@@ -60,7 +59,7 @@ public class ItemActionsBar extends FlowPanel {
 
     private final Image downCommand;
 
-    public ItemActionsBar(boolean removable, Direction direction, EntityFolderImages images) {
+    public ItemActionsBar(boolean removable, EntityFolderImages images) {
 
         setStyleName(EntityFolderActionsBar.name());
 

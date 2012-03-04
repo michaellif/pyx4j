@@ -23,7 +23,6 @@ package com.pyx4j.entity.client.ui.folder;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -111,7 +110,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         imageWarn.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         add(imageWarn);
 
-        actionsPanel = new ItemActionsBar(true, Direction.LTR, decorator.getImages());
+        actionsPanel = new ItemActionsBar(true, decorator.getImages());
         add(actionsPanel);
         actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         if (BrowserType.isIE7()) {
