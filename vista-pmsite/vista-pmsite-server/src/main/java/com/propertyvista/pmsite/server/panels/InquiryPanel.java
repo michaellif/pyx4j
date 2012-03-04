@@ -89,7 +89,7 @@ public class InquiryPanel extends Panel {
                 if (fp != null) {
                     params.set(PMSiteApplication.ParamNameFloorplan, fp.id().getValue().asLong());
                 } else {
-                    params.set(PMSiteApplication.ParamNameBuilding, bld.propertyCode());
+                    params.set(PMSiteApplication.ParamNameBuilding, bld.propertyCode().getValue());
                 }
                 setResponsePage(InquirySuccessPage.class, params);
             }
