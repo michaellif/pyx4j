@@ -41,7 +41,7 @@
             <groupId>c3p0</groupId>
             <artifactId>c3p0</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-core</artifactId>
@@ -95,6 +95,13 @@
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6_g</artifactId>
             <version>11.2.0.2.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.1-901-1.jdbc4</version>
             <scope>test</scope>
         </dependency>
 
@@ -174,6 +181,7 @@
                             <excludes>
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
+                                <exclude>**/postgresql/*.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -220,6 +228,7 @@
                         <configuration>
                             <excludes>
                                 <exclude>**/oracle/*.*</exclude>
+                                <exclude>**/postgresql/*.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -266,6 +275,7 @@
                         <configuration>
                             <excludes>
                                 <exclude>**/mysql/*.*</exclude>
+                                <exclude>**/postgresql/*.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>

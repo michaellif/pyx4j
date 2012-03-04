@@ -46,6 +46,7 @@ import com.pyx4j.entity.rdb.dialect.MySQLDialect;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.OracleDialect;
+import com.pyx4j.entity.rdb.dialect.PostgreSQLDialect;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class ConnectionProvider {
@@ -113,6 +114,9 @@ public class ConnectionProvider {
             break;
         case Oracle:
             dialect = new OracleDialect(namingConvention, cfg.isMultitenant());
+            break;
+        case PostgreSQL:
+            dialect = new PostgreSQLDialect(namingConvention, cfg.isMultitenant());
             break;
         default:
             throw new Error("Unsupported driver Dialect " + cfg.driverClass());

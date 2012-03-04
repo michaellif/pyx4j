@@ -260,8 +260,8 @@ class TableDDL {
                     alterSqls.add(sql.toString());
                 } else {
                     if (!member.getValueAdapter().isCompatibleType(dialect, columnMeta.getTypeName(), member, sqlName)) {
-                        throw new RuntimeException(tableModel.tableName + "." + member.sqlName() + " incompatible SQL type " + columnMeta.getTypeName()
-                                + " for Java type " + memberMeta.getValueClass());
+                        throw new RuntimeException(tableModel.tableName + "." + member.sqlName() + " incompatible SQL type '" + columnMeta.getTypeName()
+                                + "' for Java type " + memberMeta.getValueClass());
                     }
                 }
             }

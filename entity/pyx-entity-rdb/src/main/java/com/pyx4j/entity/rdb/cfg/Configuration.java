@@ -30,7 +30,7 @@ public interface Configuration extends IPersistenceConfiguration {
     };
 
     public enum DatabaseType {
-        Oracle, MySQL, HSQLDB, Other
+        Oracle, MySQL, PostgreSQL, HSQLDB, Other
     };
 
     public String driverClass();
