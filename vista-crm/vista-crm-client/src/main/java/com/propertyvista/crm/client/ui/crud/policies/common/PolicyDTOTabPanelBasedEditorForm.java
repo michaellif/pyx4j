@@ -154,7 +154,15 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                             throw new Error("got unsupported or unknown policy scope:" + getValue().getInstanceValueClass().getName());
                         }
                     }
-                    policyScope = isNewEntity() ? new NodeType.Builder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build() : policyScope;
+
+                    if (isNewEntity()) {
+                        for (NodeType nodeType : AVAILABLE_NODE_TYPES) {
+                            if (nodeType.getType().equals(OrganizationPoliciesNode.class)) {
+                                policyScope = nodeType;
+                                break;
+                            }
+                        }
+                    }
                     selectPolicyScopeBox.setValue(policyScope, true);
                     selectPolicyScopeBox.setViewable(!isNewEntity());
                     get(proto().node()).setViewable(!isNewEntity());
