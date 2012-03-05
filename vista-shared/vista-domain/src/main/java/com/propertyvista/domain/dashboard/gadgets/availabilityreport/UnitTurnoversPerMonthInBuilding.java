@@ -14,7 +14,6 @@
 package com.propertyvista.domain.dashboard.gadgets.availabilityreport;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -35,7 +34,5 @@ public interface UnitTurnoversPerMonthInBuilding extends IEntity {
     IPrimitive<LogicalDate> statsMonth();
 
     IPrimitive<Integer> turnovers();
-
-    IPrimitive<Double> turnoversPct();
 
 }
