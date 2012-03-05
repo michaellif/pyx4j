@@ -44,7 +44,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
     @Override
     public void retrieve(AsyncCallback<E> callback, Key entityId) {
         E entity = EntityFactory.create(entityClass);
-        entity.setPrimaryKey(entityId);
+        entity.setPrimaryKey(new Key(entityId.asLong()));
         if (entityId.getVersion() == 0) {
             entity.draft().setValue(Boolean.TRUE);
         } else {
@@ -61,7 +61,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
     @Override
     public void finalize(AsyncCallback<VoidSerializable> callback, Key entityId) {
         E entity = EntityFactory.create(entityClass);
-        entity.setPrimaryKey(entityId);
+        entity.setPrimaryKey(new Key(entityId.asLong()));
         entity.draft().setValue(Boolean.TRUE);
         Persistence.service().retrieve(entity);
 

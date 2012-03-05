@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.client.ui.crud.form;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.IView;
@@ -33,6 +34,8 @@ public interface IViewerView<E extends IEntity> extends IFormView<E> {
         void edit();
 
         void cancel();
+
+        void view(Key entityId);
     }
 
     void setPresenter(Presenter presenter);

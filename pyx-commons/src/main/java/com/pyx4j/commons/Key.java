@@ -85,7 +85,7 @@ public class Key implements java.io.Serializable {
             versionValue = 0;
             longValue = Long.valueOf(value);
         } else {
-            versionValue = Long.valueOf(value.substring(vp));
+            versionValue = Long.valueOf(value.substring(vp + 1));
             longValue = Long.valueOf(value.substring(0, vp));
         }
     }

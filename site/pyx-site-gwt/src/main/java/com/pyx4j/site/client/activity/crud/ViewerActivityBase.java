@@ -131,4 +131,10 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     public void cancel() {
         History.back();
     }
+
+    @Override
+    public void view(Key entityId) {
+        this.entityId = entityId;
+        populate();
+    }
 }
