@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services.building.catalog;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 
 import com.propertyvista.domain.financial.offering.Concession;
 
-public interface ConcessionCrudService extends AbstractCrudService<Concession> {
+public interface ConcessionCrudService extends AbstractVersionedCrudService<Concession> {
 }

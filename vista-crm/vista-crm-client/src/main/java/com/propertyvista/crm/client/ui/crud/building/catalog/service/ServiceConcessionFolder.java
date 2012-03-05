@@ -92,13 +92,13 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().type()).build(),
-                    new MemberColumnDescriptor.Builder(proto().term()).build(),
-                    new MemberColumnDescriptor.Builder(proto().value()).build(),
-                    new MemberColumnDescriptor.Builder(proto().condition()).build(),
-                    new MemberColumnDescriptor.Builder(proto().status()).build(),
-                    new MemberColumnDescriptor.Builder(proto().effectiveDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().expirationDate()).build()
+                    new MemberColumnDescriptor.Builder(proto().version().type()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().term()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().value()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().condition()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().status()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build()
             );//@formatter:on
         }
 

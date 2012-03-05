@@ -7,20 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.building.catalog;
+package com.propertyvista.crm.rpc.services.selections.version;
 
-import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
+import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
-import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Concession.ConcessionV;
 
-public class ConcessionCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Concession> implements ConcessionCrudService {
-
-    public ConcessionCrudServiceImpl() {
-        super(Concession.class);
-    }
+public interface ConcessionVersionService extends AbstractListService<ConcessionV> {
 }

@@ -19,6 +19,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -91,5 +92,11 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
     @Override
     public Presenter getFeatureListerPresenter() {
         return featureLister;
+    }
+
+    @Override
+    public void view(Key entityId) {
+        // TODO Auto-generated method stub
+
     }
 }

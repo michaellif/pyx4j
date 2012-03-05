@@ -207,7 +207,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
             // fill relevant concessions:
             for (Concession concession : selectedService.concessions()) {
-                if (concession.status().getValue() == Status.approved) {
+                if (concession.version().status().getValue() == Status.approved) {
                     currentValue.selectedConcessions().add(concession);
                 }
             }

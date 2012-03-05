@@ -16,6 +16,7 @@ package com.propertyvista.domain.tenant.lease;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
@@ -31,6 +32,6 @@ public interface ServiceAgreement extends IEntity {
     @Caption(name = "Charge Items")
     IList<BillableItem> featureItems();
 
+    @Versioned
     IList<Concession> concessions();
-
 }

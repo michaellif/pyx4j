@@ -28,10 +28,13 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IVersionData;
+import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
+
+import com.propertyvista.domain.financial.offering.Concession.ConcessionV;
 
 /**
  * Concessions needs to be versioned with service catalog.
@@ -46,8 +49,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
  * 
  */
 
-@ToStringFormat("{0}, {1}, ${2}")
-public interface Concession extends IEntity {
+public interface Concession extends IVersionedEntity<ConcessionV> {
 
     @I18n(context = "Concession Type")
     @XmlType(name = "ConcessionType")
@@ -114,49 +116,53 @@ public interface Concession extends IEntity {
 
 // ----------------------------------------------
 
-    @ToString(index = 0)
-    @MemberColumn(name = "concessionType")
-    IPrimitive<Type> type();
+    @ToStringFormat("{0}, {1}, ${2}")
+    public interface ConcessionV extends IVersionData<Concession> {
 
-    @ToString(index = 1)
-    IPrimitive<Term> term();
+        @ToString(index = 0)
+        @MemberColumn(name = "concessionType")
+        IPrimitive<Type> type();
 
-    @Length(100)
-    @Editor(type = Editor.EditorType.textarea)
-    IPrimitive<String> description();
+        @ToString(index = 1)
+        IPrimitive<Term> term();
 
-    /**
-     * for free item - gift price
-     * for percentageOff - percentage
-     * for monetaryOff - amount
-     * for skipFirstPayment - number of terms
-     */
-    @ToString(index = 2)
-    @Format("#0.00")
-    @MemberColumn(name = "val")
-    IPrimitive<Double> value();
+        @Length(100)
+        @Editor(type = Editor.EditorType.textarea)
+        IPrimitive<String> description();
 
-    @MemberColumn(name = "cond")
-    IPrimitive<Condition> condition();
+        /**
+         * for free item - gift price
+         * for percentageOff - percentage
+         * for monetaryOff - amount
+         * for skipFirstPayment - number of terms
+         */
+        @ToString(index = 2)
+        @Format("#0.00")
+        @MemberColumn(name = "val")
+        IPrimitive<Double> value();
 
-    @NotNull
-    ProductItemType productItemType();
+        @MemberColumn(name = "cond")
+        IPrimitive<Condition> condition();
 
-    @NotNull
-    IPrimitive<Integer> productItemQuantity();
+        @NotNull
+        ProductItemType productItemType();
 
-    @NotNull
-    IPrimitive<Boolean> nonMixable();
+        @NotNull
+        IPrimitive<Integer> productItemQuantity();
+
+        @NotNull
+        IPrimitive<Boolean> nonMixable();
 
 // ----------------------------------------------
 
-    IPrimitive<Status> status();
+        IPrimitive<Status> status();
 
-    IPrimitive<String> approvedBy();
+        IPrimitive<String> approvedBy();
 
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> effectiveDate();
+        @Format("MM/dd/yyyy")
+        IPrimitive<LogicalDate> effectiveDate();
 
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> expirationDate();
+        @Format("MM/dd/yyyy")
+        IPrimitive<LogicalDate> expirationDate();
+    }
 }
