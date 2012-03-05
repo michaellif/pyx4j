@@ -40,6 +40,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.env.ConfigureTestsEnv;
+import com.pyx4j.gwt.server.DateUtils;
 
 /**
  * This is the base for abstract Server side tests. RDBMS or GAE test would have their own
@@ -90,10 +91,26 @@ public abstract class DatastoreTestBase extends TestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
         if (persistenceEnvironment != null) {
-            srv.endTransaction();
+            // Want to see data in tables even if test fails.
+            try {
+                srv.commit();
+            } catch (Throwable ignore) {
+            }
+            try {
+                srv.endTransaction();
+            } finally {
+                srv.removeThreadLocale();
+            }
             persistenceEnvironment.teardownDatastore(srv);
         }
         log.debug("ended test {}.{}", this.getClass().getName(), this.getName());
+    }
+
+    /**
+     * Emulate Database current time
+     */
+    protected void setDBTime(String dateStr) {
+        srv.setTransactionSystemTime(DateUtils.detectDateformat(dateStr));
     }
 
     static public void assertValueEquals(String message, Object expected, Object actual) {

@@ -34,8 +34,8 @@ public interface RefToCurrent extends IEntity {
     /**
      * Brings the version for current date based on server clock
      */
-    //@Owned  -- ???
+    //TODO @Owned  in another test
     ItemA itemA();
 
-    ItemB itemB();
+    //ItemB itemB();
 }

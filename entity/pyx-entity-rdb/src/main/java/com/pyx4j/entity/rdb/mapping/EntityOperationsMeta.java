@@ -333,12 +333,12 @@ public class EntityOperationsMeta {
         @SuppressWarnings("unchecked")
         Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getValueClass();
         if (entityClass.getAnnotation(Inheritance.class) != null) {
-            if (entityClass.getAnnotation(Versioned.class) != null) {
+            if (memberMeta.getAnnotation(Versioned.class) != null) {
                 throw new Error("@Versioned Polymorphic not supported");
             } else {
                 return new ValueAdapterEntityPolymorphic(dialect, entityClass);
             }
-        } else if (entityClass.getAnnotation(Versioned.class) != null) {
+        } else if (memberMeta.getAnnotation(Versioned.class) != null) {
             return new ValueAdapterEntityVersioned(dialect, entityClass);
         } else {
             return new ValueAdapterEntity(dialect, entityClass);

@@ -203,11 +203,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void setTransactionSystemTime(Date date) {
+        assert getPersistenceContext() != null : "Transaction Context was not started";
         getPersistenceContext().setTimeNow(date);
     }
 
     @Override
     public void setTransactionUserKey(Key currentUserKey) {
+        assert getPersistenceContext() != null : "Transaction Context was not started";
         getPersistenceContext().setCurrentUserKey(currentUserKey);
     }
 

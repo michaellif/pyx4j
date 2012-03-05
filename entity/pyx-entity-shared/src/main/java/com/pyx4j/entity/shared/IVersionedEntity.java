@@ -37,6 +37,9 @@ public interface IVersionedEntity<VERSIONED_ITEM extends IVersionData<?>> extend
     @Owned
     IList<VERSIONED_ITEM> versions();
 
+    /**
+     * Finalize: Triggered by Not draft and not empty version() member.
+     */
     @ManagedColumn
     IPrimitive<Boolean> draft();
 

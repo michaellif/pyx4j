@@ -75,48 +75,88 @@ public class TableModleVersioned {
         if (memeberEntity.isNull()) {
             return update;
         }
-        IVersionedEntity<?> versionedEntity = (IVersionedEntity<?>) entity;
         @SuppressWarnings("unchecked")
         Class<? extends IVersionData<IVersionedEntity<?>>> targetEntityClass = (Class<? extends IVersionData<IVersionedEntity<?>>>) member.getMemberMeta()
                 .getValueClass();
-        EntityQueryCriteria<? extends IVersionData<IVersionedEntity<?>>> criteria = EntityQueryCriteria.create(targetEntityClass);
-        criteria.add(PropertyCriterion.eq(criteria.proto().holder(), entity));
-        if (versionedEntity.draft().isBooleanTrue()) {
-            criteria.add(PropertyCriterion.isNull(criteria.proto().fromDate()));
-            criteria.add(PropertyCriterion.isNull(criteria.proto().toDate()));
-        } else {
-            criteria.add(PropertyCriterion.isNotNull(criteria.proto().fromDate()));
-            criteria.add(PropertyCriterion.isNull(criteria.proto().toDate()));
+        TableModel tm = mappings.getTableModel(persistenceContext.getConnection(), targetEntityClass);
+
+        // Find existing Draft
+        IVersionData<IVersionedEntity<?>> existingDraft = null;
+        EntityQueryCriteria<? extends IVersionData<IVersionedEntity<?>>> draftCriteria = EntityQueryCriteria.create(targetEntityClass);
+        draftCriteria.add(PropertyCriterion.eq(draftCriteria.proto().holder(), entity));
+        draftCriteria.add(PropertyCriterion.isNull(draftCriteria.proto().fromDate()));
+        draftCriteria.add(PropertyCriterion.isNull(draftCriteria.proto().toDate()));
+        List<? extends IVersionData<IVersionedEntity<?>>> draftsExisting = tm.query(persistenceContext, draftCriteria, 1);
+        if (draftsExisting.size() > 1) {
+            throw new Error("Duplicate Draft versions found in " + entity.getDebugExceptionInfoString());
+        } else if (draftsExisting.size() > 0) {
+            existingDraft = draftsExisting.get(0);
         }
 
+        IVersionedEntity<?> versionedEntity = (IVersionedEntity<?>) entity;
         memeberEntity.holder().set(versionedEntity);
+        memeberEntity.createdByUserKey().setValue(persistenceContext.getCurrentUserKey());
+
         if (versionedEntity.draft().isBooleanTrue()) {
+            // Save draft
             memeberEntity.fromDate().setValue(null);
             memeberEntity.toDate().setValue(null);
+            memeberEntity.versionNumber().setValue(null);
+
+            if (existingDraft != null) {
+                memeberEntity.setPrimaryKey(existingDraft.getPrimaryKey());
+            } else {
+                memeberEntity.setPrimaryKey(null);
+            }
+
+            //Save using EntityPersistenceService
+            update.add(memeberEntity);
+
         } else {
+            // Finalize creates new IVersionData every time.
+            memeberEntity.setPrimaryKey(null);
             memeberEntity.fromDate().setValue(persistenceContext.getTimeNow());
             memeberEntity.toDate().setValue(null);
-        }
-        memeberEntity.createdByUserKey().setValue(persistenceContext.getCurrentUserKey());
-        //Save using EntityPersistenceService
-        update.add(memeberEntity);
 
-        TableModel tm = mappings.getTableModel(persistenceContext.getConnection(), targetEntityClass);
-        List<? extends IVersionData<IVersionedEntity<?>>> existing = tm.query(persistenceContext, criteria, 1);
-        if (existing.size() > 0) {
-            IVersionData<IVersionedEntity<?>> memeberEntityExisting = existing.get(0);
-            if (versionedEntity.draft().isBooleanTrue()) {
-                // Update draft 
-                memeberEntity.setPrimaryKey(memeberEntityExisting.getPrimaryKey());
-            } else {
+            //Save using EntityPersistenceService
+            update.add(memeberEntity);
+
+            EntityQueryCriteria<? extends IVersionData<IVersionedEntity<?>>> criteria = EntityQueryCriteria.create(targetEntityClass);
+            criteria.add(PropertyCriterion.eq(criteria.proto().holder(), entity));
+            criteria.add(PropertyCriterion.isNotNull(criteria.proto().fromDate()));
+            criteria.add(PropertyCriterion.isNull(criteria.proto().toDate()));
+
+            List<? extends IVersionData<IVersionedEntity<?>>> existing = tm.query(persistenceContext, criteria, 1);
+            if (existing.size() > 0) {
+                IVersionData<IVersionedEntity<?>> memeberEntityExisting = existing.get(0);
+
                 // End effective period of currently active entity
                 memeberEntityExisting.toDate().setValue(persistenceContext.getTimeNow());
                 update.add(memeberEntityExisting);
+
+                memeberEntity.versionNumber().setValue(memeberEntityExisting.versionNumber().getValue() + 1);
 
                 // Create new draft on Finalize
                 IVersionData<IVersionedEntity<?>> newDraft = EntityGraph.businessDuplicate(memeberEntity);
                 newDraft.fromDate().setValue(null);
                 newDraft.toDate().setValue(null);
+                newDraft.versionNumber().setValue(null);
+                if (existingDraft != null) {
+                    newDraft.setPrimaryKey(existingDraft.getPrimaryKey());
+                }
+                update.add(newDraft);
+
+            } else {
+                // Initial item creation
+                memeberEntity.versionNumber().setValue(0);
+                // Create new draft on Finalize
+                IVersionData<IVersionedEntity<?>> newDraft = EntityGraph.businessDuplicate(memeberEntity);
+                if (existingDraft != null) {
+                    newDraft.setPrimaryKey(existingDraft.getPrimaryKey());
+                }
+                newDraft.fromDate().setValue(null);
+                newDraft.toDate().setValue(null);
+                newDraft.versionNumber().setValue(null);
                 update.add(newDraft);
             }
         }
