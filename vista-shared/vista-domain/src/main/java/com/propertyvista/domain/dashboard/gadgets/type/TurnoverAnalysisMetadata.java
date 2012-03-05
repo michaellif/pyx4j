@@ -27,5 +27,11 @@ public interface TurnoverAnalysisMetadata extends GadgetMetadata {
 
     IPrimitive<Boolean> isTurnoverMeasuredByPercent();
 
+    /**
+     * This is not going to be used int first version: the resolution is always one month.
+     * 
+     * @return
+     */
+    @Deprecated
     IPrimitive<AnalysisResolution> turnoverAnalysisResolution();
 }

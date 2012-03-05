@@ -328,8 +328,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     }
 
     @Override
-    public void turnoverAnalysis(AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>> callback, Vector<Key> buidlings, LogicalDate fromDate,
-            LogicalDate reportDate, AnalysisResolution resolution) {
+    public void turnoverAnalysis(AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>> callback, Vector<Key> buidlings, LogicalDate reportDate) {
 
         LogicalDate tweleveMonthsAgo = new LogicalDate(reportDate.getYear() - 1, reportDate.getMonth(), 1);
 
@@ -347,7 +346,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         // initialize        
         LogicalDate month = new LogicalDate(tweleveMonthsAgo);
-        for (int i = 0; i < 12; ++i) {
+        for (int i = 0; i < 13; ++i) {
             UnitTurnoversPerIntervalDTO turnoversPerInterval = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
             turnoversPerInterval.unitsTurnedOverAbs().setValue(0);
             turnoversPerInterval.intervalSize().setValue(AnalysisResolution.Month);
@@ -377,7 +376,11 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         }
         // calculate percentage
         for (UnitTurnoversPerIntervalDTO turnoversPerInterval : result) {
-            turnoversPerInterval.unitsTurnedOverPct().setValue(turnoversPerInterval.unitsTurnedOverAbs().getValue() * 100 / total);
+            if (total != 0.) {
+                turnoversPerInterval.unitsTurnedOverPct().setValue(turnoversPerInterval.unitsTurnedOverAbs().getValue() * 100 / total);
+            } else {
+                turnoversPerInterval.unitsTurnedOverPct().setValue(0.);
+            }
         }
         callback.onSuccess(result);
 
