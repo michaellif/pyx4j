@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillChargeAdjustment;
+import com.propertyvista.domain.financial.billing.BillChargeTax;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
@@ -83,8 +84,21 @@ public class ChargeAdjustmentProcessor {
             adjustment.amount().setValue(amount.multiply(proration));
         }
 
-        bill.chargeAdjustments().add(adjustment);
-        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.amount().getValue()));
+        if (!adjustment.amount().isNull()) {
+            adjustment.taxes().addAll(
+                    TaxUtils.calculateTaxes(adjustment.amount().getValue(), itemAdjustment.billableItem().item().type(), bill.billingRun().building()));
+        }
+        adjustment.taxTotal().setValue(new BigDecimal(0));
+        for (BillChargeTax chargeTax : adjustment.taxes()) {
+            adjustment.taxTotal().setValue(adjustment.taxTotal().getValue().add(chargeTax.amount().getValue()));
+        }
+
+        addCharge(adjustment);
     }
 
+    private void addCharge(BillChargeAdjustment adjustment) {
+        bill.chargeAdjustments().add(adjustment);
+        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.amount().getValue()));
+        bill.taxes().setValue(bill.taxes().getValue().add(adjustment.taxTotal().getValue()));
+    }
 }

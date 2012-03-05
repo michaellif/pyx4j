@@ -35,7 +35,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         BillableItem parking1 = addParking();
         addBillableItemAdjustment(parking1, "-10", AdjustmentType.monetary, TermType.inLease);
 
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011");
         addBillableItemAdjustment(parking2, "-10", AdjustmentType.monetary, TermType.inLease);
 
         BillableItem locker1 = addLocker();
@@ -58,18 +58,19 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
-        numOfCharges(5).
-        numOfChargeAdjustments(4).
+        numOfCharges(4).
+        numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
-        serviceCharge("270.08").
-        recurringFeatureCharges("69.68").
-        totalAdjustments("-15.10").
-        oneTimeFeatureCharges("0.00");
+        serviceCharge("270.09").
+        recurringFeatureCharges("46.45").
+        totalAdjustments("-12.19").
+        oneTimeFeatureCharges("0.00").
+        taxes("36.52");
         // @formatter:on
 
         //==================== RUN 2 ======================//
 
-        setSysDate("16-Apr-2011");
+        setSysDate("18-Mar-2011");
         setLeaseStatus(Lease.Status.Active);
 
         bill = runBilling(true);
@@ -85,14 +86,15 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("240.00").
-        totalAdjustments("-52.00").
-        oneTimeFeatureCharges("0.00");
+        recurringFeatureCharges("181.33").
+        totalAdjustments("-44.67").
+        oneTimeFeatureCharges("0.00").
+        taxes("128.04");
         // @formatter:on
 
         //==================== RUN 3 ======================//
 
-        setSysDate("15-May-2011");
+        setSysDate("18-Apr-2011");
 
         bill = runBilling(true);
 
@@ -109,12 +111,13 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         serviceCharge("930.30").
         recurringFeatureCharges("240.00").
         totalAdjustments("-52.00").
-        oneTimeFeatureCharges("0.00");
+        oneTimeFeatureCharges("0.00").
+        taxes("134.20");
         // @formatter:on
 
         //==================== RUN 4 ======================//
 
-        setSysDate("15-Jun-2011");
+        setSysDate("18-May-2011");
 
         bill = runBilling(true);
 
@@ -131,12 +134,13 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         serviceCharge("930.30").
         recurringFeatureCharges("240.00").
         totalAdjustments("-52.00").
-        oneTimeFeatureCharges("0.00");
+        oneTimeFeatureCharges("0.00").
+        taxes("134.20");
         // @formatter:on
 
         //==================== RUN 5 ======================//
 
-        setSysDate("15-Jul-2011");
+        setSysDate("18-Jun-2011");
 
         bill = runBilling(true);
 
@@ -153,10 +157,34 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         serviceCharge("930.30").
         recurringFeatureCharges("240.00").
         totalAdjustments("-52.00").
-        oneTimeFeatureCharges("0.00");
+        oneTimeFeatureCharges("0.00").
+        taxes("134.20");
         // @formatter:on
 
         //==================== RUN 6 ======================//
+
+        setSysDate("18-Jul-2011");
+
+        bill = runBilling(true);
+
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(6).
+        previousBillSequenceNumber(5).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("01-Aug-2011").
+        billingPeriodEndDate("03-Aug-2011").
+        numOfCharges(5).
+        numOfChargeAdjustments(4).
+        numOfLeaseAdjustments(0).
+        serviceCharge("90.03").
+        recurringFeatureCharges("23.23").
+        totalAdjustments("-5.03").
+        oneTimeFeatureCharges("0.00").
+        taxes("12.98");
+        // @formatter:on
+
+        //==================== RUN final ======================//
 
         setSysDate("05-Aug-2011");
 
@@ -166,9 +194,11 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         // @formatter:off
         new BillTester(bill).
-        billSequenceNumber(6).
-        previousBillSequenceNumber(5).
-        billType(Bill.BillType.Final);
+        billSequenceNumber(7).
+        previousBillSequenceNumber(6).
+        billType(Bill.BillType.Final).
+        billingPeriodStartDate(null).
+        billingPeriodEndDate(null);
         // @formatter:on
     }
 

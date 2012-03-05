@@ -118,6 +118,11 @@ public class BillTester extends Tester {
         return this;
     }
 
+    public BillTester taxes(String value) {
+        assertEquals("Taxes", new BigDecimal(value), bill.taxes().getValue());
+        return this;
+    }
+
     protected static LogicalDate getDate(String date) {
         if (date == null) {
             return null;

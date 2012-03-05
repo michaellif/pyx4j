@@ -51,12 +51,12 @@ public class ProrationUtils {
                 }
                 break;
             case Annual:
-                proration = new BigDecimal(365).divide(new BigDecimal(12), 5, RoundingMode.HALF_UP);
+                proration = new BigDecimal(365).divide(new BigDecimal(12), 6, RoundingMode.HALF_UP);
                 break;
             default:
 
             }
-            return new BigDecimal(daysBetween(from, to)).divide(proration, 5, RoundingMode.HALF_UP);
+            return new BigDecimal(daysBetween(from, to)).divide(proration, 6, RoundingMode.HALF_UP);
         } else {
             throw new BillingException("proration can be calculated for a period of month");
         }

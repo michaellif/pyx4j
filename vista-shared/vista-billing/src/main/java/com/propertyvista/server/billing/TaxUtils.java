@@ -45,7 +45,7 @@ public class TaxUtils {
         return null;
     }
 
-    public static List<BillChargeTax> calculateTaxes(final BigDecimal baseAmount, List<Tax> taxes) {
+    static List<BillChargeTax> calculateTaxes(final BigDecimal baseAmount, List<Tax> taxes) {
 
         List<BillChargeTax> chargeTaxes = new ArrayList<BillChargeTax>();
         if (taxes != null) {

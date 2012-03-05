@@ -62,7 +62,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         numOfCharges(4).
         numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
-        serviceCharge("270.08").
+        serviceCharge("270.09").
         recurringFeatureCharges("46.45").
         totalAdjustments("-12.19").
         oneTimeFeatureCharges("0.00");
@@ -166,6 +166,29 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
 
         //==================== RUN 6 ======================//
 
+        setSysDate("18-Jul-2011");
+
+        bill = runBilling(true);
+
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(6).
+        previousBillSequenceNumber(5).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("01-Aug-2011").
+        billingPeriodEndDate("03-Aug-2011").
+        numOfCharges(5).
+        numOfChargeAdjustments(3).
+        numOfLeaseAdjustments(0).
+        serviceCharge("90.03").
+        recurringFeatureCharges("17.42").
+        totalAdjustments("-4.06").
+        oneTimeFeatureCharges("0.00").
+        taxes("12.40");
+        // @formatter:on
+
+        //==================== RUN final ======================//
+
         setSysDate("05-Aug-2011");
 
         setLeaseStatus(Lease.Status.Completed);
@@ -174,9 +197,11 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
 
         // @formatter:off
         new BillTester(bill).
-        billSequenceNumber(6).
-        previousBillSequenceNumber(5).
-        billType(Bill.BillType.Final);
+        billSequenceNumber(7).
+        previousBillSequenceNumber(6).
+        billType(Bill.BillType.Final).
+        billingPeriodStartDate(null).
+        billingPeriodEndDate(null);
         // @formatter:on
     }
 
