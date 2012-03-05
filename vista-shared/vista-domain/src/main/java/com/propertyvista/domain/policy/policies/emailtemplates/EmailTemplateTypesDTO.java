@@ -19,5 +19,6 @@ import com.pyx4j.entity.shared.IList;
 
 @Transient
 public interface EmailTemplateTypesDTO extends IEntity {
+
     IList<EmailTemplateTypeDTO> types();
 }

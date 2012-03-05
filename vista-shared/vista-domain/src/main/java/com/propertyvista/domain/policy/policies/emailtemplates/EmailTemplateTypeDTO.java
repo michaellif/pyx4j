@@ -22,6 +22,7 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 
 @Transient
 public interface EmailTemplateTypeDTO extends IEntity {
+
     IPrimitive<EmailTemplateType> type();
 
     IPrimitiveSet<String> objectNames();

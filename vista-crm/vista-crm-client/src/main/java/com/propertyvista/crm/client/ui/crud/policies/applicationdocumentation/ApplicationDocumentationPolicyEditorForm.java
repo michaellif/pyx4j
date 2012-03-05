@@ -16,12 +16,9 @@ package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -60,6 +57,13 @@ public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelB
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().allowedIDs(), new IdentificationDocumentFolder())).componentWidth(30).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfRequiredIDs())).componentWidth(3).build());
+        return content;
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
         get(proto().numberOfRequiredIDs()).addValueValidator(new EditableValueValidator<Integer>() {
             @Override
             public ValidationFailure isValid(CComponent<Integer, ?> component, Integer value) {
@@ -72,7 +76,6 @@ public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelB
                 }
             }
         });
-        return content;
     }
 
     private static class IdentificationDocumentFolder extends VistaTableFolder<IdentificationDocument> {
@@ -83,32 +86,34 @@ public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelB
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(new EntityFolderColumnDescriptor(proto().name(), "30em"));
+            return Arrays.asList(//@formatter:off
+                        new EntityFolderColumnDescriptor(proto().name(), "15em"), 
+                        new EntityFolderColumnDescriptor(proto().type(), "15em")                    
+                    );//@formatter:on
         }
-
-        @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof IdentificationDocument) {
-                return new IdentificationDocumentEditor();
-            } else {
-                return super.create(member);
-            }
-        }
-
-        private static class IdentificationDocumentEditor extends CEntityEditor<IdentificationDocument> {
-
-            public IdentificationDocumentEditor() {
-                super(IdentificationDocument.class);
-            }
-
-            @Override
-            public IsWidget createContent() {
-                Widget w = inject(proto().name()).asWidget();
-                w.setWidth("30em");
-                return w;
-            }
-        }
-
+//
+//        @Override
+//        public CComponent<?, ?> create(IObject<?> member) {
+//            if (member instanceof IdentificationDocument) {
+//                return new IdentificationDocumentEditor();
+//            } else {
+//                return super.create(member);
+//            }
+//        }
+//
+//        private static class IdentificationDocumentEditor extends CEntityEditor<IdentificationDocument> {
+//
+//            public IdentificationDocumentEditor() {
+//                super(IdentificationDocument.class);
+//            }
+//
+//            @Override
+//            public IsWidget createContent() {
+//                Widget w = inject(proto().name()).asWidget();
+//                w.setWidth("30em");
+//                return w;
+//            }
+//        }
     }
 
 }

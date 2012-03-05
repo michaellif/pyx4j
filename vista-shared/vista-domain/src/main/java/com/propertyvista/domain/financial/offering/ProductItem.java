@@ -57,7 +57,6 @@ public interface ProductItem extends IEntity {
     IPrimitive<BigDecimal> price();
 
     @Length(250)
-    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
     @Detached

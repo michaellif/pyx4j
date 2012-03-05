@@ -18,6 +18,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocument.Type;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPreloader<ApplicationDocumentationPolicy> {
@@ -35,17 +36,19 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
 
         IdentificationDocument id = EntityFactory.create(IdentificationDocument.class);
         id.name().setValue(i18n.tr("Passport"));
-        policy.allowedIDs().add(id);
-
-        id = EntityFactory.create(IdentificationDocument.class);
-        id.name().setValue(i18n.tr("Drivers License"));
+        id.type().setValue(Type.passport);
         policy.allowedIDs().add(id);
 
         id = EntityFactory.create(IdentificationDocument.class);
         id.name().setValue(i18n.tr("Citizenship Card"));
+        id.type().setValue(Type.citizenship);
+        policy.allowedIDs().add(id);
+
+        id = EntityFactory.create(IdentificationDocument.class);
+        id.name().setValue(i18n.tr("Driver License"));
+        id.type().setValue(Type.license);
         policy.allowedIDs().add(id);
 
         return policy;
     }
-
 }
