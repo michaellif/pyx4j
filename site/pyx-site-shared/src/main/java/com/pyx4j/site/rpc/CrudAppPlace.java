@@ -37,8 +37,6 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public static final String ARG_NAME_TAB_IDX = "tabIdx";
 
-    public static final String ARG_NAME_VERSION_ID = "versionId";
-
     public static enum Type {
         editor, viewer, lister, dashboard, report
     }
@@ -80,22 +78,6 @@ public abstract class CrudAppPlace extends AppPlace {
         if (tabIndex >= 0) {
             arg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
         }
-        return this;
-    }
-
-    public CrudAppPlace formViewerPlace(Key itemID, Long versionID) {
-        setType(Type.viewer);
-        arg(ARG_NAME_ID, itemID.toString());
-        arg(ARG_NAME_VERSION_ID, versionID.toString());
-        return this;
-    }
-
-    public CrudAppPlace formViewerPlace(Key itemID, int tabIndex, Long versionID) {
-        formViewerPlace(itemID);
-        if (tabIndex >= 0) {
-            arg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
-        }
-        arg(ARG_NAME_VERSION_ID, versionID.toString());
         return this;
     }
 
