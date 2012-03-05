@@ -21,7 +21,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -88,34 +87,37 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getUnitListerView().asWidget()), i18n.tr("Units"));
         tabPanel.setLastTabDisabled(isEditable());
 
-        FlowPanel combinedtab = new FlowPanel();
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Elevators") + ":"));
-        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Boilers") + ":"));
-        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Roofs") + ":"));
-        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
+        FormFlexPanel combinedtab = new FormFlexPanel();
+        int row = 0;
+        combinedtab.setH1(row++, 0, 2, i18n.tr("Elevators"));
+        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
+        combinedtab.setH1(row++, 0, 2, i18n.tr("Boilers"));
+        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
+        combinedtab.setH1(row++, 0, 2, i18n.tr("Roofs"));
+        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
         tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Mechanicals"));
         tabPanel.setLastTabDisabled(isEditable());
 
-        combinedtab = new FlowPanel();
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Parkings") + ":"));
-        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Locker Areas") + ":"));
-        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
+        combinedtab = new FormFlexPanel();
+        row = 0;
+        combinedtab.setH1(row++, 0, 2, i18n.tr("Parking"));
+        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
+        combinedtab.setH1(row++, 0, 2, i18n.tr("Locker Areas"));
+        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
         tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Add-Ons"));
         tabPanel.setLastTabDisabled(isEditable());
 
         tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
         tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
 
-        combinedtab = new FlowPanel();
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Services") + ":"));
-        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Features") + ":"));
-        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Concessions") + ":"));
-        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
+        combinedtab = new FormFlexPanel();
+        row = 0;
+        combinedtab.setH1(row++, 0, 2, i18n.tr("Services"));
+        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
+        combinedtab.setH1(row++, 0, 2, i18n.tr("Features"));
+        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
+        combinedtab.setH1(row++, 0, 2, i18n.tr("Concessions"));
+        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
         tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Product Catalog"));
         tabPanel.setLastTabDisabled(isEditable());
 
@@ -220,6 +222,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().floorType()), 15).build());
 
         row = -1;
+        main.setWidget(++row, 0, new CrmSectionSeparator(""));
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().landArea()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().waterSupply()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().centralAir()), 15).build());
