@@ -89,20 +89,20 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         FormFlexPanel combinedtab = new FormFlexPanel();
         int row = 0;
-        combinedtab.setH1(row++, 0, 2, i18n.tr("Elevators"));
+        combinedtab.setH4(row++, 0, 2, i18n.tr("Elevators"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
-        combinedtab.setH1(row++, 0, 2, i18n.tr("Boilers"));
+        combinedtab.setH4(row++, 0, 2, i18n.tr("Boilers"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
-        combinedtab.setH1(row++, 0, 2, i18n.tr("Roofs"));
+        combinedtab.setH4(row++, 0, 2, i18n.tr("Roofs"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
         tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Mechanicals"));
         tabPanel.setLastTabDisabled(isEditable());
 
         combinedtab = new FormFlexPanel();
         row = 0;
-        combinedtab.setH1(row++, 0, 2, i18n.tr("Parking"));
+        combinedtab.setH4(row++, 0, 2, i18n.tr("Parking"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
-        combinedtab.setH1(row++, 0, 2, i18n.tr("Locker Areas"));
+        combinedtab.setH4(row++, 0, 2, i18n.tr("Locker Areas"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
         tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Add-Ons"));
         tabPanel.setLastTabDisabled(isEditable());
@@ -112,11 +112,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         combinedtab = new FormFlexPanel();
         row = 0;
-        combinedtab.setH1(row++, 0, 2, i18n.tr("Services"));
+        combinedtab.setH4(row++, 0, 2, i18n.tr("Services"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
-        combinedtab.setH1(row++, 0, 2, i18n.tr("Features"));
+        combinedtab.setH4(row++, 0, 2, i18n.tr("Features"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
-        combinedtab.setH1(row++, 0, 2, i18n.tr("Concessions"));
+        combinedtab.setH4(row++, 0, 2, i18n.tr("Concessions"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
         tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Product Catalog"));
         tabPanel.setLastTabDisabled(isEditable());
