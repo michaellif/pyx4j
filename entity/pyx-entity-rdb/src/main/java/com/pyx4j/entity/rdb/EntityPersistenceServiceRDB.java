@@ -159,10 +159,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         return threadSessions.get();
     }
 
-    public void setTimeNow(Date date) {
-        getPersistenceContext().setTimeNow(date);
-    }
-
     @Override
     public void startTransaction() {
         PersistenceContext persistenceContext = threadSessions.get();
@@ -203,6 +199,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
             }
         }
+    }
+
+    @Override
+    public void setTransactionSystemTime(Date date) {
+        getPersistenceContext().setTimeNow(date);
+    }
+
+    @Override
+    public void setTransactionUserKey(Key currentUserKey) {
+        getPersistenceContext().setCurrentUserKey(currentUserKey);
     }
 
     @Override

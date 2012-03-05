@@ -23,11 +23,14 @@ package com.pyx4j.essentials.server;
 import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.config.server.LocaleResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceContextLifecycleListener;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.server.CookieLocaleResolver;
+import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Visit;
 
 public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
 
@@ -38,7 +41,16 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
 
     @Override
     public LifecycleListener getLifecycleListener() {
-        return new PersistenceContextLifecycleListener();
+        return new PersistenceContextLifecycleListener() {
+            @Override
+            public void onRequestBegin() {
+                super.onRequestBegin();
+                Visit visit = Context.getVisit();
+                if ((visit != null) && (visit.isUserLoggedIn())) {
+                    Persistence.service().setTransactionUserKey(visit.getUserVisit().getPrincipalPrimaryKey());
+                }
+            }
+        };
     }
 
     public DataPreloaderCollection getDataPreloaders() {

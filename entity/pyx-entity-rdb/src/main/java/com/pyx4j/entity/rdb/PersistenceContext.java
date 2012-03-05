@@ -28,6 +28,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.gwt.server.DateUtils;
@@ -47,6 +48,8 @@ public class PersistenceContext {
     private String uncommittedChangesFrom;
 
     private Date timeNow;
+
+    private Key currentUserKey;
 
     private int savepoints = 0;
 
@@ -83,6 +86,14 @@ public class PersistenceContext {
             timeNow = DateUtils.getRoundedNow();
         }
         return timeNow;
+    }
+
+    public Key getCurrentUserKey() {
+        return currentUserKey;
+    }
+
+    public void setCurrentUserKey(Key currentUserKey) {
+        this.currentUserKey = currentUserKey;
     }
 
     public Connection getConnection() {

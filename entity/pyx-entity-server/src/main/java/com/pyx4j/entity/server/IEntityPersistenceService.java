@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.server;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,15 @@ public interface IEntityPersistenceService {
     public void commit();
 
     public void rollback();
+
+    public void setTransactionUserKey(Key currentUserKey);
+
+    /**
+     * This used for unit tests
+     * 
+     * @param date
+     */
+    public void setTransactionSystemTime(Date date);
 
     public interface ICursorIterator<T> extends Iterator<T> {
 

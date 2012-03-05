@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
 public class TableModleVersioned {
 
@@ -96,6 +97,7 @@ public class TableModleVersioned {
             memeberEntity.fromDate().setValue(persistenceContext.getTimeNow());
             memeberEntity.toDate().setValue(null);
         }
+        memeberEntity.createdByUserKey().setValue(persistenceContext.getCurrentUserKey());
         //Save using EntityPersistenceService
         update.add(memeberEntity);
 
@@ -104,12 +106,18 @@ public class TableModleVersioned {
         if (existing.size() > 0) {
             IVersionData<IVersionedEntity<?>> memeberEntityExisting = existing.get(0);
             if (versionedEntity.draft().isBooleanTrue()) {
-                // Update draft ?
+                // Update draft 
                 memeberEntity.setPrimaryKey(memeberEntityExisting.getPrimaryKey());
             } else {
                 // End effective period of currently active entity
                 memeberEntityExisting.toDate().setValue(persistenceContext.getTimeNow());
                 update.add(memeberEntityExisting);
+
+                // Create new draft on Finalize
+                IVersionData<IVersionedEntity<?>> newDraft = EntityGraph.businessDuplicate(memeberEntity);
+                newDraft.fromDate().setValue(null);
+                newDraft.toDate().setValue(null);
+                update.add(newDraft);
             }
         }
         return update;

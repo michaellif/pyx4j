@@ -238,6 +238,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public void setTransactionSystemTime(Date date) {
+    }
+
+    @Override
+    public void setTransactionUserKey(com.pyx4j.commons.Key currentUserKey) {
+    }
+
+    @Override
     public void commit() {
         //TODO
     }

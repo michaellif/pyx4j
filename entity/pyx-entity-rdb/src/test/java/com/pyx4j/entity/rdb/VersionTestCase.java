@@ -35,8 +35,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
      * Emulate Database current time
      */
     private void setDBTime(String dateStr) {
-        EntityPersistenceServiceRDB service = ((EntityPersistenceServiceRDB) srv);
-        service.setTimeNow(DateUtils.detectDateformat(dateStr));
+        srv.setTransactionSystemTime(DateUtils.detectDateformat(dateStr));
     }
 
     public void testRetrieve() {
@@ -118,9 +117,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     public void testSaveDraft() {
         String testId = uniqueString();
-        if (true) {
-            // return;
-        }
 
         // Initial item
         ItemA itemA1 = EntityFactory.create(ItemA.class);
@@ -157,6 +153,47 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             srv.retrieve(itemA1r);
             assertTrue("version is not null", !itemA1r.version().isNull());
             assertEquals("getDraft", draftName, itemA1r.version().name().getValue());
+        }
+
+        // finalize, Save draft as version
+        ItemA itemA1f = EntityFactory.create(ItemA.class);
+        itemA1f.setPrimaryKey(itemA1.getPrimaryKey());
+        itemA1f.draft().setValue(Boolean.TRUE);
+
+        srv.retrieve(itemA1f);
+
+        final String draftV2Name = "V2" + uniqueString();
+        itemA1f.version().name().setValue(draftV2Name);
+
+        srv.startTransaction();
+        setDBTime("2010-02-01");
+
+        // finalize
+        itemA1f.draft().setValue(Boolean.FALSE);
+        srv.persist(itemA1f);
+        srv.commit();
+
+        // verify Draft updated
+        {
+            ItemA itemA1r = EntityFactory.create(ItemA.class);
+            itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
+            itemA1r.draft().setValue(Boolean.TRUE);
+
+            srv.retrieve(itemA1r);
+            assertTrue("version is not null", !itemA1r.version().isNull());
+            assertEquals("getDraft", draftV2Name, itemA1r.version().name().getValue());
+        }
+
+        // verify Version updated
+        {
+            setDBTime("2011-03-02");
+            ItemA itemA1r = EntityFactory.create(ItemA.class);
+            itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
+            itemA1r.forDate().setValue(DateUtils.detectDateformat("2011-02-11"));
+
+            srv.retrieve(itemA1r);
+            assertTrue("version is not null", !itemA1r.version().isNull());
+            assertEquals("getSpecific", draftV2Name, itemA1r.version().name().getValue());
         }
 
     }
