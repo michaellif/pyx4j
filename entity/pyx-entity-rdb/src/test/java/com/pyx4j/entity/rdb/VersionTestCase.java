@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
@@ -330,8 +331,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     }
 
-    //TODO implement
-    public void TODO_testVersionedGraph() {
+    public void testVersionedGraphReference() {
         String testId = uniqueString();
         srv.startTransaction();
 
@@ -351,16 +351,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         srv.persist(itemA1);
 
         setDBTime("2011-02-01");
-        // Second Initial item
-        ItemA itemA2 = EntityFactory.create(ItemA.class);
-        itemA2.testId().setValue(testId);
-        itemA2.name().setValue("A2");
-        // TODO fix this in framework
-        itemA2.versions().setAttachLevel(AttachLevel.Detached);
-
-        final String origA2Name = "V1A2-" + uniqueString();
-        itemA2.version().name().setValue(origA2Name);
-        itemA2.version().testId().setValue(testId);
 
         ItemB itemB1 = EntityFactory.create(ItemB.class);
         itemB1.testId().setValue(testId);
@@ -372,7 +362,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemB1.version().name().setValue(origBName);
         itemB1.version().testId().setValue(testId);
         itemB1.version().itemAFixed().set(itemA1);
-        itemB1.version().itemAOwned().set(itemA2);
         srv.persist(itemB1);
 
         setDBTime("2011-03-01");
@@ -390,7 +379,70 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             assertEquals("ref not updated", origAName, itemB1r.version().itemAFixed().version().name().getValue());
         }
 
-        setDBTime("2011-04-01");
+        //TODO fix impl
+        if (false) {
+            setDBTime("2011-04-01");
+            //Update Owned VersionedEntity,  Retrieval of itemB as draft and Finalize
+            final String updateBName = "V2B1-" + uniqueString();
+            {
+                ItemB itemB1r = EntityFactory.create(ItemB.class);
+                itemB1r.setPrimaryKey(itemB1.getPrimaryKey());
+                itemB1r.draft().setValue(Boolean.TRUE);
+                srv.retrieve(itemB1r);
+
+                itemB1r.draft().setValue(Boolean.FALSE);
+                itemB1.version().name().setValue(updateBName);
+
+                srv.merge(itemB1r);
+            }
+
+            {
+                ItemB itemB1r = srv.retrieve(ItemB.class, itemB1.getPrimaryKey());
+                assertEquals("correct data", updateBName, itemB1r.version().name().getValue());
+                assertEquals("ref not updated", origAName, itemB1r.version().itemAFixed().version().name().getValue());
+            }
+        }
+    }
+
+    //TODO implement
+    public void TODO_testVersionedGraphUnidirectionalOneToOne() {
+        String testId = uniqueString();
+        srv.startTransaction();
+
+        setDBTime("2011-01-01");
+        // Initial item
+        ItemB itemB1 = EntityFactory.create(ItemB.class);
+        itemB1.testId().setValue(testId);
+        itemB1.name().setValue("B1");
+        // TODO fix this in framework
+        itemB1.versions().setAttachLevel(AttachLevel.Detached);
+        final String origBName = "V1B1-" + uniqueString();
+        itemB1.version().name().setValue(origBName);
+        itemB1.version().testId().setValue(testId);
+
+        ItemA itemA1 = itemB1.version().itemAOwned();
+        itemA1.testId().setValue(testId);
+        itemA1.name().setValue("A1");
+        // TODO fix this in framework
+        itemA1.versions().setAttachLevel(AttachLevel.Detached);
+
+        final String origA1Name = "V1A1-" + uniqueString();
+        itemA1.version().name().setValue(origA1Name);
+        itemA1.version().testId().setValue(testId);
+
+        srv.persist(itemB1);
+
+        setDBTime("2011-02-01");
+
+        Key originalItemAKey;
+        {
+            ItemB itemB1r = srv.retrieve(ItemB.class, itemB1.getPrimaryKey());
+            assertEquals("correct data", origBName, itemB1r.version().name().getValue());
+            assertEquals("correct data", origA1Name, itemB1r.version().itemAOwned().version().name().getValue());
+            originalItemAKey = itemB1r.version().itemAOwned().getPrimaryKey();
+        }
+
+        setDBTime("2011-03-01");
         //Update Owned VersionedEntity,  Retrieval of itemB as draft and Finalize
         final String updateBName = "V2B1-" + uniqueString();
         final String updateA2Name = "V2A2-" + uniqueString();
@@ -405,6 +457,25 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             itemB1.version().itemAOwned().version().name().setValue(updateA2Name);
 
             srv.merge(itemB1r);
+        }
+
+        {
+            ItemB itemB1r = srv.retrieve(ItemB.class, itemB1.getPrimaryKey());
+            assertEquals("correct data", updateBName, itemB1r.version().name().getValue());
+            assertEquals("correct data", updateA2Name, itemB1r.version().itemAOwned().version().name().getValue());
+            assertEquals("correct reference", originalItemAKey, itemB1r.version().itemAOwned().getPrimaryKey());
+        }
+
+        // Old version of ItemB
+        {
+            ItemB itemB1r = EntityFactory.create(ItemB.class);
+            itemB1r.setPrimaryKey(itemB1.getPrimaryKey());
+            itemB1r.forDate().setValue(DateUtils.detectDateformat("2011-01-11"));
+            srv.retrieve(itemB1r);
+
+            assertEquals("correct data", origBName, itemB1r.version().name().getValue());
+            assertEquals("correct data", origA1Name, itemB1r.version().itemAOwned().version().name().getValue());
+            assertEquals("correct reference", originalItemAKey, itemB1r.version().itemAOwned().getPrimaryKey());
         }
     }
 

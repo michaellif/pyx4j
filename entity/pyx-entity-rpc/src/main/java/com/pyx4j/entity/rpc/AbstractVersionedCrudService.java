@@ -24,10 +24,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AbstractVersionedCrudService<E extends IVersionedEntity<?>> extends AbstractCrudService<E> {
 
-    public void retrieve(AsyncCallback<E> callback, Key entityId, long versionDate);
+    public void finalize(AsyncCallback<VoidSerializable> callback, Key entityId);
 
-    public void finalize(AsyncCallback<Boolean> callback, Key entityId);
 }

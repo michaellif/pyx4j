@@ -31,6 +31,8 @@ public class Key implements java.io.Serializable {
 
     private transient long longValue;
 
+    private transient long versionValue = -1;
+
     protected Key() {
 
     }
@@ -46,6 +48,13 @@ public class Key implements java.io.Serializable {
         value = String.valueOf(longValue);
     }
 
+    public Key(long dbPrimaryKey, long dbVersion) {
+        assert (dbPrimaryKey != 0);
+        this.longValue = dbPrimaryKey;
+        this.versionValue = dbVersion;
+        value = String.valueOf(longValue) + "." + String.valueOf(dbVersion);
+    }
+
     @Override
     public String toString() {
         return value;
@@ -58,9 +67,27 @@ public class Key implements java.io.Serializable {
      */
     public long asLong() throws NumberFormatException {
         if (longValue == 0) {
-            longValue = Long.valueOf(value);
+            pars();
         }
         return longValue;
+    }
+
+    public long getVersion() throws NumberFormatException {
+        if (versionValue == -1) {
+            pars();
+        }
+        return versionValue;
+    }
+
+    private void pars() throws NumberFormatException {
+        int vp = value.indexOf(".");
+        if (vp == -1) {
+            versionValue = 0;
+            longValue = Long.valueOf(value);
+        } else {
+            versionValue = Long.valueOf(value.substring(vp));
+            longValue = Long.valueOf(value.substring(0, vp));
+        }
     }
 
     @Override
