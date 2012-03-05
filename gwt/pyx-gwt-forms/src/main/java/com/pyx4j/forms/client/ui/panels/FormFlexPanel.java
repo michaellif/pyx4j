@@ -28,6 +28,8 @@ import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleNa
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH2Label;
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH3;
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH3Label;
+import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH4;
+import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH4Label;
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelHR;
 
 import com.google.gwt.user.client.ui.FlexTable;
@@ -77,6 +79,14 @@ public class FormFlexPanel extends FlexTable {
 
     public void setH3(int row, int col, int span, String caption, Widget actionWidget) {
         setHX(row, col, span, caption, actionWidget, FormFlexPanelH3Label, FormFlexPanelH3);
+    }
+
+    public void setH4(int row, int col, int span, String caption) {
+        setH4(row, col, span, caption, null);
+    }
+
+    public void setH4(int row, int col, int span, String caption, Widget actionWidget) {
+        setHX(row, col, span, caption, actionWidget, FormFlexPanelH4Label, FormFlexPanelH4);
     }
 
     private void setHX(int row, int col, int span, String caption, Widget actionWidget, StyleName labelStyle, StyleName headerStyle) {

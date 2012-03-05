@@ -29,7 +29,7 @@ import com.pyx4j.commons.css.ThemeColors;
 public abstract class DefaultFormFlexPanelTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        FormFlexPanel, FormFlexPanelHR, FormFlexPanelH1, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label, FormFlexPanelActionWidget
+        FormFlexPanel, FormFlexPanelHR, FormFlexPanelH1, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label, FormFlexPanelH4, FormFlexPanelH4Label, FormFlexPanelActionWidget
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -93,6 +93,18 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         style.addProperty("padding", "2px");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-style", "italic");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormFlexPanelH4);
+        style.addProperty("background-color", getBackgroundColor(), 0);
+        style.addProperty("margin", "6px 0 4px 0");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormFlexPanelH4Label);
+        style.addProperty("color", getBackgroundColor(), 0.8);
+        style.addProperty("padding", "4px");
+        style.addProperty("font-size", "1.3em");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelActionWidget);
