@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -107,6 +108,7 @@ public interface FloorplanAmenity extends Amenity {
         }
     }
 
+    @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "floorplanType")
     IPrimitive<Type> type();
