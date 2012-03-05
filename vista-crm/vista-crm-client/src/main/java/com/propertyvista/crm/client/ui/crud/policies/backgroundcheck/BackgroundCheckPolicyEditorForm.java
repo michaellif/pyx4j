@@ -47,10 +47,10 @@ public class BackgroundCheckPolicyEditorForm extends PolicyDTOTabPanelBasedEdito
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankruptcy())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().judgment())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().collection())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeOff())).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankruptcy()), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().judgment()), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().collection()), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeOff()), 5).build());
 
         return panel;
     }
