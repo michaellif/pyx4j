@@ -91,7 +91,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         }
 
         Persistence.secureSave(dm);
-
+        Persistence.service().commit();
         callback.onSuccess(dm);
     }
 
@@ -109,6 +109,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     public void saveSettings(AsyncCallback<GadgetMetadata> callback, GadgetMetadata gadgetMetadata) {
         if (gadgetMetadata != null) {
             persistGadgetMetadata(gadgetMetadata);
+            Persistence.service().commit();
             callback.onSuccess(gadgetMetadata);
         } else {
             throw new Error("Got null instead of gadget metadata");
