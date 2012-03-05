@@ -48,9 +48,6 @@ public class AvailabilityReportManager {
      * 
      * @param startingOn
      *            Start the computation of statuses on this date.
-     * @param unit
-     *            The unit we are interested in.
-     * 
      */
     public void generateUnitAvailablity(LogicalDate startingOn) {
         removeStatuses(startingOn);
