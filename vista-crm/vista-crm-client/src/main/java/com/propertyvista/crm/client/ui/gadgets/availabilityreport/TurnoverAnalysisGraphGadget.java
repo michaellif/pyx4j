@@ -56,8 +56,8 @@ import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstan
 import com.propertyvista.crm.client.ui.gadgets.util.TimeRange;
 import com.propertyvista.crm.client.ui.gadgets.util.Tuple;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO.AnalysisResolution;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 
@@ -98,7 +98,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
                     new Tuple<Long, List<AnalysisResolution>>(2L * TimeRange.DAY, Arrays.asList(AnalysisResolution.Day, AnalysisResolution.Week)),
                     new Tuple<Long, List<AnalysisResolution>>(0L, Arrays.asList(AnalysisResolution.Day)));
                 
-        List<UnitVacancyReportTurnoverAnalysisDTO> data;
+        List<UnitTurnoversPerIntervalDTO> data;
     
         private SimplePanel graph;
     
@@ -233,7 +233,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
             return percent.getValue();
         }
 
-        public void setTurnoverAnalysisData(List<UnitVacancyReportTurnoverAnalysisDTO> data) {
+        public void setTurnoverAnalysisData(List<UnitTurnoversPerIntervalDTO> data) {
             this.data = data;
             redraw();
         }
@@ -250,7 +250,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
                 @Override
                 public void execute() {
                     DataSource ds = new DataSource();
-                    for (UnitVacancyReportTurnoverAnalysisDTO intervalData : data) {
+                    for (UnitTurnoversPerIntervalDTO intervalData : data) {
                         ArrayList<Double> values = new ArrayList<Double>();
                         if (!isTunoverMeasuredByPercent()) {
                             values.add((double) intervalData.unitsTurnedOverAbs().getValue().intValue());
@@ -286,7 +286,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
                 populateSucceded();
                 return;
             }
-            service.turnoverAnalysis(new AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>>() {
+            service.turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
 
                 @Override
                 public void onFailure(Throwable caught) {
@@ -294,7 +294,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
                 }
 
                 @Override
-                public void onSuccess(Vector<UnitVacancyReportTurnoverAnalysisDTO> result) {
+                public void onSuccess(Vector<UnitTurnoversPerIntervalDTO> result) {
                     setTurnoverAnalysisData(result);
                     populateSucceded();
                 }

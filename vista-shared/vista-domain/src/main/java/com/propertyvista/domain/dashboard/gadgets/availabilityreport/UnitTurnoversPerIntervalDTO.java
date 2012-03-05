@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
  * 
  */
 @Transient
-public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
+public interface UnitTurnoversPerIntervalDTO extends IEntity {
     public enum AnalysisResolution {
         Day {
 
@@ -246,7 +246,7 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
     IPrimitive<AnalysisResolution> intervalSize();
 
     @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> intervalEnd();
+    IPrimitive<LogicalDate> intervalValue();
 
     /**
      * @return number of units turned over during time interval <code>[{@link #fromDate()}, {@link #toDate()})</code>.

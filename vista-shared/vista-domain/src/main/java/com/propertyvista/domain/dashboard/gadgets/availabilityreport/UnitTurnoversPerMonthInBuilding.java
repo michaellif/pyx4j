@@ -25,14 +25,14 @@ import com.propertyvista.domain.property.asset.building.Building;
 /**
  * Keeps track of turnovers per month in a specific building.
  */
-public interface TurnoverSummary extends IEntity {
+public interface UnitTurnoversPerMonthInBuilding extends IEntity {
 
     //@Owner
     @Detached
     @ReadOnly
     Building belongsTo();
 
-    IPrimitive<LogicalDate> updatedOn();
+    IPrimitive<LogicalDate> statsMonth();
 
     IPrimitive<Integer> turnovers();
 

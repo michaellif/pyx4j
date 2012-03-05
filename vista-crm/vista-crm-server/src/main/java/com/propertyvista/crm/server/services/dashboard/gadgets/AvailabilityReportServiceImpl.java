@@ -38,13 +38,13 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.util.SortingFactory;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.TurnoverSummary;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerMonthInBuilding;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -328,42 +328,57 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     }
 
     @Override
-    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<Key> buidlings, LogicalDate fromDate,
-            LogicalDate toDate, AnalysisResolution resolution) {
+    public void turnoverAnalysis(AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>> callback, Vector<Key> buidlings, LogicalDate fromDate,
+            LogicalDate reportDate, AnalysisResolution resolution) {
 
-        LogicalDate tweleveMonthsAgo = new LogicalDate(toDate.getYear() - 1, toDate.getMonth(), 1);
+        LogicalDate tweleveMonthsAgo = new LogicalDate(reportDate.getYear() - 1, reportDate.getMonth(), 1);
 
-        EntityQueryCriteria<TurnoverSummary> criteria = EntityQueryCriteria.create(TurnoverSummary.class);
+        EntityQueryCriteria<UnitTurnoversPerMonthInBuilding> criteria = EntityQueryCriteria.create(UnitTurnoversPerMonthInBuilding.class);
         if (!buidlings.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buidlings));
         }
-        criteria.asc(criteria.proto().updatedOn());
-        criteria.add(PropertyCriterion.ge(criteria.proto().updatedOn(), tweleveMonthsAgo));
-        List<TurnoverSummary> summaries = Persistence.secureQuery(criteria);
+        criteria.asc(criteria.proto().statsMonth());
+        criteria.add(PropertyCriterion.ge(criteria.proto().statsMonth(), tweleveMonthsAgo));
+        List<UnitTurnoversPerMonthInBuilding> summaries = Persistence.secureQuery(criteria);
 
-        Vector<UnitVacancyReportTurnoverAnalysisDTO> result = new Vector<UnitVacancyReportTurnoverAnalysisDTO>(12);
-        UnitVacancyReportTurnoverAnalysisDTO accumulation = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
+        Vector<UnitTurnoversPerIntervalDTO> result = new Vector<UnitTurnoversPerIntervalDTO>(12);
+        UnitTurnoversPerIntervalDTO accumulation = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
         accumulation.unitsTurnedOverAbs().setValue(0);
 
-        LogicalDate prevDate = null;
-        LogicalDate date = null;
-        Iterator<TurnoverSummary> i = summaries.iterator();
-        TurnoverSummary summary = null;
-        while (i.hasNext()) {
-            summary = i.next();
-            date = summary.updatedOn().getValue();
-            if (!date.equals(prevDate)) {
-                // TODO add empty accumulations for months between current date and prevDate;
-                result.add(accumulation);
-                accumulation = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
-                accumulation.unitsTurnedOverAbs().setValue(0);
-                accumulation.intervalSize().setValue(AnalysisResolution.Month);
+        // initialize        
+        LogicalDate month = new LogicalDate(tweleveMonthsAgo);
+        for (int i = 0; i < 12; ++i) {
+            UnitTurnoversPerIntervalDTO turnoversPerInterval = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
+            turnoversPerInterval.unitsTurnedOverAbs().setValue(0);
+            turnoversPerInterval.intervalSize().setValue(AnalysisResolution.Month);
+            turnoversPerInterval.intervalValue().setValue(new LogicalDate(month));
+            result.add(turnoversPerInterval);
+            int newMonth = (month.getMonth() + 1) % 12;
+            month.setMonth(newMonth);
+            if (newMonth == 0) {
+                month.setYear(month.getYear() + 1);
             }
-            accumulation.unitsTurnedOverAbs().setValue(accumulation.unitsTurnedOverAbs().getValue() + summary.turnovers().getValue());
         }
-        // TODO add empty accumulations for months between current date and prevDate;
-        result.add(accumulation);
 
+        // fill with data
+        Iterator<UnitTurnoversPerMonthInBuilding> si = summaries.iterator();
+        int i = -1;
+        int prevMonth = -1;
+        double total = 0.;
+        while (si.hasNext()) {
+            UnitTurnoversPerMonthInBuilding summary = si.next();
+            if (summary.statsMonth().getValue().getMonth() != prevMonth) {
+                prevMonth = summary.statsMonth().getValue().getMonth();
+                ++i;
+            }
+            int turnovers = summary.turnovers().getValue();
+            total += turnovers;
+            result.get(i).unitsTurnedOverAbs().setValue(result.get(i).unitsTurnedOverAbs().getValue() + turnovers);
+        }
+        // calculate percentage
+        for (UnitTurnoversPerIntervalDTO turnoversPerInterval : result) {
+            turnoversPerInterval.unitsTurnedOverPct().setValue(turnoversPerInterval.unitsTurnedOverAbs().getValue() * 100 / total);
+        }
         callback.onSuccess(result);
 
     }
