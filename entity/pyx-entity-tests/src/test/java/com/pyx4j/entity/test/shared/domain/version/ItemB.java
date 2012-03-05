@@ -24,8 +24,8 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
-import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
 import com.pyx4j.entity.test.shared.domain.version.ItemB.ItemBVersion;
 
 @Table(prefix = "test")
@@ -35,12 +35,11 @@ public interface ItemB extends IVersionedEntity<ItemBVersion> {
 
     IPrimitive<String> name();
 
-    public interface ItemBVersion extends ItemAVersion {
+    @Table(prefix = "test")
+    public interface ItemBVersion extends IVersionData<ItemB> {
 
-        @Override
         IPrimitive<String> testId();
 
-        @Override
         IPrimitive<String> name();
 
         @Versioned

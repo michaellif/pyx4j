@@ -37,5 +37,5 @@ public interface RefToCurrent extends IEntity {
     //TODO @Owned  in another test
     ItemA itemA();
 
-    //ItemB itemB();
+    ItemB itemB();
 }

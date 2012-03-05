@@ -35,7 +35,7 @@ public interface RefToVersioned extends IEntity {
     @Versioned
     ItemA itemA();
 
-//    @Versioned
-//    ItemB itemB();
+    @Versioned
+    ItemB itemB();
 
 }

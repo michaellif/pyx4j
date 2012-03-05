@@ -37,6 +37,7 @@ public interface ItemA extends IVersionedEntity<ItemAVersion> {
     @ToString(index = 0)
     IPrimitive<String> name();
 
+    @Table(prefix = "test")
     public interface ItemAVersion extends IVersionData<ItemA> {
 
         IPrimitive<String> testId();

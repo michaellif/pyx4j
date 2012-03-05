@@ -787,6 +787,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if (memberMeta.isOwnedRelationships() && ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 // Special case for child collections update. Collection itself is the same and in the same order.
                 ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                if (collectionMember.getAttachLevel() == AttachLevel.Detached) {
+                    // Ignore Detached collections.
+                    continue;
+                }
                 Iterator<IEntity> iterator = collectionMember.iterator();
                 for (; iterator.hasNext();) {
                     IEntity childEntity = iterator.next();
@@ -824,6 +828,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 IEntity baseChildEntity = (IEntity) member.getMember(baseEntity);
                 if (!EqualsHelper.equals(childEntity.getPrimaryKey(), baseChildEntity.getPrimaryKey())) {
                     if (childEntity.getPrimaryKey() != null) {
+                        log.debug("corrupted entity {}", entity);
                         if (ApplicationMode.isDevelopment()) {
                             throw new SecurityViolationException(ApplicationMode.DEV + "owned entity should not be attached to different entity graph, "
                                     + childEntity.getDebugExceptionInfoString());
@@ -845,6 +850,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if (memberMeta.isOwnedRelationships()) {
                 if (!EqualsHelper.equals(childEntity.getPrimaryKey(), baseChildEntity.getPrimaryKey())) {
                     if (childEntity.getPrimaryKey() != null) {
+                        log.debug("corrupted entity {}", entity);
                         if (ApplicationMode.isDevelopment()) {
                             throw new SecurityViolationException(ApplicationMode.DEV + "owned entity should not be attached to different entity graph, "
                                     + childEntity.getDebugExceptionInfoString());
