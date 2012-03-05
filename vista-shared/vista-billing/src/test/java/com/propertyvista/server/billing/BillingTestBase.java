@@ -24,7 +24,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
@@ -116,11 +115,10 @@ abstract class BillingTestBase extends VistaDBTestBase {
     protected static void setSysDate(String dateStr) {
         BillingLifecycle.setSysDate(BillingTestUtils.getDate(dateStr));
 
-        EntityPersistenceServiceRDB service = ((EntityPersistenceServiceRDB) Persistence.service());
         if (dateStr == null) {
-            service.setTimeNow(new Date());
+            Persistence.service().setTransactionSystemTime(new Date());
         } else {
-            service.setTimeNow(DateUtils.detectDateformat(dateStr));
+            Persistence.service().setTransactionSystemTime(DateUtils.detectDateformat(dateStr));
         }
     }
 
