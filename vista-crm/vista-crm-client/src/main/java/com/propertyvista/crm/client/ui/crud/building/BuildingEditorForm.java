@@ -46,7 +46,6 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsEditorForm;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.PropertyContact;
@@ -214,7 +213,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new CrmSectionSeparator(""));
+        main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().structureType()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().structureBuildYear()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().constructionType()), 15).build());
@@ -222,7 +221,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().floorType()), 15).build());
 
         row = -1;
-        main.setWidget(++row, 0, new CrmSectionSeparator(""));
+        main.setBR(++row, 0, 1);
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().landArea()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().waterSupply()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().centralAir()), 15).build());
