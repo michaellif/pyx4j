@@ -19,9 +19,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
-
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AddressIO extends IEntity {
@@ -37,9 +34,9 @@ public interface AddressIO extends IEntity {
     IPrimitive<String> streetName();
 
     @NotNull
-    IPrimitive<StreetType> streetType();
+    IPrimitive<StreetTypeIO> streetType();
 
-    IPrimitive<StreetDirection> streetDirection();
+    IPrimitive<StreetDirectionIO> streetDirection();
 
     @NotNull
     IPrimitive<String> city();

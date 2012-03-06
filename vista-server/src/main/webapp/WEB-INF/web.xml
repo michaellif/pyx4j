@@ -444,6 +444,27 @@
         <url-pattern>/public/rest/*</url-pattern>
     </servlet-mapping>   
     
+    <servlet>
+        <servlet-name>OnboardingSchemaServlet</servlet-name>
+        <servlet-class>com.propertyvista.admin.server.onboarding.OnboardingSchemaServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OnboardingSchemaServlet</servlet-name>
+        <url-pattern>/public/schema/onboarding/*</url-pattern>
+    </servlet-mapping>   
+
+    <servlet>
+        <servlet-name>OnboardingServiceServlet</servlet-name>
+        <servlet-class>com.propertyvista.admin.server.onboarding.OnboardingServiceServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OnboardingServiceServlet</servlet-name>
+        <url-pattern>/public/onboarding/*</url-pattern>
+    </servlet-mapping>   
+
+    
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>

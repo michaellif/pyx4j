@@ -34,21 +34,22 @@ import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
 import com.propertyvista.onboarding.GetUsageRequestIO.UsageReportFormatType;
 import com.propertyvista.onboarding.ProvisionPMCRequestIO.VistaFeature;
 import com.propertyvista.onboarding.ProvisionPMCRequestIO.VistaLicense;
 import com.propertyvista.onboarding.payment.CreditCardPaymentInstrumentIO;
+import com.propertyvista.onboarding.payment.PaymentRequestIO;
 
 public class OnboardingExample {
 
     private final static Logger log = LoggerFactory.getLogger(OnboardingExample.class);
 
     public static void main(String[] args) throws Exception {
+        System.setProperty("com.pyx4j.EclipseDeveloperEnviroment", "true");
 
-        XMLEntitySchemaWriter.printSchema(RequestMessageIO.class, new FileOutputStream(new File("target", "onboardingRequest-model.xsd")), true);
-        XMLEntitySchemaWriter.printSchema(ResponseMessageIO.class, new FileOutputStream(new File("target", "onboardingResponse-model.xsd")), true);
+        XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "onboardingRequest-model.xsd")), true, RequestMessageIO.class);
+        XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "onboardingResponse-model.xsd")), true, ResponseMessageIO.class);
 
         if (false) {
             writeModelXML(EntityFactory.create(RequestMessageIO.class), "requests-all-example.xml");
@@ -156,7 +157,7 @@ public class OnboardingExample {
         accountInfo.phone().setValue("416-994-4590");
         accountInfo.address().streetNumber().setValue("10");
         accountInfo.address().streetName().setValue("Lake");
-        accountInfo.address().streetType().setValue(StreetType.square);
+        accountInfo.address().streetType().setValue(StreetTypeIO.square);
         accountInfo.address().city().setValue("Toronto");
         accountInfo.address().countryName().setValue("Canada");
         accountInfo.address().postalCode().setValue("ON");

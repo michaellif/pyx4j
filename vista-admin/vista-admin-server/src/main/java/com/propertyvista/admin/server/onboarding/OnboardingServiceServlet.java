@@ -7,17 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 2, 2012
+ * Created on 2012-03-06
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding.payment;
+package com.propertyvista.admin.server.onboarding;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.i18n.annotations.I18n;
+import javax.servlet.http.HttpServlet;
 
-@Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CreditCardOnFilePaymentInstrumentIO extends PaymentInstrumentIO {
+public class OnboardingServiceServlet extends HttpServlet {
 
 }

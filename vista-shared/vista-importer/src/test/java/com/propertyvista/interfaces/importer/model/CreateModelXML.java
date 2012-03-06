@@ -38,7 +38,7 @@ public class CreateModelXML {
 
         ImportIO ent = EntityFactory.create(ImportIO.class);
 
-        XMLEntitySchemaWriter.printSchema(ImportIO.class, new FileOutputStream(new File("import-model.xsd")), true);
+        XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("import-model.xsd")), true, ImportIO.class);
 
         File f = new File("import-model.xml");
         FileWriter w = null;

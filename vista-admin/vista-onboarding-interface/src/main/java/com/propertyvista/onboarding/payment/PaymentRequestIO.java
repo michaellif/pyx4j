@@ -11,43 +11,26 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding;
+package com.propertyvista.onboarding.payment;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.onboarding.RequestIO;
+
+
 @Transient
-@XmlRootElement
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface ResponseMessageIO extends IEntity {
+public interface PaymentRequestIO extends RequestIO {
 
-    public enum StatusCode {
-
-        OK,
-
-        MessageFormatError,
-
-        AuthenticationFailed,
-
-        ReadOnly,
-
-        SystemDown,
-
-        SystemError
-
-    }
-
-    /**
-     * Status of the processing of complete request.
-     */
     @NotNull
-    IPrimitive<StatusCode> status();
+    IPrimitive<BigDecimal> amount();
 
-    IList<ResponseIO> responses();
+    @NotNull
+    PaymentInstrumentIO paymentInstrument();
+
 }

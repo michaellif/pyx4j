@@ -25,8 +25,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class CreateDomainModelSchema {
 
     public static void main(String[] args) throws FileNotFoundException {
-        XMLEntitySchemaWriter.printSchema(Building.class, new FileOutputStream(new File("domain-model-building.xsd")), true);
-        XMLEntitySchemaWriter.printSchema(Lease.class, new FileOutputStream(new File("domain-model-lease.xsd")), true);
+        XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("domain-model-building.xsd")), true, Building.class);
+        XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("domain-model-lease.xsd")), true, Lease.class);
     }
 
 }
