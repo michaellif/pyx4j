@@ -28,9 +28,17 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 
 public interface AbstractCrudService<E extends IEntity> extends AbstractListService<E> {
 
+    public static enum RetrieveTraget {
+
+        View,
+
+        Edit;
+
+    }
+
     public void create(AsyncCallback<E> callback, E editableEntity);
 
-    public void retrieve(AsyncCallback<E> callback, Key entityId);
+    public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveTraget retrieveTraget);
 
     @ServiceExecution(waitCaption = "Saving...")
     public void save(AsyncCallback<E> callback, E editableEntity);

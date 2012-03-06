@@ -105,7 +105,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
             public void onFailure(Throwable caught) {
                 throw new UnrecoverableClientError(caught);
             }
-        }, entityId);
+        }, entityId, AbstractCrudService.RetrieveTraget.View);
     }
 
     protected void onPopulateSuccess(E result) {

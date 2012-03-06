@@ -42,10 +42,10 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
 
     //TODO move Key handling to framework!
     @Override
-    public void retrieve(AsyncCallback<E> callback, Key entityId) {
+    public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveTraget retrieveTraget) {
         E entity = EntityFactory.create(entityClass);
         entity.setPrimaryKey(new Key(entityId.asLong()));
-        if (entityId.getVersion() == 0) {
+        if ((entityId.getVersion() == 0) || retrieveTraget == RetrieveTraget.Edit) {
             entity.draft().setValue(Boolean.TRUE);
         } else {
             entity.forDate().setValue(new Date(entityId.getVersion()));
