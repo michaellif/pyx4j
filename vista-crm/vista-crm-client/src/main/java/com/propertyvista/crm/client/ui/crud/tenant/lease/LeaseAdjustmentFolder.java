@@ -100,7 +100,7 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName() == PropertyName.repopulated) {
-                    if (isModifiable() && !lease.getValue().approvalDate().isNull()) {
+                    if (isAddable() && !lease.getValue().approvalDate().isNull()) {
                         LogicalDate value = item.getValue().expirationDate().getValue();
                         if ((value != null) && !value.after(TimeUtils.today())) {
                             item.setViewable(true);

@@ -26,7 +26,8 @@ public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
 
     public ChargeLineFolder() {
         super(ChargeLine.class, false);
-        setModifiable(false);
+        setAddable(false);
+        setRemovable(false);
     }
 
     @Override

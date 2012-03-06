@@ -52,7 +52,8 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
         this.clazz = clazz;
         this.itemName = itemName;
         this.modifyable = modifyable;
-        setModifiable(modifyable);
+        setAddable(modifyable);
+        setRemovable(modifyable);
         setOrderable(modifyable);
     }
 

@@ -43,7 +43,8 @@ public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E>
     public VistaBoxFolder(Class<E> clazz, String itemName, boolean modifyable) {
         super(clazz);
         this.itemName = itemName;
-        setModifiable(modifyable);
+        setAddable(modifyable);
+        setRemovable(modifyable);
         setOrderable(modifyable);
     }
 
