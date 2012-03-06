@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
@@ -75,8 +74,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         setForm(form);
     }
 
-    protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass,
-            final Class<? extends AbstractListService<V>> entityVersionServiceClass) {
+    protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass, final AbstractListService<V> entityVersionService) {
 
         selectVersion = new Button(i18n.tr("Select Version"), new ClickHandler() {
             @Override
@@ -90,7 +88,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
                     @Override
                     protected AbstractListService<V> getSelectService() {
-                        return GWT.<AbstractListService<V>> create(entityVersionServiceClass);
+                        return entityVersionService;
                     }
                 }.show();
             }
