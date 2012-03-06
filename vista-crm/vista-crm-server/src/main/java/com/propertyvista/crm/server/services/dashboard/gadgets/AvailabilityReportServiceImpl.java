@@ -43,7 +43,7 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailab
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO.AnalysisResolution;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerMonthInBuilding;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
@@ -332,13 +332,13 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         LogicalDate tweleveMonthsAgo = new LogicalDate(reportDate.getYear() - 1, reportDate.getMonth(), 1);
 
-        EntityQueryCriteria<UnitTurnoversPerMonthInBuilding> criteria = EntityQueryCriteria.create(UnitTurnoversPerMonthInBuilding.class);
+        EntityQueryCriteria<UnitTurnoverStats> criteria = EntityQueryCriteria.create(UnitTurnoverStats.class);
         if (!buidlings.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buidlings));
         }
-        criteria.asc(criteria.proto().statsMonth());
-        criteria.add(PropertyCriterion.ge(criteria.proto().statsMonth(), tweleveMonthsAgo));
-        List<UnitTurnoversPerMonthInBuilding> summaries = Persistence.secureQuery(criteria);
+        criteria.asc(criteria.proto().updatedOn());
+        criteria.add(PropertyCriterion.ge(criteria.proto().updatedOn(), tweleveMonthsAgo));
+        List<UnitTurnoverStats> summaries = Persistence.secureQuery(criteria);
 
         Vector<UnitTurnoversPerIntervalDTO> result = new Vector<UnitTurnoversPerIntervalDTO>(12);
         UnitTurnoversPerIntervalDTO accumulation = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
@@ -360,14 +360,14 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         }
 
         // fill with data
-        Iterator<UnitTurnoversPerMonthInBuilding> si = summaries.iterator();
+        Iterator<UnitTurnoverStats> si = summaries.iterator();
         int i = -1;
         int prevMonth = -1;
         double total = 0.;
         while (si.hasNext()) {
-            UnitTurnoversPerMonthInBuilding summary = si.next();
-            if (summary.statsMonth().getValue().getMonth() != prevMonth) {
-                prevMonth = summary.statsMonth().getValue().getMonth();
+            UnitTurnoverStats summary = si.next();
+            if (summary.updatedOn().getValue().getMonth() != prevMonth) {
+                prevMonth = summary.updatedOn().getValue().getMonth();
                 ++i;
             }
             int turnovers = summary.turnovers().getValue();

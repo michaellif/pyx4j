@@ -15,6 +15,7 @@ package com.propertyvista.domain.dashboard.gadgets.availabilityreport;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,16 +23,16 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.property.asset.building.Building;
 
 /**
- * Keeps track of turnovers per month in a specific building.
+ * Keeps track of unit turnovers per month in a specific building.
  */
-public interface UnitTurnoversPerMonthInBuilding extends IEntity {
+public interface UnitTurnoverStats extends IEntity {
 
-    //@Owner
+    @Owner
     @Detached
     @ReadOnly
     Building belongsTo();
 
-    IPrimitive<LogicalDate> statsMonth();
+    IPrimitive<LogicalDate> updatedOn();
 
     IPrimitive<Integer> turnovers();
 

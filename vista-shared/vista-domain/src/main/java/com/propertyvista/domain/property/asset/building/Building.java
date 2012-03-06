@@ -37,6 +37,7 @@ import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
@@ -152,4 +153,8 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<ArrearsSummary> _ArrearsSummaries();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<UnitTurnoverStats> _UnitTurnoverStats();
 }

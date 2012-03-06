@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerMonthInBuilding;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
 public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisManager {
@@ -64,18 +64,18 @@ public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisMana
             turnoverCount += leaseCount;
         }
 
-        EntityQueryCriteria<UnitTurnoversPerMonthInBuilding> turnoversCriteria = EntityQueryCriteria.create(UnitTurnoversPerMonthInBuilding.class);
+        EntityQueryCriteria<UnitTurnoverStats> turnoversCriteria = EntityQueryCriteria.create(UnitTurnoverStats.class);
         turnoversCriteria.add(PropertyCriterion.eq(turnoversCriteria.proto().belongsTo(), building));
-        turnoversCriteria.add(PropertyCriterion.lt(turnoversCriteria.proto().statsMonth(), beginningOfTheNextMonth));
-        turnoversCriteria.add(PropertyCriterion.ge(turnoversCriteria.proto().statsMonth(), beginningOfTheMonth));
-        UnitTurnoversPerMonthInBuilding turnovers = Persistence.service().retrieve(turnoversCriteria);
+        turnoversCriteria.add(PropertyCriterion.lt(turnoversCriteria.proto().updatedOn(), beginningOfTheNextMonth));
+        turnoversCriteria.add(PropertyCriterion.ge(turnoversCriteria.proto().updatedOn(), beginningOfTheMonth));
+        UnitTurnoverStats turnovers = Persistence.service().retrieve(turnoversCriteria);
         if (turnovers == null) {
-            turnovers = EntityFactory.create(UnitTurnoversPerMonthInBuilding.class);
+            turnovers = EntityFactory.create(UnitTurnoverStats.class);
             turnovers.belongsTo().setPrimaryKey(building);
 
         }
         turnovers.turnovers().setValue(turnoverCount);
-        turnovers.statsMonth().setValue(until);
+        turnovers.updatedOn().setValue(until);
         Persistence.secureSave(turnovers);
     }
 }
