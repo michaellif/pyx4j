@@ -20,33 +20,15 @@
  */
 package com.propertyvista.onboarding;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface GetUsageRequestIO extends RequestIO {
+public interface AccountInfoResponseIO extends ResponseIO {
 
-    public enum UsageReportFormatType {
+    @NotNull
+    AccountInfoIO accountInfo();
 
-        /**
-         * Returns result as one Record with totals for given period
-         */
-        Short,
-
-        /**
-         * Returns every usage record for given period
-         */
-        Detailed
-
-    }
-
-    IPrimitive<Date> from();
-
-    IPrimitive<Date> to();
-
-    IPrimitive<UsageReportFormatType> format();
 }

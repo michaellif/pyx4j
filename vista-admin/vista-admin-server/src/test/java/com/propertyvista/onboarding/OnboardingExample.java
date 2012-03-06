@@ -27,12 +27,18 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.server.xml.XMLEntityModelWriter;
 import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
 import com.pyx4j.essentials.server.xml.XMLStringWriter;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
+import com.propertyvista.onboarding.GetUsageRequestIO.UsageReportFormatType;
+import com.propertyvista.onboarding.ProvisionPMCRequestIO.VistaFeature;
+import com.propertyvista.onboarding.ProvisionPMCRequestIO.VistaLicense;
 import com.propertyvista.onboarding.payment.CreditCardPaymentInstrumentIO;
 
 public class OnboardingExample {
@@ -44,14 +50,93 @@ public class OnboardingExample {
         XMLEntitySchemaWriter.printSchema(RequestMessageIO.class, new FileOutputStream(new File("target", "onboardingRequest-model.xsd")), true);
         XMLEntitySchemaWriter.printSchema(ResponseMessageIO.class, new FileOutputStream(new File("target", "onboardingResponse-model.xsd")), true);
 
+        if (false) {
+            writeModelXML(EntityFactory.create(RequestMessageIO.class), "requests-all-example.xml");
+            writeModelXML(EntityFactory.create(ResponseMessageIO.class), "response-all-example.xml");
+        }
+
+        int cnt = 0;
         {
+            cnt++;
+            CheckAvailabilityRequestIO r = EntityFactory.create(CheckAvailabilityRequestIO.class);
+            r.pmcId().setValue("star");
+            RequestMessageIO rm = createExampleRequest(r);
+            rm.pmcId().setValue("");
+            writeXML(rm, cnt + "-request-Check.xml");
+            writeXML(createExampleResponse(), cnt + "-response-Check.xml");
+        }
+
+        {
+            cnt++;
+            UpdateAccountInfoRequestIO r = EntityFactory.create(UpdateAccountInfoRequestIO.class);
+            createAccountInfoIO(r.accountInfo());
+
+            writeXML(createExampleRequest(r), cnt + "-request-UpdateAccountInfo.xml");
+            AccountInfoResponseIO rs = EntityFactory.create(AccountInfoResponseIO.class);
+            createAccountInfoIO(rs.accountInfo());
+            writeXML(createExampleResponse(rs), cnt + "-response-UpdateAccountInfo.xml");
+        }
+
+        {
+            cnt++;
+            CreatePMCRequestIO r = EntityFactory.create(CreatePMCRequestIO.class);
+            r.name().setValue("Star Starlight");
+            r.dnsNameAliases().add("www.rentstarlight.com");
+            r.adminUserEmail().setValue("bob@rentstarlight.com");
+            r.adminUserpassword().setValue("secret");
+            writeXML(createExampleRequest(r), cnt + "-request-Create.xml");
+            writeXML(createExampleResponse(), cnt + "-response-Create.xml");
+        }
+
+        {
+            cnt++;
+            ActivatePMCRequestIO r = EntityFactory.create(ActivatePMCRequestIO.class);
+            r.country().setValue("Canada");
+            r.license().setValue(VistaLicense.Unlimited);
+            r.feature().setValue(VistaFeature.tbd1);
+            writeXML(createExampleRequest(r), cnt + "-request-Activate.xml");
+            writeXML(createExampleResponse(), cnt + "-response-Activate.xml");
+        }
+
+        {
+            cnt++;
+            GetAccountInfoRequestIO r = EntityFactory.create(GetAccountInfoRequestIO.class);
+            writeXML(createExampleRequest(r), cnt + "-request-GetAccountInfo.xml");
+            AccountInfoResponseIO rs = EntityFactory.create(AccountInfoResponseIO.class);
+            createAccountInfoIO(rs.accountInfo());
+            writeXML(createExampleResponse(rs), cnt + "-response-GetAccountInfo.xml");
+        }
+
+        {
+            cnt++;
+            GetUsageRequestIO r = EntityFactory.create(GetUsageRequestIO.class);
+            r.format().setValue(UsageReportFormatType.Short);
+            r.from().setValue(DateUtils.detectDateformat("2011-01-01"));
+            r.to().setValue(DateUtils.detectDateformat("2011-02-01"));
+            writeXML(createExampleRequest(r), cnt + "-request-GetUsage.xml");
+
+            UsageReportResponseIO rs = EntityFactory.create(UsageReportResponseIO.class);
+            rs.format().setValue(UsageReportFormatType.Short);
+            UsageRecordIO u = EntityFactory.create(UsageRecordIO.class);
+            rs.records().add(u);
+            u.from().setValue(DateUtils.detectDateformat("2011-01-01"));
+            u.to().setValue(DateUtils.detectDateformat("2011-02-01"));
+            u.usageType().setValue(UsageType.Qquifax);
+            u.value().setValue(21);
+
+            writeXML(createExampleResponse(rs), cnt + "-response-GetUsage.xml");
+        }
+
+        {
+            cnt++;
             PaymentRequestIO pr = EntityFactory.create(PaymentRequestIO.class);
             pr.amount().setValue(new BigDecimal("25.00"));
             CreditCardPaymentInstrumentIO cc = EntityFactory.create(CreditCardPaymentInstrumentIO.class);
             pr.paymentInstrument().set(cc);
             cc.number().setValue("5191111111111111");
             cc.expiryDate().setValue(new LogicalDate(new SimpleDateFormat("yyyy-MM").parse("2014-12")));
-            writeXML(createExampleRequest(pr), "PaymentRequest.xml");
+            writeXML(createExampleRequest(pr), cnt + "-request-payment.xml");
+            writeXML(createExampleResponse(), cnt + "-response-payment.xml");
         }
 
     }
@@ -60,7 +145,33 @@ public class OnboardingExample {
         RequestMessageIO r = EntityFactory.create(RequestMessageIO.class);
         r.interfaceEntity().setValue("rossul");
         r.interfaceEntityPassword().setValue("secret");
+        r.pmcId().setValue("star");
         r.requests().add(request);
+        return r;
+    }
+
+    private static void createAccountInfoIO(AccountInfoIO accountInfo) {
+        accountInfo.firstName().setValue("Bob");
+        accountInfo.lastName().setValue("Doe");
+        accountInfo.phone().setValue("416-994-4590");
+        accountInfo.address().streetNumber().setValue("10");
+        accountInfo.address().streetName().setValue("Lake");
+        accountInfo.address().streetType().setValue(StreetType.square);
+        accountInfo.address().city().setValue("Toronto");
+        accountInfo.address().countryName().setValue("Canada");
+        accountInfo.address().postalCode().setValue("ON");
+    }
+
+    private static ResponseMessageIO createExampleResponse() {
+        ResponseIO response = EntityFactory.create(ResponseIO.class);
+        response.success().setValue(Boolean.TRUE);
+        return createExampleResponse(response);
+    }
+
+    private static ResponseMessageIO createExampleResponse(ResponseIO response) {
+        ResponseMessageIO r = EntityFactory.create(ResponseMessageIO.class);
+        r.status().setValue(ResponseMessageIO.StatusCode.OK);
+        r.responses().add(response);
         return r;
     }
 
@@ -71,6 +182,24 @@ public class OnboardingExample {
             w = new FileWriter(f);
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
             XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityName());
+            xmlWriter.setEmitId(false);
+            xmlWriter.write(io);
+            w.write(xml.toString());
+            w.flush();
+        } catch (IOException e) {
+            log.error("debug write", e);
+        } finally {
+            IOUtils.closeQuietly(w);
+        }
+    }
+
+    private static void writeModelXML(IEntity io, String name) {
+        File f = new File("target", name);
+        FileWriter w = null;
+        try {
+            w = new FileWriter(f);
+            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
+            XMLEntityModelWriter xmlWriter = new XMLEntityModelWriter(xml, new ImportXMLEntityName());
             xmlWriter.setEmitId(false);
             xmlWriter.write(io);
             w.write(xml.toString());

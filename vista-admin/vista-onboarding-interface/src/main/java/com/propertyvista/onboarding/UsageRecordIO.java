@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 2, 2012
+ * Created on 2012-03-06
  * @author vlads
  * @version $Id$
  */
@@ -23,30 +23,19 @@ package com.propertyvista.onboarding;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface GetUsageRequestIO extends RequestIO {
-
-    public enum UsageReportFormatType {
-
-        /**
-         * Returns result as one Record with totals for given period
-         */
-        Short,
-
-        /**
-         * Returns every usage record for given period
-         */
-        Detailed
-
-    }
+public interface UsageRecordIO extends IEntity {
 
     IPrimitive<Date> from();
 
     IPrimitive<Date> to();
 
-    IPrimitive<UsageReportFormatType> format();
+    IPrimitive<UsageType> usageType();
+
+    IPrimitive<Integer> value();
 }
