@@ -44,6 +44,11 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         Style style = new Style(".", StyleName.FormFlexPanel);
         style.addProperty("width", "100%");
         style.addProperty("border-spacing", "0");
+        style.addProperty("box-sizing", "border-box");
+        style.addProperty("-moz-box-sizing", "border-box");
+        style.addProperty("-webkit-box-sizing", "border-box");
+        style.addProperty("padding", "6px");
+
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanel, " td");
