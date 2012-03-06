@@ -66,9 +66,9 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    public void retrieve(AsyncCallback<EmployeeDTO> callback, Key entityId) {
+    public void retrieve(AsyncCallback<EmployeeDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
         // Enforce access only to current user
-        super.retrieve(callback, CrmAppContext.getCurrentUserEmployee().getPrimaryKey());
+        super.retrieve(callback, CrmAppContext.getCurrentUserEmployee().getPrimaryKey(), retrieveTraget);
     }
 
     @Override

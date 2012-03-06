@@ -93,10 +93,10 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    public void retrieve(AsyncCallback<PmcDTO> callback, Key entityId) {
+    public void retrieve(AsyncCallback<PmcDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
-            super.retrieve(callback, entityId);
+            super.retrieve(callback, entityId, retrieveTraget);
         } finally {
             NamespaceManager.remove();
         }

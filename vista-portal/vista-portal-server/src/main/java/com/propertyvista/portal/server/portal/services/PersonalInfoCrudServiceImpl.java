@@ -26,8 +26,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -35,7 +35,7 @@ import com.propertyvista.portal.server.portal.TenantAppContext;
 public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
 
     @Override
-    public void retrieve(AsyncCallback<ResidentDTO> callback, Key entityId) {
+    public void retrieve(AsyncCallback<ResidentDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
         try {
             TenantUser currentUser = TenantAppContext.getCurrentUser();
             // find associated tenant entry

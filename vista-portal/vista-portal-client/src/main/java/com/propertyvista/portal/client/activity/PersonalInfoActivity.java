@@ -18,6 +18,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.client.ui.residents.PersonalInfoView;
@@ -53,7 +54,7 @@ public class PersonalInfoActivity extends SecurityAwareActivity implements Perso
                 view.populate(result);
             }
 
-        }, null);
+        }, null, AbstractCrudService.RetrieveTraget.View);
 
     }
 
