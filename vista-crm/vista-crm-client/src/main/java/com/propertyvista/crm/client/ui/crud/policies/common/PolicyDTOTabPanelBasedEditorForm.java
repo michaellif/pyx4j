@@ -200,12 +200,14 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         }
 
         @Override
-        public void setViewable(boolean viewable) {
-            super.setViewable(viewable);
-            Class<? extends PolicyNode> nodeType = (Class<? extends PolicyNode>) getValue().getInstanceValueClass();
-            if (nodeTypeToComponentMap.containsKey(nodeType)) {
-                CComponent<PolicyNode, ?> comp = (CComponent<PolicyNode, ?>) nodeTypeToComponentMap.get(nodeType);
-                comp.setViewable(viewable);
+        public void applyViewabilityRules() {
+            super.applyViewabilityRules();
+            if (getValue() != null) {
+                Class<? extends PolicyNode> nodeType = (Class<? extends PolicyNode>) getValue().getInstanceValueClass();
+                if (nodeTypeToComponentMap.containsKey(nodeType)) {
+                    CComponent<PolicyNode, ?> comp = (CComponent<PolicyNode, ?>) nodeTypeToComponentMap.get(nodeType);
+                    comp.setViewable(isViewable());
+                }
             }
         }
 
