@@ -35,12 +35,14 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
+import com.pyx4j.widgets.client.ImageButton;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<E> {
 
@@ -60,6 +62,8 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     private final Class<E> clazz;
 
+    private ItemActionsBar actionsPanel;
+
     public CEntityFolderItem(Class<E> clazz) {
         this(clazz, true, true);
     }
@@ -72,11 +76,24 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         this.removable = removable;
 
         handlerRegistrations = new ArrayList<HandlerRegistration>();
+        actionsPanel = new ItemActionsBar();
 
     }
 
     @Override
     protected abstract IFolderItemDecorator<E> createDecorator();
+
+    @Override
+    public void initContent() {
+        super.initContent();
+        IDecorator decorator = getDecorator();
+        if (decorator instanceof IFolderItemDecorator) {
+            actionsPanel.init(((IFolderItemDecorator) decorator).getImages(), removable);
+            ((IFolderItemDecorator) decorator).setItemActionsBar(actionsPanel);
+        } else {
+            throw new Error("Correct decorator is missing");
+        }
+    }
 
     public boolean isFirst() {
         return first;
@@ -129,33 +146,29 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     private HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        if (getDecorator() instanceof IFolderItemDecorator) {
-            HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addItemRemoveClickHandler(handler);
-            handlerRegistrations.add(handlerRegistration);
-            return handlerRegistration;
-        } else {
-            return null;
-        }
+        HandlerRegistration handlerRegistration = actionsPanel.addItemRemoveClickHandler(handler);
+        handlerRegistrations.add(handlerRegistration);
+        return handlerRegistration;
     }
 
     private HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        if (getDecorator() instanceof IFolderItemDecorator) {
-            HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addRowUpClickHandler(handler);
-            handlerRegistrations.add(handlerRegistration);
-            return handlerRegistration;
-        } else {
-            return null;
-        }
+        HandlerRegistration handlerRegistration = actionsPanel.addRowUpClickHandler(handler);
+        handlerRegistrations.add(handlerRegistration);
+        return handlerRegistration;
     }
 
     private HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        if (getDecorator() instanceof IFolderItemDecorator) {
-            HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addRowDownClickHandler(handler);
-            handlerRegistrations.add(handlerRegistration);
-            return handlerRegistration;
-        } else {
-            return null;
-        }
+        HandlerRegistration handlerRegistration = actionsPanel.addRowDownClickHandler(handler);
+        handlerRegistrations.add(handlerRegistration);
+        return handlerRegistration;
+    }
+
+    public void addCustomButton(ImageButton button) {
+        actionsPanel.addCustomButton(button);
+    }
+
+    public void removeCustomButton(ImageButton button) {
+        actionsPanel.removeCustomButton(button);
     }
 
     @Override

@@ -22,14 +22,10 @@ package com.pyx4j.entity.client.ui.folder;
 
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderRowItemDecorator;
 
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -57,7 +53,11 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
     private ItemActionsBar actionsPanel;
 
+    private SimplePanel actionsPanelHolder;
+
     private SimplePanel contentHolder;
+
+    private IDebugId parentDebugId;
 
     public TableFolderItemDecorator(EntityFolderImages images) {
         this(images, null);
@@ -69,21 +69,6 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
         setStyleName(EntityFolderRowItemDecorator.name());
 
-        addDomHandler(new MouseOverHandler() {
-            @Override
-            public void onMouseOver(MouseOverEvent event) {
-                actionsPanel.setHover(true);
-            }
-        }, MouseOverEvent.getType());
-
-        addDomHandler(new MouseOutHandler() {
-
-            @Override
-            public void onMouseOut(MouseOutEvent event) {
-                actionsPanel.setHover(false);
-            }
-        }, MouseOutEvent.getType());
-
         DockPanel mainPanel = new DockPanel();
         setWidget(mainPanel);
 
@@ -91,8 +76,8 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         validationMessageHolder.getElement().getStyle().setColor("red");
         mainPanel.add(validationMessageHolder, DockPanel.SOUTH);
 
-        actionsPanel = new ItemActionsBar(true, images);
-        mainPanel.add(actionsPanel, DockPanel.EAST);
+        actionsPanelHolder = new SimplePanel();
+        mainPanel.add(actionsPanelHolder, DockPanel.EAST);
 
         contentHolder = new SimplePanel();
         mainPanel.add(contentHolder, DockPanel.CENTER);
@@ -111,50 +96,42 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
                 }
             }
         });
-
-    }
-
-    @Override
-    public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        return actionsPanel.addItemRemoveClickHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        return actionsPanel.addRowUpClickHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        return actionsPanel.addRowDownClickHandler(handler);
     }
 
     @Override
     public void setActionsState(boolean removable, boolean up, boolean down) {
-        actionsPanel.setActionsState(removable, up, down);
+        if (actionsPanel != null) {
+            actionsPanel.setActionsState(removable, up, down);
+        }
     }
 
     @Override
     public void onSetDebugId(IDebugId parentDebugId) {
+        this.parentDebugId = parentDebugId;
         validationMessageHolder.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator,
                 IFolderDecorator.DecoratorsIds.Label)).debugId());
+    }
 
+    @Override
+    public void setItemActionsBar(final ItemActionsBar actionsPanel) {
+        this.actionsPanel = actionsPanel;
+        actionsPanelHolder.setWidget(actionsPanel);
         actionsPanel.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator,
                 IFolderDecorator.DecoratorsIds.ActionPanel)).debugId());
+        addDomHandler(new MouseOverHandler() {
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                actionsPanel.setHover(true);
+            }
+        }, MouseOverEvent.getType());
+
+        addDomHandler(new MouseOutHandler() {
+
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                actionsPanel.setHover(false);
+            }
+        }, MouseOutEvent.getType());
     }
 
-    @Override
-    public void addCustomAction(final Command cmd, ImageResource img, ImageResource imgHover, String title) {
-        actionsPanel.addCustomAction(cmd, img, imgHover, title);
-    }
-
-    @Override
-    public void removeCustomAction(final Command cmd) {
-        actionsPanel.removeCustomAction(cmd);
-    }
-
-    @Override
-    public void setCustomActionVisible(final Command cmd, boolean visible) {
-        actionsPanel.setCustomActionVisible(cmd, visible);
-    }
 }

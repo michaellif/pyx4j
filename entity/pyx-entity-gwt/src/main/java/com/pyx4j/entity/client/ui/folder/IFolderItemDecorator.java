@@ -20,23 +20,19 @@
  */
 package com.pyx4j.entity.client.ui.folder;
 
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-
 import com.pyx4j.entity.client.IDecorator;
+import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
 
 public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CEntityFolderItem<E>> {
-
-    HandlerRegistration addItemRemoveClickHandler(ClickHandler handler);
-
-    HandlerRegistration addRowUpClickHandler(ClickHandler handler);
-
-    HandlerRegistration addRowDownClickHandler(ClickHandler handler);
 
     @Override
     void setComponent(CEntityFolderItem<E> folderItem);
 
     void setActionsState(boolean remove, boolean up, boolean down);
+
+    void setItemActionsBar(ItemActionsBar actionsPanel);
+
+    EntityFolderImages getImages();
 
 }

@@ -28,10 +28,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.gwt.commons.BrowserType;
 
 public class BoxFolderItemToolbar extends HorizontalPanel {
 
@@ -46,7 +46,9 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
     private final BoxFolderItemDecorator<?> decorator;
 
-    private final ItemActionsBar actionsPanel;
+    private Widget actionsPanel;
+
+    private final SimplePanel actionsPanelHolder;
 
     private final Image collapseImage;
 
@@ -59,6 +61,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
     public BoxFolderItemToolbar(final BoxFolderItemDecorator<?> decorator) {
 
         this.decorator = decorator;
+
         setWidth("100%");
 
         SimplePanel collapseImageHolder = new SimplePanel();
@@ -110,16 +113,10 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         imageWarn.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         add(imageWarn);
 
-        actionsPanel = new ItemActionsBar(true, decorator.getImages());
-        add(actionsPanel);
-        actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        if (BrowserType.isIE7()) {
-            actionsPanel.getElement().getStyle().setMarginRight(40, Unit.PX);
-        }
+        actionsPanelHolder = new SimplePanel();
+        add(actionsPanelHolder);
 
         decorator.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.Decorator).debugId());
-        actionsPanel.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, IFolderDecorator.DecoratorsIds.ActionPanel)
-                .debugId());
 
         caption.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.Caption).debugId());
         titleIcon.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.TitleIcon).debugId());
@@ -128,10 +125,6 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
         update(decorator.isExpended());
 
-    }
-
-    protected ItemActionsBar getActionsPanel() {
-        return actionsPanel;
     }
 
     protected void update(boolean expanded) {
@@ -157,5 +150,9 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
     public void setCollapseButtonVisible(boolean collapsible) {
         collapseImage.setVisible(collapsible);
+    }
+
+    public void setActionsBar(ItemActionsBar actionsPanel) {
+        actionsPanelHolder.setWidget(actionsPanel);
     }
 }

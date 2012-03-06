@@ -23,16 +23,13 @@ package com.pyx4j.entity.client.ui.folder;
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxItem;
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxItemDecorator;
 
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -43,6 +40,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.gwt.commons.BrowserType;
 
 public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
 
@@ -63,6 +61,10 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     private SimplePanel contentHolder;
 
+    private ItemActionsBar actionsPanel;
+
+    private IDebugId parentDebugId;
+
     public BoxFolderItemDecorator(EntityFolderImages images) {
         this(images, "Remove");
     }
@@ -72,21 +74,6 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         super(images);
 
         setStyleName(EntityFolderBoxItemDecorator.name());
-
-        addDomHandler(new MouseOverHandler() {
-            @Override
-            public void onMouseOver(MouseOverEvent event) {
-                toolbar.getActionsPanel().setHover(true);
-            }
-        }, MouseOverEvent.getType());
-
-        addDomHandler(new MouseOutHandler() {
-
-            @Override
-            public void onMouseOut(MouseOutEvent event) {
-                toolbar.getActionsPanel().setHover(false);
-            }
-        }, MouseOutEvent.getType());
 
         VerticalPanel mainPanel = new VerticalPanel();
         mainPanel.setWidth("100%");
@@ -146,43 +133,42 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     }
 
     @Override
-    public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        return toolbar.getActionsPanel().addItemRemoveClickHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        return toolbar.getActionsPanel().addRowUpClickHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        return toolbar.getActionsPanel().addRowDownClickHandler(handler);
-    }
-
-    @Override
     public void setActionsState(boolean removable, boolean up, boolean down) {
-        toolbar.getActionsPanel().setActionsState(removable, up, down);
+        actionsPanel.setActionsState(removable, up, down);
     }
 
     @Override
     public void onSetDebugId(IDebugId parentDebugId) {
+        this.parentDebugId = parentDebugId;
         toolbar.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(DebugIds.BoxFolderItemDecorator, DebugIds.ToolBar)).debugId());
     }
 
     @Override
-    public void addCustomAction(final Command cmd, ImageResource img, ImageResource imgHover, String title) {
-        toolbar.getActionsPanel().addCustomAction(cmd, img, imgHover, title);
-    }
+    public void setItemActionsBar(final ItemActionsBar actionsPanel) {
+        this.actionsPanel = actionsPanel;
 
-    @Override
-    public void removeCustomAction(final Command cmd) {
-        toolbar.getActionsPanel().removeCustomAction(cmd);
-    }
+        actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        if (BrowserType.isIE7()) {
+            actionsPanel.getElement().getStyle().setMarginRight(40, Unit.PX);
+        }
+        actionsPanel.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar,
+                IFolderDecorator.DecoratorsIds.ActionPanel)).debugId());
 
-    @Override
-    public void setCustomActionVisible(final Command cmd, boolean visible) {
-        toolbar.getActionsPanel().setCustomActionVisible(cmd, visible);
+        addDomHandler(new MouseOverHandler() {
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                actionsPanel.setHover(true);
+            }
+        }, MouseOverEvent.getType());
 
+        addDomHandler(new MouseOutHandler() {
+
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                actionsPanel.setHover(false);
+            }
+        }, MouseOutEvent.getType());
+
+        toolbar.setActionsBar(actionsPanel);
     }
 }
