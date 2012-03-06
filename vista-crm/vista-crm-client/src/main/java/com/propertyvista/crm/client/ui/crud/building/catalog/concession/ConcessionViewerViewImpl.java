@@ -24,10 +24,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.widgets.client.Button;
@@ -62,6 +59,7 @@ public class ConcessionViewerViewImpl extends CrmViewerViewImplBase<Concession> 
 
             @Override
             public void onClick(ClickEvent event) {
+                presenter.finalize();
             }
         });
         addToolbarItem(finalizeButton.asWidget());
@@ -71,7 +69,7 @@ public class ConcessionViewerViewImpl extends CrmViewerViewImplBase<Concession> 
 
         public VersionSelectorDialog() {
             super(ConcessionV.class, false, Collections.<ConcessionV> emptyList(), i18n.tr("Select Version"));
-            addFilter(new DataTableFilterData(EntityFactory.getEntityPrototype(ConcessionV.class).holder().getPath(), Operators.is, form.getValue()));
+            setParentFiltering(form.getValue().getPrimaryKey());
             setWidth("700px");
         }
 
@@ -81,9 +79,9 @@ public class ConcessionViewerViewImpl extends CrmViewerViewImplBase<Concession> 
                 return false;
             } else {
                 for (ConcessionV selected : getSelectedItems()) {
-                    Key versionKey = new Key(selected.holder().getPrimaryKey().asLong(), (selected.fromDate().isNull() ? 0 : selected.fromDate().getValue()
-                            .getTime()));
-                    presenter.view(versionKey);
+                    presenter.view(new Key(selected.holder().getPrimaryKey().asLong(), (selected.fromDate().isNull() ? 0 : selected.fromDate().getValue()
+                            .getTime())));
+                    break;
                 }
                 return true;
             }
@@ -94,7 +92,7 @@ public class ConcessionViewerViewImpl extends CrmViewerViewImplBase<Concession> 
             return Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().versionNumber()).build(),
                     new MemberColumnDescriptor.Builder(proto().fromDate()).build()
-            );//@formatter:on
+                );//@formatter:on
         }
 
         @Override

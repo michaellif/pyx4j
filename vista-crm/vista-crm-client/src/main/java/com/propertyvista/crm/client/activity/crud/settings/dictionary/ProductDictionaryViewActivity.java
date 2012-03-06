@@ -99,4 +99,9 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void finalize() {
+        // TODO Auto-generated method stub
+    }
 }
