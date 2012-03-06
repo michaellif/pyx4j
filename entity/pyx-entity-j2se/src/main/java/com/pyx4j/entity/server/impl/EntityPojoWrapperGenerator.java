@@ -355,6 +355,8 @@ public class EntityPojoWrapperGenerator {
 
             annotation.addMemberValue("namespace", new StringMemberValue("##default", constPool));
             annotation.addMemberValue("factoryClass", new ClassMemberValue(XmlType.class.getName() + "$DEFAULT", constPool));
+        } else if (annotationClass == XmlRootElement.class) {
+            annotation.addMemberValue("namespace", new StringMemberValue("##default", constPool));
         }
         attr.addAnnotation(annotation);
         implClass.getClassFile().addAttribute(attr);

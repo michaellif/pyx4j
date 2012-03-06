@@ -22,6 +22,8 @@ package com.pyx4j.essentials.server.xml;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -34,9 +36,13 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class XMLEntitySchemaWriter {
 
-    public static void printSchema(Class<? extends IEntity> clazz, final java.io.OutputStream os, final boolean allowClose) {
+    public static void printSchema(final java.io.OutputStream os, final boolean allowClose, Class<?>... classes) {
         try {
-            JAXBContext context = JAXBContext.newInstance(EntityPojoWrapperGenerator.getPojoClass(clazz));
+            List<Class<?>> pojo = new ArrayList<Class<?>>();
+            for (Class<?> ec : classes) {
+                pojo.add(EntityPojoWrapperGenerator.getPojoClass((Class<? extends IEntity>) ec));
+            }
+            JAXBContext context = JAXBContext.newInstance(pojo.toArray(new Class[pojo.size()]));
             context.generateSchema(new SchemaOutputResolver() {
 
                 @Override
