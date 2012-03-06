@@ -191,4 +191,7 @@ public interface CrmImages extends VistaImages {
 
     @Source("Company_normal.png")
     ImageResource companyNormal();
+
+    @Source("edit.png")
+    ImageResource edit();
 }

@@ -23,7 +23,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -48,6 +47,7 @@ import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
+import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsEditorForm;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
@@ -122,8 +122,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.setLastTabDisabled(isEditable());
 
         tabPanel.add(createContactTab(), i18n.tr("Contacts"));
-        tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
-        tabPanel.setLastTabDisabled(isEditable());
+        tabPanel.add(createNotesAndAttachmentsTab(), i18n.tr("Notes & Attachments"));
+        //tabPanel.setLastTabDisabled(isEditable());
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
@@ -374,4 +374,14 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             return columns;
         }
     }
+
+    private Widget createNotesAndAttachmentsTab() {
+        FormFlexPanel main = new FormFlexPanel();
+        int row = -1;
+
+        main.setWidget(++row, 0, inject(proto().notesAndAttachments(), new NotesAndAttachmentsEditorForm()));
+
+        return main;
+    }
+
 }
