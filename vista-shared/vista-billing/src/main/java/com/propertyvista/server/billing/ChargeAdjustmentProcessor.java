@@ -33,8 +33,8 @@ public class ChargeAdjustmentProcessor {
     }
 
     void createChargeAdjustments() {
-        createChargeAdjustments(bill.billingAccount().leaseFinancial().lease().serviceAgreement().serviceItem());
-        for (BillableItem item : bill.billingAccount().leaseFinancial().lease().serviceAgreement().featureItems()) {
+        createChargeAdjustments(bill.billingAccount().leaseFinancial().lease().leaseProducts().serviceItem());
+        for (BillableItem item : bill.billingAccount().leaseFinancial().lease().leaseProducts().featureItems()) {
             createChargeAdjustments(item);
         }
     }

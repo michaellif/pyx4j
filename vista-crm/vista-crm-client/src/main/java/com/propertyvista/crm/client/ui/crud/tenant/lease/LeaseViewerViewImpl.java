@@ -148,7 +148,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         // disable editing for signed leases:
 //        getEditButton().setVisible(value.approvalDate().isNull());
 
-        createApplication.setVisible(status == Status.Draft);
+        createApplication.setVisible(status == Status.New);
 
         runBill.setVisible(status == Status.Active);
 

@@ -75,8 +75,8 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             TenantInLeaseRetriever.UpdateLeaseTenants(dto);
 
             // calculate price adjustments:
-            PriceCalculationHelpers.calculateChargeItemAdjustments(dto.serviceAgreement().serviceItem());
-            for (BillableItem item : dto.serviceAgreement().featureItems()) {
+            PriceCalculationHelpers.calculateChargeItemAdjustments(dto.leaseProducts().serviceItem());
+            for (BillableItem item : dto.leaseProducts().featureItems()) {
                 PriceCalculationHelpers.calculateChargeItemAdjustments(item);
             }
 
@@ -89,7 +89,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     protected void persistDBO(Lease dbo, LeaseDTO in) {
 
-        for (BillableItem item : dbo.serviceAgreement().featureItems()) {
+        for (BillableItem item : dbo.leaseProducts().featureItems()) {
             // save extra data:
             if (!item.extraData().isNull()) {
                 Persistence.service().merge(item.extraData());
@@ -151,10 +151,10 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     private void updateAdjustments(Lease lease) {
         // ServiceItem Adjustments:
-        updateAdjustments(lease.serviceAgreement().serviceItem());
+        updateAdjustments(lease.leaseProducts().serviceItem());
 
         // BillableItem Adjustments:
-        for (BillableItem ci : lease.serviceAgreement().featureItems()) {
+        for (BillableItem ci : lease.leaseProducts().featureItems()) {
             updateAdjustments(ci);
         }
 

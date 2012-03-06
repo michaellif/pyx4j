@@ -60,7 +60,7 @@ public class LeaseHelper {
                 Persistence.service().retrieve(service.items());
                 for (ProductItem item : service.items()) {
                     if (lease.unit().equals(item.element())) {
-                        lease.serviceAgreement().serviceItem().set(createBillableItem(item));
+                        lease.leaseProducts().serviceItem().set(createBillableItem(item));
                         selectedService = service;
                         lease.type().set(selectedService.type());
                         break;
@@ -69,7 +69,7 @@ public class LeaseHelper {
             }
         }
 
-        if (!lease.serviceAgreement().serviceItem().isEmpty()) {
+        if (!lease.leaseProducts().serviceItem().isEmpty()) {
             Persistence.service().retrieve(building.productCatalog());
             // pre-populate utilities for the new service: 
             Persistence.service().retrieve(selectedService.features());
@@ -79,7 +79,7 @@ public class LeaseHelper {
                     for (ProductItem item : feature.items()) {
                         if (!building.productCatalog().includedUtilities().contains(item.type())
                                 && !building.productCatalog().externalUtilities().contains(item.type())) {
-                            lease.serviceAgreement().featureItems().add(createBillableItem(item));
+                            lease.leaseProducts().featureItems().add(createBillableItem(item));
                         }
                     }
                 }
@@ -89,7 +89,7 @@ public class LeaseHelper {
             // pre-populate concessions for the new service: 
             Persistence.service().retrieve(selectedService.concessions());
             if (!selectedService.concessions().isEmpty()) {
-                lease.serviceAgreement().concessions().add(RandomUtil.random(selectedService.concessions()));
+                lease.leaseProducts().concessions().add(RandomUtil.random(selectedService.concessions()));
             }
         }
     }

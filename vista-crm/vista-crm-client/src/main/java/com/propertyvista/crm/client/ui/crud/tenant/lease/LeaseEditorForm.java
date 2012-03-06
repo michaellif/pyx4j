@@ -73,7 +73,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         tabPanel.add(detailsTab = createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
-        tabPanel.add(createServiceAgreementTab(), i18n.tr("Service Agreement"));
+        tabPanel.add(createServiceAgreementTab(), i18n.tr("Products"));
         tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
         tabPanel.setLastTabDisabled(isEditable());
         tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
@@ -225,7 +225,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
-        serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new BillableItemEditor(this)));
+        serviceItemPanel.add(inject(proto().leaseProducts().serviceItem(), new BillableItemEditor(this)));
         if (isEditable()) {
             serviceItemPanel.add(serviceSelector = new AnchorButton("Select...", new ClickHandler() {
                 @Override
@@ -264,11 +264,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         int row = -1;
         main.setWidget(++row, 0, serviceItemPanel);
 
-        main.setH1(++row, 0, 2, proto().serviceAgreement().featureItems().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().serviceAgreement().featureItems(), new BillableItemFolder(isEditable(), this)));
+        main.setH1(++row, 0, 2, proto().leaseProducts().featureItems().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this)));
 
-        main.setH1(++row, 0, 2, proto().serviceAgreement().concessions().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().serviceAgreement().concessions(), new ConcessionFolder(isEditable(), this)));
+        main.setH1(++row, 0, 2, proto().leaseProducts().concessions().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
 
         main.setH1(++row, 0, 2, proto().leaseFinancial().adjustments().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().leaseFinancial().adjustments(), new LeaseAdjustmentFolder(isEditable(), this)));

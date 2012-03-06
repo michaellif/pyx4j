@@ -33,8 +33,8 @@ public class ChargeProcessor {
     }
 
     void createCharges() {
-        createCharge(bill.billingAccount().leaseFinancial().lease().serviceAgreement().serviceItem());
-        for (BillableItem item : bill.billingAccount().leaseFinancial().lease().serviceAgreement().featureItems()) {
+        createCharge(bill.billingAccount().leaseFinancial().lease().leaseProducts().serviceItem());
+        for (BillableItem item : bill.billingAccount().leaseFinancial().lease().leaseProducts().featureItems()) {
             createCharge(item);
         }
     }

@@ -51,7 +51,7 @@ public class LeaseDataModel {
 
         lease.unit().set(serviceItem.element());
 
-        lease.serviceAgreement().serviceItem().item().set(serviceItem);
+        lease.leaseProducts().serviceItem().item().set(serviceItem);
 
         lease.leaseFrom().setValue(new LogicalDate(111, 1, 25));
         lease.approvalDate().setValue(lease.leaseFrom().getValue());

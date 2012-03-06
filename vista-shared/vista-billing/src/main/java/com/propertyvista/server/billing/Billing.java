@@ -46,7 +46,7 @@ class Billing {
     static void createBill(BillingRun billingRun, BillingAccount billingAccount) {
         Persistence.service().retrieve(billingAccount.leaseFinancial());
         Persistence.service().retrieve(billingAccount.leaseFinancial().lease());
-        Persistence.service().retrieve(billingAccount.leaseFinancial().lease().serviceAgreement());
+        Persistence.service().retrieve(billingAccount.leaseFinancial().lease().leaseProducts());
 
         Bill bill = EntityFactory.create(Bill.class);
 
@@ -65,7 +65,7 @@ class Billing {
 
                 Persistence.service().persist(bill);
 
-                if (Status.Draft.equals(billingAccount.leaseFinancial().lease().status().getValue())) {// draft bill should be issued
+                if (Status.New.equals(billingAccount.leaseFinancial().lease().status().getValue())) {// draft bill should be issued
                     bill.billType().setValue(Bill.BillType.Draft);
                 } else if (Status.Approved.equals(billingAccount.leaseFinancial().lease().status().getValue())) {// first bill should be issued
                     bill.billType().setValue(Bill.BillType.First);

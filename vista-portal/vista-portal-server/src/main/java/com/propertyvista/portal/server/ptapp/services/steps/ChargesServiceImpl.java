@@ -85,7 +85,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             throw new Error("There is no MiscPolicy for the Unit!?.");
         }
 
-        BillableItem serviceItem = lease.serviceAgreement().serviceItem();
+        BillableItem serviceItem = lease.leaseProducts().serviceItem();
         if (serviceItem != null && !serviceItem.isNull()) {
             charges.monthlyCharges().charges().clear();
 
@@ -107,7 +107,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.oneTimePayment, new BigDecimal("24.99"))); // get value from policy ! 
 
             // fill agreed items:
-            for (BillableItem item : lease.serviceAgreement().featureItems()) {
+            for (BillableItem item : lease.leaseProducts().featureItems()) {
                 if (item.item().type().type().getValue().equals(ProductItemType.Type.feature)) {
                     PriceCalculationHelpers.calculateChargeItemAdjustments(item);
 

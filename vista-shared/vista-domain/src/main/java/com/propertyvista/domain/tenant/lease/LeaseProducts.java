@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IList;
 import com.propertyvista.domain.financial.offering.Concession;
 
 @EmbeddedEntity
-public interface ServiceAgreement extends IEntity {
+public interface LeaseProducts extends IEntity {
 
     @Owned
     BillableItem serviceItem();

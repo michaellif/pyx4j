@@ -102,14 +102,14 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
 
     private void calculatePrices(MasterApplication in, MasterApplicationDTO dto) {
         // calculate price adjustments:
-        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().serviceAgreement().serviceItem());
+        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().leaseProducts().serviceItem());
 
-        dto.rentPrice().setValue(dto.lease().serviceAgreement().serviceItem()._currentPrice().getValue());
+        dto.rentPrice().setValue(dto.lease().leaseProducts().serviceItem()._currentPrice().getValue());
         dto.parkingPrice().setValue(new BigDecimal(0));
         dto.otherPrice().setValue(new BigDecimal(0));
         dto.deposit().setValue(new BigDecimal(0));
 
-        for (BillableItem item : dto.lease().serviceAgreement().featureItems()) {
+        for (BillableItem item : dto.lease().leaseProducts().featureItems()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(item); // calculate price adjustments
             if (item.item().product() instanceof Feature) {
                 switch (((Feature) item.item().product()).type().getValue()) {
@@ -123,7 +123,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
             }
         }
 
-        dto.discounts().setValue(!dto.lease().serviceAgreement().concessions().isEmpty());
+        dto.discounts().setValue(!dto.lease().leaseProducts().concessions().isEmpty());
     }
 
     @Override

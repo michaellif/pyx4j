@@ -45,7 +45,7 @@ public interface Lease extends IEntity {
     @XmlType(name = "LeaseStatus")
     public enum Status {
 
-        Draft,
+        New,
 
         ApplicationInProgress,
 
@@ -59,7 +59,7 @@ public interface Lease extends IEntity {
 
         Completed, // Lease end date is passed
 
-        Finalised, // Final bill is issued
+        FinalBillIssued, // Final bill is issued
 
         Closed; // All the transactions completed and lease closed
 
@@ -192,7 +192,7 @@ public interface Lease extends IEntity {
     LeaseFinancial leaseFinancial();
 
     @EmbeddedEntity
-    ServiceAgreement serviceAgreement();
+    LeaseProducts leaseProducts();
 
     @Detached
     // should be loaded in service when necessary!..

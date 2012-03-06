@@ -54,7 +54,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     @Override
     public void onPopulateSuccess(LeaseDTO result) {
         fillserviceItems(result);
-        fillServiceEligibilityData(result, result.serviceAgreement().serviceItem().item());
+        fillServiceEligibilityData(result, result.leaseProducts().serviceItem().item());
 
         super.onPopulateSuccess(result);
     }
@@ -66,7 +66,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             public void onSuccess(Service.Type type) {
                 LeaseDTO entity = EntityFactory.create(LeaseDTO.class);
                 entity.createDate().setValue(new LogicalDate());
-                entity.status().setValue(Lease.Status.Draft);
+                entity.status().setValue(Lease.Status.New);
                 entity.type().setValue(type);
 
                 callback.onSuccess(entity);
@@ -112,11 +112,11 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             clearServiceAgreement(currentValue, false);
 
             // set selected service:
-            currentValue.serviceAgreement().serviceItem().set(createBillableItem(serviceItem));
+            currentValue.leaseProducts().serviceItem().set(createBillableItem(serviceItem));
 
             // pre-populate utilities for the new service:
             for (ProductItem item : currentValue.selectedUtilityItems()) {
-                currentValue.serviceAgreement().featureItems().add(createBillableItem(item));
+                currentValue.leaseProducts().featureItems().add(createBillableItem(item));
             }
 
             view.populate(currentValue);
@@ -140,10 +140,10 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     private void clearServiceAgreement(LeaseDTO currentValue, boolean all) {
         if (all) {
-            currentValue.serviceAgreement().serviceItem().set(null);
+            currentValue.leaseProducts().serviceItem().set(null);
         }
-        currentValue.serviceAgreement().featureItems().clear();
-        currentValue.serviceAgreement().concessions().clear();
+        currentValue.leaseProducts().featureItems().clear();
+        currentValue.leaseProducts().concessions().clear();
     }
 
     private void fillserviceItems(LeaseDTO currentValue) {
