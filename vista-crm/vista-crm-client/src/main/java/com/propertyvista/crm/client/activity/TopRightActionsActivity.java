@@ -124,7 +124,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void back2CrmView() {
-        AppSite.getPlaceController().goTo(CrmSite.getSystemFashboardPlace());
+        AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
     }
 
     @Override

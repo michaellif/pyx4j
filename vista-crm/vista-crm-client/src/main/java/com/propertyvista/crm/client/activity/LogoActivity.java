@@ -18,6 +18,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.LogoView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
@@ -26,7 +29,7 @@ public class LogoActivity extends AbstractActivity implements LogoView.Presenter
     private final LogoView view;
 
     public LogoActivity(Place place) {
-        view = (LogoView) CrmVeiwFactory.instance(LogoView.class);
+        view = CrmVeiwFactory.instance(LogoView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -43,7 +46,6 @@ public class LogoActivity extends AbstractActivity implements LogoView.Presenter
 
     @Override
     public void navigToLanding() {
-        // TODO where to navigate on clicking on logo
-        //placeController.goTo(new SiteMap.Landing());
+        AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
     }
 }

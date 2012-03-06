@@ -47,7 +47,7 @@ public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback) {
-        callback.onSuccess(CrmSite.getSystemFashboardPlace());
+        callback.onSuccess(CrmSite.getSystemDashboardPlace());
     }
 
     @Override
