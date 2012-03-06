@@ -127,7 +127,6 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
     @Caption(name = "SIN")
     IPrimitive<String> secureIdentifier();
 
-    @Deprecated
     @Caption(name = "Not resident of Canada")
     IPrimitive<Boolean> notCanadianCitizen();
 

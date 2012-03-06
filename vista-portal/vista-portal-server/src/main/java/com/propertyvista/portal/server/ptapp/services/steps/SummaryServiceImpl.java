@@ -28,6 +28,7 @@ import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
@@ -35,7 +36,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -156,9 +156,14 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         }
 
         // fill Lease Terms:
-        LeaseTermsPolicy termsPolicy = LegalStuffUtils.retrieveLegalTermsPolicy();
+        IList<LegalTermsDescriptor> legalTerms;
+        if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+            legalTerms = LegalStuffUtils.retrieveLegalTermsPolicy().guarantorSummaryTerms();
+        } else {
+            legalTerms = LegalStuffUtils.retrieveLegalTermsPolicy().tenantSummaryTerms();
+        }
 
-        for (LegalTermsDescriptor terms : termsPolicy.tenantSummaryTerms()) {
+        for (LegalTermsDescriptor terms : legalTerms) {
             LegalTermsDescriptorDTO ltd = LegalStuffUtils.formLegalTerms(terms);
             for (IAgree agree : agrees) {
                 ltd.agrees().add((IAgree) agree.duplicate());
