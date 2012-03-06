@@ -194,4 +194,7 @@ public interface CrmImages extends VistaImages {
 
     @Source("edit.png")
     ImageResource edit();
+
+    @Source("edit_hover.png")
+    ImageResource editHover();
 }

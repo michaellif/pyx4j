@@ -15,12 +15,12 @@ package com.propertyvista.crm.client.ui.notesandattachments;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.ImageButton;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
@@ -77,14 +78,22 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
             BoxFolderItemDecorator<Note> decorator = (BoxFolderItemDecorator<Note>) super.createItemDecorator();
             decorator.setTitle(i18n.tr("Add Note"));
 
-            decorator.addCustomAction(new Command() {
-                @Override
-                public void execute() {
-                    System.out.println("Edit Note Command Fired");
-                }
-            }, CrmImages.INSTANCE.edit(), CrmImages.INSTANCE.edit(), "Edit Note");
-
             return decorator;
+        }
+
+        @Override
+        protected CEntityFolderItem<Note> createItem(boolean first) {
+            CEntityFolderItem<Note> item = super.createItem(first);
+            ImageButton button = new ImageButton(CrmImages.INSTANCE.edit(), CrmImages.INSTANCE.editHover(), i18n.tr("Edit Note"));
+            button.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    System.out.println("Edit Note Command Fired");
+
+                }
+            });
+            item.addCustomButton(button);
+            return item;
         }
 
         private static class NoteEditor extends CEntityDecoratableEditor<Note> {

@@ -376,12 +376,12 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private Widget createNotesAndAttachmentsTab() {
+        ScrollPanel content = new ScrollPanel();
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
-
         main.setWidget(++row, 0, inject(proto().notesAndAttachments(), new NotesAndAttachmentsEditorForm()));
-
-        return main;
+        content.setWidget(main);
+        return content;
     }
 
 }
