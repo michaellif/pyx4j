@@ -202,7 +202,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
-    public boolean isEnabled() {
+    public final boolean isEnabled() {
         for (IAccessAdapter adapter : accessAdapters) {
             Boolean enabled = adapter.isEnabled(this);
             if (enabled != null && !enabled) {
@@ -212,7 +212,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return true;
     }
 
-    public void setEnabled(boolean enabled) {
+    public final void setEnabled(boolean enabled) {
         if (enabled != isEnabled()) {
             componentAccessAdapter.setEnabled(enabled);
             applyEnablingRules();
@@ -223,12 +223,12 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
-    public void inheritEnabled(boolean flag) {
+    public final void inheritEnabled(boolean flag) {
         containerAccessAdapter.inheritEnabled(flag);
         applyEnablingRules();
     }
 
-    public boolean isVisible() {
+    public final boolean isVisible() {
         for (IAccessAdapter adapter : accessAdapters) {
             Boolean visible = adapter.isVisible(this);
             if (visible != null && !visible) {
@@ -238,7 +238,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return true;
     }
 
-    public void setVisible(boolean visible) {
+    public final void setVisible(boolean visible) {
         if (visible != isVisible()) {
             componentAccessAdapter.setVisible(visible);
             applyVisibilityRules();
@@ -249,12 +249,12 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
-    public void inheritVisible(boolean flag) {
+    public final void inheritVisible(boolean flag) {
         containerAccessAdapter.inheritVisible(flag);
         applyVisibilityRules();
     }
 
-    public boolean isEditable() {
+    public final boolean isEditable() {
         for (IAccessAdapter adapter : accessAdapters) {
             Boolean editable = adapter.isEditable(this);
             if (editable != null && !editable) {
@@ -264,7 +264,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return true;
     }
 
-    public void setEditable(boolean editable) {
+    public final void setEditable(boolean editable) {
         if (editable != isEditable()) {
             componentAccessAdapter.setEditable(editable);
             applyEditabilityRules();
@@ -275,12 +275,12 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
-    public void inheritEditable(boolean flag) {
+    public final void inheritEditable(boolean flag) {
         containerAccessAdapter.inheritEditable(flag);
         applyEditabilityRules();
     }
 
-    public boolean isViewable() {
+    public final boolean isViewable() {
         for (IAccessAdapter adapter : accessAdapters) {
             Boolean viewable = adapter.isViewable(this);
             if (viewable != null && adapter.isViewable(this)) {
@@ -290,7 +290,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return false;
     }
 
-    public void setViewable(boolean viewable) {
+    public final void setViewable(boolean viewable) {
         if (viewable != isViewable()) {
             componentAccessAdapter.setViewable(viewable);
             applyViewabilityRules();
@@ -301,7 +301,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
-    public void inheritViewable(boolean flag) {
+    public final void inheritViewable(boolean flag) {
         containerAccessAdapter.inheritViewable(flag);
         applyViewabilityRules();
     }

@@ -62,16 +62,6 @@ public abstract class CReference<E, T extends Widget & INativeReference<E>> exte
     }
 
     @Override
-    public boolean isEditable() {
-        return false;
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        // do nothing - not editable...
-    }
-
-    @Override
     public void onEditingStart() {
         // do nothing - not editable...
     }

@@ -55,17 +55,9 @@ public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        setTabIndex(enabled ? 0 : -2); // enable/disable focus navigation 
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        super.setEditable(editable);
-        if (editable != isEditable()) {
-            setTabIndex(editable ? 0 : -2); // enable/disable focus navigation
-        }
+    public void applyAccessibilityRules() {
+        super.applyAccessibilityRules();
+        setTabIndex((isEnabled() && isEditable()) ? 0 : -2); // enable/disable focus navigation
     }
 
     @Override

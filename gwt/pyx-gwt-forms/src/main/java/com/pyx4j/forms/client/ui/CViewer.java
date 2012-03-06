@@ -29,16 +29,6 @@ public abstract class CViewer<E> extends CComponent<E, NativeViewer<E>> {
     }
 
     @Override
-    public boolean isEditable() {
-        return false;
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        // do nothing - not editable...
-    }
-
-    @Override
     public void onEditingStart() {
         // do nothing - not editable...
     }
