@@ -48,7 +48,10 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
         style.addProperty("padding", "6px");
+        addStyle(style);
 
+        style = new Style(".", StyleName.FormFlexPanel, " .", StyleName.FormFlexPanel);
+        style.addProperty("padding", "0px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanel, " td");
@@ -62,13 +65,14 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH1);
-        style.addProperty("background-color", getBackgroundColor(), 0.4);
+        style.addProperty("background-color", getBackgroundColor(), 0.1);
         style.addProperty("margin", "6px 0 4px 0");
         style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH1Label);
-        style.addProperty("color", getBackgroundColor(), 0);
+        style.addShadow(getBackgroundColor(), 0, "1px 2px 0");
+        style.addProperty("color", getBackgroundColor(), 0.8);
         style.addProperty("padding", "4px");
         style.addProperty("font-size", "1.3em");
         addStyle(style);
