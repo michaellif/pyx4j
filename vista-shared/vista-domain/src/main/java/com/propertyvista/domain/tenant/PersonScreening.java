@@ -31,6 +31,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -39,6 +40,7 @@ import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
@@ -110,15 +112,22 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
 
     //=============== Security Info =============//
 
+    @NotNull
+    IList<IdentificationDocument> identificationDocuments();
+
+    @Deprecated
     IPrimitive<String> driversLicense();
 
+    @Deprecated
     @Caption(name = "Province/State", description = "Province/State, In Which The License Has Been Issued")
     @Editor(type = EditorType.combo)
     Province driversLicenseState();
 
+    @Deprecated
     @Caption(name = "SIN")
     IPrimitive<String> secureIdentifier();
 
+    @Deprecated
     @Caption(name = "Not resident of Canada")
     IPrimitive<Boolean> notCanadianCitizen();
 
