@@ -21,6 +21,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.IVersionData;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
@@ -31,6 +32,7 @@ public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends E
     public VersionSelectorDialog(Class<V> entityVersionClass, Key entityId) {
         super(entityVersionClass, false, Collections.<V> emptyList(), i18n.tr("Select Version"));
         setParentFiltering(entityId);
+        getLister().setSorting(Arrays.asList(new Sort(proto().versionNumber().getPath().toString(), false)));
         setWidth("700px");
     }
 
