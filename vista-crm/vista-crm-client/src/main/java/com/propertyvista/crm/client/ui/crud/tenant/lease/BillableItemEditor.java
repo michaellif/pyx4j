@@ -161,10 +161,12 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
     @Override
     public void applyViewabilityRules() {
         super.applyViewabilityRules();
-        if (isViewable() && !getValue().isNull()) {
-            adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
-        } else {
-            adjustmentPanel.setVisible(true);
+        if (adjustmentPanel != null && getValue() != null) {
+            if (isViewable() && !getValue().isNull()) {
+                adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
+            } else {
+                adjustmentPanel.setVisible(true);
+            }
         }
     }
 
