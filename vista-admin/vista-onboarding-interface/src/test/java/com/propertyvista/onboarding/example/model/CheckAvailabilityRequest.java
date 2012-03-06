@@ -11,12 +11,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding;
+package com.propertyvista.onboarding.example.model;
 
-public enum UsageType {
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
 
-    Qquifax,
+public class CheckAvailabilityRequest extends Request {
 
-    ActiveBankAccounts
+    @Size(max = 64)
+    @Pattern(regexp = "[A-Za-z0-9]+")
+    @XmlElement
+    public String pmcId;
 
 }

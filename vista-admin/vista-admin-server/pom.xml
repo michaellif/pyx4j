@@ -96,6 +96,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-server</artifactId>
+        </dependency>
+        
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>

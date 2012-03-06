@@ -7,25 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 2, 2012
+ * Created on 2011-06-22
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding;
+package com.propertyvista.onboarding.example.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-
-@Transient
 @XmlRootElement
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface ResponseMessageIO extends IEntity {
+public class ResponseMessage {
 
     public enum StatusCode {
 
@@ -46,20 +42,29 @@ public interface ResponseMessageIO extends IEntity {
     /**
      * Status of the processing of complete request.
      */
-    @NotNull
-    IPrimitive<StatusCode> status();
+    @XmlElement
+    public StatusCode status;
 
     /**
      * Contains the error message when Vista CRM running in debug mode
      */
-    IPrimitive<String> errorMessage();
+    @XmlElement
+    public String errorMessage;
 
     /**
      * Unique identifier for the XML message.
      * Returned unchanged from the request.
      */
-    IPrimitive<String> messageId();
+    @XmlElement
+    public String messageId;
 
-    IList<ResponseIO> responses();
+    @XmlElementWrapper
+    public List<Response> responses;
 
+    public void addResponse(Response response) {
+        if (responses == null) {
+            responses = new ArrayList<Response>();
+        }
+        responses.add(response);
+    }
 }

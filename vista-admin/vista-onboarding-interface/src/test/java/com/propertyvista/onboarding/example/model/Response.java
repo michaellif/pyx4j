@@ -7,38 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 2, 2012
+ * Created on 2011-06-22
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding;
+package com.propertyvista.onboarding.example.model;
 
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
 
-@Inheritance
-@Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface ResponseIO extends IEntity {
+public class Response {
 
     /**
      * Status of the processing of single request.
      */
+    @XmlElement
     @NotNull
-    IPrimitive<Boolean> success();
+    public boolean success;
 
     /**
-     * Contains the error message
+     * Contains the error message when Vista CRM running in debug mode
      */
-    IPrimitive<String> errorMessage();
+    @XmlElement
+    public String errorMessage;
 
     /**
      * If you submitted a Request with the 'requestId' field, this field will be present in the reply and will contain the exact data you placed in the
      * requestID field of the Request.
      */
-    IPrimitive<String> requestId();
+    @Size(max = 60)
+    @XmlElement
+    public String requestId;
+
 }

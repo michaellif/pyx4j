@@ -36,8 +36,18 @@ public interface RequestMessageIO extends IEntity {
     @NotNull
     IPrimitive<String> interfaceEntityPassword();
 
+    /**
+     * May contain up to 63 characters. The characters allowed in a label are a subset of the ASCII character set, and includes the characters a through z, A
+     * through Z, digits 0 through 9, and
+     * the hyphen.
+     */
     @NotNull
     IPrimitive<String> pmcId();
+
+    /**
+     * Optional unique identifier for the XML message debug
+     */
+    IPrimitive<String> messageId();
 
     IList<RequestIO> requests();
 

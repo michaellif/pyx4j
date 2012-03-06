@@ -7,16 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-03-06
+ * Created on 2011-06-22
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding;
+package com.propertyvista.onboarding.example.model;
 
-public enum UsageType {
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
-    Qquifax,
+@XmlSeeAlso({ CheckAvailabilityRequest.class, CreatePMCRequest.class })
+public abstract class Request {
 
-    ActiveBankAccounts
+    /**
+     * Optional unique identifier for Requests debug
+     */
+    @XmlElement
+    public String requestId;
 
 }
