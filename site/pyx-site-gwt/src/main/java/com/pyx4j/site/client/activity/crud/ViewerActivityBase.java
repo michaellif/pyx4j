@@ -24,13 +24,14 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -95,15 +96,10 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void populate() {
-        service.retrieve(new AsyncCallback<E>() {
+        service.retrieve(new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
                 onPopulateSuccess(result);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
             }
         }, entityId, AbstractCrudService.RetrieveTraget.View);
     }
@@ -136,5 +132,17 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     public void view(Key entityId) {
         this.entityId = entityId;
         populate();
+    }
+
+    @Override
+    public void finalize() {
+        if (service instanceof AbstractVersionedCrudService) {
+            ((AbstractVersionedCrudService<?>) service).finalize(new DefaultAsyncCallback<VoidSerializable>() {
+                @Override
+                public void onSuccess(VoidSerializable result) {
+                    populate();
+                }
+            }, entityId);
+        }
     }
 }

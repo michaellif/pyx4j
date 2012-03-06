@@ -36,6 +36,8 @@ public interface IViewerView<E extends IEntity> extends IFormView<E> {
         void cancel();
 
         void view(Key entityId);
+
+        void finalize();
     }
 
     void setPresenter(Presenter presenter);

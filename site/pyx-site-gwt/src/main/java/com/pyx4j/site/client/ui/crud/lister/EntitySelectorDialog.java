@@ -28,6 +28,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTable.ItemSelectionHandler;
@@ -126,6 +127,14 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
         }
 
         return restrictAlreadySelected;
+    }
+
+    protected void setParentFiltering(Key parentID) {
+        dataSource.setParentFiltering(parentID);
+    }
+
+    protected void setParentFiltering(Key parentID, Class<? extends IEntity> parentClass) {
+        dataSource.setParentFiltering(parentID, parentClass);
     }
 
     protected void addFilter(DataTableFilterData filter) {
