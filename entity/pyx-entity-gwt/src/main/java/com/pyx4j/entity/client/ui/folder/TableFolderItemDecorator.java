@@ -28,6 +28,8 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -139,5 +141,20 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
         actionsPanel.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator,
                 IFolderDecorator.DecoratorsIds.ActionPanel)).debugId());
+    }
+
+    @Override
+    public void addCustomAction(final Command cmd, ImageResource img, ImageResource imgHover, String title) {
+        actionsPanel.addCustomAction(cmd, img, imgHover, title);
+    }
+
+    @Override
+    public void removeCustomAction(final Command cmd) {
+        actionsPanel.removeCustomAction(cmd);
+    }
+
+    @Override
+    public void setCustomActionVisible(final Command cmd, boolean visible) {
+        actionsPanel.setCustomActionVisible(cmd, visible);
     }
 }

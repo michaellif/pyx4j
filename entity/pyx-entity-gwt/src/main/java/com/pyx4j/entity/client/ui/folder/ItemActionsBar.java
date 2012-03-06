@@ -21,12 +21,18 @@
 package com.pyx4j.entity.client.ui.folder;
 
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderActionsBar;
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderCustomButton;
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderDownButton;
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderRemoveButton;
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderUpButton;
 
+import java.util.HashMap;
+
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
@@ -59,9 +65,16 @@ public class ItemActionsBar extends FlowPanel {
 
     private final Image downCommand;
 
+    private final FlowPanel customActionsPanel;
+
+    private final HashMap<Command, ImageButton> customActions = new HashMap<Command, ImageButton>();
+
     public ItemActionsBar(boolean removable, EntityFolderImages images) {
 
         setStyleName(EntityFolderActionsBar.name());
+
+        customActionsPanel = new FlowPanel();
+        add(customActionsPanel);
 
         removeCommand = new ImageButton(images.del(), images.delHover(), i18n.tr("Delete Item"));
         removeCommand.setVisible(removable);
@@ -138,6 +151,31 @@ public class ItemActionsBar extends FlowPanel {
 
     public void setRemoveButtonVisible(boolean show) {
         removeCommand.setVisible(show);
+    }
+
+    public void addCustomAction(final Command cmd, ImageResource img, ImageResource imgHover, String title) {
+        ImageButton imgBtn = new ImageButton(img, imgHover, i18n.tr(title));
+        imgBtn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+
+                cmd.execute();
+            }
+        });
+
+        imgBtn.setStyleName(EntityFolderCustomButton.name());
+        customActions.put(cmd, imgBtn);
+        customActionsPanel.add(imgBtn);
+    }
+
+    public void removeCustomAction(final Command cmd) {
+        customActionsPanel.remove(customActions.get(cmd));
+        customActions.remove(cmd);
+    }
+
+    public void setCustomActionVisible(final Command cmd, boolean visible) {
+        customActions.get(cmd).setVisible(visible);
     }
 
     @Override

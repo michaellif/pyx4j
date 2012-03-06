@@ -31,7 +31,7 @@ public abstract class DefaultEntityFolderTheme extends Theme {
     public static enum StyleName implements IStyleName {
         EntityFolder, EntityFolderActionsBar, EntityFolderAddButton,
 
-        EntityFolderRemoveButton, EntityFolderUpButton, EntityFolderDownButton,
+        EntityFolderRemoveButton, EntityFolderUpButton, EntityFolderDownButton, EntityFolderCustomButton,
 
         //Box
         EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderBoxItemDecorator, EntityFolderBoxDecoratorCollapsedCaption,
@@ -116,10 +116,6 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderRemoveButton);
-        style.addProperty("float", "left");
-        addStyle(style);
-
         style = new Style(".", StyleName.EntityFolderUpButton);
         style.addProperty("float", "left");
         addStyle(style);
@@ -133,6 +129,14 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderRowItemDecorator, " .", StyleName.EntityFolderRemoveButton);
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.EntityFolderCustomButton);
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.EntityFolderRowItemDecorator, " .", StyleName.EntityFolderCustomButton);
         style.addProperty("float", "left");
         addStyle(style);
 

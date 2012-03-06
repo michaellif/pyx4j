@@ -31,6 +31,8 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -166,5 +168,21 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     @Override
     public void onSetDebugId(IDebugId parentDebugId) {
         toolbar.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(DebugIds.BoxFolderItemDecorator, DebugIds.ToolBar)).debugId());
+    }
+
+    @Override
+    public void addCustomAction(final Command cmd, ImageResource img, ImageResource imgHover, String title) {
+        toolbar.getActionsPanel().addCustomAction(cmd, img, imgHover, title);
+    }
+
+    @Override
+    public void removeCustomAction(final Command cmd) {
+        toolbar.getActionsPanel().removeCustomAction(cmd);
+    }
+
+    @Override
+    public void setCustomActionVisible(final Command cmd, boolean visible) {
+        toolbar.getActionsPanel().setCustomActionVisible(cmd, visible);
+
     }
 }

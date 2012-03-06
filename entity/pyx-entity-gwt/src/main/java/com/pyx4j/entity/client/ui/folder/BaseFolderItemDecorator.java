@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.client.ui.folder;
 
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
@@ -61,4 +63,10 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
     public EntityFolderImages getImages() {
         return images;
     }
+
+    public abstract void addCustomAction(final Command cmd, ImageResource img, ImageResource imgHover, String title);
+
+    public abstract void removeCustomAction(final Command cmd);
+
+    public abstract void setCustomActionVisible(final Command cmd, boolean visible);
 }
