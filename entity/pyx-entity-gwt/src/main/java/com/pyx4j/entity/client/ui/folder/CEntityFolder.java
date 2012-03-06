@@ -59,7 +59,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private boolean orderable = true;
 
-    private boolean modifiable = true;
+    private boolean addable = true;
+
+    private boolean removable = true;
 
     private int currentRowDebugId = 0;
 
@@ -103,23 +105,31 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         }
     }
 
-    public boolean isModifiable() {
-        return modifiable;
+    public boolean isAddable() {
+        return addable;
     }
 
-    public void setModifiable(boolean modifiable) {
-        this.modifiable = modifiable;
+    public void setAddable(boolean addable) {
+        this.addable = addable;
         calculateActionsState();
+    }
+
+    public boolean isRemovable() {
+        return removable;
+    }
+
+    public void setRemovable(boolean removable) {
+        this.removable = removable;
         for (CEntityFolderItem<E> item : itemsList) {
-            item.setRemovable(modifiable);
+            item.setRemovable(removable);
             item.calculateActionsState();
         }
     }
 
     private void calculateActionsState() {
-        boolean modifiable = isModifiable() && isEnabled() && isEditable();
+        boolean addable = isAddable() && isEnabled() && isEditable();
         if (getDecorator() != null) {
-            ((IFolderDecorator) getDecorator()).setAddButtonVisible(modifiable);
+            ((IFolderDecorator) getDecorator()).setAddButtonVisible(addable);
         }
     }
 
@@ -154,7 +164,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         CEntityFolderItem<E> item = createItem(first);
 
-        if (modifiable == false) {
+        if (removable == false) {
             item.setRemovable(false);
         }
 
@@ -169,7 +179,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     public void initContent() {
         super.initContent();
 
-        ((IFolderDecorator) getDecorator()).setAddButtonVisible(modifiable);
+        ((IFolderDecorator) getDecorator()).setAddButtonVisible(addable);
 
         addValueChangeHandler((IFolderDecorator) getDecorator());
 

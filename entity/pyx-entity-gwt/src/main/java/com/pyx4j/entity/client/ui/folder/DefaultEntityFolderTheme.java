@@ -100,7 +100,6 @@ public abstract class DefaultEntityFolderTheme extends Theme {
 
         style = new Style(".", StyleName.EntityFolderActionsBar);
         style.addProperty("opacity", "0.2");
-        style.addProperty("width", "63px");
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderActionsBar, "-", StyleDependent.hover);

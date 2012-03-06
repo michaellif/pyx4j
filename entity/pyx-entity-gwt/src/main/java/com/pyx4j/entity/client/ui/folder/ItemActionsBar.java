@@ -28,7 +28,7 @@ import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleNa
 
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -36,7 +36,7 @@ import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageButton;
 
-public class ItemActionsBar extends FlowPanel {
+public class ItemActionsBar extends HorizontalPanel {
 
     private static final I18n i18n = I18n.get(ItemActionsBar.class);
 
@@ -59,36 +59,41 @@ public class ItemActionsBar extends FlowPanel {
 
     private ImageButton downCommand;
 
-    private final FlowPanel customActionsPanel;
+    boolean boxDecorator = false;
 
     public ItemActionsBar() {
         setStyleName(EntityFolderActionsBar.name());
-
-        customActionsPanel = new FlowPanel();
-        add(customActionsPanel);
-
     }
 
-    public void init(EntityFolderImages images, boolean removable) {
+    public void init(IFolderItemDecorator decorator, boolean removable) {
+        EntityFolderImages images = decorator.getImages();
+
+        if (decorator instanceof BoxFolderItemDecorator) {
+            boxDecorator = true;
+        }
 
         removeCommand = new ImageButton(images.del(), images.delHover(), i18n.tr("Delete Item"));
         removeCommand.setVisible(removable);
         removeCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
         removeCommand.setStyleName(EntityFolderRemoveButton.name());
-        add(removeCommand);
-
-        FlowPanel orderActionsPanel = new FlowPanel();
-        add(orderActionsPanel);
 
         downCommand = new ImageButton(images.moveDown(), images.moveDownHover(), i18n.tr("Move down"));
         downCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
         downCommand.setStyleName(EntityFolderDownButton.name());
-        orderActionsPanel.add(downCommand);
 
         upCommand = new ImageButton(images.moveUp(), images.moveUpHover(), i18n.tr("Move up"));
         upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
         upCommand.setStyleName(EntityFolderUpButton.name());
-        orderActionsPanel.add(upCommand);
+
+        if (boxDecorator) {
+            add(upCommand);
+            add(downCommand);
+            add(removeCommand);
+        } else {
+            add(removeCommand);
+            add(upCommand);
+            add(downCommand);
+        }
     }
 
     public HandlerRegistration addItemRemoveClickHandler(final ClickHandler handler) {
@@ -147,11 +152,16 @@ public class ItemActionsBar extends FlowPanel {
 
     public void addCustomButton(ImageButton button) {
         button.setStyleName(EntityFolderCustomButton.name());
-        customActionsPanel.add(button);
+        add(button);
+        if (boxDecorator) {
+            insert(button, 0);
+        } else {
+            add(button);
+        }
     }
 
     public void removeCustomButton(ImageButton button) {
-        customActionsPanel.remove(button);
+        remove(button);
     }
 
     @Override

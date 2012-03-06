@@ -88,7 +88,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         super.initContent();
         IDecorator decorator = getDecorator();
         if (decorator instanceof IFolderItemDecorator) {
-            actionsPanel.init(((IFolderItemDecorator) decorator).getImages(), removable);
+            actionsPanel.init((IFolderItemDecorator) decorator, removable);
             ((IFolderItemDecorator) decorator).setItemActionsBar(actionsPanel);
         } else {
             throw new Error("Correct decorator is missing");
