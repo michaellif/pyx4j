@@ -36,7 +36,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     protected final String defaultCaption;
 
-    private final Button editButton;
+    private Button editButton;
 
     private Button selectVersion;
 
@@ -62,8 +62,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             editButton.addStyleName(editButton.getStylePrimaryName() + CrmTheme.StyleSuffixEx.EditButton);
 
             addToolbarItem(editButton);
-        } else {
-            editButton = null;
         }
     }
 
@@ -118,6 +116,13 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         ((CrmTitleBar) getHeader()).setCaption(defaultCaption + " " + value.getStringView());
         if (editButton != null) {
             editButton.setEnabled(super.getPresenter().canEdit());
+        }
+
+        if (finalizeButton != null) {
+            // TODO check on dirty draft present here...
+            if (false) {
+                finalizeButton.setVisible(false);
+            }
         }
     }
 }
