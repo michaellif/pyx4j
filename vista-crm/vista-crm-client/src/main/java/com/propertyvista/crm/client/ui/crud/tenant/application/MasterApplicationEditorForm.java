@@ -119,6 +119,7 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Information"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decidedBy()), 25).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionDate()), 9).build());
@@ -126,7 +127,7 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
         main.setHR(++row, 0, 1);
 
         main.setBR(++row, 0, 1);
-        main.setH3(++row, 0, 1, i18n.tr("Equifax check results"));
+        main.setH1(++row, 0, 1, i18n.tr("Equifax check results"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxApproval().percenrtageApproved()), 5).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxApproval().suggestedDecision()), 25).build());
 

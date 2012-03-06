@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.editors.LicenseEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
@@ -23,6 +24,8 @@ import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.ElevatorDTO;
 
 public class ElevatorEditorForm extends MechBaseEditorForm<ElevatorDTO> {
+
+    private static final I18n i18n = I18n.get(ElevatorEditorForm.class);
 
     public ElevatorEditorForm() {
         this(false);
@@ -37,11 +40,12 @@ public class ElevatorEditorForm extends MechBaseEditorForm<ElevatorDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Information"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().model()), 15).build());
 
-        row = -1;
+        row = 0;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().build()), 9).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
         main.getFlexCellFormatter().setRowSpan(row, 1, 3);
@@ -52,7 +56,7 @@ public class ElevatorEditorForm extends MechBaseEditorForm<ElevatorDTO> {
         main.setWidget(++row, 0, inject(proto().license(), new LicenseEditor()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setH1(++row, 0, 2, "");
+        main.setH1(++row, 0, 2, i18n.tr("Extras"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 57).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 

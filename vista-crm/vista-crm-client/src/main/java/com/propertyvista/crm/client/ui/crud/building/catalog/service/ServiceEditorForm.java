@@ -64,6 +64,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Information"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CLabel()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 57).build());
@@ -73,7 +74,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         main.setWidget(++row, 0, inject(proto().items(), new ServiceItemFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        row = -1;
+        row = 0;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositType()), 15).build());
 
         main.getColumnFormatter().setWidth(0, "50%");

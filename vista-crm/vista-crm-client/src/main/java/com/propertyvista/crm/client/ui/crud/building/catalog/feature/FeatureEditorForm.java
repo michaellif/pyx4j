@@ -40,6 +40,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Information"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CLabel()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isMandatory()), 4).build());
@@ -51,7 +52,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
         main.setWidget(++row, 0, inject(proto().items(), new FeatureItemFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        row = -1;
+        row = 0;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositType()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().isRecurring()), 4).build());
 

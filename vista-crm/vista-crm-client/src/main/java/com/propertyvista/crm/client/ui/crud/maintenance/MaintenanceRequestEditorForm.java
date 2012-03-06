@@ -132,6 +132,7 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
 
         // start panel layout
         int row = -1;
+        main.setH1(++row, 0, 2, "Information");
         main.setWidget(++row, 0, new DecoratorBuilder(comp1, 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(comp2, 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(comp3, 20).build());
@@ -141,7 +142,7 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
         main.setH1(++row, 0, 2, proto().surveyResponse().getMeta().getCaption());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel()), 10).build());
 
-        row = -1;
+        row = 0;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().tenant()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());

@@ -17,7 +17,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -66,18 +65,12 @@ public abstract class MechBaseEditorForm<E extends LicensedWarrantedMaintained> 
     protected abstract Widget createGeneralTab();
 
     protected Widget createWarrantyTab() {
-        FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().warranty(), new WarrantyEditor()));
-
-        return new CrmScrollPanel(main);
+        return new CrmScrollPanel(inject(proto().warranty(), new WarrantyEditor()).asWidget());
     }
 
     protected Widget createMaintenantceTab() {
-        FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().maintenance(), new MaintenanceEditor()));
-
-        return new CrmScrollPanel(main);
+        return new CrmScrollPanel(inject(proto().maintenance(), new MaintenanceEditor()).asWidget());
     }
 }

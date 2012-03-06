@@ -151,6 +151,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Information"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().passwordConfirm()), 10).build());
 

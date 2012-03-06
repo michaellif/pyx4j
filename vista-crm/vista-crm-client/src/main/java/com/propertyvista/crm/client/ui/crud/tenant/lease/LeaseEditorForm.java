@@ -262,6 +262,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Information"));
         main.setWidget(++row, 0, serviceItemPanel);
 
         main.setH1(++row, 0, 2, proto().leaseProducts().featureItems().getMeta().getCaption());

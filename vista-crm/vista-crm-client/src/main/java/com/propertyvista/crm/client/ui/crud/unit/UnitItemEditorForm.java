@@ -39,27 +39,29 @@ public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
-        int row0 = -1;
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
-        main.getFlexCellFormatter().setColSpan(row0, 0, 2);
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().conditionNotes()), 50).build());
-        main.getFlexCellFormatter().setColSpan(row0, 0, 2);
+        int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Information"));
 
-        main.setH1(++row0, 0, 2, i18n.tr("Details"));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().conditionNotes()), 50).build());
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        int row1 = row0; // from second column from here..
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().wallColor()), 10).build());
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().flooringType()), 10).build());
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().flooringInstallDate()), 9).build());
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().flooringValue()), 9).build());
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().counterTopType()), 10).build());
+        main.setH1(++row, 0, 2, i18n.tr("Details"));
 
-        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
-        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().counterTopValue()), 9).build());
-        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().cabinetsType()), 10).build());
-        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().cabinetsInstallDate()), 9).build());
-        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().cabinetsValue()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().wallColor()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringType()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringInstallDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringValue()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().counterTopType()), 10).build());
+
+        row = 4;
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopValue()), 9).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsType()), 10).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsInstallDate()), 9).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsValue()), 9).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
