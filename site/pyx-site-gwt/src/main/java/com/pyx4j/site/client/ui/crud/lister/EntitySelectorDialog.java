@@ -103,6 +103,10 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
         return vPanel;
     }
 
+    protected SelectEntityLister getLister() {
+        return lister;
+    }
+
     @SuppressWarnings("unchecked")
     protected List<E> getSelectedItems() {
         if (isMultiselect) {
@@ -156,7 +160,7 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
         dataSource.setPreDefinedFilters(filters);
     }
 
-    private class SelectEntityLister extends BasicLister<E> {
+    protected class SelectEntityLister extends BasicLister<E> {
 
         public SelectEntityLister(Class<E> clazz) {
             super(clazz);
