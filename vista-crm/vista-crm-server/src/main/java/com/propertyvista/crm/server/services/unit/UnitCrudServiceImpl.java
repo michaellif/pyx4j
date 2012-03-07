@@ -41,7 +41,6 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
 
         if (!fromList) {
             // load detached entities:
-
             if (!dto.marketing().isValueDetached()) { // This is not called for now cince file is detached in annotation. see comments on this filed
                 Persistence.service().retrieve(dto.marketing().adBlurbs());
             }

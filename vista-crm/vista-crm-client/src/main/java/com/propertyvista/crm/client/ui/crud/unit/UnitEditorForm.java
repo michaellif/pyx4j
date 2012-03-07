@@ -84,9 +84,9 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         super.onPopulate();
 
         if (isEditable()) {
-            // setupBuioldingEditor:
+            // setup Building Editor:
             CComponent<?, ?> building = null;
-            if (getValue().belongsTo().isEmpty()) {
+            if (getValue().belongsTo().getPrimaryKey() == null) {
                 CEntityComboBox<Building> combo = new CEntityComboBox<Building>(Building.class);
                 combo.addValueChangeHandler(new ValueChangeHandler<Building>() {
                     @Override
@@ -96,15 +96,18 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                 });
                 building = combo;
             } else {
-                CEntityLabel<Building> label = new CEntityLabel<Building>();
-                label.populate(getValue().belongsTo());
-                building = label;
                 setupFloorplanCombo(getValue().belongsTo());
+                if (!getValue().belongsTo().isEmpty()) {
+                    CEntityLabel<Building> label = new CEntityLabel<Building>();
+                    label.populate(getValue().belongsTo());
+                    building = label;
+                }
             }
 
-            buildingPlace.setWidget(new DecoratorBuilder(inject(proto().belongsTo(), building), 20).build());
+            if (building != null) {
+                buildingPlace.setWidget(new DecoratorBuilder(inject(proto().belongsTo(), building), 20).build());
+            }
         }
-
     }
 
     @Override
