@@ -27,6 +27,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 
+import com.pyx4j.forms.client.ui.CComboBox.NotInOptionsPolicy;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.widgets.client.ListBox;
 
@@ -36,6 +37,8 @@ import com.pyx4j.widgets.client.ListBox;
 public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> implements INativeFocusComponent<E> {
 
     private E value;
+
+    private E populatedValue = null;
 
     private boolean firstNativeItemIsNoSelection = false;
 
@@ -79,6 +82,10 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
         }
     }
 
+    public void setPopulatedValue(E newValue) {
+        this.populatedValue = newValue;
+    }
+
     public void refreshOption(E opt) {
         getEditor().setItemText(getNativeOptionIndex(opt), getCComponent().getItemName(opt));
     }
@@ -96,25 +103,22 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
                 getEditor().addItem(getCComponent().getItemName(null));
             }
 
-            if ((this.value != null) && ((getCComponent().getOptions() == null) || !getCComponent().getOptions().contains(this.value))) {
-                switch (getCComponent().getPolicy()) {
-                case KEEP:
-                    getEditor().addItem(getCComponent().getItemName(this.value));
-                    notInOptionsValue = this.value;
-                    break;
-                case DISCARD:
-                    if (getCComponent().getOptions() != null) {
-                        getCComponent().setValue(null);
-                    }
-                    notInOptionsValue = null;
-                    break;
-
-                }
-            } else {
-                notInOptionsValue = null;
-            }
-
             if (getCComponent().getOptions() != null) {
+
+                // For Policy.KEEP Show populated value in the list
+                if ((this.populatedValue != null) && (getCComponent().getPolicy() == NotInOptionsPolicy.KEEP)
+                        && (!getCComponent().getOptions().contains(this.populatedValue))) {
+                    notInOptionsValue = this.populatedValue;
+                    getEditor().addItem(getCComponent().getItemName(this.populatedValue));
+                } else {
+                    notInOptionsValue = null;
+                }
+
+                if ((this.value != null) && (getCComponent().getPolicy() == NotInOptionsPolicy.DISCARD) && (getNativeOptionIndex(this.value) == -1)) {
+                    // Discard selection
+                    getCComponent().setValue(null, false);
+                }
+
                 for (E o : getCComponent().getOptions()) {
                     getEditor().addItem(getCComponent().getItemName(o));
                 }
