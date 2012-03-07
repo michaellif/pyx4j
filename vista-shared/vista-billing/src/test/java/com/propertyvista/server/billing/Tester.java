@@ -21,7 +21,7 @@ public class Tester {
             return;
         if ((expected != null) && (expected.equals(actual)))
             return;
-        if (true) {
+        if (false) {
             System.out.println(format(message, expected, actual));
             Thread.dumpStack();
         } else {

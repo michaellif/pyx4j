@@ -15,15 +15,9 @@ package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+@DiscriminatorValue("entryAdjustment")
+public interface BillEntryAdjustment extends BillEntry {
 
-/**
- * 
- * @see {@link com.propertyvista.domain.financial.offering.Feature.Type.adjustment}
- */
-@DiscriminatorValue("leaseAdjustment")
-public interface BillLeaseAdjustment extends BillEntry {
-
-    LeaseAdjustment leaseAdjustment();
+    BillEntry billEntry();
 
 }

@@ -21,16 +21,15 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillPayment;
 import com.propertyvista.domain.financial.billing.Payment;
 
 public class PaymentProcessor {
 
-    private final Bill bill;
+    private final Billing billing;
 
-    PaymentProcessor(Bill bill) {
-        this.bill = bill;
+    PaymentProcessor(Billing billing) {
+        this.billing = billing;
     }
 
     void createPayments() {
@@ -45,8 +44,8 @@ public class PaymentProcessor {
     private void createPayment(Payment payment) {
         BillPayment billPayment = EntityFactory.create(BillPayment.class);
         billPayment.payment().set(payment);
-        billPayment.bill().set(bill);
-        bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue().add(billPayment.payment().amount().getValue()));
+        billPayment.bill().set(billing.getNextPeriodBill());
+        billing.getNextPeriodBill().paymentReceivedAmount().setValue(billing.getNextPeriodBill().paymentReceivedAmount().getValue().add(billPayment.payment().amount().getValue()));
     }
 
 }

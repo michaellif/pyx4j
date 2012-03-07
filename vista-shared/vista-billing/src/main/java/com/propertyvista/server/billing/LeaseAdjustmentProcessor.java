@@ -17,21 +17,20 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillChargeTax;
 import com.propertyvista.domain.financial.billing.BillLeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class LeaseAdjustmentProcessor {
 
-    private final Bill bill;
+    private final Billing billing;
 
-    LeaseAdjustmentProcessor(Bill bill) {
-        this.bill = bill;
+    LeaseAdjustmentProcessor(Billing billing) {
+        this.billing = billing;
     }
 
     void createLeaseAdjustments() {
-        for (LeaseAdjustment item : bill.billingAccount().leaseFinancial().adjustments()) {
+        for (LeaseAdjustment item : billing.getNextPeriodBill().billingAccount().leaseFinancial().adjustments()) {
             createLeaseAdjustment(item);
         }
     }
@@ -42,12 +41,12 @@ public class LeaseAdjustmentProcessor {
         }
 
         BillLeaseAdjustment adjustment = EntityFactory.create(BillLeaseAdjustment.class);
-        adjustment.bill().set(bill);
-        bill.leaseAdjustments().add(adjustment);
-        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.amount().getValue()));
+        adjustment.bill().set(billing.getNextPeriodBill());
+        billing.getNextPeriodBill().leaseAdjustments().add(adjustment);
+        billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(adjustment.amount().getValue()));
 
         if (!adjustment.amount().isNull()) {
-            adjustment.taxes().addAll(TaxUtils.calculateTaxes(adjustment.amount().getValue(), item.reason(), bill.billingRun().building()));
+            adjustment.taxes().addAll(TaxUtils.calculateTaxes(adjustment.amount().getValue(), item.reason(), billing.getNextPeriodBill().billingRun().building()));
         }
         adjustment.taxTotal().setValue(new BigDecimal(0));
         for (BillChargeTax chargeTax : adjustment.taxes()) {
@@ -58,9 +57,9 @@ public class LeaseAdjustmentProcessor {
     }
 
     private void addLeaseAdjustment(BillLeaseAdjustment item) {
-        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(item.amount().getValue()));
-        bill.leaseAdjustments().add(item);
-        bill.taxes().setValue(bill.taxes().getValue().add(item.taxTotal().getValue()));
+        billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(item.amount().getValue()));
+        billing.getNextPeriodBill().leaseAdjustments().add(item);
+        billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(item.taxTotal().getValue()));
     }
 
     private boolean isLeaseAdjustmentApplicable(LeaseAdjustment item) {

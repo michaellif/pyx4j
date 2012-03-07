@@ -33,7 +33,7 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 1 ======================//
 
-        setSysDate("18-Mar-2011");
+        setSysDate("18-Feb-2011");
         setLeaseStatus(Lease.Status.Approved);
 
         Bill bill = runBilling(true);
@@ -58,7 +58,7 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         setLeaseStatus(Lease.Status.Active);
 
-        setSysDate("16-Apr-2011");
+        setSysDate("19-Mar-2011");
 
         bill = runBilling(true);
 
@@ -80,7 +80,7 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 3 ======================//
 
-        setSysDate("15-May-2011");
+        setSysDate("16-Apr-2011");
 
         bill = runBilling(false);
 
@@ -122,7 +122,7 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 4 ======================//
 
-        setSysDate("15-Jun-2011");
+        setSysDate("18-May-2011");
 
         bill = runBilling(true);
 
@@ -144,7 +144,7 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 5 ======================//
 
-        setSysDate("15-Jul-2011");
+        setSysDate("18-Jun-2011");
 
         bill = runBilling(true);
 
@@ -166,9 +166,7 @@ public class BillingPeriodsTest extends BillingTestBase {
 
         //==================== RUN 6 ======================//
 
-        setSysDate("05-Aug-2011");
-
-        setLeaseStatus(Lease.Status.Completed);
+        setSysDate("18-Jul-2011");
 
         bill = runBilling(true);
 
@@ -181,6 +179,30 @@ public class BillingPeriodsTest extends BillingTestBase {
         billingRunPeriodStartDate("1-Aug-2011").
         billingRunPeriodEndDate("31-Aug-2011").
         billingRunExecutionTargetDate("17-Jul-2011").
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("1-Aug-2011").
+        billingPeriodEndDate("3-Aug-2011");
+        // @formatter:on
+
+        assertEquals("Same Billing Cycle", billingCycleId, bill.billingRun().billingCycle().id().toString());
+
+        //==================== RUN final ======================//
+
+        setSysDate("05-Aug-2011");
+
+        setLeaseStatus(Lease.Status.Completed);
+
+        bill = runBilling(true);
+
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(8).
+        previousBillSequenceNumber(7).
+        billingCyclePeriodStartDay(1).
+        billingCycleRunTargetDay(14).
+        billingRunPeriodStartDate("01-Sep-2011").
+        billingRunPeriodEndDate("30-Sep-2011").
+        billingRunExecutionTargetDate("17-Aug-2011").
         billType(Bill.BillType.Final).
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);

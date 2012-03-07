@@ -42,7 +42,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         addBillableItemAdjustment(locker1, "-0.2", AdjustmentType.percentage, TermType.inLease);
 
         BillableItem pet1 = addPet();
-        addBillableItemAdjustment(pet1, null, AdjustmentType.free, TermType.inLease);
+        addBillableItemAdjustment(pet1, "-1", AdjustmentType.percentage, TermType.inLease);
 
         //==================== RUN 1 ======================//
 
@@ -97,7 +97,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
 
         setSysDate("18-Apr-2011");
 
-        BillableItem pet2 = addPet();
+        BillableItem pet2 = addPet("20-Apr-2011", null);
 
         bill = runBilling(true);
 
@@ -108,11 +108,11 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
-        numOfCharges(6).
+        numOfCharges(7).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("231.61").
+        recurringFeatureCharges("238.95").
         totalAdjustments("-48.45").
         oneTimeFeatureCharges("0.00");
         // @formatter:on

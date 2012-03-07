@@ -58,7 +58,7 @@ public class ProrationUtils {
             }
             return new BigDecimal(daysBetween(from, to)).divide(proration, 6, RoundingMode.HALF_UP);
         } else {
-            throw new BillingException("proration can be calculated for a period of month");
+            throw new BillingException("proration can't be calculated for a period more than one month, but period was defined as " + from + " - " + to);
         }
 
     }

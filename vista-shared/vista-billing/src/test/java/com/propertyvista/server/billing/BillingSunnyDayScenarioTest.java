@@ -42,7 +42,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         addBillableItemAdjustment(locker1, "-0.2", AdjustmentType.percentage, TermType.inLease);
 
         BillableItem pet1 = addPet();
-        addBillableItemAdjustment(pet1, null, AdjustmentType.free, TermType.inLease);
+        addBillableItemAdjustment(pet1, "-1", AdjustmentType.percentage, TermType.inLease);
 
         //==================== RUN 1 ======================//
 

@@ -63,9 +63,7 @@ public interface Bill extends IEntity {
 
         Regular,
 
-        Final,
-
-        Draft;
+        Final;
 
         @Override
         public String toString() {
@@ -78,6 +76,11 @@ public interface Bill extends IEntity {
     BillingAccount billingAccount();
 
     IPrimitive<Integer> billSequenceNumber();
+
+    /**
+     * If draft is true no need to verify it. Next bill will run on the same billing cycle.
+     */
+    IPrimitive<Boolean> draft();
 
     Bill previousBill();
 
@@ -115,7 +118,9 @@ public interface Bill extends IEntity {
     @OrderBy(BillLeaseAdjustment.OrderId.class)
     IList<BillLeaseAdjustment> leaseAdjustments();
 
-    //TODO BillLeaseAdjustment
+    @Detached
+    @Owned
+    ISet<BillEntryAdjustment> billEntryAdjustments();
 
     /**
      * The total amount due from the previous bill.

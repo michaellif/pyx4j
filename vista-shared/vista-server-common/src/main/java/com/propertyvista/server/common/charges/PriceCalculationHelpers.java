@@ -41,22 +41,18 @@ public class PriceCalculationHelpers {
         // Calculate adjustments:
         BigDecimal adjustedPrice = startPrice;
         if (adjustment.termType().getValue().equals(BillableItemAdjustment.TermType.inLease)) {
-            if (adjustment.adjustmentType().getValue().equals(BillableItemAdjustment.AdjustmentType.free)) {
-                adjustedPrice = new BigDecimal(0);
-            } else {
-                if (adjustment.value().isNull()) {
-                    return startPrice; // value is necessary on this stage!..
-                }
+            if (adjustment.value().isNull()) {
+                return startPrice; // value is necessary on this stage!..
+            }
 
-                switch (adjustment.adjustmentType().getValue()) {
-                case monetary:
-                    adjustedPrice = adjustedPrice.add(adjustment.value().getValue());
-                    break;
+            switch (adjustment.adjustmentType().getValue()) {
+            case monetary:
+                adjustedPrice = adjustedPrice.add(adjustment.value().getValue());
+                break;
 
-                case percentage:
-                    adjustedPrice = adjustedPrice.multiply(new BigDecimal(1).add(adjustment.value().getValue()).divide(new BigDecimal(100)));
-                    break;
-                }
+            case percentage:
+                adjustedPrice = adjustedPrice.multiply(new BigDecimal(1).add(adjustment.value().getValue()).divide(new BigDecimal(100)));
+                break;
             }
         }
 

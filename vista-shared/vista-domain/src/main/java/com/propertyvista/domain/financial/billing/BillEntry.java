@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -31,8 +32,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Inheritance
 @AbstractEntity
 public interface BillEntry extends IEntity {
+
+    enum Period {
+        previous, current, next
+    }
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
@@ -44,6 +50,8 @@ public interface BillEntry extends IEntity {
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> taxTotal();
+
+    IPrimitive<Period> period();
 
     interface OrderId extends ColumnId {
 

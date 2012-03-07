@@ -37,10 +37,109 @@ class Billing {
 
     private final static Logger log = LoggerFactory.getLogger(Billing.class);
 
-    private final Bill bill;
+    private final Bill nextPeriodBill;
+
+    private Bill currentPeriodBill;
+
+    private Bill previousPeriodBill;
+
+    private final PaymentProcessor paymentProcessor;
+
+    private final ChargeProcessor chargeProcessor;
+
+    private final ChargeAdjustmentProcessor chargeAdjustmentProcessor;
+
+    private final LeaseAdjustmentProcessor leaseAdjustmentProcessor;
 
     private Billing(Bill bill) {
-        this.bill = bill;
+        this.nextPeriodBill = bill;
+        if (!bill.previousBill().isNull()) {
+            this.currentPeriodBill = bill.previousBill();
+            Persistence.service().retrieve(currentPeriodBill.charges());
+        }
+        if (currentPeriodBill != null && !currentPeriodBill.previousBill().isNull()) {
+            this.previousPeriodBill = currentPeriodBill.previousBill();
+            Persistence.service().retrieve(previousPeriodBill.charges());
+        }
+        paymentProcessor = new PaymentProcessor(this);
+        chargeProcessor = new ChargeProcessor(this);
+        chargeAdjustmentProcessor = new ChargeAdjustmentProcessor(this);
+        leaseAdjustmentProcessor = new LeaseAdjustmentProcessor(this);
+
+    }
+
+    private void run() {
+
+        //Set accumulating fields to 0 value
+        nextPeriodBill.paymentReceivedAmount().setValue(new BigDecimal(0));
+        nextPeriodBill.recurringFeatureCharges().setValue(new BigDecimal(0));
+        nextPeriodBill.oneTimeFeatureCharges().setValue(new BigDecimal(0));
+        nextPeriodBill.totalAdjustments().setValue(new BigDecimal(0));
+        nextPeriodBill.immediateAdjustments().setValue(new BigDecimal(0));
+        nextPeriodBill.latePaymentCharges().setValue(new BigDecimal(0));
+        nextPeriodBill.taxes().setValue(new BigDecimal(0));
+        nextPeriodBill.depositPaidAmount().setValue(new BigDecimal(0));
+
+        getPreviousTotals();
+
+        paymentProcessor.createPayments();
+        chargeProcessor.createCharges();
+        chargeAdjustmentProcessor.createChargeAdjustments();
+        leaseAdjustmentProcessor.createLeaseAdjustments();
+
+        calculateTotals();
+
+    }
+
+    private void getPreviousTotals() {
+        Bill lastBill = BillingLifecycle.getLatestConfirmedBill(nextPeriodBill.billingAccount());
+        if (lastBill != null) {
+            nextPeriodBill.previousBalanceAmount().setValue(lastBill.totalDueAmount().getValue());
+        } else {
+            nextPeriodBill.previousBalanceAmount().setValue(new BigDecimal(0));
+        }
+    }
+
+    private void calculateTotals() {
+        nextPeriodBill.pastDueAmount().setValue(
+                nextPeriodBill.previousBalanceAmount().getValue().subtract(nextPeriodBill.paymentReceivedAmount().getValue())
+                        .subtract(nextPeriodBill.immediateAdjustments().getValue()));
+
+        nextPeriodBill.currentAmount().setValue(
+                nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.serviceCharge().getValue())
+                        .add(nextPeriodBill.recurringFeatureCharges().getValue()).add(nextPeriodBill.oneTimeFeatureCharges().getValue())
+                        .add(nextPeriodBill.totalAdjustments().getValue()).subtract(nextPeriodBill.depositPaidAmount().getValue())
+                        .add(nextPeriodBill.latePaymentCharges().getValue()));
+
+        nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue()));
+    }
+
+    public Bill getNextPeriodBill() {
+        return nextPeriodBill;
+    }
+
+    public Bill getCurrentPeriodBill() {
+        return currentPeriodBill;
+    }
+
+    public Bill getPreviousPeriodBill() {
+        return previousPeriodBill;
+    }
+
+    public PaymentProcessor getPaymentProcessor() {
+        return paymentProcessor;
+    }
+
+    public ChargeProcessor getChargeProcessor() {
+        return chargeProcessor;
+    }
+
+    public ChargeAdjustmentProcessor getChargeAdjustmentProcessor() {
+        return chargeAdjustmentProcessor;
+    }
+
+    public LeaseAdjustmentProcessor getLeaseAdjustmentProcessor() {
+        return leaseAdjustmentProcessor;
     }
 
     static void createBill(BillingRun billingRun, BillingAccount billingAccount) {
@@ -65,9 +164,9 @@ class Billing {
 
                 Persistence.service().persist(bill);
 
-                if (Status.New.equals(billingAccount.leaseFinancial().lease().status().getValue())) {// draft bill should be issued
-                    bill.billType().setValue(Bill.BillType.Draft);
-                } else if (Status.Approved.equals(billingAccount.leaseFinancial().lease().status().getValue())) {// first bill should be issued
+                bill.draft().setValue(Status.New.equals(billingAccount.leaseFinancial().lease().status().getValue()));
+
+                if (Status.Approved.equals(billingAccount.leaseFinancial().lease().status().getValue())) {// first bill should be issued
                     bill.billType().setValue(Bill.BillType.First);
                     bill.billingPeriodStartDate().setValue(billingAccount.leaseFinancial().lease().leaseFrom().getValue());
 
@@ -114,49 +213,4 @@ class Billing {
         }
 
     }
-
-    private void run() {
-
-        //Set accumulating fields to 0 value
-        bill.paymentReceivedAmount().setValue(new BigDecimal(0));
-        bill.recurringFeatureCharges().setValue(new BigDecimal(0));
-        bill.oneTimeFeatureCharges().setValue(new BigDecimal(0));
-        bill.totalAdjustments().setValue(new BigDecimal(0));
-        bill.immediateAdjustments().setValue(new BigDecimal(0));
-        bill.latePaymentCharges().setValue(new BigDecimal(0));
-        bill.taxes().setValue(new BigDecimal(0));
-        bill.depositPaidAmount().setValue(new BigDecimal(0));
-
-        getPreviousTotals();
-
-        new PaymentProcessor(bill).createPayments();
-        new ChargeProcessor(bill).createCharges();
-        new ChargeAdjustmentProcessor(bill).createChargeAdjustments();
-        new LeaseAdjustmentProcessor(bill).createLeaseAdjustments();
-
-        calculateTotals();
-
-    }
-
-    private void getPreviousTotals() {
-        Bill lastBill = BillingLifecycle.getLatestConfirmedBill(bill.billingAccount());
-        if (lastBill != null) {
-            bill.previousBalanceAmount().setValue(lastBill.totalDueAmount().getValue());
-        } else {
-            bill.previousBalanceAmount().setValue(new BigDecimal(0));
-        }
-    }
-
-    private void calculateTotals() {
-        bill.pastDueAmount().setValue(
-                bill.previousBalanceAmount().getValue().subtract(bill.paymentReceivedAmount().getValue()).subtract(bill.immediateAdjustments().getValue()));
-
-        bill.currentAmount().setValue(
-                bill.pastDueAmount().getValue().add(bill.serviceCharge().getValue()).add(bill.recurringFeatureCharges().getValue())
-                        .add(bill.oneTimeFeatureCharges().getValue()).add(bill.totalAdjustments().getValue()).subtract(bill.depositPaidAmount().getValue())
-                        .add(bill.latePaymentCharges().getValue()));
-
-        bill.totalDueAmount().setValue(bill.currentAmount().getValue().add(bill.taxes().getValue()));
-    }
-
 }

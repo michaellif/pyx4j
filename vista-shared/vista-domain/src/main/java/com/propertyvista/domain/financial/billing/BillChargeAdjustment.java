@@ -13,8 +13,11 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 
+@DiscriminatorValue("chargeAdjustment")
 public interface BillChargeAdjustment extends BillEntry {
 
     BillableItemAdjustment billableItemAdjustment();

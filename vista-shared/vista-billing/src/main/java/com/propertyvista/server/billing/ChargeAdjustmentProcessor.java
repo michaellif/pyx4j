@@ -26,15 +26,15 @@ import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class ChargeAdjustmentProcessor {
 
-    private final Bill bill;
+    private final Billing billing;
 
-    ChargeAdjustmentProcessor(Bill bill) {
-        this.bill = bill;
+    ChargeAdjustmentProcessor(Billing billing) {
+        this.billing = billing;
     }
 
     void createChargeAdjustments() {
-        createChargeAdjustments(bill.billingAccount().leaseFinancial().lease().leaseProducts().serviceItem());
-        for (BillableItem item : bill.billingAccount().leaseFinancial().lease().leaseProducts().featureItems()) {
+        createChargeAdjustments(billing.getNextPeriodBill().billingAccount().leaseFinancial().lease().leaseProducts().serviceItem());
+        for (BillableItem item : billing.getNextPeriodBill().billingAccount().leaseFinancial().lease().leaseProducts().featureItems()) {
             createChargeAdjustments(item);
         }
     }
@@ -48,7 +48,7 @@ public class ChargeAdjustmentProcessor {
     private void createChargeAdjustment(BillableItemAdjustment itemAdjustment) {
 
         BillChargeAdjustment adjustment = EntityFactory.create(BillChargeAdjustment.class);
-        adjustment.bill().set(bill);
+        adjustment.bill().set(billing.getNextPeriodBill());
         adjustment.billableItemAdjustment().set(itemAdjustment);
 
         BigDecimal amount = null;
@@ -57,16 +57,15 @@ public class ChargeAdjustmentProcessor {
             amount = itemAdjustment.billableItem().item().price().getValue().multiply(itemAdjustment.value().getValue());
         } else if (BillableItemAdjustment.AdjustmentType.monetary.equals(itemAdjustment.adjustmentType().getValue())) {
             amount = itemAdjustment.value().getValue();
-        } else if (BillableItemAdjustment.AdjustmentType.free.equals(itemAdjustment.adjustmentType().getValue())) {
-            amount = itemAdjustment.billableItem().item().price().getValue().multiply(new BigDecimal(-1));
         }
 
-        if (Bill.BillType.Final.equals(bill.billType().getValue())) {
+        if (Bill.BillType.Final.equals(billing.getNextPeriodBill().billType().getValue())) {
             //TODO final bill
             adjustment.amount().setValue(new BigDecimal("0.00"));
         } else {
-            DateRange overlap = DateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate().getValue()),
-                    new DateRange(itemAdjustment.effectiveDate().getValue(), itemAdjustment.expirationDate().getValue()));
+            DateRange overlap = DateUtils.getOverlappingRange(new DateRange(billing.getNextPeriodBill().billingPeriodStartDate().getValue(), billing
+                    .getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(itemAdjustment.effectiveDate().getValue(), itemAdjustment
+                    .expirationDate().getValue()));
 
             if (overlap == null) {
                 return;
@@ -86,7 +85,8 @@ public class ChargeAdjustmentProcessor {
 
         if (!adjustment.amount().isNull()) {
             adjustment.taxes().addAll(
-                    TaxUtils.calculateTaxes(adjustment.amount().getValue(), itemAdjustment.billableItem().item().type(), bill.billingRun().building()));
+                    TaxUtils.calculateTaxes(adjustment.amount().getValue(), itemAdjustment.billableItem().item().type(), billing.getNextPeriodBill()
+                            .billingRun().building()));
         }
         adjustment.taxTotal().setValue(new BigDecimal(0));
         for (BillChargeTax chargeTax : adjustment.taxes()) {
@@ -97,8 +97,8 @@ public class ChargeAdjustmentProcessor {
     }
 
     private void addCharge(BillChargeAdjustment adjustment) {
-        bill.chargeAdjustments().add(adjustment);
-        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(adjustment.amount().getValue()));
-        bill.taxes().setValue(bill.taxes().getValue().add(adjustment.taxTotal().getValue()));
+        billing.getNextPeriodBill().chargeAdjustments().add(adjustment);
+        billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(adjustment.amount().getValue()));
+        billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(adjustment.taxTotal().getValue()));
     }
 }
