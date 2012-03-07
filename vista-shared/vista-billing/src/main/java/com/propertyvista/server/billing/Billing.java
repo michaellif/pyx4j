@@ -51,6 +51,8 @@ class Billing {
 
     private final LeaseAdjustmentProcessor leaseAdjustmentProcessor;
 
+    private final BillEntryAdjustmentProcessor billEntryAdjustmentProcessor;
+
     private Billing(Bill bill) {
         this.nextPeriodBill = bill;
         if (!bill.previousBill().isNull()) {
@@ -65,6 +67,7 @@ class Billing {
         chargeProcessor = new ChargeProcessor(this);
         chargeAdjustmentProcessor = new ChargeAdjustmentProcessor(this);
         leaseAdjustmentProcessor = new LeaseAdjustmentProcessor(this);
+        billEntryAdjustmentProcessor = new BillEntryAdjustmentProcessor(this);
 
     }
 
@@ -140,6 +143,10 @@ class Billing {
 
     public LeaseAdjustmentProcessor getLeaseAdjustmentProcessor() {
         return leaseAdjustmentProcessor;
+    }
+
+    public BillEntryAdjustmentProcessor getBillEntryAdjustmentProcessor() {
+        return billEntryAdjustmentProcessor;
     }
 
     static void createBill(BillingRun billingRun, BillingAccount billingAccount) {

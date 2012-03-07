@@ -23,6 +23,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillCharge;
 import com.propertyvista.domain.financial.billing.BillChargeTax;
 import com.propertyvista.domain.financial.billing.BillEntry;
+import com.propertyvista.domain.financial.billing.BillEntryAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
@@ -86,12 +87,41 @@ public class ChargeProcessor {
             addCharge(revisedCharge);
         } else if (revisedCharge != null && originalCharge != null) {
             if (!revisedCharge.amount().getValue().equals(originalCharge.amount().getValue())) {
-                //TODO if new charge is different from old one create appropriate adjustment
+                billing.getBillEntryAdjustmentProcessor().createBillEntryAdjustment(originalCharge, revisedCharge);
             }
         }
     }
 
     private void updateChargeForPreviousPeriod(BillableItem billableItem) {
+        if (billing.getPreviousPeriodBill() == null) {
+            return;
+        }
+
+        BillCharge finalCharge = createCharge(billableItem, billing.getPreviousPeriodBill(), BillEntry.Period.previous);
+
+        BillCharge originalCharge = null;
+
+        for (BillCharge charge : billing.getPreviousPeriodBill().charges()) {
+            if (billableItem.equals(charge.billableItem())) {
+                originalCharge = charge;
+                break;
+            }
+        }
+
+        if (finalCharge != null && originalCharge == null) {
+            addCharge(finalCharge);
+        } else if (finalCharge != null && originalCharge != null) {
+            BillEntryAdjustment billEntryAdjustment = null;
+            for (BillEntryAdjustment adjustment : billing.getCurrentPeriodBill().billEntryAdjustments()) {
+                if (originalCharge.equals(adjustment.originalBillEntry())) {
+                    billEntryAdjustment = adjustment;
+                    break;
+                }
+            }
+            if (billEntryAdjustment != null) {
+                billing.getBillEntryAdjustmentProcessor().createBillEntryAdjustment(billEntryAdjustment.revisedBillEntry(), finalCharge);
+            }
+        }
     }
 
     private BillCharge createCharge(BillableItem billableItem, Bill bill, BillEntry.Period period) {

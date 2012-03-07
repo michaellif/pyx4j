@@ -133,11 +133,11 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
-        numOfCharges(5).
+        numOfCharges(6).
         numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("180.00").
+        recurringFeatureCharges("187.33").
         totalAdjustments("-42.00").
         oneTimeFeatureCharges("0.00");
         // @formatter:on

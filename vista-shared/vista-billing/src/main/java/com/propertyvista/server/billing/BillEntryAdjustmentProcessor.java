@@ -7,19 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 25, 2012
+ * Created on Feb 25, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial.billing;
+package com.propertyvista.server.billing;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.propertyvista.domain.financial.billing.BillEntry;
 
-@DiscriminatorValue("entryAdjustment")
-public interface BillEntryAdjustment extends BillEntry {
+public class BillEntryAdjustmentProcessor {
 
-    BillEntry originalBillEntry();
+    private final Billing billing;
 
-    BillEntry revisedBillEntry();
+    BillEntryAdjustmentProcessor(Billing billing) {
+        this.billing = billing;
+    }
+
+    protected void createBillEntryAdjustment(BillEntry originalEntry, BillEntry revisedEntry) {
+    }
 
 }

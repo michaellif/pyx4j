@@ -20,14 +20,21 @@
  */
 package com.propertyvista.server.billing;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.report.JasperFileFormat;
+import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -47,6 +54,7 @@ import com.propertyvista.server.billing.preload.ProductItemTypesDataModel;
 import com.propertyvista.server.billing.preload.ProductTaxPolicyDataModel;
 import com.propertyvista.server.billing.preload.TaxesDataModel;
 import com.propertyvista.server.billing.preload.TenantDataModel;
+import com.propertyvista.server.billing.print.BillPrint;
 
 abstract class BillingTestBase extends VistaDBTestBase {
 
@@ -109,6 +117,18 @@ abstract class BillingTestBase extends VistaDBTestBase {
         DataDump.dump("bill", bill);
         DataDump.dump("lease", lease);
 
+        FileOutputStream pdf = null;
+        try {
+            pdf = new FileOutputStream(billFileName(bill));
+            JasperReportProcessor.createReport(BillPrint.createModel(bill), JasperFileFormat.PDF, pdf);
+            pdf.flush();
+        } catch (FileNotFoundException e) {
+            throw new Error(e);
+        } catch (IOException e) {
+            throw new Error(e);
+        } finally {
+            IOUtils.closeQuietly(pdf);
+        }
         return bill;
     }
 
@@ -232,4 +252,20 @@ abstract class BillingTestBase extends VistaDBTestBase {
         return adjustment;
     }
 
+    protected static String billFileName(Bill bill) {
+        String ext = ".pdf";
+        File dir = new File("target", "reports-dump");
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                throw new Error("Can't create directory " + dir.getAbsolutePath());
+            }
+        }
+        File file = new File(dir, "Bill-" + bill.getPrimaryKey().toString() + ext);
+        if (file.exists()) {
+            if (!file.delete()) {
+                throw new Error("Can't delete file " + file.getAbsolutePath());
+            }
+        }
+        return file.getAbsolutePath();
+    }
 }
