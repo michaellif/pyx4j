@@ -75,8 +75,9 @@ public interface Showing extends IEntity {
     }
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @JoinColumn
     Appointment appointment();
 

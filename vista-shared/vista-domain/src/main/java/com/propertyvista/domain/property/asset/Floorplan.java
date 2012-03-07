@@ -38,8 +38,9 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface Floorplan extends PolicyNode {
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @Indexed
     @JoinColumn
     Building building();

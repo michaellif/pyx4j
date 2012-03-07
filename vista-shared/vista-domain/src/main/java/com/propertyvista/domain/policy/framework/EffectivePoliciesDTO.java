@@ -16,14 +16,9 @@ package com.propertyvista.domain.policy.framework;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
-
 
 @Transient
 public interface EffectivePoliciesDTO extends IEntity {
 
     IList<PolicyAtNode> policies();
-
-    @Deprecated
-    IPrimitive<String> x();
 }

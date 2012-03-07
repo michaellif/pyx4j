@@ -33,9 +33,10 @@ public interface PageContent extends IEntity {
     AvailableLocale locale();
 
     @Owner
-    @JoinColumn
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
+    @JoinColumn
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     PageDescriptor descriptor();
 

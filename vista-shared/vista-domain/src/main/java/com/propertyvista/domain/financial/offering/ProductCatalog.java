@@ -18,12 +18,12 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.EmptyEntityCreation;
 import com.propertyvista.domain.property.asset.building.Building;
 
 /**
@@ -34,13 +34,14 @@ public interface ProductCatalog extends IEntity {
     /**
      * This is small hack for no column table SQL update. Do not use.
      */
-    @EmptyEntityCreation
+    @Deprecated
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<String> x();
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @JoinColumn
     Building building();
 

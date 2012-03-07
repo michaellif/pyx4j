@@ -133,8 +133,9 @@ public interface BuildingAmenity extends Amenity {
     }
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @Indexed
     @JoinColumn
     Building belongsTo();

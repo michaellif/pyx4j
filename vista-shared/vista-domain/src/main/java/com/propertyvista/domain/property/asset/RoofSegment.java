@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -25,8 +26,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface RoofSegment extends IEntity {
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @JoinColumn
     Roof belongsTo();
 

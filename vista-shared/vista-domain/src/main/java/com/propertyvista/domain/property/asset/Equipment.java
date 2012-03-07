@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.Notes;
@@ -37,8 +38,9 @@ import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 public interface Equipment extends LicensedWarrantedMaintained, Notes {
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @JoinColumn
     @XmlTransient
     Building belongsTo();

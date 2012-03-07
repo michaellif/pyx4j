@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.building.Building;
@@ -25,8 +26,9 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface ArrearsSummary extends Arrears {
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @JoinColumn
     Building belongsTo();
 

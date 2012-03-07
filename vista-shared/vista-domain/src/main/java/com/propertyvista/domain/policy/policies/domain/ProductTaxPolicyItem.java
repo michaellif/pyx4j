@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -38,8 +39,9 @@ public interface ProductTaxPolicyItem extends IEntity {
     // internals:
 
     @Owner
-    @Detached(level = AttachLevel.Detached)
+    @NotNull
     @ReadOnly
+    @Detached(level = AttachLevel.Detached)
     ProductTaxPolicy taxPolicy();
 
     interface OrderId extends ColumnId {

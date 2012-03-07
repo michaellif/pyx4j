@@ -188,7 +188,7 @@ public interface Lease extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();
 
-    @Owned
+    @Owned(forceCreation = true)
     LeaseFinancial leaseFinancial();
 
     @EmbeddedEntity

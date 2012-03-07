@@ -104,8 +104,8 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @Owned
     IList<Media> media();
 
-    @Owned
     @Detached
+    @Owned(forceCreation = true)
     ProductCatalog productCatalog();
 
     @Detached

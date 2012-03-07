@@ -54,8 +54,9 @@ public interface Appointment extends IEntity {
     }
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @JoinColumn
     @I18nComment("Potential customer")
     Lead lead();

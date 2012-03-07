@@ -37,8 +37,9 @@ import com.propertyvista.domain.property.asset.BuildingElement;
 public interface ProductItem extends IEntity {
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @JoinColumn
     Product product();
 

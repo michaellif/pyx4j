@@ -51,8 +51,9 @@ import com.propertyvista.misc.EquifaxApproval;
 public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @JoinColumn
     PersonScreeningHolder screene();
 

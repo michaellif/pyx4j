@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.policy.framework.UnitPolicy;
 import com.propertyvista.domain.policy.policies.domain.PetConstraints;
@@ -31,5 +32,6 @@ public interface PetPolicy extends UnitPolicy {
 
     /** This is required only to let the persistence engine to create a table */
     @Deprecated
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<Integer> x();
 }

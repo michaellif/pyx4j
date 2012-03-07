@@ -32,8 +32,9 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface PersonGuarantor extends IEntity {
 
     @Owner
-    @Detached
     @NotNull
+    @ReadOnly
+    @Detached
     @Indexed
     @JoinColumn
     PersonScreening guarantee();

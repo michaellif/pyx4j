@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -56,8 +57,10 @@ public interface PageDescriptor extends Descriptor {
     IPrimitive<Type> type();
 
     @Owner
-    @JoinColumn
+    @NotNull
+    @ReadOnly
     @Detached
+    @JoinColumn
     Descriptor parent();
 
     @OrderColumn

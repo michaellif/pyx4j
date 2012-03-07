@@ -43,8 +43,9 @@ public interface GlCode extends IEntity {
     IPrimitive<String> description();
 
     @Owner
-    @Detached(level = AttachLevel.ToStringMembers)
+    @NotNull
     @ReadOnly
+    @Detached(level = AttachLevel.ToStringMembers)
     @JoinColumn
     GlCodeCategory glCodeCategory();
 

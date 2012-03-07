@@ -90,6 +90,7 @@ public interface AptUnitOccupancySegment extends IEntity {
     }
 
     @Owner
+    @NotNull
     @ReadOnly
     @Detached
     @JoinColumn

@@ -50,8 +50,9 @@ public interface PaymentTransactionAccount extends IEntity {
     // internals
 
     @Owner
-    @Detached(level = AttachLevel.Detached)
+    @NotNull
     @ReadOnly
+    @Detached(level = AttachLevel.Detached)
     PaymentTransactionsPolicy policy();
 
     interface OrderId extends ColumnId {

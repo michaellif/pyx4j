@@ -106,8 +106,9 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
 // ----------------------------------------------
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @JoinColumn
     ProductCatalog catalog();
 

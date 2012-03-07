@@ -114,8 +114,9 @@ public interface FloorplanAmenity extends Amenity {
     IPrimitive<Type> type();
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @Indexed
     @JoinColumn
     Floorplan belongsTo();

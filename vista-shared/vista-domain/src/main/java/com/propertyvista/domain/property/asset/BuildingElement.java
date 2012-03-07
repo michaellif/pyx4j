@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.property.asset.building.Building;
@@ -41,8 +42,9 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface BuildingElement extends IEntity {
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @Caption(name = "Building")
     @XmlTransient
     @JoinColumn

@@ -34,8 +34,9 @@ import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
 public interface Application extends IEntity {
 
     @Owner
-    @Detached
+    @NotNull
     @ReadOnly
+    @Detached
     @JoinColumn
     MasterApplication belongsTo();
 

@@ -120,9 +120,6 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             }
         }
 
-        // TODO: trick to ensure creation of the catalog:
-        dbo.productCatalog().x().setValue("x");
-
         boolean isCreate = dbo.id().isNull();
         Persistence.service().merge(dbo);
         PublicDataUpdater.updateIndexData(dbo);
