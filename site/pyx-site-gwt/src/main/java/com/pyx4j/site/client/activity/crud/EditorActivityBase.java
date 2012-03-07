@@ -130,6 +130,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
             createNewEntity(new DefaultAsyncCallback<E>() {
                 @Override
                 public void onSuccess(E entity) {
+                    setEntityParent(entity);
                     onPopulateSuccess(entity);
                 }
             });
@@ -155,20 +156,22 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         }
     }
 
-    /**
-     * Descendants may override this method to perform some initialization.
-     * 
-     * @param callback
-     */
-    protected void createNewEntity(AsyncCallback<E> callback) {
-        E entity = EntityFactory.create(entityClass);
+    protected void setEntityParent(E entity) {
         if (parentID != null) {
             String ownerName = entity.getEntityMeta().getOwnerMemberName();
             if (ownerName != null) {
                 ((IEntity) entity.getMember(ownerName)).setPrimaryKey(parentID);
             }
         }
-        callback.onSuccess(entity);
+    }
+
+    /**
+     * Descendants may override this method to perform some initialization.
+     * 
+     * @param callback
+     */
+    protected void createNewEntity(AsyncCallback<E> callback) {
+        callback.onSuccess(EntityFactory.create(entityClass));
     }
 
     protected boolean isNewEntity() {
@@ -241,7 +244,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected void onSaved(E result) {
-
     }
 
     protected void onApplySuccess(E result) {
