@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.EmptyEntityCreation;
 import com.propertyvista.domain.property.asset.building.Building;
 
 /**
@@ -33,7 +34,7 @@ public interface ProductCatalog extends IEntity {
     /**
      * This is small hack for no column table SQL update. Do not use.
      */
-    @Deprecated
+    @EmptyEntityCreation
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<String> x();
 
