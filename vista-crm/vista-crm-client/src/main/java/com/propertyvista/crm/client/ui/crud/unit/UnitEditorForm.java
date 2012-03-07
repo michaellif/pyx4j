@@ -71,8 +71,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                 i18n.tr("Occupancy"));
         tabPanel.setLastTabDisabled(isEditable());
 
-        tabPanel.add(createFinancialsTab(), i18n.tr("Financial"));
-        tabPanel.setLastTabDisabled(isEditable());
 // TODO Hided till further investigation:
 //        tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
         tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
@@ -149,6 +147,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().area()), 8).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial()._unitRent(), new CNumberLabel()), 10).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial()._marketRent(), new CNumberLabel()), 10).build());
 
         // restrict floorplan combo here to any free :
         CComponent<Floorplan, ?> comp = get(proto().floorplan());
@@ -168,16 +168,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         main.getColumnFormatter().setWidth(0, "40%");
         main.getColumnFormatter().setWidth(1, "60%");
-
-        return new CrmScrollPanel(main);
-    }
-
-    private Widget createFinancialsTab() {
-        FormFlexPanel main = new FormFlexPanel();
-
-        int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._unitRent(), new CNumberLabel()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent(), new CNumberLabel()), 10).build());
 
         return new CrmScrollPanel(main);
     }
