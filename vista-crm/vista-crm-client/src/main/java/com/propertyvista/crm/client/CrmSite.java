@@ -38,6 +38,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.CrmPanel;
@@ -90,6 +91,7 @@ public class CrmSite extends VistaSite {
         });
 
         initSiteTheme();
+        ClientPolicyManager.initialize();
     }
 
     @Override

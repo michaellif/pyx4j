@@ -176,6 +176,9 @@ public class ApartmentServiceImpl implements ApartmentService {
         aptInfo.maxParkingSpots().setValue(miscPolicy.maxParkingSpots().getValue());
         aptInfo.maxPets().setValue(miscPolicy.maxPets().getValue());
 
+        aptInfo.unit().set(lease.unit().createIdentityStub());
+        PolicyManager.sendPolicyToClient(lease.unit(), MiscPolicy.class, miscPolicy);
+
         return aptInfo;
     }
 

@@ -21,8 +21,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.policy.framework.BuildingPolicy;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -36,6 +38,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.portal.rpc.PolicyDataSystemNotification;
 
 public class PolicyManager {
 
@@ -116,6 +119,14 @@ public class PolicyManager {
         } while (currentNode != null);
 
         return policy;
+    }
+
+    public static <POLICY extends Policy> void sendPolicyToClient(final PolicyNode node, final Class<POLICY> policyClass, POLICY policy) {
+        PolicyDataSystemNotification data = new PolicyDataSystemNotification();
+        data.policy = policy;
+        data.policyClass = EntityFactory.getEntityPrototype(policyClass);
+        data.node = (PolicyNode) node.createIdentityStub();
+        Context.addResponseSystemNotification(data);
     }
 
     private static List<PolicyAtNode> merge(List<PolicyAtNode> effectivePolicies, List<PolicyAtNode> policies) {

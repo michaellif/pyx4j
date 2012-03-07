@@ -36,6 +36,7 @@ import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSitePanel;
@@ -90,6 +91,7 @@ public class PtAppSite extends VistaSite {
             }
         });
 
+        ClientPolicyManager.initialize();
         wizardManager = new PtAppWizardManager();
 
         SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);

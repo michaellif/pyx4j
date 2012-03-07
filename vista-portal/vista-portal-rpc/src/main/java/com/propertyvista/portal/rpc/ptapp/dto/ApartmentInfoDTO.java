@@ -30,6 +30,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
 /**
@@ -98,8 +99,13 @@ public interface ApartmentInfoDTO extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> unitRent();
 
+    // Short/Id only version for reference only
+    AptUnit unit();
+
     // limits:
+    @Deprecated
     IPrimitive<Integer> maxParkingSpots();
 
+    @Deprecated
     IPrimitive<Integer> maxPets();
 }

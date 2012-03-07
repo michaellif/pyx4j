@@ -22,12 +22,15 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
@@ -181,7 +184,17 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         otherPanel.setVisible(!getValue().agreedOther().isEmpty() || !getValue().availableOther().isEmpty());
 
         // set maximum limits:
-        petFolder.setMaxCount(getValue().maxPets().getValue());
-        parkingFolder.setMaxCount(getValue().maxParkingSpots().getValue());
+        // petFolder.setMaxCount(getValue().maxPets().getValue());
+        //parkingFolder.setMaxCount(getValue().maxParkingSpots().getValue());
+
+        ClientPolicyManager.obtainEffectivePolicy(getValue().unit(), MiscPolicy.class, new DefaultAsyncCallback<MiscPolicy>() {
+
+            @Override
+            public void onSuccess(MiscPolicy result) {
+                petFolder.setMaxCount(result.maxPets().getValue());
+                parkingFolder.setMaxCount(result.maxParkingSpots().getValue());
+            }
+        });
+
     }
 }
