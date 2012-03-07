@@ -150,7 +150,7 @@
 
         <jettyVersion>7.2.2.v20101205</jettyVersion>
 
-        <jasperreportsVersion>4.0.1</jasperreportsVersion>
+        <jasperreportsVersion>4.5.1</jasperreportsVersion>
         <quartzVersion>2.0.2</quartzVersion>
         <batikVersion>1.7</batikVersion>
 
@@ -444,7 +444,12 @@
                     <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
                     <exclusion><groupId>jfree</groupId><artifactId>jfreechart</artifactId></exclusion>
                     <exclusion><groupId>jfree</groupId><artifactId>jcommon</artifactId></exclusion>
-                    <!--exclusion><groupId>org.apache.poi</groupId><artifactId>poi</artifactId></exclusion-->
+                    <exclusion><groupId>org.apache.poi</groupId><artifactId>poi-ooxml</artifactId></exclusion>
+                    <exclusion><groupId>org.codehaus.castor</groupId><artifactId>castor</artifactId></exclusion>
+                    <exclusion><groupId>org.codehaus.jackson</groupId><artifactId>jackson-core-lgpl</artifactId></exclusion>
+                    <exclusion><groupId>org.codehaus.jackson</groupId><artifactId>jackson-mapper-lgpl</artifactId></exclusion>
+                    <!--exclusion><groupId>commons-digester</groupId><artifactId>commons-digester</artifactId></exclusion-->
+                   <!--exclusion><groupId>org.apache.poi</groupId><artifactId>poi</artifactId></exclusion-->
                 </exclusions>
             </dependency>
 

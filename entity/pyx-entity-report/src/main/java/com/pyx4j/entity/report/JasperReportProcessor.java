@@ -71,7 +71,7 @@ public class JasperReportProcessor {
             case RTF:
                 JRRtfExporter exporterRtf = new JRRtfExporter() {
                     @Override
-                    protected void exportImage(JRPrintImage printImage) throws JRException, IOException {
+                    public void exportImage(JRPrintImage printImage) throws JRException, IOException {
                         //if (!request.isExcludeImages()) {
                         super.exportImage(printImage);
                         //}

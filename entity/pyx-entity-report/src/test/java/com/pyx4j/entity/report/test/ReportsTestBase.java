@@ -84,7 +84,7 @@ public abstract class ReportsTestBase {
     }
 
     @Deprecated
-    protected void createReport(String designName, Map<String, String> parameters, JRDataSource dataSource) throws Exception {
+    protected void createReport(String designName, Map<String, Object> parameters, JRDataSource dataSource) throws Exception {
         ByteArrayOutputStream bos = null;
         try {
             JasperReport jasperReport = JasperReportFactory.create(designName);
@@ -154,11 +154,10 @@ public abstract class ReportsTestBase {
     private Document parseXML(byte[] xml) throws SAXException, IOException, ParserConfigurationException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setValidating(false);
-        dbf.setNamespaceAware(true);
+        dbf.setNamespaceAware(false);
         dbf.setIgnoringComments(true);
         dbf.setIgnoringElementContentWhitespace(false);
         dbf.setExpandEntityReferences(false);
-        dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
         DocumentBuilder db = dbf.newDocumentBuilder();
         return db.parse(new ByteArrayInputStream(xml));
     }
