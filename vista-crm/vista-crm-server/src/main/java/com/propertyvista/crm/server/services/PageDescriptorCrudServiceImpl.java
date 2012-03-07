@@ -61,6 +61,19 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
             dbo.type().setValue(PageDescriptor.Type.staticContent);
         }
 
+        // place new entry at the end
+        if (dbo.orderInDescriptor().isNull()) {
+
+            Persistence.service().retrieve(dbo.parent());
+            int maxOrder = 0;
+            for (PageDescriptor sibling : dbo.parent().childPages()) {
+                Integer order = sibling.orderInDescriptor().getValue();
+                if (order != null && maxOrder <= order) {
+                    maxOrder = order + 1;
+                }
+            }
+            dbo.orderInDescriptor().setValue(maxOrder);
+        }
         super.persist(dbo);
 
         // set update flag

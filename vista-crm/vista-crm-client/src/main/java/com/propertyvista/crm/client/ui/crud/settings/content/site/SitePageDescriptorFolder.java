@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
@@ -90,5 +91,17 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
             }
             return super.createCell(column);
         }
+    }
+
+    @Override
+    public void adopt(final CComponent<?, ?> component) {
+        // first two items are not editable
+        if (this.getItemCount() < 2) {
+            @SuppressWarnings("unchecked")
+            CEntityFolderItem<PageDescriptor> item = (CEntityFolderItem<PageDescriptor>) component;
+            item.setMovable(false);
+            item.setRemovable(false);
+        }
+        super.adopt(component);
     }
 }
