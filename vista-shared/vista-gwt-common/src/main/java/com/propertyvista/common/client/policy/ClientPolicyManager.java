@@ -24,6 +24,9 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.SystemNotificationEvent;
 import com.pyx4j.rpc.client.SystemNotificationHandler;
+import com.pyx4j.security.client.ClientSecurityController;
+import com.pyx4j.security.client.SecurityControllerEvent;
+import com.pyx4j.security.client.SecurityControllerHandler;
 
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -39,13 +42,26 @@ public class ClientPolicyManager {
         Class<?> policyClass;
 
         PolicyFindKey(final PolicyNode node, final Class<?> policyClass) {
-            this.node = node;
+            this.node = (PolicyNode) node.createIdentityStub();
             this.policyClass = policyClass;
         }
 
         @Override
         public boolean equals(Object obj) {
             return node.equals(((PolicyFindKey) obj).node) && policyClass.equals(((PolicyFindKey) obj).policyClass);
+        }
+
+        @Override
+        public int hashCode() {
+            int hashCode = node.hashCode();
+            hashCode *= 0x1F;
+            hashCode += policyClass.hashCode();
+            return hashCode;
+        }
+
+        @Override
+        public String toString() {
+            return "Key " + policyClass.getName() + " " + node.toString();
         }
     }
 
@@ -71,6 +87,14 @@ public class ClientPolicyManager {
     }
 
     public static void initialize() {
+
+        ClientSecurityController.addSecurityControllerHandler(new SecurityControllerHandler() {
+            @Override
+            public void onSecurityContextChange(SecurityControllerEvent event) {
+                ClientPolicyManager.invalidate();
+            }
+        });
+
         RPCManager.addSystemNotificationHandler(new SystemNotificationHandler() {
             @Override
             public void onSystemNotificationReceived(SystemNotificationEvent event) {
@@ -80,5 +104,9 @@ public class ClientPolicyManager {
                 }
             }
         });
+    }
+
+    protected static void invalidate() {
+        cache.clear();
     }
 }
