@@ -232,6 +232,9 @@ public class EntityPojoWrapperGenerator {
                             addXmlElementsAnnotationValue(memberGet, assignablePojoNames);
                         }
                         addAnnotationValue(memberGet, XmlElementWrapper.class, "name", memberName);
+                    } else if (memberMeta.getObjectClassType() == ObjectClassType.PrimitiveSet) {
+                        addAnnotationValue(memberGet, XmlElementWrapper.class, "name", memberName);
+                        addXmlElementsAnnotationValue(memberGet, "item", null);
                     } else if (memberMeta.isValidatorAnnotationPresent(NotNull.class)) {
                         addAnnotationValue(memberGet, XmlElement.class, "required", true);
                     }
@@ -485,6 +488,33 @@ public class EntityPojoWrapperGenerator {
             xmlElementAnnotation.addMemberValue("defaultValue", new StringMemberValue("\u0000", constPool));
             m.add(new AnnotationMemberValue(xmlElementAnnotation, constPool));
         }
+        a.setValue(m.toArray(new MemberValue[0]));
+        annotation.addMemberValue("value", a);
+
+        attr.addAnnotation(annotation);
+        member.getMethodInfo().addAttribute(attr);
+    }
+
+    private void addXmlElementsAnnotationValue(CtMethod member, String name, Class<?> typeValue) throws NotFoundException {
+        CtClass implClass = member.getDeclaringClass();
+        ConstPool constPool = implClass.getClassFile().getConstPool();
+        AnnotationsAttribute attr = (AnnotationsAttribute) member.getMethodInfo().getAttribute(AnnotationsAttribute.visibleTag);
+        if (attr == null) {
+            attr = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
+        }
+        Annotation annotation = new Annotation(constPool, pool.get(XmlElements.class.getName()));
+        ArrayMemberValue a = new ArrayMemberValue(constPool);
+        List<MemberValue> m = new Vector<MemberValue>();
+
+        Annotation xmlElementAnnotation = new Annotation(constPool, pool.get(XmlElement.class.getName()));
+        xmlElementAnnotation.addMemberValue("name", new StringMemberValue(name, constPool));
+        if (typeValue != null) {
+            xmlElementAnnotation.addMemberValue("type", new ClassMemberValue(typeValue.getName(), constPool));
+        }
+        xmlElementAnnotation.addMemberValue("namespace", new StringMemberValue("##default", constPool));
+        xmlElementAnnotation.addMemberValue("defaultValue", new StringMemberValue("\u0000", constPool));
+        m.add(new AnnotationMemberValue(xmlElementAnnotation, constPool));
+
         a.setValue(m.toArray(new MemberValue[0]));
         annotation.addMemberValue("value", a);
 
