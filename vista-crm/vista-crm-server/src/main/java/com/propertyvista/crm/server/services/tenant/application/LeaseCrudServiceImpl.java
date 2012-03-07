@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
@@ -38,15 +37,14 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
+import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
 
@@ -96,41 +94,9 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             }
         }
 
+        new LeaseManager().save(dbo);
+
         updateAdjustments(dbo);
-
-        // occupacny system related stuff: here we decide if we reserve lease or cancel it
-        boolean isNewLease = dbo.getPrimaryKey() == null;
-        boolean isChanged = isNewLease;
-        boolean doReserve = false;
-        boolean doUnreserve = false;
-        Lease oldLease = null;
-        if (!isNewLease) {
-            oldLease = Persistence.secureRetrieve(Lease.class, dbo.getPrimaryKey());
-            Persistence.service().retrieve(oldLease.unit());
-            if (!EqualsHelper.equals(oldLease.unit().id().getValue(), dbo.unit().id().getValue())) {
-                isChanged = true;
-                // old lease has unit: o
-                // new lease has a unit: n
-
-                // !o & !n is impossible here,
-                // then we have:
-                // !o & n -> reserve
-                // o & n -> reserve           
-                //  o & !n -> unreserve
-                // o & n -> unreserve                
-                // hence:
-                // o -> unreserve                
-                // n -> reseve
-                doUnreserve = oldLease.unit().getPrimaryKey() != null;
-                doReserve = dbo.unit().getPrimaryKey() != null;
-            }
-        } else {
-            doReserve = dbo.unit().getPrimaryKey() != null;
-        }
-        // end of occupancy system related stuff
-
-        Persistence.service().merge(dbo);
-
         int no = 0;
         for (TenantInLease item : dbo.tenants()) {
             item.lease().set(dbo);
@@ -138,15 +104,6 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             Persistence.service().merge(item);
         }
 
-        // now update occupancy if needed
-        if (isChanged) {
-            if (doUnreserve) {
-                new AptUnitOccupancyManagerImpl(oldLease.unit().getPrimaryKey()).unreserve();
-            }
-            if (doReserve) {
-                new AptUnitOccupancyManagerImpl(dbo.unit().getPrimaryKey()).reserve(dbo);
-            }
-        }
     }
 
     private void updateAdjustments(Lease lease) {
@@ -257,49 +214,29 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     @Override
     public void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
-        Lease lease = Persistence.secureRetrieve(dboClass, entityId);
-        lease.completion().setValue(CompletionType.Notice);
-        lease.moveOutNotice().setValue(date);
-        lease.expectedMoveOut().setValue(moveOut);
-        Persistence.secureSave(lease);
-        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).endLease();
+        new LeaseManager().notice(entityId, date, moveOut);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
     public void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        Lease lease = Persistence.secureRetrieve(dboClass, entityId);
-        lease.completion().setValue(null);
-        lease.moveOutNotice().setValue(null);
-        lease.expectedMoveOut().setValue(null);
-        Persistence.secureSave(lease);
-        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).cancelEndLease();
-        callback.onSuccess(null);
-
-    }
-
-    @Override
-    public void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
-        Lease lease = Persistence.secureRetrieve(dboClass, entityId);
-        lease.completion().setValue(CompletionType.Eviction);
-        lease.moveOutNotice().setValue(date);
-        lease.expectedMoveOut().setValue(moveOut);
-        Persistence.secureSave(lease);
-        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).endLease();
+        new LeaseManager().cancelNotice(entityId);
         Persistence.service().commit();
         callback.onSuccess(null);
 
     }
 
     @Override
+    public void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
+        new LeaseManager().evict(entityId, date, moveOut);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
     public void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        Lease lease = Persistence.secureRetrieve(dboClass, entityId);
-        lease.completion().setValue(null);
-        lease.moveOutNotice().setValue(null);
-        lease.expectedMoveOut().setValue(null);
-        Persistence.secureSave(lease);
-        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).cancelEndLease();
+        new LeaseManager().cancelEvict(entityId);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

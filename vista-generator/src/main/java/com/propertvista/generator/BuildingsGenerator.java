@@ -491,10 +491,6 @@ public class BuildingsGenerator {
             detail.belongsTo().set(unit);
         }
 
-        // TODO populate currentOccupancies and then set avalableForRent using
-        // some ServerSideDomainUtils
-        unit.availableForRent().setValue(RandomUtil.randomLogicalDate(2012, 2012));
-
         AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
         occupancySegment.unit().set(unit);
         occupancySegment.status().setValue(AptUnitOccupancySegment.Status.vacant);

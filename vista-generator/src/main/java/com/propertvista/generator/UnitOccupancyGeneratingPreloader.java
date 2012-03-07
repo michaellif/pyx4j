@@ -13,33 +13,115 @@
  */
 package com.propertvista.generator;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 /**
- * This one currently knows to generate leased segment that are consistent with
+ * This one currently knows to generate leased segment that are consistent with.
  * 
  */
 public class UnitOccupancyGeneratingPreloader {
 
-    public void preloadOccupancy(List<Lease> leases) {
-        Collections.sort(leases, new Comparator<Lease>() {
+    public void preloadOccupancy() {
+        scopeAvailableForAll();
+
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        List<Lease> leases = Persistence.service().query(criteria);
+
+        final LogicalDate[] now = new LogicalDate[1];
+        AptUnitOccupancyManagerImpl.NowSource nowSource = new AptUnitOccupancyManagerImpl.NowSource() {
             @Override
-            public int compare(Lease arg0, Lease arg1) {
-                return arg0.leaseFrom().compareTo(arg1.leaseFrom());
+            public LogicalDate getNow() {
+                return now[0];
             }
-        });
+        };
 
         for (final Lease lease : leases) {
             if (!lease.unit().id().isNull() & !lease.status().isNull()) {
 
-                // TODO update occupancy based on lease
-                // TODO ...
-                // TODO profit!
+                switch (lease.status().getValue()) {
+                case Active:
+                    now[0] = lease.createDate().getValue();
+                    new AptUnitOccupancyManagerImpl(lease.unit(), nowSource).reserve(lease);
+                    now[0] = lease.approvalDate().getValue();
+                    new AptUnitOccupancyManagerImpl(lease.unit(), nowSource).approveLease();
+                    if (!lease.moveOutNotice().isNull()) {
+                        now[0] = lease.moveOutNotice().getValue();
+                        new AptUnitOccupancyManagerImpl(lease.unit(), nowSource).endLease();
+                    }
+                    break;
+
+                case ApplicationCancelled:
+                    // we don't need this lease
+                    break;
+
+                case ApplicationInProgress:
+                    now[0] = lease.createDate().getValue();
+                    new AptUnitOccupancyManagerImpl(lease.unit(), nowSource).reserve(lease);
+                    break;
+
+                case Approved:
+                    now[0] = lease.createDate().getValue();
+                    new AptUnitOccupancyManagerImpl(lease.unit(), nowSource).reserve(lease);
+                    now[0] = lease.approvalDate().getValue();
+                    new AptUnitOccupancyManagerImpl(lease.unit(), nowSource).approveLease();
+                    break;
+
+                case Closed:
+                    // TODO ask what does it mean                    
+                    break;
+
+                case Completed:
+                    now[0] = lease.createDate().getValue();
+                    new AptUnitOccupancyManagerImpl(lease.unit(), nowSource).reserve(lease);
+                    now[0] = lease.approvalDate().getValue();
+                    new AptUnitOccupancyManagerImpl(lease.unit(), nowSource).approveLease();
+                    // must have notice so
+                    now[0] = lease.actualLeaseTo().getValue();
+                    new AptUnitOccupancyManagerImpl(lease.unit(), nowSource).endLease();
+                    break;
+
+                case Declined:
+                    // we don't need this lease
+                    break;
+
+                case FinalBillIssued:
+                    // TODO ask what does it mean
+                    break;
+                case New:
+                    // draft
+                    break;
+                }
             }
         }
+    }
+
+    private void scopeAvailableForAll() {
+        // assume that a unit is generated with "vacant" status
+        List<AptUnit> units = Persistence.service().query(EntityQueryCriteria.create(AptUnit.class));
+
+        for (AptUnit unit : units) {
+//            AptUnitOccupancySegment availableSegment = EntityFactory.create(AptUnitOccupancySegment.class);
+//            availableSegment.status().setValue(Status.available);
+//            availableSegment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
+//            availableSegment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+//            availableSegment.unit().set(unit);
+//            Persistence.service().persist(availableSegment);
+            new AptUnitOccupancyManagerImpl(unit, new AptUnitOccupancyManagerImpl.NowSource() {
+                @Override
+                public LogicalDate getNow() {
+                    return AptUnitOccupancyManagerHelper.MIN_DATE;
+                }
+            }).scopeAvailable();
+        }
+
     }
 }
