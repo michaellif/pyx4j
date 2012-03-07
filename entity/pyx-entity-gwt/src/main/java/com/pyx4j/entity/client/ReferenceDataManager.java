@@ -64,10 +64,8 @@ public class ReferenceDataManager {
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
                 ReferenceDataManager.invalidate();
-
             }
         });
-
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
