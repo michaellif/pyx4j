@@ -24,7 +24,8 @@ public class CreatePMCRun {
 
     public static void main(String[] args) throws Exception {
         CreatePMCRequest r = new CreatePMCRequest();
-        r.pmcId = "rossul";
+        r.requestId = "TestCreatePMCRun";
+        r.pmcid = "rossul";
         r.dnsNameAliases = Arrays.asList(new String[] { "www.rossul.com", "www.rossul.ca" });
         r.name = "Apartments & Co";
         r.adminUserEmail = "rossul@propertyvista.com";

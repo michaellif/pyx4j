@@ -21,8 +21,15 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
@@ -51,6 +58,7 @@ public class OnboardingExample {
 
         XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "onboardingRequest-model.xsd")), true, RequestMessageIO.class);
         XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "onboardingResponse-model.xsd")), true, ResponseMessageIO.class);
+        XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "onboarding.xsd")), true, RequestMessageIO.class, ResponseMessageIO.class);
 
         if (false) {
             writeModelXML(EntityFactory.create(RequestMessageIO.class), "requests-all-example.xml");
@@ -75,6 +83,7 @@ public class OnboardingExample {
 
             writeXML(createExampleRequest(r), cnt + "-request-UpdateAccountInfo.xml");
             AccountInfoResponseIO rs = EntityFactory.create(AccountInfoResponseIO.class);
+            rs.success().setValue(Boolean.TRUE);
             createAccountInfoIO(rs.accountInfo());
             writeXML(createExampleResponse(rs), cnt + "-response-UpdateAccountInfo.xml");
         }
@@ -124,6 +133,7 @@ public class OnboardingExample {
             writeXML(createExampleRequest(r), cnt + "-request-GetUsage.xml");
 
             UsageReportResponseIO rs = EntityFactory.create(UsageReportResponseIO.class);
+            rs.success().setValue(Boolean.TRUE);
             rs.format().setValue(UsageReportFormatType.Short);
             UsageRecordIO u = EntityFactory.create(UsageRecordIO.class);
             rs.records().add(u);
@@ -205,6 +215,7 @@ public class OnboardingExample {
         } finally {
             IOUtils.closeQuietly(w);
         }
+        validate(f);
     }
 
     private static void writeModelXML(IEntity io, String name) {
@@ -222,6 +233,23 @@ public class OnboardingExample {
             log.error("debug write", e);
         } finally {
             IOUtils.closeQuietly(w);
+        }
+    }
+
+    private static void validate(File f) {
+        try {
+            SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+            File schemaLocation = new File("target", "onboarding.xsd");
+            Schema schema = factory.newSchema(schemaLocation);
+            Validator validator = schema.newValidator();
+
+            Source source = new StreamSource(f);
+            validator.validate(source);
+            log.info(f.getName() + " is valid.");
+        } catch (SAXException ex) {
+            log.error(f.getName() + " is not valid {}", ex.getMessage());
+        } catch (IOException e) {
+            log.error("Error", e);
         }
     }
 

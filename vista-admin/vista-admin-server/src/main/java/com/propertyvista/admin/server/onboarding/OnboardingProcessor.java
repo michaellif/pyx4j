@@ -33,11 +33,19 @@ class OnboardingProcessor {
     }
 
     public boolean isValid(RequestMessageIO message) {
+        for (RequestIO request : message.requests()) {
+            if (request.pmcId().isNull()) {
+                return false;
+            }
+        }
         return true;
     }
 
     private ResponseIO execute(RequestIO request) {
         ResponseIO response = EntityFactory.create(ResponseIO.class);
+        if (!request.requestId().isNull()) {
+            response.requestId().set(request.requestId());
+        }
         response.success().setValue(Boolean.FALSE);
         response.errorMessage().setValue("Not implemented");
         return response;
@@ -45,6 +53,9 @@ class OnboardingProcessor {
 
     public ResponseMessageIO execute(RequestMessageIO message) {
         ResponseMessageIO rm = EntityFactory.create(ResponseMessageIO.class);
+        if (!message.messageId().isNull()) {
+            rm.messageId().set(message.messageId());
+        }
         for (RequestIO request : message.requests()) {
             try {
                 rm.responses().add(execute(request));

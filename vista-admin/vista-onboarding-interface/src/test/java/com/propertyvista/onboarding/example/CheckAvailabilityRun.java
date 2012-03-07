@@ -22,7 +22,8 @@ public class CheckAvailabilityRun {
 
     public static void main(String[] args) throws Exception {
         CheckAvailabilityRequest r = new CheckAvailabilityRequest();
-        r.pmcId = "star";
+        r.requestId = "TestCheckAvailabilityRun";
+        r.pmcid = "star";
 
         RequestMessage rm = new RequestMessage();
         rm.interfaceEntity = "rossul";

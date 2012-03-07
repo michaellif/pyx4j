@@ -16,8 +16,6 @@ package com.propertyvista.onboarding.example.model;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
@@ -27,11 +25,6 @@ public class CreatePMCRequest extends Request {
     @NotNull
     @XmlElement
     public String name;
-
-    @Size(max = 64)
-    @Pattern(regexp = "[A-Za-z0-9]+")
-    @XmlElement
-    public String pmcId;
 
     @XmlElementWrapper
     @XmlElements({ @XmlElement(name = "item") })

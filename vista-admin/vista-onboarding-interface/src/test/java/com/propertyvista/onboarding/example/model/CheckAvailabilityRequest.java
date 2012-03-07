@@ -13,15 +13,7 @@
  */
 package com.propertyvista.onboarding.example.model;
 
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlElement;
 
 public class CheckAvailabilityRequest extends Request {
-
-    @Size(max = 64)
-    @Pattern(regexp = "[A-Za-z0-9]+")
-    @XmlElement
-    public String pmcId;
 
 }

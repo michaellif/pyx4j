@@ -32,8 +32,9 @@ public abstract class Request {
      * through Z, digits 0 through 9, and
      * the hyphen.
      */
+    @XmlElement(required = true, name = "pmcId")
+    // name="" is  hack for jaxb  fields ending with Id
     @Size(max = 64)
     @Pattern(regexp = "[A-Za-z0-9]+")
-    @XmlElement(required = true)
-    public String pmcId;
+    public String pmcid;
 }
