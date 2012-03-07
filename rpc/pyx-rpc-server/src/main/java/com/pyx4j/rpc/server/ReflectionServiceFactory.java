@@ -51,7 +51,7 @@ public class ReflectionServiceFactory implements IServiceFactory {
         String serviceImplClassName;
         if (serviceInterfaceClassName.contains(".client.")) {
             serviceImplClassName = serviceInterfaceClassName.replace(".client.", ".server.") + "Impl";
-        } else if (serviceInterfaceClassName.contains(".rpc.")) {
+        } else if (serviceInterfaceClassName.contains(".rpc.") && (!serviceInterfaceClassName.startsWith("com.pyx4j.rpc"))) {
             serviceImplClassName = serviceInterfaceClassName.replace(".rpc.", ".server.") + "Impl";
         } else if (serviceInterfaceClassName.contains(".shared.")) {
             serviceImplClassName = serviceInterfaceClassName.replace(".shared.", ".server.") + "Impl";
