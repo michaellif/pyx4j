@@ -767,6 +767,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
                 entity.setValueDetached();
             } else {
                 Map<Object, Object> processed = new IdentityHashMap<Object, Object>();
+                processed.put(this.getValue(), entity.getValue());
                 for (String memberName : entity.getEntityMeta().getMemberNames()) {
                     if (entityValue.containsKey(memberName)) {
                         entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
@@ -780,6 +781,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
                 entity.setValueDetached();
             } else {
                 Map<Object, Object> processed = new IdentityHashMap<Object, Object>();
+                processed.put(this.getValue(), entity.getValue());
                 for (String memberName : this.getEntityMeta().getMemberNames()) {
                     if (entityValue.containsKey(memberName)) {
                         entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
