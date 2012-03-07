@@ -39,6 +39,7 @@ import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Table.PrimaryKeyStrategy;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
@@ -386,6 +387,10 @@ public class TableModel {
                 if ((childEntity.getPrimaryKey() == null) && !childEntity.isNull()) {
                     log.error("Saving non persisted reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
                     throw new Error("Saving non persisted reference " + childEntity.getDebugExceptionInfoString());
+                }
+                if (member.isOwnerColumn() && childEntity.isNull() && member.getMemberMeta().getAnnotation(NotNull.class) != null) {
+                    log.error("Saving empty owner reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                    throw new Error("Saving empty owner reference " + childEntity.getDebugExceptionInfoString());
                 }
                 parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, childEntity);
             } else {
