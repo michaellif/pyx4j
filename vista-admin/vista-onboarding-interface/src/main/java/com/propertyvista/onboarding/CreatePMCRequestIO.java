@@ -34,9 +34,6 @@ public interface CreatePMCRequestIO extends RequestIO {
     @NotNull
     IPrimitive<String> name();
 
-    @NotNull
-    IPrimitive<String> pmcId();
-
     IPrimitiveSet<String> dnsNameAliases();
 
     @NotNull

@@ -27,7 +27,6 @@ public class CheckAvailabilityRun {
         RequestMessage rm = new RequestMessage();
         rm.interfaceEntity = "rossul";
         rm.interfaceEntityPassword = "secret";
-        rm.pmcId = "";
         rm.addRequest(r);
 
         ResponseMessage response = ExampleClient.execute(rm);

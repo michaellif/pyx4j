@@ -44,7 +44,7 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.interfaces.importer.BuildingRetriever;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.ImportIO;
-import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
+import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 
 @SuppressWarnings("serial")
 public class ExportDownloadServlet extends HttpServlet {
@@ -79,7 +79,7 @@ public class ExportDownloadServlet extends HttpServlet {
                 }
             }
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityName());
+            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityNamingConvention());
             xmlWriter.setEmitId(false);
             xmlWriter.write(importIO);
             data = xml.getBytes();

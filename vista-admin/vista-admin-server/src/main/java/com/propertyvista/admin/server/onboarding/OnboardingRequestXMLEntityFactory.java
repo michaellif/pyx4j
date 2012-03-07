@@ -16,7 +16,7 @@ package com.propertyvista.admin.server.onboarding;
 import com.pyx4j.essentials.server.xml.XMLEntityFactoryStrict;
 
 import com.propertyvista.interfaces.importer.model.AddressIO;
-import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
+import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 import com.propertyvista.onboarding.AccountInfoIO;
 import com.propertyvista.onboarding.ActivatePMCRequestIO;
 import com.propertyvista.onboarding.CheckAvailabilityRequestIO;
@@ -34,7 +34,7 @@ import com.propertyvista.onboarding.UpdateAccountInfoRequestIO;
 public class OnboardingRequestXMLEntityFactory extends XMLEntityFactoryStrict {
 
     public OnboardingRequestXMLEntityFactory() {
-        super(new ImportXMLEntityName());
+        super(new ImportXMLEntityNamingConvention());
     }
 
     @Override

@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -35,7 +36,7 @@ import com.pyx4j.essentials.server.xml.XMLEntityWriter;
 import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
+import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 import com.propertyvista.onboarding.RequestMessageIO;
 import com.propertyvista.onboarding.ResponseMessageIO;
 
@@ -123,8 +124,13 @@ public class OnboardingServiceServlet extends HttpServlet {
     private void replyWith(HttpServletResponse response, IEntity message) {
         try {
             response.setContentType("text/xml");
-            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityName());
+            String namespace = null;
+            javax.xml.bind.annotation.XmlSchema schema = message.getValueClass().getPackage().getAnnotation(javax.xml.bind.annotation.XmlSchema.class);
+            if ((schema != null) && (CommonsStringUtils.isStringSet(schema.namespace()))) {
+                namespace = schema.namespace();
+            }
+            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"), namespace);
+            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityNamingConvention());
             xmlWriter.setEmitId(false);
             xmlWriter.write(message);
             response.getWriter().write(xml.toString());
@@ -133,5 +139,4 @@ public class OnboardingServiceServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-
 }

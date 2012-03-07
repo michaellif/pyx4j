@@ -38,7 +38,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.CreateModelXML;
 import com.propertyvista.interfaces.importer.model.ImportIO;
-import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
+import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 
 public class BuildingExample {
 
@@ -69,7 +69,7 @@ public class BuildingExample {
         try {
             w = new FileWriter(f);
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityName());
+            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityNamingConvention());
             xmlWriter.setEmitId(false);
             xmlWriter.write(importIO);
             w.write(xml.toString());

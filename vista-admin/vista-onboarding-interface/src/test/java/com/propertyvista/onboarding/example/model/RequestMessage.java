@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -39,16 +38,6 @@ public class RequestMessage {
     @NotNull
     @XmlElement(required = true)
     public String interfaceEntityPassword;
-
-    /**
-     * May contain up to 63 characters. The characters allowed in a label are a subset of the ASCII character set, and includes the characters a through z, A
-     * through Z, digits 0 through 9, and
-     * the hyphen.
-     */
-    @Size(max = 64)
-    @Pattern(regexp = "[A-Za-z0-9]+")
-    @XmlElement(required = true)
-    public String pmcId;
 
     /**
      * Optional unique identifier for the XML message

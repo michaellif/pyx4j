@@ -11,6 +11,6 @@
  * @author vlads
  * @version $Id$
  */
-//@javax.xml.bind.annotation.XmlSchema(namespace = "http://interfaces.birchwoodsoftwaregroup.com/schema/onboarding")
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://interfaces.birchwoodsoftwaregroup.com/schema/onboarding")
 package com.propertyvista.onboarding.example.model;
 

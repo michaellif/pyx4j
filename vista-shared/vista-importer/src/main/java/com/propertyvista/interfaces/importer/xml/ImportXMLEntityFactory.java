@@ -32,7 +32,7 @@ import com.propertyvista.interfaces.importer.model.ParkingIO;
 public class ImportXMLEntityFactory extends XMLEntityFactoryStrict {
 
     public ImportXMLEntityFactory() {
-        super(new ImportXMLEntityName());
+        super(new ImportXMLEntityNamingConvention());
     }
 
     @Override

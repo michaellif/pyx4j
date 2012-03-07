@@ -28,7 +28,7 @@ import com.pyx4j.essentials.server.xml.XMLEntityModelWriter;
 import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 import com.pyx4j.essentials.server.xml.XMLStringWriter;
 
-import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
+import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 
 public class CreateModelXML {
 
@@ -45,7 +45,7 @@ public class CreateModelXML {
         try {
             w = new FileWriter(f);
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            XMLEntityModelWriter xmlWriter = new XMLEntityModelWriter(xml, new ImportXMLEntityName());
+            XMLEntityModelWriter xmlWriter = new XMLEntityModelWriter(xml, new ImportXMLEntityNamingConvention());
             xmlWriter.setEmitId(false);
             xmlWriter.write(ent);
             w.write(xml.toString());

@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -34,7 +35,7 @@ import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
+import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 import com.propertyvista.onboarding.GetUsageRequestIO.UsageReportFormatType;
 import com.propertyvista.onboarding.ProvisionPMCRequestIO.VistaFeature;
 import com.propertyvista.onboarding.ProvisionPMCRequestIO.VistaLicense;
@@ -62,7 +63,6 @@ public class OnboardingExample {
             CheckAvailabilityRequestIO r = EntityFactory.create(CheckAvailabilityRequestIO.class);
             r.pmcId().setValue("star");
             RequestMessageIO rm = createExampleRequest(r);
-            rm.pmcId().setValue("");
             writeXML(rm, cnt + "-request-Check.xml");
             writeXML(createExampleResponse(), cnt + "-response-Check.xml");
         }
@@ -70,6 +70,7 @@ public class OnboardingExample {
         {
             cnt++;
             UpdateAccountInfoRequestIO r = EntityFactory.create(UpdateAccountInfoRequestIO.class);
+            r.pmcId().setValue("star");
             createAccountInfoIO(r.accountInfo());
 
             writeXML(createExampleRequest(r), cnt + "-request-UpdateAccountInfo.xml");
@@ -81,6 +82,7 @@ public class OnboardingExample {
         {
             cnt++;
             CreatePMCRequestIO r = EntityFactory.create(CreatePMCRequestIO.class);
+            r.pmcId().setValue("star");
             r.name().setValue("Star Starlight");
             r.dnsNameAliases().add("www.rentstarlight.com");
             r.dnsNameAliases().add("www.rentstarlight.ca");
@@ -93,6 +95,7 @@ public class OnboardingExample {
         {
             cnt++;
             ActivatePMCRequestIO r = EntityFactory.create(ActivatePMCRequestIO.class);
+            r.pmcId().setValue("star");
             r.country().setValue("Canada");
             r.license().setValue(VistaLicense.Unlimited);
             r.feature().setValue(VistaFeature.tbd1);
@@ -103,15 +106,18 @@ public class OnboardingExample {
         {
             cnt++;
             GetAccountInfoRequestIO r = EntityFactory.create(GetAccountInfoRequestIO.class);
+            r.pmcId().setValue("star");
             writeXML(createExampleRequest(r), cnt + "-request-GetAccountInfo.xml");
             AccountInfoResponseIO rs = EntityFactory.create(AccountInfoResponseIO.class);
             createAccountInfoIO(rs.accountInfo());
+            rs.success().setValue(Boolean.TRUE);
             writeXML(createExampleResponse(rs), cnt + "-response-GetAccountInfo.xml");
         }
 
         {
             cnt++;
             GetUsageRequestIO r = EntityFactory.create(GetUsageRequestIO.class);
+            r.pmcId().setValue("star");
             r.format().setValue(UsageReportFormatType.Short);
             r.from().setValue(DateUtils.detectDateformat("2011-01-01"));
             r.to().setValue(DateUtils.detectDateformat("2011-02-01"));
@@ -132,6 +138,7 @@ public class OnboardingExample {
         {
             cnt++;
             PaymentRequestIO pr = EntityFactory.create(PaymentRequestIO.class);
+            pr.pmcId().setValue("star");
             pr.amount().setValue(new BigDecimal("25.00"));
             CreditCardPaymentInstrumentIO cc = EntityFactory.create(CreditCardPaymentInstrumentIO.class);
             pr.paymentInstrument().set(cc);
@@ -147,7 +154,6 @@ public class OnboardingExample {
         RequestMessageIO r = EntityFactory.create(RequestMessageIO.class);
         r.interfaceEntity().setValue("rossul");
         r.interfaceEntityPassword().setValue("secret");
-        r.pmcId().setValue("star");
         r.requests().add(request);
         return r;
     }
@@ -182,8 +188,14 @@ public class OnboardingExample {
         FileWriter w = null;
         try {
             w = new FileWriter(f);
-            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityName());
+            String namespace = null;
+            javax.xml.bind.annotation.XmlSchema schema = io.getValueClass().getPackage().getAnnotation(javax.xml.bind.annotation.XmlSchema.class);
+            if ((schema != null) && (CommonsStringUtils.isStringSet(schema.namespace()))) {
+                namespace = schema.namespace();
+            }
+            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"), namespace);
+            xml.setSchemaLocation("http://interfaces.birchwoodsoftwaregroup.com/schema/onboarding");
+            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityNamingConvention());
             xmlWriter.setEmitId(false);
             xmlWriter.write(io);
             w.write(xml.toString());
@@ -201,7 +213,7 @@ public class OnboardingExample {
         try {
             w = new FileWriter(f);
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            XMLEntityModelWriter xmlWriter = new XMLEntityModelWriter(xml, new ImportXMLEntityName());
+            XMLEntityModelWriter xmlWriter = new XMLEntityModelWriter(xml, new ImportXMLEntityNamingConvention());
             xmlWriter.setEmitId(false);
             xmlWriter.write(io);
             w.write(xml.toString());

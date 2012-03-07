@@ -27,9 +27,9 @@ import com.propertyvista.onboarding.example.model.ResponseMessage;
 
 public class ExampleClient {
 
-    public static String serverUrl = "http://interfaces.birchwoodsoftwaregroup.com/onboarding";
+    //public static String serverUrl = "http://interfaces.birchwoodsoftwaregroup.com/onboarding";
 
-    //public static String serverUrl = "http://localhost:8888/vista/public/onboarding";
+    public static String serverUrl = "http://localhost:8888/vista/public/onboarding";
 
     public static ResponseMessage execute(RequestMessage requestMessage) throws Exception {
 
