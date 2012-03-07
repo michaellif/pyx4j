@@ -49,12 +49,12 @@ public class ReflectionServiceFactory implements IServiceFactory {
 
     protected String getImplClassName(String serviceInterfaceClassName) {
         String serviceImplClassName;
-        if (serviceInterfaceClassName.contains(".shared.")) {
+        if (serviceInterfaceClassName.contains(".rpc.")) {
+            serviceImplClassName = serviceInterfaceClassName.replace(".rpc.", ".server.") + "Impl";
+        } else if (serviceInterfaceClassName.contains(".shared.")) {
             serviceImplClassName = serviceInterfaceClassName.replace(".shared.", ".server.") + "Impl";
         } else if (serviceInterfaceClassName.contains(".client.")) {
             serviceImplClassName = serviceInterfaceClassName.replace(".client.", ".server.") + "Impl";
-        } else if (serviceInterfaceClassName.contains(".rpc.")) {
-            serviceImplClassName = serviceInterfaceClassName.replace(".rpc.", ".server.") + "Impl";
         } else {
             serviceImplClassName = serviceInterfaceClassName + "Impl";
         }
