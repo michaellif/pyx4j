@@ -30,16 +30,15 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
+import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<MasterApplication, MasterApplicationDTO> implements
         MasterApplicationCrudService {
@@ -134,41 +133,22 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         dbo.decidedBy().set(CrmAppContext.getCurrentUserEmployee());
         dbo.decisionReason().setValue(actionDTO.decisionReason().getValue());
         dbo.decisionDate().setValue(new LogicalDate());
-
         Persistence.service().merge(dbo);
 
-        // Update lease status if necessary:
-        Persistence.service().retrieve(dbo.lease());
         switch (actionDTO.status().getValue()) {
         case Approved:
-            dbo.lease().status().setValue(Status.Approved);
+            new LeaseManager().approveApplication(dbo.lease().getPrimaryKey());
             break;
         case Declined:
-            dbo.lease().status().setValue(Status.Declined);
+            new LeaseManager().declineApplication(dbo.lease().getPrimaryKey());
             break;
         case Cancelled:
-            dbo.lease().status().setValue(Status.ApplicationCancelled);
+            new LeaseManager().cancelApplication(dbo.lease().getPrimaryKey());
             break;
         }
-
-        Persistence.service().merge(dbo.lease());
 
         MasterApplicationDTO dto2 = GenericConverter.convertDBO2DTO(dbo, dtoClass);
         enhanceDTO(dbo, dto2, false);
-
-        // update occupancy
-        switch (actionDTO.status().getValue()) {
-        case Approved:
-            new AptUnitOccupancyManagerImpl(dbo.lease().unit().getPrimaryKey()).approveLease();
-            break;
-        case Declined:
-            new AptUnitOccupancyManagerImpl(dbo.lease().unit().getPrimaryKey()).unreserve();
-            break;
-        case Cancelled:
-            new AptUnitOccupancyManagerImpl(dbo.lease().unit().getPrimaryKey()).unreserve();
-            break;
-        }
-
         Persistence.service().commit();
         callback.onSuccess(dto2);
     }

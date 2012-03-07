@@ -132,15 +132,24 @@ public class LeaseManager {
     }
 
     public void approveApplication(Key leaseId) {
-        // TODO
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        lease.status().setValue(Status.Approved);
+
+        new AptUnitOccupancyManagerImpl(lease.unit()).approveLease();
     }
 
     public void declineApplication(Key leaseId) {
-        // TODO 
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        lease.status().setValue(Status.Declined);
+        Persistence.secureSave(lease);
+        new AptUnitOccupancyManagerImpl(lease.unit()).unreserve();
     }
 
     public void cancelApplication(Key leaseId) {
-        // TODO
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        lease.status().setValue(Status.Declined);
+        Persistence.secureSave(lease);
+        new AptUnitOccupancyManagerImpl(lease.unit()).unreserve();
     }
 
 }
