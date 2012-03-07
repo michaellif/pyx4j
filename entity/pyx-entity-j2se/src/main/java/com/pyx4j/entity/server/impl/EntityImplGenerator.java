@@ -414,16 +414,18 @@ public class EntityImplGenerator {
             }
             allMethodsSortedByDeclaration.add(method);
         }
+        List<CtMethod> allSuperMethods = new Vector<CtMethod>();
         for (CtMethod method : interfaceCtClass.getMethods()) {
             if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
                     || (method.getDeclaringClass().equals(ctClassIObject))) {
                 continue;
             }
-            if (!allMethodsSortedByDeclaration.contains(method)) {
-                allMethodsSortedByDeclaration.add(method);
+            if ((!allMethodsSortedByDeclaration.contains(method)) && (!allSuperMethods.contains(method))) {
+                allSuperMethods.add(method);
             }
         }
-        return allMethodsSortedByDeclaration;
+        allSuperMethods.addAll(allMethodsSortedByDeclaration);
+        return allSuperMethods;
     }
 
     private void assertOwnership(CtClass interfaceCtClass, CtMethod method) throws ClassNotFoundException, NotFoundException {
