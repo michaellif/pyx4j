@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.mapping;
 
 import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -69,6 +70,10 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     public boolean isOwnerColumn() {
         return ownerColumn;
+    }
+
+    public boolean isOwnedForceCreation() {
+        return memberMeta.isOwnedRelationships() && (!memberMeta.isEmbedded()) && memberMeta.getAnnotation(Owned.class).forceCreation();
     }
 
     public String getMemberPath() {

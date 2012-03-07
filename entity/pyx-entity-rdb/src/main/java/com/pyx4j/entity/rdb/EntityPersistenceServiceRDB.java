@@ -347,7 +347,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
             IEntity childEntity = (IEntity) member.getMember(entity);
-            if (!childEntity.isNull()) {
+            if (!childEntity.isNull() || member.isOwnedForceCreation()) {
                 if (memberMeta.isOwnedRelationships()) {
                     if (!childEntity.isValueDetached()) {
                         childEntity = childEntity.cast();
@@ -862,7 +862,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         cascadeRemove.add(baseChildEntity);
                     }
                 }
-                if (!childEntity.isValueDetached() && (!childEntity.isNull())) {
+                if (!childEntity.isValueDetached() && ((!childEntity.isNull() || member.isOwnedForceCreation()))) {
                     childEntity = childEntity.cast();
                     merge(tableModel(childEntity.getEntityMeta()), childEntity);
                 }
