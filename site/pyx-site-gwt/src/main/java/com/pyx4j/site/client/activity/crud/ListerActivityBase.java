@@ -85,9 +85,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void setParent(Key parentID) {
-        this.parentID = parentID; // save parent id for newItem creation...
-        this.parentClass = null;
-        setFilterByParent(true);
+        setParent(parentID, null);
     }
 
     @Override

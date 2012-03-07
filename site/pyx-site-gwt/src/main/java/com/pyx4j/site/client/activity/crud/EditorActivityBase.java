@@ -125,12 +125,11 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void populate() {
-
         if (isNewEntity()) {
             createNewEntity(new DefaultAsyncCallback<E>() {
                 @Override
                 public void onSuccess(E entity) {
-                    setEntityParent(entity);
+                    setEntityParent(entity, false);
                     onPopulateSuccess(entity);
                 }
             });
@@ -156,11 +155,13 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         }
     }
 
-    protected void setEntityParent(E entity) {
+    private void setEntityParent(E entity, boolean force) {
         if (parentID != null) {
             String ownerName = entity.getEntityMeta().getOwnerMemberName();
             if (ownerName != null) {
-                ((IEntity) entity.getMember(ownerName)).setPrimaryKey(parentID);
+                if (force || ((IEntity) entity.getMember(ownerName)).getPrimaryKey() == null) {
+                    ((IEntity) entity.getMember(ownerName)).setPrimaryKey(parentID);
+                }
             }
         }
     }
