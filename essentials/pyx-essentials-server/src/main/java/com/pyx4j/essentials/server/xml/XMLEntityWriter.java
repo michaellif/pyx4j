@@ -52,7 +52,7 @@ public class XMLEntityWriter {
 
     private boolean emitAttachLevel = false;
 
-    private final XMLEntityName entityName;
+    private final XMLEntityNamingConvention namingConvention;
 
     private final Map<String, String> detachedEntityAttributes = new LinkedHashMap<String, String>();
 
@@ -110,12 +110,12 @@ public class XMLEntityWriter {
     }
 
     public XMLEntityWriter(XMLStringWriter xml) {
-        this(xml, new XMLEntityNameDefault());
+        this(xml, new XMLEntityNamingConventionDefault());
     }
 
-    public XMLEntityWriter(XMLStringWriter xml, XMLEntityName entityName) {
+    public XMLEntityWriter(XMLStringWriter xml, XMLEntityNamingConvention namingConvention) {
         this.xml = xml;
-        this.entityName = entityName;
+        this.namingConvention = namingConvention;
         detachedEntityAttributes.put("attachLevel", AttachLevel.Detached.name());
     }
 
@@ -145,14 +145,14 @@ public class XMLEntityWriter {
 
     public void writeRoot(IEntity entity, Map<String, String> attributes) {
         VerticalGraph grapth = new VerticalGraph();
-        write(entity, entityName.getXMLName(entity.getObjectClass()), attributes, null, grapth);
+        write(entity, namingConvention.getXMLName(entity.getObjectClass()), attributes, null, grapth);
         if (isEmitOnlyOwnedReferences() && grapth.getReferences().size() > 0) {
             throw new Error("UnOwnedReferences references detected " + grapth.getReferences());
         }
     }
 
     public void write(IEntity entity) {
-        write(entity, entityName.getXMLName(entity.getObjectClass()));
+        write(entity, namingConvention.getXMLName(entity.getObjectClass()));
     }
 
     public void write(IEntity entity, String name) {
@@ -191,7 +191,7 @@ public class XMLEntityWriter {
             throw new Error("Writing detached entity " + entity.getDebugExceptionInfoString());
         }
         if ((declaredObjectClass != null) && (!entity.getObjectClass().equals(declaredObjectClass))) {
-            String typeName = entityName.getXMLName(entity.getObjectClass());
+            String typeName = namingConvention.getXMLName(entity.getObjectClass());
             if (!typeName.equals(name)) {
                 entityAttributes.put("type", typeName);
             }
@@ -242,10 +242,10 @@ public class XMLEntityWriter {
                 if (!((ICollection<?, ?>) member).isEmpty()) {
                     xml.startIdented(memberName);
                     for (Object item : (ICollection<?, ?>) member) {
-                        write((IEntity) item, entityName.getXMLName(((IEntity) item).getObjectClass()), null, memberMeta.getObjectClass(), new VerticalGraph(
-                                graph));
+                        write((IEntity) item, namingConvention.getXMLName(((IEntity) item).getObjectClass()), null, memberMeta.getObjectClass(),
+                                new VerticalGraph(graph));
                     }
-                    xml.endIdented(memberName);
+                    xml.endIdented();
                 }
                 break;
             case PrimitiveSet:
@@ -254,7 +254,7 @@ public class XMLEntityWriter {
                     for (Object item : (Collection<?>) entity.getMemberValue(memberName)) {
                         xml.write("item", getValueAsString(item));
                     }
-                    xml.endIdented(memberName);
+                    xml.endIdented();
                 }
                 break;
             case Primitive:
@@ -263,7 +263,7 @@ public class XMLEntityWriter {
                         xml.startIdented(memberName);
                         xml.write("lat", getValueAsString(((GeoPoint) entity.getMemberValue(memberName)).getLat()));
                         xml.write("lng", getValueAsString(((GeoPoint) entity.getMemberValue(memberName)).getLng()));
-                        xml.endIdented(memberName);
+                        xml.endIdented();
                     } else {
                         xml.write(memberName, getValueAsString(entity.getMemberValue(memberName)));
                     }
@@ -271,7 +271,7 @@ public class XMLEntityWriter {
                 break;
             }
         }
-        xml.endIdented(name);
+        xml.endIdented();
     }
 
     protected boolean emitMemeber(IEntity entity, String memberName, IObject<?> member) {
@@ -294,7 +294,7 @@ public class XMLEntityWriter {
             DateFormat df = new SimpleDateFormat("HH:mm:ss");
             return df.format((Date) value);
         } else if (value instanceof Date) {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             df.setTimeZone(TimeZone.getTimeZone("UTC"));
             return df.format((Date) value);
         } else {

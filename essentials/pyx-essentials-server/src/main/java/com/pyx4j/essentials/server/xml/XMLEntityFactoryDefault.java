@@ -53,6 +53,10 @@ public class XMLEntityFactoryDefault implements XMLEntityFactory {
     public <T extends IEntity> T createInstance(String xmlName, Class<T> objectClass) {
         Class<T> entityClass;
         if (xmlName != null) {
+            int ns = xmlName.indexOf(':');
+            if (ns != -1) {
+                xmlName = xmlName.substring(ns + 1);
+            }
             String entityClassName = names.get(xmlName);
             if (entityClassName == null) {
                 entityClassName = xmlName;

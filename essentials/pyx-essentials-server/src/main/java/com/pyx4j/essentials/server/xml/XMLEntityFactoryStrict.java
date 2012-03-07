@@ -30,9 +30,9 @@ public abstract class XMLEntityFactoryStrict implements XMLEntityFactory {
 
     private final Map<String, Class<?>> binding = new HashMap<String, Class<?>>();
 
-    private final XMLEntityName entityName;
+    private final XMLEntityNamingConvention entityName;
 
-    public XMLEntityFactoryStrict(XMLEntityName entityName) {
+    public XMLEntityFactoryStrict(XMLEntityNamingConvention entityName) {
         this.entityName = entityName;
         bind();
     }
@@ -48,6 +48,10 @@ public abstract class XMLEntityFactoryStrict implements XMLEntityFactory {
     public <T extends IEntity> T createInstance(String xmlName, Class<T> objectClass) {
         Class<T> entityClass;
         if (xmlName != null) {
+            int ns = xmlName.indexOf(':');
+            if (ns != -1) {
+                xmlName = xmlName.substring(ns + 1);
+            }
             entityClass = (Class<T>) binding.get(xmlName);
             if (entityClass == null) {
                 throw new Error("Unbound XML entity name '" + xmlName + "'");
@@ -57,5 +61,4 @@ public abstract class XMLEntityFactoryStrict implements XMLEntityFactory {
         }
         return EntityFactory.create(entityClass);
     }
-
 }

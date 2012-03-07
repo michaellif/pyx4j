@@ -104,19 +104,19 @@ public class LocalXMLBackupConsumer implements BackupConsumer {
                         itemAttributes.put("type", XMLBackupUtils.getValueType(item));
                         xml.write("item", itemAttributes, XMLBackupUtils.getValueAsString(item));
                     }
-                    xml.endIdented(propertyName);
+                    xml.endIdented();
                 } else {
                     xml.write(propertyName, attributes, XMLBackupUtils.getValueAsString(value));
                 }
             }
-            xml.endIdented(keyValue.getKind());
+            xml.endIdented();
         }
         totalRecords += records.size();
     }
 
     @Override
     public void end() {
-        xml.endIdented("Backup");
+        xml.endIdented();
         Writer writer = null;
         ZipOutputStream zip = null;
         try {

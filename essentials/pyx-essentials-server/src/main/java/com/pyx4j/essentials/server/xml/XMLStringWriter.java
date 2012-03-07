@@ -30,6 +30,10 @@ public class XMLStringWriter {
 
     private final Charset charset;
 
+    private final String namespace;
+
+    private String schemaLocation;
+
     private final StringBuilder out = new StringBuilder();
 
     private int level = 0;
@@ -38,11 +42,21 @@ public class XMLStringWriter {
 
     public XMLStringWriter() {
         charset = null;
+        namespace = null;
     }
 
     public XMLStringWriter(Charset charset) {
+        this(charset, null);
+    }
+
+    public XMLStringWriter(Charset charset, String namespace) {
         this.charset = charset;
+        this.namespace = namespace;
         out.append("<?xml version=\"1.0\" encoding=\"").append(charset.displayName()).append("\"?>\n");
+    }
+
+    public void setSchemaLocation(String schemaLocation) {
+        this.schemaLocation = schemaLocation;
     }
 
     public void idented() {
@@ -57,11 +71,28 @@ public class XMLStringWriter {
     }
 
     public void start(String name) {
-        out.append("<").append(name).append(">");
+        beggining(name, null);
+        out.append(">");
+    }
+
+    private void start(String name, Map<String, String> attributes) {
+        beggining(name, attributes);
+        out.append(">");
     }
 
     private void beggining(String name, Map<String, String> attributes) {
-        out.append("<").append(name);
+        out.append("<");
+        if ((openItems.size() == 0) && (namespace != null)) {
+            out.append("ns1:");
+            out.append(name);
+            out.append(" xmlns:ns1=\"").append(namespace).append("\"");
+            if (schemaLocation != null) {
+                out.append(" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+                out.append(" xsi:schemaLocation=\"").append(namespace).append(' ').append(schemaLocation).append("\"");
+            }
+        } else {
+            out.append(name);
+        }
         if (attributes != null) {
             for (Map.Entry<String, String> me : attributes.entrySet()) {
                 if (me.getValue() != null) {
@@ -69,11 +100,7 @@ public class XMLStringWriter {
                 }
             }
         }
-    }
-
-    public void start(String name, Map<String, String> attributes) {
-        beggining(name, attributes);
-        out.append(">");
+        openItems.push(name);
     }
 
     public void writeEmpty(String name, Map<String, String> attributes) {
@@ -93,23 +120,19 @@ public class XMLStringWriter {
         out.append("\n");
     }
 
-    public void open(String name) {
-        start(name);
-        openItems.push(name);
+    public void end() {
+        String name = openItems.pop();
+        out.append("</");
+        if ((openItems.size() == 0) && (namespace != null)) {
+            out.append("ns1:");
+        }
+        out.append(name).append(">\n");
     }
 
-    public void close() {
-        end(openItems.pop());
-    }
-
-    public void end(String name) {
-        out.append("</").append(name).append(">\n");
-    }
-
-    public void endIdented(String name) {
+    public void endIdented() {
         level--;
         idented();
-        end(name);
+        end();
     }
 
     public void write(String name, Object value) {
@@ -122,7 +145,7 @@ public class XMLStringWriter {
         if (value != null) {
             XMLEscape.appendEscapeText(out, value.toString());
         }
-        end(name);
+        end();
     }
 
     public void write(String name, IPrimitive<?> value) {
@@ -140,7 +163,7 @@ public class XMLStringWriter {
         idented();
         start(name);
         append(value.toString());
-        end(name);
+        end();
     }
 
     public void writeRaw(String name, IPrimitive<?> value) {

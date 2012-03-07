@@ -48,13 +48,13 @@ public class XMLEntityModelWriter {
 
     private boolean emitId = true;
 
-    private final XMLEntityName entityName;
+    private final XMLEntityNamingConvention entityName;
 
     public XMLEntityModelWriter(XMLStringWriter xml) {
-        this(xml, new XMLEntityNameDefault());
+        this(xml, new XMLEntityNamingConventionDefault());
     }
 
-    public XMLEntityModelWriter(XMLStringWriter xml, XMLEntityName entityName) {
+    public XMLEntityModelWriter(XMLStringWriter xml, XMLEntityNamingConvention entityName) {
         this.xml = xml;
         this.entityName = entityName;
     }
@@ -89,7 +89,7 @@ public class XMLEntityModelWriter {
         xml.startIdented(name, entityAttributes);
 
         if (processed.contains(entity)) {
-            xml.endIdented(name);
+            xml.endIdented();
             return;
         }
         processed.add(entity);
@@ -116,7 +116,7 @@ public class XMLEntityModelWriter {
                     IEntity item = cm.$();
                     write(item, entityName.getXMLName(item.getObjectClass()), null, memberMeta.getObjectClass(), processed);
                 }
-                xml.endIdented(memberName);
+                xml.endIdented();
                 break;
             case PrimitiveSet:
                 if (!((Collection<?>) entity.getMemberValue(memberName)).isEmpty()) {
@@ -124,7 +124,7 @@ public class XMLEntityModelWriter {
                     for (Object item : (Collection<?>) entity.getMemberValue(memberName)) {
                         xml.write("item", getValueAsString(item));
                     }
-                    xml.endIdented(memberName);
+                    xml.endIdented();
                 }
                 break;
             case Primitive:
@@ -133,7 +133,7 @@ public class XMLEntityModelWriter {
                         xml.startIdented(memberName);
                         xml.write("lat", getValueClassAsString(double.class));
                         xml.write("lng", getValueClassAsString(double.class));
-                        xml.endIdented(memberName);
+                        xml.endIdented();
                     } else {
                         xml.write(memberName, getValueClassAsString(memberMeta.getValueClass()));
                     }
@@ -141,7 +141,7 @@ public class XMLEntityModelWriter {
                 break;
             }
         }
-        xml.endIdented(name);
+        xml.endIdented();
     }
 
     private static <T extends Enum<T>> String allEnums(Class<T> enumClass) {

@@ -155,7 +155,7 @@ public class DataDump {
                     for (IEntity ent : (List<IEntity>) item) {
                         xmlWriter.write(ent);
                     }
-                    xml.end("list");
+                    xml.end();
                     w.write(xml.toString());
                 } else if (item instanceof IEntity) {
                     xmlWriter.write((IEntity) item);

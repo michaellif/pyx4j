@@ -23,7 +23,7 @@ package com.pyx4j.essentials.server.xml;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.shared.IObject;
 
-public class XMLEntityNameDefault implements XMLEntityName {
+public class XMLEntityNamingConventionDefault implements XMLEntityNamingConvention {
 
     @Override
     public String getXMLName(@SuppressWarnings("rawtypes") Class<? extends IObject> memberClass) {
