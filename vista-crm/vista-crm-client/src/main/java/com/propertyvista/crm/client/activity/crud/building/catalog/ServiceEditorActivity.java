@@ -19,11 +19,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceEditorActivity extends EditorActivityBase<Service> implements ServiceEditorView.Presenter {
@@ -35,18 +37,19 @@ public class ServiceEditorActivity extends EditorActivityBase<Service> implement
 
     @Override
     protected void createNewEntity(final AsyncCallback<Service> callback) {
-        ((ServiceEditorView) view).showSelectTypePopUp(new AsyncCallback<Service.Type>() {
+        ((ServiceEditorView) view).showSelectTypePopUp(new DefaultAsyncCallback<Service.Type>() {
             @Override
-            public void onSuccess(Service.Type type) {
-                Service entity = EntityFactory.create(entityClass);
-                entity.type().setValue(type);
+            public void onSuccess(final Service.Type type) {
+                ((ServiceCrudService) service).retrieveCatalog(new DefaultAsyncCallback<ProductCatalog>() {
+                    @Override
+                    public void onSuccess(ProductCatalog catalog) {
+                        Service entity = EntityFactory.create(entityClass);
+                        entity.type().setValue(type);
+                        entity.catalog().set(catalog);
 
-                callback.onSuccess(entity);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                callback.onFailure(caught);
+                        callback.onSuccess(entity);
+                    }
+                }, parentID);
             }
         });
     }

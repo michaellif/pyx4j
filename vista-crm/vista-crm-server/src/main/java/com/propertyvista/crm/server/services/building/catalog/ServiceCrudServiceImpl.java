@@ -13,11 +13,15 @@
  */
 package com.propertyvista.crm.server.services.building.catalog;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 
@@ -49,5 +53,10 @@ public class ServiceCrudServiceImpl extends GenericCrudServiceImpl<Service> impl
                 }
             }
         }
+    }
+
+    @Override
+    public void retrieveCatalog(AsyncCallback<ProductCatalog> callback, Key entityId) {
+        callback.onSuccess(Persistence.service().retrieve(ProductCatalog.class, entityId));
     }
 }

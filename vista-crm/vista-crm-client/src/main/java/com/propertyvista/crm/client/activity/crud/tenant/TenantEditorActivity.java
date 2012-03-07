@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorView;
@@ -36,18 +37,13 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
 
     @Override
     protected void createNewEntity(final AsyncCallback<TenantDTO> callback) {
-        ((TenantEditorView) view).showSelectTypePopUp(new AsyncCallback<Tenant.Type>() {
+        ((TenantEditorView) view).showSelectTypePopUp(new DefaultAsyncCallback<Tenant.Type>() {
             @Override
             public void onSuccess(Tenant.Type type) {
                 TenantDTO entity = EntityFactory.create(entityClass);
                 entity.type().setValue(type);
 
                 callback.onSuccess(entity);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                callback.onFailure(caught);
             }
         });
     }

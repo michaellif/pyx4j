@@ -86,7 +86,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                 protected void setFilters(List<DataTableFilterData> filters) {
                     super.setFilters(filters);
                     addFilter(new DataTableFilterData(EntityFactory.getEntityPrototype(AptUnit.class).belongsTo().getPath(), Operators.is, parent.getValue()
-                            .catalog().building().detach()));
+                            .catalog().building()));
                 }
 
                 @Override

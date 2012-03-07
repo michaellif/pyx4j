@@ -21,8 +21,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.rpc.AbstractListService;
@@ -73,7 +71,7 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
 
         public ConcessionSelectorDialog() {
             super(Concession.class, true, getValue(), i18n.tr("Select Concession"));
-            addFilter(new DataTableFilterData(ServiceConcessionFolder.this.proto().catalog().getPath(), Operators.is, parent.getValue().catalog()));
+            setParentFiltering(parent.getValue().catalog().getPrimaryKey());
             setWidth("700px");
         }
 

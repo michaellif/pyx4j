@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureEditorView;
@@ -36,10 +37,10 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> {
 
     @Override
     protected void createNewEntity(final AsyncCallback<Feature> callback) {
-        ((FeatureEditorView) view).showSelectTypePopUp(new AsyncCallback<Feature.Type>() {
+        ((FeatureEditorView) view).showSelectTypePopUp(new DefaultAsyncCallback<Feature.Type>() {
             @Override
             public void onSuccess(final Feature.Type type) {
-                ((FeatureCrudService) service).retrieveCatalog(new AsyncCallback<ProductCatalog>() {
+                ((FeatureCrudService) service).retrieveCatalog(new DefaultAsyncCallback<ProductCatalog>() {
                     @Override
                     public void onSuccess(ProductCatalog catalog) {
                         Feature entity = EntityFactory.create(entityClass);
@@ -48,17 +49,7 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> {
 
                         callback.onSuccess(entity);
                     }
-
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        callback.onFailure(caught);
-                    }
                 }, parentID);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                callback.onFailure(caught);
             }
         });
     }

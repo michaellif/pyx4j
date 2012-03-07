@@ -43,5 +43,4 @@ public class MaintenanceRequestEditorActivity extends EditorActivityBase<Mainten
         entity.status().setValue(MaintenanceRequestStatus.Submitted);
         callback.onSuccess(entity);
     }
-
 }

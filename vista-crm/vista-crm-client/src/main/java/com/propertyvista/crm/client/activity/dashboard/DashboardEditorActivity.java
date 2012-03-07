@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -38,14 +39,14 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
 
     @SuppressWarnings("unchecked")
     public DashboardEditorActivity(Place place) {
-        super(place, (DashboardEditor) DashboardViewFactory.instance(DashboardEditor.class), (AbstractCrudService<DashboardMetadata>) GWT
+        super(place, DashboardViewFactory.instance(DashboardEditor.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(DashboardMetadataCrudService.class), DashboardMetadata.class);
 
     }
 
     @Override
     protected void createNewEntity(final AsyncCallback<DashboardMetadata> callback) {
-        ((DashboardEditor) view).showSelectTypePopUp(new AsyncCallback<DashboardMetadata.DashboardType>() {
+        ((DashboardEditor) view).showSelectTypePopUp(new DefaultAsyncCallback<DashboardMetadata.DashboardType>() {
             @Override
             public void onSuccess(DashboardType type) {
                 DashboardMetadata entity = EntityFactory.create(entityClass);
@@ -55,11 +56,6 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
                 //entity.user().id().setValue(Key.DORMANT_KEY);
 
                 callback.onSuccess(entity);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                callback.onFailure(caught);
             }
         });
     }
