@@ -29,7 +29,7 @@ import com.pyx4j.essentials.server.xml.XMLEntityParser;
 public class OnboardingXMLUtils {
 
     public static <T extends IEntity> T parse(Class<T> entityClass, InputSource input) {
-        XMLEntityParser parser = new XMLEntityParser(new OnboardingXMLEntityFactory());
+        XMLEntityParser parser = new XMLEntityParser(new OnboardingRequestXMLEntityFactory());
         return parser.parse(entityClass, newDocument(input).getDocumentElement());
     }
 

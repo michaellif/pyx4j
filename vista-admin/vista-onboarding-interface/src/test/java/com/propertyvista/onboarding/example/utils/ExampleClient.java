@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding.example;
+package com.propertyvista.onboarding.example.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,15 +24,18 @@ import javax.xml.bind.Unmarshaller;
 
 import com.propertyvista.onboarding.example.model.RequestMessage;
 import com.propertyvista.onboarding.example.model.ResponseMessage;
-import com.propertyvista.onboarding.example.utils.MarshallUtil;
 
 public class ExampleClient {
 
-    //public static String serverUrl = "http://interfaces.birchwoodsoftwaregroup.com/onboarding";
+    public static String serverUrl = "http://interfaces.birchwoodsoftwaregroup.com/onboarding";
 
-    public static String serverUrl = "http://localhost:8888/vista/public/onboarding";
+    //public static String serverUrl = "http://localhost:8888/vista/public/onboarding";
 
     public static ResponseMessage execute(RequestMessage requestMessage) throws Exception {
+
+        System.out.println("--sending:");
+        MarshallUtil.marshal(requestMessage, System.out);
+
         HttpURLConnection conn = null;
         OutputStream out = null;
         InputStream in = null;
@@ -55,10 +58,12 @@ public class ExampleClient {
 
             int responseCode = conn.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
+                System.out.println("--received:");
                 in = conn.getInputStream();
                 JAXBContext context = JAXBContext.newInstance(ResponseMessage.class);
                 Unmarshaller um = context.createUnmarshaller();
                 ResponseMessage message = (ResponseMessage) um.unmarshal(in);
+                MarshallUtil.marshal(message, System.out);
                 in.close();
                 return message;
             } else {

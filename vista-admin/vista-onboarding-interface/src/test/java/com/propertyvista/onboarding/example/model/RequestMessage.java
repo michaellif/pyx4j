@@ -60,8 +60,8 @@ public class RequestMessage {
     //@formatter:off
     @XmlElementWrapper
     @XmlElements({ 
-        @XmlElement(name = "CheckAvailabilityRequest", type = CheckAvailabilityRequest.class), 
-        @XmlElement(name = "CreatePMCRequest", type = CreatePMCRequest.class) })
+        @XmlElement(name = "checkAvailabilityRequest", type = CheckAvailabilityRequest.class), 
+        @XmlElement(name = "createPMCRequest", type = CreatePMCRequest.class) })
     //@formatter:on    
     public List<Request> requests;
 

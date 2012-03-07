@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -58,7 +59,12 @@ public class ResponseMessage {
     @XmlElement
     public String messageId;
 
+    //@formatter:off
     @XmlElementWrapper
+    @XmlElements({ 
+        @XmlElement(name = "response", type = Response.class), 
+        })
+    //@formatter:on    
     public List<Response> responses;
 
     public void addResponse(Response response) {

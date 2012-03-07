@@ -38,7 +38,6 @@ public class OnboardingSchemaServlet extends HttpServlet {
         try {
             response.setContentType("text/xml");
             XMLEntitySchemaWriter.printSchema(response.getOutputStream(), false, RequestMessageIO.class, ResponseMessageIO.class);
-
         } catch (Throwable e) {
             log.error("Error", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
