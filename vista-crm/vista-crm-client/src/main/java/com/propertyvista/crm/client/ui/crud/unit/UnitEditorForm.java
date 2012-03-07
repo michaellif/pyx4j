@@ -163,8 +163,13 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             combo.addValueChangeHandler(new ValueChangeHandler<Floorplan>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Floorplan> event) {
-                    get(proto().info()._bedrooms()).setValue(event.getValue().bedrooms().getValue());
-                    get(proto().info()._bathrooms()).setValue(event.getValue().bathrooms().getValue());
+                    if (event.getValue() != null) {
+                        get(proto().info()._bedrooms()).setValue(event.getValue().bedrooms().getValue());
+                        get(proto().info()._bathrooms()).setValue(event.getValue().bathrooms().getValue());
+                    } else {
+                        get(proto().info()._bedrooms()).setValue(null);
+                        get(proto().info()._bathrooms()).setValue(null);
+                    }
                 }
             });
         }
@@ -190,7 +195,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             @SuppressWarnings("unchecked")
             CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
             combo.resetCriteria(); // reload options with new criteria...
-            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), building.detach()));
+            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), building));
+            combo.retriveOptions(null);
         }
     }
 }
