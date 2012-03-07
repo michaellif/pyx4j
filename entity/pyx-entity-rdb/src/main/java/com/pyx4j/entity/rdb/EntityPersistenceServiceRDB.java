@@ -429,7 +429,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembersSecondPass()) {
                 IEntity childEntity = (IEntity) member.getMember(entity);
-                if ((!childEntity.isNull()) && (!childEntity.isValueDetached())) {
+                if (!childEntity.isValueDetached() && ((!childEntity.isNull() || member.isOwnedForceCreation()))) {
                     childEntity = childEntity.cast();
                     persist(tableModel(childEntity.getEntityMeta()), childEntity);
                 }
@@ -492,7 +492,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembersSecondPass()) {
                 IEntity childEntity = (IEntity) member.getMember(entity);
-                if ((!childEntity.isNull()) && (!childEntity.isValueDetached())) {
+                if (!childEntity.isValueDetached() && ((!childEntity.isNull() || member.isOwnedForceCreation()))) {
                     childEntity = childEntity.cast();
                     if (doMerge) {
                         merge(tableModel(childEntity.getEntityMeta()), childEntity);

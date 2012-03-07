@@ -20,12 +20,16 @@
  */
 package com.pyx4j.entity.test.server;
 
+import junit.framework.Assert;
+
 import com.pyx4j.commons.IFullDebug;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Organization;
+import com.pyx4j.entity.test.shared.domain.ownership.creation.ForceCreationOneToOneParent;
 
 public abstract class BidirectionalPersistenceTestCase extends DatastoreTestBase {
 
@@ -92,5 +96,32 @@ public abstract class BidirectionalPersistenceTestCase extends DatastoreTestBase
             fail("Managed to save readonly property");
         }
 
+    }
+
+    public void testForceCreationOneToOnePersist() {
+        testForceCreationOneToOneSave(TestCaseMethod.Persist);
+    }
+
+    public void testForceCreationOneToOneMerge() {
+        testForceCreationOneToOneSave(TestCaseMethod.Merge);
+    }
+
+    //TODO Make it work on GAE
+    public void testForceCreationOneToOneSave(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+        ForceCreationOneToOneParent o = EntityFactory.create(ForceCreationOneToOneParent.class);
+        o.testId().setValue(testId);
+        o.name().setValue(uniqueString());
+
+        // Save child and owner
+        srvSave(o, testCaseMethod);
+
+        // Get Parent and see that Child is retrieved, then verify it is created
+        {
+            ForceCreationOneToOneParent parent = srv.retrieve(ForceCreationOneToOneParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
+            Assert.assertNotNull("child created", parent.child().getPrimaryKey());
+        }
     }
 }
