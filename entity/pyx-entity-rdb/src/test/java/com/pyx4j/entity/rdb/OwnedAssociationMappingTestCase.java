@@ -41,6 +41,8 @@ import com.pyx4j.entity.test.shared.domain.ownership.managed.UnidirectionalOneTo
 import com.pyx4j.entity.test.shared.domain.ownership.managed.UnidirectionalOneToManyParent;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.UnidirectionalOneToOneChild;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.UnidirectionalOneToOneParent;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.detached.BidirectionalOneToOneDetdInverChild;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.detached.BidirectionalOneToOneDetdInverParent;
 
 public abstract class OwnedAssociationMappingTestCase extends AssociationMappingTestCase {
 
@@ -419,6 +421,139 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         // See that Child was removed
         {
             BidirectionalOneToOneInversedChild child = srv.retrieve(BidirectionalOneToOneInversedChild.class, oldchildKey);
+            //TODO The persist method is inconsistent for now
+            switch (testCaseMethod) {
+            case Merge:
+                Assert.assertNull("child NOT removed", child);
+                break;
+            case Persist:
+                Assert.assertNotNull("child removed", child);
+            }
+        }
+    }
+
+    public void testBidirectionalOneToOneDetachedInversedPersist() {
+        testBidirectionalOneToOneDetachedInversedSave(TestCaseMethod.Persist);
+    }
+
+    public void testBidirectionalOneToOneDetachedInversedMerge() {
+        testBidirectionalOneToOneDetachedInversedSave(TestCaseMethod.Merge);
+    }
+
+    public void testBidirectionalOneToOneDetachedInversedSave(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+        BidirectionalOneToOneDetdInverParent o = EntityFactory.create(BidirectionalOneToOneDetdInverParent.class);
+        o.testId().setValue(testId);
+        o.name().setValue(uniqueString());
+        o.child().testId().setValue(testId);
+        o.child().name().setValue(uniqueString());
+
+        // Save child and owner
+        srvSave(o, testCaseMethod);
+
+        Assert.assertNotNull("Id Assigned", o.child().getPrimaryKey());
+
+        // Get Parent and see that Child is retrieved, then verify values
+        {
+            BidirectionalOneToOneDetdInverParent parent = srv.retrieve(BidirectionalOneToOneDetdInverParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("correct data retrieved", o.name(), parent.name());
+            Assert.assertEquals("child data retrieved", AttachLevel.IdOnly, parent.child().getAttachLevel());
+            srv.retrieve(parent.child());
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
+            Assert.assertEquals("owner in child data retrieved", AttachLevel.Attached, parent.child().parent().getAttachLevel());
+            Assert.assertEquals("owner in child correct data retrieved", o.getPrimaryKey(), parent.child().parent().getPrimaryKey());
+            Assert.assertEquals("owner in child correct data retrieved", o.name(), parent.child().parent().name());
+        }
+
+        // Get Child and see that child is retrieved, then verify values
+        {
+            BidirectionalOneToOneDetdInverChild child = srv.retrieve(BidirectionalOneToOneDetdInverChild.class, o.child().getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", child);
+            Assert.assertEquals("owner data retrieved", AttachLevel.IdOnly, child.parent().getAttachLevel());
+            srv.retrieve(child.parent());
+            Assert.assertEquals("owner data retrieved", AttachLevel.Attached, child.parent().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+        }
+
+        // update child and owner
+        o.name().setValue(uniqueString());
+        o.child().name().setValue(uniqueString());
+        srvSave(o, testCaseMethod);
+
+        // Get Parent and see that Child is retrieved, then verify values
+        {
+            BidirectionalOneToOneDetdInverParent parent = srv.retrieve(BidirectionalOneToOneDetdInverParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("child data retrieved", AttachLevel.IdOnly, parent.child().getAttachLevel());
+            srv.retrieve(parent.child());
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
+            Assert.assertEquals("owner in child data retrieved", AttachLevel.Attached, parent.child().parent().getAttachLevel());
+            Assert.assertEquals("owner in child correct data retrieved", o.getPrimaryKey(), parent.child().parent().getPrimaryKey());
+            Assert.assertEquals("owner in child correct data retrieved", o.name(), parent.child().parent().name());
+        }
+
+        // Get Child and see that child is retrieved, then verify values
+        {
+            BidirectionalOneToOneDetdInverChild child = srv.retrieve(BidirectionalOneToOneDetdInverChild.class, o.child().getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", child);
+            Assert.assertEquals("owner data retrieved", AttachLevel.IdOnly, child.parent().getAttachLevel());
+            srv.retrieve(child.parent());
+            Assert.assertEquals("owner data retrieved", AttachLevel.Attached, child.parent().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+        }
+
+        // Query Parent By Child
+        {
+            EntityQueryCriteria<BidirectionalOneToOneDetdInverParent> criteria = EntityQueryCriteria.create(BidirectionalOneToOneDetdInverParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().child().name(), o.child().name()));
+
+            List<BidirectionalOneToOneDetdInverParent> parents = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, parents.size());
+            srv.retrieve(parents.get(0).child());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parents.get(0).child().name());
+        }
+
+        // Query Child By Parent
+        {
+            EntityQueryCriteria<BidirectionalOneToOneDetdInverChild> criteria = EntityQueryCriteria.create(BidirectionalOneToOneDetdInverChild.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().parent().name(), o.name()));
+
+            List<BidirectionalOneToOneDetdInverChild> children = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, children.size());
+            srv.retrieve(children.get(0).parent());
+            Assert.assertEquals("correct data retrieved", o.name(), children.get(0).parent().name());
+        }
+
+        // Get Child, change and save independently
+        {
+            BidirectionalOneToOneDetdInverChild child = srv.retrieve(BidirectionalOneToOneDetdInverChild.class, o.child().getPrimaryKey());
+            child.name().setValue(child.name().getValue() + "#");
+            srvSave(child, testCaseMethod);
+
+            child = srv.retrieve(BidirectionalOneToOneDetdInverChild.class, o.child().getPrimaryKey());
+            Assert.assertTrue("child update", child.name().getValue().endsWith("#"));
+            srv.retrieve(child.parent());
+            Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+
+            BidirectionalOneToOneDetdInverParent parent = srv.retrieve(BidirectionalOneToOneDetdInverParent.class, o.getPrimaryKey());
+            srv.retrieve(parent.child());
+            Assert.assertTrue("child update", parent.child().name().getValue().endsWith("#"));
+
+        }
+
+        // remove child and update owner
+        Key oldchildKey = o.child().getPrimaryKey();
+        o.child().set(null);
+        srvSave(o, testCaseMethod);
+
+        // See that Child was removed
+        {
+            BidirectionalOneToOneDetdInverChild child = srv.retrieve(BidirectionalOneToOneDetdInverChild.class, oldchildKey);
             //TODO The persist method is inconsistent for now
             switch (testCaseMethod) {
             case Merge:

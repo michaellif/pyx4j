@@ -18,8 +18,9 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.ownership.managed;
+package com.pyx4j.entity.test.shared.domain.ownership.managed.detached;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -27,10 +28,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
 // This table does NOT have column that references child
-public interface BidirectionalOneToOneInversedParent extends IEntity {
+public interface BidirectionalOneToOneDetdInverParent extends IEntity {
 
     @Owned
-    BidirectionalOneToOneInversedChild child();
+    @Detached
+    BidirectionalOneToOneDetdInverChild child();
 
     IPrimitive<String> testId();
 

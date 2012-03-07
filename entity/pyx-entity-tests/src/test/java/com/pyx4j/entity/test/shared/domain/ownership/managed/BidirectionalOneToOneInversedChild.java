@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
-//This table does not have column that references owner because this is one to one relationship
+//This table does have column that references owner.
 public interface BidirectionalOneToOneInversedChild extends IEntity {
 
     @Owner
