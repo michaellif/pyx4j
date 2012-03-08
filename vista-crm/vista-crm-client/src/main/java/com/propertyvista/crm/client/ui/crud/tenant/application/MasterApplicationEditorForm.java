@@ -65,7 +65,8 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
         tabPanel.setLastTabDisabled(isEditable());
         tabPanel.add(createInfoTab(), i18n.tr("Information"));
         tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
-        tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
+// TODO: should be hidden untill back end implementation:   
+//        tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
         tabPanel.add(createAppStatustab(), i18n.tr("Status Details"));
 
         tabPanel.setSize("100%", "100%");
