@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.pyx4j.entity.report.JasperReportModel;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.Bill;
 
@@ -26,9 +27,13 @@ public class BillPrint {
     public static final String title = "Bill";
 
     public static JasperReportModel createModel(Bill bill) {
+
+        BillData billData = EntityFactory.create(BillData.class);
+        billData.bill().set(bill);
+
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("ReportTitle", title);
-        return new JasperReportModel(BillPrint.class.getPackage().getName() + ".Bill", Arrays.asList(new Bill[] { bill }), parameters);
+        return new JasperReportModel(BillPrint.class.getPackage().getName() + ".Bill", Arrays.asList(new BillData[] { billData }), parameters);
     }
 
 }
