@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
@@ -59,6 +60,8 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
 
         private static final I18n i18n = I18n.get(NoteAndAttachmentsEditorFolder.class);
 
+        protected boolean newItemAdded = false;
+
         public NoteAndAttachmentsEditorFolder() {
             super(Note.class);
 
@@ -67,7 +70,11 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof Note) {
-                return new NoteEditor();
+                {
+                    System.out.println("NoteEditor");
+
+                    return new NoteEditor();
+                }
             } else {
                 return super.create(member);
             }
@@ -83,17 +90,32 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
 
         @Override
         protected CEntityFolderItem<Note> createItem(boolean first) {
-            CEntityFolderItem<Note> item = super.createItem(first);
+            final CEntityFolderItem<Note> item = super.createItem(first);
             ImageButton button = new ImageButton(CrmImages.INSTANCE.edit(), CrmImages.INSTANCE.editHover(), i18n.tr("Edit Note"));
             button.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    System.out.println("Edit Note Command Fired");
-
+                    item.setViewable(false);
+                    ((NoteEditor) item.getComponents().toArray()[0]).setViewable(false);
+                    ((NoteEditor) item.getComponents().toArray()[0]).setButtonsVisible(true);
                 }
             });
             item.addCustomButton(button);
+//
+//            if (((NoteEditor) item.getComponents().toArray()[0]).getValue().isEmpty()) {
+//                ((NoteEditor) item.getComponents().toArray()[0]).setViewable(false);
+//                ((NoteEditor) item.getComponents().toArray()[0]).setButtonsVisible(true);
+//            } else
+            item.setViewable(true);
+
             return item;
+        }
+
+        @Override
+        protected void addItem(Note newEntity) {
+            newItemAdded = newEntity.isEmpty();
+            System.out.println("addItem");
+            super.addItem(newEntity);
         }
 
         private static class NoteEditor extends CEntityDecoratableEditor<Note> {
@@ -125,24 +147,45 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
                 btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
+                        System.out.println(isVisited());
+                        System.out.println(isValid());
+
+                        if (getValue().created().getValue() == null)
+                            getValue().created().setValue(new LogicalDate());
+
+                        setViewable(true);
+                        setButtonsVisible(false);
                     }
                 });
 
-                //btnSave.setVisible(false);
+                btnSave.setVisible(false);
                 tb.addItem(btnSave);
 
                 btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
 //                        getPresenter().cancel();
+
+                        if (getValue().isEmpty())
+                            ((NoteAndAttachmentsEditorFolder) getParent().getParent()).removeItem((CEntityFolderItem<Note>) getParent());
+                        else {
+                            setButtonsVisible(false);
+                            setViewable(true);
+                        }
                     }
                 });
 
-                //btnCancel.setVisible(false);
+                btnCancel.setVisible(false);
                 tb.addItem(btnCancel);
 
                 content.setWidget(++row, 0, tb);
+
                 return content;
+            }
+
+            public void setButtonsVisible(boolean visible) {
+                btnSave.setVisible(visible);
+                btnCancel.setVisible(visible);
             }
 
         }
