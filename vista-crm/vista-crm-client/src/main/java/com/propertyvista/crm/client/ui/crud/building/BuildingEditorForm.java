@@ -213,15 +213,14 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setBR(++row, 0, 1);
+        main.setH1(++row, 0, 2, i18n.tr("Information"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().structureType()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().structureBuildYear()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().constructionType()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().foundationType()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().floorType()), 15).build());
 
-        row = -1;
-        main.setBR(++row, 0, 1);
+        row = 0;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().landArea()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().waterSupply()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().centralAir()), 15).build());
@@ -262,6 +261,14 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         }
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
+        main.setH1(++row, 0, 2, i18n.tr("Included Utilities/Add-ons"));
+        main.setWidget(++row, 0, inject(proto().productCatalog().includedUtilities(), new UtilityFolder(this)));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        main.setH1(++row, 0, 2, i18n.tr("Excluded Utilities/Add-ons"));
+        main.setWidget(++row, 0, inject(proto().productCatalog().externalUtilities(), new UtilityFolder(this)));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
@@ -272,7 +279,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = 0;
-        main.setH1(row++, 0, 2, i18n.tr("Financial Summary"));
+        main.setBR(row++, 0, 2);
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().financial().dateAcquired()), 9).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().financial().purchasePrice()), 10).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().financial().marketPrice()), 10).build());
@@ -281,14 +288,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalDate()), 9).build());
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalValue()), 10).build());
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
-
-        main.setH1(++row, 0, 2, i18n.tr("Included Utilities/Add-ons"));
-        main.setWidget(++row, 0, inject(proto().productCatalog().includedUtilities(), new UtilityFolder(this)));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        main.setH1(++row, 0, 2, i18n.tr("Excluded Utilities/Add-ons"));
-        main.setWidget(++row, 0, inject(proto().productCatalog().externalUtilities(), new UtilityFolder(this)));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         return new CrmScrollPanel(main);
     }
