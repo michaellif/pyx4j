@@ -21,8 +21,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.rpc.AbstractListService;
@@ -33,7 +31,7 @@ import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureEditorForm;
-import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectFeatureListService;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 
@@ -72,7 +70,7 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
 
         public FeatureSelectorDialog() {
             super(Feature.class, true, getValue(), i18n.tr("Select Feature"));
-            addFilter(new DataTableFilterData(ServiceFeatureFolder.this.proto().catalog().getPath(), Operators.is, parent.getValue().catalog()));
+            setParentFiltering(parent.getValue().catalog().getPrimaryKey());
             setWidth("700px");
         }
 
@@ -100,8 +98,7 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
 
         @Override
         protected AbstractListService<Feature> getSelectService() {
-            return GWT.<AbstractListService<Feature>> create(FeatureCrudService.class);
+            return GWT.<AbstractListService<Feature>> create(SelectFeatureListService.class);
         }
-
     }
 }

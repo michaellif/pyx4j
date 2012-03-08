@@ -31,7 +31,7 @@ import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
-import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectConcessionListService;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Service;
 
@@ -102,7 +102,7 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
 
         @Override
         protected AbstractListService<Concession> getSelectService() {
-            return GWT.<AbstractListService<Concession>> create(ConcessionCrudService.class);
+            return GWT.<AbstractListService<Concession>> create(SelectConcessionListService.class);
         }
     }
 }

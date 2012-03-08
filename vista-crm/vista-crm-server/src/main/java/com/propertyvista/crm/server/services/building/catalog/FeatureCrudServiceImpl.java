@@ -33,7 +33,7 @@ public class FeatureCrudServiceImpl extends GenericCrudServiceImpl<Feature> impl
     @Override
     protected void enhanceRetrieved(Feature entity, boolean fromList) {
         if (!fromList) {
-            Persistence.service().retrieve(entity.catalog());
+            // Load detached data:
             Persistence.service().retrieve(entity.items());
             // next level:
             for (ProductItem item : entity.items()) {
