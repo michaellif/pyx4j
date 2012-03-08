@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -48,6 +48,27 @@ public class LeaseTermsPolicyPreloader extends AbstractPolicyPreloader<LeaseTerm
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        String guarantorTermsContentText;
+        try {
+            guarantorTermsContentText = IOUtils.getUTF8TextResource("guarantorPolicy.html", this.getClass());
+            if (guarantorTermsContentText == null) {
+                guarantorTermsContentText = "Error: the policy is null";
+            }
+        } catch (IOException e) {
+            guarantorTermsContentText = "Page was not created for ${pmcName}";
+        }
+
+        String prepaidTermsContentText;
+        try {
+            prepaidTermsContentText = IOUtils.getUTF8TextResource("paymentTermsNotes.html", this.getClass());
+            if (prepaidTermsContentText == null) {
+                prepaidTermsContentText = "Error: the policy is null";
+            }
+        } catch (IOException e) {
+            prepaidTermsContentText = "Page was not created for ${pmcName}";
+        }
+
         // Find Local if exists
         EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lang(), CompiledLocale.en));
@@ -58,16 +79,18 @@ public class LeaseTermsPolicyPreloader extends AbstractPolicyPreloader<LeaseTerm
             Persistence.service().persist(en);
         }
 
-        String caption = i18n.tr("Mockup Summary Terms");
-        policy.tenantSummaryTerms().add(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, termsContentText)));
+        String caption = i18n.tr("Mockup Tenant Terms");
+        policy.tenantSummaryTerms().add(createLegalTermsDescriptor(caption, "Main Tenant Policy", createLegalTermsContent(caption, en, termsContentText)));
+
+        caption = i18n.tr("Mockup Guarantor Terms");
+        policy.guarantorSummaryTerms().add(
+                createLegalTermsDescriptor(caption, "Main Guarantor Policy", createLegalTermsContent(caption, en, guarantorTermsContentText)));
 
         caption = i18n.tr("Mockup One Time Payment Terms");
         policy.oneTimePaymentTerms().set(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, termsContentText)));
 
         caption = i18n.tr("Mockup Recurrent Time Payment Terms");
-        policy.recurrentPaymentTerms().set(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, termsContentText)));
-
-        Persistence.service().merge(policy);
+        policy.recurrentPaymentTerms().set(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, prepaidTermsContentText)));
 
         return policy;
     }
