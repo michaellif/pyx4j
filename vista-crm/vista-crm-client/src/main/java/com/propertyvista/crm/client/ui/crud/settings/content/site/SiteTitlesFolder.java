@@ -13,20 +13,60 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SiteTitles;
 
 class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
+    private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
 
     public SiteTitlesFolder(boolean modifyable) {
         super(SiteTitles.class, modifyable);
+        this.addValueChangeHandler(new ValueChangeHandler<IList<SiteTitles>>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<IList<SiteTitles>> event) {
+                updateUsedLocales();
+            }
+        });
+    }
+
+    private void updateUsedLocales() {
+        usedLocales.clear();
+        for (SiteTitles titles : getValue()) {
+            usedLocales.add(titles.locale());
+        }
+    }
+
+    @Override
+    protected void onPopulate() {
+        updateUsedLocales();
+    }
+
+    @Override
+    protected void addItem() {
+        new AvailableLocaleSelectorDialog(usedLocales, new ValueChangeHandler<AvailableLocale>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
+                SiteTitles titles = EntityFactory.create(SiteTitles.class);
+                titles.locale().set(event.getValue());
+                SiteTitlesFolder.super.addItem(titles);
+            }
+        }).show();
     }
 
     @Override
@@ -48,7 +88,9 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
+            CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
+            locale.setEditable(false);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().crmHeader()), 25).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prospectPortalTitle()), 25).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalTitle()), 25).build());
@@ -57,5 +99,4 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
             return main;
         }
     }
-
 }

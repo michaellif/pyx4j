@@ -13,14 +13,22 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.CEntityHyperlink;
+import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IFormat;
@@ -34,14 +42,47 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.File;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.SiteImageResource;
 
 public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResource> {
     private static final I18n i18n = I18n.get(PortalImageResourceFolder.class);
 
+    private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
+
     public PortalImageResourceFolder(boolean editable) {
         super(PortalImageResource.class, editable);
+        this.addValueChangeHandler(new ValueChangeHandler<IList<PortalImageResource>>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<IList<PortalImageResource>> event) {
+                updateUsedLocales();
+            }
+        });
+    }
+
+    private void updateUsedLocales() {
+        usedLocales.clear();
+        for (PortalImageResource items : getValue()) {
+            usedLocales.add(items.locale());
+        }
+    }
+
+    @Override
+    protected void onPopulate() {
+        updateUsedLocales();
+    }
+
+    @Override
+    protected void addItem() {
+        new AvailableLocaleSelectorDialog(usedLocales, new ValueChangeHandler<AvailableLocale>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
+                PortalImageResource item = EntityFactory.create(PortalImageResource.class);
+                item.locale().set(event.getValue());
+                PortalImageResourceFolder.super.addItem(item);
+            }
+        }).show();
     }
 
     @Override
@@ -65,7 +106,9 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
+            CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
+            locale.setEditable(false);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
             if (PortalImageResourceFolder.this.isEditable()) {
 
                 CEntityHyperlink<File> link = new CEntityHyperlink<File>(new Command() {

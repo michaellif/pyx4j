@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.settings.content.page;
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public interface PageViewer extends IViewerView<PageDescriptor> {
@@ -24,10 +25,10 @@ public interface PageViewer extends IViewerView<PageDescriptor> {
 
         void viewChild(Key id);
 
-        void editNew(Key parentid);
+        void editNew(Key parentid, AvailableLocale locale);
     }
 
     void viewChild(Key id);
 
-    void newChild(Key parentid);
+    void newChild(Key parentid, AvailableLocale locale);
 }

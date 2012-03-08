@@ -26,6 +26,7 @@ import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> implements SiteViewer.Presenter {
@@ -41,9 +42,10 @@ public class SiteViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> imp
     }
 
     @Override
-    public void editNew(Key parentid) {
+    public void editNew(Key parentid, AvailableLocale locale) {
         AppSite.getPlaceController().goTo(
                 AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class).formNewItemPlace(parentid)
-                        .arg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.site.name()));
+                        .arg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.site.name())
+                        .arg(PageEditor.Presenter.URL_PARAM_PAGE_LOCALE, locale.lang().getValue().name()));
     }
 }

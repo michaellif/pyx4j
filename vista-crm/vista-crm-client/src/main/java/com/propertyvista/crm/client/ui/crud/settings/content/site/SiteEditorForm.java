@@ -20,22 +20,15 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.themes.CrmTheme;
-import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
@@ -91,34 +84,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         main.setWidget(row++, 0, inject(proto().logo(), new PortalImageResourceFolder(isEditable())));
 
         main.setH1(row++, 0, 1, proto().slogan().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().slogan(), new VistaBoxFolder<HtmlContent>(HtmlContent.class) {
-            @Override
-            public CComponent<?, ?> create(IObject<?> member) {
-                if (member instanceof HtmlContent) {
-                    return new CEntityDecoratableEditor<HtmlContent>(HtmlContent.class) {
-                        @Override
-                        public IsWidget createContent() {
-                            FormFlexPanel main = new FormFlexPanel();
-
-                            int row = -1;
-                            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
-                            if (isEditable()) {
-                                CRichTextArea editor = new CRichTextArea();
-                                editor.setImageProvider(new SiteImageResourceProvider());
-                                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), editor), 60).build());
-                            } else {
-                                CLabel content = new CLabel();
-                                content.setAllowHtml(true);
-                                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), content), 60).build());
-                            }
-
-                            return main;
-                        }
-                    };
-                }
-                return super.create(member);
-            }
-        }));
+        main.setWidget(row++, 0, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
 
         main.setH1(row++, 0, 1, proto().banner().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().banner(), new PortalImageResourceFolder(isEditable())));

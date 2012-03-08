@@ -29,10 +29,13 @@ import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.shared.CompiledLocale;
 
 public class PageEditorActivity extends EditorActivityBase<PageDescriptor> implements PageEditor.Presenter {
 
     private PageParent pageParentArg = null;
+
+    private CompiledLocale locale = null;
 
     @SuppressWarnings("unchecked")
     public PageEditorActivity(Place place) {
@@ -42,6 +45,10 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
         String val = ((CrudAppPlace) place).getFirstArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT);
         if (val != null) {
             pageParentArg = PageParent.valueOf(val);
+        }
+        val = ((CrudAppPlace) place).getFirstArg(PageEditor.Presenter.URL_PARAM_PAGE_LOCALE);
+        if (val != null) {
+            locale = CompiledLocale.valueOf(val);
         }
     }
 
@@ -66,6 +73,9 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
 
         // add at least one content item:
         PageContent content = EntityFactory.create(PageContent.class);
+        if (locale != null) {
+            content.locale().lang().setValue(locale);
+        }
         entity.content().add(content);
 
         callback.onSuccess(entity);

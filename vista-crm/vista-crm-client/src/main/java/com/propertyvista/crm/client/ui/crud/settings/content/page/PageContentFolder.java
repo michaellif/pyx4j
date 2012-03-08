@@ -13,10 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.page;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -30,18 +37,51 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
+import com.propertyvista.crm.client.ui.crud.settings.content.site.AvailableLocaleSelectorDialog;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 
 class PageContentFolder extends VistaBoxFolder<PageContent> {
-
     private static final I18n i18n = I18n.get(PageContentFolder.class);
 
     private final CEntityEditor<PageDescriptor> parent;
 
+    private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
+
     public PageContentFolder(CEntityEditor<PageDescriptor> parent) {
         super(PageContent.class, parent.isEditable());
         this.parent = parent;
+        this.addValueChangeHandler(new ValueChangeHandler<IList<PageContent>>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<IList<PageContent>> event) {
+                updateUsedLocales();
+            }
+        });
+    }
+
+    private void updateUsedLocales() {
+        usedLocales.clear();
+        for (PageContent item : getValue()) {
+            usedLocales.add(item.locale());
+        }
+    }
+
+    @Override
+    protected void onPopulate() {
+        updateUsedLocales();
+    }
+
+    @Override
+    protected void addItem() {
+        new AvailableLocaleSelectorDialog(usedLocales, new ValueChangeHandler<AvailableLocale>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
+                PageContent item = EntityFactory.create(PageContent.class);
+                item.locale().set(event.getValue());
+                PageContentFolder.super.addItem(item);
+            }
+        }).show();
     }
 
     @Override
@@ -56,7 +96,6 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
     public void addValidations() {
         super.addValidations();
         this.addValueValidator(new EditableValueValidator<IList<PageContent>>() {
-
             @Override
             public ValidationFailure isValid(CComponent<IList<PageContent>, ?> component, IList<PageContent> value) {
                 if (value == null) {
@@ -64,7 +103,6 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
                 }
                 return !value.isEmpty() ? null : new ValidationFailure(i18n.tr("At least one content item is necessary"));
             }
-
         });
     }
 
@@ -85,10 +123,10 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
-
+            CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
+            locale.setEditable(false);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._caption().caption()), 20).build());
-
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._caption().secondaryCaption()), 20).build());
 
             if (isEditable()) {
