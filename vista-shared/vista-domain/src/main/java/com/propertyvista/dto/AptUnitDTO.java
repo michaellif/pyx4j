@@ -13,7 +13,6 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -21,9 +20,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @Transient
 public interface AptUnitDTO extends AptUnit {
-
-    @Caption(name = "Number Of Occupants")
-    IPrimitive<Double> numberOfOccupants();
 
     IPrimitive<String> buildingCode();
 }

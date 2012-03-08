@@ -100,8 +100,8 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @EmbeddedEntity
     Marketing marketing();
 
-    @Detached
     @Owned
+    @Detached
     IList<Media> media();
 
     @Detached
@@ -115,6 +115,12 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = CrmUserBuildings.class, cascade = false)
     ISet<CrmUser> userAccess();
+
+    @Owned
+    @Detached
+// TODO VladS    
+//    @Detached(level = AttachLevel.Detached)
+    IList<BuildingAmenity> amenities();
 
     // ----------------------------------------------------
     // parent <-> child relationship:
@@ -145,10 +151,6 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<Roof> _Roofs();
-
-    @Owned
-    @Detached(level = AttachLevel.Detached)
-    ISet<BuildingAmenity> _BuildingAmenities();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

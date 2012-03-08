@@ -36,7 +36,6 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
     @Override
     protected void enhanceDTO(AptUnit in, AptUnitDTO dto, boolean fromList) {
         //TODO: calculate value here:
-        dto.numberOfOccupants().setValue(0.0);
         dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.belongsTo().getPrimaryKey()).propertyCode());
 
         if (!fromList) {

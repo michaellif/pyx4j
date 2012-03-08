@@ -94,9 +94,10 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             }
         }
 
+        updateAdjustments(dbo);
+
         new LeaseManager().save(dbo);
 
-        updateAdjustments(dbo);
         int no = 0;
         for (TenantInLease item : dbo.tenants()) {
             item.lease().set(dbo);

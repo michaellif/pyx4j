@@ -30,7 +30,6 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
@@ -52,6 +51,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             Persistence.service().retrieve(dto.contacts().organizationContacts());
             Persistence.service().retrieve(dto.marketing().adBlurbs());
             Persistence.service().retrieve(dto.dashboard());
+            Persistence.service().retrieve(dto.amenities());
 
             if (dto.dashboard().isEmpty()) {
                 // load first building  dashoard by default:
@@ -62,10 +62,6 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
                     dto.dashboard().set(dashboards.get(0));
                 }
             }
-
-            EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
-            amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
-            dto.amenities().addAll(Persistence.service().query(amenitysCriteria));
 
             EntityQueryCriteria<ProductItemType> serviceItemCriteria = EntityQueryCriteria.create(ProductItemType.class);
             serviceItemCriteria.add(PropertyCriterion.in(serviceItemCriteria.proto().featureType(), Feature.Type.addOn, Feature.Type.utility));
@@ -123,20 +119,5 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
         boolean isCreate = dbo.id().isNull();
         Persistence.service().merge(dbo);
         PublicDataUpdater.updateIndexData(dbo);
-
-        if (!isCreate) {
-            EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
-            amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), dbo));
-            List<BuildingAmenity> existingAmenities = Persistence.service().query(amenitysCriteria);
-            for (BuildingAmenity amenity : existingAmenities) {
-                if (!in.amenities().contains(amenity)) {
-                    Persistence.service().delete(amenity);
-                }
-            }
-        }
-        for (BuildingAmenity amenity : in.amenities()) {
-            amenity.belongsTo().set(dbo);
-        }
-        Persistence.service().merge(in.amenities());
     }
 }

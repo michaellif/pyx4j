@@ -333,7 +333,7 @@ public class BuildingsGenerator {
 
     public BuildingAmenity createBuildingAmenity(Building building) {
         BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
-        building._BuildingAmenities().add(amenity);
+        building.amenities().add(amenity);
 
         amenity.type().setValue(RandomUtil.randomEnum(BuildingAmenity.Type.class));
 

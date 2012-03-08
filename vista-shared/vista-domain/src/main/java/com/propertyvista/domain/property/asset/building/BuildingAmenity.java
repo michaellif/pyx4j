@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -139,6 +140,9 @@ public interface BuildingAmenity extends Amenity {
     @Indexed
     @JoinColumn
     Building belongsTo();
+
+    @OrderColumn
+    IPrimitive<Integer> orderInBuilding();
 
     @NotNull
     @ToString(index = 0)

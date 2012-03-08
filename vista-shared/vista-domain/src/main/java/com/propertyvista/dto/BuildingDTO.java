@@ -20,12 +20,9 @@ import com.pyx4j.entity.shared.IList;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 
 @Transient
 public interface BuildingDTO extends Building {
-
-    IList<BuildingAmenity> amenities();
 
     IList<ProductItemType> availableUtilities();
 
