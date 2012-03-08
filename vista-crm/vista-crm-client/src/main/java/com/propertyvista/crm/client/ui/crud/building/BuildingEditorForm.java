@@ -192,15 +192,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.setH1(row++, 0, 2, proto().geoLocation().getMeta().getCaption());
-        if (isEditable()) {
-            main.setWidget(row, 0, inject(proto().geoLocation()));
-        } else {
-            main.setWidget(row, 0, new DecoratorBuilder(inject(proto().geoLocation())).customLabel("").useLabelSemicolon(false).build());
-        }
-        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
-
-        main.setH1(row++, 0, 2, proto().amenities().getMeta().getCaption());
-        main.setWidget(row, 0, inject(proto().amenities(), new BuildingAmenityFolder()));
+//        if (isEditable()) {
+        main.setWidget(row, 0, inject(proto().geoLocation()));
+//        } else {
+//            main.setWidget(row, 0, new DecoratorBuilder(inject(proto().geoLocation())).customLabel("").useLabelSemicolon(false).build());
+//        }
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.getColumnFormatter().setWidth(0, "50%");
@@ -260,6 +256,10 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             })), 50).build());
         }
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        main.setH1(row++, 0, 2, proto().amenities().getMeta().getCaption());
+        main.setWidget(row, 0, inject(proto().amenities(), new BuildingAmenityFolder()));
+        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.setH1(++row, 0, 2, i18n.tr("Included Utilities/Add-ons"));
         main.setWidget(++row, 0, inject(proto().productCatalog().includedUtilities(), new UtilityFolder(this)));
