@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.report;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -66,6 +67,12 @@ public class JRIEntityCollectionDataSource<E extends IEntity> implements JRRewin
         if (this.data != null) {
             this.iterator = this.data.iterator();
         }
+    }
+
+    public JRIEntityCollectionDataSource(E bean) {
+        this.data = new ArrayList<E>();
+        data.add(bean);
+        this.iterator = this.data.iterator();
     }
 
     @Override
