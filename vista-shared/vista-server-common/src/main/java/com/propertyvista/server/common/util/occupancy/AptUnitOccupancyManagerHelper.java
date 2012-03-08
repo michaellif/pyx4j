@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -42,12 +43,16 @@ public class AptUnitOccupancyManagerHelper {
     private static final long MILLIS_IN_DAY = 1000l * 60l * 60l * 24l;
 
     public static void merge(AptUnit unit, LogicalDate startingAt, List<Status> relevantStatuses, MergeHandler handler) {
+        merge(unit.getPrimaryKey(), startingAt, relevantStatuses, handler);
+    }
+
+    public static void merge(Key unitId, LogicalDate startingAt, List<Status> relevantStatuses, MergeHandler handler) {
         if (relevantStatuses.isEmpty()) {
             return;
         }
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
         criteria.asc(criteria.proto().dateFrom());
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unitId));
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), startingAt));
         criteria.add(PropertyCriterion.in(criteria.proto().status(), new ArrayList<Status>(relevantStatuses)));
 
@@ -66,7 +71,7 @@ public class AptUnitOccupancyManagerHelper {
                 AptUnitOccupancySegment s2 = i.next();
                 if (s1.dateTo().getValue().equals(substractDay(s2.dateFrom().getValue())) & handler.isMergeable(s1, s2)) {
                     AptUnitOccupancySegment merged = EntityFactory.create(AptUnitOccupancySegment.class);
-                    merged.unit().set(unit);
+                    merged.unit().id().setValue(unitId);
                     merged.dateFrom().setValue(s1.dateFrom().getValue());
                     merged.dateTo().setValue(s2.dateTo().getValue());
                     merged.status().setValue(s1.status().getValue());
@@ -132,7 +137,11 @@ public class AptUnitOccupancyManagerHelper {
     }
 
     public static AptUnitOccupancySegment split(AptUnit unit, LogicalDate splitDay, SplittingHandler handler) {
-        AptUnitOccupancySegment segment = retrieveOccupancySegment(unit, splitDay);
+        return split(unit.getPrimaryKey(), splitDay, handler);
+    }
+
+    public static AptUnitOccupancySegment split(Key unitId, LogicalDate splitDay, SplittingHandler handler) {
+        AptUnitOccupancySegment segment = retrieveOccupancySegment(unitId, splitDay);
         if (segment == null) {
             throw new IllegalStateException("failed to retrieve segment that contains the " + SimpleDateFormat.getDateInstance().format(splitDay));
         } else {
@@ -180,9 +189,13 @@ public class AptUnitOccupancyManagerHelper {
      * @return
      */
     public static AptUnitOccupancySegment retrieveOccupancySegment(AptUnit unit, LogicalDate contained) {
+        return retrieveOccupancySegment(unit.getPrimaryKey(), contained);
+    }
+
+    public static AptUnitOccupancySegment retrieveOccupancySegment(Key unitId, LogicalDate contained) {
 
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unitId));
         criteria.add(PropertyCriterion.le(criteria.proto().dateFrom(), contained));
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), contained));
 
