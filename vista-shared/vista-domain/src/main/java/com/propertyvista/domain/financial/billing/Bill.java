@@ -90,8 +90,6 @@ public interface Bill extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> billingPeriodEndDate();
 
-    IPrimitive<BigDecimal> billProration();
-
     IPrimitive<BillStatus> billStatus();
 
     IPrimitive<BillType> billType();
@@ -133,10 +131,12 @@ public interface Bill extends IEntity {
      */
     IPrimitive<BigDecimal> paymentReceivedAmount();
 
+    IPrimitive<BigDecimal> depositRefundAmount();
+
     IPrimitive<BigDecimal> immediateAdjustments();
 
     /**
-     * pastDueAmount = previousBalanceAmount - paymentReceivedAmount -
+     * pastDueAmount = previousBalanceAmount - paymentReceivedAmount - depositRefundAmount -
      * immediateAdjustments
      */
     IPrimitive<BigDecimal> pastDueAmount();

@@ -7,24 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 25, 2012
+ * Created on Mar 8, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.server.billing;
+package com.propertyvista.server.billing.print;
 
-import com.propertyvista.domain.financial.billing.BillEntry;
+import java.text.SimpleDateFormat;
 
-public class BillEntryAdjustmentProcessor {
+import net.sf.jasperreports.engine.JRDefaultScriptlet;
+import net.sf.jasperreports.engine.JRScriptletException;
 
-    private final Billing billing;
+import com.pyx4j.commons.LogicalDate;
 
-    BillEntryAdjustmentProcessor(Billing billing) {
-        this.billing = billing;
-    }
+public class BillPrintScriptlet extends JRDefaultScriptlet {
 
-    protected void createBillEntryAdjustment(BillEntry originalEntry, BillEntry revisedEntry) {
-        //TODO
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+
+    public String formatDate(LogicalDate date) throws JRScriptletException {
+        return formatter.format(date);
     }
 
 }

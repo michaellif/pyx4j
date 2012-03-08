@@ -40,6 +40,8 @@ public interface BillingAccount extends IEntity {
     @ReadOnly
     BillingCycle billingCycle();
 
+    IPrimitive<Integer> accountNumber();
+
     /**
      * Assign to BillingRun during billing extract.
      * Set to null when last period bill has been approved or rejected.

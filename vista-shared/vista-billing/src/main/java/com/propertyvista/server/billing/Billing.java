@@ -79,6 +79,7 @@ class Billing {
         nextPeriodBill.oneTimeFeatureCharges().setValue(new BigDecimal(0));
         nextPeriodBill.totalAdjustments().setValue(new BigDecimal(0));
         nextPeriodBill.immediateAdjustments().setValue(new BigDecimal(0));
+        nextPeriodBill.depositRefundAmount().setValue(new BigDecimal(0));
         nextPeriodBill.latePaymentCharges().setValue(new BigDecimal(0));
         nextPeriodBill.taxes().setValue(new BigDecimal(0));
         nextPeriodBill.depositPaidAmount().setValue(new BigDecimal(0));
@@ -106,7 +107,7 @@ class Billing {
     private void calculateTotals() {
         nextPeriodBill.pastDueAmount().setValue(
                 nextPeriodBill.previousBalanceAmount().getValue().subtract(nextPeriodBill.paymentReceivedAmount().getValue())
-                        .subtract(nextPeriodBill.immediateAdjustments().getValue()));
+                        .subtract(nextPeriodBill.immediateAdjustments().getValue()).subtract(nextPeriodBill.depositRefundAmount().getValue()));
 
         nextPeriodBill.currentAmount().setValue(
                 nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.serviceCharge().getValue())
