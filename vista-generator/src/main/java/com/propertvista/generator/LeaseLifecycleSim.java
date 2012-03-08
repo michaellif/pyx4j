@@ -57,31 +57,31 @@ public class LeaseLifecycleSim {
         return lease;
     }
 
-    public Lease createApplication(Key leaseId) {
+    public Lease createApplication(Key leaseId, LogicalDate eventDate) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.ApplicationInProgress);
         return lease;
     }
 
-    public Lease approveApplication(Key leaseId) {
+    public Lease approveApplication(Key leaseId, LogicalDate eventDate) {
         new LeaseManager().approveApplication(leaseId);
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         return lease;
     }
 
-    public Lease declineApplication(Key leaseId) {
+    public Lease declineApplication(Key leaseId, LogicalDate eventDate) {
         new LeaseManager().declineApplication(leaseId);
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         return lease;
     }
 
-    public Lease cancelApplication(Key leaseId) {
+    public Lease cancelApplication(Key leaseId, LogicalDate eventDate) {
         new LeaseManager().cancelApplication(leaseId);
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         return lease;
     }
 
-    public Lease activate(Key leaseId) {
+    public Lease activate(Key leaseId, LogicalDate eventDate) {
         new LeaseManager().approveApplication(leaseId);
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         return lease;
@@ -94,33 +94,33 @@ public class LeaseLifecycleSim {
 //        return lease;
 //    }
 
-    public Lease notice(LogicalDate eventDay, Key leaseId, LogicalDate moveOutDay) {
-        new LeaseManager().notice(leaseId, eventDay, moveOutDay);
+    public Lease notice(Key leaseId, LogicalDate noticeDay, LogicalDate moveOutDay) {
+        new LeaseManager().notice(leaseId, noticeDay, moveOutDay);
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         return lease;
     }
 
-    public Lease cancelNotice(Key leaseId) {
+    public Lease cancelNotice(Key leaseId, LogicalDate cancelDay) {
         new LeaseManager().cancelNotice(leaseId);
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         return lease;
     }
 
-    public Lease evict(LogicalDate eventDay, Key leaseId, LogicalDate moveOutDay) {
-        new LeaseManager().evict(leaseId, eventDay, moveOutDay);
+    public Lease evict(Key leaseId, LogicalDate evictDay, LogicalDate moveOutDay) {
+        new LeaseManager().evict(leaseId, evictDay, moveOutDay);
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         return lease;
     }
 
-    public Lease cancelEvict(Key leaseId) {
+    public Lease cancelEvict(Key leaseId, LogicalDate cancellationDay) {
         new LeaseManager().cancelEvict(leaseId);
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         return lease;
     }
 
-    public Lease complete(final LogicalDate eventDay, Key leaseId) {
+    public Lease complete(Key leaseId, final LogicalDate completetionDay) {
         final Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        lease.actualLeaseTo().setValue(eventDay);
+        lease.actualLeaseTo().setValue(completetionDay);
         lease.status().setValue(Status.Completed);
         new LeaseManager().save(lease);
 
@@ -129,13 +129,13 @@ public class LeaseLifecycleSim {
             @Override
             public LogicalDate getNow() {
 
-                return eventDay;
+                return completetionDay;
             }
         }).scopeAvailable();
         return lease;
     }
 
-    public Lease close(Key leaseId) {
+    public Lease close(Key leaseId, LogicalDate closingDay) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.Closed);
         return lease;
