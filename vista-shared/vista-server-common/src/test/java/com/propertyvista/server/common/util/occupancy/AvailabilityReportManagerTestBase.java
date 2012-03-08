@@ -71,6 +71,8 @@ public class AvailabilityReportManagerTestBase {
 
         unit = EntityFactory.create(AptUnit.class);
         unit.info().number().setValue("1");
+        unit.belongsTo().propertyCode().setValue("2");
+        Persistence.service().merge(unit.belongsTo());
         Persistence.service().merge(unit);
     }
 
