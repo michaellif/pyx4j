@@ -104,6 +104,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                 }
             }
 
+            buildingPlace.clear();
             if (building != null) {
                 buildingPlace.setWidget(new DecoratorBuilder(inject(proto().belongsTo(), building), 20).build());
             }
