@@ -38,6 +38,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityCriteriaFilter;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.RPCManager;
@@ -173,6 +174,11 @@ public class ReferenceDataManager {
             if (me.getKey().getEntityClass().equals(ent.getObjectClass())) {
                 if (!me.getKey().hasCriteria()) {
                     ((List<T>) me.getValue()).add(ent);
+                } else {
+                    EntityCriteriaFilter f = new EntityCriteriaFilter(me.getKey());
+                    if (f.accept(ent)) {
+                        ((List<T>) me.getValue()).add(ent);
+                    }
                 }
             }
         }
