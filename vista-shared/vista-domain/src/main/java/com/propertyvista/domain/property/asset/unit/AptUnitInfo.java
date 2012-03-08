@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -54,6 +55,7 @@ public interface AptUnitInfo extends IEntity {
 
     @ToString(index = 0)
     @MemberColumn(name = "unitNumber")
+    @NotNull
     IPrimitive<String> number();
 
     // ---- Physical: ----------------

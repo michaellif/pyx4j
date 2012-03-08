@@ -128,7 +128,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
         main.getFlexCellFormatter().setRowSpan(row, 0, 3);
         row += 2;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().availableForRent()), 9).build());
 
         main.setBR(++row, 0, 0);
@@ -139,6 +138,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                     new DecoratorBuilder(inject(proto().belongsTo(), new CEntityCrudHyperlink<Building>(MainActivityMapper.getCrudAppPlace(Building.class))),
                             20).build());
         }
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().floor()), 5).build());
