@@ -150,7 +150,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
                 if (IEntity.PRIMARY_KEY.equals(memberName)) {
                     return primaryKeyMeta;
                 } else {
-                    throw new RuntimeException("Unknown member " + memberName);
+                    throw new RuntimeException("Unknown member '" + memberName + "' of " + this.entityClass.getName());
                 }
             }
             membersMeta.put(memberName, memberMeta);
@@ -167,7 +167,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
             //TODO ICollection support
             if (mm != null) {
                 if (!mm.isEntity()) {
-                    throw new RuntimeException("Invalid member in path " + memberName);
+                    throw new RuntimeException("Invalid member in path '" + memberName + "' of " + this.entityClass.getName());
                 } else {
                     em = EntityFactory.getEntityMeta((Class<? extends IEntity>) mm.getValueClass());
                 }
