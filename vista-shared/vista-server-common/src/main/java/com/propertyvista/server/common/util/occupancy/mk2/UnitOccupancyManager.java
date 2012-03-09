@@ -23,6 +23,7 @@ import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyMan
 import java.util.Arrays;
 import java.util.List;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -231,8 +232,13 @@ public class UnitOccupancyManager implements IUnitOccupancyManager {
                 if (!readCluster) {
                     if (segment.status().getValue() != Status.vacant) {
                         readCluster = true;
-                        maxVacantFromCandidate = segment.dateTo().getValue();
+                        if (segment.status().getValue() == Status.available) {
+                            maxVacantFromCandidate = segment.dateFrom().getValue();
+                        } else {
+                            maxVacantFromCandidate = segment.dateTo().getValue();
+                        }
                         minVacantFromCandidate = segment.dateFrom().getValue();
+
                     }
                 } else {
                     if (segment.status().getValue() != Status.vacant) {
@@ -246,7 +252,9 @@ public class UnitOccupancyManager implements IUnitOccupancyManager {
 
         MakeVacantConstraintsDTO constraints = EntityFactory.create(MakeVacantConstraintsDTO.class);
         constraints.minVacantFrom().setValue(minVacantFromCandidate);
-        constraints.maxVacantFrom().setValue(maxVacantFromCandidate);
+        if (!EqualsHelper.equals(maxVacantFromCandidate, UnitOccupancyConstants.MAX_DATE)) {
+            constraints.maxVacantFrom().setValue(maxVacantFromCandidate);
+        }
 
         return constraints;
     }
