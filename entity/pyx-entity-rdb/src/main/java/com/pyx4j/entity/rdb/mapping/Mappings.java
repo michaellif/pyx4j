@@ -85,11 +85,7 @@ public class Mappings {
         return getTableModel(connection, entityClass).operationsMeta();
     }
 
-    public TableModel ensureTable(Connection connection, Dialect dialect, EntityMeta entityMeta) {
-        TableModel model = tables.get(entityMeta.getEntityClass());
-        if (model != null) {
-            return model;
-        }
+    public static void assertPersistableEntity(EntityMeta entityMeta) {
         if (entityMeta.isTransient()) {
             throw new Error("Can't operate on Transient Entity " + entityMeta.getEntityClass().getName());
         }
@@ -99,6 +95,14 @@ public class Mappings {
         if (entityMeta.getAnnotation(AbstractEntity.class) != null) {
             throw new Error("Can't operate on Abstract Entity " + entityMeta.getEntityClass().getName());
         }
+    }
+
+    public TableModel ensureTable(Connection connection, Dialect dialect, EntityMeta entityMeta) {
+        TableModel model = tables.get(entityMeta.getEntityClass());
+        if (model != null) {
+            return model;
+        }
+        assertPersistableEntity(entityMeta);
 
         // Avoid lock on EntityClass
         Object entityTypeLock;

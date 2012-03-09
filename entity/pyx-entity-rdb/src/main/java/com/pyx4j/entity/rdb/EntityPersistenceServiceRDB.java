@@ -891,9 +891,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private <T extends IEntity> void clearRetrieveValues(T entity) {
-        if (true) {
-            return;
-        }
         // Clear all values, already in Entity, Retrieve from scratch
         Key pk = entity.getPrimaryKey();
 
@@ -1023,6 +1020,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @SuppressWarnings("unchecked")
     private <T extends IEntity> T cascadeRetrieve(T entity, AttachLevel attachLevel) {
         if (entity.getPrimaryKey() == null) {
+            Mappings.assertPersistableEntity(entity.getEntityMeta());
             return null;
         }
         T cachedEntity = (T) CacheService.entityCache().get(entity.getEntityMeta().getEntityClass(), entity.getPrimaryKey());
