@@ -66,7 +66,7 @@ public interface Payment extends IEntity {
     @I18n
     enum PaymentStatus {
 
-        Accepted,
+        Received,
 
         Posted,
 
@@ -78,16 +78,6 @@ public interface Payment extends IEntity {
         }
     };
 
-    /**
-     * 
-     * Accepted || Posted && New (and targetDate is past) - next bill should pick it and process the payment (BillingStatus -> Processed)
-     * Rejected && New - apply NSF charge (v0.5) (BillingStatus -> Reverted)
-     * Accepted && Processed - N/A
-     * Posted && Processed - do nothing
-     * Rejected && Processed - apply NSF charge + revert payment using adjustment + late payment charge (v0.5) (BillingStatus -> Reverted)
-     * Reverted - do nothing
-     * 
-     */
     @I18n
     enum BillingStatus {
 

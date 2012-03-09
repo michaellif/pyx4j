@@ -31,8 +31,10 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
+import com.propertyvista.domain.financial.billing.BillPayment;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.BillingRun.BillingRunStatus;
+import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -113,6 +115,13 @@ public class BillingLifecycle {
             bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
 
             Persistence.service().persist(bill.billingAccount());
+
+            Persistence.service().retrieve(bill.billPayments());
+
+            for (BillPayment payment : bill.billPayments()) {
+                payment.payment().billingStatus().setValue(Payment.BillingStatus.Processed);
+                Persistence.service().persist(payment.payment());
+            }
             Persistence.service().commit();
         } else if (BillStatus.Erred.equals(bill.billStatus().getValue())) {
             bill.billingAccount().currentBillingRun().setValue(null);

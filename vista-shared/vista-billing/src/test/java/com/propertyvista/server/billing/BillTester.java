@@ -123,6 +123,11 @@ public class BillTester extends Tester {
         return this;
     }
 
+    public BillTester paymentReceivedAmount(String value) {
+        assertEquals("Payment Received Amount", new BigDecimal(value), bill.paymentReceivedAmount().getValue());
+        return this;
+    }
+
     protected static LogicalDate getDate(String date) {
         if (date == null) {
             return null;

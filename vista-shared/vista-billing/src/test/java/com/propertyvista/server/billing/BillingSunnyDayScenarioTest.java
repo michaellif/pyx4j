@@ -48,7 +48,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         setSysDate("18-Mar-2011");
         setLeaseStatus(Lease.Status.Approved);
-        addPayment("18-Mar-2011", "300.00");
+        receivePayment("18-Mar-2011", "300.00");
 
         Bill bill = runBilling(true, true);
 
@@ -66,7 +66,8 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         recurringFeatureCharges("46.45").
         totalAdjustments("-12.19").
         oneTimeFeatureCharges("0.00").
-        taxes("36.52");
+        taxes("36.52").
+        paymentReceivedAmount("300.00");
         // @formatter:on
 
         //==================== RUN 2 ======================//
@@ -90,7 +91,8 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         recurringFeatureCharges("181.33").
         totalAdjustments("-44.67").
         oneTimeFeatureCharges("0.00").
-        taxes("128.04");
+        taxes("128.04").
+        paymentReceivedAmount("0.00");
         // @formatter:on
 
         //==================== RUN 3 ======================//
