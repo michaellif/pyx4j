@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.server.services.unit;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -23,9 +25,13 @@ import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
@@ -78,6 +84,21 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
             PriceCalculationHelpers.calculateChargeItemAdjustments(lease.leaseProducts().serviceItem());
             dto.financial()._unitRent().setValue(lease.leaseProducts().serviceItem()._currentPrice().getValue());
         }
+    }
+
+    @Override
+    protected void persistDBO(AptUnit dbo, AptUnitDTO in) {
+        if (dbo.id().isNull()) {
+            // if the unit is new, create a new occupancy for it and
+            AptUnitOccupancySegment vacant = EntityFactory.create(AptUnitOccupancySegment.class);
+            vacant.status().setValue(Status.vacant);
+            vacant.dateFrom().setValue(new LogicalDate());
+            vacant.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+            dbo._AptUnitOccupancySegment().add(vacant);
+
+        }
+        super.persistDBO(dbo, in);
+        new AptUnitOccupancyManagerImpl(dbo).scopeAvailable();
     }
 
     @Override

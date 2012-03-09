@@ -130,6 +130,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.getFlexCellFormatter().setRowSpan(row, 0, 3);
         row += 2;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().availableForRent()), 9).build());
+        get(proto().availableForRent()).inheritViewable(false);
+        get(proto().availableForRent()).setViewable(true);
 
         main.setBR(++row, 0, 0);
         if (isEditable()) {
