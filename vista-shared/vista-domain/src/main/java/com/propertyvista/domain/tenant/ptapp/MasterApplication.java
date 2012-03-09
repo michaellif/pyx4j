@@ -40,6 +40,8 @@ public interface MasterApplication extends IEntity {
     @XmlType(name = "ApplicationStatus")
     public enum Status {
 
+        Created, // Mapped to Lease status Created
+
         Invited, // Mapped to Lease status ApplicationInProgress
 
         Incomplete, // Mapped to Lease status ApplicationInProgress

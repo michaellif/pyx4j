@@ -206,11 +206,13 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    public void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
+    public void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId, boolean invite) {
         Lease lease = Persistence.service().retrieve(dboClass, entityId);
         Persistence.service().retrieve(lease.tenants());
         MasterApplication ma = ApplicationManager.createMasterApplication(lease);
-        ApplicationManager.sendMasterApplicationEmail(ma);
+        if (invite) {
+            ApplicationManager.sendMasterApplicationEmail(ma);
+        }
         Persistence.service().commit();
         callback.onSuccess(null);
     }

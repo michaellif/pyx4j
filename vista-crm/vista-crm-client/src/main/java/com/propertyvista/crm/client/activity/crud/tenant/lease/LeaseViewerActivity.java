@@ -102,13 +102,13 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     // Actions:
 
     @Override
-    public void createMasterApplication() {
+    public void createMasterApplication(boolean invite) {
         ((LeaseCrudService) service).createMasterApplication(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, entityId);
+        }, entityId, invite);
     }
 
     @Override

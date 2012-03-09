@@ -46,13 +46,13 @@ public interface Application extends IEntity {
     @MemberColumn(name = "user_id")
     TenantUser user();
 
-    @Owned
-    IList<ApplicationWizardStep> steps();
+    @Detached
+    Lease lease();
 
     IPrimitive<Status> status();
 
-    @Detached
-    Lease lease();
+    @Owned
+    IList<ApplicationWizardStep> steps();
 
     @Owned
     IList<DigitalSignature> signatures();

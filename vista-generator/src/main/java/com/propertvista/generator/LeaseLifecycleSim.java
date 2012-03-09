@@ -34,7 +34,7 @@ public class LeaseLifecycleSim {
     public Lease newLease(LogicalDate eventDate, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo, LogicalDate expectedMoveIn,
             PaymentFrequency paymentFrequency, Tenant tenant) {
         final Lease lease = EntityFactory.create(Lease.class);
-        lease.status().setValue(Lease.Status.New);
+        lease.status().setValue(Lease.Status.Created);
         lease.leaseID().setValue(RandomUtil.randomLetters(8));
         lease.unit().set(unit);
 

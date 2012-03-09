@@ -123,7 +123,7 @@ public class ApplicationManager {
 
         MasterApplication ma = EntityFactory.create(MasterApplication.class);
         ma.lease().set(lease);
-        ma.status().setValue(MasterApplication.Status.Invited);
+        ma.status().setValue(MasterApplication.Status.Created);
         Persistence.service().persist(ma);
 
         Persistence.service().retrieve(lease.tenants());
@@ -131,7 +131,7 @@ public class ApplicationManager {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
                 Application a = EntityFactory.create(Application.class);
                 a.belongsTo().set(ma);
-                a.status().setValue(MasterApplication.Status.Invited);
+                a.status().setValue(MasterApplication.Status.Created);
                 a.steps().addAll(ApplicationManager.createApplicationProgress());
                 a.user().set(ensureTenantUser(tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveApplicant));
                 a.lease().set(ma.lease());
@@ -141,7 +141,6 @@ public class ApplicationManager {
                 Persistence.service().persist(tenantInLease);
 
                 ma.applications().add(a);
-
                 return ma;
             }
         }
@@ -155,7 +154,14 @@ public class ApplicationManager {
         for (TenantInLease tenantInLease : ma.lease().tenants()) {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
                 Persistence.service().retrieve(tenantInLease.tenant().user());
-                sendInvitationEmail(tenantInLease.tenant().user(), EmailTemplateType.ApplicationCreatedApplicant);
+                try {
+                    sendInvitationEmail(tenantInLease.tenant().user(), EmailTemplateType.ApplicationCreatedApplicant);
+                } catch (Exception e) {
+                    break;
+                }
+
+                ma.status().setValue(MasterApplication.Status.Invited);
+                Persistence.service().persist(ma);
                 break;
             }
         }
@@ -195,7 +201,7 @@ public class ApplicationManager {
             for (PersonGuarantor personGuarantor : tenantScreenings.guarantors()) {
                 Application a = EntityFactory.create(Application.class);
                 a.belongsTo().set(ma);
-                a.status().setValue(MasterApplication.Status.Invited);
+                a.status().setValue(MasterApplication.Status.Created);
                 a.steps().addAll(ApplicationManager.createGuarantorApplicationProgress());
                 a.user().set(ensureTenantUser(personGuarantor.guarantor(), personGuarantor.guarantor().person(), VistaTenantBehavior.Guarantor));
                 a.lease().set(ma.lease());
@@ -203,7 +209,12 @@ public class ApplicationManager {
 
                 ma.applications().add(a);
                 allApplicationsSubmited = false;
-                sendInvitationEmail(a.user(), EmailTemplateType.ApplicationCreatedGuarantor);
+                try {
+                    sendInvitationEmail(a.user(), EmailTemplateType.ApplicationCreatedGuarantor);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+                a.status().setValue(MasterApplication.Status.Invited);
             }
         }
 
@@ -213,7 +224,7 @@ public class ApplicationManager {
                 if ((TenantInLease.Role.CoApplicant == tenantInLease.role().getValue() && (!tenantInLease.takeOwnership().isBooleanTrue()))) {
                     Application a = EntityFactory.create(Application.class);
                     a.belongsTo().set(ma);
-                    a.status().setValue(MasterApplication.Status.Invited);
+                    a.status().setValue(MasterApplication.Status.Created);
                     a.steps().addAll(ApplicationManager.createApplicationProgress());
                     a.user().set(ensureTenantUser(tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveCoApplicant));
                     a.lease().set(ma.lease());
@@ -224,7 +235,12 @@ public class ApplicationManager {
 
                     ma.applications().add(a);
                     allApplicationsSubmited = false;
-                    sendInvitationEmail(a.user(), EmailTemplateType.ApplicationCreatedCoApplicant);
+                    try {
+                        sendInvitationEmail(a.user(), EmailTemplateType.ApplicationCreatedCoApplicant);
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+                    a.status().setValue(MasterApplication.Status.Invited);
                 }
             }
         } else {
@@ -262,7 +278,6 @@ public class ApplicationManager {
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
-
     }
 
     public static MasterApplicationStatusDTO calculateStatus(MasterApplication ma) {
@@ -292,6 +307,9 @@ public class ApplicationManager {
                     status.role().setValue(Role.Guarantor);
                 }
             }
+
+            status.status().setValue(app.status().getValue());
+            status.user().set(app.user());
 
             // calculate progress:
             if (!status.person().isEmpty()) {

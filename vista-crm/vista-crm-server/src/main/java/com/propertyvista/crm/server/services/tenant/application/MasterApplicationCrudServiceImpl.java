@@ -86,6 +86,34 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         dto.deposit().setValue(new BigDecimal(100 + RandomUtil.randomDouble(1000)));
     }
 
+    @Override
+    public void action(AsyncCallback<MasterApplicationDTO> callback, MasterApplicationActionDTO actionDTO) {
+        MasterApplication dbo = Persistence.service().retrieve(dboClass, actionDTO.getPrimaryKey());
+
+        dbo.status().setValue(actionDTO.status().getValue());
+        dbo.decidedBy().set(CrmAppContext.getCurrentUserEmployee());
+        dbo.decisionReason().setValue(actionDTO.decisionReason().getValue());
+        dbo.decisionDate().setValue(new LogicalDate());
+        Persistence.service().merge(dbo);
+
+        switch (actionDTO.status().getValue()) {
+        case Approved:
+            new LeaseManager().approveApplication(dbo.lease().getPrimaryKey());
+            break;
+        case Declined:
+            new LeaseManager().declineApplication(dbo.lease().getPrimaryKey());
+            break;
+        case Cancelled:
+            new LeaseManager().cancelApplication(dbo.lease().getPrimaryKey());
+            break;
+        }
+
+        MasterApplicationDTO dto2 = GenericConverter.convertDBO2DTO(dbo, dtoClass);
+        enhanceDTO(dbo, dto2, false);
+        Persistence.service().commit();
+        callback.onSuccess(dto2);
+    }
+
     // internal helpers:
     private TenantInfoDTO createTenantInfoDTO(TenantInLeaseRetriever tr) {
         TenantInfoDTO tiDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
@@ -123,33 +151,5 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         }
 
         dto.discounts().setValue(!dto.lease().leaseProducts().concessions().isEmpty());
-    }
-
-    @Override
-    public void action(AsyncCallback<MasterApplicationDTO> callback, MasterApplicationActionDTO actionDTO) {
-        MasterApplication dbo = Persistence.service().retrieve(dboClass, actionDTO.getPrimaryKey());
-
-        dbo.status().setValue(actionDTO.status().getValue());
-        dbo.decidedBy().set(CrmAppContext.getCurrentUserEmployee());
-        dbo.decisionReason().setValue(actionDTO.decisionReason().getValue());
-        dbo.decisionDate().setValue(new LogicalDate());
-        Persistence.service().merge(dbo);
-
-        switch (actionDTO.status().getValue()) {
-        case Approved:
-            new LeaseManager().approveApplication(dbo.lease().getPrimaryKey());
-            break;
-        case Declined:
-            new LeaseManager().declineApplication(dbo.lease().getPrimaryKey());
-            break;
-        case Cancelled:
-            new LeaseManager().cancelApplication(dbo.lease().getPrimaryKey());
-            break;
-        }
-
-        MasterApplicationDTO dto2 = GenericConverter.convertDBO2DTO(dbo, dtoClass);
-        enhanceDTO(dbo, dto2, false);
-        Persistence.service().commit();
-        callback.onSuccess(dto2);
     }
 }

@@ -172,7 +172,7 @@ class Billing {
 
                 Persistence.service().persist(bill);
 
-                bill.draft().setValue(Status.New.equals(billingAccount.leaseFinancial().lease().status().getValue()));
+                bill.draft().setValue(Status.Created.equals(billingAccount.leaseFinancial().lease().status().getValue()));
 
                 if (Status.Approved.equals(billingAccount.leaseFinancial().lease().status().getValue())) {// first bill should be issued
                     bill.billType().setValue(Bill.BillType.First);

@@ -71,7 +71,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             Lease lease = EntityFactory.create(Lease.class);
             lease.leaseID().setValue(RandomUtil.randomLetters(10));
             lease.type().setValue(RandomUtil.randomEnum(Service.Type.class));
-            lease.status().setValue(Lease.Status.New);
+            lease.status().setValue(Lease.Status.Created);
             lease.leaseFrom().setValue(lead.moveInDate().getValue());
             lease.expectedMoveIn().setValue(lead.moveInDate().getValue());
             Persistence.service().merge(lease);

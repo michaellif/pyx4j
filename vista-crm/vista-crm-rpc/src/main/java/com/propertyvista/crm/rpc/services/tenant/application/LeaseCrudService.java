@@ -34,7 +34,7 @@ public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
 
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 
-    void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
+    void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId, boolean invite);
 
     void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut);
 

@@ -37,8 +37,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-
 public abstract class SelectDialog<E extends IEntity> extends OkCancelDialog {
+
     private static final I18n i18n = I18n.get(SelectDialog.class);
 
     private final SelectionModel<E> selectionModel;
@@ -69,6 +69,7 @@ public abstract class SelectDialog<E extends IEntity> extends OkCancelDialog {
                 return enntity.getStringView();
             }
         };
+
         setBody(initBody(isMultiselectAllowed, data));
         setWidth(defineWidth());
         getOkButton().setEnabled(false);

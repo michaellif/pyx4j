@@ -109,7 +109,7 @@ public class PTGenerator {
 
         // This is actually update during save to match real unit data
         summary.lease().type().setValue(Service.Type.residentialUnit);
-        summary.lease().status().setValue(Lease.Status.New);
+        summary.lease().status().setValue(Lease.Status.Created);
         summary.lease().unit().set(selectedUnit);
         summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2012, 2012));
         summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2013, 2015));

@@ -45,7 +45,7 @@ public interface Lease extends IEntity {
     @XmlType(name = "LeaseStatus")
     public enum Status {
 
-        New,
+        Created,
 
         ApplicationInProgress,
 

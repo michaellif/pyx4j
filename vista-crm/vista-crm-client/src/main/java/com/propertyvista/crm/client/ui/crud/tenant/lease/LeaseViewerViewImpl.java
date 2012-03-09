@@ -15,10 +15,13 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -70,11 +73,17 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         //set main form here:
         setForm(new LeaseEditorForm(true));
 
+        // Add actions:
         createApplication = new Button(i18n.tr("Create Application"), new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) presenter).createMasterApplication();
+                new ApplicationBox() {
+                    @Override
+                    public boolean onClickOk() {
+                        ((LeaseViewerView.Presenter) presenter).createMasterApplication(isInvite());
+                        return true;
+                    }
+                }.show();
             }
         });
         addToolbarItem(createApplication.asWidget());
@@ -89,10 +98,9 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         addToolbarItem(runBill.asWidget());
 
         notice = new Button(i18n.tr("Notice..."), new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
-                new ActionBox(CompletionType.Notice) {
+                new TermLeaseBox(CompletionType.Notice) {
                     @Override
                     public boolean onClickOk() {
                         ((LeaseViewerView.Presenter) presenter).notice(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
@@ -104,7 +112,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         addToolbarItem(notice.asWidget());
 
         cancelNotice = new Button(i18n.tr("Cancel Notice"), new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
                 ((LeaseViewerView.Presenter) presenter).cancelNotice();
@@ -113,10 +120,9 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         addToolbarItem(cancelNotice.asWidget());
 
         evict = new Button(i18n.tr("Evict..."), new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
-                new ActionBox(CompletionType.Eviction) {
+                new TermLeaseBox(CompletionType.Eviction) {
                     @Override
                     public boolean onClickOk() {
                         ((LeaseViewerView.Presenter) presenter).evict(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
@@ -148,7 +154,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         // disable editing for signed leases:
 //        getEditButton().setVisible(value.approvalDate().isNull());
 
-        createApplication.setVisible(status == Status.New);
+        createApplication.setVisible(status == Status.Created);
 
         runBill.setVisible(status == Status.Active);
 
@@ -168,13 +174,13 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         return paymentLister;
     }
 
-    private abstract class ActionBox extends OkCancelDialog {
+    private abstract class TermLeaseBox extends OkCancelDialog {
 
         private final CompletionType action;
 
         private CEntityDecoratableEditor<LeaseDTO> content;
 
-        public ActionBox(CompletionType action) {
+        public TermLeaseBox(CompletionType action) {
             super(i18n.tr("Please select"));
             this.action = action;
             setBody(createBody());
@@ -240,6 +246,31 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         public LeaseDTO getValue() {
             return content.getValue();
+        }
+    }
+
+    private abstract class ApplicationBox extends OkCancelDialog {
+
+        private final CCheckBox invite = new CCheckBox();
+
+        public ApplicationBox() {
+            super(i18n.tr("Please select"));
+            invite.setValue(true);
+            setBody(createBody());
+        }
+
+        protected Widget createBody() {
+            getOkButton().setEnabled(true);
+
+            HorizontalPanel content = new HorizontalPanel();
+            content.add(new Label(i18n.tr("Invite Applicant)" + ": ")));
+            content.add(invite.asWidget());
+            content.setSpacing(4);
+            return content;
+        }
+
+        protected boolean isInvite() {
+            return invite.getValue();
         }
     }
 }

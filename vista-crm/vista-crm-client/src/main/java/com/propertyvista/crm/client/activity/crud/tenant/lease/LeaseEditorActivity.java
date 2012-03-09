@@ -66,7 +66,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             public void onSuccess(Service.Type type) {
                 LeaseDTO entity = EntityFactory.create(LeaseDTO.class);
                 entity.createDate().setValue(new LogicalDate());
-                entity.status().setValue(Lease.Status.New);
+                entity.status().setValue(Lease.Status.Created);
                 entity.type().setValue(type);
 
                 callback.onSuccess(entity);

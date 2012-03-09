@@ -96,7 +96,7 @@ public class UnitOccupancyGeneratingPreloader {
                 case FinalBillIssued:
                     // TODO ask what does it mean
                     break;
-                case New:
+                case Created:
                     // draft
                     break;
                 }

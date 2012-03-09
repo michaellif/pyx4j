@@ -45,6 +45,10 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
 
     private final IListerView<TenantInLeaseDTO> tenantLister;
 
+    private final Button inviteAction;
+
+    private final Button checkAction;
+
     private final Button approveAction;
 
     private final Button moreInfoAction;
@@ -53,7 +57,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
 
     private final Button cancelAction;
 
-    private final Button checkAction;
+    private static final String INVITE = i18n.tr("Invite");
 
     private static final String APPROVE = i18n.tr("Approve");
 
@@ -71,6 +75,69 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         tenantLister = new ListerInternalViewImplBase<TenantInLeaseDTO>(new TenantInLeaseLister());
 
         // Add actions:
+
+        inviteAction = new Button(INVITE, new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                new SelectDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Send An Infitation To"), true, form.getValue().tenantInfo(),
+                        new SelectDialog.Formatter<TenantInfoDTO>() {
+                            @Override
+                            public String format(TenantInfoDTO enntity) {
+                                return enntity.person().name().getStringView();
+                            }
+                        }) {
+
+                    @Override
+                    public boolean onClickOk() {
+                        // TODO make the credit check happen
+                        return true;
+                    }
+
+                    @Override
+                    public String defineWidth() {
+                        return "350px";
+                    }
+
+                    @Override
+                    public String defineHeight() {
+                        return "100px";
+                    }
+                }.show();
+            }
+        });
+        addToolbarItem(inviteAction.asWidget());
+
+        checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                new SelectDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Check"), true, form.getValue().tenantInfo(),
+                        new SelectDialog.Formatter<TenantInfoDTO>() {
+                            @Override
+                            public String format(TenantInfoDTO enntity) {
+                                return enntity.person().name().getStringView();
+                            }
+                        }) {
+
+                    @Override
+                    public boolean onClickOk() {
+                        // TODO make the credit check happen
+                        return true;
+                    }
+
+                    @Override
+                    public String defineWidth() {
+                        return "350px";
+                    }
+
+                    @Override
+                    public String defineHeight() {
+                        return "100px";
+                    }
+                }.show();
+            }
+        });
+        addToolbarItem(checkAction.asWidget());
+
         approveAction = new Button(APPROVE, new ClickHandler() {
 
             @Override
@@ -89,7 +156,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new SelectDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Acqure info"), true, form.getValue().tenantInfo(),
+                new SelectDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Acqure Info"), true, form.getValue().tenantInfo(),
                         new SelectDialog.Formatter<TenantInfoDTO>() {
                             @Override
                             public String format(TenantInfoDTO enntity) {
@@ -145,37 +212,6 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         });
         addToolbarItem(cancelAction.asWidget());
 
-        checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                new SelectDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Check"), true, form.getValue().tenantInfo(),
-                        new SelectDialog.Formatter<TenantInfoDTO>() {
-                            @Override
-                            public String format(TenantInfoDTO enntity) {
-                                return enntity.person().name().getStringView();
-                            }
-                        }) {
-
-                    @Override
-                    public boolean onClickOk() {
-                        // TODO make the credit check happen
-                        return true;
-                    }
-
-                    @Override
-                    public String defineWidth() {
-                        return "350px";
-                    }
-
-                    @Override
-                    public String defineHeight() {
-                        return "100px";
-                    }
-                }.show();
-            }
-        });
-        addToolbarItem(checkAction.asWidget());
-
         //set main form here:
         setForm(new MasterApplicationEditorForm(true));
     }
@@ -186,11 +222,12 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
 
         // set buttons state:
         Status status = value.status().getValue();
+        inviteAction.setVisible(status != Status.Declined && status != Status.Cancelled);
+        checkAction.setVisible(status != Status.Declined && status != Status.Cancelled);
         approveAction.setVisible(status != Status.Approved && status != Status.Declined && status != Status.Cancelled);
         moreInfoAction.setVisible(status != Status.Declined && status != Status.Cancelled);
         declineAction.setVisible(status != Status.Approved && status != Status.Declined && status != Status.Cancelled);
         cancelAction.setVisible(status != Status.Cancelled);
-        checkAction.setVisible(status != Status.Declined && status != Status.Cancelled);
     }
 
     @Override
