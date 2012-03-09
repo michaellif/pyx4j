@@ -119,13 +119,17 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     @Override
-    public void removeTenat(TenantInLease tenant) {
+    public void removeTenat(TenantInLease tenantInLease) {
+        if (tenantInLease.getPrimaryKey() == null) {
+            // newly added tenant
+            return;
+        }
         ((LeaseCrudService) service).removeTenat(new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {
             }
-        }, tenant.getPrimaryKey());
+        }, tenantInLease.getPrimaryKey());
     }
 
     @Override
