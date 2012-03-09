@@ -493,9 +493,14 @@ public class BuildingsGenerator {
 
         AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
         occupancySegment.unit().set(unit);
-        occupancySegment.status().setValue(AptUnitOccupancySegment.Status.vacant);
         occupancySegment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
         occupancySegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+        if (RandomUtil.randomBoolean()) {
+            occupancySegment.status().setValue(AptUnitOccupancySegment.Status.vacant);
+        } else {
+            occupancySegment.status().setValue(AptUnitOccupancySegment.Status.available);
+            unit.availableForRent().setValue(occupancySegment.dateFrom().getValue());
+        }
         occupancySegment.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
         unit._AptUnitOccupancySegment().add(occupancySegment);
 

@@ -140,9 +140,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         @Override
                         protected void setFilters(List<DataTableFilterData> filters) {
                             if (!getValue().leaseFrom().isNull() && !getValue().leaseTo().isNull() && filters != null) {
-                                filters.add(new DataTableFilterData(proto().availableForRent().getPath(), Operators.greaterThan, getValue().leaseFrom()
-                                        .getValue()));
-                                filters.add(new DataTableFilterData(proto().availableForRent().getPath(), Operators.lessThan, getValue().leaseTo().getValue()));
+                                filters.add(new DataTableFilterData(proto().availableForRent().getPath(), Operators.lessThan, getValue().leaseFrom().getValue()));
                             }
                             super.setFilters(filters);
                         };
