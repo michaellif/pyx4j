@@ -144,6 +144,14 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         getSatisfaction = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
+//                new OkCancelDialog("ytuyrt") {
+//
+//                    @Override
+//                    public boolean onClickOk() {
+//                        // TODO Auto-generated method stub
+//                        return true;
+//                    }
+//                }.show();
                 presenter.getSatisfaction();
             }
         });
@@ -178,7 +186,6 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         container.add(alertwr);
         container.add(locales);
         container.add(getSatisfaction);
-
         add(container);
     }
 

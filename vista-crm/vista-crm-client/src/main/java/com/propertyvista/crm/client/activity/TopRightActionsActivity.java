@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -144,7 +144,25 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     @Override
     public native void getSatisfaction()
     /*-{
-		$wnd.getSatisfaction();
+		//		$wnd.getSatisfaction();
+		var feedback_widget_options = {};
+		feedback_widget_options.display = "overlay";
+		feedback_widget_options.company = "property_vista";
+		feedback_widget_options.placement = "hidden";
+		feedback_widget_options.color = "#222";
+		feedback_widget_options.style = "question";
+		feedback_widget_options.container = "feedback_widget_container";
+		//feedback_widget_options.product = "property_vista_crm";
+		feedback_widget_options.limit = "3";
+		feedback_widget_options.container.style = ("top", "0");
+
+		$wnd.GSFN.feedback_widget.prototype.local_base_url = "http://support.propertyvista.com";
+		$wnd.GSFN.feedback_widget.prototype.local_ssl_base_url = "https://support.propertyvista.com";
+
+		var feedback_widget = new $wnd.GSFN.feedback_widget(
+				feedback_widget_options);
+
+		feedback_widget.show();
     }-*/;
 
 }

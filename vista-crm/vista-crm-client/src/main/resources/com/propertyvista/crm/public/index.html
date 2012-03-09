@@ -41,7 +41,7 @@
 	</div>
 
 	<!-- scripts go here -->
-	
+
     <script type="text/javascript">
 	    // Fix for display from Google's cache
         var bodyDivs = document.getElementsByTagName("div");
@@ -50,10 +50,13 @@
 			document.getElementById("Site").style.display = "none";	document.getElementById('loading-bdr').style.visibility = 'visible';
 		}
 	</script>
-	
+
     <script type="text/javascript" language="javascript" src="crm.nocache.js"></script>
-    <script type="text/javascript" language="javascript" src="get_satisfaction.js"></script>
-    
+    <script type="text/javascript" charset="utf-8">
+  		var is_ssl = ("https:" == document.location.protocol);
+  		var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+  		document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
 	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
 	<!--[if lt IE 7]><script type="text/javascript">var ieVersion6=6;</script><p>Please upgrade to Internet Explorer version 7 or later.</p><![endif]-->
   </body>

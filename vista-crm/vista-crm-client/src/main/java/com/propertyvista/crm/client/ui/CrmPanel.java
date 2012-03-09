@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -20,6 +20,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
@@ -82,11 +83,14 @@ public class CrmPanel extends LayoutPanel {
          */
         LayoutPanel centerAreaContent = new LayoutPanel();
         centerAreaContent.ensureDebugId("just_checking");
+        HTML feedbackWidgetContainer = new HTML();
+        feedbackWidgetContainer.getElement().setAttribute("id", "feedback_widget_container"); //getSatisfaction button container
+        centerAreaContent.add(feedbackWidgetContainer);
         contentPanel.add(centerAreaContent);
 
-        //================ Main application area - splitter with navig menu and content ======= 
+        //================ Main application area - splitter with navig menu and content =======
 
-        SplitLayoutPanel splitPanel = new SplitLayoutPanel(3);
+        SplitLayoutPanel splitPanel = new SplitLayoutPanel(4);
         splitPanel.ensureDebugId("splitPanel");
         splitPanel.setSize("100%", "100%");
         centerAreaContent.add(splitPanel);
