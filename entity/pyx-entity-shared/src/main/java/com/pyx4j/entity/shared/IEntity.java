@@ -86,6 +86,11 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public void setMemberValue(String memberName, Object value);
 
+    /**
+     * Remove all values from this entity, preserve ownership relationships
+     */
+    public void clearValues();
+
     public Object getValue(Path path);
 
     public void setValue(Path path, Object value);

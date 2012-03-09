@@ -890,6 +890,34 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    private <T extends IEntity> void clearRetrieveValues(T entity) {
+        if (true) {
+            return;
+        }
+        // Clear all values, already in Entity, Retrieve from scratch
+        Key pk = entity.getPrimaryKey();
+
+        // Preserve special  VersionedEntity data
+        Boolean draft = null;
+        Date forDate = null;
+        if (entity instanceof IVersionedEntity) {
+            draft = ((IVersionedEntity<?>) entity).draft().getValue();
+            forDate = ((IVersionedEntity<?>) entity).forDate().getValue();
+        }
+
+        entity.clearValues();
+        entity.setPrimaryKey(pk);
+
+        if (entity instanceof IVersionedEntity) {
+            if (draft != null) {
+                ((IVersionedEntity<?>) entity).draft().setValue(draft);
+            }
+            if (forDate != null) {
+                ((IVersionedEntity<?>) entity).forDate().setValue(forDate);
+            }
+        }
+    }
+
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey) {
         return retrieve(entityClass, primaryKey, AttachLevel.Attached);
@@ -916,6 +944,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         startContext(ConnectionTarget.forRead);
         try {
             entity = entity.cast();
+            clearRetrieveValues(entity);
             return cascadeRetrieve(entity, attachLevel) != null;
         } finally {
             endContext();

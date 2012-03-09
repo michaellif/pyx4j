@@ -270,6 +270,27 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
     }
 
+    @Override
+    public void clearValues() {
+        Map<String, Object> entityValue = ensureValue();
+
+        Object ownerValue = null;
+        String ownerMemberName = getEntityMeta().getOwnerMemberName();
+        if ((ownerMemberName != null) && (getMeta().isOwnedRelationships())) {
+            ownerValue = entityValue.get(ownerMemberName);
+        }
+
+        IEntity typeAttr = (IEntity) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
+        entityValue.clear();
+        if (typeAttr != null) {
+            entityValue.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, typeAttr);
+        }
+        // ensure @Owner value is set properly.
+        if ((ownerMemberName != null) && (ownerValue != null)) {
+            entityValue.put(ownerMemberName, ownerValue);
+        }
+    }
+
     void removeValueFromGraph(IEntity entity) {
         IEntity ent = this;
         while (ent.getOwner() != null) {
