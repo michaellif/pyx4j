@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.notesandattachments;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
@@ -31,6 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ImageButton;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -70,11 +72,7 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof Note) {
-                {
-                    System.out.println("NoteEditor");
-
-                    return new NoteEditor();
-                }
+                return new NoteEditor(!newItemAdded);
             } else {
                 return super.create(member);
             }
@@ -96,17 +94,11 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
                 @Override
                 public void onClick(ClickEvent event) {
                     item.setViewable(false);
-                    ((NoteEditor) item.getComponents().toArray()[0]).setViewable(false);
-                    ((NoteEditor) item.getComponents().toArray()[0]).setButtonsVisible(true);
+                    ((NoteEditor) item.getComponents().toArray()[0]).setViewableMode(false);
                 }
             });
+
             item.addCustomButton(button);
-//
-//            if (((NoteEditor) item.getComponents().toArray()[0]).getValue().isEmpty()) {
-//                ((NoteEditor) item.getComponents().toArray()[0]).setViewable(false);
-//                ((NoteEditor) item.getComponents().toArray()[0]).setButtonsVisible(true);
-//            } else
-            item.setViewable(true);
 
             return item;
         }
@@ -124,10 +116,14 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
 
             private Button btnSave;
 
+            private final boolean viewable;
+
             private AnchorButton btnCancel;
 
-            public NoteEditor() {
+            public NoteEditor(boolean viewable) {
                 super(Note.class);
+
+                this.viewable = viewable;
             }
 
             @Override
@@ -147,9 +143,6 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
                 btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        System.out.println(isVisited());
-                        System.out.println(isValid());
-
                         if (getValue().created().getValue() == null)
                             getValue().created().setValue(new LogicalDate());
 
@@ -169,8 +162,15 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
                         if (getValue().isEmpty())
                             ((NoteAndAttachmentsEditorFolder) getParent().getParent()).removeItem((CEntityFolderItem<Note>) getParent());
                         else {
-                            setButtonsVisible(false);
-                            setViewable(true);
+                            MessageDialog.confirm(i18n.tr("Confirm"),
+                                    i18n.tr("Are you sure you want to cancel your changes?\n\nPress Yes to continue, or No to stay on the current page."),
+                                    new Command() {
+
+                                        @Override
+                                        public void execute() {
+                                            setViewableMode(true);
+                                        }
+                                    });
                         }
                     }
                 });
@@ -180,12 +180,19 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
 
                 content.setWidget(++row, 0, tb);
 
+                setViewableMode(viewable);
+
                 return content;
             }
 
             public void setButtonsVisible(boolean visible) {
                 btnSave.setVisible(visible);
                 btnCancel.setVisible(visible);
+            }
+
+            public void setViewableMode(boolean isViewable) {
+                setButtonsVisible(!isViewable);
+                setViewable(isViewable);
             }
 
         }
