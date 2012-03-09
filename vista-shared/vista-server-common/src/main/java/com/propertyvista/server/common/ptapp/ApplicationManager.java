@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.server.contexts.Context;
@@ -94,6 +95,10 @@ public class ApplicationManager {
     static TenantUser ensureTenantUser(TenantUserHolder tenant, Person person, VistaTenantBehavior behavior) {
         TenantUser user = tenant.user();
         if (user.getPrimaryKey() == null) {
+            if (person.email().isNull()) {
+                throw new UnRecoverableRuntimeException(i18n.tr("Can't create application user for tenant  {0} without e-mail address", person.name()
+                        .getStringView()));
+            }
             user.name().setValue(person.name().getStringView());
             user.email().setValue(person.email().getValue());
             Persistence.service().persist(user);

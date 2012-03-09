@@ -125,6 +125,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
     @Override
     public void addValidations() {
+        get(proto().person().email()).setMandatory(true);
+
         get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
             @Override
