@@ -54,7 +54,7 @@ public interface BillableItemAdjustment extends IEntity {
     @I18n
     @XmlType(name = "ChargeType")
     enum ChargeType {
-        negotiation, discount, priceCorrection;
+        negotiation, priceCorrection;
 
         @Override
         public String toString() {

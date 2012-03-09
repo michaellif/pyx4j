@@ -28,9 +28,11 @@ import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -39,6 +41,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
@@ -187,7 +190,17 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
             columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
             columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "9em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().createdBy(), "15em"));
             return columns;
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            CComponent<?, ?> comp = super.create(member);
+            if (member instanceof Employee) {
+                comp.setViewable(true);
+            }
+            return comp;
         }
 
         @Override
