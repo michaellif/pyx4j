@@ -27,8 +27,12 @@ public class PaymentProcessor {
     }
 
     void createPayments() {
-        for (Payment item : billing.getNextPeriodBill().billingAccount().payments()) {
-            createPayment(item);
+        for (Payment payment : billing.getNextPeriodBill().billingAccount().payments()) {
+            if (Payment.BillingStatus.New.equals(payment.billingStatus())) {
+                createPayment(payment);
+            } else if (Payment.BillingStatus.Processed.equals(payment.billingStatus()) && Payment.PaymentStatus.Rejected.equals(payment.billingStatus())) {
+                createPayment(payment);
+            }
         }
     }
 

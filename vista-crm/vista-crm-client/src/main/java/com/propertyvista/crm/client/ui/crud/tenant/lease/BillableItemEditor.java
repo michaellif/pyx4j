@@ -80,8 +80,6 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expirationDate()), 9).build());
 
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().exemptFromTax()), 5).build());
-
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
@@ -123,7 +121,6 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             if (isViewable()) {
                 adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
             } else {
-                get(proto().exemptFromTax()).setVisible(true);
                 adjustmentPanel.setVisible(true);
             }
 
@@ -156,7 +153,6 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 extraDataPanel.setWidget(editor);
             }
         } else {// tweak UI for empty ProductItem:  
-            get(proto().exemptFromTax()).setVisible(false);
             adjustmentPanel.setVisible(false);
         }
     }

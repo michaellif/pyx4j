@@ -24,7 +24,6 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -40,8 +39,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 
 /**
  * 
- * Actual payment record. {@link com.propertyvista.domain.financial.billing.BillPayment}
- * captures payment portion for particular charge (in future version)
+ * Actual payment record. {@link com.propertyvista.domain.financial.billing.BillPayment} captures payment portion for particular charge (in future version)
  * Deposit is considered as payment and presented by this class (this statement requires
  * review, Alex S, see deposit properties in
  * com.propertyvista.domain.financial.payment.java)
@@ -80,10 +78,40 @@ public interface Payment extends IEntity {
         }
     };
 
+    /**
+     * 
+     * Accepted || Posted && New (and targetDate is past) - next bill should pick it and process the payment (BillingStatus -> Processed)
+     * Rejected && New - apply NSF charge (v0.5) (BillingStatus -> Reverted)
+     * Accepted && Processed - N/A
+     * Posted && Processed - do nothing
+     * Rejected && Processed - apply NSF charge + revert payment using adjustment + late payment charge (v0.5) (BillingStatus -> Reverted)
+     * Reverted - do nothing
+     * 
+     */
+    @I18n
+    enum BillingStatus {
+
+        New,
+
+        Processed,
+
+        Reverted;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    };
+
     @Override
     @Indexed
     @ToString
     IPrimitive<Key> id();
+
+    IPrimitive<LogicalDate> receivedDate();
+
+    //Do not post before that date
+    IPrimitive<LogicalDate> targetDate();
 
     IPrimitive<LogicalDate> depositDate();
 
@@ -98,8 +126,7 @@ public interface Payment extends IEntity {
 
     IPrimitive<PaymentStatus> paymentStatus();
 
-    @JoinTable(value = BillPayment.class, cascade = false)
-    BillPayment billPayment();
+    IPrimitive<BillingStatus> billingStatus();
 
     @Owner
     @ReadOnly

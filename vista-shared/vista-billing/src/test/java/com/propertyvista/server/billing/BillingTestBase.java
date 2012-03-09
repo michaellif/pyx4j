@@ -115,11 +115,11 @@ abstract class BillingTestBase extends VistaDBTestBase {
             BillingFacade.rejectBill(bill);
         }
 
+        Persistence.service().commit();
+
         Persistence.service().retrieve(bill.charges());
         Persistence.service().retrieve(bill.chargeAdjustments());
         Persistence.service().retrieve(bill.leaseAdjustments());
-
-        Persistence.service().commit();
 
         DataDump.dump("bill", bill);
         DataDump.dump("lease", lease);
@@ -270,11 +270,11 @@ abstract class BillingTestBase extends VistaDBTestBase {
         return adjustment;
     }
 
-    protected Payment addPayment(String depositDate, String amount) {
+    protected Payment addPayment(String receivedDate, String amount) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
 
         Payment payment = EntityFactory.create(Payment.class);
-        payment.depositDate().setValue(BillingTestUtils.getDate(depositDate));
+        payment.receivedDate().setValue(BillingTestUtils.getDate(receivedDate));
         payment.amount().setValue(new BigDecimal(amount));
 
         lease.leaseFinancial().billingAccount().payments().add(payment);

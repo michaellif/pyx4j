@@ -27,6 +27,7 @@ public class PaymentLister extends ListerBase<Payment> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().id()).build(),
+            new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
             new MemberColumnDescriptor.Builder(proto().depositDate()).build(),
             new MemberColumnDescriptor.Builder(proto().amount()).build(),
             new MemberColumnDescriptor.Builder(proto().type()).build()
