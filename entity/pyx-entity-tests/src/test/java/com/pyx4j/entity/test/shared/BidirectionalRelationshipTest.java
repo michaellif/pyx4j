@@ -29,6 +29,9 @@ import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
 import com.pyx4j.entity.test.shared.domain.bidir.Child;
 import com.pyx4j.entity.test.shared.domain.bidir.Master;
+import com.pyx4j.entity.test.shared.domain.ownership.creation.ForceCreationOneToOneParentDTO;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyChild;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyParentDTO;
 
 public class BidirectionalRelationshipTest extends InitializerTestBase {
 
@@ -118,4 +121,34 @@ public class BidirectionalRelationshipTest extends InitializerTestBase {
         Assert.assertTrue("Owner is not null after assignment", emp.department().organization().isNull());
     }
 
+    public void testOneToOneOwnerPreservationInClear() {
+        ForceCreationOneToOneParentDTO o = EntityFactory.create(ForceCreationOneToOneParentDTO.class);
+        o.name().setValue("v1");
+        o.child().name().setValue("v2");
+        o.otherEntity().description().setValue("v3");
+
+        assertEquals("parent value is the same", o.getValue(), o.child().parent().getValue());
+        assertTrue("parent value is the same", o.getValue() == o.child().parent().getValue());
+
+        o.child().clearValues();
+
+        assertEquals("parent value is the same", o.getValue(), o.child().parent().getValue());
+        assertTrue("parent value is the same", o.getValue() == o.child().parent().getValue());
+    }
+
+    public void testOneToManyOwnerPreservationInClear() {
+        BidirectionalOneToManyParentDTO o = EntityFactory.create(BidirectionalOneToManyParentDTO.class);
+        o.name().setValue("v1");
+        BidirectionalOneToManyChild c = EntityFactory.create(BidirectionalOneToManyChild.class);
+        c.name().setValue("v2");
+        o.children().add(c);
+
+        assertEquals("parent value is the same", o.getValue(), c.parent().getValue());
+        assertTrue("parent value is the same", o.getValue() == c.parent().getValue());
+
+        c.clearValues();
+
+        assertEquals("parent value is the same", o.getValue(), c.parent().getValue());
+        assertTrue("parent value is the same", o.getValue() == c.parent().getValue());
+    }
 }

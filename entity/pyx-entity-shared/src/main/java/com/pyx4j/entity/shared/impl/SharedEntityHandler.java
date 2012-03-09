@@ -248,6 +248,16 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return v;
     }
 
+    private boolean isActualOwner(String ownerMemberName) {
+        if ((getOwner() != null) && getMeta().isOwnedRelationships()) {
+            @SuppressWarnings("unchecked")
+            Class<IEntity> ownerType = (Class<IEntity>) this.getEntityMeta().getMemberMeta(ownerMemberName).getValueClass();
+            return getOwner().isInstanceOf(ownerType);
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void setValue(Map<String, Object> value) {
         assert !isTemplateEntity : "Template Entity '" + getObjectClass().getName() + "' data manipulations disabled";
@@ -259,7 +269,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             ownerValue.put(getFieldName(), value);
             // ensure @Owner value is set properly.
             String ownerMemberName = getEntityMeta().getOwnerMemberName();
-            if ((ownerMemberName != null) && (value != null) && (getMeta().isOwnedRelationships())) {
+            if ((ownerMemberName != null) && (value != null) && (isActualOwner(ownerMemberName))) {
                 value.put(ownerMemberName, ownerValue);
                 if (!this.getMember(ownerMemberName).getObjectClass().equals(getOwner().getInstanceValueClass())) {
                     ownerValue.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(getOwner().getInstanceValueClass()));
@@ -275,9 +285,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         Map<String, Object> entityValue = ensureValue();
 
         Object ownerValue = null;
-        String ownerMemberName = getEntityMeta().getOwnerMemberName();
-        if ((ownerMemberName != null) && (getMeta().isOwnedRelationships())) {
-            ownerValue = entityValue.get(ownerMemberName);
+        String ownerMemberName = null;
+        if (getOwner() != null) {
+            ownerMemberName = getEntityMeta().getOwnerMemberName();
+            if ((ownerMemberName != null) && (isActualOwner(ownerMemberName))) {
+                ownerValue = entityValue.get(ownerMemberName);
+            }
         }
 
         IEntity typeAttr = (IEntity) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
