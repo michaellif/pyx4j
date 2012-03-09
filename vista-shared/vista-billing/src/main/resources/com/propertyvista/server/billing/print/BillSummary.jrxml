@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bill1" pageWidth="400" pageHeight="842" columnWidth="400" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="com.propertyvista.server.billing.print.BillPrintScriptlet">
-	<property name="ireport.zoom" value="1.000000000000002"/>
+	<property name="ireport.zoom" value="1.6105100000000039"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
@@ -96,10 +96,10 @@
 				<text><![CDATA[One-Time Charges]]></text>
 			</staticText>
 			<line>
-				<reportElement x="11" y="105" width="326" height="1" forecolor="#AFAAAA"/>
+				<reportElement x="11" y="105" width="342" height="1" forecolor="#AFAAAA"/>
 			</line>
 			<line>
-				<reportElement x="11" y="498" width="326" height="1" forecolor="#AFAAAA"/>
+				<reportElement x="11" y="498" width="342" height="1" forecolor="#AFAAAA"/>
 			</line>
 			<textField>
 				<reportElement x="232" y="56" width="105" height="20"/>
@@ -196,7 +196,7 @@
 				<textFieldExpression><![CDATA["$ "+$F{totalDueAmount}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="11" y="529" width="326" height="1" forecolor="#AFAAAA"/>
+				<reportElement x="11" y="529" width="342" height="1" forecolor="#AFAAAA"/>
 			</line>
 			<staticText>
 				<reportElement x="38" y="357" width="194" height="20"/>

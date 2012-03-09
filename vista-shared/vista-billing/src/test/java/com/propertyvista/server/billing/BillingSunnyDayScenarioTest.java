@@ -49,7 +49,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         setSysDate("18-Mar-2011");
         setLeaseStatus(Lease.Status.Approved);
 
-        Bill bill = runBilling(true);
+        Bill bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -73,7 +73,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         setSysDate("18-Mar-2011");
         setLeaseStatus(Lease.Status.Active);
 
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -96,7 +96,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         setSysDate("18-Apr-2011");
 
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -119,7 +119,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         setSysDate("18-May-2011");
 
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -142,7 +142,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         setSysDate("18-Jun-2011");
 
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -165,7 +165,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         setSysDate("18-Jul-2011");
 
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -190,7 +190,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         setLeaseStatus(Lease.Status.Completed);
 
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).

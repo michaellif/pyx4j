@@ -99,6 +99,10 @@ abstract class BillingTestBase extends VistaDBTestBase {
     }
 
     protected Bill runBilling(boolean confirm) {
+        return runBilling(confirm, false);
+    }
+
+    protected Bill runBilling(boolean confirm, boolean printBill) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         BillingFacade.runBilling(lease);
 
@@ -117,18 +121,21 @@ abstract class BillingTestBase extends VistaDBTestBase {
         DataDump.dump("bill", bill);
         DataDump.dump("lease", lease);
 
-        FileOutputStream pdf = null;
-        try {
-            pdf = new FileOutputStream(billFileName(bill));
-            JasperReportProcessor.createReport(BillPrint.createModel(bill), JasperFileFormat.PDF, pdf);
-            pdf.flush();
-        } catch (FileNotFoundException e) {
-            throw new Error(e);
-        } catch (IOException e) {
-            throw new Error(e);
-        } finally {
-            IOUtils.closeQuietly(pdf);
+        if (printBill) {
+            FileOutputStream pdf = null;
+            try {
+                pdf = new FileOutputStream(billFileName(bill));
+                JasperReportProcessor.createReport(BillPrint.createModel(bill), JasperFileFormat.PDF, pdf);
+                pdf.flush();
+            } catch (FileNotFoundException e) {
+                throw new Error(e);
+            } catch (IOException e) {
+                throw new Error(e);
+            } finally {
+                IOUtils.closeQuietly(pdf);
+            }
         }
+
         return bill;
     }
 
