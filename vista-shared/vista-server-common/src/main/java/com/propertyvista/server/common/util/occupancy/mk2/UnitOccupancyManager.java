@@ -211,6 +211,17 @@ public class UnitOccupancyManager implements IUnitOccupancyManager {
         deleteCriteria.add(PropertyCriterion.ne(deleteCriteria.proto().id(), vacantSegment.id().getValue()));
         Persistence.service().delete(deleteCriteria);
 
+        merge(unitId, substractDay(vacantFrom), Arrays.asList(Status.vacant), new MergeHandler() {
+            @Override
+            public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
+            }
+
+            @Override
+            public boolean isMergeable(AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
+                return true;
+            }
+        });
+
         clearUnitAvailableFrom(unitId);
     }
 
@@ -307,7 +318,7 @@ public class UnitOccupancyManager implements IUnitOccupancyManager {
         if (constraints.minCancelFrom().getValue().after(cancelFrom)) {
             throw new IllegalArgumentException("cancelFrom date is not copmatible with current constraints");
         }
-        // leave "reserved" part in the past (if past reserved part is available)
+        // leave "reserved" part in the past (if past reserved part is present)
         split(unitId, cancelFrom, new SplittingHandler() {
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
@@ -315,14 +326,13 @@ public class UnitOccupancyManager implements IUnitOccupancyManager {
 
             @Override
             public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-
+                segment.status().setValue(Status.available);
+                segment.lease().setValue(null);
             }
         });
-        merge(unitId, cancelFrom, Arrays.asList(Status.available, Status.reserved), new MergeHandler() {
+        merge(unitId, substractDay(cancelFrom), Arrays.asList(Status.available), new MergeHandler() {
             @Override
             public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
-                merged.status().setValue(Status.available);
-                merged.lease().set(null);
             }
 
             @Override
@@ -330,6 +340,7 @@ public class UnitOccupancyManager implements IUnitOccupancyManager {
                 return true;
             }
         });
+
         updateUnitAvailableFrom(unitId, cancelFrom);
     }
 

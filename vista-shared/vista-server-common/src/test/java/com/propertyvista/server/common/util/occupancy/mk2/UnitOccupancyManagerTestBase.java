@@ -106,10 +106,16 @@ public class UnitOccupancyManagerTestBase {
         Persistence.service().merge(lease);
     }
 
+    /**
+     * E - Expect Segment
+     */
     protected ExpectedSegmentBuilder e() {
         return new ExpectedSegmentBuilder(expectedTimeline);
     }
 
+    /**
+     * S - Create Segment
+     */
     protected ActualSegmentBuilder s() {
         return new ActualSegmentBuilder();
     }
