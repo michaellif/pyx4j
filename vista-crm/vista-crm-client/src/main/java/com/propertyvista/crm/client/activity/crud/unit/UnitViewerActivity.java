@@ -139,7 +139,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                populateOccupancy(entityId);
+                populate();
             }
 
         }, entityId, type);
@@ -151,7 +151,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                populateOccupancy(entityId);
+                populate();
             }
 
         }, entityId, renovationEndDate);
@@ -163,7 +163,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                populateOccupancy(entityId);
+                populate();
             }
 
         }, entityId);
@@ -175,7 +175,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                populateOccupancy(entityId);
+                populate();
             }
 
         }, entityId, vacantFrom);

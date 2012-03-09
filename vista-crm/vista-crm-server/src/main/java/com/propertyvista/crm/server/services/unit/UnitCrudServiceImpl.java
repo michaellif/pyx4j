@@ -88,7 +88,9 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
 
     @Override
     protected void persistDBO(AptUnit dbo, AptUnitDTO in) {
-        if (dbo.id().isNull()) {
+        boolean isNewUnit = dbo.id().isNull();
+
+        if (isNewUnit) {
             // if the unit is new, create a new occupancy for it and
             AptUnitOccupancySegment vacant = EntityFactory.create(AptUnitOccupancySegment.class);
             vacant.status().setValue(Status.vacant);
@@ -98,7 +100,9 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
 
         }
         super.persistDBO(dbo, in);
-        new AptUnitOccupancyManagerImpl(dbo).scopeAvailable();
+        if (isNewUnit) {
+            new AptUnitOccupancyManagerImpl(dbo).scopeAvailable();
+        }
     }
 
     @Override
