@@ -34,6 +34,13 @@ public class FeatureCrudServiceImpl extends GenericCrudServiceImpl<Feature> impl
     protected void enhanceRetrieved(Feature entity, boolean fromList) {
         if (!fromList) {
             // Load detached data:
+
+            /*
+             * catalog retrieving is necessary for building element selection
+             * (lister filtering by catalog().building() in @link ServiceItemFolder.AddItem())
+             */
+            Persistence.service().retrieve(entity.catalog());
+
             Persistence.service().retrieve(entity.items());
             // next level:
             for (ProductItem item : entity.items()) {

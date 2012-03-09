@@ -157,7 +157,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                 if (buildingElementClass != null) {
                     if (parent.isEditable()) {
                         CEntityComboBox<BuildingElement> combo = new CEntityComboBox(buildingElementClass);
-                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().building().detach()));
+                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().building()));
                         comp = inject(column.getObject(), combo);
                         comp.setViewable(isViewable);
                     } else {

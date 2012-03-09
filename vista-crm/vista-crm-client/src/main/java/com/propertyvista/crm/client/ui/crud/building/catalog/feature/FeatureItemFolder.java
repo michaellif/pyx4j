@@ -94,7 +94,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 if (buildingElementClass != null) {
                     if (parent.isEditable()) {
                         CEntityComboBox<BuildingElement> combo = new CEntityComboBox(buildingElementClass);
-                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().building().detach()));
+                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().building()));
                         comp = inject(column.getObject(), combo);
                     } else {
                         comp = inject(column.getObject(), new CEntityCrudHyperlink<BuildingElement>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
@@ -108,7 +108,6 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
             if (column.getObject() == proto().type()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
-                    @SuppressWarnings("unchecked")
                     final CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) comp;
                     combo.addCriterion(PropertyCriterion.eq(combo.proto().featureType(), parent.getValue().type()));
                     combo.addValueChangeHandler(new ValueChangeHandler<ProductItemType>() {
