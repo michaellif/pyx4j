@@ -154,7 +154,6 @@ class Billing {
         Persistence.service().retrieve(billingAccount.payments());
         Persistence.service().retrieve(billingAccount.leaseFinancial());
         Persistence.service().retrieve(billingAccount.leaseFinancial().lease());
-        Persistence.service().retrieve(billingAccount.leaseFinancial().lease().leaseProducts());
 
         Bill bill = EntityFactory.create(Bill.class);
 
