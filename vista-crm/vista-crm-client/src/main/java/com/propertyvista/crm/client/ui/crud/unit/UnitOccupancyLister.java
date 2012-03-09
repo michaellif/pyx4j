@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
 public class UnitOccupancyLister extends ListerBase<AptUnitOccupancySegment> {
 
     public UnitOccupancyLister() {
-        super(AptUnitOccupancySegment.class, CrmSiteMap.Properties.UnitOccupancy.class, false, false);
+        super(AptUnitOccupancySegment.class, null, false, false);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
