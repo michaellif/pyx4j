@@ -113,6 +113,9 @@ class QueryJoinBuilder {
 
     private QueryMember buildRecurciveJoin(EntityOperationsMeta fromEntityOperMeta, String fromAlias, String propertyPath, boolean leftJoin) {
         MemberOperationsMeta memberOper = fromEntityOperMeta.getFirstDirectMember(propertyPath);
+        if (memberOper == null) {
+            return null;
+        }
         JoinDef join;
         if (memberOper instanceof MemberExternalOperationsMeta) {
             join = createExternalJoin((MemberExternalOperationsMeta) memberOper, fromAlias, leftJoin);
