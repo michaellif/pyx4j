@@ -29,11 +29,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Table(prefix = "test")
 public interface ForceCreationOneToOneChild extends IEntity {
 
+    IPrimitive<String> testId();
+
+    IPrimitive<String> name();
+
     @Owner
     @JoinColumn
     ForceCreationOneToOneParent parent();
 
-    IPrimitive<String> testId();
-
-    IPrimitive<String> name();
 }

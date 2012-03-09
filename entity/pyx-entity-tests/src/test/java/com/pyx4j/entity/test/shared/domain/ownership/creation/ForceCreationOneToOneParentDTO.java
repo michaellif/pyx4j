@@ -14,25 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 8, 2012
+ * Created on 2012-03-08
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.ownership.creation;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.test.shared.domain.Task;
 
-@Table(prefix = "test")
-public interface ForceCreationOneToOneParent extends IEntity {
+@Transient
+public interface ForceCreationOneToOneParentDTO extends ForceCreationOneToOneParent {
 
-    IPrimitive<String> testId();
-
-    IPrimitive<String> name();
-
-    @Owned(forceCreation = true)
-    ForceCreationOneToOneChild child();
+    Task otherEntity();
 
 }

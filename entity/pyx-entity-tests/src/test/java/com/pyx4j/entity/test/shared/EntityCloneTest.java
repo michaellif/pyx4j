@@ -25,6 +25,7 @@ import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
+import com.pyx4j.entity.test.shared.domain.ownership.creation.ForceCreationOneToOneParentDTO;
 
 public class EntityCloneTest extends InitializerTestBase {
 
@@ -83,5 +84,21 @@ public class EntityCloneTest extends InitializerTestBase {
 
         assertEquals("Level 1 name", org.name().getValue(), orgClone.name().getValue());
         assertEquals("Level 2 name", org.departments().iterator().next().name().getValue(), orgClone.departments().iterator().next().name().getValue());
+    }
+
+    public void testDTOOwnerClone() {
+        ForceCreationOneToOneParentDTO o = EntityFactory.create(ForceCreationOneToOneParentDTO.class);
+        o.name().setValue("v1");
+        o.child().name().setValue("v2");
+        o.otherEntity().description().setValue("v3");
+
+        ForceCreationOneToOneParentDTO o2 = o.duplicate();
+
+        assertEquals("value", "v1", o2.name().getValue());
+        assertEquals("value", "v2", o2.child().name().getValue());
+        assertEquals("value", "v3", o2.otherEntity().description().getValue());
+
+        assertEquals("parent value is the same", o2.getValue(), o2.child().parent().getValue());
+        assertTrue("parent value is the same", o2.getValue() == o2.child().parent().getValue());
     }
 }

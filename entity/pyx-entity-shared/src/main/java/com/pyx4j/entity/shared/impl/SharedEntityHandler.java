@@ -714,7 +714,9 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         Map<String, Object> v = getValue();
         if (v != null) {
             Map<String, Object> data2 = new EntityValueMap();
-            cloneMap(v, data2, new IdentityHashMap<Object, Object>());
+            Map<Object, Object> processed = new IdentityHashMap<Object, Object>();
+            processed.put(v, data2);
+            cloneMap(v, data2, processed);
             entity.setValue(data2);
         }
         return entity;
