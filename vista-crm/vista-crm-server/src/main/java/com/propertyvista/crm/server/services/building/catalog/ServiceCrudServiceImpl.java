@@ -39,6 +39,7 @@ public class ServiceCrudServiceImpl extends GenericCrudServiceImpl<Service> impl
             /*
              * catalog retrieving is necessary for building element selection
              * (lister filtering by catalog().building() in @link ServiceItemFolder.AddItem())
+             * and building element filtering in ServiceItemEditor
              */
             Persistence.service().retrieve(entity.catalog());
 

@@ -36,8 +36,7 @@ public class FeatureCrudServiceImpl extends GenericCrudServiceImpl<Feature> impl
             // Load detached data:
 
             /*
-             * catalog retrieving is necessary for building element selection
-             * (lister filtering by catalog().building() in @link ServiceItemFolder.AddItem())
+             * catalog retrieving is necessary for building element filtering by catalog().building() in @link FeatureItemEditor
              */
             Persistence.service().retrieve(entity.catalog());
 

@@ -65,14 +65,14 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ProductItem) {
-            return new ServiceItemEditor();
+            return new FeatureItemEditor();
         }
         return super.create(member);
     }
 
-    private class ServiceItemEditor extends CEntityFolderRowEditor<ProductItem> {
+    private class FeatureItemEditor extends CEntityFolderRowEditor<ProductItem> {
 
-        public ServiceItemEditor() {
+        public FeatureItemEditor() {
             super(ProductItem.class, columns());
         }
 
