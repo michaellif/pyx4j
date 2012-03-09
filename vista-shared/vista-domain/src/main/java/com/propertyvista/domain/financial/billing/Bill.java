@@ -120,6 +120,10 @@ public interface Bill extends IEntity {
     @Owned
     ISet<BillEntryAdjustment> billEntryAdjustments();
 
+    @Detached
+    @Owned
+    ISet<BillPayment> billPayments();
+
     /**
      * The total amount due from the previous bill.
      */

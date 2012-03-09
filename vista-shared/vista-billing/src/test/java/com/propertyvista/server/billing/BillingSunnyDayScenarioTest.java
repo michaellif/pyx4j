@@ -48,6 +48,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         setSysDate("18-Mar-2011");
         setLeaseStatus(Lease.Status.Approved);
+        addPayment("18-Mar-2011", "300.00");
 
         Bill bill = runBilling(true, true);
 

@@ -13,13 +13,7 @@
  */
 package com.propertyvista.server.billing;
 
-import java.io.Serializable;
-import java.util.List;
-
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.billing.BillPayment;
 import com.propertyvista.domain.financial.billing.Payment;
@@ -33,19 +27,19 @@ public class PaymentProcessor {
     }
 
     void createPayments() {
-        EntityQueryCriteria<Payment> criteria = EntityQueryCriteria.create(Payment.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billPayment(), (Serializable) null));
-        List<Payment> payments = Persistence.service().query(criteria);
-        for (Payment item : payments) {
+        for (Payment item : billing.getNextPeriodBill().billingAccount().payments()) {
             createPayment(item);
         }
     }
 
     private void createPayment(Payment payment) {
+
         BillPayment billPayment = EntityFactory.create(BillPayment.class);
         billPayment.payment().set(payment);
         billPayment.bill().set(billing.getNextPeriodBill());
-        billing.getNextPeriodBill().paymentReceivedAmount().setValue(billing.getNextPeriodBill().paymentReceivedAmount().getValue().add(billPayment.payment().amount().getValue()));
+
+        billing.getNextPeriodBill().paymentReceivedAmount()
+                .setValue(billing.getNextPeriodBill().paymentReceivedAmount().getValue().add(billPayment.payment().amount().getValue()));
     }
 
 }

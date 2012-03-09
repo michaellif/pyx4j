@@ -13,15 +13,11 @@
  */
 package com.propertyvista.domain.financial.billing;
 
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-public interface BillPayment extends IEntity {
+@DiscriminatorValue("payment")
+public interface BillPayment extends BillEntry {
 
     Payment payment();
 
-    @Owner
-    @JoinColumn
-    Bill bill();
 }

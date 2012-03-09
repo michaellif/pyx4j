@@ -63,6 +63,7 @@ public class BillingLifecycle {
 
         billingAccount.currentBillingRun().set(billingRun);
         Persistence.service().persist(billingAccount);
+        Persistence.service().commit();
 
         runBilling(billingRun);
 
@@ -145,7 +146,7 @@ public class BillingLifecycle {
         if (leaseFinancial.isValueDetached()) {
             Persistence.service().retrieve(leaseFinancial);
         }
-        if (leaseFinancial.billingAccount().id().isNull()) {
+        if (leaseFinancial.billingAccount().billingCycle().isNull()) {
             leaseFinancial.billingAccount().billingCycle().set(BillingCycleManger.ensureBillingCycle(lease));
             leaseFinancial.billingAccount().billCounter().setValue(1);
             Persistence.service().persist(lease);

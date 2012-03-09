@@ -58,7 +58,6 @@ public interface BillingAccount extends IEntity {
 
     @Owned
     @OrderBy(Payment.OrderId.class)
-    @Detached(level = AttachLevel.Detached)
     IList<Payment> payments();
 
     //Should have deposit value field

@@ -38,6 +38,7 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -118,6 +119,8 @@ abstract class BillingTestBase extends VistaDBTestBase {
         Persistence.service().retrieve(bill.chargeAdjustments());
         Persistence.service().retrieve(bill.leaseAdjustments());
 
+        Persistence.service().commit();
+
         DataDump.dump("bill", bill);
         DataDump.dump("lease", lease);
 
@@ -158,13 +161,17 @@ abstract class BillingTestBase extends VistaDBTestBase {
         lease.leaseFinancial().billingPeriodStartDate().setValue(billingPeriodStartDate);
 
         Persistence.service().persist(lease);
+        Persistence.service().commit();
 
     }
 
     protected void setLeaseStatus(Lease.Status status) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         lease.status().setValue(status);
+
         Persistence.service().persist(lease);
+        Persistence.service().commit();
+
     }
 
     protected BillableItem addParking(String effectiveDate, String expirationDate) {
@@ -218,7 +225,10 @@ abstract class BillingTestBase extends VistaDBTestBase {
                 billableItem.effectiveDate().setValue(effectiveDate);
                 billableItem.expirationDate().setValue(expirationDate);
                 lease.leaseProducts().featureItems().add(billableItem);
+
                 Persistence.service().persist(lease);
+                Persistence.service().commit();
+
                 return billableItem;
             }
         }
@@ -255,8 +265,24 @@ abstract class BillingTestBase extends VistaDBTestBase {
         billableItem.adjustments().add(adjustment);
 
         Persistence.service().persist(billableItem);
+        Persistence.service().commit();
 
         return adjustment;
+    }
+
+    protected Payment addPayment(String depositDate, String amount) {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
+
+        Payment payment = EntityFactory.create(Payment.class);
+        payment.depositDate().setValue(BillingTestUtils.getDate(depositDate));
+        payment.amount().setValue(new BigDecimal(amount));
+
+        lease.leaseFinancial().billingAccount().payments().add(payment);
+
+        Persistence.service().persist(lease.leaseFinancial().billingAccount());
+        Persistence.service().commit();
+
+        return payment;
     }
 
     protected static String billFileName(Bill bill) {

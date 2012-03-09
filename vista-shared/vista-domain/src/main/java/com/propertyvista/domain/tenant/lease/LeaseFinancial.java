@@ -38,7 +38,7 @@ public interface LeaseFinancial extends IEntity {
     @Detached
     Lease lease();
 
-    @Owned
+    @Owned(forceCreation = true)
     @JoinColumn
     BillingAccount billingAccount();
 
