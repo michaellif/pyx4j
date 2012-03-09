@@ -891,6 +891,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private <T extends IEntity> void clearRetrieveValues(T entity) {
+        if (true) {
+            return;
+        }
         // Clear all values, already in Entity, Retrieve from scratch
         Key pk = entity.getPrimaryKey();
 
