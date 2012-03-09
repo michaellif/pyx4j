@@ -157,6 +157,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     public void removeTenat(AsyncCallback<Boolean> callback, Key tenantId) {
         // TODO if should physically remove it here or just break relation to Lease (TenantInLease.lease().set(null))? 
         Persistence.service().delete(Persistence.service().retrieve(TenantInLease.class, tenantId));
+        Persistence.service().commit();
         callback.onSuccess(true);
     }
 
@@ -210,6 +211,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         Persistence.service().retrieve(lease.tenants());
         MasterApplication ma = ApplicationManager.createMasterApplication(lease);
         ApplicationManager.sendMasterApplicationEmail(ma);
+        Persistence.service().commit();
         callback.onSuccess(null);
     }
 
