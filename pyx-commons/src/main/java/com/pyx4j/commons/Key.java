@@ -20,6 +20,8 @@
  */
 package com.pyx4j.commons;
 
+import java.util.Date;
+
 /**
  * Serializable DB Reference (Primary Key) representation
  */
@@ -31,7 +33,11 @@ public class Key implements java.io.Serializable {
 
     private transient long longValue;
 
-    private transient long versionValue = -1;
+    public static final long VERSION_DRAFT = 0;
+
+    public static final long VERSION_CURRENT = -1;
+
+    private transient long versionValue = VERSION_CURRENT;
 
     protected Key() {
 
@@ -53,6 +59,18 @@ public class Key implements java.io.Serializable {
         this.longValue = dbPrimaryKey;
         this.versionValue = dbVersion;
         value = String.valueOf(longValue) + "." + String.valueOf(dbVersion);
+    }
+
+    public Key draftKey() {
+        return new Key(this.asLong(), VERSION_DRAFT);
+    }
+
+    public Key forDateKey(Date forDate) {
+        if (forDate == null) {
+            return new Key(this.asLong(), VERSION_CURRENT);
+        } else {
+            return new Key(this.asLong(), forDate.getTime());
+        }
     }
 
     @Override

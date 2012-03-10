@@ -24,7 +24,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
@@ -89,14 +88,13 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
         } else {
             stmt.setLong(parameterIndex, primaryKey.asLong());
             Calendar c = new GregorianCalendar();
-            Date forDate = childEntity.forDate().getValue();
-            if (forDate == null) {
-                forDate = persistenceContext.getTimeNow();
-                childEntity.forDate().setValue(forDate);
+            if (primaryKey.getVersion() <= 0) {
+                c.setTime(persistenceContext.getTimeNow());
+                // DB does not store Milliseconds
+                c.set(Calendar.MILLISECOND, 0);
+                childEntity.setPrimaryKey(primaryKey.forDateKey(c.getTime()));
             }
-            c.setTime(childEntity.forDate().getValue());
-            // DB does not store Milliseconds
-            c.set(Calendar.MILLISECOND, 0);
+            c.setTimeInMillis(primaryKey.getVersion());
             stmt.setTimestamp(parameterIndex + 1, new java.sql.Timestamp(c.getTimeInMillis()));
         }
         return 2;
@@ -109,10 +107,11 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
             return null;
         } else {
             IEntity entity = EntityFactory.create(entityClass);
-            entity.setPrimaryKey(new Key(value));
             java.sql.Timestamp forDate = rs.getTimestamp(memberSqlName + FOR_DATE_COLUNM_NAME_SUFIX);
             if (!rs.wasNull()) {
-                ((IVersionedEntity<?>) entity).forDate().setValue(new java.util.Date(forDate.getTime()));
+                entity.setPrimaryKey(new Key(value).forDateKey(new java.util.Date(forDate.getTime())));
+            } else {
+                entity.setPrimaryKey(new Key(value));
             }
             entity.setValueDetached();
             return entity;
