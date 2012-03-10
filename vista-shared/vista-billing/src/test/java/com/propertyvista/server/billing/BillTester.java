@@ -128,6 +128,11 @@ public class BillTester extends Tester {
         return this;
     }
 
+    public BillTester totalDueAmount(String value) {
+        assertEquals("Total Due Amount", new BigDecimal(value), bill.totalDueAmount().getValue());
+        return this;
+    }
+
     protected static LogicalDate getDate(String date) {
         if (date == null) {
             return null;

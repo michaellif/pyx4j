@@ -48,7 +48,6 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         setSysDate("18-Mar-2011");
         setLeaseStatus(Lease.Status.Approved);
-        receivePayment("18-Mar-2011", "300.00");
 
         Bill bill = runBilling(true, true);
 
@@ -62,13 +61,16 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         numOfCharges(4).
         numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
+        paymentReceivedAmount("0.00").
         serviceCharge("270.09").
         recurringFeatureCharges("46.45").
         totalAdjustments("-12.19").
         oneTimeFeatureCharges("0.00").
         taxes("36.52").
-        paymentReceivedAmount("300.00");
+        totalDueAmount("340.87");
         // @formatter:on
+
+        receivePayment("19-Mar-2011", "340.87");
 
         //==================== RUN 2 ======================//
 
@@ -87,13 +89,16 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         numOfCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
+        paymentReceivedAmount("340.87").
         serviceCharge("930.30").
         recurringFeatureCharges("181.33").
         totalAdjustments("-44.67").
         oneTimeFeatureCharges("0.00").
         taxes("128.04").
-        paymentReceivedAmount("0.00");
+        totalDueAmount("1195.01");
         // @formatter:on
+
+        receivePayment("19-Mar-2011", "1195.01");
 
         //==================== RUN 3 ======================//
 
@@ -111,12 +116,16 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         numOfCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
+        paymentReceivedAmount("1195.01").
         serviceCharge("930.30").
         recurringFeatureCharges("240.00").
         totalAdjustments("-52.00").
         oneTimeFeatureCharges("0.00").
-        taxes("134.20");
+        taxes("134.20").
+        totalDueAmount("1252.50");
         // @formatter:on
+
+        receivePayment("19-Apr-2011", "1252.50");
 
         //==================== RUN 4 ======================//
 
@@ -134,12 +143,16 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         numOfCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
+        paymentReceivedAmount("1252.50").
         serviceCharge("930.30").
         recurringFeatureCharges("240.00").
         totalAdjustments("-52.00").
         oneTimeFeatureCharges("0.00").
-        taxes("134.20");
+        taxes("134.20").
+        totalDueAmount("1252.50");
         // @formatter:on
+
+        receivePayment("19-May-2011", "1252.50");
 
         //==================== RUN 5 ======================//
 
@@ -157,12 +170,16 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         numOfCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
+        paymentReceivedAmount("1252.50").
         serviceCharge("930.30").
         recurringFeatureCharges("240.00").
         totalAdjustments("-52.00").
         oneTimeFeatureCharges("0.00").
-        taxes("134.20");
+        taxes("134.20").
+        totalDueAmount("1252.50");
         // @formatter:on
+
+        receivePayment("19-Jun-2011", "1252.50");
 
         //==================== RUN 6 ======================//
 
@@ -180,12 +197,16 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         numOfCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
+        paymentReceivedAmount("1252.50").
         serviceCharge("90.03").
         recurringFeatureCharges("23.23").
         totalAdjustments("-5.03").
         oneTimeFeatureCharges("0.00").
-        taxes("12.98");
+        taxes("12.98").
+        totalDueAmount("121.20");
         // @formatter:on
+
+        receivePayment("19-Jul-2011", "121.20");
 
         //==================== RUN final ======================//
 
