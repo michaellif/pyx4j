@@ -98,7 +98,9 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         totalDueAmount("1195.01");
         // @formatter:on
 
-        receivePayment("19-Mar-2011", "1195.01");
+        receivePayment("19-Mar-2011", "995.01");
+        receivePayment("20-Mar-2011", "100.00");
+        receivePayment("21-Mar-2011", "100.00");
 
         //==================== RUN 3 ======================//
 

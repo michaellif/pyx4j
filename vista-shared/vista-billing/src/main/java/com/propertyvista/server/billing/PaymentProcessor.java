@@ -49,6 +49,7 @@ public class PaymentProcessor {
     private void createPayment(Payment payment) {
         BillPayment billPayment = EntityFactory.create(BillPayment.class);
         billPayment.payment().set(payment);
+        billPayment.amount().setValue(payment.amount().getValue());
         billing.getNextPeriodBill().billPayments().add(billPayment);
         billing.getNextPeriodBill().paymentReceivedAmount()
                 .setValue(billing.getNextPeriodBill().paymentReceivedAmount().getValue().add(billPayment.payment().amount().getValue()));

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bill1" pageWidth="400" pageHeight="842" columnWidth="400" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="com.propertyvista.server.billing.print.BillPrintScriptlet">
-	<property name="ireport.zoom" value="1.6105100000000039"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bill1" pageWidth="400" pageHeight="842" columnWidth="380" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="0" scriptletClass="com.propertyvista.server.billing.print.BillPrintScriptlet">
+	<property name="ireport.zoom" value="1.331000000000003"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
@@ -20,243 +20,260 @@
 	<field name="totalAdjustments" class="java.math.BigDecimal"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="billingRun" class="com.propertyvista.domain.financial.billing.BillingRun"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
 		<band height="586">
-			<rectangle>
-				<reportElement mode="Opaque" x="3" y="6" width="362" height="536" forecolor="#FEFEFE" backcolor="#F8F8F8"/>
-			</rectangle>
 			<staticText>
-				<reportElement x="38" y="36" width="194" height="20"/>
+				<reportElement x="0" y="36" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Account Summary]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="56" width="194" height="20"/>
+				<reportElement x="0" y="56" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="76" width="194" height="20"/>
+				<reportElement x="0" y="76" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Due Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="115" width="194" height="20"/>
+				<reportElement x="0" y="115" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Your Last Bill]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="141" width="194" height="20"/>
+				<reportElement x="0" y="141" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Previous balance]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="161" width="194" height="20"/>
+				<reportElement x="0" y="161" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Payment(s)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="229" width="194" height="20"/>
+				<reportElement x="0" y="229" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Balance from the last bill]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="270" width="194" height="20"/>
+				<reportElement x="0" y="270" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Your Current Bill]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="297" width="194" height="20"/>
+				<reportElement x="0" y="297" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Lease charges]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="317" width="194" height="20"/>
+				<reportElement x="0" y="317" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Other Recurring Charges]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="337" width="194" height="20"/>
+				<reportElement x="0" y="337" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[One-Time Charges]]></text>
 			</staticText>
 			<line>
-				<reportElement x="11" y="105" width="342" height="1" forecolor="#AFAAAA"/>
+				<reportElement x="0" y="105" width="380" height="1" forecolor="#AFAAAA"/>
 			</line>
 			<line>
-				<reportElement x="11" y="498" width="342" height="1" forecolor="#AFAAAA"/>
+				<reportElement x="0" y="480" width="380" height="1" forecolor="#AFAAAA"/>
 			</line>
 			<textField>
-				<reportElement x="232" y="56" width="105" height="20"/>
+				<reportElement x="280" y="56" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ "+$F{totalDueAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="232" y="76" width="105" height="20"/>
+				<reportElement x="280" y="76" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDate($F{billingPeriodStartDate})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="80" y="453" width="152" height="20"/>
+				<reportElement x="111" y="435" width="170" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<text><![CDATA[Total (before taxes)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="80" y="473" width="152" height="20"/>
+				<reportElement x="111" y="455" width="170" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<text><![CDATA[Taxes]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="80" y="504" width="152" height="20"/>
+				<reportElement x="111" y="486" width="170" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="232" y="141" width="105" height="20"/>
+				<reportElement x="280" y="141" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{previousBalanceAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="232" y="161" width="105" height="20"/>
+				<reportElement x="280" y="161" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{paymentReceivedAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="232" y="229" width="105" height="20"/>
+				<reportElement x="280" y="229" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ "+$F{pastDueAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="232" y="337" width="105" height="20"/>
+				<reportElement x="280" y="337" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{oneTimeFeatureCharges}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="232" y="297" width="105" height="20"/>
+				<reportElement x="280" y="297" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{serviceCharge}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="232" y="317" width="105" height="20"/>
+				<reportElement x="280" y="317" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{recurringFeatureCharges}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="232" y="453" width="105" height="20"/>
+				<reportElement x="280" y="435" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{currentAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="232" y="473" width="105" height="20"/>
+				<reportElement x="280" y="455" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{taxes}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="232" y="504" width="105" height="20"/>
+				<reportElement x="280" y="486" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ "+$F{totalDueAmount}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="11" y="529" width="342" height="1" forecolor="#AFAAAA"/>
+				<reportElement x="0" y="511" width="380" height="1" forecolor="#AFAAAA"/>
 			</line>
 			<staticText>
-				<reportElement x="38" y="357" width="194" height="20"/>
+				<reportElement x="0" y="357" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Adjustment(s)]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="232" y="357" width="105" height="20"/>
+				<reportElement x="280" y="357" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalAdjustments}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="38" y="397" width="194" height="20"/>
+				<reportElement x="0" y="397" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Late Payment Charges]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="232" y="397" width="105" height="20"/>
+				<reportElement x="280" y="397" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{latePaymentCharges}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="232" y="181" width="105" height="20"/>
+				<reportElement x="280" y="181" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{depositRefundAmount}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="38" y="181" width="194" height="20"/>
+				<reportElement x="0" y="181" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Deposit refund]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="201" width="194" height="20"/>
+				<reportElement x="0" y="201" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Adjustment(s)]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="232" y="201" width="105" height="20"/>
+				<reportElement x="280" y="201" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{immediateAdjustments}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="38" y="377" width="194" height="20"/>
+				<reportElement x="0" y="377" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Deposit(s)]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="232" y="377" width="105" height="20"/>
+				<reportElement x="280" y="377" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{depositPaidAmount}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="320" y="225" width="60" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.75" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="320" y="431" width="60" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.75" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="249" width="320" height="14"/>
+				<textElement markup="none">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Any payments we received and processed after" + $P{REPORT_SCRIPTLET}.formatDate($F{billingRun}.executionDate().getValue()) + " will show on your next bill"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

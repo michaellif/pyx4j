@@ -25,9 +25,6 @@
 	</background>
 	<detail>
 		<band height="586">
-			<rectangle>
-				<reportElement mode="Opaque" x="3" y="6" width="362" height="536" forecolor="#FEFEFE" backcolor="#F8F8F8"/>
-			</rectangle>
 			<staticText>
 				<reportElement x="38" y="36" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">

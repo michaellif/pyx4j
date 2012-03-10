@@ -101,6 +101,11 @@ public interface Bill extends IEntity {
 
     @Detached
     @Owned
+    @OrderBy(BillPayment.OrderId.class)
+    IList<BillPayment> billPayments();
+
+    @Detached
+    @Owned
     @OrderBy(BillCharge.OrderId.class)
     IList<BillCharge> charges();
 
@@ -118,11 +123,6 @@ public interface Bill extends IEntity {
     @Owned
     @OrderBy(BillEntryAdjustment.OrderId.class)
     IList<BillEntryAdjustment> billEntryAdjustments();
-
-    @Detached
-    @Owned
-    @OrderBy(BillPayment.OrderId.class)
-    IList<BillPayment> billPayments();
 
     /**
      * The total amount due from the previous bill.
