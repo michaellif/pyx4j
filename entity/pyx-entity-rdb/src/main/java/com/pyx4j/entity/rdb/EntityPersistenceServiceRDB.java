@@ -440,7 +440,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getDetachedMembers()) {
-                member.getMember(entity).setAttachLevel(AttachLevel.Detached);
+                if (member.getMember(entity).isNull()) {
+                    member.getMember(entity).setAttachLevel(AttachLevel.Detached);
+                }
             }
         } finally {
             if (trace) {
@@ -511,7 +513,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
 
             for (MemberOperationsMeta member : tm.operationsMeta().getDetachedMembers()) {
-                member.getMember(entity).setAttachLevel(AttachLevel.Detached);
+                if (member.getMember(entity).isNull()) {
+                    member.getMember(entity).setAttachLevel(AttachLevel.Detached);
+                }
             }
 
             return updated;
