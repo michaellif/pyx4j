@@ -20,52 +20,38 @@
  */
 package com.pyx4j.entity.server;
 
-import java.util.Date;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntity<?>> extends AbstractCrudServiceImpl<E> implements
         AbstractVersionedCrudService<E> {
 
-    private static final I18n i18n = I18n.get(AbstractVersionedCrudServiceImpl.class);
-
     public AbstractVersionedCrudServiceImpl(Class<E> entityClass) {
         super(entityClass);
     }
 
-    //TODO move Key handling to framework!
     @Override
     public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveTraget retrieveTraget) {
-        E entity = EntityFactory.create(entityClass);
-        entity.setPrimaryKey(new Key(entityId.asLong()));
-        if ((entityId.getVersion() == 0) || retrieveTraget == RetrieveTraget.Edit) {
-            entity.draft().setValue(Boolean.TRUE);
+        Key primaryKey;
+        // Force draft for edit
+        if (retrieveTraget == RetrieveTraget.Edit) {
+            primaryKey = entityId.draftKey();
         } else {
-            entity.forDate().setValue(new Date(entityId.getVersion()));
+            primaryKey = entityId;
         }
-        //TODO move to framework!
-
-        Persistence.service().retrieve(entity);
-
+        E entity = Persistence.secureRetrieve(entityClass, primaryKey);
         enhanceRetrieved(entity);
         callback.onSuccess(entity);
     }
 
     @Override
     public void finalize(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        E entity = EntityFactory.create(entityClass);
-        entity.setPrimaryKey(new Key(entityId.asLong()));
-        entity.draft().setValue(Boolean.TRUE);
-        Persistence.service().retrieve(entity);
-
-        entity.draft().setValue(Boolean.FALSE);
+        E entity = Persistence.secureRetrieve(entityClass, entityId.draftKey());
+        entity.setPrimaryKey(entityId.currentKey());
         persist(entity);
         Persistence.service().commit();
         callback.onSuccess(null);

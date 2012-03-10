@@ -24,6 +24,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -35,13 +36,16 @@ public interface IVersionData<VERSIONED_ENTITY extends IVersionedEntity<?>> exte
 
     @Owner
     @JoinColumn
+    @Indexed(group = { "h,1" })
     VERSIONED_ENTITY holder();
 
     @OrderColumn
     IPrimitive<Integer> versionNumber();
 
+    @Indexed(group = { "h,2" })
     IPrimitive<Date> fromDate();
 
+    @Indexed(group = { "h,3" })
     IPrimitive<Date> toDate();
 
     IPrimitive<Key> createdByUserKey();

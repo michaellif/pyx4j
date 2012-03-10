@@ -88,13 +88,14 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
         } else {
             stmt.setLong(parameterIndex, primaryKey.asLong());
             Calendar c = new GregorianCalendar();
-            if (primaryKey.getVersion() <= 0) {
+            if (primaryKey.getVersion() > 0) {
+                c.setTimeInMillis(primaryKey.getVersion());
+            } else {
                 c.setTime(persistenceContext.getTimeNow());
                 // DB does not store Milliseconds
                 c.set(Calendar.MILLISECOND, 0);
                 childEntity.setPrimaryKey(primaryKey.forDateKey(c.getTime()));
             }
-            c.setTimeInMillis(primaryKey.getVersion());
             stmt.setTimestamp(parameterIndex + 1, new java.sql.Timestamp(c.getTimeInMillis()));
         }
         return 2;

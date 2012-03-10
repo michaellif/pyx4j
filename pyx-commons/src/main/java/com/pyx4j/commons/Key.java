@@ -65,6 +65,10 @@ public class Key implements java.io.Serializable {
         return new Key(this.asLong(), VERSION_DRAFT);
     }
 
+    public Key currentKey() {
+        return new Key(this.asLong(), VERSION_CURRENT);
+    }
+
     public Key forDateKey(Date forDate) {
         if (forDate == null) {
             return new Key(this.asLong(), VERSION_CURRENT);
@@ -91,7 +95,7 @@ public class Key implements java.io.Serializable {
     }
 
     public long getVersion() throws NumberFormatException {
-        if (versionValue == -1) {
+        if (longValue == 0) {
             pars();
         }
         return versionValue;
@@ -100,7 +104,7 @@ public class Key implements java.io.Serializable {
     private void pars() throws NumberFormatException {
         int vp = value.indexOf(".");
         if (vp == -1) {
-            versionValue = 0;
+            versionValue = VERSION_CURRENT;
             longValue = Long.valueOf(value);
         } else {
             versionValue = Long.valueOf(value.substring(vp + 1));

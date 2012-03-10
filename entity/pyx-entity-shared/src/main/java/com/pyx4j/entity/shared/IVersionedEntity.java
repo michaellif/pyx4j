@@ -20,8 +20,6 @@
  */
 package com.pyx4j.entity.shared;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.ManagedColumn;
@@ -37,24 +35,24 @@ public interface IVersionedEntity<VERSIONED_ITEM extends IVersionData<?>> extend
     @Owned
     IList<VERSIONED_ITEM> versions();
 
-    /**
-     * Finalize: Triggered by Not draft and not empty version() member.
-     */
-    @ManagedColumn
-    IPrimitive<Boolean> draft();
-
-    /**
-     * null for draft
-     * 
-     * On persist (only draft):
-     * version() contains Draft
-     * 
-     * On finalised:
-     * version == null, draft from versions -> finalised (from date is set to current date)
-     * version != null, only for preloader and with condition that versions() is detached
-     */
-    @ManagedColumn
-    IPrimitive<Date> forDate();
+//    /**
+//     * Finalize: Triggered by Not draft and not empty version() member.
+//     */
+//    @ManagedColumn
+//    IPrimitive<Boolean> draft();
+//
+//    /**
+//     * null for draft
+//     * 
+//     * On persist (only draft):
+//     * version() contains Draft
+//     * 
+//     * On finalised:
+//     * version == null, draft from versions -> finalised (from date is set to current date)
+//     * version != null, only for preloader and with condition that versions() is detached
+//     */
+//    @ManagedColumn
+//    IPrimitive<Date> forDate();
 
     @ManagedColumn
     @ToString(index = 1)

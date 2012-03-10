@@ -592,13 +592,15 @@ public class TableModel {
                 return false;
             } else {
                 Key key = new Key(rs.getLong(dialect.getNamingConvention().sqlIdColumnName()));
-                if (!primaryKey.equals(key)) {
+                // Ignore version in comparison
+                if (primaryKey.asLong() != key.asLong()) {
                     throw new RuntimeException();
                 }
                 if ((dialect.isMultitenant()) && !rs.getString(dialect.getNamingConvention().sqlNameSpaceColumnName()).equals(NamespaceManager.getNamespace())) {
                     throw new RuntimeException("namespace access error");
                 }
-                entity.setPrimaryKey(key);
+                // Preserve version when retrieving  key
+                entity.setPrimaryKey(primaryKey);
                 retrieveValues(rs, entity);
                 retrieveExternal(persistenceContext, entity);
                 return true;

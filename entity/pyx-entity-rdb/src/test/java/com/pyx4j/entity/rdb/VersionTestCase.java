@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.util.Date;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -32,7 +34,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 public abstract class VersionTestCase extends DatastoreTestBase {
 
-    public void _OFF_testRetrieve() {
+    public void testRetrieve() {
         String testId = uniqueString();
 
         // Initial item
@@ -64,11 +66,13 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         //Save
         srv.persist(itemA1);
 
+        // Key assigned and versions not set in the key
+        assertEquals("assigned version", Key.VERSION_CURRENT, itemA1.getPrimaryKey().getVersion());
+
         // Retrieval of item as draft
         {
             ItemA itemA1r = EntityFactory.create(ItemA.class);
-            itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
-            itemA1r.draft().setValue(Boolean.TRUE);
+            itemA1r.setPrimaryKey(itemA1.getPrimaryKey().draftKey());
 
             srv.retrieve(itemA1r);
             assertTrue("version is not null", !itemA1r.version().isNull());
@@ -87,9 +91,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // Retrieval of item for specific date
         {
             setDBTime("2011-03-02");
-            ItemA itemA1r = EntityFactory.create(ItemA.class);
-            itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
-            itemA1r.forDate().setValue(DateUtils.detectDateformat("2011-01-11"));
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().forDateKey(DateUtils.detectDateformat("2011-01-11")));
 
             srv.retrieve(itemA1r);
             assertTrue("version is not null", !itemA1r.version().isNull());
@@ -140,8 +142,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // verify Draft created
         {
             ItemA itemA1r = EntityFactory.create(ItemA.class);
-            itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
-            itemA1r.draft().setValue(Boolean.TRUE);
+            itemA1r.setPrimaryKey(itemA1.getPrimaryKey().draftKey());
 
             srv.retrieve(itemA1r);
             assertTrue("version is not null", !itemA1r.version().isNull());
@@ -179,7 +180,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         }
     }
 
-    public void _OFF_testSaveDraft() {
+    public void testSaveDraft() {
         String testId = uniqueString();
         srv.startTransaction();
 
@@ -197,8 +198,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         srv.persist(itemA1);
 
         ItemA itemA1draft = EntityFactory.create(ItemA.class);
-        itemA1draft.setPrimaryKey(itemA1.getPrimaryKey());
-        itemA1draft.draft().setValue(Boolean.TRUE);
+        itemA1draft.setPrimaryKey(itemA1.getPrimaryKey().draftKey());
 
         srv.retrieve(itemA1draft);
 
@@ -212,8 +212,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // Retrieval of item as draft
         {
             ItemA itemA1r = EntityFactory.create(ItemA.class);
-            itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
-            itemA1r.draft().setValue(Boolean.TRUE);
+            itemA1r.setPrimaryKey(itemA1.getPrimaryKey().draftKey());
 
             srv.retrieve(itemA1r);
             assertTrue("version is not null", !itemA1r.version().isNull());
@@ -222,8 +221,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
         // finalize, Save draft as version
         ItemA itemA1f = EntityFactory.create(ItemA.class);
-        itemA1f.setPrimaryKey(itemA1.getPrimaryKey());
-        itemA1f.draft().setValue(Boolean.TRUE);
+        itemA1f.setPrimaryKey(itemA1.getPrimaryKey().draftKey());
 
         srv.retrieve(itemA1f);
 
@@ -233,15 +231,14 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         setDBTime("2010-02-01");
 
         // finalize
-        itemA1f.draft().setValue(Boolean.FALSE);
+        itemA1f.setPrimaryKey(itemA1f.getPrimaryKey().currentKey());
         srv.persist(itemA1f);
         srv.commit();
 
         // verify Draft updated
         {
             ItemA itemA1r = EntityFactory.create(ItemA.class);
-            itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
-            itemA1r.draft().setValue(Boolean.TRUE);
+            itemA1r.setPrimaryKey(itemA1.getPrimaryKey().draftKey());
 
             srv.retrieve(itemA1r);
             assertTrue("version is not null", !itemA1r.version().isNull());
@@ -261,7 +258,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     }
 
-    public void _OFF_testVersionedReference() {
+    public void testVersionedReference() {
         String testId = uniqueString();
         srv.startTransaction();
 
@@ -304,7 +301,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
         //Save another Draft
         final String draftName = "D1-" + uniqueString();
-        itemA1.draft().setValue(Boolean.TRUE);
+        itemA1.setPrimaryKey(itemA1.getPrimaryKey().draftKey());
         itemA1.version().name().setValue(draftName);
         srv.persist(itemA1);
 
@@ -312,7 +309,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         {
             RefToCurrent refToCurrent1r1 = srv.retrieve(RefToCurrent.class, refToCurrent1.getPrimaryKey());
             assertEquals("ref updated", newName, refToCurrent1r1.itemA().version().name().getValue());
-            assertEquals("date as of now", DateUtils.detectDateformat("2011-02-01"), refToCurrent1r1.itemA().forDate().getValue());
+            //assertEquals("date as of now", DateUtils.detectDateformat("2011-02-01"), refToCurrent1r1.itemA().forDate().getValue());
         }
 
         // Versioned has value of the time when it was saved
@@ -320,18 +317,18 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             // Retrieve new version
             RefToVersioned refToVersioned1r1 = srv.retrieve(RefToVersioned.class, refToVersioned1.getPrimaryKey());
             assertEquals("ref not updated", origName, refToVersioned1r1.itemA().version().name().getValue());
-            assertEquals("date as of time of save", DateUtils.detectDateformat("2011-01-15"), refToVersioned1r1.itemA().forDate().getValue());
+            assertEquals("date as of time of save", DateUtils.detectDateformat("2011-01-15"), new Date(refToVersioned1r1.itemA().getPrimaryKey().getVersion()));
         }
 
         // Retrieval of item itself, by default returns current
         {
-            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey());
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().currentKey());
             assertEquals("current", newName, itemA1r.version().name().getValue());
         }
 
     }
 
-    public void _OFF_testVersionedGraphReference() {
+    public void testVersionedGraphReference() {
         String testId = uniqueString();
         srv.startTransaction();
 
@@ -379,18 +376,16 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             assertEquals("ref not updated", origAName, itemB1r.version().itemAFixed().version().name().getValue());
         }
 
-        //TODO fix impl
-        if (false) {
+        {
             setDBTime("2011-04-01");
             //Update Owned VersionedEntity,  Retrieval of itemB as draft and Finalize
             final String updateBName = "V2B1-" + uniqueString();
             {
                 ItemB itemB1r = EntityFactory.create(ItemB.class);
-                itemB1r.setPrimaryKey(itemB1.getPrimaryKey());
-                itemB1r.draft().setValue(Boolean.TRUE);
+                itemB1r.setPrimaryKey(itemB1.getPrimaryKey().draftKey());
                 srv.retrieve(itemB1r);
 
-                itemB1r.draft().setValue(Boolean.FALSE);
+                itemB1r.setPrimaryKey(itemB1r.getPrimaryKey().currentKey());
                 itemB1r.version().name().setValue(updateBName);
 
                 srv.merge(itemB1r);
@@ -448,11 +443,10 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         final String updateA2Name = "V2A2-" + uniqueString();
         {
             ItemB itemB1r = EntityFactory.create(ItemB.class);
-            itemB1r.setPrimaryKey(itemB1.getPrimaryKey());
-            itemB1r.draft().setValue(Boolean.TRUE);
+            itemB1r.setPrimaryKey(itemB1.getPrimaryKey().draftKey());
             srv.retrieve(itemB1r);
 
-            itemB1r.draft().setValue(Boolean.FALSE);
+            itemB1r.setPrimaryKey(itemB1r.getPrimaryKey().currentKey());
             itemB1.version().name().setValue(updateBName);
             itemB1.version().itemAOwned().version().name().setValue(updateA2Name);
 
@@ -469,8 +463,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // Old version of ItemB
         {
             ItemB itemB1r = EntityFactory.create(ItemB.class);
-            itemB1r.setPrimaryKey(itemB1.getPrimaryKey());
-            itemB1r.forDate().setValue(DateUtils.detectDateformat("2011-01-11"));
+            itemB1r.setPrimaryKey(itemB1.getPrimaryKey().forDateKey(DateUtils.detectDateformat("2011-01-11")));
             srv.retrieve(itemB1r);
 
             assertEquals("correct data", origBName, itemB1r.version().name().getValue());

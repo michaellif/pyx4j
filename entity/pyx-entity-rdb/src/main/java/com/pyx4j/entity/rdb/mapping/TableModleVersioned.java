@@ -43,14 +43,15 @@ public class TableModleVersioned {
         EntityQueryCriteria<? extends IVersionData<?>> criteria = EntityQueryCriteria.create(targetEntityClass);
         criteria.add(PropertyCriterion.eq(criteria.proto().holder(), entity));
 
-        if (versionedEntity.draft().isBooleanTrue()) {
+        if (versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_DRAFT) {
             criteria.add(PropertyCriterion.isNull(criteria.proto().fromDate()));
             criteria.add(PropertyCriterion.isNull(criteria.proto().toDate()));
         } else {
-            Date forDate = versionedEntity.forDate().getValue();
-            if (forDate == null) {
+            Date forDate;
+            if (versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_CURRENT) {
                 forDate = persistenceContext.getTimeNow();
-                versionedEntity.forDate().setValue(forDate);
+            } else {
+                forDate = new java.util.Date(versionedEntity.getPrimaryKey().getVersion());
             }
             criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), forDate));
             criteria.or(PropertyCriterion.gt(criteria.proto().toDate(), forDate), PropertyCriterion.isNull(criteria.proto().toDate()));
@@ -97,7 +98,7 @@ public class TableModleVersioned {
         memeberEntity.holder().set(versionedEntity);
         memeberEntity.createdByUserKey().setValue(persistenceContext.getCurrentUserKey());
 
-        if (versionedEntity.draft().isBooleanTrue()) {
+        if (versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_DRAFT) {
             // Save draft
             memeberEntity.fromDate().setValue(null);
             memeberEntity.toDate().setValue(null);
@@ -121,12 +122,12 @@ public class TableModleVersioned {
             //Save using EntityPersistenceService
             update.add(memeberEntity);
 
-            EntityQueryCriteria<? extends IVersionData<IVersionedEntity<?>>> criteria = EntityQueryCriteria.create(targetEntityClass);
-            criteria.add(PropertyCriterion.eq(criteria.proto().holder(), entity));
-            criteria.add(PropertyCriterion.isNotNull(criteria.proto().fromDate()));
-            criteria.add(PropertyCriterion.isNull(criteria.proto().toDate()));
+            EntityQueryCriteria<? extends IVersionData<IVersionedEntity<?>>> criteriaCurrent = EntityQueryCriteria.create(targetEntityClass);
+            criteriaCurrent.add(PropertyCriterion.eq(criteriaCurrent.proto().holder(), entity));
+            criteriaCurrent.add(PropertyCriterion.isNotNull(criteriaCurrent.proto().fromDate()));
+            criteriaCurrent.add(PropertyCriterion.isNull(criteriaCurrent.proto().toDate()));
 
-            List<? extends IVersionData<IVersionedEntity<?>>> existing = tm.query(persistenceContext, criteria, 1);
+            List<? extends IVersionData<IVersionedEntity<?>>> existing = tm.query(persistenceContext, criteriaCurrent, 1);
             if (existing.size() > 0) {
                 IVersionData<IVersionedEntity<?>> memeberEntityExisting = existing.get(0);
 

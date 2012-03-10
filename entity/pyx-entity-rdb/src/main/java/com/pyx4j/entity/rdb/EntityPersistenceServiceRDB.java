@@ -893,26 +893,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private <T extends IEntity> void clearRetrieveValues(T entity) {
         // Clear all values, already in Entity, Retrieve from scratch
         Key pk = entity.getPrimaryKey();
-
-        // Preserve special  VersionedEntity data
-        Boolean draft = null;
-        Date forDate = null;
-        if ((entity instanceof IVersionedEntity) && (entity.getAttachLevel() == AttachLevel.Attached)) {
-            draft = ((IVersionedEntity<?>) entity).draft().getValue();
-            forDate = ((IVersionedEntity<?>) entity).forDate().getValue();
-        }
-
         entity.clearValues();
         entity.setPrimaryKey(pk);
-
-        if (entity instanceof IVersionedEntity) {
-            if (draft != null) {
-                ((IVersionedEntity<?>) entity).draft().setValue(draft);
-            }
-            if (forDate != null) {
-                ((IVersionedEntity<?>) entity).forDate().setValue(forDate);
-            }
-        }
     }
 
     @Override
