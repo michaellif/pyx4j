@@ -138,8 +138,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         int unitCount = 0;
         List<Building> buildings = generator.createBuildings(config().numResidentialBuildings);
 
-        List<Complex> complexesWithBuildins = new Vector<Complex>();
-
         SharedGeoLocator.setMode(Mode.updateCache);
         int noGeoCount = 0;
 
@@ -154,7 +152,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             if (DataGenerator.randomBoolean()) {
                 building.complex().set(DataGenerator.random(complexes));
                 building.complexPrimary().setValue(building.complex().isEmpty());
-                building.complex().buildings().add(building);
             }
 
             // TODO Need to be saving PropertyProfile, PetCharge
@@ -289,9 +286,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             noGeoCount++;
             log.warn("GeoLocation not found for {} buildings", noGeoCount);
         }
-
-        // update complexes with new buildings:
-        Persistence.service().merge(complexes);
 
         StringBuilder sb = new StringBuilder();
         sb.append("Created ").append(buildings.size()).append(" buildings\n");

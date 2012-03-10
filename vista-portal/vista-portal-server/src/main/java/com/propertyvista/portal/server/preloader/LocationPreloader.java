@@ -31,13 +31,12 @@ public class LocationPreloader extends AbstractDataPreloader {
     public String create() {
 
         List<Country> countries = LocationsGenerator.createCountries();
-
-        Persistence.service().persist(countries);
-
         List<Province> provinces = new ArrayList<Province>();
         for (Country country : countries) {
             provinces.addAll(country.provinces());
         }
+
+        Persistence.service().persist(countries);
 
         SharedData.registerCountries(countries);
         SharedData.registerProvinces(provinces);
