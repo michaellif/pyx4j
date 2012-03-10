@@ -39,7 +39,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
         Key primaryKey;
         // Force draft for edit
         if (retrieveTraget == RetrieveTraget.Edit) {
-            primaryKey = entityId.draftKey();
+            primaryKey = entityId.asDraftKey();
         } else {
             primaryKey = entityId;
         }
@@ -50,8 +50,8 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
 
     @Override
     public void finalize(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        E entity = Persistence.secureRetrieve(entityClass, entityId.draftKey());
-        entity.setPrimaryKey(entityId.currentKey());
+        E entity = Persistence.secureRetrieve(entityClass, entityId.asDraftKey());
+        entity.setPrimaryKey(entityId.asCurrentKey());
         persist(entity);
         Persistence.service().commit();
         callback.onSuccess(null);

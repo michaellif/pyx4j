@@ -35,6 +35,19 @@ public interface IVersionedEntity<VERSIONED_ITEM extends IVersionData<?>> extend
     @Owned
     IList<VERSIONED_ITEM> versions();
 
+    public enum SaveAction {
+
+        saveAsDraft, // Default: When saving owner save child as Draft : default 
+
+        saveAsFinal // When saving owner finalize child
+    }
+
+    /**
+     * in preload set : saveAction().setValue(SaveAction.saveAsFinal)
+     */
+    @ManagedColumn
+    IPrimitive<SaveAction> saveAction();
+
 //    /**
 //     * Finalize: Triggered by Not draft and not empty version() member.
 //     */

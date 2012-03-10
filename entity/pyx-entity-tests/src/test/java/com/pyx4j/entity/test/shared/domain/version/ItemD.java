@@ -24,10 +24,12 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
-import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
 import com.pyx4j.entity.test.shared.domain.version.ItemD.ItemDVersion;
 
+//TODO Not supported!
+@Deprecated
 @Table(prefix = "test")
 public interface ItemD extends IVersionedEntity<ItemDVersion> {
 
@@ -35,12 +37,10 @@ public interface ItemD extends IVersionedEntity<ItemDVersion> {
 
     IPrimitive<String> name();
 
-    public interface ItemDVersion extends ItemAVersion {
+    public interface ItemDVersion extends IVersionData<ItemD> {
 
-        @Override
         IPrimitive<String> testId();
 
-        @Override
         IPrimitive<String> name();
 
         @Owned

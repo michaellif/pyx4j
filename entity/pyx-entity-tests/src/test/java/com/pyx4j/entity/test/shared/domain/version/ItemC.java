@@ -29,6 +29,8 @@ import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.test.shared.domain.version.ItemC.ItemCVersion;
 
+//TODO Not supported!
+@Deprecated
 @ToStringFormat("{0} - {1}")
 @Table(prefix = "test")
 public interface ItemC extends IVersionedEntity<ItemCVersion> {

@@ -94,7 +94,7 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
                 c.setTime(persistenceContext.getTimeNow());
                 // DB does not store Milliseconds
                 c.set(Calendar.MILLISECOND, 0);
-                childEntity.setPrimaryKey(primaryKey.forDateKey(c.getTime()));
+                childEntity.setPrimaryKey(primaryKey.asVersionKey(c.getTime()));
             }
             stmt.setTimestamp(parameterIndex + 1, new java.sql.Timestamp(c.getTimeInMillis()));
         }
@@ -110,7 +110,7 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
             IEntity entity = EntityFactory.create(entityClass);
             java.sql.Timestamp forDate = rs.getTimestamp(memberSqlName + FOR_DATE_COLUNM_NAME_SUFIX);
             if (!rs.wasNull()) {
-                entity.setPrimaryKey(new Key(value).forDateKey(new java.util.Date(forDate.getTime())));
+                entity.setPrimaryKey(new Key(value).asVersionKey(new java.util.Date(forDate.getTime())));
             } else {
                 entity.setPrimaryKey(new Key(value));
             }

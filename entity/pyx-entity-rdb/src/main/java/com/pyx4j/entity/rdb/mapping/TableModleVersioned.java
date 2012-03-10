@@ -29,6 +29,7 @@ import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -98,7 +99,7 @@ public class TableModleVersioned {
         memeberEntity.holder().set(versionedEntity);
         memeberEntity.createdByUserKey().setValue(persistenceContext.getCurrentUserKey());
 
-        if (versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_DRAFT) {
+        if (versionedEntity.saveAction().getValue() != SaveAction.saveAsFinal) {
             // Save draft
             memeberEntity.fromDate().setValue(null);
             memeberEntity.toDate().setValue(null);
@@ -161,6 +162,9 @@ public class TableModleVersioned {
                 update.add(newDraft);
             }
         }
+
+        versionedEntity.saveAction().setValue(null);
+
         return update;
     }
 }

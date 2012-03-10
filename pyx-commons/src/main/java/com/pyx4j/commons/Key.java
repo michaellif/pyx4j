@@ -61,15 +61,15 @@ public class Key implements java.io.Serializable {
         value = String.valueOf(longValue) + "." + String.valueOf(dbVersion);
     }
 
-    public Key draftKey() {
+    public Key asDraftKey() {
         return new Key(this.asLong(), VERSION_DRAFT);
     }
 
-    public Key currentKey() {
+    public Key asCurrentKey() {
         return new Key(this.asLong(), VERSION_CURRENT);
     }
 
-    public Key forDateKey(Date forDate) {
+    public Key asVersionKey(Date forDate) {
         if (forDate == null) {
             return new Key(this.asLong(), VERSION_CURRENT);
         } else {

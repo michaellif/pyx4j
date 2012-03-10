@@ -23,6 +23,7 @@ package com.pyx4j.entity.test.shared.domain.version;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Versioned;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
@@ -45,6 +46,11 @@ public interface ItemB extends IVersionedEntity<ItemBVersion> {
         @Versioned
         ItemA itemAFixed();
 
+        @Versioned
+        IList<ItemA> itemAFixedList();
+
+        //TODO Not supported!
+        @Deprecated
         @Owned
         ItemA itemAOwned();
     }
