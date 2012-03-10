@@ -22,8 +22,10 @@ package com.pyx4j.entity.rdb;
 
 import junit.framework.Assert;
 
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
+import com.pyx4j.entity.test.shared.domain.detached.DetachedCompletely;
 import com.pyx4j.entity.test.shared.domain.detached.DetachedEntity;
 import com.pyx4j.entity.test.shared.domain.detached.MainEnity;
 import com.pyx4j.entity.test.shared.domain.detached.MainHolderEnity;
@@ -211,5 +213,29 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
             MainHolderEnity main1r2 = srv.retrieve(MainHolderEnity.class, main1.getPrimaryKey());
             Assert.assertEquals(main1.name().getValue(), main1r2.ownedWithBackReference().detachedOwner().name().getValue());
         }
+    }
+
+    public void testDetachedCompletelyPersist() {
+        testDetachedCompletelySave(TestCaseMethod.Persist);
+    }
+
+    public void testDetachedCompletelyMerge() {
+        testDetachedCompletelySave(TestCaseMethod.Merge);
+    }
+
+    public void testDetachedCompletelySave(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+        DetachedCompletely o = EntityFactory.create(DetachedCompletely.class);
+        o.testId().setValue(testId);
+        o.name().setValue(uniqueString());
+
+        Assert.assertEquals("default child data", AttachLevel.Attached, o.child().getAttachLevel());
+        Assert.assertEquals("default children data", AttachLevel.Attached, o.children().getAttachLevel());
+
+        // Save child and owner
+        srvSave(o, testCaseMethod);
+
+        Assert.assertEquals("child data set by persist", AttachLevel.Detached, o.child().getAttachLevel());
+        Assert.assertEquals("children data set by persist", AttachLevel.Detached, o.children().getAttachLevel());
     }
 }

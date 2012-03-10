@@ -439,6 +439,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     merge(tableModel(memeberEntity.getEntityMeta()), memeberEntity);
                 }
             }
+            for (MemberOperationsMeta member : tm.operationsMeta().getDetachedMembers()) {
+                member.getMember(entity).setAttachLevel(AttachLevel.Detached);
+            }
         } finally {
             if (trace) {
                 log.info(Trace.returns() + "insert {}", tm.getTableName());
@@ -506,6 +509,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     merge(tableModel(memeberEntity.getEntityMeta()), memeberEntity);
                 }
             }
+
+            for (MemberOperationsMeta member : tm.operationsMeta().getDetachedMembers()) {
+                member.getMember(entity).setAttachLevel(AttachLevel.Detached);
+            }
+
             return updated;
         } finally {
             if (trace) {

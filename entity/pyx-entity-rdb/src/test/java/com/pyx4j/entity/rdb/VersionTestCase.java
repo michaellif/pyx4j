@@ -190,8 +190,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // Initial item
         ItemA itemA1 = EntityFactory.create(ItemA.class);
         itemA1.testId().setValue(testId);
-        // TODO fix this in framework
-        itemA1.versions().setAttachLevel(AttachLevel.Detached);
 
         final String currentName = "V0-" + uniqueString();
         itemA1.version().name().setValue(currentName);
@@ -338,9 +336,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         ItemA itemA1 = EntityFactory.create(ItemA.class);
         itemA1.testId().setValue(testId);
 
-        // TODO fix this in framework
-        itemA1.versions().setAttachLevel(AttachLevel.Detached);
-
         final String origName = "V1-" + uniqueString();
         itemA1.version().name().setValue(origName);
         itemA1.version().testId().setValue(testId);
@@ -411,8 +406,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         ItemA itemA1 = EntityFactory.create(ItemA.class);
         itemA1.testId().setValue(testId);
         itemA1.name().setValue("A1");
-        // TODO fix this in framework
-        itemA1.versions().setAttachLevel(AttachLevel.Detached);
 
         final String origAName = "V1A1-" + uniqueString();
         itemA1.version().name().setValue(origAName);
@@ -427,8 +420,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         ItemB itemB1 = EntityFactory.create(ItemB.class);
         itemB1.testId().setValue(testId);
         itemB1.name().setValue("B1");
-        // TODO fix this in framework
-        itemB1.versions().setAttachLevel(AttachLevel.Detached);
 
         final String origBName = "V1B1-" + uniqueString();
         itemB1.version().name().setValue(origBName);
@@ -487,8 +478,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         ItemB itemB1 = EntityFactory.create(ItemB.class);
         itemB1.testId().setValue(testId);
         itemB1.name().setValue("B1");
-        // TODO fix this in framework
-        itemB1.versions().setAttachLevel(AttachLevel.Detached);
+
         final String origBName = "V1B1-" + uniqueString();
         itemB1.version().name().setValue(origBName);
         itemB1.version().testId().setValue(testId);
@@ -496,8 +486,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         ItemA itemA1 = itemB1.version().itemAOwned();
         itemA1.testId().setValue(testId);
         itemA1.name().setValue("A1");
-        // TODO fix this in framework
-        itemA1.versions().setAttachLevel(AttachLevel.Detached);
 
         final String origA1Name = "V1A1-" + uniqueString();
         itemA1.version().name().setValue(origA1Name);

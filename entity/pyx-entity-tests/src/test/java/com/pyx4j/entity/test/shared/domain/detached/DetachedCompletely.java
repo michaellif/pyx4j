@@ -20,15 +20,27 @@
  */
 package com.pyx4j.entity.test.shared.domain.detached;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
-public interface DetachedEntity extends IEntity {
+public interface DetachedCompletely extends IEntity {
 
     IPrimitive<String> testId();
 
     IPrimitive<String> name();
+
+    @Detached(level = AttachLevel.Detached)
+    @Owned
+    DetachedEntity child();
+
+    @Detached(level = AttachLevel.Detached)
+    @Owned
+    IList<DetachedEntity> children();
 
 }
