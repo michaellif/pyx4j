@@ -28,16 +28,17 @@ import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.common.mail.templates.model.ApplicationT;
 import com.propertyvista.server.common.mail.templates.model.BuildingT;
+import com.propertyvista.server.common.mail.templates.model.EmailTemplateContext;
 import com.propertyvista.server.common.mail.templates.model.LeaseT;
 import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
 import com.propertyvista.server.common.mail.templates.model.PasswordRequestT;
 import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
-import com.propertyvista.server.common.mail.templates.model.EmailTemplateContext;
 import com.propertyvista.server.common.mail.templates.model.TenantT;
 
 public class EmailTemplateRootObjectLoader {
@@ -73,9 +74,9 @@ public class EmailTemplateRootObjectLoader {
             t.name().set(tenant.name());
         } else if (tObj instanceof BuildingT) {
             BuildingT t = (BuildingT) tObj;
-            TenantUser tenant = context.tenant();
-            Application app = getApplication(tenant);
-            Lease lease = getLease(app);
+            TenantUser tenantUser = context.tenant();
+            TenantInLease til = getTenantInLease(tenantUser);
+            Lease lease = getLease(til);
             Building bld = getBuilding(lease);
             t.propertyCode().set(bld.propertyCode());
             t.propertyName().set(bld.marketing().name());
@@ -99,45 +100,63 @@ public class EmailTemplateRootObjectLoader {
             }
         } else if (tObj instanceof ApplicationT) {
             ApplicationT t = (ApplicationT) tObj;
-            TenantUser tenant = context.tenant();
-            Application app = getApplication(tenant);
-            t.applicant().set(tenant.name());
+            TenantUser tenantUser = context.tenant();
+            TenantInLease til = getTenantInLease(tenantUser);
+            Application app = getApplication(til);
+            t.applicant().set(tenantUser.name());
             t.refNumber().setValue(app.belongsTo().getPrimaryKey().toString());
         } else if (tObj instanceof LeaseT) {
             LeaseT t = (LeaseT) tObj;
-            TenantUser tenant = context.tenant();
-            Application app = getApplication(tenant);
-            Lease lease = getLease(app);
-            t.applicant().set(tenant.name());
+            TenantUser tenantUser = context.tenant();
+            TenantInLease til = getTenantInLease(tenantUser);
+            Lease lease = getLease(til);
+            t.applicant().set(tenantUser.name());
             t.startDate().setValue(lease.leaseFrom().getStringView());
             t.startDateWeekday().setValue(new SimpleDateFormat("EEEE").format(lease.leaseFrom().getValue()));
         }
         return tObj;
     }
 
-    private static Application getApplication(TenantUser tu) {
-        if (tu == null) {
+    private static TenantInLease getTenantInLease(TenantUser tenantUser) {
+        if (tenantUser == null) {
             throw new Error("Context cannot be null");
         }
-        EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), tu));
-        Application app = Persistence.service().retrieve(criteria);
-        if (app != null) {
-            return app;
+        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant().id(), tenantUser.id()));
+        TenantInLease til = Persistence.service().retrieve(criteria);
+        if (til != null) {
+            return til;
         } else {
-            throw new Error("Invalid context. No application found.");
+            throw new Error("Invalid context. No TenantInLease found.");
+        }
+
+    }
+
+    private static Application getApplication(TenantInLease til) {
+        if (til == null) {
+            throw new Error("Context cannot be null");
+        }
+
+        if (til.application().isValueDetached()) {
+            Persistence.service().retrieve(til.application());
+        }
+        if (til.application() != null) {
+            return til.application();
+        } else {
+            throw new Error("Invalid context. No lease found.");
         }
     }
 
-    private static Lease getLease(Application app) {
-        if (app == null) {
+    private static Lease getLease(TenantInLease til) {
+        if (til == null) {
             throw new Error("Context cannot be null");
         }
-        if (app.lease().isValueDetached()) {
-            Persistence.service().retrieve(app.lease());
+
+        if (til.lease().isValueDetached()) {
+            Persistence.service().retrieve(til.lease());
         }
-        if (app.lease() != null) {
-            return app.lease();
+        if (til.lease() != null) {
+            return til.lease();
         } else {
             throw new Error("Invalid context. No lease found.");
         }
