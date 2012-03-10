@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bill1" pageWidth="400" pageHeight="842" columnWidth="400" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="com.propertyvista.server.billing.print.BillPrintScriptlet">
-	<property name="ireport.zoom" value="1.000000000000002"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bill1" pageWidth="400" pageHeight="842" columnWidth="380" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="0" scriptletClass="com.propertyvista.server.billing.print.BillPrintScriptlet">
+	<property name="ireport.zoom" value="1.7715610000000048"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
@@ -20,240 +20,168 @@
 	<field name="totalAdjustments" class="java.math.BigDecimal"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="billPayments" class="com.pyx4j.entity.shared.IList"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="586">
+		<band height="62">
 			<staticText>
-				<reportElement x="38" y="36" width="194" height="20"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Account Summary]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="38" y="56" width="194" height="20"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Total:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="38" y="76" width="194" height="20"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Due Date]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="38" y="115" width="194" height="20"/>
+				<reportElement x="0" y="12" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Your Last Bill]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="141" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="0" y="38" width="194" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Previous balance]]></text>
 			</staticText>
+			<line>
+				<reportElement x="0" y="34" width="380" height="1" forecolor="#AFAAAA"/>
+			</line>
+			<textField>
+				<reportElement x="280" y="38" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{previousBalanceAmount}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="30">
+			<printWhenExpression><![CDATA[$F{billPayments}.size()>0]]></printWhenExpression>
 			<staticText>
-				<reportElement x="38" y="161" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="0" y="5" width="194" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Payment(s)]]></text>
 			</staticText>
+		</band>
+		<band height="24">
+			<printWhenExpression><![CDATA[$F{billPayments}.size()>0]]></printWhenExpression>
+			<subreport isUsingCache="true" runToBottom="false">
+				<reportElement x="0" y="0" width="380" height="23"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{billPayments})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillPayment")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="33">
+			<printWhenExpression><![CDATA[$F{billPayments}.size()>0]]></printWhenExpression>
+			<textField>
+				<reportElement x="280" y="8" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$ "+$F{paymentReceivedAmount}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="38" y="229" width="194" height="20"/>
+				<reportElement x="87" y="8" width="194" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Payment(s)]]></text>
+			</staticText>
+			<line>
+				<reportElement x="320" y="3" width="60" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.75" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+		</band>
+		<band height="30">
+			<staticText>
+				<reportElement x="0" y="5" width="194" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Deposit refund(s)]]></text>
+			</staticText>
+		</band>
+		<band height="24">
+			<subreport isUsingCache="true" runToBottom="false">
+				<reportElement x="0" y="0" width="380" height="23"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{billPayments})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillPayment")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="33">
+			<staticText>
+				<reportElement x="87" y="8" width="194" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Deposit refund(s)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="280" y="8" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$ "+$F{depositRefundAmount}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="320" y="3" width="60" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.75" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+		</band>
+		<band height="30">
+			<staticText>
+				<reportElement x="0" y="5" width="194" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Adjustment(s)]]></text>
+			</staticText>
+		</band>
+		<band height="24">
+			<subreport isUsingCache="true" runToBottom="false">
+				<reportElement x="0" y="0" width="380" height="23"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{billPayments})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillPayment")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="33">
+			<textField>
+				<reportElement x="280" y="9" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$ "+$F{immediateAdjustments}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="87" y="9" width="194" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Adjustment(s)]]></text>
+			</staticText>
+			<line>
+				<reportElement x="320" y="5" width="60" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.75" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+		</band>
+		<band height="49">
+			<staticText>
+				<reportElement x="0" y="11" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Balance from the last bill]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="38" y="270" width="194" height="20"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Your Current Bill]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="38" y="297" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Lease charges]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="38" y="317" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Other Recurring Charges]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="38" y="337" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[One-Time Charges]]></text>
-			</staticText>
-			<line>
-				<reportElement x="11" y="105" width="326" height="1" forecolor="#AFAAAA"/>
-			</line>
-			<line>
-				<reportElement x="11" y="498" width="326" height="1" forecolor="#AFAAAA"/>
-			</line>
 			<textField>
-				<reportElement x="232" y="56" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{totalDueAmount}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="232" y="76" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDate($F{billingPeriodStartDate})]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="80" y="453" width="152" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[Total (before taxes)]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="80" y="473" width="152" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[Taxes]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="80" y="504" width="152" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Total:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="232" y="141" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{previousBalanceAmount}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="232" y="161" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{paymentReceivedAmount}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="232" y="229" width="105" height="20"/>
+				<reportElement x="280" y="11" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ "+$F{pastDueAmount}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="232" y="337" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{oneTimeFeatureCharges}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="232" y="297" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{serviceCharge}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="232" y="317" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{recurringFeatureCharges}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="232" y="453" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{currentAmount}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="232" y="473" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{taxes}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="232" y="504" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{totalDueAmount}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="11" y="529" width="326" height="1" forecolor="#AFAAAA"/>
-			</line>
-			<staticText>
-				<reportElement x="38" y="357" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Adjustment(s)]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="232" y="357" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{totalAdjustments}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="38" y="397" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Late Payment Charges]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="232" y="397" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{latePaymentCharges}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="232" y="181" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{depositRefundAmount}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="38" y="181" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Deposit refund]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="38" y="201" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Adjustment(s)]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="232" y="201" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{immediateAdjustments}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="38" y="377" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Deposit(s)]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="232" y="377" width="105" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{depositPaidAmount}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

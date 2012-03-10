@@ -101,7 +101,13 @@
 				<text><![CDATA[Deposit refund(s)]]></text>
 			</staticText>
 		</band>
-		<band height="24"/>
+		<band height="24">
+			<subreport isUsingCache="true" runToBottom="false">
+				<reportElement x="0" y="0" width="380" height="23"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{billPayments})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillPayment")]]></subreportExpression>
+			</subreport>
+		</band>
 		<band height="33">
 			<staticText>
 				<reportElement x="87" y="8" width="194" height="20"/>
@@ -133,7 +139,13 @@
 				<text><![CDATA[Adjustment(s)]]></text>
 			</staticText>
 		</band>
-		<band height="24"/>
+		<band height="24">
+			<subreport isUsingCache="true" runToBottom="false">
+				<reportElement x="0" y="0" width="380" height="23"/>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{billPayments})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillPayment")]]></subreportExpression>
+			</subreport>
+		</band>
 		<band height="33">
 			<textField>
 				<reportElement x="280" y="9" width="100" height="20"/>
