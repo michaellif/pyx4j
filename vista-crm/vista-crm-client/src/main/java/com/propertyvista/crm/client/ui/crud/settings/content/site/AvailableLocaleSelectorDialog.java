@@ -59,11 +59,14 @@ public class AvailableLocaleSelectorDialog extends Dialog implements CancelOptio
             }
         });
 
-        if (localeSelector.getOptions().size() == 0) {
+        int optSize = localeSelector.getOptions().size();
+        if (optSize == 0) {
             panel.add(new Label("Sorry, no more items to choose from."));
         } else {
             panel.add(localeSelector);
+            localeSelector.getWidget().getEditor().setVisibleItemCount(optSize + 1);
         }
+
         setBody(panel);
     }
 
