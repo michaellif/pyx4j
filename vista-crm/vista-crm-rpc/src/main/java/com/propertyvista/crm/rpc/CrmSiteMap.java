@@ -350,6 +350,12 @@ public class CrmSiteMap implements SiteMap {
             public static class BackgroundCheck extends CrudAppPlace {
 
             }
+
+            @PlaceProperties(caption = "Late Fees")
+            @NavigationItem(navigLabel = "Late Fees")
+            public static class LateFees extends CrudAppPlace {
+
+            }
         }
 
         @PlaceProperties(caption = "Lease Terms")

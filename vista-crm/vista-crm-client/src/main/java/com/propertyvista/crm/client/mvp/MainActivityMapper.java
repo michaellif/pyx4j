@@ -141,6 +141,9 @@ import com.propertyvista.crm.client.activity.policies.deposit.DepositPolicyViewe
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.latefee.LateFeePolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.latefee.LateFeePolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.latefee.LateFeePolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyViewerActivity;
@@ -827,6 +830,18 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case viewer:
                         activity = new BackgroundCheckPolicyViewerActivity(place);
+                        break;
+                    }
+                } else if (place instanceof CrmSiteMap.Settings.Policies.LateFees) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case lister:
+                        activity = new LateFeePolicyListerActivity(place);
+                        break;
+                    case editor:
+                        activity = new LateFeePolicyEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new LateFeePolicyViewerActivity(place);
                         break;
                     }
                 }

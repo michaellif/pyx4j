@@ -38,6 +38,12 @@ import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplat
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyListerView;
@@ -128,6 +134,13 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(BackgroundCheckPolicyEditorView.class, new BackgroundCheckPolicyEditorViewImpl());
             } else if (BackgroundCheckPolicyViewerView.class.equals(type)) {
                 map.put(BackgroundCheckPolicyViewerView.class, new BackgroundCheckPolicyViewerViewImpl());
+
+            } else if (LateFeePolicyListerView.class.equals(type)) {
+                map.put(LateFeePolicyListerView.class, new LateFeePolicyListerViewImpl());
+            } else if (LateFeePolicyEditorView.class.equals(type)) {
+                map.put(LateFeePolicyEditorView.class, new LateFeePolicyEditorViewImpl());
+            } else if (LateFeePolicyViewerView.class.equals(type)) {
+                map.put(LateFeePolicyViewerView.class, new LateFeePolicyViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")
