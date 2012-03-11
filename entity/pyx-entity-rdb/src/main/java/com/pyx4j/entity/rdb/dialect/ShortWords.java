@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class ShortWords {
 
-    private static Map<String, String> words = new HashMap<String, String>();
+    private final Map<String, String> words = new HashMap<String, String>();
 
     public ShortWords() {
 
