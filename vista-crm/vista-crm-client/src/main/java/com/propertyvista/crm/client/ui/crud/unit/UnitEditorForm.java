@@ -95,6 +95,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                     }
                 });
                 building = combo;
+                // Hack to clear CEntityComboBox
+                setupFloorplanCombo(null);
             } else {
                 setupFloorplanCombo(getValue().belongsTo());
                 if (!getValue().belongsTo().isEmpty()) {
