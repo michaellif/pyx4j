@@ -98,8 +98,6 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
         CRadioGroupBoolean rgb = new CRadioGroupBoolean(Layout.VERTICAL);
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().booleanRadioGroupVertical(), rgb)));
 
-        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().enumRadioGroupHorizontal())));
-
         CRadioGroupEnum<Enum1> rge = new CRadioGroupEnum<Enum1>(Enum1.class, Layout.VERTICAL);
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().enumRadioGroupVertical(), rge)));
 
