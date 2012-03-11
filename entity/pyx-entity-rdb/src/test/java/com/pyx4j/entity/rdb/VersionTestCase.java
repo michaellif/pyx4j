@@ -31,6 +31,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
 import com.pyx4j.entity.test.shared.domain.version.ItemB;
+import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyChild;
+import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyParent;
 import com.pyx4j.entity.test.shared.domain.version.RefToCurrent;
 import com.pyx4j.entity.test.shared.domain.version.RefToVersioned;
 import com.pyx4j.gwt.server.DateUtils;
@@ -90,11 +92,11 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             assertEquals("getDraft", draftName, itemA1r.version().name().getValue());
         }
 
-        // Verify VersionData
+        // Verify VersionData, there are only final/current version
         {
             EntityQueryCriteria<ItemA.ItemAVersion> criteria = EntityQueryCriteria.create(ItemA.ItemAVersion.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            assertEquals("VersionData.size()", 2, srv.query(criteria).size());
+            assertEquals("VersionData.size()", 1, srv.query(criteria).size());
         }
     }
 
@@ -205,17 +207,16 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
             srv.retrieve(itemA1r);
             srv.retrieveMember(itemA1r.versions());
-            assertEquals("Two versions created", 2, itemA1r.versions().size());
+            assertEquals("One Final version created", 1, itemA1r.versions().size());
         }
 
-        // verify Draft created
+        // verify Draft NOT created
         {
             ItemA itemA1r = EntityFactory.create(ItemA.class);
             itemA1r.setPrimaryKey(itemA1.getPrimaryKey().asDraftKey());
 
             srv.retrieve(itemA1r);
-            assertTrue("version is not null", !itemA1r.version().isNull());
-            assertEquals("getDraft", currentName, itemA1r.version().name().getValue());
+            assertTrue("version is null", itemA1r.version().isNull());
         }
 
         // verify Version created
@@ -246,7 +247,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
             srv.retrieve(itemA1r);
             srv.retrieveMember(itemA1r.versions());
-            assertEquals("Number of versions created", 3, itemA1r.versions().size());
+            assertEquals("Number of versions created", 2, itemA1r.versions().size());
         }
     }
 
@@ -305,14 +306,13 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         srv.persist(itemA1f);
         srv.commit();
 
-        // verify Draft updated
+        // verify Draft removed
         {
             ItemA itemA1r = EntityFactory.create(ItemA.class);
             itemA1r.setPrimaryKey(itemA1.getPrimaryKey().asDraftKey());
 
             srv.retrieve(itemA1r);
-            assertTrue("version is not null", !itemA1r.version().isNull());
-            assertEquals("getDraft", draftV2Name, itemA1r.version().name().getValue());
+            assertTrue("version is null", itemA1r.version().isNull());
         }
 
         // verify Version updated
@@ -439,7 +439,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         {
             ItemB itemB1r = srv.retrieve(ItemB.class, itemB1.getPrimaryKey());
             assertEquals("correct data", origBName, itemB1r.version().name().getValue());
-            assertEquals("correct data", itemA1.getPrimaryKey(), itemB1r.version().itemAFixed().getPrimaryKey());
+            assertEquals("correct data", itemA1.getPrimaryKey().asLong(), itemB1r.version().itemAFixed().getPrimaryKey().asLong());
             assertEquals("AttachLevel", AttachLevel.Attached, itemB1r.version().itemAFixed().getAttachLevel());
             assertEquals("ref not updated", origAName, itemB1r.version().itemAFixed().version().name().getValue());
         }
@@ -449,9 +449,8 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             //Update Owned VersionedEntity,  Retrieval of itemB as draft and Finalize
             final String updateBName = "V2B1-" + uniqueString();
             {
-                ItemB itemB1r = EntityFactory.create(ItemB.class);
-                itemB1r.setPrimaryKey(itemB1.getPrimaryKey().asDraftKey());
-                srv.retrieve(itemB1r);
+                ItemB itemB1r = srv.retrieve(ItemB.class, itemB1.getPrimaryKey());
+                assertEquals("ref not updated", origAName, itemB1r.version().itemAFixed().version().name().getValue());
 
                 itemB1r.saveAction().setValue(SaveAction.saveAsFinal);
                 itemB1r.version().name().setValue(updateBName);
@@ -538,4 +537,39 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         }
     }
 
+    public void testVersionedGraphWithOneToManyPersist() {
+        testVersionedGraphWithOneToManySave(TestCaseMethod.Persist);
+    }
+
+    public void testVersionedGraphWithOneToManyMerge() {
+        testVersionedGraphWithOneToManySave(TestCaseMethod.Merge);
+    }
+
+    public void testVersionedGraphWithOneToManySave(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+        srv.startTransaction();
+
+        OwnedByVerOneToManyParent o = EntityFactory.create(OwnedByVerOneToManyParent.class);
+        o.testId().setValue(testId);
+        o.name().setValue(uniqueString());
+
+        o.version().children().add(EntityFactory.create(OwnedByVerOneToManyChild.class));
+        o.version().children().add(EntityFactory.create(OwnedByVerOneToManyChild.class));
+
+        o.version().children().get(0).testId().setValue(testId);
+        o.version().children().get(0).name().setValue(uniqueString());
+
+        o.version().children().get(1).testId().setValue(testId);
+        o.version().children().get(1).name().setValue(uniqueString());
+
+        // Save child and owner
+        srvSave(o, testCaseMethod);
+
+        // finalize, Save draft as version
+        {
+            OwnedByVerOneToManyParent o1r = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asDraftKey());
+            o1r.saveAction().setValue(SaveAction.saveAsFinal);
+            srv.persist(o1r);
+        }
+    }
 }

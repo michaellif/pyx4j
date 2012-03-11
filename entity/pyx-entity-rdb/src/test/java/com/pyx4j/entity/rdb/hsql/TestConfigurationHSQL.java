@@ -23,6 +23,8 @@ package com.pyx4j.entity.rdb.hsql;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionModern;
+import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
+import com.pyx4j.entity.rdb.dialect.ShortWords;
 
 public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.ConfigurationHSQL {
 
@@ -77,13 +79,16 @@ public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.Configuratio
 
     @Override
     public NamingConvention namingConvention() {
+        ShortWords shortWords = new ShortWords();
+        shortWords.add("TEST", "T");
+
         //TODO testDiferentNamingConvention
         boolean testDiferentNamingConvention = false;
         if (testDiferentNamingConvention) {
             return new NamingConventionModern(64, "_");
         } else {
-            // Use default
-            return null;
+            return new NamingConventionOracle(64, shortWords);
         }
     }
+
 }

@@ -59,8 +59,8 @@ public class TableModleVersioned {
         }
         TableModel tm = mappings.getTableModel(persistenceContext.getConnection(), targetEntityClass);
         List<Key> keys = tm.queryKeys(persistenceContext, criteria, 1);
-
         IVersionData<?> memeberEntity = (IVersionData<?>) member.getMember(entity);
+
         if (keys.isEmpty()) {
             memeberEntity.set(null);
         } else {
@@ -106,7 +106,10 @@ public class TableModleVersioned {
             memeberEntity.versionNumber().setValue(null);
 
             if (existingDraft != null) {
-                memeberEntity.setPrimaryKey(existingDraft.getPrimaryKey());
+                if (!memeberEntity.getPrimaryKey().equals(existingDraft.getPrimaryKey())) {
+                    throw new Error("Attempt to override draft " + existingDraft.getDebugExceptionInfoString() + " with other data "
+                            + memeberEntity.getDebugExceptionInfoString());
+                }
             } else {
                 memeberEntity.setPrimaryKey(null);
             }
@@ -115,8 +118,17 @@ public class TableModleVersioned {
             update.add(memeberEntity);
 
         } else {
-            // Finalize creates new IVersionData every time.
-            memeberEntity.setPrimaryKey(null);
+            // Finalize do not creates new IVersionData from draft.
+            if (existingDraft != null) {
+                if (!memeberEntity.getPrimaryKey().equals(existingDraft.getPrimaryKey())) {
+                    memeberEntity = EntityGraph.businessDuplicate(memeberEntity);
+                    memeberEntity.setPrimaryKey(null);
+                }
+            } else {
+                // TODO optimize new item creation if no data changed; for now Finalize create new data anyway, 
+                memeberEntity = EntityGraph.businessDuplicate(memeberEntity);
+                memeberEntity.setPrimaryKey(null);
+            }
             memeberEntity.fromDate().setValue(persistenceContext.getTimeNow());
             memeberEntity.toDate().setValue(null);
 
@@ -138,28 +150,9 @@ public class TableModleVersioned {
 
                 memeberEntity.versionNumber().setValue(memeberEntityExisting.versionNumber().getValue() + 1);
 
-                // Create new draft on Finalize
-                IVersionData<IVersionedEntity<?>> newDraft = EntityGraph.businessDuplicate(memeberEntity);
-                newDraft.fromDate().setValue(null);
-                newDraft.toDate().setValue(null);
-                newDraft.versionNumber().setValue(null);
-                if (existingDraft != null) {
-                    newDraft.setPrimaryKey(existingDraft.getPrimaryKey());
-                }
-                update.add(newDraft);
-
             } else {
                 // Initial item creation
                 memeberEntity.versionNumber().setValue(0);
-                // Create new draft on Finalize
-                IVersionData<IVersionedEntity<?>> newDraft = EntityGraph.businessDuplicate(memeberEntity);
-                if (existingDraft != null) {
-                    newDraft.setPrimaryKey(existingDraft.getPrimaryKey());
-                }
-                newDraft.fromDate().setValue(null);
-                newDraft.toDate().setValue(null);
-                newDraft.versionNumber().setValue(null);
-                update.add(newDraft);
             }
         }
 
