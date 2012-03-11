@@ -64,18 +64,18 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     private E origEntity;
 
-    private final HashMap<CComponent<?, ?>, Path> binding;
+    // Bidirectional map CComponent to Path
+    private final Map<Path, CComponent<?, ?>> components = new HashMap<Path, CComponent<?, ?>>();
+
+    private final Map<CComponent<?, ?>, Path> binding = new HashMap<CComponent<?, ?>, Path>();
 
     public CEntityEditor(Class<E> clazz) {
         this(clazz, new EntityFormComponentFactory());
     }
 
     public CEntityEditor(Class<E> clazz, IEditableComponentFactory factory) {
-        binding = new HashMap<CComponent<?, ?>, Path>();
         this.entityPrototype = EntityFactory.getEntityPrototype(clazz);
-
         this.factory = factory;
-
         setDebugIdSuffix(new StringDebugId(GWTJava5Helper.getSimpleName(clazz)));
     }
 
@@ -120,29 +120,27 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     @SuppressWarnings("rawtypes")
     private <T> CComponent getRaw(IObject<T> member) {
-        Path memberPath = member.getPath();
-        for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
-            if (me.getValue().equals(memberPath)) {
-                return me.getKey();
-            }
+        CComponent component = components.get(member.getPath());
+        if (component == null) {
+            throw new IndexOutOfBoundsException("Member " + member.getFieldName() + " is not bound");
+        } else {
+            return component;
         }
-        throw new IndexOutOfBoundsException("Member " + member.getFieldName() + " is not bound");
     }
 
     public boolean contains(IObject<?> member) {
-        Path memberPath = member.getPath();
-        for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
-            if (me.getValue().equals(memberPath)) {
-                return true;
-            }
-        }
-        return false;
+        return components.containsKey(member.getPath());
     }
 
     public void bind(CComponent<?, ?> component, IObject<?> member) {
         // verify that member actually exists in entity.
         assert (proto().getMember(member.getPath()) != null);
+        CComponent<?, ?> alreadyBound = components.get(member.getPath());
+        if (alreadyBound != null) {
+            throw new Error("Path '" + member.getPath() + "' already bound");
+        }
         binding.put(component, member.getPath());
+        components.put(member.getPath(), component);
         adopt(component);
     }
 
