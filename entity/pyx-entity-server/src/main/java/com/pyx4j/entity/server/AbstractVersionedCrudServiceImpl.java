@@ -25,6 +25,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntity<?>> extends AbstractCrudServiceImpl<E> implements
@@ -51,7 +52,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
     @Override
     public void finalize(AsyncCallback<VoidSerializable> callback, Key entityId) {
         E entity = Persistence.secureRetrieve(entityClass, entityId.asDraftKey());
-        entity.setPrimaryKey(entityId.asCurrentKey());
+        entity.saveAction().setValue(SaveAction.saveAsFinal);
         persist(entity);
         Persistence.service().commit();
         callback.onSuccess(null);
