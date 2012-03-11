@@ -17,9 +17,11 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.property.asset.building.Building;
+
 public class LatePaymentUtils {
 
-    public static BigDecimal latePayment(BigDecimal amount, LogicalDate dueDate, LogicalDate receivedDate) {
+    public static BigDecimal latePayment(BigDecimal amount, LogicalDate dueDate, LogicalDate receivedDate, Building building) {
         //TODO YS to get detailes of types and rules for late payment fee
         return amount.multiply(new BigDecimal("0.05"));
     }
