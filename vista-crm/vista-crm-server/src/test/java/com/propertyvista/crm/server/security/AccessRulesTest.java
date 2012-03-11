@@ -32,6 +32,7 @@ import com.propertyvista.domain.security.CrmUserBuildings;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AccessRulesTest extends VistaDBTestBase {
 
@@ -56,17 +57,27 @@ public class AccessRulesTest extends VistaDBTestBase {
         t1.person().name().firstName().setValue(setId);
         Persistence.service().persist(t1);
 
-        Tenant t2 = EntityFactory.create(Tenant.class);
-        t2.person().name().firstName().setValue(setId);
-        Persistence.service().persist(t2);
-        t2._tenantInLease().add(t2._tenantInLease().$());
+        // Tenant with Lease but no Unit
+        {
+            Tenant t2 = EntityFactory.create(Tenant.class);
+            t2.person().name().firstName().setValue(setId);
+            Persistence.service().persist(t2);
+
+            Lease lease = EntityFactory.create(Lease.class);
+            Persistence.service().persist(lease);
+
+            TenantInLease tl2 = EntityFactory.create(TenantInLease.class);
+            tl2.lease().set(lease);
+            tl2.tenant().set(t2);
+            Persistence.service().persist(tl2);
+        }
 
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().person().name().firstName(), setId));
         new TenantDatasetAccessRule().applyRule(criteria);
 
         List<Tenant> r = Persistence.service().query(criteria);
-        Assert.assertEquals("result set size", 2, r.size());
+        Assert.assertEquals("result set size", 1, r.size());
     }
 
     public void testTenantDatasetExistingEntityAccess() {
