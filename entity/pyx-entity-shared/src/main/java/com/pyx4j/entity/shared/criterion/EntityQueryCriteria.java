@@ -78,6 +78,11 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
     }
 
+    // for Versioned Enity
+    // OnlyFinalized,
+    // FinalizedOrDraft
+    // 
+
     protected EntityQueryCriteria() {
 
     }
