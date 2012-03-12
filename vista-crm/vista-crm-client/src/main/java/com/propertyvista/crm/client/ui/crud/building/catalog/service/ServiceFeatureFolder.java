@@ -91,8 +91,8 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
             return Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().type()).build(),
                     new MemberColumnDescriptor.Builder(proto().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().isMandatory()).build(),
-                    new MemberColumnDescriptor.Builder(proto().isRecurring()).build()
+                    new MemberColumnDescriptor.Builder(proto().mandatory()).build(),
+                    new MemberColumnDescriptor.Builder(proto().recurring()).build()
             );//@formatter:on
         }
 

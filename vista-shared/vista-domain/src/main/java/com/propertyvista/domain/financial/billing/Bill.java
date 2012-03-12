@@ -153,7 +153,7 @@ public interface Bill extends IEntity {
 
     /**
      * 
-     * It includes all feature/service adjustments as well as Product Item adjustments
+     * It includes all feature/service adjustments as well as lease adjustments
      * 
      */
     IPrimitive<BigDecimal> totalAdjustments();

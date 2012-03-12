@@ -28,8 +28,8 @@ public class FeatureLister extends ListerBase<Feature> {
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().type(), true).build(),
             new MemberColumnDescriptor.Builder(proto().name(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().isMandatory(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().isRecurring(), true).build()
+            new MemberColumnDescriptor.Builder(proto().mandatory(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().recurring(), true).build()
         );//@formatter:on
     }
 }

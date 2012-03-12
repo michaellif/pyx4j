@@ -44,7 +44,7 @@ public class BillingUtils {
     }
 
     public static boolean isRecurringFeature(Product product) {
-        return isFeature(product) && ((Feature) product.cast()).isRecurring().getValue();
+        return isFeature(product) && ((Feature) product.cast()).recurring().getValue();
     }
 
     public static BillCharge getServiceCharge(IList<BillCharge> charges) {

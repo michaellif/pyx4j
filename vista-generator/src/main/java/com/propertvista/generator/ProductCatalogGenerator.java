@@ -179,8 +179,8 @@ public class ProductCatalogGenerator {
 
         item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
-        item.isRecurring().setValue(RandomUtil.randomBoolean());
-        item.isMandatory().setValue(RandomUtil.randomBoolean());
+        item.recurring().setValue(RandomUtil.randomBoolean());
+        item.mandatory().setValue(RandomUtil.randomBoolean());
 
         item.items().addAll(createFeatureItems(type));
 

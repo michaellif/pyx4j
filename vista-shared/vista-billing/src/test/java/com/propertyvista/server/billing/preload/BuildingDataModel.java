@@ -166,7 +166,7 @@ public class BuildingDataModel {
 
         switch (feature.type().getValue()) {
         case parking:
-            feature.isRecurring().setValue(true);
+            feature.recurring().setValue(true);
             for (Parking parking : building._Parkings()) {
                 for (ProductItemType productItemType : featureMeta.get(Feature.Type.parking)) {
                     generateParkingFeatureItem(feature, parking, productItemType);
@@ -174,7 +174,7 @@ public class BuildingDataModel {
             }
             break;
         case locker:
-            feature.isRecurring().setValue(true);
+            feature.recurring().setValue(true);
             for (LockerArea lockerArea : building._LockerAreas()) {
                 for (ProductItemType productItemType : featureMeta.get(Feature.Type.locker)) {
                     generateLockerAreaFeatureItem(feature, lockerArea, productItemType);
@@ -182,13 +182,13 @@ public class BuildingDataModel {
             }
             break;
         case pet:
-            feature.isRecurring().setValue(true);
+            feature.recurring().setValue(true);
             for (ProductItemType productItemType : featureMeta.get(Feature.Type.pet)) {
                 generatePetFeatureItem(feature, productItemType);
             }
             break;
         case addOn:
-            feature.isRecurring().setValue(false);
+            feature.recurring().setValue(false);
             for (ProductItemType productItemType : featureMeta.get(Feature.Type.addOn)) {
                 generateAddOnFeatureItem(feature, productItemType);
             }

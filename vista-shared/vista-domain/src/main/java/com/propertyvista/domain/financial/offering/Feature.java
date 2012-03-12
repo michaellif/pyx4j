@@ -67,7 +67,7 @@ public interface Feature extends Product {
     @MemberColumn(name = "featureType")
     IPrimitive<Type> type();
 
-    IPrimitive<Boolean> isRecurring();
+    IPrimitive<Boolean> recurring();
 
-    IPrimitive<Boolean> isMandatory();
+    IPrimitive<Boolean> mandatory();
 }
