@@ -105,7 +105,7 @@ public class LeaseLifecycleSim {
     public Lease complete(Key leaseId, final LogicalDate completetionDay) {
         Lease lease = leaseManager(completetionDay).complete(leaseId);
 
-        AptUnitOccupancyManagerImpl.get(leaseId, new NowSource() {
+        AptUnitOccupancyManagerImpl.get(lease.unit().getPrimaryKey(), new NowSource() {
             @Override
             public LogicalDate getNow() {
 

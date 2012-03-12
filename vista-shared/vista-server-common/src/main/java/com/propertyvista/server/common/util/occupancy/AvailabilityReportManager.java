@@ -165,6 +165,8 @@ public class AvailabilityReportManager {
         status.rentedStatus().setValue(RentedStatus.Rented);
         status.rentedFromDay().setValue(current.lease().leaseFrom().getValue());
         status.moveInDay().setValue(current.lease().expectedMoveIn().getValue());
+
+        // TODO there might be lease in the future....
     }
 
     private void leased(UnitAvailabilityStatus status, AptUnitOccupancySegment current, List<AptUnitOccupancySegment> future) {

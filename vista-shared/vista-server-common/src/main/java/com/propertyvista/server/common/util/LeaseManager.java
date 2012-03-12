@@ -56,6 +56,7 @@ public class LeaseManager {
 
             // check if unit reservation has changed
             Persistence.service().retrieve(oldLease.unit());
+            Persistence.service().retrieve(lease.unit());
             if (!EqualsHelper.equals(oldLease.unit().id().getValue(), lease.unit().id().getValue())) {
                 isUnitChanged = true;
                 // old lease has unit: o
