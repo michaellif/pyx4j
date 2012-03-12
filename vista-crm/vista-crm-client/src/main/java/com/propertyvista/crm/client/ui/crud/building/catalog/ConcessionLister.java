@@ -30,6 +30,7 @@ public class ConcessionLister extends ListerBase<Concession> {
         getDataTablePanel().setFilteringEnabled(!readOnly);
 
         setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
             new MemberColumnDescriptor.Builder(proto().version().type()).build(),
             new MemberColumnDescriptor.Builder(proto().version().term()).build(),
             new MemberColumnDescriptor.Builder(proto().version().value()).build(), new MemberColumnDescriptor.Builder(proto().version().condition()).build(),
