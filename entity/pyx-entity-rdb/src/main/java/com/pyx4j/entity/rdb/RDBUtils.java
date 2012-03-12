@@ -37,6 +37,7 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.dialect.MySQLDialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -120,10 +121,27 @@ public class RDBUtils implements Closeable {
     }
 
     public static void dropAllEntityTables() {
+        long start = System.currentTimeMillis();
+        RDBUtils utils = new RDBUtils();
+        try {
+            if (utils.connectionProvider.getDialect() instanceof MySQLDialect) {
+                Configuration cfg = getRDBConfiguration();
+                try {
+                    utils.execute("DROP DATABASE " + cfg.dbName());
+                    utils.execute("CREATE DATABASE " + cfg.dbName() + "  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
+                } catch (SQLException e) {
+                    throw new Error(e);
+                }
+                log.info("Database '{}' recreated in {}", cfg.dbName(), TimeUtils.secSince(start));
+                return;
+            }
+        } finally {
+            utils.close();
+        }
+
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         int countTotal = 0;
-        long start = System.currentTimeMillis();
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
