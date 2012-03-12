@@ -27,7 +27,7 @@ public class PolicyRetrieveServiceImpl implements PolicyRetrieveService {
     @SuppressWarnings("unchecked")
     @Override
     public void obtainEffectivePolicy(AsyncCallback<Policy> callback, PolicyNode node, IEntity policyClass) {
-        callback.onSuccess(PolicyManager.effectivePolicy(node, (Class<Policy>) policyClass.getValueClass()));
+        callback.onSuccess(PolicyManager.obtainEffectivePolicy(node, (Class<Policy>) policyClass.getValueClass()));
     }
 
 }

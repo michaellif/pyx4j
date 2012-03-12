@@ -20,13 +20,12 @@ import com.pyx4j.commons.LogicalDate;
 
 public class BillingTestUtils {
 
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
-
     public static LogicalDate getDate(String date) {
         if (date == null) {
             return null;
         }
         try {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
             return new LogicalDate(formatter.parse(date));
         } catch (ParseException e) {
             throw new Error(e);

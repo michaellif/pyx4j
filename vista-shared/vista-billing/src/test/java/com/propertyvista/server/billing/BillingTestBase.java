@@ -45,8 +45,8 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ActionType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.billing.preload.BuildingDataModel;
 import com.propertyvista.server.billing.preload.LeaseDataModel;
@@ -235,19 +235,19 @@ abstract class BillingTestBase extends VistaDBTestBase {
         return null;
     }
 
-    protected BillableItemAdjustment addBillableItemAdjustment(BillableItem billableItem, String value, AdjustmentType adjustmentType, TermType termType) {
+    protected BillableItemAdjustment addBillableItemAdjustment(BillableItem billableItem, String value, AdjustmentType adjustmentType, ActionType termType) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         return addBillableItemAdjustment(billableItem, value, adjustmentType, termType, lease.leaseFrom().getValue(), lease.leaseTo().getValue());
 
     }
 
-    protected BillableItemAdjustment addBillableItemAdjustment(BillableItem billableItem, String value, AdjustmentType adjustmentType, TermType termType,
+    protected BillableItemAdjustment addBillableItemAdjustment(BillableItem billableItem, String value, AdjustmentType adjustmentType, ActionType termType,
             String effectiveDate, String expirationDate) {
         return addBillableItemAdjustment(billableItem, value, adjustmentType, termType, BillingTestUtils.getDate(effectiveDate),
                 BillingTestUtils.getDate(expirationDate));
     }
 
-    private BillableItemAdjustment addBillableItemAdjustment(BillableItem billableItem, String value, AdjustmentType adjustmentType, TermType termType,
+    private BillableItemAdjustment addBillableItemAdjustment(BillableItem billableItem, String value, AdjustmentType adjustmentType, ActionType actionType,
             LogicalDate effectiveDate, LogicalDate expirationDate) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
 
@@ -259,7 +259,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
             adjustment.value().setValue(new BigDecimal(value));
         }
         adjustment.adjustmentType().setValue(adjustmentType);
-        adjustment.termType().setValue(termType);
+        adjustment.actionType().setValue(actionType);
         adjustment.effectiveDate().setValue(effectiveDate);
         adjustment.expirationDate().setValue(expirationDate);
         billableItem.adjustments().add(adjustment);

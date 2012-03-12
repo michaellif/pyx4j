@@ -28,7 +28,7 @@ import com.propertyvista.server.common.policy.PolicyManager;
 public class LegalStuffUtils {
 
     public static LeaseTermsPolicy retrieveLegalTermsPolicy() {
-        LeaseTermsPolicy termsPolicy = (LeaseTermsPolicy) PolicyManager.effectivePolicy(PtAppContext.getCurrentUserLease().unit(), LeaseTermsPolicy.class);
+        LeaseTermsPolicy termsPolicy = (LeaseTermsPolicy) PolicyManager.obtainEffectivePolicy(PtAppContext.getCurrentUserLease().unit(), LeaseTermsPolicy.class);
         if (termsPolicy == null) {
             throw new Error("There is no Legal Policy!?.");
         }

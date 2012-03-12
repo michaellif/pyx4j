@@ -137,7 +137,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             tenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }
 
-        MiscPolicy miscPolicy = PolicyManager.effectivePolicy(lease.unit(), MiscPolicy.class);
+        MiscPolicy miscPolicy = PolicyManager.obtainEffectivePolicy(lease.unit(), MiscPolicy.class);
         if (miscPolicy == null) {
             throw new Error("There is no MiscPolicy for the Unit!?.");
         }

@@ -135,14 +135,12 @@ public interface Bill extends IEntity {
      */
     IPrimitive<BigDecimal> paymentReceivedAmount();
 
-    IPrimitive<BigDecimal> latePaymentReceivedAmount();
-
     IPrimitive<BigDecimal> depositRefundAmount();
 
     IPrimitive<BigDecimal> immediateAdjustments();
 
     /**
-     * pastDueAmount = previousBalanceAmount - paymentReceivedAmount - latePaymentReceivedAmount -depositRefundAmount -
+     * pastDueAmount = previousBalanceAmount - paymentReceivedAmount - depositRefundAmount -
      * immediateAdjustments
      */
     IPrimitive<BigDecimal> pastDueAmount();

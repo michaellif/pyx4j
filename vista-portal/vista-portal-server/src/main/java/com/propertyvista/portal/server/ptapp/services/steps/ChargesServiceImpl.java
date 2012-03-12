@@ -80,7 +80,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.tenants());
         }
 
-        MiscPolicy miscPolicy = PolicyManager.effectivePolicy(lease.unit(), MiscPolicy.class);
+        MiscPolicy miscPolicy = PolicyManager.obtainEffectivePolicy(lease.unit(), MiscPolicy.class);
         if (miscPolicy == null) {
             throw new Error("There is no MiscPolicy for the Unit!?.");
         }

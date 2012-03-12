@@ -74,7 +74,7 @@ public class TaxUtils {
 
     private static List<Tax> retrieveTaxes(ProductItemType productItemType, Building building) {
 
-        ProductTaxPolicy productTaxPolicy = PolicyManager.effectivePolicy(building, ProductTaxPolicy.class);
+        ProductTaxPolicy productTaxPolicy = PolicyManager.obtainEffectivePolicy(building, ProductTaxPolicy.class);
 
         ProductTaxPolicyItem productTaxPolicyItem = null;
         {

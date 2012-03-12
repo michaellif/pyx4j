@@ -15,15 +15,12 @@ package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import junit.framework.TestCase;
 
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class ProrationTest extends TestCase {
-
-    SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
 
     public void testProration() throws ParseException {
 

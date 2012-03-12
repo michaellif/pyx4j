@@ -96,7 +96,7 @@ public class PolicyManager {
      *            not <code>null</code>.
      * @return policy at the requested organization policies hierarchy node or <code>null</code>.
      */
-    public static <POLICY extends Policy> POLICY effectivePolicy(final PolicyNode node, final Class<POLICY> policyClass) {
+    public static <POLICY extends Policy> POLICY obtainEffectivePolicy(final PolicyNode node, final Class<POLICY> policyClass) {
         POLICY policy = null;
 
         if (node == null || node.isNull()) {

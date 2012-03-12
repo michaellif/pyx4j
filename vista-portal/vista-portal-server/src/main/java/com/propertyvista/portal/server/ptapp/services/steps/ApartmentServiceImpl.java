@@ -168,7 +168,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         aptInfo.unitRent().setValue(lease.leaseProducts().serviceItem().item().price().getValue());
 
         // policy limits:
-        MiscPolicy miscPolicy = PolicyManager.effectivePolicy(lease.unit(), MiscPolicy.class);
+        MiscPolicy miscPolicy = PolicyManager.obtainEffectivePolicy(lease.unit(), MiscPolicy.class);
         if (miscPolicy == null) {
             throw new Error("There is no MiscPolicy for the Unit!?.");
         }

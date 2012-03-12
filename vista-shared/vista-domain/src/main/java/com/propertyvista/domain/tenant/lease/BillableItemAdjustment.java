@@ -67,9 +67,9 @@ public interface BillableItemAdjustment extends IEntity {
      * 
      */
     @I18n
-    @XmlType(name = "TermType")
-    enum TermType {
-        postLease, inLease, oneTime;
+    @XmlType(name = "ActionType")
+    enum ActionType {
+        postLease, inLease, oneTime, immediate;
 
         @Override
         public String toString() {
@@ -102,7 +102,7 @@ public interface BillableItemAdjustment extends IEntity {
     IPrimitive<ChargeType> chargeType();
 
     @NotNull
-    IPrimitive<TermType> termType();
+    IPrimitive<ActionType> actionType();
 
     IPrimitive<String> description();
 

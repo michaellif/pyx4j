@@ -39,7 +39,7 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
         }
 
         @SuppressWarnings("unchecked")
-        Policy policy = PolicyManager.effectivePolicy(node, (Class<? extends Policy>) policyProto.getInstanceValueClass());
+        Policy policy = PolicyManager.obtainEffectivePolicy(node, (Class<? extends Policy>) policyProto.getInstanceValueClass());
         if (policy != null) {
             callback.onSuccess(policy);
         } else {

@@ -20,22 +20,61 @@
  */
 package com.propertyvista.server.billing;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
+import com.propertyvista.domain.financial.billing.BillCharge;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.Service;
 
 public class BillingUtils {
 
-    static boolean isService(Product product) {
+    public static boolean isService(Product product) {
         return product.cast().isAssignableFrom(Service.class);
     }
 
-    static boolean isFeature(Product product) {
+    public static boolean isFeature(Product product) {
         return product.cast().isAssignableFrom(Feature.class);
     }
 
-    static boolean isRecurringFeature(Product product) {
+    public static boolean isRecurringFeature(Product product) {
         return isFeature(product) && ((Feature) product.cast()).isRecurring().getValue();
     }
 
+    public static BillCharge getServiceCharge(IList<BillCharge> charges) {
+        if (false) {
+            EntityQueryCriteria<BillCharge> criteria = EntityQueryCriteria.create(BillCharge.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().billableItem().item().product(), Service.class));
+            BillCharge billCharge = Persistence.service().retrieve(criteria);
+        }
+
+        for (BillCharge charge : charges) {
+            if (charge.billableItem().item().product().isValueDetached()) {
+                Persistence.service().retrieve(charge.billableItem().item().product());
+            }
+            if (isService(charge.billableItem().item().product())) {
+                return charge;
+            }
+        }
+        return null;
+    }
+
+    public static List<BillCharge> getFeatureCharges(IList<BillCharge> charges) {
+        List<BillCharge> featureCharges = new ArrayList<BillCharge>();
+        for (BillCharge charge : charges) {
+            if (charge.billableItem().item().product().isValueDetached()) {
+                Persistence.service().retrieve(charge.billableItem().item().product());
+            }
+            if (isFeature(charge.billableItem().item().product())) {
+                featureCharges.add(charge);
+            }
+        }
+        return featureCharges;
+    }
 }

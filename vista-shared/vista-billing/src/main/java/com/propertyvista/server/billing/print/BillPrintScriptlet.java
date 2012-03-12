@@ -22,9 +22,8 @@ import com.pyx4j.commons.LogicalDate;
 
 public class BillPrintScriptlet extends JRDefaultScriptlet {
 
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
-
     public String formatDate(LogicalDate date) throws JRScriptletException {
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
         return formatter.format(date);
     }
 

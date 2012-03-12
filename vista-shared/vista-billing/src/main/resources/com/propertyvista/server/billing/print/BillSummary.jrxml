@@ -273,7 +273,7 @@
 				<textElement markup="none">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Any payments we received and processed after" + $P{REPORT_SCRIPTLET}.formatDate($F{billingRun}.executionDate().getValue()) + " will show on your next bill"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Any payments we received and processed after" + $P{REPORT_SCRIPTLET}.formatDate($F{billingRun}.executionDate().getValue()) + " will appear on your next bill"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

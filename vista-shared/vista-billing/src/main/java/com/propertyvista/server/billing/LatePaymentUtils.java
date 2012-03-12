@@ -14,14 +14,16 @@
 package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.financial.billing.BillPayment;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class LatePaymentUtils {
 
-    public static BigDecimal latePayment(BigDecimal amount, LogicalDate dueDate, LogicalDate receivedDate, Building building) {
+    public static BigDecimal latePayment(BigDecimal amount, LogicalDate dueDate, List<BillPayment> latePayments, Building building) {
         //TODO YS to get detailes of types and rules for late payment fee
         return amount.multiply(new BigDecimal("0.05"));
     }

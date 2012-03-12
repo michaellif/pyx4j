@@ -65,9 +65,9 @@ public class MessageTemplates {
      * @param building
      * @return
      */
-    public static EmailTemplate getEmailTemplate(EmailTemplateType type, PolicyNode node) {
 
-        EmailTemplatesPolicy policy = PolicyManager.effectivePolicy(node, EmailTemplatesPolicy.class).duplicate();
+    public static EmailTemplate getEmailTemplate(EmailTemplateType type, PolicyNode policyNode) {
+        EmailTemplatesPolicy policy = PolicyManager.obtainEffectivePolicy(policyNode, EmailTemplatesPolicy.class).duplicate();
         if (policy == null) {
             return null;
         } else {

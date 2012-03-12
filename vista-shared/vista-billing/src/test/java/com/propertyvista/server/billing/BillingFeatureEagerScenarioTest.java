@@ -23,7 +23,7 @@ package com.propertyvista.server.billing;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.TermType;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ActionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingFeatureEagerScenarioTest extends BillingTestBase {
@@ -33,16 +33,16 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         setLeaseConditions("23-Mar-2011", "3-Aug-2011", 1);
 
         BillableItem parking1 = addParking();
-        addBillableItemAdjustment(parking1, "-10", AdjustmentType.monetary, TermType.inLease);
+        addBillableItemAdjustment(parking1, "-10", AdjustmentType.monetary, ActionType.inLease);
 
         BillableItem parking2 = addParking("23-Apr-2011", null);
-        addBillableItemAdjustment(parking2, "-10", AdjustmentType.monetary, TermType.inLease);
+        addBillableItemAdjustment(parking2, "-10", AdjustmentType.monetary, ActionType.inLease);
 
         BillableItem locker1 = addLocker();
-        addBillableItemAdjustment(locker1, "-0.2", AdjustmentType.percentage, TermType.inLease);
+        addBillableItemAdjustment(locker1, "-0.2", AdjustmentType.percentage, ActionType.inLease);
 
         BillableItem pet1 = addPet();
-        addBillableItemAdjustment(pet1, "-1", AdjustmentType.percentage, TermType.inLease);
+        addBillableItemAdjustment(pet1, "-1", AdjustmentType.percentage, ActionType.inLease);
 
         //==================== RUN 1 ======================//
 
