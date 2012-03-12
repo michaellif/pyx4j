@@ -221,8 +221,8 @@ abstract class BillingTestBase extends VistaDBTestBase {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
 
         ProductItem serviceItem = leaseDataModel.getServiceItem();
-        Service service = serviceItem.product().cast();
-        for (Feature feature : service.version().features()) {
+        Service.ServiceV service = serviceItem.product().cast();
+        for (Feature feature : service.features()) {
             if (featureType.equals(feature.version().type().getValue()) && feature.version().items().size() != 0) {
                 BillableItem billableItem = EntityFactory.create(BillableItem.class);
                 billableItem.item().set(feature.version().items().get(0));
