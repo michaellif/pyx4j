@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bill1" pageWidth="400" pageHeight="842" columnWidth="380" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="0" scriptletClass="com.propertyvista.server.billing.print.BillPrintScriptlet">
 	<property name="ireport.zoom" value="1.7715610000000057"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="144"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
 	<field name="pastDueAmount" class="java.math.BigDecimal"/>
 	<field name="totalDueAmount" class="java.math.BigDecimal"/>
@@ -67,7 +67,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{paymentReceivedAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{serviceCharge}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="87" y="8" width="194" height="20"/>
@@ -96,8 +96,8 @@
 			<printWhenExpression><![CDATA[$F{billPayments}.size()>0]]></printWhenExpression>
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{billPayments})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillPayment")]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($P{REPORT_SCRIPTLET}.getFeatureRecurringCharges($F{charges}))]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillCharge")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="33">
@@ -107,7 +107,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{paymentReceivedAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{recurringFeatureCharges}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="87" y="8" width="194" height="20"/>
@@ -136,8 +136,8 @@
 			<printWhenExpression><![CDATA[$F{billPayments}.size()>0]]></printWhenExpression>
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{billPayments})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillPayment")]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($P{REPORT_SCRIPTLET}.getFeatureOneTimeCharges($F{charges}))]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillCharge")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="33">
@@ -147,7 +147,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{paymentReceivedAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{oneTimeFeatureCharges}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="87" y="8" width="194" height="20"/>

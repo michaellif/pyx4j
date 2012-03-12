@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial.billing;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
@@ -50,6 +51,12 @@ public interface BillEntry extends IEntity {
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> taxTotal();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> fromDate();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> toDate();
 
     IPrimitive<Period> period();
 

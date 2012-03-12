@@ -15,7 +15,6 @@ package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -137,16 +136,18 @@ public class ChargeProcessor {
         charge.bill().set(billing.getNextPeriodBill());
         charge.billableItem().set(billableItem);
         charge.period().setValue(period);
+        charge.fromDate().setValue(overlap.getFromDate());
+        charge.toDate().setValue(overlap.getToDate());
 
-        prorate(charge, overlap.getFromDate(), overlap.getToDate());
+        prorate(charge);
         calculateTax(charge);
 
         return charge;
     }
 
-    private void prorate(BillCharge charge, LogicalDate fromDate, LogicalDate toDate) {
+    private void prorate(BillCharge charge) {
         //TODO use policy to determin proration type
-        BigDecimal proration = ProrationUtils.prorate(fromDate, toDate, LeaseFinancial.ProrationMethod.Actual);
+        BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), LeaseFinancial.ProrationMethod.Actual);
         charge.amount().setValue(charge.billableItem().item().price().getValue().multiply(proration));
     }
 

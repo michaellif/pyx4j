@@ -78,6 +78,9 @@ public class ChargeAdjustmentProcessor {
                 return;
             }
 
+            adjustment.fromDate().setValue(overlap.getFromDate());
+            adjustment.toDate().setValue(overlap.getToDate());
+
             //TODO use policy to determin proration type
             BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), LeaseFinancial.ProrationMethod.Actual);
             adjustment.amount().setValue(amount.multiply(proration));

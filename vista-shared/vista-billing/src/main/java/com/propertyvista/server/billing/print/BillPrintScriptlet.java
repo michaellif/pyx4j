@@ -14,19 +14,17 @@
 package com.propertyvista.server.billing.print;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRDefaultScriptlet;
 import net.sf.jasperreports.engine.JRScriptletException;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.billing.BillCharge;
-import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.server.billing.BillingUtils;
 
 public class BillPrintScriptlet extends JRDefaultScriptlet {
 
@@ -35,11 +33,39 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         return formatter.format(date);
     }
 
+    public String formatDay(LogicalDate date) throws JRScriptletException {
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
+        return formatter.format(date);
+    }
+
     public static List<BillCharge> getServiceCharges(IList<BillCharge> charges) {
-        EntityQueryCriteria<BillCharge> criteria = EntityQueryCriteria.create(BillCharge.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billableItem().item().product(), Service.class));
-        List<BillCharge> serviceCharges = Persistence.service().query(criteria);
-        return serviceCharges;
+        List<BillCharge> featureCharges = new ArrayList<BillCharge>();
+        for (BillCharge charge : charges) {
+            if (BillingUtils.isService(charge.billableItem().item().product())) {
+                featureCharges.add(charge);
+            }
+        }
+        return featureCharges;
+    }
+
+    public static List<BillCharge> getFeatureRecurringCharges(IList<BillCharge> charges) {
+        List<BillCharge> featureCharges = new ArrayList<BillCharge>();
+        for (BillCharge charge : charges) {
+            if (BillingUtils.isRecurringFeature(charge.billableItem().item().product())) {
+                featureCharges.add(charge);
+            }
+        }
+        return featureCharges;
+    }
+
+    public static List<BillCharge> getFeatureOneTimeCharges(IList<BillCharge> charges) {
+        List<BillCharge> featureCharges = new ArrayList<BillCharge>();
+        for (BillCharge charge : charges) {
+            if (BillingUtils.isOneTimeFeature(charge.billableItem().item().product())) {
+                featureCharges.add(charge);
+            }
+        }
+        return featureCharges;
     }
 
 }

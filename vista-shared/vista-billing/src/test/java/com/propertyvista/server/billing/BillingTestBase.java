@@ -38,6 +38,7 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillCharge;
 import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Feature.Type;
@@ -118,6 +119,9 @@ abstract class BillingTestBase extends VistaDBTestBase {
         Persistence.service().commit();
 
         Persistence.service().retrieve(bill.charges());
+        for (BillCharge billCharge : bill.charges()) {
+            Persistence.service().retrieve(billCharge.billableItem().item().product());
+        }
         Persistence.service().retrieve(bill.chargeAdjustments());
         Persistence.service().retrieve(bill.leaseAdjustments());
 

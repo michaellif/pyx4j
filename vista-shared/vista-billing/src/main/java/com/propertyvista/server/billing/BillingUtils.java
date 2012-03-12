@@ -20,15 +20,6 @@
  */
 package com.propertyvista.server.billing;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-
-import com.propertyvista.domain.financial.billing.BillCharge;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.Service;
@@ -47,25 +38,8 @@ public class BillingUtils {
         return isFeature(product) && ((Feature) product.cast()).recurring().getValue();
     }
 
-    public static List<BillCharge> getServiceCharges(IList<BillCharge> charges) {
-        EntityQueryCriteria<BillCharge> criteria = EntityQueryCriteria.create(BillCharge.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billableItem().item().product(), Service.class));
-        BillCharge billCharge = Persistence.service().retrieve(criteria);
-        List<BillCharge> serviceCharges = new ArrayList<BillCharge>();
-        serviceCharges.add(billCharge);
-        return serviceCharges;
+    public static boolean isOneTimeFeature(Product product) {
+        return isFeature(product) && !((Feature) product.cast()).recurring().getValue();
     }
 
-    public static List<BillCharge> getFeatureCharges(IList<BillCharge> charges) {
-        List<BillCharge> featureCharges = new ArrayList<BillCharge>();
-        for (BillCharge charge : charges) {
-            if (charge.billableItem().item().product().isValueDetached()) {
-                Persistence.service().retrieve(charge.billableItem().item().product());
-            }
-            if (isFeature(charge.billableItem().item().product())) {
-                featureCharges.add(charge);
-            }
-        }
-        return featureCharges;
-    }
 }

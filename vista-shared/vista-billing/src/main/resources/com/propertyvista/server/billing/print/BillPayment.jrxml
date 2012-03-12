@@ -22,7 +22,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDate($F{payment/receivedDate})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDay($F{payment/receivedDate})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="111" y="0" width="163" height="20"/>

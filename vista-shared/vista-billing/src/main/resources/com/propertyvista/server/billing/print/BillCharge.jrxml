@@ -4,8 +4,9 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="amount" class="java.math.BigDecimal"/>
-	<field name="billableItem/effectiveDate" class="com.pyx4j.commons.LogicalDate"/>
-	<field name="billableItem/expirationDate" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="fromDate" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="toDate" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="billableItem/item/type" class="com.propertyvista.domain.financial.offering.ProductItemType"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -23,13 +24,13 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDate($F{billableItem/effectiveDate})+" - "+$P{REPORT_SCRIPTLET}.formatDate($F{billableItem/expirationDate})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDay($F{fromDate})+" - "+$P{REPORT_SCRIPTLET}.formatDay($F{toDate})]]></textFieldExpression>
 			</textField>
-			<staticText>
+			<textField>
 				<reportElement x="111" y="0" width="163" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Charge]]></text>
-			</staticText>
+				<textElement verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA[$F{billableItem/item/type}.getStringView()]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
