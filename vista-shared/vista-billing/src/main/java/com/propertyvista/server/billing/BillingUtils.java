@@ -47,22 +47,13 @@ public class BillingUtils {
         return isFeature(product) && ((Feature) product.cast()).recurring().getValue();
     }
 
-    public static BillCharge getServiceCharge(IList<BillCharge> charges) {
-        if (false) {
-            EntityQueryCriteria<BillCharge> criteria = EntityQueryCriteria.create(BillCharge.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().billableItem().item().product(), Service.class));
-            BillCharge billCharge = Persistence.service().retrieve(criteria);
-        }
-
-        for (BillCharge charge : charges) {
-            if (charge.billableItem().item().product().isValueDetached()) {
-                Persistence.service().retrieve(charge.billableItem().item().product());
-            }
-            if (isService(charge.billableItem().item().product())) {
-                return charge;
-            }
-        }
-        return null;
+    public static List<BillCharge> getServiceCharges(IList<BillCharge> charges) {
+        EntityQueryCriteria<BillCharge> criteria = EntityQueryCriteria.create(BillCharge.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billableItem().item().product(), Service.class));
+        BillCharge billCharge = Persistence.service().retrieve(criteria);
+        List<BillCharge> serviceCharges = new ArrayList<BillCharge>();
+        serviceCharges.add(billCharge);
+        return serviceCharges;
     }
 
     public static List<BillCharge> getFeatureCharges(IList<BillCharge> charges) {

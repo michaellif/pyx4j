@@ -21,6 +21,7 @@
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billPayments" class="com.pyx4j.entity.shared.IList"/>
+	<field name="charges" class="com.pyx4j.entity.shared.IList"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -55,8 +56,8 @@
 			<printWhenExpression><![CDATA[$F{billPayments}.size()>0]]></printWhenExpression>
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{billPayments})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillPayment")]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($P{REPORT_SCRIPTLET}.getServiceCharges($F{charges}))]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillCharge")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="33">

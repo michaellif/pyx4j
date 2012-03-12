@@ -14,17 +14,32 @@
 package com.propertyvista.server.billing.print;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import net.sf.jasperreports.engine.JRDefaultScriptlet;
 import net.sf.jasperreports.engine.JRScriptletException;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
+import com.propertyvista.domain.financial.billing.BillCharge;
+import com.propertyvista.domain.financial.offering.Service;
 
 public class BillPrintScriptlet extends JRDefaultScriptlet {
 
     public String formatDate(LogicalDate date) throws JRScriptletException {
         SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
         return formatter.format(date);
+    }
+
+    public static List<BillCharge> getServiceCharges(IList<BillCharge> charges) {
+        EntityQueryCriteria<BillCharge> criteria = EntityQueryCriteria.create(BillCharge.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billableItem().item().product(), Service.class));
+        List<BillCharge> serviceCharges = Persistence.service().query(criteria);
+        return serviceCharges;
     }
 
 }
