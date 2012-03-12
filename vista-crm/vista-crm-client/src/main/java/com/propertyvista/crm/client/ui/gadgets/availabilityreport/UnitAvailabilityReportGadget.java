@@ -22,9 +22,12 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -37,6 +40,7 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -83,6 +87,8 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
         private final AvailabilityReportService service;
 
+        private CDatePicker asFor;
+
         public UnitAvailabilityReportGadgetInstance(GadgetMetadata gmd) {
             super(gmd, UnitAvailabilityStatus.class, UnitAvailability.class);
             service = GWT.create(AvailabilityReportService.class);
@@ -110,6 +116,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         @Override
         public void populatePage(int pageNumber) {
             if (containerBoard.getSelectedBuildings() == null) {
+                setAsForValue(getStatusDate());
                 setPageData(new Vector<UnitAvailabilityStatus>(), 0, 0, false);
                 populateSucceded();
                 return;
@@ -135,20 +142,38 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
             }, buildingPks, getMetadata().defaultFilteringPreset().getValue(), getStatusDate(), new Vector<Sort>(getSorting()), pageNumber, getPageSize());
         }
 
+        private void setAsForValue(LogicalDate statusDate) {
+            asFor.setValue(statusDate);
+        }
+
         private LogicalDate getStatusDate() {
-            return new LogicalDate();
+            return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asFor().getValue() : new LogicalDate();
         }
 
         @Override
         public Widget initContentPanel() {
 
             gadgetPanel = new VerticalPanel();
+            gadgetPanel.add(initAsForBannerPanel());
             gadgetPanel.add(initFilteringConrolsPanel());
             gadgetPanel.add(initListerWidget());
             gadgetPanel.setCellHorizontalAlignment(controlsPanel, VerticalPanel.ALIGN_CENTER);
             gadgetPanel.setWidth("100%");
 
             return gadgetPanel;
+        }
+
+        private Widget initAsForBannerPanel() {
+            HorizontalPanel asForBannerPanel = new HorizontalPanel();
+            asForBannerPanel.setWidth("100%");
+            asForBannerPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+
+            asFor = new CDatePicker();
+            asFor.setValue(getStatusDate());
+            asFor.setViewable(true);
+
+            asForBannerPanel.add(asFor);
+            return asForBannerPanel.asWidget();
         }
 
         private Widget initFilteringConrolsPanel() {
@@ -236,9 +261,28 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                     p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
                     p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
                     p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().defaultFilteringPreset())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
+                    get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<Boolean> event) {
+                            if (event.getValue() != null) {
+                                get(proto().asFor()).setVisible(event.getValue());
+                            }
+                        }
+                    });
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asFor())).build());
+                    get(proto().asFor()).setVisible(false);
                     return p;
                 }
+
+                @Override
+                protected void onPopulate() {
+                    super.onPopulate();
+                    get(proto().asFor()).setVisible(getValue().customizeDate().isBooleanTrue());
+                }
+
             });
+
         }
 
         private class FilterButton extends ToggleButton {

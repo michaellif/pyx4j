@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -50,6 +52,20 @@ import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 public class PreloadTenants extends BaseVistaDevDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(PreloadTenants.class);
+
+    private final static Random RND = new Random(1);
+
+    private static final long MIN_RESERVE_TIME = 0L;
+
+    private static final long MAX_RESERVE_TIME = 1000L * 60L * 60L * 24L * 60L; // 60 days
+
+    private static final long MIN_LEASE_TERM = 1000L * 60L * 60L * 24L * 365L; // approx 1 Year
+
+    private static final long MAX_LEASE_TERM = 1000L * 60L * 60L * 24L * 365L * 5; // approx 5 Years
+
+    private static final long MIN_NOTICE_TERM = 1000L * 60L * 60L * 24L * 31L;
+
+    private static final long MAX_NOTICE_TERM = 1000L * 60L * 60L * 24L * 60L;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -129,6 +145,67 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
                 req.tenant().set(tenant);
                 Persistence.service().persist(req);
             }
+
+//            Persistence.service().persist(generator.createPaymentMethods(tenant));
+//            LeaseLifecycleSim leaseSim = new LeaseLifecycleSim();
+//            LogicalDate now = new LogicalDate();
+//            int firstYear = 2008;
+//            int lastYear = 1900 + now.getYear();
+//
+//            LogicalDate eventDate = new LogicalDate(RandomUtil.randomDate(firstYear, lastYear));
+//            LogicalDate leaseFrom = add(eventDate, random(MIN_RESERVE_TIME, MAX_RESERVE_TIME));
+//            LogicalDate expectedMoveIn = leaseFrom;
+//            LogicalDate leaseTo = add(leaseFrom, random(MIN_LEASE_TERM, MAX_LEASE_TERM));
+//
+//            Lease lease = leaseSim.newLease(eventDate, aptUnitSource.next(), leaseFrom, leaseTo, expectedMoveIn, PaymentFrequency.Monthly, tenant);
+//            LeaseHelper.updateLease(lease);
+//            Persistence.service().persist(lease);
+//            Persistence.service().persist(lease.leaseFinancial());
+//
+//            do {
+//                if ((eventDate.getYear() + 1900) > lastYear) {
+//                    break;
+//                }
+//
+//                eventDate = new LogicalDate(random(eventDate.getTime(), lease.leaseFrom().getValue().getTime()));
+//                if (eventDate.after(now)) {
+//                    break;
+//                }
+//                lease = leaseSim.createApplication(lease.getPrimaryKey(), eventDate);
+//
+//                eventDate = new LogicalDate(random(eventDate.getTime(), lease.leaseFrom().getValue().getTime()));
+//                if (eventDate.after(now)) {
+//                    break;
+//                }
+//                lease = leaseSim.approveApplication(lease.getPrimaryKey(), eventDate);
+//
+//                eventDate = lease.leaseFrom().getValue();
+//                if (eventDate.after(now)) {
+//                    break;
+//                }
+//                lease = leaseSim.activate(lease.getPrimaryKey(), eventDate);
+//
+//                // Maintenance Requests
+//                for (MaintenanceRequest req : generator.createMntRequests(config().numMntRequests)) {
+//                    req.submitted().setValue(new LogicalDate(random(lease.leaseFrom().getValue().getTime(), lease.leaseTo().getValue().getTime())));
+//                    req.issueClassification().set(RandomUtil.random(issues));
+//                    req.tenant().set(tenant);
+//                    Persistence.service().persist(req);
+//                }
+//
+//                eventDate = new LogicalDate(lease.leaseTo().getValue().getTime() - random(MIN_NOTICE_TERM, MAX_NOTICE_TERM));
+//                if (eventDate.after(now)) {
+//                    break;
+//                }
+//                lease = leaseSim.notice(lease.getPrimaryKey(), eventDate, lease.leaseTo().getValue());
+//
+//                eventDate = lease.leaseTo().getValue();
+//                if (eventDate.after(now)) {
+//                    break;
+//                }
+//                lease = leaseSim.complete(lease.getPrimaryKey(), leaseTo);
+//
+//            } while (false);
         }
 
         for (int i = 1; i <= config().numUnAssigendTenants; i++) {
@@ -191,6 +268,14 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             break;
         }
         Persistence.service().persist(tenant);
+    }
+
+    private long random(long min, long max) {
+        return min + RND.nextLong() % (max - min);
+    }
+
+    private LogicalDate add(LogicalDate date, long term) {
+        return new LogicalDate(date.getTime() + term);
     }
 
 }

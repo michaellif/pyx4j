@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
@@ -41,4 +42,9 @@ public interface UnitAvailability extends ListerGadgetBaseMetadata {
 
     /** Defines the filtering criteria button by its caption */
     IPrimitive<FilterPreset> defaultFilteringPreset();
+
+    /** <code>null</code> null means now */
+    IPrimitive<LogicalDate> asFor();
+
+    IPrimitive<Boolean> customizeDate();
 }
