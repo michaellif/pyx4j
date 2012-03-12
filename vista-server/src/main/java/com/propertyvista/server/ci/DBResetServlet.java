@@ -46,6 +46,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.quartz.SchedulerHelper;
+import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.DemoData.DemoPmc;
@@ -139,6 +140,7 @@ public class DBResetServlet extends HttpServlet {
                 } else {
                     buf.append("Requested : '" + type.name() + "' " + type.toString());
                     Persistence.service().startBackgroundProcessTransaction();
+                    Lifecycle.startElevatedUserContext();
                     try {
                         if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
                             SchedulerHelper.shutdown();
@@ -185,6 +187,7 @@ public class DBResetServlet extends HttpServlet {
                         log.info("DB reset {} {}", type, TimeUtils.secSince(start));
                         buf.insert(0, "Processing total time: " + TimeUtils.secSince(start) + "\n");
                     } finally {
+                        Lifecycle.endElevatedUserContext();
                         Persistence.service().endTransaction();
                     }
                 }

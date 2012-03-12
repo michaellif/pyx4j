@@ -23,6 +23,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.quartz.SchedulerHelper;
+import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.misc.VistaDataPreloaderParameter;
@@ -57,7 +58,13 @@ public class VistaDBReset {
                     preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
                 }
             }
-            log.info(preloaders.preloadAll());
+
+            try {
+                Lifecycle.startElevatedUserContext();
+                log.info(preloaders.preloadAll());
+            } finally {
+                Lifecycle.endElevatedUserContext();
+            }
 
             NamespaceManager.setNamespace(Pmc.adminNamespace);
             Pmc pmc = EntityFactory.create(Pmc.class);
