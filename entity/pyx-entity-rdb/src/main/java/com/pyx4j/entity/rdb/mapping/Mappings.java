@@ -92,9 +92,6 @@ public class Mappings {
         if (entityMeta.getAnnotation(EmbeddedEntity.class) != null) {
             throw new Error("Can't operate on Embedded Entity " + entityMeta.getEntityClass().getName());
         }
-        if (entityMeta.getAnnotation(AbstractEntity.class) != null) {
-            throw new Error("Can't operate on Abstract Entity " + entityMeta.getEntityClass().getName());
-        }
     }
 
     public TableModel ensureTable(Connection connection, Dialect dialect, EntityMeta entityMeta) {
@@ -103,6 +100,9 @@ public class Mappings {
             return model;
         }
         assertPersistableEntity(entityMeta);
+        if (entityMeta.getAnnotation(AbstractEntity.class) != null) {
+            throw new Error("Can't operate on Abstract Entity " + entityMeta.getEntityClass().getName());
+        }
 
         // Avoid lock on EntityClass
         Object entityTypeLock;
