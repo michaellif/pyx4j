@@ -15,12 +15,12 @@ package com.propertyvista.crm.server.services.selections.version;
 
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 
-import com.propertyvista.crm.rpc.services.selections.version.ConcessionVersionService;
-import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.crm.rpc.services.selections.version.ServiceVersionService;
+import com.propertyvista.domain.financial.offering.Service;
 
-public class ConcessionVersionServiceImpl extends AbstractListServiceImpl<Concession.ConcessionV> implements ConcessionVersionService {
+public class ServiceVersionServiceImpl extends AbstractListServiceImpl<Service.ServiceV> implements ServiceVersionService {
 
-    public ConcessionVersionServiceImpl() {
-        super(Concession.ConcessionV.class);
+    public ServiceVersionServiceImpl() {
+        super(Service.ServiceV.class);
     }
 }

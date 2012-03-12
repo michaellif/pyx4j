@@ -13,13 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 
+import com.google.gwt.core.client.GWT;
+
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.selections.version.FeatureVersionService;
 import com.propertyvista.domain.financial.offering.Feature;
 
 public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implements FeatureViewerView {
 
     public FeatureViewerViewImpl() {
         super(CrmSiteMap.Properties.Feature.class, new FeatureEditorForm(true));
+        enableVersioning(Feature.FeatureV.class, GWT.<FeatureVersionService> create(FeatureVersionService.class));
     }
 }

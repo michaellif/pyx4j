@@ -7,21 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-29
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.building.catalog;
+package com.propertyvista.crm.rpc.services.selections.version;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
+import com.pyx4j.entity.rpc.AbstractListService;
 
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ProductCatalog;
 
-public interface FeatureCrudService extends AbstractVersionedCrudService<Feature> {
-
-    public void retrieveCatalog(AsyncCallback<ProductCatalog> callback, Key entityId);
+public interface FeatureVersionService extends AbstractListService<Feature.FeatureV> {
 }

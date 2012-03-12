@@ -22,12 +22,8 @@ import com.propertyvista.domain.financial.offering.Concession;
 public class ConcessionLister extends ListerBase<Concession> {
 
     public ConcessionLister() {
-        this(false);
-    }
-
-    public ConcessionLister(boolean readOnly) {
-        super(Concession.class, CrmSiteMap.Properties.Concession.class, false, !readOnly);
-        getDataTablePanel().setFilteringEnabled(!readOnly);
+        super(Concession.class, CrmSiteMap.Properties.Concession.class, false, true);
+        getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),

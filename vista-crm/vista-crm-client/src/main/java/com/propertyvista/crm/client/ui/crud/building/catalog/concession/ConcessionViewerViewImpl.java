@@ -19,12 +19,11 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.version.ConcessionVersionService;
 import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.Concession.ConcessionV;
 
 public class ConcessionViewerViewImpl extends CrmViewerViewImplBase<Concession> implements ConcessionViewerView {
 
     public ConcessionViewerViewImpl() {
         super(CrmSiteMap.Properties.Concession.class, new ConcessionEditorForm(true));
-        enableVersioning(ConcessionV.class, GWT.<ConcessionVersionService> create(ConcessionVersionService.class));
+        enableVersioning(Concession.ConcessionV.class, GWT.<ConcessionVersionService> create(ConcessionVersionService.class));
     }
 }

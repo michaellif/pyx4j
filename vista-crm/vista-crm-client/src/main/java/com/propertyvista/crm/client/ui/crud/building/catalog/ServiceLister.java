@@ -24,11 +24,11 @@ public class ServiceLister extends ListerBase<Service> {
     public ServiceLister() {
         super(Service.class, CrmSiteMap.Properties.Service.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
-        setColumnDescriptors(
 
-        new MemberColumnDescriptor.Builder(proto().version().type()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().version().name()).build());
+        setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
+            new MemberColumnDescriptor.Builder(proto().version().type()).build(),
+            new MemberColumnDescriptor.Builder(proto().version().name()).build()
+        );//@formatter:on
     }
-
 }

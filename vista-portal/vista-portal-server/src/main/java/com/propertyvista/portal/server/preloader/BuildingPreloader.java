@@ -272,9 +272,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
             Persistence.service().persist(building);
 
-            // Service Catalog Eligibility Matrix:
-            productCatalogGenerator.createProductCatalog(building.productCatalog());
-
             //Do not publish until data is clean-up
             if (true) {
                 PublicDataUpdater.updateIndexData(building);

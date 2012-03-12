@@ -22,6 +22,7 @@ import com.propertvista.generator.gdo.ProductItemTypesGDO;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
@@ -123,7 +124,8 @@ public class ProductCatalogGenerator {
         item.version().depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
         item.version().items().addAll(createServiceItems(type));
-
+// TODO VladS: 
+//        item.saveAction().setValue(SaveAction.saveAsFinal);
         return item;
     }
 
@@ -185,6 +187,7 @@ public class ProductCatalogGenerator {
 
         item.version().items().addAll(createFeatureItems(type));
 
+        item.saveAction().setValue(SaveAction.saveAsFinal);
         return item;
     }
 
@@ -235,40 +238,39 @@ public class ProductCatalogGenerator {
     }
 
     private Concession createConcession(ProductCatalog catalog) {
-        Concession concession = EntityFactory.create(Concession.class);
-        concession.catalog().set(catalog);
+        Concession item = EntityFactory.create(Concession.class);
+        item.catalog().set(catalog);
 
-        concession.version().fromDate().setValue(DateUtils.detectDateformat("2012-01-01"));
-        concession.version().type().setValue(RandomUtil.random(Concession.Type.values(), "Concession.Type", Concession.Type.values().length));
+        item.version().fromDate().setValue(DateUtils.detectDateformat("2012-01-01"));
+        item.version().type().setValue(RandomUtil.random(Concession.Type.values(), "Concession.Type", Concession.Type.values().length));
 
-        if (concession.version().type().getValue() == Concession.Type.percentageOff) {
-            concession.version().value().setValue(10d + RandomUtil.randomInt(11));
-            concession.version().description()
-                    .setValue(i18n.tr("Special Promotion Applies, {0}% Off The Value Of The Service", concession.version().value().getValue()));
-        } else if (concession.version().type().getValue() == Concession.Type.monetaryOff) {
-            concession.version().value().setValue(50d + RandomUtil.randomInt(50));
-            concession.version().description()
-                    .setValue(i18n.tr("Special Promotion Applies, ${0} Off The Value Of The Service", concession.version().value().getValue()));
-        } else if (concession.version().type().getValue() == Concession.Type.promotionalItem) {
-            concession.version().value().setValue(100d + RandomUtil.randomInt(100));
-            concession.version().description()
-                    .setValue(i18n.tr("Special Promotion Applies, ${0} In Promotional Items Or Services", concession.version().value().getValue()));
-        } else if (concession.version().type().getValue() == Concession.Type.free) {
-            concession.version().value().setValue(200d + RandomUtil.randomInt(100));
-            concession.version().description().setValue(i18n.tr("Special Promotion Applies, Everything Completely Free"));
+        if (item.version().type().getValue() == Concession.Type.percentageOff) {
+            item.version().value().setValue(10d + RandomUtil.randomInt(11));
+            item.version().description().setValue(i18n.tr("Special Promotion Applies, {0}% Off The Value Of The Service", item.version().value().getValue()));
+        } else if (item.version().type().getValue() == Concession.Type.monetaryOff) {
+            item.version().value().setValue(50d + RandomUtil.randomInt(50));
+            item.version().description().setValue(i18n.tr("Special Promotion Applies, ${0} Off The Value Of The Service", item.version().value().getValue()));
+        } else if (item.version().type().getValue() == Concession.Type.promotionalItem) {
+            item.version().value().setValue(100d + RandomUtil.randomInt(100));
+            item.version().description()
+                    .setValue(i18n.tr("Special Promotion Applies, ${0} In Promotional Items Or Services", item.version().value().getValue()));
+        } else if (item.version().type().getValue() == Concession.Type.free) {
+            item.version().value().setValue(200d + RandomUtil.randomInt(100));
+            item.version().description().setValue(i18n.tr("Special Promotion Applies, Everything Completely Free"));
         }
 
-        concession.version().term().setValue(RandomUtil.random(Concession.Term.values()));
-        concession.version().condition().setValue(RandomUtil.random(Concession.Condition.values()));
-        concession.version().status().setValue(RandomUtil.random(Concession.Status.values()));
-        if (concession.version().status().getValue() == Concession.Status.approved) {
-            concession.version().approvedBy().setValue("George W. Bush Jr.");
+        item.version().term().setValue(RandomUtil.random(Concession.Term.values()));
+        item.version().condition().setValue(RandomUtil.random(Concession.Condition.values()));
+        item.version().status().setValue(RandomUtil.random(Concession.Status.values()));
+        if (item.version().status().getValue() == Concession.Status.approved) {
+            item.version().approvedBy().setValue("George W. Bush Jr.");
         }
 
-        concession.version().effectiveDate().setValue(DataGenerator.randomDate(2));
-        concession.version().expirationDate().setValue(DataGenerator.randomDate(4));
+        item.version().effectiveDate().setValue(DataGenerator.randomDate(2));
+        item.version().expirationDate().setValue(DataGenerator.randomDate(4));
 
-        return concession;
+        item.saveAction().setValue(SaveAction.saveAsFinal);
+        return item;
     }
 
     public List<ProductItemType> createIncludedUtilities() {

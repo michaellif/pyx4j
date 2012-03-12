@@ -26,6 +26,7 @@ public class FeatureLister extends ListerBase<Feature> {
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
             new MemberColumnDescriptor.Builder(proto().version().type(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),

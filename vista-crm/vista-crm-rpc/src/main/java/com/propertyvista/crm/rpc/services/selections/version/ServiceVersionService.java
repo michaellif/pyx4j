@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services.selections.version;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Service;
 
-public interface ConcessionVersionService extends AbstractListService<Concession.ConcessionV> {
+public interface ServiceVersionService extends AbstractListService<Service.ServiceV> {
 }
