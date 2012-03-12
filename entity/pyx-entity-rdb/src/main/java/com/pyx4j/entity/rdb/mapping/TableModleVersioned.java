@@ -152,7 +152,7 @@ public class TableModleVersioned {
 
             } else {
                 // Initial item creation
-                memeberEntity.versionNumber().setValue(0);
+                memeberEntity.versionNumber().setValue(1);
             }
         }
 

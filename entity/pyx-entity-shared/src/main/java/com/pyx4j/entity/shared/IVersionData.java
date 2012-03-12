@@ -24,6 +24,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -40,6 +41,7 @@ public interface IVersionData<VERSIONED_ENTITY extends IVersionedEntity<?>> exte
     VERSIONED_ENTITY holder();
 
     @OrderColumn
+    @Format(value = "#", nil = "Draft")
     IPrimitive<Integer> versionNumber();
 
     @Indexed(group = { "h,2" })

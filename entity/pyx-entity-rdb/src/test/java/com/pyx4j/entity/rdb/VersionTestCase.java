@@ -208,6 +208,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             srv.retrieve(itemA1r);
             srv.retrieveMember(itemA1r.versions());
             assertEquals("One Final version created", 1, itemA1r.versions().size());
+            assertEquals("versionNumber", "1", itemA1r.version().versionNumber().getStringView());
         }
 
         // verify Draft NOT created
@@ -288,6 +289,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             srv.retrieve(itemA1r);
             assertTrue("version is not null", !itemA1r.version().isNull());
             assertEquals("getDraft", draftName, itemA1r.version().name().getValue());
+            assertEquals("versionNumber", "Draft", itemA1r.version().versionNumber().getStringView());
         }
 
         // finalize, Save draft as version
