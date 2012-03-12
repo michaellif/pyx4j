@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
@@ -32,7 +33,13 @@ public class VistaDBPreloadTest extends VistaDBTestBase {
         long start = System.currentTimeMillis();
         DataPreloaderCollection dp = new VistaDataPreloaders(VistaDevPreloadConfig.createTest());
         dp.setParameterValue(VistaDataPreloaderParameter.attachMedia.name(), Boolean.FALSE);
-        log.info(dp.preloadAll());
+
+        try {
+            Lifecycle.startElevatedUserContext();
+            log.info(dp.preloadAll());
+        } finally {
+            Lifecycle.endElevatedUserContext();
+        }
 
         log.info("Preload time {}", TimeUtils.secSince(start));
     }
