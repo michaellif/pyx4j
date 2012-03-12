@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -69,9 +70,11 @@ public interface Service extends Product, IVersionedEntity<ServiceV> {
         // ----------------------------------------------------
         // eligibility matrix:
 
+        @Versioned
         @Detached
         IList<Feature> features();
 
+        @Versioned
         @Detached
         IList<Concession> concessions();
     }
