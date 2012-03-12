@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb;
 
 import java.util.Date;
+import java.util.List;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -573,5 +574,37 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             o1r.saveAction().setValue(SaveAction.saveAsFinal);
             srv.persist(o1r);
         }
+    }
+
+    public void testVersionQueryCriteria() {
+        String testId = uniqueString();
+        srv.startTransaction();
+
+        // Initial item
+        ItemA itemA1 = EntityFactory.create(ItemA.class);
+        itemA1.testId().setValue(testId);
+        itemA1.version().name().setValue("A1-" + uniqueString());
+        itemA1.version().testId().setValue(testId);
+
+        //Save initial value
+        itemA1.saveAction().setValue(SaveAction.saveAsFinal);
+        srv.persist(itemA1);
+
+        ItemA itemA2 = EntityFactory.create(ItemA.class);
+        itemA2.testId().setValue(testId);
+        itemA2.version().name().setValue("A2-" + uniqueString());
+        itemA2.version().testId().setValue(testId);
+
+        //Save initial value
+        itemA2.saveAction().setValue(SaveAction.saveAsDraft);
+        srv.persist(itemA2);
+
+        if (false) {
+            EntityQueryCriteria<ItemA> criteria = EntityQueryCriteria.create(ItemA.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            List<ItemA> list = srv.query(criteria);
+            assertEquals("final data", 1, list.size());
+        }
+
     }
 }
