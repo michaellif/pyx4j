@@ -20,11 +20,13 @@
  */
 package com.pyx4j.server.contexts;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 import com.pyx4j.i18n.server.I18nManager;
 
-public class InheritableUserContext {
+@SuppressWarnings("serial")
+public class InheritableUserContext implements Serializable {
 
     final Visit abstractVisit;
 

@@ -41,6 +41,7 @@ import com.pyx4j.i18n.server.I18nManager;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
+import com.pyx4j.security.server.AclCreatorAllowAll;
 import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
@@ -215,6 +216,18 @@ public class Lifecycle {
         Context.setVisit(inheritableUserContext.abstractVisit);
         NamespaceManager.setNamespace(inheritableUserContext.namespace);
         I18nManager.setThreadLocale(inheritableUserContext.locale);
+    }
+
+    public static void startElevatedUserContext() {
+        Visit visit = new Visit(null);
+        visit.beginSession(null, new AclCreatorAllowAll().createAcl(null));
+        visit.setAttribute("inheritableUserContext", Context.getInheritableUserContext());
+        Context.setVisit(visit);
+    }
+
+    public static void endElevatedUserContext() {
+        Visit visit = Context.getVisit();
+        inheritUserContext((InheritableUserContext) visit.getAttribute("inheritableUserContext"));
     }
 
     public static void endSession() {
