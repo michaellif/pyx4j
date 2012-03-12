@@ -107,6 +107,7 @@ public class XMLStringWriter {
         idented();
         beggining(name, attributes);
         out.append("/>\n");
+        openItems.pop();
     }
 
     public void startIdented(String name) {
