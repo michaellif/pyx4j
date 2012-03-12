@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -132,6 +133,10 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                     populateFailed(caught);
                 }
             }, buildingPks, getMetadata().defaultFilteringPreset().getValue(), getStatusDate(), new Vector<Sort>(getSorting()), pageNumber, getPageSize());
+        }
+
+        private LogicalDate getStatusDate() {
+            return new LogicalDate();
         }
 
         @Override

@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
@@ -210,6 +211,10 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
                     populateSucceded();
                 }
             }, buildingPks, getStatusDate());
+        }
+
+        private LogicalDate getStatusDate() {
+            return new LogicalDate();
         }
 
         @Override

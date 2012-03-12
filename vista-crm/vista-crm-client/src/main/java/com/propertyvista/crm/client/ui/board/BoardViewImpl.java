@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.board.events.DashboardDateChangedEventHandler;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -88,16 +87,6 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
     @Override
     public void stop() {
         board.stop();
-    }
-
-    @Override
-    public void setDashboardDate(LogicalDate statusDate, boolean fireEvent) {
-        board.setDashboardDate(statusDate, fireEvent);
-    }
-
-    @Override
-    public HandlerRegistration addDashboardDateChangedEventHandler(DashboardDateChangedEventHandler handler) {
-        return board.addDashboardDateChangedEventHandler(handler);
     }
 
     @Override

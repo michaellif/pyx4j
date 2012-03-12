@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.gadgets.common;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -32,8 +31,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.board.BoardView;
-import com.propertyvista.crm.client.ui.board.events.DashboardDateChangedEvent;
-import com.propertyvista.crm.client.ui.board.events.DashboardDateChangedEventHandler;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
 
@@ -62,8 +59,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     private final T metadata;
 
     protected final Class<T> metadataClass;
-
-    private HandlerRegistration dashboardDateChangedEventRegistration = null;
 
     protected BoardView containerBoard;
 
@@ -123,14 +118,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     @Override
     public void setContainerBoard(BoardView board) {
         this.containerBoard = board;
-    }
-
-    /**
-     * Gadgets should override this function in order to get the date that is required for their queries, the default implementation returns the date from the
-     * containing dashboard.
-     */
-    public LogicalDate getStatusDate() {
-        return this.containerBoard.getDashboardDate();
     }
 
     /**
@@ -293,12 +280,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     @Override
     public void start() {
-        dashboardDateChangedEventRegistration = containerBoard.addDashboardDateChangedEventHandler(new DashboardDateChangedEventHandler() {
-            @Override
-            public void onDashboardDateChanged(DashboardDateChangedEvent event) {
-                onDashboardDateChangeEvent(event.getNewDate());
-            }
-        });
 
         initView();
         isRunning = true;
@@ -319,7 +300,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     @Override
     public void stop() {
-        dashboardDateChangedEventRegistration.removeHandler();
         isRunning = false;
         getRefreshTimer().deactivate();
     }

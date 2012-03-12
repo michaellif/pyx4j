@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgRoot;
@@ -170,6 +171,10 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
                 description.add(Integer.toString(year));
             }
             return description;
+        }
+
+        private java.util.Date getStatusDate() {
+            return new LogicalDate();
         }
 
         private GridBasedChartConfigurator createConfig(DataSource ds) {

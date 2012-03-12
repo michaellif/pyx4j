@@ -23,7 +23,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.client.ReportDialog;
@@ -51,7 +50,6 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
         assert (view != null);
 
         view.setPresenter(this);
-        view.setDashboardDate(new LogicalDate(), false);
         view.setBuildings(new ArrayList<Building>(), false);
         if (place != null) {
             setPlace(place);

@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
@@ -180,6 +181,10 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
             } else {
                 setPageData(new ArrayList<MockupArrearsState>(1), 0, 0, false);
             }
+        }
+
+        private LogicalDate getStatusDate() {
+            return new LogicalDate();
         }
 
         private Vector<Criterion> getCustomCriteria() {

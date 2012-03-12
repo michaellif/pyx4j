@@ -22,12 +22,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.crm.client.ui.board.events.HasBuildingSelectionChangedEventHandlers;
-import com.propertyvista.crm.client.ui.board.events.HasDashboardDateChangedEventHandlers;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstancePresenter;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface BoardView extends IsWidget, HasDashboardDateChangedEventHandlers, HasBuildingSelectionChangedEventHandlers {
+public interface BoardView extends IsWidget, HasBuildingSelectionChangedEventHandlers {
 
     public interface Presenter extends IGadgetInstancePresenter {
 
@@ -46,8 +45,6 @@ public interface BoardView extends IsWidget, HasDashboardDateChangedEventHandler
     void populate(DashboardMetadata dashboardMetadata);
 
     void stop();
-
-    void setDashboardDate(LogicalDate statusDate, boolean fireEvent);
 
     void setBuildings(List<Building> buildings, boolean fireEvent);
 

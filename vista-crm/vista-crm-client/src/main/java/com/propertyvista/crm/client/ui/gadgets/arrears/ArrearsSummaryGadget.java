@@ -23,6 +23,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -88,6 +89,10 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
                 setPageData(new ArrayList<ArrearsSummary>(1), 0, 0, false);
                 populateSucceded();
             }
+        }
+
+        private LogicalDate getStatusDate() {
+            return new LogicalDate();
         }
 
         @Override

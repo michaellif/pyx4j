@@ -129,7 +129,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                 }
             }));
 
-            buttons.add(new Button(i18n.tr("Add Buildings..."), new ClickHandler() {
+            buttons.add(new Button(i18n.tr("Select Buildings..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     selectBuildings();

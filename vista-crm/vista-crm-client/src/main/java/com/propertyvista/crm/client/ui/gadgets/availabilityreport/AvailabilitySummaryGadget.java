@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -158,6 +159,11 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
                 }
             }, buildingPks, getStatusDate());
 
+        }
+
+        private LogicalDate getStatusDate() {
+            // TODO Auto-generated method stub
+            return null;
         }
 
     }

@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.board;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.Scheduler;
@@ -22,8 +21,6 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -50,8 +47,6 @@ import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.board.events.DashboardDateChangedEvent;
-import com.propertyvista.crm.client.ui.board.events.DashboardDateChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -139,8 +134,6 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
         add(scroll);
 
-        addAction(createDashboardDateControls());
-
         setSize("100%", "100%");
     }
 
@@ -216,20 +209,6 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     }
 
     @Override
-    public void setDashboardDate(LogicalDate dashboardDate, boolean fireEvent) {
-        datePicker.setValue(dashboardDate, fireEvent);
-    }
-
-    @Override
-    public HandlerRegistration addDashboardDateChangedEventHandler(final DashboardDateChangedEventHandler handler) {
-        return getEventBus().addHandler(DashboardDateChangedEvent.TYPE, handler);
-    }
-
-    protected void fireDashboardDateChanged() {
-        getEventBus().fireEvent(new DashboardDateChangedEvent(getDashboardDate()));
-    }
-
-    @Override
     public EventBus getEventBus() {
         return eventBus;
     }
@@ -270,7 +249,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
     @Override
     public LogicalDate getDashboardDate() {
-        return new LogicalDate(datePicker.getValue());
+        return new LogicalDate();
     }
 
     @Override
@@ -329,25 +308,6 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     //
 // Internals:
 //
-
-    protected Widget createDashboardDateControls() {
-//        HorizontalPanel panel = new HorizontalPanel();
-//        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-//        panel.setWidth("30em");
-        datePicker = new CDatePicker();
-        datePicker.setWidth("10em");
-        datePicker.asWidget().getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        datePicker.setValue(new LogicalDate(), false);
-        datePicker.addValueChangeHandler(new ValueChangeHandler<Date>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Date> event) {
-                fireDashboardDateChanged();
-            }
-        });
-//        panel.add(datePicker);
-
-        return datePicker.asWidget();
-    }
 
     protected void procesDashboardEvent(Reason reason) {
         boolean save = true;

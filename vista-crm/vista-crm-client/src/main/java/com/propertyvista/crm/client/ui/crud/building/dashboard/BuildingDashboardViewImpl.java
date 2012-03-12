@@ -27,7 +27,6 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.board.events.DashboardDateChangedEventHandler;
 import com.propertyvista.crm.client.ui.dashboard.DashboardPanel;
 import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -75,16 +74,6 @@ public class BuildingDashboardViewImpl implements BuildingDashboardView {
     public void setPresenter(com.propertyvista.crm.client.ui.board.BoardView.Presenter presenter) {
         dashboard.setPresenter(presenter);
         this.presenter = presenter;
-    }
-
-    @Override
-    public void setDashboardDate(LogicalDate statusDate, boolean fireEvent) {
-        dashboard.setDashboardDate(statusDate, fireEvent);
-    }
-
-    @Override
-    public HandlerRegistration addDashboardDateChangedEventHandler(DashboardDateChangedEventHandler handler) {
-        return dashboard.addDashboardDateChangedEventHandler(handler);
     }
 
     @Override
