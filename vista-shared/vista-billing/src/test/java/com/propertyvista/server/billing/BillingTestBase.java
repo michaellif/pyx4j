@@ -222,10 +222,10 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
         ProductItem serviceItem = leaseDataModel.getServiceItem();
         Service service = serviceItem.product().cast();
-        for (Feature feature : service.features()) {
-            if (featureType.equals(feature.type().getValue()) && feature.items().size() != 0) {
+        for (Feature feature : service.version().features()) {
+            if (featureType.equals(feature.version().type().getValue()) && feature.version().items().size() != 0) {
                 BillableItem billableItem = EntityFactory.create(BillableItem.class);
-                billableItem.item().set(feature.items().get(0));
+                billableItem.item().set(feature.version().items().get(0));
                 billableItem.effectiveDate().setValue(effectiveDate);
                 billableItem.expirationDate().setValue(expirationDate);
                 lease.leaseProducts().featureItems().add(billableItem);

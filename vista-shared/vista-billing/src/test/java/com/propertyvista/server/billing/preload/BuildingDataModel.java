@@ -77,7 +77,7 @@ public class BuildingDataModel {
         productItem.element().set(generateResidentialUnit());
         productItem.price().setValue(new BigDecimal("930.30"));
 
-        standardResidentialService.items().add(productItem);
+        standardResidentialService.version().items().add(productItem);
 
         if (persist) {
             Persistence.service().persist(standardResidentialService);
@@ -140,11 +140,11 @@ public class BuildingDataModel {
         standardResidentialService = EntityFactory.create(Service.class);
         building.productCatalog().services().add(standardResidentialService);
 
-        standardResidentialService.type().setValue(Service.Type.residentialUnit);
-        standardResidentialService.name().setValue("Standard Residential Unit");
-        standardResidentialService.description().setValue("Standard Residential Unit Lease for 1 year term");
+        standardResidentialService.version().type().setValue(Service.Type.residentialUnit);
+        standardResidentialService.version().name().setValue("Standard Residential Unit");
+        standardResidentialService.version().description().setValue("Standard Residential Unit Lease for 1 year term");
 
-        standardResidentialService.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
+        standardResidentialService.version().depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
     }
 
@@ -158,15 +158,15 @@ public class BuildingDataModel {
         Feature feature = EntityFactory.create(Feature.class);
         feature.catalog().set(building.productCatalog());
 
-        feature.type().setValue(type);
-        feature.name().setValue("Regular " + type.name());
-        feature.description().setValue("Feature - " + type.name());
+        feature.version().type().setValue(type);
+        feature.version().name().setValue("Regular " + type.name());
+        feature.version().description().setValue("Feature - " + type.name());
 
-        feature.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
+        feature.version().depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
-        switch (feature.type().getValue()) {
+        switch (feature.version().type().getValue()) {
         case parking:
-            feature.recurring().setValue(true);
+            feature.version().recurring().setValue(true);
             for (Parking parking : building._Parkings()) {
                 for (ProductItemType productItemType : featureMeta.get(Feature.Type.parking)) {
                     generateParkingFeatureItem(feature, parking, productItemType);
@@ -174,7 +174,7 @@ public class BuildingDataModel {
             }
             break;
         case locker:
-            feature.recurring().setValue(true);
+            feature.version().recurring().setValue(true);
             for (LockerArea lockerArea : building._LockerAreas()) {
                 for (ProductItemType productItemType : featureMeta.get(Feature.Type.locker)) {
                     generateLockerAreaFeatureItem(feature, lockerArea, productItemType);
@@ -182,13 +182,13 @@ public class BuildingDataModel {
             }
             break;
         case pet:
-            feature.recurring().setValue(true);
+            feature.version().recurring().setValue(true);
             for (ProductItemType productItemType : featureMeta.get(Feature.Type.pet)) {
                 generatePetFeatureItem(feature, productItemType);
             }
             break;
         case addOn:
-            feature.recurring().setValue(false);
+            feature.version().recurring().setValue(false);
             for (ProductItemType productItemType : featureMeta.get(Feature.Type.addOn)) {
                 generateAddOnFeatureItem(feature, productItemType);
             }
@@ -200,7 +200,7 @@ public class BuildingDataModel {
 
         building.productCatalog().features().add(feature);
 
-        standardResidentialService.features().add(feature);
+        standardResidentialService.version().features().add(feature);
 
     }
 
@@ -209,7 +209,7 @@ public class BuildingDataModel {
         productItem.type().set(type);
         productItem.element().set(parking);
         productItem.price().setValue(new BigDecimal("80.00"));
-        feature.items().add(productItem);
+        feature.version().items().add(productItem);
     }
 
     private void generateLockerAreaFeatureItem(Feature feature, LockerArea lockerArea, ProductItemType type) {
@@ -217,21 +217,21 @@ public class BuildingDataModel {
         productItem.type().set(type);
         productItem.element().set(lockerArea);
         productItem.price().setValue(new BigDecimal("60.00"));
-        feature.items().add(productItem);
+        feature.version().items().add(productItem);
     }
 
     private void generateAddOnFeatureItem(Feature feature, ProductItemType type) {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(type);
         productItem.price().setValue(new BigDecimal("40.00"));
-        feature.items().add(productItem);
+        feature.version().items().add(productItem);
     }
 
     private void generatePetFeatureItem(Feature feature, ProductItemType type) {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(type);
         productItem.price().setValue(new BigDecimal("20.00"));
-        feature.items().add(productItem);
+        feature.version().items().add(productItem);
     }
 
     private void generateConcessions() {

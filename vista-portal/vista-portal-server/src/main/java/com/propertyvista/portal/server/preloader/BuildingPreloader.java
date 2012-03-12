@@ -236,19 +236,19 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             List<Roof> buildingRoofs = Persistence.service().query(buildingRoofsCriteria);
 
             for (Service service : building.productCatalog().services()) {
-                switch (service.type().getValue()) {
+                switch (service.version().type().getValue()) {
                 case garage:
-                    for (ProductItem item : service.items()) {
+                    for (ProductItem item : service.version().items()) {
                         item.element().set(RandomUtil.random(buildingParkings));
                     }
                     break;
                 case storage:
-                    for (ProductItem item : service.items()) {
+                    for (ProductItem item : service.version().items()) {
                         item.element().set(RandomUtil.random(buildingockers));
                     }
                     break;
                 case roof:
-                    for (ProductItem item : service.items()) {
+                    for (ProductItem item : service.version().items()) {
                         item.element().set(RandomUtil.random(buildingRoofs));
                     }
                     break;
@@ -256,14 +256,14 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             for (Feature feature : building.productCatalog().features()) {
-                switch (feature.type().getValue()) {
+                switch (feature.version().type().getValue()) {
                 case parking:
-                    for (ProductItem item : feature.items()) {
+                    for (ProductItem item : feature.version().items()) {
                         item.element().set(RandomUtil.random(buildingParkings));
                     }
                     break;
                 case locker:
-                    for (ProductItem item : feature.items()) {
+                    for (ProductItem item : feature.version().items()) {
                         item.element().set(RandomUtil.random(buildingockers));
                     }
                     break;

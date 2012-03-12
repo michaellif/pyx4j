@@ -26,9 +26,9 @@ public class ServiceLister extends ListerBase<Service> {
         getDataTablePanel().setFilteringEnabled(false);
         setColumnDescriptors(
 
-        new MemberColumnDescriptor.Builder(proto().type()).build(),
+        new MemberColumnDescriptor.Builder(proto().version().type()).build(),
 
-        new MemberColumnDescriptor.Builder(proto().name()).build());
+        new MemberColumnDescriptor.Builder(proto().version().name()).build());
     }
 
 }

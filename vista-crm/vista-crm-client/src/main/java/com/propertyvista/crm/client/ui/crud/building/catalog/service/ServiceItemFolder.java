@@ -73,7 +73,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
     @Override
     protected void addItem() {
         EntitySelectorDialog<?> buildingElementSelectionBox = null;
-        switch (parent.getValue().type().getValue()) {
+        switch (parent.getValue().version().type().getValue()) {
         case residentialUnit:
         case residentialShortTermUnit:
         case commercialUnit:
@@ -134,7 +134,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             boolean isViewable = false;
             Class<? extends IEntity> buildingElementClass = null;
-            switch (parent.getValue().type().getValue()) {
+            switch (parent.getValue().version().type().getValue()) {
             case residentialUnit:
             case residentialShortTermUnit:
             case commercialUnit:
@@ -173,7 +173,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             if (column.getObject() == proto().type()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
                     final CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().type()));
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().version().type()));
 //                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ProductItemType>>() {
 //                        @Override
 //                        public void onOptionsChange(OptionsChangeEvent<List<ProductItemType>> event) {

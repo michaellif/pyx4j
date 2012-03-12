@@ -23,12 +23,15 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IVersionData;
+import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@ToStringFormat("{0}, {1}")
+import com.propertyvista.domain.financial.offering.Service.ServiceV;
+
 @DiscriminatorValue("service")
-public interface Service extends Product {
+public interface Service extends Product, IVersionedEntity<ServiceV> {
 
     @I18n
     @XmlType(name = "ServiceType")
@@ -54,17 +57,22 @@ public interface Service extends Product {
         }
     }
 
-    @NotNull
-    @ToString(index = 0)
-    @MemberColumn(name = "serviceType")
-    IPrimitive<Type> type();
+    @ToStringFormat("{0}, {1}")
+    @DiscriminatorValue("service")
+    public interface ServiceV extends Product.ProductV, IVersionData<Service> {
 
-    // ----------------------------------------------------
-    // eligibility matrix:
+        @NotNull
+        @ToString(index = 0)
+        @MemberColumn(name = "serviceType")
+        IPrimitive<Type> type();
 
-    @Detached
-    IList<Feature> features();
+        // ----------------------------------------------------
+        // eligibility matrix:
 
-    @Detached
-    IList<Concession> concessions();
+        @Detached
+        IList<Feature> features();
+
+        @Detached
+        IList<Concession> concessions();
+    }
 }

@@ -44,7 +44,7 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> {
                     @Override
                     public void onSuccess(ProductCatalog catalog) {
                         Feature entity = EntityFactory.create(entityClass);
-                        entity.type().setValue(type);
+                        entity.version().type().setValue(type);
                         entity.catalog().set(catalog);
 
                         callback.onSuccess(entity);

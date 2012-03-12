@@ -22,24 +22,24 @@ package com.propertyvista.server.billing;
 
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
-import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.Service.ServiceV;
 
 public class BillingUtils {
 
-    public static boolean isService(Product product) {
-        return product.cast().isAssignableFrom(Service.class);
+    public static boolean isService(Product.ProductV product) {
+        return product.cast().isAssignableFrom(ServiceV.class);
     }
 
-    public static boolean isFeature(Product product) {
-        return product.cast().isAssignableFrom(Feature.class);
+    public static boolean isFeature(Product.ProductV product) {
+        return product.cast().isAssignableFrom(Feature.FeatureV.class);
     }
 
-    public static boolean isRecurringFeature(Product product) {
-        return isFeature(product) && ((Feature) product.cast()).recurring().getValue();
+    public static boolean isRecurringFeature(Product.ProductV product) {
+        return isFeature(product) && ((Feature.FeatureV) product.cast()).recurring().getValue();
     }
 
-    public static boolean isOneTimeFeature(Product product) {
-        return isFeature(product) && !((Feature) product.cast()).recurring().getValue();
+    public static boolean isOneTimeFeature(Product.ProductV product) {
+        return isFeature(product) && !((Feature.FeatureV) product.cast()).recurring().getValue();
     }
 
 }

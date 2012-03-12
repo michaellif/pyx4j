@@ -44,7 +44,7 @@ public class ServiceEditorActivity extends EditorActivityBase<Service> implement
                     @Override
                     public void onSuccess(ProductCatalog catalog) {
                         Service entity = EntityFactory.create(entityClass);
-                        entity.type().setValue(type);
+                        entity.version().type().setValue(type);
                         entity.catalog().set(catalog);
 
                         callback.onSuccess(entity);

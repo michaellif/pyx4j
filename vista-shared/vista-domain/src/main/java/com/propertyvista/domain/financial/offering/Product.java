@@ -45,17 +45,23 @@ public interface Product extends IEntity {
     @OrderColumn
     IPrimitive<Integer> orderInCatalog();
 
-    @Owned
-    @Detached
-    IList<ProductItem> items();
+    @Inheritance
+    @AbstractEntity
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    public interface ProductV extends IEntity {
 
-    @Length(25)
-    @ToString(index = 1)
-    IPrimitive<String> name();
+        @Owned
+        @Detached
+        IList<ProductItem> items();
 
-    @Length(250)
-    @Editor(type = Editor.EditorType.textarea)
-    IPrimitive<String> description();
+        @Length(25)
+        @ToString(index = 1)
+        IPrimitive<String> name();
 
-    IPrimitive<DepositType> depositType();
+        @Length(250)
+        @Editor(type = Editor.EditorType.textarea)
+        IPrimitive<String> description();
+
+        IPrimitive<DepositType> depositType();
+    }
 }

@@ -41,20 +41,20 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CLabel()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mandatory()), 4).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type(), new CLabel()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().name()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().mandatory()), 4).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 50).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setH1(++row, 0, 2, i18n.tr("Items"));
 
-        main.setWidget(++row, 0, inject(proto().items(), new FeatureItemFolder(this)));
+        main.setWidget(++row, 0, inject(proto().version().items(), new FeatureItemFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositType()), 15).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().recurring()), 4).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().depositType()), 15).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().recurring()), 4).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

@@ -94,18 +94,19 @@ public class ProductCatalogGenerator {
 
     public void buildEligibilityMatrix(ProductCatalog catalog) {
         for (Service srv : catalog.services()) {
-            if (srv.type().getValue().equals(Service.Type.residentialUnit) || srv.type().getValue().equals(Service.Type.residentialShortTermUnit)
-                    || srv.type().getValue().equals(Service.Type.commercialUnit)) {
+            if (srv.version().type().getValue().equals(Service.Type.residentialUnit)
+                    || srv.version().type().getValue().equals(Service.Type.residentialShortTermUnit)
+                    || srv.version().type().getValue().equals(Service.Type.commercialUnit)) {
 
                 int count = catalog.features().size();
                 for (int i = 0; i < count; ++i) {
-                    srv.features().add(catalog.features().get(i));
+                    srv.version().features().add(catalog.features().get(i));
                 }
             }
 
             int count = Math.min(2, catalog.concessions().size());
             for (int i = 0; i < count; ++i) {
-                srv.concessions().add(RandomUtil.random(catalog.concessions(), "concessions", count));
+                srv.version().concessions().add(RandomUtil.random(catalog.concessions(), "concessions", count));
             }
         }
     }
@@ -115,13 +116,13 @@ public class ProductCatalogGenerator {
         Service item = EntityFactory.create(Service.class);
         item.catalog().set(catalog);
 
-        item.type().setValue(type);
-        item.name().setValue(RandomUtil.randomLetters(6));
-        item.description().setValue("Service description");
+        item.version().type().setValue(type);
+        item.version().name().setValue(RandomUtil.randomLetters(6));
+        item.version().description().setValue("Service description");
 
-        item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
+        item.version().depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
-        item.items().addAll(createServiceItems(type));
+        item.version().items().addAll(createServiceItems(type));
 
         return item;
     }
@@ -173,16 +174,16 @@ public class ProductCatalogGenerator {
         Feature item = EntityFactory.create(Feature.class);
         item.catalog().set(catalog);
 
-        item.type().setValue(type);
-        item.name().setValue(RandomUtil.randomLetters(6));
-        item.description().setValue("Feature description");
+        item.version().type().setValue(type);
+        item.version().name().setValue(RandomUtil.randomLetters(6));
+        item.version().description().setValue("Feature description");
 
-        item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
+        item.version().depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
-        item.recurring().setValue(RandomUtil.randomBoolean());
-        item.mandatory().setValue(RandomUtil.randomBoolean());
+        item.version().recurring().setValue(RandomUtil.randomBoolean());
+        item.version().mandatory().setValue(RandomUtil.randomBoolean());
 
-        item.items().addAll(createFeatureItems(type));
+        item.version().items().addAll(createFeatureItems(type));
 
         return item;
     }
@@ -310,7 +311,7 @@ public class ProductCatalogGenerator {
 
     private Service getService(ProductCatalog catalog, Service.Type type) {
         for (Service service : catalog.services()) {
-            if (service.type().getValue().equals(type)) {
+            if (service.version().type().getValue().equals(type)) {
                 return service;
             }
         }
@@ -361,7 +362,7 @@ public class ProductCatalogGenerator {
         item.description().setValue(type.toString() + " description");
         item.element().set(buildingElement);
 
-        service.items().add(item);
+        service.version().items().add(item);
         items.add(item);
 
         return items;

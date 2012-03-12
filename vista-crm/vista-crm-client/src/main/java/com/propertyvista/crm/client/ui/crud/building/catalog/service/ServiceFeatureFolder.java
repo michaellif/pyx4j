@@ -89,10 +89,10 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().type()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().mandatory()).build(),
-                    new MemberColumnDescriptor.Builder(proto().recurring()).build()
+                    new MemberColumnDescriptor.Builder(proto().version().type()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().recurring()).build()
             );//@formatter:on
         }
 

@@ -29,9 +29,9 @@ public class SelectFeatureListServiceImpl extends AbstractListServiceImpl<Featur
     @Override
     protected void enhanceListRetrieved(Feature entity) {
         // Load detached data:
-        Persistence.service().retrieve(entity.items());
+        Persistence.service().retrieve(entity.version().items());
         // next level:
-        for (ProductItem item : entity.items()) {
+        for (ProductItem item : entity.version().items()) {
             Persistence.service().retrieve(item.element());
         }
     }

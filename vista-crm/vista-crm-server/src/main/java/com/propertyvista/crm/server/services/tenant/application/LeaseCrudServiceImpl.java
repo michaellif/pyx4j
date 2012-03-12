@@ -172,12 +172,12 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
         // load detached service eligibility matrix data:
         for (Service item : building.productCatalog().services()) {
-            Persistence.service().retrieve(item.items());
-            Persistence.service().retrieve(item.features());
-            for (Feature fi : item.features()) {
-                Persistence.service().retrieve(fi.items());
+            Persistence.service().retrieve(item.version().items());
+            Persistence.service().retrieve(item.version().features());
+            for (Feature fi : item.version().features()) {
+                Persistence.service().retrieve(fi.version().items());
             }
-            Persistence.service().retrieve(item.concessions());
+            Persistence.service().retrieve(item.version().concessions());
         }
 //      
 //  Currently not used here:        

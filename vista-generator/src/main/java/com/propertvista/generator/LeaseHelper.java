@@ -57,12 +57,12 @@ public class LeaseHelper {
             List<Service> services = Persistence.service().query(serviceCriteria);
 
             for (Service service : services) {
-                Persistence.service().retrieve(service.items());
-                for (ProductItem item : service.items()) {
+                Persistence.service().retrieve(service.version().items());
+                for (ProductItem item : service.version().items()) {
                     if (lease.unit().equals(item.element())) {
                         lease.leaseProducts().serviceItem().set(createBillableItem(item));
                         selectedService = service;
-                        lease.type().set(selectedService.type());
+                        lease.type().set(selectedService.version().type());
                         break;
                     }
                 }
@@ -72,11 +72,11 @@ public class LeaseHelper {
         if (!lease.leaseProducts().serviceItem().isEmpty()) {
             Persistence.service().retrieve(building.productCatalog());
             // pre-populate utilities for the new service: 
-            Persistence.service().retrieve(selectedService.features());
-            for (Feature feature : selectedService.features()) {
-                if (Feature.Type.utility.equals(feature.type().getValue())) {
-                    Persistence.service().retrieve(feature.items());
-                    for (ProductItem item : feature.items()) {
+            Persistence.service().retrieve(selectedService.version().features());
+            for (Feature feature : selectedService.version().features()) {
+                if (Feature.Type.utility.equals(feature.version().type().getValue())) {
+                    Persistence.service().retrieve(feature.version().items());
+                    for (ProductItem item : feature.version().items()) {
                         if (!building.productCatalog().includedUtilities().contains(item.type())
                                 && !building.productCatalog().externalUtilities().contains(item.type())) {
                             lease.leaseProducts().featureItems().add(createBillableItem(item));
@@ -87,9 +87,9 @@ public class LeaseHelper {
             }
 
             // pre-populate concessions for the new service: 
-            Persistence.service().retrieve(selectedService.concessions());
-            if (!selectedService.concessions().isEmpty()) {
-                lease.leaseProducts().concessions().add(RandomUtil.random(selectedService.concessions()));
+            Persistence.service().retrieve(selectedService.version().concessions());
+            if (!selectedService.version().concessions().isEmpty()) {
+                lease.leaseProducts().concessions().add(RandomUtil.random(selectedService.version().concessions()));
             }
         }
     }

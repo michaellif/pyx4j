@@ -148,8 +148,8 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     private void fillserviceItems(LeaseDTO currentValue) {
         currentValue.selectedServiceItems().clear();
         for (Service service : currentValue.selectedBuilding().productCatalog().services()) {
-            if (service.type().equals(currentValue.type())) {
-                for (ProductItem item : service.items()) {
+            if (service.version().type().equals(currentValue.type())) {
+                for (ProductItem item : service.version().items()) {
                     if (currentValue.unit().equals(item.element())) {
                         currentValue.selectedServiceItems().add(item);
                     }
@@ -166,7 +166,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         // find the service by Service item:
         Service selectedService = null;
         for (Service service : currentValue.selectedBuilding().productCatalog().services()) {
-            for (ProductItem item : service.items()) {
+            for (ProductItem item : service.version().items()) {
                 if (item.equals(serviceItem)) {
                     selectedService = service;
                     break;
@@ -189,9 +189,9 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             utilitiesToExclude.addAll(catalog.externalUtilities());
 
             // fill features:
-            for (Feature feature : selectedService.features()) {
-                for (ProductItem item : feature.items()) {
-                    switch (feature.type().getValue()) {
+            for (Feature feature : selectedService.version().features()) {
+                for (ProductItem item : feature.version().items()) {
+                    switch (feature.version().type().getValue()) {
                     case utility:
                         // filter out utilities included in price for selected building:
                         if (!utilitiesToExclude.contains(item.type())) {
@@ -205,7 +205,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             }
 
             // fill relevant concessions:
-            for (Concession concession : selectedService.concessions()) {
+            for (Concession concession : selectedService.version().concessions()) {
                 if (concession.version().status().getValue() == Status.approved) {
                     currentValue.selectedConcessions().add(concession);
                 }

@@ -195,12 +195,12 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         // load detached data:
         for (Service item : building.productCatalog().services()) {
-            Persistence.service().retrieve(item.items());
-            Persistence.service().retrieve(item.features());
-            for (Feature fi : item.features()) {
-                Persistence.service().retrieve(fi.items());
+            Persistence.service().retrieve(item.version().items());
+            Persistence.service().retrieve(item.version().features());
+            for (Feature fi : item.version().features()) {
+                Persistence.service().retrieve(fi.version().items());
             }
-            Persistence.service().retrieve(item.concessions());
+            Persistence.service().retrieve(item.version().concessions());
         }
 //
 //  Currently not used here:
@@ -269,9 +269,9 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         // fill available items:
         for (Service service : building.productCatalog().services()) {
-            if (service.type().equals(lease.type())) {
-                for (Feature feature : service.features()) {
-                    for (ProductItem item : feature.items()) {
+            if (service.version().type().equals(lease.type())) {
+                for (Feature feature : service.version().features()) {
+                    for (ProductItem item : feature.version().items()) {
                         switch (item.type().featureType().getValue()) {
                         case utility:
                             if (!entity.includedUtilities().contains(item.type()) && !entity.externalUtilities().contains(item.type())) {

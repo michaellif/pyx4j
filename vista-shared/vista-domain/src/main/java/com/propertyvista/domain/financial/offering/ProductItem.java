@@ -41,7 +41,7 @@ public interface ProductItem extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    Product product();
+    Product.ProductV product();
 
     @OrderColumn
     IPrimitive<Integer> _orderColumn();

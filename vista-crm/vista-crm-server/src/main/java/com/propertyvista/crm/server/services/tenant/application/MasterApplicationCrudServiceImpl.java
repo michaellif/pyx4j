@@ -139,7 +139,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         for (BillableItem item : dto.lease().leaseProducts().featureItems()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(item); // calculate price adjustments
             if (item.item().product() instanceof Feature) {
-                switch (((Feature) item.item().product()).type().getValue()) {
+                switch (((Feature) item.item().product()).version().type().getValue()) {
                 case parking:
                     dto.parkingPrice().setValue(dto.parkingPrice().getValue().add(item._currentPrice().getValue()));
                     break;

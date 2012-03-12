@@ -65,17 +65,17 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CLabel()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 57).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type(), new CLabel()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().name()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 57).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setH1(++row, 0, 2, i18n.tr("Items"));
-        main.setWidget(++row, 0, inject(proto().items(), new ServiceItemFolder(this)));
+        main.setWidget(++row, 0, inject(proto().version().items(), new ServiceItemFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositType()), 15).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().depositType()), 15).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
@@ -88,10 +88,10 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Features"));
-        main.setWidget(++row, 0, inject(proto().features(), new ServiceFeatureFolder(isEditable(), this)));
+        main.setWidget(++row, 0, inject(proto().version().features(), new ServiceFeatureFolder(isEditable(), this)));
 
         main.setH1(++row, 0, 1, i18n.tr("Concessions"));
-        main.setWidget(++row, 0, inject(proto().concessions(), new ServiceConcessionFolder(isEditable(), this)));
+        main.setWidget(++row, 0, inject(proto().version().concessions(), new ServiceConcessionFolder(isEditable(), this)));
 
         return new CrmScrollPanel(main);
     }
