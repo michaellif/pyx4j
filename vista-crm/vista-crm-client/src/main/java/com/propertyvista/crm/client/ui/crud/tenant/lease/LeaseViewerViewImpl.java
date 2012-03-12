@@ -263,7 +263,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             getOkButton().setEnabled(true);
 
             HorizontalPanel content = new HorizontalPanel();
-            content.add(new Label(i18n.tr("Invite Applicant)" + ": ")));
+            content.add(new Label(i18n.tr("Invite Applicant") + ": "));
             content.add(invite.asWidget());
             content.setSpacing(4);
             return content;
