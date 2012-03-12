@@ -28,6 +28,7 @@ import com.propertyvista.server.common.util.occupancy.mk2.opconstraints.ScopeAva
 import com.propertyvista.server.common.util.occupancy.mk2.opconstraints.ScopeOffMarketConstraintsDTO;
 import com.propertyvista.server.common.util.occupancy.mk2.opconstraints.ScopeRenovationConstraintsDTO;
 
+//TODO add `now` date for all the functions
 public interface IUnitOccupancyManager {
 
     /**

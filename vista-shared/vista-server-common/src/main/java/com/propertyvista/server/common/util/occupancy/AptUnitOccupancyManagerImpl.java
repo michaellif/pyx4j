@@ -49,6 +49,10 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     private final AvailabilityReportManager availabilityReportManager;
 
+    public static AptUnitOccupancyManager get(Key unitPk, NowSource nowSource) {
+        return new AptUnitOccupancyManagerImpl(Persistence.secureRetrieve(AptUnit.class, unitPk), nowSource);
+    }
+
     public AptUnitOccupancyManagerImpl(Key unitPk) {
         this(Persistence.secureRetrieve(AptUnit.class, unitPk));
     }

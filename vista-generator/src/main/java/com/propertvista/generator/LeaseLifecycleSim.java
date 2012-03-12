@@ -20,6 +20,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -27,18 +28,21 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.server.common.util.LeaseManager;
+import com.propertyvista.server.common.util.LeaseManager.TimeContextProvider;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
 
 public class LeaseLifecycleSim {
 
-    public Lease newLease(LogicalDate eventDate, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo, LogicalDate expectedMoveIn,
+    public Lease newLease(final LogicalDate eventDate, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo, LogicalDate expectedMoveIn,
             PaymentFrequency paymentFrequency, Tenant tenant) {
         final Lease lease = EntityFactory.create(Lease.class);
         lease.status().setValue(Lease.Status.Created);
         lease.leaseID().setValue(RandomUtil.randomLetters(8));
         lease.unit().set(unit);
 
-        //TODO :lease.type().setValue(Service.Type.residentialUnit);         // This is actually updated during save to match real unit data
+        // TODO fix this to match unit type
+        lease.type().setValue(Service.Type.residentialUnit);
 
         lease.createDate().setValue(RandomUtil.randomLogicalDate(2010, 2011));
         lease.leaseFrom().setValue(lease.createDate().getValue());
@@ -53,91 +57,79 @@ public class LeaseLifecycleSim {
         tenantInLease.role().setValue(TenantInLease.Role.Applicant);
         lease.tenants().add(tenantInLease);
 
-        new LeaseManager().save(lease);
+        leaseManager(eventDate).save(lease);
+
         return lease;
     }
 
     public Lease createApplication(Key leaseId, LogicalDate eventDate) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.ApplicationInProgress);
+        leaseManager(eventDate).save(lease);
         return lease;
     }
 
     public Lease approveApplication(Key leaseId, LogicalDate eventDate) {
-        new LeaseManager().approveApplication(leaseId);
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        return lease;
+        return leaseManager(eventDate).approveApplication(leaseId);
     }
 
     public Lease declineApplication(Key leaseId, LogicalDate eventDate) {
-        new LeaseManager().declineApplication(leaseId);
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        return lease;
+        return leaseManager(eventDate).declineApplication(leaseId);
     }
 
     public Lease cancelApplication(Key leaseId, LogicalDate eventDate) {
-        new LeaseManager().cancelApplication(leaseId);
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        return lease;
+        return leaseManager(eventDate).cancelApplication(leaseId);
     }
 
     public Lease activate(Key leaseId, LogicalDate eventDate) {
-        new LeaseManager().approveApplication(leaseId);
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        return lease;
+        return leaseManager(eventDate).activate(leaseId);
     }
 
-//    public Lease moveIn(Key leaseId, LogicalDate moveInDate) {
-//        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-//        lease.actualMoveIn().setValue(moveInDate);
-//        new LeaseManager().save(lease);
-//        return lease;
-//    }
-
     public Lease notice(Key leaseId, LogicalDate noticeDay, LogicalDate moveOutDay) {
-        new LeaseManager().notice(leaseId, noticeDay, moveOutDay);
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        return lease;
+        return leaseManager(noticeDay).notice(leaseId, noticeDay, moveOutDay);
     }
 
     public Lease cancelNotice(Key leaseId, LogicalDate cancelDay) {
-        new LeaseManager().cancelNotice(leaseId);
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        return lease;
+        return leaseManager(cancelDay).cancelNotice(leaseId);
     }
 
-    public Lease evict(Key leaseId, LogicalDate evictDay, LogicalDate moveOutDay) {
-        new LeaseManager().evict(leaseId, evictDay, moveOutDay);
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        return lease;
+    public Lease evict(Key leaseId, LogicalDate evictionDay, LogicalDate moveOutDay) {
+        return leaseManager(evictionDay).evict(leaseId, evictionDay, moveOutDay);
     }
 
     public Lease cancelEvict(Key leaseId, LogicalDate cancellationDay) {
-        new LeaseManager().cancelEvict(leaseId);
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        return lease;
+        return leaseManager(cancellationDay).cancelEvict(leaseId);
     }
 
+    /** completes the lease and makes the unit "available" */
     public Lease complete(Key leaseId, final LogicalDate completetionDay) {
-        final Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        lease.actualLeaseTo().setValue(completetionDay);
-        lease.status().setValue(Status.Completed);
-        new LeaseManager().save(lease);
+        Lease lease = leaseManager(completetionDay).complete(leaseId);
 
-        new AptUnitOccupancyManagerImpl(lease.unit(), new AptUnitOccupancyManagerImpl.NowSource() {
-
+        AptUnitOccupancyManagerImpl.get(leaseId, new NowSource() {
             @Override
             public LogicalDate getNow() {
 
                 return completetionDay;
             }
         }).scopeAvailable();
+
         return lease;
     }
 
     public Lease close(Key leaseId, LogicalDate closingDay) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.Closed);
+        Persistence.secureSave(lease);
         return lease;
     }
+
+    private LeaseManager leaseManager(final LogicalDate eventDate) {
+        return new LeaseManager(new TimeContextProvider() {
+            @Override
+            public LogicalDate getTimeContext() {
+                return eventDate;
+            }
+        });
+    }
+
 }

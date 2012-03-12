@@ -39,6 +39,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
+import com.propertyvista.server.common.util.occupancy.AvailabilityReportManager;
 import com.propertyvista.server.common.util.occupancy.SplittingHandler;
 import com.propertyvista.server.common.util.occupancy.mk2.opconstraints.ApproveLeaseConstraintsDTO;
 import com.propertyvista.server.common.util.occupancy.mk2.opconstraints.CancelEndLeaseConstraintsDTO;
@@ -50,7 +51,12 @@ import com.propertyvista.server.common.util.occupancy.mk2.opconstraints.ScopeAva
 import com.propertyvista.server.common.util.occupancy.mk2.opconstraints.ScopeOffMarketConstraintsDTO;
 import com.propertyvista.server.common.util.occupancy.mk2.opconstraints.ScopeRenovationConstraintsDTO;
 
+// TODO add `now` date for all the functions
 public class UnitOccupancyManager implements IUnitOccupancyManager {
+
+    public static IUnitOccupancyManager exec() {
+        return new UnitOccupancyManager();
+    }
 
     @Override
     public void scopeAvailable(Key unitId, LogicalDate availableFrom) {
@@ -71,7 +77,7 @@ public class UnitOccupancyManager implements IUnitOccupancyManager {
         });
 
         updateUnitAvailableFrom(unitId, availableFrom);
-
+        AvailabilityReportManager.generateUnitAvailability(unitId, availableFrom);
     }
 
     @Override

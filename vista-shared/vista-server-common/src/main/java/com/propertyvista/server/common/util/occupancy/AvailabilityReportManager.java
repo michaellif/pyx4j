@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -39,8 +40,17 @@ public class AvailabilityReportManager {
 
     private final AptUnit unit;
 
+    public static void generateUnitAvailability(Key unitId, LogicalDate startingOn) {
+        new AvailabilityReportManager(unitId).generateUnitAvailablity(startingOn);
+    }
+
     public AvailabilityReportManager(AptUnit unit) {
+        assert unit != null;
         this.unit = unit;
+    }
+
+    public AvailabilityReportManager(Key unitId) {
+        this(Persistence.secureRetrieve(AptUnit.class, unitId));
     }
 
     /**

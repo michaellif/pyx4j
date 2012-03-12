@@ -21,11 +21,27 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 public class LeaseManager {
 
-    public void save(Lease lease) {
+    private final TimeContextProvider timeContextProvider;
+
+    public LeaseManager() {
+        this(new TimeContextProvider() {
+            @Override
+            public LogicalDate getTimeContext() {
+                return new LogicalDate();
+            }
+        });
+    }
+
+    public LeaseManager(TimeContextProvider timeContextProvider) {
+        this.timeContextProvider = timeContextProvider;
+    }
+
+    public Lease save(Lease lease) {
         boolean isNewLease = lease.getPrimaryKey() == null;
         boolean isUnitChanged = isNewLease;
         boolean doReserve = false;
@@ -61,15 +77,16 @@ public class LeaseManager {
 
         if (isUnitChanged) {
             if (doUnreserve) {
-                new AptUnitOccupancyManagerImpl(oldLease.unit().getPrimaryKey()).unreserve();
+                occupancyManager(oldLease.unit().getPrimaryKey()).unreserve();
             }
             if (doReserve) {
-                new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).reserve(lease);
+                occupancyManager(lease.unit().getPrimaryKey()).reserve(lease);
             }
         }
+        return lease;
     }
 
-    public void notice(Key leaseId, LogicalDate noticeDay, LogicalDate moveOutDay) {
+    public Lease notice(Key leaseId, LogicalDate noticeDay, LogicalDate moveOutDay) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
@@ -82,11 +99,12 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(noticeDay);
         lease.expectedMoveOut().setValue(moveOutDay);
         Persistence.secureSave(lease);
+        occupancyManager(lease.unit().getPrimaryKey()).endLease();
 
-        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).endLease();
+        return lease;
     }
 
-    public void cancelNotice(Key leaseId) {
+    public Lease cancelNotice(Key leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
@@ -98,10 +116,11 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);
-        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).cancelEndLease();
+        occupancyManager(lease.unit().getPrimaryKey()).cancelEndLease();
+        return lease;
     }
 
-    public void evict(Key leaseId, LogicalDate evictionDay, LogicalDate moveOutDay) {
+    public Lease evict(Key leaseId, LogicalDate evictionDay, LogicalDate moveOutDay) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
@@ -113,10 +132,11 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(evictionDay);
         lease.expectedMoveOut().setValue(moveOutDay);
         Persistence.secureSave(lease);
-        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).endLease();
+        occupancyManager(lease.unit().getPrimaryKey()).endLease();
+        return lease;
     }
 
-    public void cancelEvict(Key leaseId) {
+    public Lease cancelEvict(Key leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
@@ -128,28 +148,62 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);
-        new AptUnitOccupancyManagerImpl(lease.unit().getPrimaryKey()).cancelEndLease();
+        occupancyManager(lease.unit().getPrimaryKey()).cancelEndLease();
+        return lease;
     }
 
-    public void approveApplication(Key leaseId) {
+    public Lease approveApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.Approved);
-
-        new AptUnitOccupancyManagerImpl(lease.unit()).approveLease();
+        Persistence.secureSave(lease);
+        occupancyManager(lease.unit().getPrimaryKey()).approveLease();
+        return lease;
     }
 
-    public void declineApplication(Key leaseId) {
+    public Lease declineApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.Declined);
         Persistence.secureSave(lease);
-        new AptUnitOccupancyManagerImpl(lease.unit()).unreserve();
+        occupancyManager(lease.unit().getPrimaryKey()).unreserve();
+        return lease;
     }
 
-    public void cancelApplication(Key leaseId) {
+    public Lease cancelApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        lease.status().setValue(Status.Declined);
+        lease.status().setValue(Status.ApplicationCancelled);
         Persistence.secureSave(lease);
-        new AptUnitOccupancyManagerImpl(lease.unit()).unreserve();
+        occupancyManager(lease.unit().getPrimaryKey()).unreserve();
+        return lease;
+    }
+
+    public Lease activate(Key leaseId) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        lease.status().setValue(Status.Active);
+        Persistence.secureSave(lease);
+        return lease;
+    }
+
+    public Lease complete(Key leaseId) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        lease.actualLeaseTo().setValue(timeContextProvider.getTimeContext());
+        lease.status().setValue(Status.Completed);
+        Persistence.secureSave(lease);
+        return lease;
+    }
+
+    private AptUnitOccupancyManager occupancyManager(Key unitId) {
+        return AptUnitOccupancyManagerImpl.get(unitId, new AptUnitOccupancyManagerImpl.NowSource() {
+            @Override
+            public LogicalDate getNow() {
+                return timeContextProvider.getTimeContext();
+            }
+        });
+    }
+
+    public interface TimeContextProvider {
+
+        LogicalDate getTimeContext();
+
     }
 
 }
