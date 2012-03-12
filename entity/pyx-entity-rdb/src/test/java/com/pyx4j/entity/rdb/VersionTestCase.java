@@ -55,7 +55,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         //itemA1.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA1);
         // Key assigned and versions not set in the key
-        assertEquals("assigned version", Key.VERSION_CURRENT, itemA1.getPrimaryKey().getVersion());
+        assertEquals("assigned version", Key.VERSION_DRAFT, itemA1.getPrimaryKey().getVersion());
 
         // Retrieval of item as draft
         {
@@ -69,7 +69,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
         // Retrieval of item as version that was not created
         {
-            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey());
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
             assertTrue("current is null", itemA1r.version().isNull());
         }
 

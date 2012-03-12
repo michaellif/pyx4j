@@ -515,7 +515,7 @@ public class TableModel {
                         // Special handling for recursive retrieve of Owner
                         if ((entity.getOwner() != null) && (entity.getMeta() != null) && entity.getMeta().isOwnedRelationships()) {
                             // verify graph integrity
-                            if (!entity.getOwner().getPrimaryKey().equals(valueEntity.getPrimaryKey())) {
+                            if (entity.getOwner().getPrimaryKey().asLong() != valueEntity.getPrimaryKey().asLong()) {
                                 throw new RuntimeException("Unexpected owner " + member.getMemberPath() + " '" + valueEntity.getDebugExceptionInfoString()
                                         + "' != '" + entity.getOwner().getDebugExceptionInfoString() + "' in entity '" + entity.getDebugExceptionInfoString()
                                         + "'");

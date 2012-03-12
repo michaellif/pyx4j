@@ -116,7 +116,7 @@ public class TableModleVersioned {
 
             //Save using EntityPersistenceService
             update.add(memeberEntity);
-
+            entity.setPrimaryKey(entity.getPrimaryKey().asDraftKey());
         } else {
             // Finalize do not creates new IVersionData from draft.
             if (existingDraft != null) {
@@ -154,10 +154,9 @@ public class TableModleVersioned {
                 // Initial item creation
                 memeberEntity.versionNumber().setValue(1);
             }
+            entity.setPrimaryKey(entity.getPrimaryKey().asCurrentKey());
         }
-
         versionedEntity.saveAction().setValue(null);
-
         return update;
     }
 }
