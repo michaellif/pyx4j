@@ -288,6 +288,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
         payment.paymentStatus().setValue(Payment.PaymentStatus.Posted);
         payment.billingStatus().setValue(Payment.BillingStatus.New);
 
+        Persistence.service().retrieveMember(lease.leaseFinancial().billingAccount().payments());
         lease.leaseFinancial().billingAccount().payments().add(payment);
 
         Persistence.service().persist(lease.leaseFinancial().billingAccount());

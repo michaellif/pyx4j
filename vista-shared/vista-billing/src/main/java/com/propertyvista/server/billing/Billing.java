@@ -151,7 +151,7 @@ class Billing {
     }
 
     static void createBill(BillingRun billingRun, BillingAccount billingAccount) {
-        Persistence.service().retrieve(billingAccount.payments());
+        Persistence.service().retrieveMember(billingAccount.payments());
         Persistence.service().retrieve(billingAccount.leaseFinancial());
         Persistence.service().retrieve(billingAccount.leaseFinancial().lease());
 
