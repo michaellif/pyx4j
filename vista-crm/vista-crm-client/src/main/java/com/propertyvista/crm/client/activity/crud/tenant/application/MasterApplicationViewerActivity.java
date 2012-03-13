@@ -13,12 +13,17 @@
  */
 package com.propertyvista.crm.client.activity.crud.tenant.application;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
@@ -30,14 +35,15 @@ import com.propertyvista.crm.rpc.services.tenant.TenantInLeaseCrudService;
 import com.propertyvista.crm.rpc.services.tenant.application.ApplicationCrudService;
 import com.propertyvista.crm.rpc.services.tenant.application.MasterApplicationCrudService;
 import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
 public class MasterApplicationViewerActivity extends CrmViewerActivity<MasterApplicationDTO> implements MasterApplicationViewerView.Presenter {
 
-    private final IListerView.Presenter applicationLister;
+    private final IListerView.Presenter<ApplicationDTO> applicationLister;
 
-    private final IListerView.Presenter tenantLister;
+    private final IListerView.Presenter<TenantInLeaseDTO> tenantLister;
 
     @SuppressWarnings("unchecked")
     public MasterApplicationViewerActivity(Place place) {
@@ -77,5 +83,26 @@ public class MasterApplicationViewerActivity extends CrmViewerActivity<MasterApp
                 view.populate(result);
             }
         }, action);
+    }
+
+    @Override
+    public void retrieveUsers(final AsyncCallback<List<ApplicationUserDTO>> callback) {
+        ((MasterApplicationCrudService) service).retrieveUsers(new DefaultAsyncCallback<Vector<ApplicationUserDTO>>() {
+            @Override
+            public void onSuccess(Vector<ApplicationUserDTO> result) {
+                callback.onSuccess(result);
+            }
+        }, entityId);
+    }
+
+    @Override
+    public void inviteUsers(List<ApplicationUserDTO> users) {
+        Vector<ApplicationUserDTO> vector = new Vector<ApplicationUserDTO>(users);
+        ((MasterApplicationCrudService) service).inviteUsers(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, entityId, vector);
     }
 }

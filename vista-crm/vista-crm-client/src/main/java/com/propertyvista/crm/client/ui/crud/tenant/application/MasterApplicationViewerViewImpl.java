@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
@@ -22,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
@@ -33,6 +36,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
 import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -79,30 +83,35 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         inviteAction = new Button(INVITE, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new SelectDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Send An Infitation To"), true, form.getValue().tenantInfo(),
-                        new SelectDialog.Formatter<TenantInfoDTO>() {
+                ((MasterApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
+                    @Override
+                    public void onSuccess(List<ApplicationUserDTO> result) {
+                        new SelectDialog<ApplicationUserDTO>(i18n.tr("Select Tenants To Send An Invitation To"), true, result,
+                                new SelectDialog.Formatter<ApplicationUserDTO>() {
+                                    @Override
+                                    public String format(ApplicationUserDTO enntity) {
+                                        return enntity.getStringView();
+                                    }
+                                }) {
+
                             @Override
-                            public String format(TenantInfoDTO enntity) {
-                                return enntity.person().name().getStringView();
+                            public boolean onClickOk() {
+                                ((MasterApplicationViewerView.Presenter) presenter).inviteUsers(getSelectedItems());
+                                return true;
                             }
-                        }) {
 
-                    @Override
-                    public boolean onClickOk() {
-                        // TODO make the credit check happen
-                        return true;
-                    }
+                            @Override
+                            public String defineWidth() {
+                                return "350px";
+                            }
 
-                    @Override
-                    public String defineWidth() {
-                        return "350px";
+                            @Override
+                            public String defineHeight() {
+                                return "100px";
+                            }
+                        }.show();
                     }
-
-                    @Override
-                    public String defineHeight() {
-                        return "100px";
-                    }
-                }.show();
+                });
             }
         });
         addToolbarItem(inviteAction.asWidget());

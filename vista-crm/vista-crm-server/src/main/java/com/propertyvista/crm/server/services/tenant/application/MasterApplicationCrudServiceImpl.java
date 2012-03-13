@@ -14,12 +14,18 @@
 package com.propertyvista.crm.server.services.tenant.application;
 
 import java.math.BigDecimal;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.tenant.application.MasterApplicationCrudService;
@@ -27,10 +33,15 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.crm.server.util.GenericConverter;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.tenant.PersonGuarantor;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.dto.ApplicationUserDTO.ApplicationUser;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -151,5 +162,76 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         }
 
         dto.discounts().setValue(!dto.lease().leaseProducts().concessions().isEmpty());
+    }
+
+    @Override
+    public void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId) {
+        MasterApplication entity = Persistence.service().retrieve(dboClass, entityId);
+        if ((entity == null) || (entity.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
+        }
+
+        Vector<ApplicationUserDTO> users = new Vector<ApplicationUserDTO>();
+
+        Persistence.service().retrieve(entity.lease());
+        TenantInLeaseRetriever.UpdateLeaseTenants(entity.lease());
+        for (TenantInLease tenantInLease : entity.lease().tenants()) {
+            Persistence.service().retrieve(tenantInLease);
+            switch (tenantInLease.role().getValue()) {
+            case Applicant:
+            case CoApplicant:
+                ApplicationUserDTO tenant = EntityFactory.create(ApplicationUserDTO.class);
+
+                tenant.person().set(tenantInLease.tenant().person());
+                tenant.user().set(tenantInLease.tenant());
+                tenant.userType().setValue(tenantInLease.role().getValue() == Role.Applicant ? ApplicationUser.Applicant : ApplicationUser.CoApplicant);
+
+                users.add(tenant);
+
+                // process Guarantors:
+
+                EntityQueryCriteria<PersonScreening> criteriaPS = EntityQueryCriteria.create(PersonScreening.class);
+                criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.tenant()));
+                PersonScreening tenantScreenings = Persistence.service().retrieve(criteriaPS);
+
+                Persistence.service().retrieve(tenantScreenings.guarantors());
+                for (PersonGuarantor pg : tenantScreenings.guarantors()) {
+                    ApplicationUserDTO guarantor = EntityFactory.create(ApplicationUserDTO.class);
+
+                    guarantor.person().set(pg.guarantor().person());
+                    guarantor.user().set(pg.guarantor());
+                    guarantor.userType().setValue(ApplicationUser.Guarantor);
+
+                    users.add(guarantor);
+                }
+            }
+        }
+
+        callback.onSuccess(users);
+    }
+
+    @Override
+    public void inviteUsers(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users) {
+        MasterApplication entity = Persistence.service().retrieve(dboClass, entityId);
+        if ((entity == null) || (entity.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
+        }
+
+        for (ApplicationUserDTO user : users) {
+            switch (user.userType().getValue()) {
+            case Applicant:
+                ApplicationManager.inviteUser(entity, user.user(), user.person(), VistaTenantBehavior.ProspectiveApplicant);
+                break;
+            case CoApplicant:
+                ApplicationManager.inviteUser(entity, user.user(), user.person(), VistaTenantBehavior.ProspectiveCoApplicant);
+                break;
+            case Guarantor:
+                ApplicationManager.inviteUser(entity, user.user(), user.person(), VistaTenantBehavior.Guarantor);
+                break;
+            }
+        }
+
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 }

@@ -13,11 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
+import java.util.List;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
 import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
@@ -26,6 +31,10 @@ public interface MasterApplicationViewerView extends IViewerView<MasterApplicati
     interface Presenter extends IViewerView.Presenter {
 
         void action(MasterApplicationActionDTO action);
+
+        void retrieveUsers(AsyncCallback<List<ApplicationUserDTO>> callback);
+
+        void inviteUsers(List<ApplicationUserDTO> users);
     }
 
     IListerView<ApplicationDTO> getApplicationsView();

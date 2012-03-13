@@ -38,7 +38,6 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.TenantUserHolder;
 import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
@@ -200,7 +199,7 @@ public class ApplicationManager {
 
             Persistence.service().retrieve(tenantScreenings.guarantors());
             for (PersonGuarantor personGuarantor : tenantScreenings.guarantors()) {
-                inviteGuarantor(ma, personGuarantor.guarantor());
+                inviteUser(ma, personGuarantor.guarantor(), personGuarantor.guarantor().person(), VistaTenantBehavior.Guarantor);
             }
         }
 
@@ -209,7 +208,8 @@ public class ApplicationManager {
             Persistence.service().retrieve(lease.tenants());
             for (TenantInLease tenantInLease : lease.tenants()) {
                 if ((TenantInLease.Role.CoApplicant == tenantInLease.role().getValue() && (!tenantInLease.takeOwnership().isBooleanTrue()))) {
-                    tenantInLease.application().set(inviteTenant(ma, tenantInLease.tenant()));
+                    tenantInLease.application().set(
+                            inviteUser(ma, tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveCoApplicant));
                     Persistence.service().persist(tenantInLease);
                 }
             }
@@ -233,45 +233,14 @@ public class ApplicationManager {
         }
     }
 
-    public static Application inviteGuarantor(MasterApplication ma, Guarantor guarantor) {
-        Application application = null;
-        for (Application app : ma.applications()) {
-            if (app.user().equals(guarantor)) {
-                application = app;
-            }
-        }
-        if (application == null) {
-            application = EntityFactory.create(Application.class);
-
-            application.belongsTo().set(ma);
-            application.lease().set(ma.lease());
-            application.status().setValue(MasterApplication.Status.Created);
-            application.steps().addAll(ApplicationManager.createGuarantorApplicationProgress());
-            application.user().set(ensureTenantUser(guarantor, guarantor.person(), VistaTenantBehavior.Guarantor));
-
-            Persistence.service().persist(application);
-            ma.applications().add(application);
-            Persistence.service().persist(ma);
-        }
-
-        try {
-            sendInvitationEmail(application.user(), EmailTemplateType.ApplicationCreatedGuarantor);
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-
-        application.status().setValue(MasterApplication.Status.Invited);
-        Persistence.service().persist(application);
-        return application;
-    }
-
-    public static Application inviteTenant(MasterApplication ma, Tenant tenant) {
+    public static Application inviteUser(MasterApplication ma, TenantUserHolder tenant, Person person, VistaTenantBehavior behaviour) {
         Application application = null;
         for (Application app : ma.applications()) {
             if (app.user().equals(tenant)) {
                 application = app;
             }
         }
+        // create new if not found:
         if (application == null) {
             application = EntityFactory.create(Application.class);
 
@@ -279,19 +248,31 @@ public class ApplicationManager {
             application.lease().set(ma.lease());
             application.status().setValue(MasterApplication.Status.Created);
             application.steps().addAll(ApplicationManager.createApplicationProgress());
-            application.user().set(ensureTenantUser(tenant, tenant.person(), VistaTenantBehavior.ProspectiveCoApplicant));
+            application.user().set(ensureTenantUser(tenant, person, behaviour));
 
             Persistence.service().persist(application);
             ma.applications().add(application);
             Persistence.service().persist(ma);
         }
 
-        ma.applications().add(application);
+        // actual invitation (send e-mail):
         try {
-            sendInvitationEmail(application.user(), EmailTemplateType.ApplicationCreatedCoApplicant);
+            switch (behaviour) {
+            case ProspectiveApplicant:
+                sendInvitationEmail(application.user(), EmailTemplateType.ApplicationCreatedApplicant);
+                break;
+            case ProspectiveCoApplicant:
+                sendInvitationEmail(application.user(), EmailTemplateType.ApplicationCreatedCoApplicant);
+                break;
+            case Guarantor:
+                sendInvitationEmail(application.user(), EmailTemplateType.ApplicationCreatedGuarantor);
+                break;
+            }
         } catch (Exception e) {
             // TODO: handle exception
         }
+
+        // update app status:
         application.status().setValue(MasterApplication.Status.Invited);
         Persistence.service().persist(application);
         return application;

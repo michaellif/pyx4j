@@ -13,15 +13,23 @@
  */
 package com.propertyvista.crm.rpc.services.tenant.application;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
 
 public interface MasterApplicationCrudService extends AbstractCrudService<MasterApplicationDTO> {
 
     public void action(AsyncCallback<MasterApplicationDTO> callback, MasterApplicationActionDTO actionDTO);
 
+    public void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId);
+
+    public void inviteUsers(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users);
 }
