@@ -67,7 +67,7 @@ public interface BillableItemAdjustment extends IEntity {
      * 
      */
     @I18n
-    @XmlType(name = "ActionType")
+    @XmlType(name = "BillableItemAdjustmentActionType")
     enum ActionType {
         postLease, inLease, oneTime, immediate;
 

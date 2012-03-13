@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset.unit.occupancy;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -33,6 +35,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public interface AptUnitOccupancySegment extends IEntity {
 
     @I18n
+    @XmlType(name = "AptUnitOccupancySegmentStatus")
     public enum Status {
 
         leased,

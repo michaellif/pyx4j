@@ -33,6 +33,7 @@ import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
+import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
@@ -66,6 +67,10 @@ abstract class BillingTestBase extends VistaDBTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         Persistence.service().startBackgroundProcessTransaction();
+        if (true) {
+            XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "bill-model.xsd")), true, Bill.class);
+            XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "leas-model.xsd")), true, Lease.class);
+        }
     }
 
     @Override

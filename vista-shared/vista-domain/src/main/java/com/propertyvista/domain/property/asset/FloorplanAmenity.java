@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
@@ -34,6 +36,7 @@ import com.propertyvista.domain.marketing.yield.Amenity;
 public interface FloorplanAmenity extends Amenity {
 
     @I18n
+    @XmlType(name = "FloorplanAmenityType")
     public enum Type {
 
         additionalStorage,

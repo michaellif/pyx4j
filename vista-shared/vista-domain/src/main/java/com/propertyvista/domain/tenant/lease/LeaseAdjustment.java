@@ -39,7 +39,7 @@ import com.propertyvista.domain.company.Employee;
 public interface LeaseAdjustment extends IEntity {
 
     @I18n
-    @XmlType(name = "ActionType")
+    @XmlType(name = "LeaseAdjustmentActionType")
     enum ActionType {
         oneTime, immediate;
 

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -36,6 +38,7 @@ public interface BuildingAmenity extends Amenity {
 
     @I18n
     @I18nComment("Building Amenity Type")
+    @XmlType(name = "BuildingAmenityType")
     public enum Type {
 
         garage,
