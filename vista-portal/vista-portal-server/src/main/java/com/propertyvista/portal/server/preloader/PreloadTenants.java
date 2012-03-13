@@ -68,6 +68,10 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
     private static final long MAX_NOTICE_TERM = 1000L * 60L * 60L * 24L * 60L;
 
+    private static final long MIN_AVAILABLE = 0;
+
+    private static final long MAX_AVAILABLE = 1000L * 60L * 60L * 24L * 30L;
+
     @SuppressWarnings("unchecked")
     @Override
     public String delete() {
@@ -131,40 +135,27 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             tenant.user().set(user);
             persistTenant(tenant);
 
-//            ApplicationSummaryGDO summary = generator.createLease(tenant, aptUnitSource.next());
-//            LeaseHelper.updateLease(summary.lease());
-//            Persistence.service().persist(summary.lease());
-//            Persistence.service().persist(summary.lease().leaseFinancial());
-//            for (TenantSummaryGDO tenantSummary : summary.tenants()) {
-//                Persistence.service().persist(tenantSummary.tenantInLease());
-//            }
-//            Persistence.service().persist(generator.createPaymentMethods(tenant));
-//
-//            // Maintenance Requests
-//            for (MaintenanceRequest req : generator.createMntRequests(config().numMntRequests)) {
-//                req.issueClassification().set(RandomUtil.random(issues));
-//                req.tenant().set(tenant);
-//                Persistence.service().persist(req);
-//            }
-
             Persistence.service().persist(generator.createPaymentMethods(tenant));
+
+            AptUnit unit = aptUnitSource.next();
+            if (unit.availableForRent().isNull()) {
+                continue;
+            }
             LeaseLifecycleSim leaseSim = new LeaseLifecycleSim();
             LogicalDate now = new LogicalDate();
-            int firstYear = 2008;
-            int lastYear = 1900 + now.getYear();
-
-            LogicalDate eventDate = new LogicalDate(RandomUtil.randomDate(firstYear, lastYear));
+            LogicalDate simStart = new LogicalDate(Math.max(unit.availableForRent().getValue().getTime(), new LogicalDate(2008 - 1900, 1, 1).getTime()));
+            LogicalDate eventDate = add(simStart, random(MIN_AVAILABLE, MAX_AVAILABLE));
             LogicalDate leaseFrom = add(eventDate, random(MIN_RESERVE_TIME, MAX_RESERVE_TIME));
             LogicalDate expectedMoveIn = leaseFrom;
             LogicalDate leaseTo = add(leaseFrom, random(MIN_LEASE_TERM, MAX_LEASE_TERM));
 
-            Lease lease = leaseSim.newLease(eventDate, aptUnitSource.next(), leaseFrom, leaseTo, expectedMoveIn, PaymentFrequency.Monthly, tenant);
+            Lease lease = leaseSim.newLease(eventDate, unit, leaseFrom, leaseTo, expectedMoveIn, PaymentFrequency.Monthly, tenant);
             LeaseHelper.updateLease(lease);
             Persistence.service().persist(lease);
             Persistence.service().persist(lease.leaseFinancial());
 
             do {
-                if ((eventDate.getYear() + 1900) > lastYear) {
+                if (eventDate.after(now)) {
                     break;
                 }
 
