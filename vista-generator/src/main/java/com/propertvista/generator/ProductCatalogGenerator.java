@@ -124,8 +124,7 @@ public class ProductCatalogGenerator {
         item.version().depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
         item.version().items().addAll(createServiceItems(type));
-// TODO VladS: 
-//        item.saveAction().setValue(SaveAction.saveAsFinal);
+        item.saveAction().setValue(SaveAction.saveAsFinal);
         return item;
     }
 
