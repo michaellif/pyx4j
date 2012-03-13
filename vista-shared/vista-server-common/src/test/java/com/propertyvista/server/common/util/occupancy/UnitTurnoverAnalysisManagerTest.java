@@ -14,10 +14,12 @@
 package com.propertyvista.server.common.util.occupancy;
 
 import org.junit.Ignore;
+import org.junit.Test;
 
 @Ignore
 public class UnitTurnoverAnalysisManagerTest extends UnitTurnoverAnalysisManagerTestBase {
 
+    @Test
     public void testOneUnit() {
         lease(unit(1), "2011-12-01", "2012-12-05");
         lease(unit(1), "2011-12-07", "2013-01-01");
@@ -34,6 +36,7 @@ public class UnitTurnoverAnalysisManagerTest extends UnitTurnoverAnalysisManager
         expect("2013-01-31", 1);
     }
 
+    @Test
     public void testTwoUnits() {
         lease(unit(1), "2011-12-01", "2012-12-05");
         lease(unit(1), "2011-12-07", "2013-01-01");
