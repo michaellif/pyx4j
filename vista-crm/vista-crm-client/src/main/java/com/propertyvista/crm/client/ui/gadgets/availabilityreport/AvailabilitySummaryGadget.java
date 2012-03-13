@@ -18,7 +18,10 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -26,9 +29,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -55,6 +60,8 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
 
         private final AvailabilityReportService service;
 
+        private CDatePicker asOf;
+
         public AvailabiltySummaryGadgetInstance(GadgetMetadata gmd) {
 
             super(gmd, AvailabilitySummary.class);
@@ -63,14 +70,32 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
             setDefaultPopulator(new Populator() {
                 @Override
                 public void populate() {
+                    asOf.setValue(getStatusDate());
                     doPopulate();
                 }
             });
             initView();
         }
 
+        private Widget initAsOfBannerPanel() {
+            HorizontalPanel asForBannerPanel = new HorizontalPanel();
+            asForBannerPanel.setWidth("100%");
+            asForBannerPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+
+            asOf = new CDatePicker();
+            asOf.setValue(getStatusDate());
+            asOf.setViewable(true);
+
+            asForBannerPanel.add(asOf);
+            return asForBannerPanel.asWidget();
+        }
+
         @Override
         public Widget initContentPanel() {
+            panel = new VerticalPanel();
+
+            panel.add(initAsOfBannerPanel());
+
             form = new CrmEntityForm<UnitVacancyReportSummaryDTO>(UnitVacancyReportSummaryDTO.class, true) {
 
                 @Override
@@ -114,7 +139,6 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
             };
             form.initContent();
             form.setWidth("100%");
-            panel = new VerticalPanel();
             panel.add(form);
 
             return panel;
@@ -133,7 +157,7 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
 
         @Override
         public boolean isSetupable() {
-            return false;
+            return true;
         }
 
         private void setData(UnitVacancyReportSummaryDTO summary) {
@@ -162,8 +186,39 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
         }
 
         private LogicalDate getStatusDate() {
-            // TODO Auto-generated method stub
-            return null;
+            return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate();
+        }
+
+        @Override
+        public ISetup getSetup() {
+            return new SetupForm(new CEntityDecoratableEditor<AvailabilitySummary>(AvailabilitySummary.class) {
+                @Override
+                public IsWidget createContent() {
+                    FormFlexPanel p = new FormFlexPanel();
+                    int row = -1;
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
+                    get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<Boolean> event) {
+                            if (event.getValue() != null) {
+                                get(proto().asOf()).setVisible(event.getValue());
+                            }
+                        }
+                    });
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
+                    get(proto().asOf()).setVisible(false);
+                    return p;
+                }
+
+                @Override
+                protected void onPopulate() {
+                    super.onPopulate();
+                    get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
+                }
+
+            });
+
         }
 
     }

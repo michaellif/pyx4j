@@ -44,7 +44,7 @@ public interface UnitAvailability extends ListerGadgetBaseMetadata {
     IPrimitive<FilterPreset> defaultFilteringPreset();
 
     /** <code>null</code> null means now */
-    IPrimitive<LogicalDate> asFor();
+    IPrimitive<LogicalDate> asOf();
 
     IPrimitive<Boolean> customizeDate();
 }
