@@ -52,6 +52,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
         // If draft do not exists, return data from current version
         if (primaryKey.getVersion() == Key.VERSION_DRAFT && entity.version().isNull()) {
             E entityCurrent = Persistence.secureRetrieve(entityClass, primaryKey.asCurrentKey());
+            enhanceRetrieved(entityCurrent);
             entity.version().set(EntityGraph.businessDuplicate(entityCurrent.version()));
         }
 
