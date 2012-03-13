@@ -62,7 +62,7 @@ public class ResponseMessage {
     //@formatter:off
     @XmlElementWrapper
     @XmlElements({ 
-        @XmlElement(name = "response", type = Response.class), 
+        @XmlElement(name = "response", type = Response.class)
         })
     //@formatter:on    
     public List<Response> responses;
