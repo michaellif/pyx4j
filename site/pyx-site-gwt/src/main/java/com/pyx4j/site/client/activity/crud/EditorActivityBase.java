@@ -69,7 +69,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         this.view = view;
         this.service = service;
         this.entityClass = entityClass;
-        view.setPresenter(this);
         setPlace(place);
     }
 
@@ -113,6 +112,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         // should be called first in start - some views can set appropriate form according to the current mode
         view.setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
         view.reset();
+        view.setPresenter(this);
         populate();
         containerWidget.setWidget(view);
     }

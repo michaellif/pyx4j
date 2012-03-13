@@ -55,7 +55,6 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
         this.view = view;
         this.service = service;
-        view.setPresenter(this);
 
         setPlace(place);
     }
@@ -83,6 +82,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.reset();
+        view.setPresenter(this);
         populate();
         panel.setWidget(view);
     }
