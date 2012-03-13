@@ -298,6 +298,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
                         segment.status().setValue(Status.leased);
                     }
                 });
+                availabilityReportManager.generateUnitAvailablity(now);
                 return;
             }
         }
