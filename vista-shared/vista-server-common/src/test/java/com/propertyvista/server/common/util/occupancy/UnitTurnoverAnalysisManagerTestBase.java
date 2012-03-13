@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.common.util.occupancy;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
@@ -80,6 +81,11 @@ public class UnitTurnoverAnalysisManagerTestBase {
         Persistence.secureSave(floorplan);
     }
 
+    @After
+    public void tearDown() {
+
+    }
+
     protected void lease(AptUnit unit, String dateFrom, String dateTo) {
         Tenant tenant = EntityFactory.create(Tenant.class);
         tenant.type().setValue(Tenant.Type.person);
@@ -121,15 +127,24 @@ public class UnitTurnoverAnalysisManagerTestBase {
 
     protected void recalcTurnovers(String date) {
         new UnitTurnoverAnalysisManagerImpl().recalculateTurnovers(building.getPrimaryKey(), asDate(date));
+        Persistence.service().commit();
     }
 
     protected void expect(String onDate, int turnovers) {
+
         EntityQueryCriteria<UnitTurnoverStats> criteria = EntityQueryCriteria.create(UnitTurnoverStats.class);
-        criteria.add(PropertyCriterion.ge(criteria.proto().updatedOn(), asDate(onDate)));
+        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+        LogicalDate asOf = asDate(onDate);
+        LogicalDate monthStart = new LogicalDate(asOf.getYear(), asOf.getMonth(), 1);
+        criteria.add(PropertyCriterion.ge(criteria.proto().updatedOn(), monthStart));
         criteria.add(PropertyCriterion.le(criteria.proto().updatedOn(), asDate(onDate)));
         criteria.desc(criteria.proto().updatedOn());
 
         UnitTurnoverStats stats = Persistence.service().retrieve(criteria);
+
+        if (turnovers == 0 & stats == null) {
+            return;
+        }
         Assert.assertNotNull(stats);
         Assert.assertEquals(new Integer(turnovers), stats.turnovers().getValue());
     }

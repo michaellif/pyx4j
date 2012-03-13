@@ -31,16 +31,16 @@ public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisMana
 
     /** recalculate turnover for the building, for the month that includes "until" */
     @Override
-    public void recalculateTurnovers(Key building, LogicalDate until) {
+    public void recalculateTurnovers(Key building, LogicalDate asOf) {
 
-        LogicalDate beginningOfTheMonth = new LogicalDate(until.getYear(), until.getMonth(), 1);
-        LogicalDate beginningOfTheNextMonth = new LogicalDate(until.getYear() + (until.getMonth() + 1) / 12, (until.getMonth() + 1) % 12, 1);
+        LogicalDate beginningOfTheMonth = new LogicalDate(asOf.getYear(), asOf.getMonth(), 1);
+        LogicalDate beginningOfTheNextMonth = new LogicalDate(asOf.getYear() + (asOf.getMonth() + 1) / 12, (asOf.getMonth() + 1) % 12, 1);
 
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit().belongsTo(), building));
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), beginningOfTheMonth));
-        criteria.add(PropertyCriterion.le(criteria.proto().dateFrom(), until));
-        criteria.add(PropertyCriterion.le(criteria.proto().status(), AptUnitOccupancySegment.Status.leased));
+        criteria.add(PropertyCriterion.lt(criteria.proto().dateFrom(), asOf));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), AptUnitOccupancySegment.Status.leased));
         List<Sort> sorts = Arrays.asList(new Sort(criteria.proto().dateFrom().getPath().toString(), false), new Sort(criteria.proto().unit().getPath()
                 .toString(), false));
         criteria.setSorts(sorts);
@@ -75,7 +75,7 @@ public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisMana
 
         }
         turnovers.turnovers().setValue(turnoverCount);
-        turnovers.updatedOn().setValue(until);
+        turnovers.updatedOn().setValue(asOf);
         Persistence.secureSave(turnovers);
     }
 }
