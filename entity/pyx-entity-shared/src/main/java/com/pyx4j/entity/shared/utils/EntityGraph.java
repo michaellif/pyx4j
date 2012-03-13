@@ -371,7 +371,7 @@ public class EntityGraph {
             @Override
             public void apply(IEntity entity) {
                 if (entity == copy || entity.getMeta().isOwnedRelationships()) {
-                    entity.id().set(null);
+                    entity.setPrimaryKey(null);
                 }
             }
         });
