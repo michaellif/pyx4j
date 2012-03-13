@@ -123,11 +123,15 @@ public class TableModleVersioned {
                 if (!memeberEntity.getPrimaryKey().equals(existingDraft.getPrimaryKey())) {
                     memeberEntity = EntityGraph.businessDuplicate(memeberEntity);
                     memeberEntity.setPrimaryKey(null);
+                    memeberEntity.holder().set(versionedEntity);
+                    ((IEntity) member.getMember(versionedEntity)).set(memeberEntity);
                 }
-            } else {
+            } else if (memeberEntity.getPrimaryKey() != null) {
                 // TODO optimize new item creation if no data changed; for now Finalize create new data anyway, 
                 memeberEntity = EntityGraph.businessDuplicate(memeberEntity);
                 memeberEntity.setPrimaryKey(null);
+                memeberEntity.holder().set(versionedEntity);
+                ((IEntity) member.getMember(versionedEntity)).set(memeberEntity);
             }
             memeberEntity.fromDate().setValue(persistenceContext.getTimeNow());
             memeberEntity.toDate().setValue(null);
