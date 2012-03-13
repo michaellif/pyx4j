@@ -11,9 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertvista.generator;
-
-import com.propertvista.generator.util.RandomUtil;
+package com.propertyvista.server.common.util;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -27,27 +25,26 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
-import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.common.util.LeaseManager.TimeContextProvider;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
 
 public class LeaseLifecycleSim {
 
-    public Lease newLease(final LogicalDate eventDate, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo, LogicalDate expectedMoveIn,
+    public Lease newLease(final LogicalDate eventDate, String leaseId, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo, LogicalDate expectedMoveIn,
             PaymentFrequency paymentFrequency, Tenant tenant) {
         final Lease lease = EntityFactory.create(Lease.class);
         lease.status().setValue(Lease.Status.Created);
-        lease.leaseID().setValue(RandomUtil.randomLetters(8));
+        lease.leaseID().setValue(leaseId);
         lease.unit().set(unit);
 
         // TODO fix this to match unit type
         lease.type().setValue(Service.Type.residentialUnit);
 
-        lease.createDate().setValue(RandomUtil.randomLogicalDate(2010, 2011));
-        lease.leaseFrom().setValue(lease.createDate().getValue());
-        lease.leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2014));
-        lease.expectedMoveIn().setValue(lease.leaseFrom().getValue());
+        lease.createDate().setValue(eventDate);
+        lease.leaseFrom().setValue(leaseFrom);
+        lease.leaseTo().setValue(leaseTo);
+        lease.expectedMoveIn().setValue(expectedMoveIn);
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);

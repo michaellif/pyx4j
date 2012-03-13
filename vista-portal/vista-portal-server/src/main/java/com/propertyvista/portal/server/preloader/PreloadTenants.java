@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.LeaseHelper;
-import com.propertvista.generator.LeaseLifecycleSim;
 import com.propertvista.generator.TenantsGenerator;
 import com.propertvista.generator.util.RandomUtil;
 
@@ -49,6 +48,7 @@ import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
+import com.propertyvista.server.common.util.LeaseLifecycleSim;
 
 public class PreloadTenants extends BaseVistaDevDataPreloader {
 
@@ -62,7 +62,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
     private static final long MIN_LEASE_TERM = 1000L * 60L * 60L * 24L * 365L; // approx 1 Year
 
-    private static final long MAX_LEASE_TERM = 1000L * 60L * 60L * 24L * 365L * 5; // approx 5 Years
+    private static final long MAX_LEASE_TERM = 1000L * 60L * 60L * 24L * 365L * 5L; // approx 5 Years
 
     private static final long MIN_NOTICE_TERM = 1000L * 60L * 60L * 24L * 31L;
 
@@ -120,9 +120,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
-
         TenantsGenerator generator = new TenantsGenerator(config().tenantsGenerationSeed);
-
         AptUnitSource aptUnitSource = new AptUnitSource();
 
         // retrieve MaintenanceRequest issues
@@ -148,8 +146,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             LogicalDate leaseFrom = add(eventDate, random(MIN_RESERVE_TIME, MAX_RESERVE_TIME));
             LogicalDate expectedMoveIn = leaseFrom;
             LogicalDate leaseTo = add(leaseFrom, random(MIN_LEASE_TERM, MAX_LEASE_TERM));
-
-            Lease lease = leaseSim.newLease(eventDate, unit, leaseFrom, leaseTo, expectedMoveIn, PaymentFrequency.Monthly, tenant);
+            Lease lease = leaseSim.newLease(eventDate, RandomUtil.randomLetters(8), unit, leaseFrom, leaseTo, expectedMoveIn, PaymentFrequency.Monthly, tenant);
             LeaseHelper.updateLease(lease);
             Persistence.service().persist(lease);
             Persistence.service().persist(lease.leaseFinancial());
@@ -185,7 +182,8 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
                     Persistence.service().persist(req);
                 }
 
-                eventDate = new LogicalDate(lease.leaseTo().getValue().getTime() - random(MIN_NOTICE_TERM, MAX_NOTICE_TERM));
+                eventDate = new LogicalDate(Math.max(lease.leaseFrom().getValue().getTime(),
+                        lease.leaseTo().getValue().getTime() - random(MIN_NOTICE_TERM, MAX_NOTICE_TERM)));
                 if (eventDate.after(now)) {
                     break;
                 }
@@ -263,7 +261,12 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
     }
 
     private long random(long min, long max) {
-        return min + RND.nextLong() % (max - min);
+        assert min <= max;
+        if (max == min) {
+            return min;
+        } else {
+            return min + Math.abs(RND.nextLong()) % (max - min);
+        }
     }
 
     private LogicalDate add(LogicalDate date, long term) {

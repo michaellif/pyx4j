@@ -41,9 +41,9 @@ import com.propertyvista.crm.server.util.SortingFactory;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO.AnalysisResolution;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
@@ -70,7 +70,6 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             throw new IllegalArgumentException("the report date cannot be null");
         }
         criteria.add(PropertyCriterion.le(criteria.proto().statusDate(), on));
-        criteria.add(PropertyCriterion.ne(criteria.proto().vacancyStatus(), null));
 
         // use descending order of the status date in order to select the most recent statuses first
         // use unit pk sorting in order to make tacking of already added unit statuses
@@ -102,7 +101,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         while (i.hasNext()) {
             UnitAvailabilityStatus unitStatus = i.next();
-            if (filter.isAcceptable(unitStatus)) {
+            if (!unitStatus.vacancyStatus().isNull() & filter.isAcceptable(unitStatus)) {
                 ++currentPagePosition;
                 ++totalRows;
                 if (currentPagePosition > pageSize) {
