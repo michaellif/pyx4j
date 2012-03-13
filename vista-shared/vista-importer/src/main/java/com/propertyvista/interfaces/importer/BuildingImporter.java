@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -27,6 +28,7 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.interfaces.importer.converter.AptUnitConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanAmenityConverter;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
@@ -37,6 +39,7 @@ import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
+import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 
 public class BuildingImporter extends ImportPersister {
 
@@ -161,6 +164,21 @@ public class BuildingImporter extends ImportPersister {
                         i.belongsTo().set(building);
                         i.floorplan().set(floorplan);
                         items.add(i);
+
+                        AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
+                        i._AptUnitOccupancySegment().add(occupancySegment);
+                        occupancySegment.unit().set(i);
+
+                        if (i.availableForRent().isNull()) {
+                            occupancySegment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
+                            occupancySegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+                            occupancySegment.status().setValue(AptUnitOccupancySegment.Status.offMarket);
+                        } else {
+                            occupancySegment.dateFrom().setValue(i.availableForRent().getValue());
+                            occupancySegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+                            occupancySegment.status().setValue(AptUnitOccupancySegment.Status.available);
+                        }
+
                     }
                     Persistence.service().merge(items);
                     counters.units += items.size();
