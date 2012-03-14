@@ -35,6 +35,8 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public static final String ARG_NAME_PARENT_ID = "parentId";
 
+    public static final String ARG_NAME_PARENT_CLASS = "parentClass";
+
     public static final String ARG_NAME_TAB_IDX = "tabIdx";
 
     public static enum Type {
@@ -100,6 +102,16 @@ public abstract class CrudAppPlace extends AppPlace {
         arg(ARG_NAME_ID, ARG_VALUE_NEW);
         if (parentID != null) {
             arg(ARG_NAME_PARENT_ID, parentID.toString());
+        }
+        return this;
+    }
+
+    public CrudAppPlace formNewItemPlace(Key parentID, Class<?> parentClass) {
+        setType(Type.editor);
+        arg(ARG_NAME_ID, ARG_VALUE_NEW);
+        if (parentID != null) {
+            arg(ARG_NAME_PARENT_ID, parentID.toString());
+            arg(ARG_NAME_PARENT_CLASS, parentClass.toString());
         }
         return this;
     }
