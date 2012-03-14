@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.config;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionModern;
 
@@ -78,4 +79,12 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
         return new NamingConventionModern();
     }
 
+    @Override
+    public int unreturnedConnectionTimeout() {
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode() && ServerSideConfiguration.isStartedUnderEclipse()) {
+            return 0;
+        } else {
+            return super.unreturnedConnectionTimeout();
+        }
+    }
 }
