@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -28,14 +29,19 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.Payment;
-import com.propertyvista.domain.tenant.lease.LeaseFinancial;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface BillingAccount extends IEntity {
 
+    enum ProrationMethod {
+        Actual, Standard, Annual
+    }
+
     @Owner
+    @NotNull
     @ReadOnly
     @Detached
-    LeaseFinancial leaseFinancial();
+    Lease lease();
 
     @ReadOnly
     BillingCycle billingCycle();
@@ -61,5 +67,8 @@ public interface BillingAccount extends IEntity {
     @Detached(level = AttachLevel.Detached)
     IList<Payment> payments();
 
+    IPrimitive<ProrationMethod> prorationMethod();
+
+    IPrimitive<Integer> billingPeriodStartDate();
     //Should have deposit value field
 }

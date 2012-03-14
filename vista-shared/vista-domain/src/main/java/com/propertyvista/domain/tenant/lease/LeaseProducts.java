@@ -34,4 +34,8 @@ public interface LeaseProducts extends IEntity {
 
     @Versioned
     IList<Concession> concessions();
+
+    @Owned
+    @Caption(name = "Lease Adjustments")
+    IList<LeaseAdjustment> adjustments();
 }

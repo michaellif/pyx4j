@@ -152,8 +152,7 @@ class Billing {
 
     static void createBill(BillingRun billingRun, BillingAccount billingAccount) {
         Persistence.service().retrieveMember(billingAccount.payments());
-        Persistence.service().retrieve(billingAccount.leaseFinancial());
-        Persistence.service().retrieve(billingAccount.leaseFinancial().lease());
+        Persistence.service().retrieve(billingAccount.lease());
 
         Bill bill = EntityFactory.create(Bill.class);
 
@@ -172,22 +171,22 @@ class Billing {
 
                 Persistence.service().persist(bill);
 
-                bill.draft().setValue(Status.Created.equals(billingAccount.leaseFinancial().lease().status().getValue()));
+                bill.draft().setValue(Status.Created.equals(billingAccount.lease().status().getValue()));
 
-                if (Status.Approved.equals(billingAccount.leaseFinancial().lease().status().getValue())) {// first bill should be issued
+                if (Status.Approved.equals(billingAccount.lease().status().getValue())) {// first bill should be issued
                     bill.billType().setValue(Bill.BillType.First);
-                    bill.billingPeriodStartDate().setValue(billingAccount.leaseFinancial().lease().leaseFrom().getValue());
+                    bill.billingPeriodStartDate().setValue(billingAccount.lease().leaseFrom().getValue());
 
-                    if (billingAccount.leaseFinancial().lease().leaseTo().isNull()
-                            || (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
+                    if (billingAccount.lease().leaseTo().isNull()
+                            || (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
                         bill.billingPeriodEndDate().setValue(billingRun.billingPeriodEndDate().getValue());
-                    } else if (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) >= 0) {
-                        bill.billingPeriodEndDate().setValue(billingAccount.leaseFinancial().lease().leaseTo().getValue());
+                    } else if (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) >= 0) {
+                        bill.billingPeriodEndDate().setValue(billingAccount.lease().leaseTo().getValue());
                     } else {
                         throw new BillingException("Lease already ended");
                     }
 
-                } else if (Status.Completed.equals(billingAccount.leaseFinancial().lease().status().getValue())) {// final bill should be issued
+                } else if (Status.Completed.equals(billingAccount.lease().status().getValue())) {// final bill should be issued
                     bill.billType().setValue(Bill.BillType.Final);
                 } else {
                     bill.billType().setValue(Bill.BillType.Regular);
@@ -198,11 +197,11 @@ class Billing {
 
                     bill.billingPeriodStartDate().setValue(billingRun.billingPeriodStartDate().getValue());
 
-                    if (billingAccount.leaseFinancial().lease().leaseTo().isNull()
-                            || (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
+                    if (billingAccount.lease().leaseTo().isNull()
+                            || (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
                         bill.billingPeriodEndDate().setValue(billingRun.billingPeriodEndDate().getValue());
-                    } else if (billingAccount.leaseFinancial().lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) >= 0) {
-                        bill.billingPeriodEndDate().setValue(billingAccount.leaseFinancial().lease().leaseTo().getValue());
+                    } else if (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) >= 0) {
+                        bill.billingPeriodEndDate().setValue(billingAccount.lease().leaseTo().getValue());
                     } else {
                         throw new BillingException("Lease already ended");
                     }

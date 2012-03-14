@@ -85,16 +85,16 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
 
     protected void populateBills(LeaseDTO result) {
         List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
-        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Bill.class).billingAccount().leaseFinancial().id().getPath(),
-                Operators.is, result.leaseFinancial().getPrimaryKey()));
+        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Bill.class).billingAccount().id().getPath(), Operators.is, result
+                .billingAccount().getPrimaryKey()));
         billLister.setPreDefinedFilters(preDefinedFilters);
         billLister.populate();
     }
 
     protected void populatePayments(LeaseDTO result) {
         List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
-        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Payment.class).billingAccount().leaseFinancial().id().getPath(),
-                Operators.is, result.leaseFinancial().getPrimaryKey()));
+        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Payment.class).billingAccount().id().getPath(), Operators.is, result
+                .billingAccount().getPrimaryKey()));
         paymentLister.setPreDefinedFilters(preDefinedFilters);
         paymentLister.populate();
     }

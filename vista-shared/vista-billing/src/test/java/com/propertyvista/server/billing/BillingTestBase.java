@@ -108,7 +108,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         BillingFacade.runBilling(lease);
 
-        Bill bill = BillingFacade.getLatestBill(lease.leaseFinancial().billingAccount());
+        Bill bill = BillingFacade.getLatestBill(lease.billingAccount());
 
         if (confirm) {
             BillingFacade.confirmBill(bill);
@@ -147,7 +147,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
         lease.leaseFrom().setValue(BillingTestUtils.getDate(leaseDateFrom));
         lease.leaseTo().setValue(BillingTestUtils.getDate(leaseDateTo));
 
-        lease.leaseFinancial().billingPeriodStartDate().setValue(billingPeriodStartDate);
+        lease.billingAccount().billingPeriodStartDate().setValue(billingPeriodStartDate);
 
         Persistence.service().persist(lease);
         Persistence.service().commit();
@@ -272,10 +272,10 @@ abstract class BillingTestBase extends VistaDBTestBase {
         payment.paymentStatus().setValue(Payment.PaymentStatus.Posted);
         payment.billingStatus().setValue(Payment.BillingStatus.New);
 
-        Persistence.service().retrieveMember(lease.leaseFinancial().billingAccount().payments());
-        lease.leaseFinancial().billingAccount().payments().add(payment);
+        Persistence.service().retrieveMember(lease.billingAccount().payments());
+        lease.billingAccount().payments().add(payment);
 
-        Persistence.service().persist(lease.leaseFinancial().billingAccount());
+        Persistence.service().persist(lease.billingAccount());
         Persistence.service().commit();
 
         return payment;

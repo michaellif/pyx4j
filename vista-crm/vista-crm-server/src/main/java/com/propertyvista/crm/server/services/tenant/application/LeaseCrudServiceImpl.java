@@ -38,7 +38,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ActionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseFinancial;
+import com.propertyvista.domain.tenant.lease.LeaseProducts;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
@@ -117,7 +117,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         }
 
         // Lease Financial Adjustments:
-        updateAdjustments(lease.leaseFinancial());
+        updateAdjustments(lease.leaseProducts());
     }
 
     private void updateAdjustments(BillableItem item) {
@@ -133,8 +133,8 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         }
     }
 
-    private void updateAdjustments(LeaseFinancial leaseFinancial) {
-        for (LeaseAdjustment adj : leaseFinancial.adjustments()) {
+    private void updateAdjustments(LeaseProducts leaseProducts) {
+        for (LeaseAdjustment adj : leaseProducts.adjustments()) {
             // set creator:
             if (adj.createdWhen().isNull()) {
                 adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());

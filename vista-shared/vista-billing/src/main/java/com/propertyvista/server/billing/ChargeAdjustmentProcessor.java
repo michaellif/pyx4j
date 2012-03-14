@@ -17,12 +17,12 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillChargeAdjustment;
 import com.propertyvista.domain.financial.billing.BillChargeTax;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class ChargeAdjustmentProcessor {
 
@@ -33,8 +33,8 @@ public class ChargeAdjustmentProcessor {
     }
 
     void createChargeAdjustments() {
-        createChargeAdjustments(billing.getNextPeriodBill().billingAccount().leaseFinancial().lease().leaseProducts().serviceItem());
-        for (BillableItem item : billing.getNextPeriodBill().billingAccount().leaseFinancial().lease().leaseProducts().featureItems()) {
+        createChargeAdjustments(billing.getNextPeriodBill().billingAccount().lease().leaseProducts().serviceItem());
+        for (BillableItem item : billing.getNextPeriodBill().billingAccount().lease().leaseProducts().featureItems()) {
             createChargeAdjustments(item);
         }
     }
@@ -82,7 +82,7 @@ public class ChargeAdjustmentProcessor {
             adjustment.toDate().setValue(overlap.getToDate());
 
             //TODO use policy to determin proration type
-            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), LeaseFinancial.ProrationMethod.Actual);
+            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), BillingAccount.ProrationMethod.Actual);
             adjustment.amount().setValue(amount.multiply(proration));
         }
 

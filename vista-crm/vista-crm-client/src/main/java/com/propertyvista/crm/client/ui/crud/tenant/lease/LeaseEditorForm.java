@@ -269,8 +269,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setH1(++row, 0, 2, proto().leaseProducts().concessions().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
 
-        main.setH1(++row, 0, 2, proto().leaseFinancial().adjustments().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().leaseFinancial().adjustments(), new LeaseAdjustmentFolder(isEditable(), this)));
+        main.setH1(++row, 0, 2, proto().leaseProducts().adjustments().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().leaseProducts().adjustments(), new LeaseAdjustmentFolder(isEditable(), this)));
 
         return new CrmScrollPanel(main);
     }

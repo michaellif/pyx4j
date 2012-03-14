@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
@@ -34,6 +35,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -189,7 +191,8 @@ public interface Lease extends IEntity {
     IPrimitive<LogicalDate> approvalDate();
 
     @Owned(forceCreation = true)
-    LeaseFinancial leaseFinancial();
+    @JoinColumn
+    BillingAccount billingAccount();
 
     @EmbeddedEntity
     LeaseProducts leaseProducts();

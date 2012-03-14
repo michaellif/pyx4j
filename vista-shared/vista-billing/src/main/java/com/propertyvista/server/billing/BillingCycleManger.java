@@ -37,15 +37,15 @@ public class BillingCycleManger {
     private static final long REF_SUNDAY = new LogicalDate(112, 0, 1).getTime();
 
     static BillingCycle ensureBillingCycle(Lease lease) {
-        BillingCycle billingCycle = lease.leaseFinancial().billingAccount().billingCycle();
+        BillingCycle billingCycle = lease.billingAccount().billingCycle();
 
         if (billingCycle.isNull()) {
             PaymentFrequency paymentFrequency = lease.paymentFrequency().getValue();
             Integer billingPeriodStartDay = null;
-            if (lease.leaseFinancial().billingPeriodStartDate().isNull()) {
+            if (lease.billingAccount().billingPeriodStartDate().isNull()) {
                 billingPeriodStartDay = calculateBillingCycleStartDay(lease.paymentFrequency().getValue(), lease.leaseFrom().getValue());
             } else {
-                billingPeriodStartDay = lease.leaseFinancial().billingPeriodStartDate().getValue();
+                billingPeriodStartDay = lease.billingAccount().billingPeriodStartDate().getValue();
             }
 
             //try to find existing billing cycle    

@@ -30,7 +30,7 @@ public class LeaseAdjustmentProcessor {
     }
 
     void createLeaseAdjustments() {
-        for (LeaseAdjustment item : billing.getNextPeriodBill().billingAccount().leaseFinancial().adjustments()) {
+        for (LeaseAdjustment item : billing.getNextPeriodBill().billingAccount().lease().leaseProducts().adjustments()) {
             createLeaseAdjustment(item);
         }
     }
@@ -46,7 +46,8 @@ public class LeaseAdjustmentProcessor {
         billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(adjustment.amount().getValue()));
 
         if (!adjustment.amount().isNull()) {
-            adjustment.taxes().addAll(TaxUtils.calculateTaxes(adjustment.amount().getValue(), item.reason(), billing.getNextPeriodBill().billingRun().building()));
+            adjustment.taxes().addAll(
+                    TaxUtils.calculateTaxes(adjustment.amount().getValue(), item.reason(), billing.getNextPeriodBill().billingRun().building()));
         }
         adjustment.taxTotal().setValue(new BigDecimal(0));
         for (BillChargeTax chargeTax : adjustment.taxes()) {

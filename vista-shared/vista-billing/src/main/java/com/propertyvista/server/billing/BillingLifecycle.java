@@ -38,7 +38,6 @@ import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
-import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class BillingLifecycle {
 
@@ -53,7 +52,7 @@ public class BillingLifecycle {
             throw new BillingException("Can't run billing on Account with non-confirmed bills");
         }
 
-        BillingRun billingRun = createBillingRun(lease.leaseFinancial());
+        BillingRun billingRun = createBillingRun(lease.billingAccount());
         Persistence.service().retrieve(lease.unit());
         billingRun.building().set(lease.unit().belongsTo());
         Persistence.service().persist(billingRun);
@@ -134,13 +133,13 @@ public class BillingLifecycle {
         }
     }
 
-    static BillingRun createBillingRun(LeaseFinancial leaseFinancial) {
-        Bill previousBill = getLatestConfirmedBill(leaseFinancial.billingAccount());
+    static BillingRun createBillingRun(BillingAccount billingAccount) {
+        Bill previousBill = getLatestConfirmedBill(billingAccount);
         if (previousBill == null) {
-            return BillingCycleManger.createFirstBillingRun(leaseFinancial.billingAccount().billingCycle(), leaseFinancial.lease().leaseFrom().getValue(),
-                    !leaseFinancial.billingPeriodStartDate().isNull());
+            return BillingCycleManger.createFirstBillingRun(billingAccount.billingCycle(), billingAccount.lease().leaseFrom().getValue(), !billingAccount
+                    .billingPeriodStartDate().isNull());
         } else {
-            return BillingCycleManger.createSubsiquentBillingRun(leaseFinancial.billingAccount().billingCycle(), previousBill.billingRun());
+            return BillingCycleManger.createSubsiquentBillingRun(billingAccount.billingCycle(), previousBill.billingRun());
         }
     }
 
@@ -151,16 +150,16 @@ public class BillingLifecycle {
         if (lease.leaseFrom().isNull()) {
             throw new BillingException("'Lease from' date is not set");
         }
-        LeaseFinancial leaseFinancial = lease.leaseFinancial();
-        if (leaseFinancial.isValueDetached()) {
-            Persistence.service().retrieve(leaseFinancial);
+        BillingAccount billingAccount = lease.billingAccount();
+        if (billingAccount.isValueDetached()) {
+            Persistence.service().retrieve(billingAccount);
         }
-        if (leaseFinancial.billingAccount().billingCycle().isNull()) {
-            leaseFinancial.billingAccount().billingCycle().set(BillingCycleManger.ensureBillingCycle(lease));
-            leaseFinancial.billingAccount().billCounter().setValue(1);
+        if (billingAccount.billingCycle().isNull()) {
+            billingAccount.billingCycle().set(BillingCycleManger.ensureBillingCycle(lease));
+            billingAccount.billCounter().setValue(1);
             Persistence.service().persist(lease);
         }
-        return leaseFinancial.billingAccount();
+        return billingAccount;
 
     }
 

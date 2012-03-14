@@ -21,13 +21,13 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillCharge;
 import com.propertyvista.domain.financial.billing.BillChargeTax;
 import com.propertyvista.domain.financial.billing.BillEntry;
 import com.propertyvista.domain.financial.billing.BillEntryAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class ChargeProcessor {
 
@@ -46,10 +46,10 @@ public class ChargeProcessor {
 
     void createCharges() {
         if (!Bill.BillType.Final.equals(billing.getNextPeriodBill().billType().getValue())) {
-            createChargeForNextPeriod(billing.getNextPeriodBill().billingAccount().leaseFinancial().lease().leaseProducts().serviceItem());
+            createChargeForNextPeriod(billing.getNextPeriodBill().billingAccount().lease().leaseProducts().serviceItem());
         }
 
-        for (BillableItem billableItem : billing.getNextPeriodBill().billingAccount().leaseFinancial().lease().leaseProducts().featureItems()) {
+        for (BillableItem billableItem : billing.getNextPeriodBill().billingAccount().lease().leaseProducts().featureItems()) {
             if (billableItem.isNull()) {
                 throw new BillingException("Service Item is mandatory in lease");
             }
@@ -165,7 +165,7 @@ public class ChargeProcessor {
 
     private void prorate(BillCharge charge) {
         //TODO use policy to determin proration type
-        BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), LeaseFinancial.ProrationMethod.Actual);
+        BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), BillingAccount.ProrationMethod.Actual);
         charge.amount().setValue(charge.billableItem().item().price().getValue().multiply(proration));
     }
 

@@ -20,11 +20,11 @@ import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.domain.tenant.lease.LeaseFinancial;
+import com.propertyvista.domain.financial.BillingAccount;
 
 public class ProrationUtils {
 
-    public static BigDecimal prorate(LogicalDate from, LogicalDate to, LeaseFinancial.ProrationMethod method) {
+    public static BigDecimal prorate(LogicalDate from, LogicalDate to, BillingAccount.ProrationMethod method) {
         assert from != null && to != null;
         Calendar calendarFrom = new GregorianCalendar();
         calendarFrom.setTime(from);
