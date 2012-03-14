@@ -236,7 +236,8 @@ public class ApplicationManager {
     public static Application inviteUser(MasterApplication ma, TenantUserHolder tenant, Person person, VistaTenantBehavior behaviour) {
         Application application = null;
         for (Application app : ma.applications()) {
-            if (app.user().equals(tenant)) {
+            Persistence.service().retrieve(app);
+            if (app.user().equals(tenant.user())) {
                 application = app;
             }
         }
