@@ -98,7 +98,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         finalizeButton = new Button(i18n.tr("Finalize"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.finalize();
+                presenter.approveFinal();
             }
         });
         addToolbarItem(finalizeButton.asWidget());
