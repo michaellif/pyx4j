@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.billing;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 
@@ -36,7 +37,13 @@ class BillLeaseDeferredProcess implements IDeferredProcess {
     @Override
     public void execute() {
         if (!compleate) {
-            BillingFacade.runBilling(lease);
+            try {
+                Persistence.service().startBackgroundProcessTransaction();
+                BillingFacade.runBilling(lease);
+                Persistence.service().commit();
+            } finally {
+                Persistence.service().endTransaction();
+            }
         }
         compleate = true;
     }
