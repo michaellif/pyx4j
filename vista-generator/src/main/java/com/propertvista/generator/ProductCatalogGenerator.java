@@ -28,7 +28,6 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.DepositType;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -121,8 +120,6 @@ public class ProductCatalogGenerator {
         item.version().name().setValue(RandomUtil.randomLetters(6));
         item.version().description().setValue("Service description");
 
-        item.version().depositType().setValue(RandomUtil.randomEnum(DepositType.class));
-
         item.version().items().addAll(createServiceItems(type));
         item.saveAction().setValue(SaveAction.saveAsFinal);
         return item;
@@ -178,8 +175,6 @@ public class ProductCatalogGenerator {
         item.version().type().setValue(type);
         item.version().name().setValue(RandomUtil.randomLetters(6));
         item.version().description().setValue("Feature description");
-
-        item.version().depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
         item.version().recurring().setValue(RandomUtil.randomBoolean());
         item.version().mandatory().setValue(RandomUtil.randomBoolean());

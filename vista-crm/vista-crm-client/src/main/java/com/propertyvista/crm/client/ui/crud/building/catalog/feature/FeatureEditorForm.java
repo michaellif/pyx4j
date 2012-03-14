@@ -43,7 +43,6 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
         main.setH1(++row, 0, 2, i18n.tr("Information"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type(), new CLabel()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().name()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().mandatory()), 4).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 50).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
@@ -53,7 +52,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().depositType()), 15).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().mandatory()), 4).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().recurring()), 4).build());
 
         main.getColumnFormatter().setWidth(0, "50%");

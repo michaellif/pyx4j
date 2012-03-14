@@ -20,7 +20,7 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestViewerView {
 
     public MaintenanceRequestViewerViewImpl() {
-        super(CrmSiteMap.Properties.MaintenanceRequest.class);
+        super(CrmSiteMap.Tenants.MaintenanceRequest.class);
 
         setForm(new MaintenanceRequestEditorForm(true));
     }

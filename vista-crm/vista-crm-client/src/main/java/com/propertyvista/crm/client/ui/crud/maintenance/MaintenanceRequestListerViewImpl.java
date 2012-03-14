@@ -20,7 +20,7 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public class MaintenanceRequestListerViewImpl extends CrmListerViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestListerView {
 
     public MaintenanceRequestListerViewImpl() {
-        super(CrmSiteMap.Properties.MaintenanceRequest.class);
+        super(CrmSiteMap.Tenants.MaintenanceRequest.class);
         setLister(new MaintenanceRequestLister());
     }
 }

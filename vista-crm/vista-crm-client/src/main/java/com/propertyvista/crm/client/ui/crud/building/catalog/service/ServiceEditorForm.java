@@ -74,12 +74,6 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         main.setWidget(++row, 0, inject(proto().version().items(), new ServiceItemFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().depositType()), 15).build());
-
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
-
         return new CrmScrollPanel(main);
     }
 

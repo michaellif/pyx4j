@@ -19,13 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.propertvista.generator.util.RandomUtil;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.financial.offering.DepositType;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
@@ -143,9 +140,6 @@ public class BuildingDataModel {
         standardResidentialService.version().type().setValue(Service.Type.residentialUnit);
         standardResidentialService.version().name().setValue("Standard Residential Unit");
         standardResidentialService.version().description().setValue("Standard Residential Unit Lease for 1 year term");
-
-        standardResidentialService.version().depositType().setValue(RandomUtil.randomEnum(DepositType.class));
-
     }
 
     private void generateFeatures() {
@@ -161,8 +155,6 @@ public class BuildingDataModel {
         feature.version().type().setValue(type);
         feature.version().name().setValue("Regular " + type.name());
         feature.version().description().setValue("Feature - " + type.name());
-
-        feature.version().depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
         switch (feature.version().type().getValue()) {
         case parking:

@@ -201,8 +201,6 @@ public class MainActivityMapper implements AppActivityMapper {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Parking.class);
         } else if (entityClass.equals(Roof.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Roof.class);
-        } else if (entityClass.equals(MaintenanceRequest.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.MaintenanceRequest.class);
 
         } else if (entityClass.equals(Tenant.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Tenant.class);
@@ -214,6 +212,8 @@ public class MainActivityMapper implements AppActivityMapper {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.MasterApplication.class);
         } else if (entityClass.equals(EquifaxResult.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.EquifaxResult.class);
+        } else if (entityClass.equals(MaintenanceRequest.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.MaintenanceRequest.class);
         }
 
         return null;
@@ -524,6 +524,19 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+                } else if (place instanceof CrmSiteMap.Tenants.MaintenanceRequest) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case lister:
+                        activity = new MaintenanceRequestListerActivity(place);
+                        break;
+                    case viewer:
+                        activity = new MaintenanceRequestViewerActivity(place);
+                        break;
+                    case editor:
+                        activity = new MaintenanceRequestEditorActivity(place);
+                        break;
+                    }
+
 // - Organization-related:
                 } else if (place instanceof CrmSiteMap.Organization.Employee) {
                     switch (((CrudAppPlace) place).getType()) {
@@ -701,19 +714,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case lister:
                         activity = new ComplexListerActivity(place);
-                        break;
-                    }
-
-                } else if (place instanceof CrmSiteMap.Properties.MaintenanceRequest) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case lister:
-                        activity = new MaintenanceRequestListerActivity(place);
-                        break;
-                    case viewer:
-                        activity = new MaintenanceRequestViewerActivity(place);
-                        break;
-                    case editor:
-                        activity = new MaintenanceRequestEditorActivity(place);
                         break;
                     }
 

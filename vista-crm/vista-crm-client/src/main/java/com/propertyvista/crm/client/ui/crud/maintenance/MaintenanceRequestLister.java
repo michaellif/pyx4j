@@ -22,28 +22,18 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public class MaintenanceRequestLister extends ListerBase<MaintenanceRequestDTO> {
 
     public MaintenanceRequestLister() {
-        super(MaintenanceRequestDTO.class, CrmSiteMap.Properties.MaintenanceRequest.class, false, true);
+        super(MaintenanceRequestDTO.class, CrmSiteMap.Tenants.MaintenanceRequest.class, false, true);
 
-        setColumnDescriptors(
-
-        new MemberColumnDescriptor.Builder(proto().issueClassification().issue()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().issueClassification().priority()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().description()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().tenant()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().submitted()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().status()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().updated()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().surveyResponse().rating()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().surveyResponse().description(), false).build()
-
-        );
+        setColumnDescriptors( // @formatter:off
+                new MemberColumnDescriptor.Builder(proto().issueClassification().issue()).build(),
+                new MemberColumnDescriptor.Builder(proto().issueClassification().priority()).build(),
+                new MemberColumnDescriptor.Builder(proto().description()).build(),
+                new MemberColumnDescriptor.Builder(proto().tenant()).build(),
+                new MemberColumnDescriptor.Builder(proto().submitted()).build(),
+                new MemberColumnDescriptor.Builder(proto().status()).build(),
+                new MemberColumnDescriptor.Builder(proto().updated()).build(),
+                new MemberColumnDescriptor.Builder(proto().surveyResponse().rating()).build(),
+                new MemberColumnDescriptor.Builder(proto().surveyResponse().description(), false).build()
+            ); // @formatter:on
     }
 }

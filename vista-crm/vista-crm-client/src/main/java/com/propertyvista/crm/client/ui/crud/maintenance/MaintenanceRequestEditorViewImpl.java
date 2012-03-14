@@ -20,7 +20,7 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public class MaintenanceRequestEditorViewImpl extends CrmEditorViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestEditorView {
 
     public MaintenanceRequestEditorViewImpl() {
-        super(CrmSiteMap.Properties.MaintenanceRequest.class, new MaintenanceRequestEditorForm());
+        super(CrmSiteMap.Tenants.MaintenanceRequest.class, new MaintenanceRequestEditorForm());
     }
 
 }

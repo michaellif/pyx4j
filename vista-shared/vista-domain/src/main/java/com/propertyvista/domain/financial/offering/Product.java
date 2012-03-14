@@ -61,7 +61,5 @@ public interface Product extends IEntity {
         @Length(250)
         @Editor(type = Editor.EditorType.textarea)
         IPrimitive<String> description();
-
-        IPrimitive<DepositType> depositType();
     }
 }
