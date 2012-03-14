@@ -16,7 +16,6 @@ package com.propertyvista.server.common.util.occupancy;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -63,8 +62,12 @@ public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisMana
         LogicalDate leaseFrom = lease.leaseFrom().getValue();
         LogicalDate beginningOfTheMonth = new LogicalDate(leaseFrom.getYear(), leaseFrom.getMonth(), 1);
 
+        // FIXME after retrieve member fixed the following code should look approximately like:
+//        if (lease.unit().belongsTo().isValueDetached()) {
+//            Persistence.service().retrieveMember(lease.unit().belongsTo(), AttachLevel.IdOnly);
+//        }
         if (lease.unit().belongsTo().isValueDetached()) {
-            Persistence.service().retrieveMember(lease.unit().belongsTo(), AttachLevel.IdOnly);
+            Persistence.service().retrieve(lease.unit().belongsTo());
         }
 
         // check if we have lease that ended on the same month

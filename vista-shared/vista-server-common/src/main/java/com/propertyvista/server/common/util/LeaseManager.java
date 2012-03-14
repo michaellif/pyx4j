@@ -23,10 +23,14 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
+import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManager;
+import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManagerImpl;
 
 public class LeaseManager {
 
     private final TimeContextProvider timeContextProvider;
+
+    private final UnitTurnoverAnalysisManager turnoverAnalysisManager;
 
     public LeaseManager() {
         this(new TimeContextProvider() {
@@ -38,7 +42,14 @@ public class LeaseManager {
     }
 
     public LeaseManager(TimeContextProvider timeContextProvider) {
+        this(timeContextProvider, new UnitTurnoverAnalysisManagerImpl());
+    }
+
+    public LeaseManager(TimeContextProvider timeContextProvider, UnitTurnoverAnalysisManager turnoverAnalysisManager) {
+        assert timeContextProvider != null;
+        assert turnoverAnalysisManager != null;
         this.timeContextProvider = timeContextProvider;
+        this.turnoverAnalysisManager = turnoverAnalysisManager;
     }
 
     public Lease save(Lease lease) {
@@ -181,6 +192,7 @@ public class LeaseManager {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.Active);
         Persistence.secureSave(lease);
+        turnoverAnalysisManager.propagateLeaseActivationToTurnoverReport(lease);
         return lease;
     }
 
