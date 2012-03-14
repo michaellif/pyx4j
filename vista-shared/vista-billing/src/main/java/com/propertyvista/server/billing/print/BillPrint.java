@@ -44,7 +44,7 @@ public class BillPrint {
         return new JasperReportModel(BillPrint.class.getPackage().getName() + ".Bill", Arrays.asList(new BillData[] { billData }), parameters);
     }
 
-    public static Bill printBill(Bill bill, OutputStream pdf) {
+    public static void printBill(Bill bill, OutputStream pdf) {
 
         Persistence.service().retrieve(bill.charges());
         for (BillCharge billCharge : bill.charges()) {
@@ -64,6 +64,5 @@ public class BillPrint {
             IOUtils.closeQuietly(pdf);
         }
 
-        return bill;
     }
 }
