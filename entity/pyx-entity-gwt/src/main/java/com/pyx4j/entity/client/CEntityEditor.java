@@ -144,6 +144,14 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         adopt(component);
     }
 
+    public void unbind(IObject<?> member) {
+        CComponent<?, ?> component = components.get(member.getPath());
+        if (component != null) {
+            binding.remove(component);
+        }
+        components.remove(member.getPath());
+    }
+
     @Override
     public void adopt(CComponent<?, ?> component) {
         component.addValueChangeHandler(new ValuePropagationHandler());
