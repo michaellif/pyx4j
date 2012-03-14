@@ -13,12 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.reports;
 
-import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.pyx4j.essentials.rpc.report.ReportService;
-import com.pyx4j.rpc.shared.IService;
+
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public interface DashboardReportService extends ReportService<DashboardMetadata> {
-	
-	
+
 }

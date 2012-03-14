@@ -23,23 +23,18 @@ package com.propertyvista.server.billing;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.report.JasperFileFormat;
-import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.BillCharge;
 import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Feature.Type;
@@ -123,28 +118,13 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
         Persistence.service().commit();
 
-        Persistence.service().retrieve(bill.charges());
-        for (BillCharge billCharge : bill.charges()) {
-            Persistence.service().retrieve(billCharge.billableItem().item().product());
-        }
-        Persistence.service().retrieve(bill.chargeAdjustments());
-        Persistence.service().retrieve(bill.leaseAdjustments());
-
-        DataDump.dump("bill", bill);
-        DataDump.dump("lease", lease);
-
         if (printBill) {
-            FileOutputStream pdf = null;
             try {
-                pdf = new FileOutputStream(billFileName(bill));
-                JasperReportProcessor.createReport(BillPrint.createModel(bill), JasperFileFormat.PDF, pdf);
-                pdf.flush();
+                BillPrint.printBill(bill, new FileOutputStream(billFileName(bill)));
+                DataDump.dump("bill", bill);
+                DataDump.dump("lease", lease);
             } catch (FileNotFoundException e) {
                 throw new Error(e);
-            } catch (IOException e) {
-                throw new Error(e);
-            } finally {
-                IOUtils.closeQuietly(pdf);
             }
         }
 
