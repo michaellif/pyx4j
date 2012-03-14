@@ -15,6 +15,9 @@ package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -27,6 +30,8 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class ChargeProcessor {
+
+    private final static Logger log = LoggerFactory.getLogger(ChargeProcessor.class);
 
     private final Billing billing;
 
@@ -76,7 +81,7 @@ public class ChargeProcessor {
         BillCharge originalCharge = null;
 
         for (BillCharge charge : billing.getCurrentPeriodBill().charges()) {
-            if (billableItem.equals(charge.billableItem())) {
+            if (billableItem.equals(charge.billableItem()) && BillEntry.Period.next.equals(charge.period().getValue())) {
                 originalCharge = charge;
                 break;
             }
@@ -101,7 +106,14 @@ public class ChargeProcessor {
         BillCharge originalCharge = null;
 
         for (BillCharge charge : billing.getPreviousPeriodBill().charges()) {
-            if (billableItem.equals(charge.billableItem())) {
+            if (billableItem.equals(charge.billableItem()) && BillEntry.Period.next.equals(charge.period().getValue())) {
+                originalCharge = charge;
+                break;
+            }
+        }
+
+        for (BillCharge charge : billing.getCurrentPeriodBill().charges()) {
+            if (billableItem.equals(charge.billableItem()) && BillEntry.Period.current.equals(charge.period().getValue())) {
                 originalCharge = charge;
                 break;
             }
@@ -136,10 +148,16 @@ public class ChargeProcessor {
         charge.bill().set(billing.getNextPeriodBill());
         charge.billableItem().set(billableItem);
         charge.period().setValue(period);
+
         charge.fromDate().setValue(overlap.getFromDate());
         charge.toDate().setValue(overlap.getToDate());
 
-        prorate(charge);
+        if (BillingUtils.isOneTimeFeature(charge.billableItem().item().product())) {
+            charge.amount().setValue(charge.billableItem().item().price().getValue());
+        } else {
+            prorate(charge);
+        }
+
         calculateTax(charge);
 
         return charge;

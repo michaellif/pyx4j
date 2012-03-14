@@ -22,8 +22,8 @@ package com.propertyvista.server.billing;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ActionType;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingSunnyDayScenarioTest extends BillingTestBase {
@@ -106,6 +106,8 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         setSysDate("18-Apr-2011");
 
+        addBooking("25-Apr-2011");
+
         bill = runBilling(true, true);
 
         // @formatter:off
@@ -115,19 +117,19 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
-        numOfCharges(5).
+        numOfCharges(6).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         paymentReceivedAmount("1195.01").
         serviceCharge("930.30").
         recurringFeatureCharges("240.00").
         totalAdjustments("-52.00").
-        oneTimeFeatureCharges("0.00").
-        taxes("134.20").
-        totalDueAmount("1252.50");
+        oneTimeFeatureCharges("100.00").
+        taxes("146.20").
+        totalDueAmount("1364.50");
         // @formatter:on
 
-        receivePayment("19-Apr-2011", "1252.50");
+        receivePayment("19-Apr-2011", "1364.50");
 
         //==================== RUN 4 ======================//
 
@@ -145,7 +147,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         numOfCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
-        paymentReceivedAmount("1252.50").
+        paymentReceivedAmount("1364.50").
         serviceCharge("930.30").
         recurringFeatureCharges("240.00").
         totalAdjustments("-52.00").

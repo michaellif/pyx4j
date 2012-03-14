@@ -38,7 +38,7 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         return formatter.format(date);
     }
 
-    public static List<BillCharge> getServiceCharges(IList<BillCharge> charges) {
+    public List<BillCharge> getServiceCharges(IList<BillCharge> charges) {
         List<BillCharge> featureCharges = new ArrayList<BillCharge>();
         for (BillCharge charge : charges) {
             if (BillingUtils.isService(charge.billableItem().item().product())) {
@@ -48,7 +48,7 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         return featureCharges;
     }
 
-    public static List<BillCharge> getFeatureRecurringCharges(IList<BillCharge> charges) {
+    public List<BillCharge> getFeatureRecurringCharges(IList<BillCharge> charges) {
         List<BillCharge> featureCharges = new ArrayList<BillCharge>();
         for (BillCharge charge : charges) {
             if (BillingUtils.isRecurringFeature(charge.billableItem().item().product())) {
@@ -58,7 +58,7 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         return featureCharges;
     }
 
-    public static List<BillCharge> getFeatureOneTimeCharges(IList<BillCharge> charges) {
+    public List<BillCharge> getFeatureOneTimeCharges(IList<BillCharge> charges) {
         List<BillCharge> featureCharges = new ArrayList<BillCharge>();
         for (BillCharge charge : charges) {
             if (BillingUtils.isOneTimeFeature(charge.billableItem().item().product())) {

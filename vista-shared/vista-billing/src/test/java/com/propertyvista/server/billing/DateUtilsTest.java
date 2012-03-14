@@ -66,5 +66,12 @@ public class DateUtilsTest extends TestCase {
             assertEquals(null, dateRange);
         }
 
+        {
+            DateRange dateRange = DateUtils.getOverlappingRange(new DateRange(BillingTestUtils.getDate("8-Jul-2011"), BillingTestUtils.getDate("15-Jul-2011")),
+                    new DateRange(BillingTestUtils.getDate("12-Jul-2011"), BillingTestUtils.getDate("12-Jul-2011")));
+            assertEquals(BillingTestUtils.getDate("12-Jul-2011"), dateRange.getFromDate());
+            assertEquals(BillingTestUtils.getDate("12-Jul-2011"), dateRange.getToDate());
+        }
+
     }
 }

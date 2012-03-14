@@ -22,8 +22,8 @@ package com.propertyvista.server.billing;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ActionType;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingFeatureEagerScenarioTest extends BillingTestBase {
@@ -50,7 +50,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
 
         setLeaseStatus(Lease.Status.Approved);
 
-        Bill bill = runBilling(true);
+        Bill bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -73,7 +73,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         setSysDate("18-Mar-2011");
         setLeaseStatus(Lease.Status.Active);
 
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -91,15 +91,13 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
-        changeBillableItem(parking1, null, "20-May-2011");
-
         //==================== RUN 3 ======================//
 
         setSysDate("18-Apr-2011");
+        BillableItem pet2 = addPet("10-Apr-2011", null);
+        changeBillableItem(parking1, null, "20-May-2011");
 
-        BillableItem pet2 = addPet("20-Apr-2011", null);
-
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -112,19 +110,18 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("238.95").
+        recurringFeatureCharges("245.61").
         totalAdjustments("-48.45").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
-        //TODO calculate arrears
-        changeBillableItem(parking1, null, "10-May-2011");
-
         //==================== RUN 4 ======================//
 
         setSysDate("18-May-2011");
+        //TODO calculate arrears
+        changeBillableItem(parking1, null, "10-May-2011");
 
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -133,11 +130,11 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
-        numOfCharges(6).
+        numOfCharges(5).
         numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
-        recurringFeatureCharges("187.33").
+        recurringFeatureCharges("180.00").
         totalAdjustments("-42.00").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
@@ -146,7 +143,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
 
         setSysDate("18-Jun-2011");
 
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -168,7 +165,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
 
         setSysDate("18-Jul-2011");
 
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -193,7 +190,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
 
         setLeaseStatus(Lease.Status.Completed);
 
-        bill = runBilling(true);
+        bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).

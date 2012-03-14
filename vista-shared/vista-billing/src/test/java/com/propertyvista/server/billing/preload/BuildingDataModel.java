@@ -188,9 +188,15 @@ public class BuildingDataModel {
             }
             break;
         case addOn:
-            feature.version().recurring().setValue(false);
+            feature.version().recurring().setValue(true);
             for (ProductItemType productItemType : featureMeta.get(Feature.Type.addOn)) {
                 generateAddOnFeatureItem(feature, productItemType);
+            }
+            break;
+        case booking:
+            feature.version().recurring().setValue(false);
+            for (ProductItemType productItemType : featureMeta.get(Feature.Type.booking)) {
+                generateBookingFeatureItem(feature, productItemType);
             }
             break;
 
@@ -231,6 +237,13 @@ public class BuildingDataModel {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(type);
         productItem.price().setValue(new BigDecimal("20.00"));
+        feature.version().items().add(productItem);
+    }
+
+    private void generateBookingFeatureItem(Feature feature, ProductItemType type) {
+        ProductItem productItem = EntityFactory.create(ProductItem.class);
+        productItem.type().set(type);
+        productItem.price().setValue(new BigDecimal("100.00"));
         feature.version().items().add(productItem);
     }
 

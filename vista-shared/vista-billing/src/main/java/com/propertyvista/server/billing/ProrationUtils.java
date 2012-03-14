@@ -25,6 +25,7 @@ import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 public class ProrationUtils {
 
     public static BigDecimal prorate(LogicalDate from, LogicalDate to, LeaseFinancial.ProrationMethod method) {
+        assert from != null && to != null;
         Calendar calendarFrom = new GregorianCalendar();
         calendarFrom.setTime(from);
         int daysInMonth = calendarFrom.getActualMaximum(Calendar.DAY_OF_MONTH);

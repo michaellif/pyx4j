@@ -207,6 +207,10 @@ abstract class BillingTestBase extends VistaDBTestBase {
         return addBillableItem(Type.pet);
     }
 
+    protected BillableItem addBooking(String date) {
+        return addBillableItem(Type.booking, date, date);
+    }
+
     protected void changeBillableItem(BillableItem billableItem, String effectiveDate, String expirationDate) {
         billableItem.effectiveDate().setValue(BillingTestUtils.getDate(effectiveDate));
         billableItem.expirationDate().setValue(BillingTestUtils.getDate(expirationDate));
