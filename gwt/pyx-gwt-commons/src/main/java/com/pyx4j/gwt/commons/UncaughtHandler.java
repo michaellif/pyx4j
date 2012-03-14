@@ -91,8 +91,12 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
                                 cause = cause.getCause();
                             }
                         }
-                        log.error(UNEXPECTED_ERROR_MESSAGE + ((errorCode != null) ? "[" + errorCode + "] " : " ") + ";\n Href " + Window.Location.getHref()
-                                + ";\n UserAgent " + userAgent(), cause);
+                        if (GWT.isScript()) {
+                            log.error(UNEXPECTED_ERROR_MESSAGE + ((errorCode != null) ? "[" + errorCode + "] " : " ") + ";\n Href " + Window.Location.getHref()
+                                    + ";\n UserAgent " + userAgent(), cause);
+                        } else {
+                            log.error(UNEXPECTED_ERROR_MESSAGE, cause);
+                        }
                         GoogleAnalytics.track("unrecoverableError");
                     } catch (Throwable ignore) {
                         System.out.println("error in exception handling" + ignore);
