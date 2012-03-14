@@ -72,6 +72,7 @@ public class BillPrintDeferredProcess implements IDeferredProcess {
 
         if (compleate) {
             response.setCompleted();
+            // TODO Bill.pdf - to more readable for end user
             response.setDownloadLink(System.currentTimeMillis() + "/" + "Bill.pdf");
         } else {
             response.setMessage(i18n.tr("Creating Bill..."));

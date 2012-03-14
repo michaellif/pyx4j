@@ -60,6 +60,6 @@ public class BillViewerActivity extends CrmViewerActivity<Bill> implements BillV
     public void print() {
         EntityQueryCriteria<Bill> criteria = new EntityQueryCriteria<Bill>(Bill.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), entityId));
-        ReportDialog.start(GWT.<BillPrintService> create(BillPrintService.class), criteria);
+        new ReportDialog("Bill", "Creating Bill...").start(GWT.<BillPrintService> create(BillPrintService.class), criteria);
     }
 }

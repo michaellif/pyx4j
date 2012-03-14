@@ -134,7 +134,7 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
     public void print() {
         EntityQueryCriteria<DashboardMetadata> criteria = new EntityQueryCriteria<DashboardMetadata>(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), view.getDashboardMetadata().getPrimaryKey()));
-        ReportDialog.start(GWT.<DashboardReportService> create(DashboardReportService.class), criteria);
+        new ReportDialog("Report", "Creating report...").start(GWT.<DashboardReportService> create(DashboardReportService.class), criteria);
     }
 
 // GadgetPresenter:
