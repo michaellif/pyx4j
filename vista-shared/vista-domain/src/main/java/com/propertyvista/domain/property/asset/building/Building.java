@@ -97,7 +97,7 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @EmbeddedEntity
     BuildingContactInfo contacts();
 
-    @EmbeddedEntity
+    @Owned
     Marketing marketing();
 
     @Owned
