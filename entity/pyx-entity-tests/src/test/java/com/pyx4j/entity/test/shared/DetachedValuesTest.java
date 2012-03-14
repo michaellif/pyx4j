@@ -21,6 +21,7 @@
 package com.pyx4j.entity.test.shared;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -33,6 +34,7 @@ public class DetachedValuesTest extends InitializerTestBase {
             run.run();
             accessed = true;
         } catch (RuntimeException e) {
+        } catch (AssertionError e) {
         }
 
         if (accessed) {
@@ -40,12 +42,8 @@ public class DetachedValuesTest extends InitializerTestBase {
         }
     }
 
-    public void testMethodsAccess() {
-        final Employee emp = EntityFactory.create(Employee.class);
-        emp.department().setPrimaryKey(new Key(1));
-        emp.department().setValueDetached();
+    public void assertDepartmentFieldsAccess(final Employee emp) {
 
-        assertFalse("Can access isNull", emp.department().isNull());
         assertTrue("Can access isEmpty and is properly set", emp.department().isEmpty());
         assertNotNull("Can access toString", emp.department().toString());
         assertFalse("Can access equals", emp.department().equals(null));
@@ -89,6 +87,50 @@ public class DetachedValuesTest extends InitializerTestBase {
                 emp.department().name().getStringView();
             }
         });
+
+        emp.department().name().equals("somthingWrong");
+
+        if (isJavaAssertEnabled()) {
+            assertException("name().equals", new Runnable() {
+                @Override
+                public void run() {
+                    Department dep = EntityFactory.create(Department.class);
+                    dep.name().setValue("somthingResonable");
+                    emp.department().name().equals(dep.name());
+                }
+            });
+        }
+    }
+
+    public void testMethodsAccessDirect() {
+        final Employee emp = EntityFactory.create(Employee.class);
+        emp.department().setPrimaryKey(new Key(1));
+        emp.department().setValueDetached();
+
+        assertFalse("Can access isNull", emp.department().isNull());
+
+        assertDepartmentFieldsAccess(emp);
+    }
+
+    public void testMethodsAccessIndirect() {
+        final Employee emp = EntityFactory.create(Employee.class);
+        emp.setValueDetached();
+
+        assertEquals("AttachLevel", AttachLevel.Detached, emp.department().getAttachLevel());
+        assertTrue("isValuesDetached", emp.department().isValueDetached());
+        assertTrue("Can access isNull", emp.department().isNull());
+        assertDepartmentFieldsAccess(emp);
+
+        if (isJavaAssertEnabled()) {
+            assertException("department().equals", new Runnable() {
+                @Override
+                public void run() {
+                    Department dep = EntityFactory.create(Department.class);
+                    dep.id().setValue(new Key(2));
+                    emp.department().equals(dep);
+                }
+            });
+        }
     }
 
     public void testEntityMethods() {

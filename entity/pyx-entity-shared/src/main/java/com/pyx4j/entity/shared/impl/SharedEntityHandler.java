@@ -210,7 +210,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     private Map<String, Object> getValue(boolean assertDetached) {
         assert !isTemplateEntity : "Template Entity '" + getObjectClass().getName() + "' data manipulations disabled";
         if (delegateValue) {
-            Map<String, Object> ownerValue = getOwner().getValue();
+            Map<String, Object> ownerValue = ((SharedEntityHandler) getOwner()).getValue(assertDetached);
             if (ownerValue == null) {
                 return null;
             } else {
@@ -401,23 +401,29 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
         if (isTemplateEntity) {
             return (other != null) && this.getClass().equals(other.getClass());
+        } else {
+            if ((other == null) || (!(other instanceof SharedEntityHandler)) || (((SharedEntityHandler) other).isTemplateEntity)) {
+                return false;
+            }
+            Map<String, Object> thisValue = this.getValue(false);
+            assert getAttachLevel() != AttachLevel.Detached : "Access to detached entity " + getDebugExceptionInfoString();
+            if (thisValue == null) {
+                return false;
+            }
+            Map<String, Object> otherValue = ((SharedEntityHandler) other).getValue(false);
+            if (otherValue == null) {
+                return false;
+            }
+            if (otherValue == thisValue) {
+                return true;
+            }
+            Object pk = thisValue.get(IEntity.PRIMARY_KEY);
+            if (pk == null) {
+                return false;
+            }
+            return EqualsHelper.equals(pk, otherValue.get(IEntity.PRIMARY_KEY))
+                    && (this.getInstanceValueClass().equals(((IEntity) other).getInstanceValueClass()));
         }
-        Map<String, Object> thisValue = this.getValue(false);
-        if ((other == null) || (thisValue == null) || (!(other instanceof SharedEntityHandler)) || (((SharedEntityHandler) other).isTemplateEntity)) {
-            return false;
-        }
-        Map<String, Object> otherValue = ((SharedEntityHandler) other).getValue(false);
-        if (otherValue == null) {
-            return false;
-        }
-        if (otherValue == thisValue) {
-            return true;
-        }
-        Object pk = thisValue.get(IEntity.PRIMARY_KEY);
-        if (pk == null) {
-            return false;
-        }
-        return EqualsHelper.equals(pk, otherValue.get(IEntity.PRIMARY_KEY)) && (this.getInstanceValueClass().equals(((IEntity) other).getInstanceValueClass()));
     }
 
     @Override
@@ -495,7 +501,11 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     public AttachLevel getAttachLevel() {
         Map<String, Object> thisValue = this.getValue(false);
         if ((thisValue == null) || (thisValue.isEmpty())) {
-            return AttachLevel.Attached;
+            if ((delegateValue) && getOwner().isValueDetached()) {
+                return AttachLevel.Detached;
+            } else {
+                return AttachLevel.Attached;
+            }
         }
         AttachLevel level = (AttachLevel) thisValue.get(DETACHED_ATTR);
         if (level == null) {

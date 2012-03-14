@@ -31,4 +31,14 @@ public abstract class InitializerTestBase extends TestCase {
         super.setUp();
         ConfigureTestsEnv.configure();
     }
+
+    boolean isJavaAssertEnabled() {
+        try {
+            int i = 2;
+            assert i == 3;
+            return false;
+        } catch (Throwable e) {
+            return true;
+        }
+    }
 }

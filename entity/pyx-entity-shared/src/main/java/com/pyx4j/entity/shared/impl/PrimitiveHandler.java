@@ -186,6 +186,8 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
         if ((other == null) || (!(other instanceof IPrimitive<?>)) || (!this.getValueClass().equals(((IPrimitive<?>) other).getValueClass()))) {
             return false;
         } else if (isNull()) {
+            //Assert value is not detached, simple trick just to call the function and discard result  
+            assert getValue() != this;
             return (((IPrimitive<?>) other).isNull());
         } else {
             return this.getValue().equals(((IPrimitive<?>) other).getValue());
