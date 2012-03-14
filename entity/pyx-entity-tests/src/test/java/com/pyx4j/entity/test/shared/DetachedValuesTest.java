@@ -112,6 +112,17 @@ public class DetachedValuesTest extends InitializerTestBase {
         assertDepartmentFieldsAccess(emp);
     }
 
+    public void testMethodsAccessAttachedToStringMembers() {
+        final Employee emp = EntityFactory.create(Employee.class);
+        emp.department().setPrimaryKey(new Key(1));
+        emp.department().name().setValue("somthing");
+        emp.department().setAttachLevel(AttachLevel.ToStringMembers);
+
+        assertFalse("Can access isNull", emp.department().isNull());
+
+        assertDepartmentFieldsAccess(emp);
+    }
+
     public void testMethodsAccessIndirect() {
         final Employee emp = EntityFactory.create(Employee.class);
         emp.setValueDetached();
