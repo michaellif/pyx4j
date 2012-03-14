@@ -13,10 +13,8 @@
  */
 package com.propertyvista.server.common.util.occupancy;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class UnitTurnoverAnalysisManagerTest extends UnitTurnoverAnalysisManagerTestBase {
 
     public UnitTurnoverAnalysisManagerTest() {
@@ -24,7 +22,7 @@ public class UnitTurnoverAnalysisManagerTest extends UnitTurnoverAnalysisManager
     }
 
     @Test
-    public void testOneUnit() {
+    public void testWithOneUnit() {
 
         expect("2011-01-01", 0);
         expect("2011-12-01", 0);
@@ -69,7 +67,7 @@ public class UnitTurnoverAnalysisManagerTest extends UnitTurnoverAnalysisManager
     }
 
     @Test
-    public void testTwoUnits() {
+    public void testWithTwoUnits() {
         expect("2011-12-01", 0);
 
         lease(unit(1), "2011-12-01", "2012-12-05");
@@ -89,9 +87,8 @@ public class UnitTurnoverAnalysisManagerTest extends UnitTurnoverAnalysisManager
 
         expect("2012-12-05", 0);
         expect("2012-12-07", 1);
-        expect("2012-12-17", 1);
-        expect("2012-12-31", 1);
-        expect("2012-12-31", 1);
+        expect("2012-12-17", 2);
+        expect("2012-12-31", 2);
         expect("2013-01-01", 0);
 
     }

@@ -153,8 +153,9 @@ public class UnitTurnoverAnalysisManagerTestBase {
                 segment.lease().set(null);
             }
         });
-
+        Persistence.service().commit(); // for debugging's sake
         theMan.propagateLeaseActivationToTurnoverReport(lease);
+        Persistence.service().commit(); // for debugging's sake
     }
 
     protected AptUnit unit(long pk) {

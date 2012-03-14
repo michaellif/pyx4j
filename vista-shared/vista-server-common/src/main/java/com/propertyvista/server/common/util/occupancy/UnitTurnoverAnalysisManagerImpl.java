@@ -16,6 +16,7 @@ package com.propertyvista.server.common.util.occupancy;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -62,9 +63,13 @@ public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisMana
         LogicalDate leaseFrom = lease.leaseFrom().getValue();
         LogicalDate beginningOfTheMonth = new LogicalDate(leaseFrom.getYear(), leaseFrom.getMonth(), 1);
 
+        if (lease.unit().belongsTo().isValueDetached()) {
+            Persistence.service().retrieveMember(lease.unit().belongsTo(), AttachLevel.IdOnly);
+        }
+
         // check if we have lease that ended on the same month
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit().belongsTo(), lease.unit()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit().belongsTo(), lease.unit().belongsTo()));
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), beginningOfTheMonth));
         criteria.add(PropertyCriterion.lt(criteria.proto().dateTo(), leaseFrom));
         criteria.add(PropertyCriterion.eq(criteria.proto().status(), AptUnitOccupancySegment.Status.leased));
@@ -85,6 +90,7 @@ public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisMana
 
         if (stats == null) {
             stats = EntityFactory.create(UnitTurnoverStats.class);
+            stats.belongsTo().set(unit.belongsTo());
             stats.turnovers().setValue(1);
         } else {
             UnitTurnoverStats newStats = EntityFactory.create(UnitTurnoverStats.class);
