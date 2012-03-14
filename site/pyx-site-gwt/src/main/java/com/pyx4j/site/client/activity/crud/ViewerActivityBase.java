@@ -135,9 +135,9 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void finalize() {
+    public void approveFinal() {
         if (service instanceof AbstractVersionedCrudService) {
-            ((AbstractVersionedCrudService<?>) service).finalize(new DefaultAsyncCallback<VoidSerializable>() {
+            ((AbstractVersionedCrudService<?>) service).approveFinal(new DefaultAsyncCallback<VoidSerializable>() {
                 @Override
                 public void onSuccess(VoidSerializable result) {
                     populate();

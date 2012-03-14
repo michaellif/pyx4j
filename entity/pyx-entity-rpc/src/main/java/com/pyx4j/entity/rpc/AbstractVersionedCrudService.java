@@ -28,6 +28,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AbstractVersionedCrudService<E extends IVersionedEntity<?>> extends AbstractCrudService<E> {
 
-    public void finalize(AsyncCallback<VoidSerializable> callback, Key entityId);
+    public void approveFinal(AsyncCallback<VoidSerializable> callback, Key entityId);
 
 }
