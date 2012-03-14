@@ -50,7 +50,9 @@ public class BillPrintDeferredProcess implements IDeferredProcess {
                 BillPrint.printBill(bill, bos);
                 Downloadable billPrint = new Downloadable(bos.toByteArray(), Downloadable.getContentType(DownloadFormat.PDF));
                 String fileName = "Bill.pdf";
-                billPrint.save(fileName);
+                if (!canceled) {
+                    billPrint.save(fileName);
+                }
             } finally {
                 IOUtils.closeQuietly(bos);
             }
