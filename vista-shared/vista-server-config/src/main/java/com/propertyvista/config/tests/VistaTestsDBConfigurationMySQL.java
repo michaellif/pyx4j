@@ -73,4 +73,21 @@ public class VistaTestsDBConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Con
         return new NamingConventionModern();
     }
 
+    @Override
+    public int unreturnedConnectionTimeout() {
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+            return 0;
+        } else {
+            return super.unreturnedConnectionTimeout();
+        }
+    }
+
+    @Override
+    public int unreturnedConnectionBackgroundProcessTimeout() {
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+            return 0;
+        } else {
+            return super.unreturnedConnectionBackgroundProcessTimeout();
+        }
+    }
 }

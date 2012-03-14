@@ -13,6 +13,7 @@
  */
 package com.propertyvista.config.tests;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.ConfigurationHSQL;
 
 public class VistaTestsDBConfigurationHSQLMemory extends ConfigurationHSQL {
@@ -45,5 +46,23 @@ public class VistaTestsDBConfigurationHSQLMemory extends ConfigurationHSQL {
     @Override
     public int tablesItentityOffset() {
         return 1000;
+    }
+
+    @Override
+    public int unreturnedConnectionTimeout() {
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+            return 0;
+        } else {
+            return super.unreturnedConnectionTimeout();
+        }
+    }
+
+    @Override
+    public int unreturnedConnectionBackgroundProcessTimeout() {
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+            return 0;
+        } else {
+            return super.unreturnedConnectionBackgroundProcessTimeout();
+        }
     }
 }
