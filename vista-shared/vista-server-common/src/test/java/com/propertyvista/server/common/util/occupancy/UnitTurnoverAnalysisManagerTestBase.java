@@ -30,6 +30,7 @@ import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -39,15 +40,22 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
-import com.propertyvista.server.common.util.LeaseLifecycleSim;
 
+// TODO enhance the test base to allow test cases with multiple buildings
 public class UnitTurnoverAnalysisManagerTestBase {
 
     private Building building;
 
     private Floorplan floorplan;
+
+    private final UnitTurnoverAnalysisManager theMan;
+
+    protected UnitTurnoverAnalysisManagerTestBase(UnitTurnoverAnalysisManager manager) {
+        theMan = manager;
+    }
 
     @Before
     public void setUp() {
@@ -79,6 +87,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
         floorplan.name().setValue("floorplan-1");
         floorplan.building().set(building);
         Persistence.secureSave(floorplan);
+
     }
 
     @After
@@ -86,6 +95,13 @@ public class UnitTurnoverAnalysisManagerTestBase {
 
     }
 
+    /**
+     * Creates lease and relevant occupancy segments, and then invokes the turnover recalculation routine of the turnover manager
+     * 
+     * @param unit
+     * @param dateFrom
+     * @param dateTo
+     */
     protected void lease(AptUnit unit, String dateFrom, String dateTo) {
         Tenant tenant = EntityFactory.create(Tenant.class);
         tenant.type().setValue(Tenant.Type.person);
@@ -95,21 +111,57 @@ public class UnitTurnoverAnalysisManagerTestBase {
         tenant.user().set(user);
         Persistence.service().merge(tenant);
 
-        LeaseLifecycleSim sim = new LeaseLifecycleSim();
-        Lease lease = sim.newLease(asDate(dateFrom), "lease: " + dateFrom + " " + dateTo, unit, asDate(dateFrom), asDate(dateTo), asDate(dateFrom),
-                PaymentFrequency.Monthly, tenant);
-        sim.createApplication(lease.getPrimaryKey(), lease.leaseFrom().getValue());
-        sim.approveApplication(lease.getPrimaryKey(), lease.leaseFrom().getValue());
-        sim.activate(lease.getPrimaryKey(), lease.leaseFrom().getValue());
-        sim.notice(lease.getPrimaryKey(), lease.leaseTo().getValue(), lease.leaseTo().getValue());
-        sim.complete(lease.getPrimaryKey(), lease.leaseTo().getValue());
+        final Lease lease = EntityFactory.create(Lease.class);
+        lease.status().setValue(Lease.Status.Active);
+        lease.leaseID().setValue("lease: " + dateFrom + " " + dateTo);
+        lease.unit().set(unit);
+        lease.type().setValue(Service.Type.residentialUnit);
+        lease.createDate().setValue(asDate(dateFrom));
+        lease.leaseFrom().setValue(asDate(dateFrom));
+        lease.leaseTo().setValue(asDate(dateTo));
+        lease.expectedMoveIn().setValue(asDate(dateFrom));
+        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
+
+        TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
+        tenantInLease.lease().set(lease);
+        tenantInLease.tenant().set(tenant);
+        tenantInLease.orderInLease().setValue(1);
+        tenantInLease.role().setValue(TenantInLease.Role.Applicant);
+        lease.tenants().add(tenantInLease);
+        Persistence.secureSave(lease);
+
+        AptUnitOccupancySegment leased = AptUnitOccupancyManagerHelper.split(unit, asDate(dateFrom), new SplittingHandler() {
+            @Override
+            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
+
+            }
+
+            @Override
+            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
+                segment.status().setValue(Status.leased);
+                segment.lease().set(lease);
+            }
+        });
+        AptUnitOccupancyManagerHelper.split(leased, AptUnitOccupancyManagerHelper.addDay(asDate(dateTo)), new SplittingHandler() {
+            @Override
+            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
+            }
+
+            @Override
+            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
+                segment.status().setValue(Status.available);
+                segment.lease().set(null);
+            }
+        });
+
+        theMan.propagateLeaseActivationToTurnoverReport(lease);
     }
 
     protected AptUnit unit(long pk) {
         String number = "unit-" + pk;
         EntityQueryCriteria<AptUnit> c = EntityQueryCriteria.create(AptUnit.class);
         c.add(PropertyCriterion.eq(c.proto().info().number(), number));
-        AptUnit unit = Persistence.service().retrieve(AptUnit.class, new Key(pk));
+        AptUnit unit = Persistence.service().retrieve(c);
         if (unit == null) {
             unit = EntityFactory.create(AptUnit.class);
             unit.info().number().setValue(number);
@@ -125,28 +177,8 @@ public class UnitTurnoverAnalysisManagerTestBase {
         return unit;
     }
 
-    protected void recalcTurnovers(String date) {
-        new UnitTurnoverAnalysisManagerImpl().recalculateTurnovers(building.getPrimaryKey(), asDate(date));
-        Persistence.service().commit();
-    }
-
-    protected void expect(String onDate, int turnovers) {
-
-        EntityQueryCriteria<UnitTurnoverStats> criteria = EntityQueryCriteria.create(UnitTurnoverStats.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-        LogicalDate asOf = asDate(onDate);
-        LogicalDate monthStart = new LogicalDate(asOf.getYear(), asOf.getMonth(), 1);
-        criteria.add(PropertyCriterion.ge(criteria.proto().updatedOn(), monthStart));
-        criteria.add(PropertyCriterion.le(criteria.proto().updatedOn(), asDate(onDate)));
-        criteria.desc(criteria.proto().updatedOn());
-
-        UnitTurnoverStats stats = Persistence.service().retrieve(criteria);
-
-        if (turnovers == 0 & stats == null) {
-            return;
-        }
-        Assert.assertNotNull(stats);
-        Assert.assertEquals(new Integer(turnovers), stats.turnovers().getValue());
+    protected void expect(String asOf, int turnovers) {
+        Assert.assertEquals(turnovers, theMan.turnoversSinceBeginningOfTheMonth(asDate(asOf), building.getPrimaryKey()));
     }
 
     private LogicalDate asDate(String asDate) {

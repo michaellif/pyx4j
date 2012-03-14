@@ -16,8 +16,18 @@ package com.propertyvista.server.common.util.occupancy;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.tenant.lease.Lease;
+
 public interface UnitTurnoverAnalysisManager {
 
-    void recalculateTurnovers(Key building, LogicalDate until);
+    /**
+     * Update turnover statistics for the relevant building if needed
+     * 
+     * @param lease
+     *            must be active
+     */
+    void propagateLeaseActivationToTurnoverReport(Lease lease);
+
+    int turnoversSinceBeginningOfTheMonth(LogicalDate asOf, Key... buildings);
 
 }

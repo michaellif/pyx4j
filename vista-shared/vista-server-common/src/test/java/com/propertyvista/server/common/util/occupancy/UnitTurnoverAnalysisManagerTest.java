@@ -19,40 +19,81 @@ import org.junit.Test;
 @Ignore
 public class UnitTurnoverAnalysisManagerTest extends UnitTurnoverAnalysisManagerTestBase {
 
+    public UnitTurnoverAnalysisManagerTest() {
+        super(new UnitTurnoverAnalysisManagerImpl());
+    }
+
     @Test
     public void testOneUnit() {
-        lease(unit(1), "2011-12-01", "2012-12-05");
-        lease(unit(1), "2011-12-07", "2013-01-01");
 
-        recalcTurnovers("2013-01-01");
+        expect("2011-01-01", 0);
+        expect("2011-12-01", 0);
+
+        lease(unit(1), "2011-12-01", "2012-12-05");
+
+        expect("2011-12-01", 0);
+        expect("2011-12-02", 0);
+        expect("2012-12-03", 0);
+        expect("2012-12-05", 0);
+        expect("2012-12-06", 0);
+
+        lease(unit(1), "2012-12-07", "2013-01-01");
+
+        expect("2012-12-01", 0);
+        expect("2012-12-02", 0);
+        expect("2012-12-03", 0);
+        expect("2012-12-05", 0);
+        expect("2012-12-06", 0);
+        expect("2012-12-07", 1);
+        expect("2012-12-31", 1);
+
         expect("2013-01-01", 0);
+        expect("2013-01-07", 0);
 
         lease(unit(1), "2013-01-05", "2013-02-28");
 
-        recalcTurnovers("2013-01-03");
-        expect("2013-01-03", 0);
+        expect("2012-12-01", 0);
+        expect("2012-12-02", 0);
+        expect("2012-12-03", 0);
+        expect("2012-12-05", 0);
+        expect("2012-12-06", 0);
+        expect("2012-12-07", 1);
+        expect("2012-12-31", 1);
+
+        expect("2013-01-01", 0);
         expect("2013-01-05", 1);
-        expect("2013-01-10", 1);
-        expect("2013-01-31", 1);
+        expect("2013-01-07", 1);
+
+        expect("2013-02-01", 0);
+
     }
 
     @Test
     public void testTwoUnits() {
-        lease(unit(1), "2011-12-01", "2012-12-05");
-        lease(unit(1), "2011-12-07", "2013-01-01");
-        lease(unit(2), "2011-10-05", "2013-01-10");
+        expect("2011-12-01", 0);
 
-        recalcTurnovers("2013-01-01");
+        lease(unit(1), "2011-12-01", "2012-12-05");
+        lease(unit(2), "2011-12-02", "2012-12-15");
+
+        expect("2012-12-01", 0);
+        expect("2012-12-02", 0);
+        expect("2012-12-05", 0);
+        expect("2012-12-15", 0);
+
+        lease(unit(1), "2012-12-07", "2013-01-01");
+
+        expect("2012-12-05", 0);
+        expect("2012-12-07", 1);
+
+        lease(unit(2), "2012-12-17", "2013-01-01");
+
+        expect("2012-12-05", 0);
+        expect("2012-12-07", 1);
+        expect("2012-12-17", 1);
+        expect("2012-12-31", 1);
+        expect("2012-12-31", 1);
         expect("2013-01-01", 0);
 
-        lease(unit(1), "2013-01-05", "2013-02-28");
-        lease(unit(2), "2013-01-15", "2013-03-01");
-
-        recalcTurnovers("2013-01-03");
-        expect("2013-01-03", 0);
-        expect("2013-01-05", 1);
-        expect("2013-01-10", 1);
-        expect("2013-01-15", 2);
     }
 
 }

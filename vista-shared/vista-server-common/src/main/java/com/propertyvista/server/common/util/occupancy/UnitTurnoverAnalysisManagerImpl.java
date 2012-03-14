@@ -13,69 +13,86 @@
  */
 package com.propertyvista.server.common.util.occupancy;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisManager {
 
-    /** recalculate turnover for the building, for the month that includes "until" */
     @Override
-    public void recalculateTurnovers(Key building, LogicalDate asOf) {
-
+    public int turnoversSinceBeginningOfTheMonth(LogicalDate asOf, Key... buildings) {
+        int totalTurnovers = 0;
         LogicalDate beginningOfTheMonth = new LogicalDate(asOf.getYear(), asOf.getMonth(), 1);
-        LogicalDate beginningOfTheNextMonth = new LogicalDate(asOf.getYear() + (asOf.getMonth() + 1) / 12, (asOf.getMonth() + 1) % 12, 1);
 
-        EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit().belongsTo(), building));
-        criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), beginningOfTheMonth));
-        criteria.add(PropertyCriterion.lt(criteria.proto().dateFrom(), asOf));
-        criteria.add(PropertyCriterion.eq(criteria.proto().status(), AptUnitOccupancySegment.Status.leased));
-        List<Sort> sorts = Arrays.asList(new Sort(criteria.proto().dateFrom().getPath().toString(), false), new Sort(criteria.proto().unit().getPath()
-                .toString(), false));
-        criteria.setSorts(sorts);
-
-        List<AptUnitOccupancySegment> leasedSegs = Persistence.secureQuery(criteria);
-        int turnoverCount = 0;
-        int leaseCount = 0;
-        Key prevUnit = null;
-        for (AptUnitOccupancySegment seg : leasedSegs) {
-            Key unit = seg.unit().getPrimaryKey();
-            ++leaseCount;
-            if (!unit.equals(prevUnit)) {
-                prevUnit = unit;
-                if (leaseCount > 1) {
-                    turnoverCount += leaseCount - 1;
-                }
-                leaseCount = 1;
+        for (Key builidngPk : buildings) {
+            EntityQueryCriteria<UnitTurnoverStats> criteria = EntityQueryCriteria.create(UnitTurnoverStats.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), builidngPk));
+            criteria.add(PropertyCriterion.ge(criteria.proto().updatedOn(), beginningOfTheMonth));
+            criteria.add(PropertyCriterion.le(criteria.proto().updatedOn(), asOf));
+            criteria.desc(criteria.proto().updatedOn());
+            UnitTurnoverStats stats = Persistence.secureRetrieve(criteria);
+            if (stats != null) {
+                totalTurnovers += stats.turnovers().getValue();
             }
         }
-        if (leaseCount > 1) {
-            turnoverCount += leaseCount;
+
+        return totalTurnovers;
+    }
+
+    @Override
+    public void propagateLeaseActivationToTurnoverReport(Lease lease) {
+        if (lease.status().getValue() != Lease.Status.Active) {
+            throw new IllegalStateException("this function is only applicable to ACTIVE leases");
         }
 
-        EntityQueryCriteria<UnitTurnoverStats> turnoversCriteria = EntityQueryCriteria.create(UnitTurnoverStats.class);
-        turnoversCriteria.add(PropertyCriterion.eq(turnoversCriteria.proto().belongsTo(), building));
-        turnoversCriteria.add(PropertyCriterion.lt(turnoversCriteria.proto().updatedOn(), beginningOfTheNextMonth));
-        turnoversCriteria.add(PropertyCriterion.ge(turnoversCriteria.proto().updatedOn(), beginningOfTheMonth));
-        UnitTurnoverStats turnovers = Persistence.service().retrieve(turnoversCriteria);
-        if (turnovers == null) {
-            turnovers = EntityFactory.create(UnitTurnoverStats.class);
-            turnovers.belongsTo().setPrimaryKey(building);
-
+        if (hasTurnover(lease)) {
+            addTurnover(lease.unit().getPrimaryKey(), lease.leaseFrom().getValue());
         }
-        turnovers.turnovers().setValue(turnoverCount);
-        turnovers.updatedOn().setValue(asOf);
-        Persistence.secureSave(turnovers);
+    }
+
+    public boolean hasTurnover(Lease lease) {
+        LogicalDate leaseFrom = lease.leaseFrom().getValue();
+        LogicalDate beginningOfTheMonth = new LogicalDate(leaseFrom.getYear(), leaseFrom.getMonth(), 1);
+
+        // check if we have lease that ended on the same month
+        EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit().belongsTo(), lease.unit()));
+        criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), beginningOfTheMonth));
+        criteria.add(PropertyCriterion.lt(criteria.proto().dateTo(), leaseFrom));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), AptUnitOccupancySegment.Status.leased));
+
+        return Persistence.service().count(criteria) != 0;
+    }
+
+    public void addTurnover(Key unitPk, LogicalDate when) {
+        // try to retrieve the last known turnover statistics record for the building that owns this builing
+        AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitPk);
+        LogicalDate beginningOfTheMonth = new LogicalDate(when.getYear(), when.getMonth(), 1);
+        EntityQueryCriteria<UnitTurnoverStats> criteria = EntityQueryCriteria.create(UnitTurnoverStats.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), unit.belongsTo()));
+        criteria.add(PropertyCriterion.ge(criteria.proto().updatedOn(), beginningOfTheMonth));
+        criteria.add(PropertyCriterion.le(criteria.proto().updatedOn(), when));
+        criteria.desc(criteria.proto().updatedOn());
+        UnitTurnoverStats stats = Persistence.secureRetrieve(criteria);
+
+        if (stats == null) {
+            stats = EntityFactory.create(UnitTurnoverStats.class);
+            stats.turnovers().setValue(1);
+        } else {
+            UnitTurnoverStats newStats = EntityFactory.create(UnitTurnoverStats.class);
+            newStats.belongsTo().set(unit.belongsTo());
+            newStats.turnovers().setValue(stats.turnovers().getValue() + 1);
+            stats = newStats;
+        }
+        stats.updatedOn().setValue(when);
+        Persistence.secureSave(stats);
     }
 }

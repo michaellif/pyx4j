@@ -15,8 +15,10 @@ package com.propertyvista.domain.dashboard.gadgets.availabilityreport;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -30,6 +32,8 @@ public interface UnitTurnoverStats extends IEntity {
     @Owner
     @Detached
     @ReadOnly
+    @JoinColumn
+    @NotNull
     Building belongsTo();
 
     IPrimitive<LogicalDate> updatedOn();
