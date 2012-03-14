@@ -132,6 +132,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         CacheService.shutdown();
     }
 
+    public void resetMapping() {
+        mappings.reset();
+    }
+
     private void startContext(ConnectionTarget reason) {
         if ((reason == ConnectionTarget.forUpdate) && ServerSideConfiguration.instance().datastoreReadOnly()) {
             throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());

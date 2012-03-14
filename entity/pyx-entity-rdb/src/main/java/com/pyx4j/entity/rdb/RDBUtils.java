@@ -131,6 +131,8 @@ public class RDBUtils implements Closeable {
                     utils.execute("CREATE DATABASE " + cfg.dbName() + "  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
                 } catch (SQLException e) {
                     throw new Error(e);
+                } finally {
+                    ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
                 }
                 log.info("Database '{}' recreated in {}", cfg.dbName(), TimeUtils.secSince(start));
                 return;

@@ -77,6 +77,14 @@ public class Mappings {
         }
     }
 
+    public void reset() {
+        tables.clear();
+        usedTableNames.clear();
+        if (sequences != null) {
+            sequences.clear();
+        }
+    }
+
     public TableModel getTableModel(Connection connection, Class<? extends IEntity> entityClass) {
         return ensureTable(connection, connectionProvider.getDialect(), EntityFactory.getEntityMeta(entityClass));
     }
