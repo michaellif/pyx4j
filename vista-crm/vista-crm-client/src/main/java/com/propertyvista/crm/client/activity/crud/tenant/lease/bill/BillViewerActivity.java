@@ -17,12 +17,16 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
+import com.propertyvista.crm.rpc.services.billing.BillPrintService;
 import com.propertyvista.domain.financial.billing.Bill;
 
 public class BillViewerActivity extends CrmViewerActivity<Bill> implements BillViewerView.Presenter {
@@ -50,5 +54,12 @@ public class BillViewerActivity extends CrmViewerActivity<Bill> implements BillV
                 view.populate(result);
             }
         }, entityId, reason);
+    }
+
+    @Override
+    public void print() {
+        EntityQueryCriteria<Bill> criteria = new EntityQueryCriteria<Bill>(Bill.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), entityId));
+        ReportDialog.start(GWT.<BillPrintService> create(BillPrintService.class), criteria);
     }
 }

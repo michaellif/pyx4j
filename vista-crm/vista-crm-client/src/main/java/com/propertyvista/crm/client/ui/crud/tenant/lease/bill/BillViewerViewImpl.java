@@ -37,14 +37,27 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<Bill> implements B
 
     private static final String DECLINE = i18n.tr("Reject");
 
+    private static final String PRINT = i18n.tr("Print");
+
     private final Button approveAction;
 
     private final Button declineAction;
+
+    private final Button print;
 
     public BillViewerViewImpl() {
         super(CrmSiteMap.Tenants.Bill.class, new BillEditorForm(true), true);
 
         // Add actions:
+
+        print = new Button(PRINT, new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((BillViewerView.Presenter) presenter).print();
+            }
+        });
+        addToolbarItem(print.asWidget());
+
         approveAction = new Button(APPROVE, new ClickHandler() {
 
             @Override

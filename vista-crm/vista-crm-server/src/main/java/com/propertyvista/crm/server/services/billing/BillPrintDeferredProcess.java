@@ -13,35 +13,70 @@
  */
 package com.propertyvista.crm.server.services.billing;
 
-import com.pyx4j.entity.report.JasperFileFormat;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import java.io.ByteArrayOutputStream;
+
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
+import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.server.billing.print.BillPrint;
 
 public class BillPrintDeferredProcess implements IDeferredProcess {
 
-    public BillPrintDeferredProcess(EntityQueryCriteria<Bill> entityQueryCriteria, JasperFileFormat pdf) {
-        // TODO Auto-generated constructor stub
+    private final static I18n i18n = I18n.get(BillPrintDeferredProcess.class);
+
+    private static final long serialVersionUID = -6125308101533877962L;
+
+    protected volatile boolean canceled;
+
+    private boolean compleate;
+
+    private final Bill bill;
+
+    public BillPrintDeferredProcess(Bill bill) {
+        this.bill = bill;
     }
 
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
+        if (!compleate) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            try {
+                BillPrint.printBill(bill, bos);
+                Downloadable billPrint = new Downloadable(bos.toByteArray(), Downloadable.getContentType(DownloadFormat.PDF));
+                String fileName = "Bill.pdf";
+                billPrint.save(fileName);
+            } finally {
+                IOUtils.closeQuietly(bos);
+            }
 
+        }
+        compleate = true;
     }
 
     @Override
     public void cancel() {
-        // TODO Auto-generated method stub
-
+        canceled = true;
     }
 
     @Override
     public DeferredProcessProgressResponse status() {
-        // TODO Auto-generated method stub
-        return null;
+        DeferredReportProcessProgressResponse response = new DeferredReportProcessProgressResponse();
+
+        if (compleate) {
+            response.setCompleted();
+            response.setDownloadLink(System.currentTimeMillis() + "/" + "Bill.pdf");
+        } else {
+            response.setMessage(i18n.tr("Creating Bill..."));
+            response.setProgress(0);
+        }
+        return response;
+
     }
 
 }

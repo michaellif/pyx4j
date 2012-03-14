@@ -34,7 +34,7 @@ public class BillPrint {
 
     public static final String title = "Bill";
 
-    public static JasperReportModel createModel(Bill bill) {
+    private static JasperReportModel createModel(Bill bill) {
 
         BillData billData = EntityFactory.create(BillData.class);
         billData.bill().set(bill);
