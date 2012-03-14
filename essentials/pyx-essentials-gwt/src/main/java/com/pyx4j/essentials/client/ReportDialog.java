@@ -40,6 +40,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.site.client.NavigationUri;
 
+//TODO find name for that - it is used not only for reports
 public class ReportDialog extends DeferredProcessDialog {
 
     private ReportService<?> reportService;
@@ -48,41 +49,39 @@ public class ReportDialog extends DeferredProcessDialog {
 
     private String downloadUrl;
 
-    public static ReportDialog start(ReportService<?> reportService, EntityQueryCriteria<?> criteria) {
-        return start(reportService, criteria, null);
+    public void start(ReportService<?> reportService, EntityQueryCriteria<?> criteria) {
+        start(reportService, criteria, null);
     }
 
-    public static ReportDialog start(ReportService<?> reportService, EntityQueryCriteria<?> criteria, HashMap<String, Serializable> parameters) {
+    public void start(ReportService<?> reportService, EntityQueryCriteria<?> criteria, HashMap<String, Serializable> parameters) {
         ReportRequest reportRequest = new ReportRequest();
         reportRequest.setTimezoneOffset(TimeUtils.getTimezoneOffset());
         reportRequest.setCriteria(criteria);
         reportRequest.setParameters(parameters);
-        return start(reportService, reportRequest);
+        start(reportService, reportRequest);
     }
 
-    public static ReportDialog start(ReportService<?> reportService, ReportRequest reportRequest) {
-
-        final ReportDialog rd = new ReportDialog("Report", "Creating report...");
-        rd.reportService = reportService;
-        rd.show();
+    public void start(ReportService<?> reportService, ReportRequest reportRequest) {
+        this.reportService = reportService;
+        show();
 
         AsyncCallback<String> callback = new BlockingAsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
-                rd.hide();
+                hide();
                 throw new UnrecoverableClientError(caught);
             }
 
             @Override
             public void onSuccess(String deferredCorrelationID) {
-                rd.startProgress(deferredCorrelationID);
+                startProgress(deferredCorrelationID);
             }
 
         };
 
         reportService.createDownload(callback, reportRequest);
-        return rd;
+
     }
 
     public ReportDialog(String title, String initialMessage) {
