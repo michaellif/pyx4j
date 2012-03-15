@@ -60,7 +60,8 @@ public class LeaseHelper {
                 Persistence.service().retrieve(service.version().items());
                 for (ProductItem item : service.version().items()) {
                     if (lease.unit().equals(item.element())) {
-                        lease.leaseProducts().serviceItem().set(createBillableItem(item));
+                        lease.leaseProducts().serviceItem().set(createBillableItem(item, lease.leaseFrom().getValue()));
+
                         selectedService = service;
                         lease.type().set(selectedService.version().type());
                         break;
@@ -79,7 +80,7 @@ public class LeaseHelper {
                     for (ProductItem item : feature.version().items()) {
                         if (!building.productCatalog().includedUtilities().contains(item.type())
                                 && !building.productCatalog().externalUtilities().contains(item.type())) {
-                            lease.leaseProducts().featureItems().add(createBillableItem(item));
+                            lease.leaseProducts().featureItems().add(createBillableItem(item, lease.leaseFrom().getValue()));
                         }
                     }
                 }
@@ -94,10 +95,10 @@ public class LeaseHelper {
         }
     }
 
-    private static BillableItem createBillableItem(ProductItem serviceItem) {
+    private static BillableItem createBillableItem(ProductItem serviceItem, LogicalDate effectiveDate) {
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(serviceItem);
-        newItem.effectiveDate().setValue(new LogicalDate());
+        newItem.effectiveDate().setValue(effectiveDate != null ? effectiveDate : new LogicalDate());
         return newItem;
     }
 }

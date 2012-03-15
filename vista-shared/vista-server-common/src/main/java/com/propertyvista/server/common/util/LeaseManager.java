@@ -17,6 +17,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
@@ -27,6 +28,8 @@ import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManage
 import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManagerImpl;
 
 public class LeaseManager {
+
+    private static final I18n i18n = I18n.get(LeaseManager.class);
 
     private final TimeContextProvider timeContextProvider;
 
@@ -168,7 +171,12 @@ public class LeaseManager {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.Approved);
         Persistence.secureSave(lease);
+
         occupancyManager(lease.unit().getPrimaryKey()).approveLease();
+
+//        // TODO uncomment when project dependencies will be corrected:        
+//        BillingFacade.runBilling(lease);
+
         return lease;
     }
 
@@ -190,9 +198,18 @@ public class LeaseManager {
 
     public Lease activate(Key leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        lease.status().setValue(Status.Active);
-        Persistence.secureSave(lease);
-        turnoverAnalysisManager.propagateLeaseActivationToTurnoverReport(lease);
+
+// TODO uncomment when project dependencies will be corrected:        
+//        // set lease status to active ONLY if first (latest till now) bill is confirmed: 
+//        if (BillingFacade.getLatestBill(lease.billingAccount()).billStatus().getValue() == Bill.BillStatus.Confirmed) {
+//            lease.status().setValue(Status.Active);
+//            Persistence.secureSave(lease);
+//
+//            turnoverAnalysisManager.propagateLeaseActivationToTurnoverReport(lease);
+//        } else {
+//            throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
+//        }
+
         return lease;
     }
 
@@ -216,7 +233,5 @@ public class LeaseManager {
     public interface TimeContextProvider {
 
         LogicalDate getTimeContext();
-
     }
-
 }
