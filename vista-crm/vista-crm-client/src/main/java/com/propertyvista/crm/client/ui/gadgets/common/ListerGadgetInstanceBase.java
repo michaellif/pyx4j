@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
@@ -39,7 +39,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
 
 public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE extends ListerGadgetBaseMetadata> extends GadgetInstanceBase<GADGET_TYPE> {
-	
+
     protected static final int DEFAULT_PAGE_SIZE = 10;
 
     private DataTablePanel<E> dataTablePanel;
@@ -65,7 +65,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     protected final E proto() {
         return proto;
     }
-    
+
     protected Widget initListerWidget() {
         dataTablePanel = new DataTablePanel<E>(entityClass);
         dataTablePanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings());
@@ -144,6 +144,8 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
         dataTablePanel.getDataTable().setAutoColumnsWidth(true);
+        dataTablePanel.getDataTable().setHasDetailsNavigation(true);
+        dataTablePanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ListerListPanel.name());
         dataTablePanel.getDataTable().renderTable();
         return dataTablePanel;
     }
