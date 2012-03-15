@@ -18,8 +18,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
-import com.propertvista.generator.gdo.ApplicationSummaryGDO;
-import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.CompanyVendor;
 import com.propertvista.generator.util.RandomUtil;
@@ -29,19 +27,14 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class TenantsGenerator {
 
@@ -73,67 +66,6 @@ public class TenantsGenerator {
         }
 
         return item;
-    }
-
-    public ApplicationSummaryGDO createLease(Tenant tenant, AptUnit selectedUnit) {
-        ApplicationSummaryGDO summary = EntityFactory.create(ApplicationSummaryGDO.class);
-
-        // lease:
-        summary.lease().leaseID().setValue(RandomUtil.randomLetters(8));
-
-        // This is actually updated during save to match real unit data
-        summary.lease().type().setValue(Service.Type.residentialUnit);
-        summary.lease().status().setValue(Lease.Status.Active);
-        summary.lease().unit().set(selectedUnit);
-        summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2010, 2011));
-        summary.lease().paymentFrequency().setValue(PaymentFrequency.Monthly);
-        summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2014));
-        summary.lease().expectedMoveIn().setValue(summary.lease().leaseFrom().getValue());
-        summary.lease().actualMoveIn().setValue(summary.lease().expectedMoveIn().getValue());
-        summary.lease().approvalDate().setValue(summary.lease().leaseFrom().getValue());
-        summary.lease().createDate().setValue(RandomUtil.randomLogicalDate(2010, 2010));
-
-        if (RandomUtil.randomBoolean()) {
-            if (RandomUtil.randomBoolean()) {
-                LogicalDate date = new LogicalDate(summary.lease().leaseTo().getValue());
-                date.setTime(date.getTime() - 31 * 24 * 60 * 60 * 1000L);
-                summary.lease().moveOutNotice().setValue(date);
-
-                date = new LogicalDate(summary.lease().leaseTo().getValue());
-                date.setTime(date.getTime() - 3 * 24 * 60 * 60 * 1000L);
-                summary.lease().expectedMoveOut().setValue(date);
-
-                summary.lease().completion().setValue(Lease.CompletionType.Notice);
-            }
-            if (RandomUtil.randomBoolean()) {
-                LogicalDate date = new LogicalDate(summary.lease().leaseTo().getValue());
-                date.setTime(date.getTime() - 100 * 24 * 60 * 60 * 1000L);
-                summary.lease().moveOutNotice().setValue(date);
-
-                date = new LogicalDate(date);
-                date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000L);
-                summary.lease().expectedMoveOut().setValue(date);
-
-                summary.lease().completion().setValue(Lease.CompletionType.Skip);
-            }
-            if (RandomUtil.randomBoolean()) {
-                LogicalDate date = new LogicalDate(summary.lease().leaseTo().getValue());
-                date.setTime(date.getTime() - 100 * 24 * 60 * 60 * 1000L);
-                summary.lease().moveOutNotice().setValue(date);
-                summary.lease().expectedMoveOut().setValue(date);
-
-                summary.lease().completion().setValue(Lease.CompletionType.Eviction);
-            }
-        }
-
-        TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);
-        summary.tenants().add(tenantSummary);
-        tenantSummary.tenant().set(tenant);
-        tenantSummary.tenantInLease().tenant().set(tenantSummary.tenant());
-        tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.Applicant);
-        tenantSummary.tenantInLease().lease().set(summary.lease());
-
-        return summary;
     }
 
     public List<PaymentMethod> createPaymentMethods(Tenant tenant) {

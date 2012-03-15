@@ -105,6 +105,7 @@ public class PTGenerator {
         createTenantList(user, summary.tenants());
 
         // lease:
+        // FIXME generate a lease with all the underground occupancy related stuff via LeaseLifecycleSim
         summary.lease().leaseID().setValue(RandomUtil.randomLetters(8));
 
         // This is actually update during save to match real unit data
