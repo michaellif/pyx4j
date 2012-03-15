@@ -18,6 +18,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,7 +42,6 @@ import com.propertyvista.crm.server.util.SortingFactory;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO.AnalysisResolution;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
@@ -50,6 +50,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPr
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManager;
+import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManagerImpl;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
 
@@ -328,61 +330,67 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
     @Override
     public void turnoverAnalysis(AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>> callback, Vector<Key> buidlings, LogicalDate reportDate) {
+        if (buidlings.isEmpty()) {
+            List<Building> bb = Persistence.secureQuery(EntityQueryCriteria.create(Building.class));
+            for (Building building : bb) {
+                buidlings.add(building.getPrimaryKey());
+            }
+        }
+        Vector<UnitTurnoversPerIntervalDTO> result = new Vector<UnitTurnoversPerIntervalDTO>(12);
+        if (buidlings.isEmpty()) {
+            // TODO maybe error??
+            callback.onSuccess(result);
+            return;
+        }
 
         LogicalDate tweleveMonthsAgo = new LogicalDate(reportDate.getYear() - 1, reportDate.getMonth(), 1);
+        LogicalDate endOfTheMonth = thisMonthEnd(tweleveMonthsAgo);
+        UnitTurnoverAnalysisManager manager = new UnitTurnoverAnalysisManagerImpl();
 
-        EntityQueryCriteria<UnitTurnoverStats> criteria = EntityQueryCriteria.create(UnitTurnoverStats.class);
-        if (!buidlings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buidlings));
+        Key[] buildingsArray = buidlings.toArray(new Key[buidlings.size()]);
+        int totalTurnovers = 0;
+        // sketch
+        while (endOfTheMonth.before(reportDate)) {
+            UnitTurnoversPerIntervalDTO intervalStats = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
+            intervalStats.intervalSize().setValue(AnalysisResolution.Month);
+            intervalStats.intervalValue().setValue(new LogicalDate(endOfTheMonth));
+            int turnovers = manager.turnoversSinceBeginningOfTheMonth(endOfTheMonth, buildingsArray);
+            intervalStats.unitsTurnedOverAbs().setValue(turnovers);
+            totalTurnovers += turnovers;
+            result.add(intervalStats);
+            endOfTheMonth = nextMonthEnd(endOfTheMonth);
         }
-        criteria.asc(criteria.proto().updatedOn());
-        criteria.add(PropertyCriterion.ge(criteria.proto().updatedOn(), tweleveMonthsAgo));
-        List<UnitTurnoverStats> summaries = Persistence.secureQuery(criteria);
+        UnitTurnoversPerIntervalDTO intervalStats = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
+        intervalStats.intervalSize().setValue(AnalysisResolution.Month);
+        intervalStats.intervalValue().setValue(new LogicalDate(endOfTheMonth));
+        intervalStats.unitsTurnedOverAbs().setValue(manager.turnoversSinceBeginningOfTheMonth(reportDate, buildingsArray));
+        result.add(intervalStats);
 
-        Vector<UnitTurnoversPerIntervalDTO> result = new Vector<UnitTurnoversPerIntervalDTO>(12);
-        UnitTurnoversPerIntervalDTO accumulation = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
-        accumulation.unitsTurnedOverAbs().setValue(0);
-
-        // initialize        
-        LogicalDate month = new LogicalDate(tweleveMonthsAgo);
-        for (int i = 0; i < 13; ++i) {
-            UnitTurnoversPerIntervalDTO turnoversPerInterval = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
-            turnoversPerInterval.unitsTurnedOverAbs().setValue(0);
-            turnoversPerInterval.intervalSize().setValue(AnalysisResolution.Month);
-            turnoversPerInterval.intervalValue().setValue(new LogicalDate(month));
-            result.add(turnoversPerInterval);
-            int newMonth = (month.getMonth() + 1) % 12;
-            month.setMonth(newMonth);
-            if (newMonth == 0) {
-                month.setYear(month.getYear() + 1);
+        if (totalTurnovers != 0) {
+            for (UnitTurnoversPerIntervalDTO stats : result) {
+                stats.unitsTurnedOverPct().setValue((double) (stats.unitsTurnedOverAbs().getValue()) / totalTurnovers);
             }
-        }
-
-        // fill with data
-        Iterator<UnitTurnoverStats> si = summaries.iterator();
-        int i = -1;
-        int prevMonth = -1;
-        double total = 0.;
-        while (si.hasNext()) {
-            UnitTurnoverStats summary = si.next();
-            if (summary.updatedOn().getValue().getMonth() != prevMonth) {
-                prevMonth = summary.updatedOn().getValue().getMonth();
-                ++i;
-            }
-            int turnovers = summary.turnovers().getValue();
-            total += turnovers;
-            result.get(i).unitsTurnedOverAbs().setValue(result.get(i).unitsTurnedOverAbs().getValue() + turnovers);
-        }
-        // calculate percentage
-        for (UnitTurnoversPerIntervalDTO turnoversPerInterval : result) {
-            if (total != 0.) {
-                turnoversPerInterval.unitsTurnedOverPct().setValue(turnoversPerInterval.unitsTurnedOverAbs().getValue() * 100 / total);
-            } else {
-                turnoversPerInterval.unitsTurnedOverPct().setValue(0.);
+        } else {
+            for (UnitTurnoversPerIntervalDTO stats : result) {
+                stats.unitsTurnedOverPct().setValue(0d);
             }
         }
         callback.onSuccess(result);
+    }
 
+    private LogicalDate thisMonthEnd(LogicalDate date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
+        return new LogicalDate(cal.getTime());
+    }
+
+    private LogicalDate nextMonthEnd(LogicalDate endOfTheMonth) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(endOfTheMonth);
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
+        return new LogicalDate(cal.getTime());
     }
 
 }
