@@ -52,7 +52,10 @@ public enum VistaCrmBehavior implements Behavior {
 
     Billing,
 
-    Reports;
+    Reports,
+
+    //Onboarding
+    VistaAccountOwner;
 
     @Override
     public String toString() {

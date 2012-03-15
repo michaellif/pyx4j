@@ -7,30 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 17, 2011
+ * Created on 2012-03-14
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto.company;
+package com.propertyvista.admin.rpc;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.security.CrmRole;
-import com.propertyvista.domain.security.UserCredentialEditDTO;
+import com.propertyvista.domain.security.AdminUser;
 
 @Transient
-public interface EmployeeDTO extends Employee, UserCredentialEditDTO {
-
-    @Override
-    @Caption(name = "Active Employee")
-    IPrimitive<Boolean> enabled();
-
-    IPrimitive<Boolean> accessAllBuildings();
-
-    IList<CrmRole> roles();
+@Caption(name = "User")
+public interface AdminUserDTO extends AdminUser {
 
 }

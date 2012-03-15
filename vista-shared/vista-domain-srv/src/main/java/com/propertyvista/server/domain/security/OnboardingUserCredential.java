@@ -13,34 +13,27 @@
  */
 package com.propertyvista.server.domain.security;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.security.CrmRole;
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.VistaOnboardingBehavior;
 
 @RpcBlacklist
-@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = CrmUser.class)
+@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = OnboardingUser.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CrmUserCredential extends AbstractUserCredential<CrmUser> {
+public interface OnboardingUserCredential extends AbstractUserCredential<OnboardingUser> {
 
     @Override
     @Detached
     @MemberColumn(name = "usr")
     @ReadOnly
-    CrmUser user();
+    OnboardingUser user();
 
-    IPrimitive<Boolean> accessAllBuildings();
-
-    @MemberColumn(name = "rls")
-    ISet<CrmRole> roles();
-
-    IPrimitive<Key> onboardingUser();
+    IPrimitive<VistaOnboardingBehavior> behavior();
 }
