@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.client.activity.board;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -134,7 +137,13 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
     public void print() {
         EntityQueryCriteria<DashboardMetadata> criteria = new EntityQueryCriteria<DashboardMetadata>(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), view.getDashboardMetadata().getPrimaryKey()));
-        new ReportDialog("Report", "Creating report...").start(GWT.<DashboardReportService> create(DashboardReportService.class), criteria);
+        HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
+        Vector<Key> buildingsPks = new Vector<Key>(view.getSelectedBuildings().size());
+        for (Building b : view.getSelectedBuildings()) {
+            buildingsPks.add(b.getPrimaryKey());
+        }
+        parameters.put(DashboardReportService.PARAM_SELECTED_BUILDINGS, buildingsPks);
+        new ReportDialog("Report", "Creating report...").start(GWT.<DashboardReportService> create(DashboardReportService.class), criteria, parameters);
     }
 
 // GadgetPresenter:

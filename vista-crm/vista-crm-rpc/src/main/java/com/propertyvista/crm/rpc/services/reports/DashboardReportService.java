@@ -19,4 +19,6 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public interface DashboardReportService extends ReportService<DashboardMetadata> {
 
+    String PARAM_SELECTED_BUILDINGS = "selected-buildings";
+
 }

@@ -17,12 +17,14 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
@@ -30,6 +32,7 @@ import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.report.master.MasterReportEntry;
 import com.pyx4j.entity.report.master.MasterReportModel;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
@@ -39,6 +42,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public class ReportsDeferredProcess implements IDeferredProcess {
@@ -65,9 +69,16 @@ public class ReportsDeferredProcess implements IDeferredProcess {
 
     private final JasperFileFormat format;
 
-    public ReportsDeferredProcess(EntityQueryCriteria<DashboardMetadata> queryCriteria, JasperFileFormat format) {
+    private final Vector<Key> selectedBuildigns;
+
+    public ReportsDeferredProcess(EntityQueryCriteria<DashboardMetadata> queryCriteria, Vector<Key> selectedBuildings, JasperFileFormat format) {
         this.queryCriteria = queryCriteria;
         this.format = format;
+        if (selectedBuildings == null) {
+            this.selectedBuildigns = new Vector<Key>();
+        } else {
+            this.selectedBuildigns = selectedBuildings;
+        }
     }
 
     @Override
@@ -78,10 +89,16 @@ public class ReportsDeferredProcess implements IDeferredProcess {
             DashboardMetadata dashboard = (DashboardMetadata) Persistence.service().retrieve(queryCriteria);
             if (dashboard != null) {
 
-                HashMap<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put(MasterReportModel.REPORT_TITLE, dashboard.name().getValue());
+                HashMap<String, Object> masterReportParameters = new HashMap<String, Object>();
+                masterReportParameters.put(MasterReportModel.REPORT_TITLE, dashboard.name().getValue());
 
-                MasterReportModel masterReportModel = new MasterReportModel(prepareSubreports(dashboard.gadgets()), parameters);
+                MasterReportModel masterReportModel = null;
+                if (dashboard.layoutType().getValue() == LayoutType.Report) {
+                    masterReportModel = new MasterReportModel(prepareSubreportsForReportLayout(dashboard.gadgets(), selectedBuildigns), masterReportParameters);
+                } else {
+                    masterReportModel = new MasterReportModel(prepareSubreportsForDashboardLayout(dashboard.gadgets(), selectedBuildigns),
+                            masterReportParameters);
+                }
 
                 bos = new ByteArrayOutputStream();
                 JasperReportProcessor.createReport(masterReportModel, JasperFileFormat.PDF, bos);
@@ -128,7 +145,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
         return response;
     }
 
-    public static JasperReportModel createReportModel(GadgetMetadata gadgetMetadata) throws Exception {
+    public static JasperReportModel createReportModel(GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) throws Exception {
         final Boolean[] isFinished = new Boolean[] { false };
         final JasperReportModel[] result = new JasperReportModel[] { null };
         final Throwable[] error = new Throwable[] { null };
@@ -154,7 +171,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
                         isFinished.notify();
                     }
                 }
-            }, gadgetMetadata);
+            }, gadgetMetadata, selectedBuildings);
 
             boolean isInterrupted = false;
             synchronized (isFinished) {
@@ -174,7 +191,16 @@ public class ReportsDeferredProcess implements IDeferredProcess {
         }
     }
 
-    public static List<MasterReportEntry> prepareSubreports(List<GadgetMetadata> gadgetMetadatas) throws Exception {
+    public static List<MasterReportEntry> prepareSubreportsForDashboardLayout(IList<GadgetMetadata> gadgets, Vector<Key> selectedBuildigns) throws Exception {
+        List<MasterReportEntry> subreports = new LinkedList<MasterReportEntry>();
+        for (GadgetMetadata gadgetMetadata : gadgets) {
+            subreports.add(new MasterReportEntry(createReportModel(gadgetMetadata, selectedBuildigns)));
+        }
+        return subreports;
+    }
+
+    public static List<MasterReportEntry> prepareSubreportsForReportLayout(List<GadgetMetadata> gadgetMetadatas, Vector<Key> selectedBuildigns)
+            throws Exception {
         List<MasterReportEntry> subreports = new LinkedList<MasterReportEntry>();
 
         GadgetMetadata leftGadgetMetadata = null;
@@ -182,19 +208,20 @@ public class ReportsDeferredProcess implements IDeferredProcess {
             switch (gadgetMetadata.docking().column().getValue()) {
             case -1:
                 if (leftGadgetMetadata != null) {
-                    subreports.add(new MasterReportEntry(createReportModel(leftGadgetMetadata), null));
+                    subreports.add(new MasterReportEntry(createReportModel(leftGadgetMetadata, selectedBuildigns), null));
                 }
-                subreports.add(new MasterReportEntry(createReportModel(gadgetMetadata)));
+                subreports.add(new MasterReportEntry(createReportModel(gadgetMetadata, selectedBuildigns)));
                 leftGadgetMetadata = null;
                 break;
             case 0:
                 if (leftGadgetMetadata != null) {
-                    subreports.add(new MasterReportEntry(createReportModel(gadgetMetadata)));
+                    subreports.add(new MasterReportEntry(createReportModel(gadgetMetadata, selectedBuildigns)));
                 }
                 leftGadgetMetadata = gadgetMetadata;
                 break;
             case 1:
-                subreports.add(new MasterReportEntry(createReportModel(leftGadgetMetadata), createReportModel(gadgetMetadata)));
+                subreports.add(new MasterReportEntry(createReportModel(leftGadgetMetadata, selectedBuildigns), createReportModel(gadgetMetadata,
+                        selectedBuildigns)));
                 leftGadgetMetadata = null;
                 break;
             default:
@@ -208,7 +235,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
             }
         }
         if (leftGadgetMetadata != null) {
-            subreports.add(new MasterReportEntry(createReportModel(leftGadgetMetadata), null));
+            subreports.add(new MasterReportEntry(createReportModel(leftGadgetMetadata, selectedBuildigns), null));
         }
 
         return subreports;

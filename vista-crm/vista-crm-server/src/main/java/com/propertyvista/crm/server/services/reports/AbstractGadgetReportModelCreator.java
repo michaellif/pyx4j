@@ -15,9 +15,11 @@ package com.propertyvista.crm.server.services.reports;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -41,7 +43,7 @@ public abstract class AbstractGadgetReportModelCreator<G extends GadgetMetadata>
      *            not <code>null</code>
      */
     @Override
-    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata) {
+    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
         if (canHandle(gadgetMetadata.getInstanceValueClass())) {
             convert(new AsyncCallback<AbstractGadgetReportModelCreator.ConvertedGadgetMetadata>() {
 

@@ -15,10 +15,12 @@ package com.propertyvista.crm.server.services.reports;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.report.JasperReportModel;
 
 import com.propertyvista.crm.server.services.reports.directory.BuildingListerReportCreator;
@@ -42,11 +44,11 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
     }
 
     @Override
-    public void createReportModel(AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata) {
+    public void createReportModel(AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
         AbstractGadgetReportModelCreator<?> creator = map.get(gadgetMetadata.getInstanceValueClass());
 
         if (creator != null) {
-            creator.createReportModel(callback, gadgetMetadata);
+            creator.createReportModel(callback, gadgetMetadata, selectedBuildings);
         } else {
             callback.onSuccess(createReportNotImplementedModel(gadgetMetadata.getInstanceValueClass().getSimpleName(), gadgetMetadata.docking().column()
                     .getValue() == -1));

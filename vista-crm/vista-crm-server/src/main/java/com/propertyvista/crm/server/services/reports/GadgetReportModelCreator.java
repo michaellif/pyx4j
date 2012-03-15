@@ -13,14 +13,17 @@
  */
 package com.propertyvista.crm.server.services.reports;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.report.JasperReportModel;
 
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public interface GadgetReportModelCreator {
 
-    void createReportModel(AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata);
+    void createReportModel(AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings);
 
 }

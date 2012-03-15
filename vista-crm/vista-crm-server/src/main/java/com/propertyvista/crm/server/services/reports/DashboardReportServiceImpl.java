@@ -13,23 +13,29 @@
  */
 package com.propertyvista.crm.server.services.reports;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertyvista.config.ThreadPoolNames;
-import com.propertyvista.crm.rpc.services.reports.DashboardReportService;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.report.ReportServiceImpl;
 
+import com.propertyvista.config.ThreadPoolNames;
+import com.propertyvista.crm.rpc.services.reports.DashboardReportService;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
+
 public class DashboardReportServiceImpl extends ReportServiceImpl<DashboardMetadata> implements DashboardReportService {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void createDownload(AsyncCallback<String> callback,
-			ReportRequest reportRequest) {		
-		callback.onSuccess(DeferredProcessRegistry.fork(new ReportsDeferredProcess((EntityQueryCriteria<DashboardMetadata>) reportRequest.getCriteria(), JasperFileFormat.PDF), ThreadPoolNames.DOWNLOADS));
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
+        callback.onSuccess(DeferredProcessRegistry.fork(new ReportsDeferredProcess((EntityQueryCriteria<DashboardMetadata>) reportRequest.getCriteria(),
+                (Vector<Key>) reportRequest.getParameters().get(DashboardReportService.PARAM_SELECTED_BUILDINGS), JasperFileFormat.PDF),
+                ThreadPoolNames.DOWNLOADS));
+    }
 
 }

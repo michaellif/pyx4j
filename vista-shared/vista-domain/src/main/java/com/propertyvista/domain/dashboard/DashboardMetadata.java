@@ -19,7 +19,6 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -77,17 +76,6 @@ public interface DashboardMetadata extends ISharedUserEntity {
     @ToString(index = 0)
     @NotNull
     IPrimitive<String> name();
-
-    /**
-     * For {@link DashboardType#building} kind of gadget this property is filled on
-     * retrieval in server and represents the set of buildings this dashboard
-     * displays
-     * 
-     * @return
-     */
-    @Deprecated
-    @Transient
-    IPrimitive<String> buildingsStringView();
 
     @Length(250)
     @Editor(type = Editor.EditorType.textarea)
