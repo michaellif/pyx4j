@@ -97,11 +97,12 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             String email = DemoData.UserType.PTENANT.getEmail(i);
             TenantUser user = UserPreloader.createTenantUser("", email, email, VistaTenantBehavior.ProspectiveApplicant);
             ApplicationSummaryGDO summary = generator.createSummary(user, units.get(i - 1));
-
-            // Update user name
-            Persistence.service().persist(user);
-            persistFullApplication(summary, generator, i);
-            numCreated++;
+            if (summary != null) {
+                // Update user name
+                Persistence.service().persist(user);
+                persistFullApplication(summary, generator, i);
+                numCreated++;
+            }
         }
 
         StringBuilder b = new StringBuilder();
