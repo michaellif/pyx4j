@@ -18,25 +18,30 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class BillingFacade {
+public class BillingFacadeImpl implements BillingFacade {
 
-    public static BillingRun runBilling(Lease lease) {
+    @Override
+    public BillingRun runBilling(Lease lease) {
         return BillingLifecycle.runBilling(lease);
     }
 
-    public static Bill getLatestConfirmedBill(BillingAccount billingAccount) {
+    @Override
+    public Bill getLatestConfirmedBill(BillingAccount billingAccount) {
         return BillingLifecycle.getLatestConfirmedBill(billingAccount);
     }
 
-    public static Bill getLatestBill(BillingAccount billingAccount) {
+    @Override
+    public Bill getLatestBill(BillingAccount billingAccount) {
         return BillingLifecycle.getLatestBill(billingAccount);
     }
 
-    public static void confirmBill(Bill bill) {
+    @Override
+    public void confirmBill(Bill bill) {
         BillingLifecycle.confirmBill(bill);
     }
 
-    public static void rejectBill(Bill bill) {
+    @Override
+    public void rejectBill(Bill bill) {
         BillingLifecycle.rejectBill(bill);
     }
 

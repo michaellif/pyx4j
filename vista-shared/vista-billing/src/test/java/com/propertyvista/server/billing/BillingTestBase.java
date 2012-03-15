@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
@@ -106,14 +107,14 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
     protected Bill runBilling(boolean confirm, boolean printBill) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
-        BillingFacade.runBilling(lease);
+        ServerSideFactory.create(BillingFacade.class).runBilling(lease);
 
-        Bill bill = BillingFacade.getLatestBill(lease.billingAccount());
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease.billingAccount());
 
         if (confirm) {
-            BillingFacade.confirmBill(bill);
+            ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
         } else {
-            BillingFacade.rejectBill(bill);
+            ServerSideFactory.create(BillingFacade.class).rejectBill(bill);
         }
 
         Persistence.service().commit();

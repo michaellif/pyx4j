@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.billing;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
@@ -44,15 +45,8 @@ public class BillCrudServiceImpl extends AbstractCrudServiceImpl<Bill> implement
     public void confirm(AsyncCallback<Bill> callback, Key entityId) {
         Bill bill = Persistence.service().retrieve(Bill.class, entityId);
         if (bill != null) {
-
-            try {
-                Persistence.service().startBackgroundProcessTransaction();
-                BillingFacade.confirmBill(bill);
-                Persistence.service().commit();
-            } finally {
-                Persistence.service().endTransaction();
-            }
-
+            ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
+            Persistence.service().commit();
             callback.onSuccess(bill);
         } else {
             throw new IllegalArgumentException();
@@ -63,15 +57,8 @@ public class BillCrudServiceImpl extends AbstractCrudServiceImpl<Bill> implement
     public void reject(AsyncCallback<Bill> callback, Key entityId, String reason) {
         Bill bill = Persistence.service().retrieve(Bill.class, entityId);
         if (bill != null) {
-
-            try {
-                Persistence.service().startBackgroundProcessTransaction();
-                BillingFacade.rejectBill(bill);
-                Persistence.service().commit();
-            } finally {
-                Persistence.service().endTransaction();
-            }
-
+            ServerSideFactory.create(BillingFacade.class).rejectBill(bill);
+            Persistence.service().commit();
             callback.onSuccess(bill);
         } else {
             throw new IllegalArgumentException();
