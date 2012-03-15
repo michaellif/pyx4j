@@ -22,24 +22,53 @@ package com.pyx4j.entity.client.images;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
+import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
+import com.pyx4j.widgets.client.images.IconButtonImages;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public interface EntityFolderImages extends WidgetsImages {
+public interface EntityFolderImages extends WidgetsImages, IconButtonImages {
 
     EntityFolderImages INSTANCE = GWT.create(EntityFolderImages.class);
 
-    @Source("arrow_up.png")
-    ImageResource moveUp();
+    MoveUpIconButtonImages moveUpButton();
 
-    @Source("arrow_up_hover.png")
-    ImageResource moveUpHover();
-
-    @Source("arrow_down.png")
-    ImageResource moveDown();
-
-    @Source("arrow_down_hover.png")
-    ImageResource moveDownHover();
+    MoveDownIconButtonImages moveDownButton();
 
     ImageResource warn();
+
+    public interface MoveUpIconButtonImages extends IconButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("arrow_up.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("arrow_up_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("arrow_up.png")
+        ImageResource pushed();
+    }
+
+    public interface MoveDownIconButtonImages extends IconButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("arrow_down.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("arrow_down_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("arrow_down.png")
+        ImageResource pushed();
+    }
 }

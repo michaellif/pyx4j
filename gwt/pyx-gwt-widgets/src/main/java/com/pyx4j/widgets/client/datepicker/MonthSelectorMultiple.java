@@ -73,7 +73,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
     protected void setup() {
         DatePickerImages resource = (DatePickerImages) GWT.create(DatePickerImages.class);
         // Set up backwards.
-        backwards = new Image(resource.MonthPrevious());
+        backwards = new Image(resource.monthPrevious());
         backwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsYear.debugId());
         backwards.addStyleName(DefaultDatePickerTheme.StyleDependent.middle.name());
         backwards.addClickHandler(new ClickHandler() {
@@ -84,7 +84,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
             }
         });
 
-        forwards = new Image(resource.MonthNext());
+        forwards = new Image(resource.monthNext());
         forwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardYear.debugId());
         forwards.addStyleName(DefaultDatePickerTheme.StyleDependent.middle.name());
         forwards.addClickHandler(new ClickHandler() {

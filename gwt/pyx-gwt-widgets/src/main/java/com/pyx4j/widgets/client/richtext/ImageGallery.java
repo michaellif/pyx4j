@@ -124,7 +124,7 @@ public abstract class ImageGallery implements IsWidget {
                 controls.getElement().getStyle().setProperty("visibility", "hidden");
                 add(controls, NORTH);
 
-                final Image delButt = new Image(ImageFactory.getImages().del());
+                final Image delButt = new Image(ImageFactory.getImages().delButton().regular());
                 delButt.getElement().getStyle().setCursor(Cursor.POINTER);
                 delButt.getElement().getStyle().setFloat(Style.Float.RIGHT);
 

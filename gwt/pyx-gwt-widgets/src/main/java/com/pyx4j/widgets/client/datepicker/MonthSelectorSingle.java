@@ -82,7 +82,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
     protected void setup() {
         DatePickerImages resource = (DatePickerImages) GWT.create(DatePickerImages.class);
         // Set up backwards.        
-        backwards = new Image(resource.MonthPrevious());
+        backwards = new Image(resource.monthPrevious());
         backwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsMonth.debugId());
         backwards.addStyleName(DefaultDatePickerTheme.StyleDependent.middle.name());
         backwards.addClickHandler(new ClickHandler() {
@@ -93,7 +93,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
             }
         });
 
-        forwards = new Image(resource.MonthNext());
+        forwards = new Image(resource.monthNext());
         forwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardMonth.debugId());
         forwards.addStyleName(DefaultDatePickerTheme.StyleDependent.middle.name());
         forwards.addClickHandler(new ClickHandler() {
@@ -104,7 +104,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
             }
         });
         // Set up backwards year
-        backwardsYear = new HoldableImage(resource.YearPrevious(), 300);
+        backwardsYear = new HoldableImage(resource.yearPrevious(), 300);
         backwardsYear.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsYear.debugId());
         backwardsYear.addStyleName(DefaultDatePickerTheme.StyleDependent.bottom.name());
         backwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
@@ -116,7 +116,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
             }
         });
 
-        forwardsYear = new HoldableImage(resource.YearNext(), 300);
+        forwardsYear = new HoldableImage(resource.yearNext(), 300);
         forwardsYear.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardYear.debugId());
         forwardsYear.addStyleName(DefaultDatePickerTheme.StyleDependent.top.name());
         forwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {

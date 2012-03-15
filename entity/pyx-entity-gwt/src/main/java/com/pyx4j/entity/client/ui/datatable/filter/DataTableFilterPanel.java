@@ -39,7 +39,7 @@ import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.ImageButton;
+import com.pyx4j.widgets.client.IconButton;
 
 public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
@@ -125,7 +125,7 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
     private Widget createAddButton() {
 
-        ImageButton btnAdd = new ImageButton(EntityFolderImages.INSTANCE.add(), EntityFolderImages.INSTANCE.addHover());
+        IconButton btnAdd = new IconButton(i18n.tr("Add filter..."), EntityFolderImages.INSTANCE.addButton());
         btnAdd.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

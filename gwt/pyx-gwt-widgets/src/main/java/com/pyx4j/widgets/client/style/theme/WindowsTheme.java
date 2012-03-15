@@ -706,7 +706,7 @@ public class WindowsTheme extends Theme {
         DatePickerImages resource = (DatePickerImages) GWT.create(DatePickerImages.class);
 
         Style style = new Style("table.datePickerMonthSelector");
-        style.addProperty("background-image", "url('" + resource.MonthSelectorBackground().getURL() + "')");
+        style.addProperty("background-image", "url('" + resource.monthSelectorBackground().getURL() + "')");
         style.addProperty("background-repeat", "repeat-x");
         style.addProperty("line-height", "12px");
         style.addProperty("border-bottom", "1px solid #A8A8A8");

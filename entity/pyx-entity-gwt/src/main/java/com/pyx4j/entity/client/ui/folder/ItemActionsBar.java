@@ -34,7 +34,7 @@ import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.ImageButton;
+import com.pyx4j.widgets.client.IconButton;
 
 public class ItemActionsBar extends HorizontalPanel {
 
@@ -53,39 +53,39 @@ public class ItemActionsBar extends HorizontalPanel {
         }
     }
 
-    private ImageButton removeCommand;
+    private final IconButton removeCommand;
 
-    private ImageButton upCommand;
+    private final IconButton upCommand;
 
-    private ImageButton downCommand;
+    private final IconButton downCommand;
 
     boolean boxDecorator = false;
 
-    public ItemActionsBar() {
+    public ItemActionsBar(boolean removable) {
         setStyleName(EntityFolderActionsBar.name());
-    }
 
-    public void init(IFolderItemDecorator decorator, boolean removable) {
-        EntityFolderImages images = decorator.getImages();
-
-        if (decorator instanceof BoxFolderItemDecorator) {
-            boxDecorator = true;
-        }
-
-        removeCommand = new ImageButton(images.del(), images.delHover(), i18n.tr("Delete Item"));
+        removeCommand = new IconButton(i18n.tr("Delete Item"));
         removeCommand.setVisible(removable);
         removeCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
         removeCommand.setStyleName(EntityFolderRemoveButton.name());
 
-        downCommand = new ImageButton(images.moveDown(), images.moveDownHover(), i18n.tr("Move down"));
+        downCommand = new IconButton(i18n.tr("Move down"));
         downCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
         downCommand.setStyleName(EntityFolderDownButton.name());
 
-        upCommand = new ImageButton(images.moveUp(), images.moveUpHover(), i18n.tr("Move up"));
+        upCommand = new IconButton(i18n.tr("Move up"));
         upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
         upCommand.setStyleName(EntityFolderUpButton.name());
+    }
 
-        if (boxDecorator) {
+    public void init(IFolderItemDecorator decorator) {
+        EntityFolderImages images = decorator.getImages();
+        removeCommand.setImages(images.delButton());
+        upCommand.setImages(images.moveUpButton());
+        downCommand.setImages(images.moveDownButton());
+
+        clear();
+        if (decorator instanceof BoxFolderItemDecorator) {
             add(upCommand);
             add(downCommand);
             add(removeCommand);
@@ -150,7 +150,7 @@ public class ItemActionsBar extends HorizontalPanel {
         removeCommand.setVisible(show);
     }
 
-    public void addCustomButton(ImageButton button) {
+    public void addCustomButton(IconButton button) {
         button.setStyleName(EntityFolderCustomButton.name());
         add(button);
         if (boxDecorator) {
@@ -160,7 +160,7 @@ public class ItemActionsBar extends HorizontalPanel {
         }
     }
 
-    public void removeCustomButton(ImageButton button) {
+    public void removeCustomButton(IconButton button) {
         remove(button);
     }
 

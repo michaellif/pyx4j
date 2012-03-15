@@ -42,7 +42,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
-import com.pyx4j.widgets.client.ImageButton;
+import com.pyx4j.widgets.client.IconButton;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<E> {
 
@@ -64,6 +64,8 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     private ItemActionsBar actionsPanel;
 
+    private boolean initiated = false;
+
     public CEntityFolderItem(Class<E> clazz) {
         this(clazz, true, true);
     }
@@ -76,7 +78,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         this.removable = removable;
 
         handlerRegistrations = new ArrayList<HandlerRegistration>();
-        actionsPanel = new ItemActionsBar();
+        actionsPanel = new ItemActionsBar(removable);
 
     }
 
@@ -86,12 +88,15 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     @Override
     public void initContent() {
         super.initContent();
-        IDecorator decorator = getDecorator();
-        if (decorator instanceof IFolderItemDecorator) {
-            actionsPanel.init((IFolderItemDecorator) decorator, removable);
-            ((IFolderItemDecorator) decorator).setItemActionsBar(actionsPanel);
-        } else {
-            throw new Error("Correct decorator is missing");
+        if (!initiated) {
+            IDecorator decorator = getDecorator();
+            if (decorator instanceof IFolderItemDecorator) {
+                actionsPanel.init((IFolderItemDecorator) decorator);
+                ((IFolderItemDecorator) decorator).setItemActionsBar(actionsPanel);
+            } else {
+                throw new Error("Correct decorator is missing");
+            }
+            initiated = true;
         }
     }
 
@@ -163,11 +168,11 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         return handlerRegistration;
     }
 
-    public void addCustomButton(ImageButton button) {
+    public void addCustomButton(IconButton button) {
         actionsPanel.addCustomButton(button);
     }
 
-    public void removeCustomButton(ImageButton button) {
+    public void removeCustomButton(IconButton button) {
         actionsPanel.removeCustomButton(button);
     }
 
@@ -224,7 +229,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     protected void calculateActionsState() {
         boolean enabled = isEnabled() && isEditable();
         if (!enabled) {
-            ((IFolderItemDecorator<?>) getDecorator()).setActionsState(false, false, false);
+            actionsPanel.setActionsState(false, false, false);
         } else {
 
             CEntityFolder<E> parent = ((CEntityFolder<E>) getParent());
@@ -236,10 +241,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
             CEntityFolderItem<?> previousSibling = parent.getItem(index - 1);
             CEntityFolderItem<?> nextSibling = parent.getItem(index + 1);
 
-            if (getDecorator() != null) {
-                ((IFolderItemDecorator<?>) getDecorator()).setActionsState(removable, movable && !first && previousSibling.isMovable(), movable && !last
-                        && nextSibling.isMovable());
-            }
+            actionsPanel.setActionsState(removable, movable && !first && previousSibling.isMovable(), movable && !last && nextSibling.isMovable());
         }
 
     }

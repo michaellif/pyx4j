@@ -27,28 +27,16 @@ import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
 public interface WidgetsImages extends ClientBundle {
 
-    public ImageResource expand();
+    AddIconButtonImages addButton();
 
-    public ImageResource collapse();
+    DelIconButtonImages delButton();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("add.png")
-    ImageResource add();
+    ImageResource expand();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("add_hover.png")
-    ImageResource addHover();
+    ImageResource collapse();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("del.png")
-    ImageResource del();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("del_hover.png")
-    ImageResource delHover();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    public ImageResource viewMenu();
+    ImageResource viewMenu();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     public ImageResource comboBoxPicker();
@@ -100,5 +88,39 @@ public interface WidgetsImages extends ClientBundle {
 
     @Source("rate-full-star.png")
     ImageResource rateFullStar();
+
+    public interface AddIconButtonImages extends IconButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("add.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("add_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("add.png")
+        ImageResource pushed();
+    }
+
+    public interface DelIconButtonImages extends IconButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("del.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("del_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("del.png")
+        ImageResource pushed();
+    }
 
 }

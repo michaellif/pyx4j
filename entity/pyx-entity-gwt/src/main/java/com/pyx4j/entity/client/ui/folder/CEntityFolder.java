@@ -272,6 +272,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     @SuppressWarnings("unchecked")
     protected void setComponentsValue(IList<E> value, boolean fireEvent, boolean populate) {
+
         ArrayList<CEntityFolderItem<E>> previousList = new ArrayList<CEntityFolderItem<E>>(itemsList);
 
         for (CEntityFolderItem<E> item : previousList) {

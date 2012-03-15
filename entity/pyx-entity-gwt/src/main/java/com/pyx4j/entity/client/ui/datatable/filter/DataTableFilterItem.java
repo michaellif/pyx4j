@@ -49,7 +49,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.ImageButton;
+import com.pyx4j.widgets.client.IconButton;
 
 public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
@@ -88,7 +88,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
         setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterItem.name());
 
-        Image btnDel = new ImageButton(EntityFolderImages.INSTANCE.del(), EntityFolderImages.INSTANCE.delHover(), i18n.tr("Remove Filter"));
+        Image btnDel = new IconButton(i18n.tr("Remove Filter"), EntityFolderImages.INSTANCE.delButton());
         btnDel.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

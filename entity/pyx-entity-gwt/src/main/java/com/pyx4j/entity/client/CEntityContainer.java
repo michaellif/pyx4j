@@ -35,6 +35,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     private ImageResource icon;
 
+    private boolean initiated = false;
+
     public CEntityContainer() {
     }
 
@@ -56,16 +58,19 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     }
 
     public void initContent() {
-        asWidget();
-        decorator = createDecorator();
-        if (decorator == null) {
-            getWidget().setWidget(createContent());
-        } else {
-            getWidget().setWidget(decorator);
-            decorator.setComponent(this);
+        assert initiated == false;
+        if (!initiated) {
+            asWidget();
+            decorator = createDecorator();
+            if (decorator == null) {
+                getWidget().setWidget(createContent());
+            } else {
+                getWidget().setWidget(decorator);
+                decorator.setComponent(this);
+            }
+            addValidations();
+            initiated = true;
         }
-
-        addValidations();
     }
 
     public IDecorator getDecorator() {
@@ -94,8 +99,14 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     @Override
     public void onAdopt(CContainer<?, ?> parent) {
         super.onAdopt(parent);
-        initContent();
-        addValidations();
+        if (!initiated) {
+            initContent();
+        }
+    }
+
+    @Override
+    public void onAbandon() {
+        super.onAbandon();
     }
 
     @Override
