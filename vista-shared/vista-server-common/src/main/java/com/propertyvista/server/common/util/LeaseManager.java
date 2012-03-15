@@ -202,8 +202,8 @@ public class LeaseManager {
 // TODO uncomment when project dependencies will be corrected:        
 //        // set lease status to active ONLY if first (latest till now) bill is confirmed: 
 //        if (BillingFacade.getLatestBill(lease.billingAccount()).billStatus().getValue() == Bill.BillStatus.Confirmed) {
-//            lease.status().setValue(Status.Active);
-//            Persistence.secureSave(lease);
+        lease.status().setValue(Status.Active);
+        Persistence.secureSave(lease);
 //
 //            turnoverAnalysisManager.propagateLeaseActivationToTurnoverReport(lease);
 //        } else {
