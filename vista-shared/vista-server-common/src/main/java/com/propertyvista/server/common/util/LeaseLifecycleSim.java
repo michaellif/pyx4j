@@ -47,13 +47,14 @@ public class LeaseLifecycleSim {
         lease.expectedMoveIn().setValue(expectedMoveIn);
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
-        TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
-        tenantInLease.lease().set(lease);
-        tenantInLease.tenant().set(tenant);
-        tenantInLease.orderInLease().setValue(1);
-        tenantInLease.role().setValue(TenantInLease.Role.Applicant);
-        lease.tenants().add(tenantInLease);
-
+        if (tenant != null) {
+            TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
+            tenantInLease.lease().set(lease);
+            tenantInLease.tenant().set(tenant);
+            tenantInLease.orderInLease().setValue(1);
+            tenantInLease.role().setValue(TenantInLease.Role.Applicant);
+            lease.tenants().add(tenantInLease);
+        }
         leaseManager(eventDate).save(lease);
 
         return lease;
