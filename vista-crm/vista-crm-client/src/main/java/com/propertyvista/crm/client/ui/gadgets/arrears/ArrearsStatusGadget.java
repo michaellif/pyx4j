@@ -203,9 +203,11 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
                         case like:
                             customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.RDB_LIKE, filterData.getValue()));
                             break;
+                        case laterThan:
                         case greaterThan:
                             customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.GREATER_THAN, filterData.getValue()));
                             break;
+                        case earlierThan:
                         case lessThan:
                             customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.LESS_THAN, filterData.getValue()));
                             break;
