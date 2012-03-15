@@ -20,6 +20,8 @@
  */
 package com.propertyvista.server.billing;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,20 +82,33 @@ public class BillingLifecycle {
         billingRun.status().setValue(BillingRunStatus.Running);
         billingRun.executionDate().setValue(new LogicalDate());
         Persistence.service().persist(billingRun);
-        try {
 
-            EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().currentBillingRun(), billingRun));
-            for (BillingAccount billingAccount : Persistence.service().query(criteria)) {
+        EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().currentBillingRun(), billingRun));
+        List<BillingAccount> billingAccounts = Persistence.service().query(criteria);
+        try {
+            for (BillingAccount billingAccount : billingAccounts) {
                 Billing.createBill(billingRun, billingAccount);
             }
 
             billingRun.status().setValue(BillingRunStatus.Finished);
             Persistence.service().persist(billingRun);
+            Persistence.service().commit();
+
         } catch (Throwable e) {
+            Persistence.service().rollback();
             log.error("Bill run error", e);
+
+            for (BillingAccount billingAccount : billingAccounts) {
+                billingAccount.currentBillingRun().setValue(null);
+                billingAccount.billCounter().setValue(billingAccount.billCounter().getValue() + 1);
+                Persistence.service().persist(billingAccount);
+            }
+
             billingRun.status().setValue(BillingRunStatus.Erred);
             Persistence.service().persist(billingRun);
+            Persistence.service().commit();
+
         }
     }
 
@@ -121,12 +136,6 @@ public class BillingLifecycle {
                 payment.payment().billingStatus().setValue(Payment.BillingStatus.Processed);
                 Persistence.service().persist(payment.payment());
             }
-            Persistence.service().commit();
-        } else if (BillStatus.Erred.equals(bill.billStatus().getValue())) {
-            bill.billingAccount().currentBillingRun().setValue(null);
-            bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
-
-            Persistence.service().persist(bill.billingAccount());
             Persistence.service().commit();
         } else {
             throw new BillingException("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
