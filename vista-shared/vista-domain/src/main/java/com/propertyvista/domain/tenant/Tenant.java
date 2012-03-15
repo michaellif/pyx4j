@@ -35,6 +35,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.company.Company;
+import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsState;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.security.TenantUserHolder;
 
@@ -82,4 +83,9 @@ public interface Tenant extends IEntity, PersonScreeningHolder, TenantUserHolder
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<MaintenanceRequest> _MaintenanceRequests();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<ArrearsState> _ArrearsState();
+
 }
