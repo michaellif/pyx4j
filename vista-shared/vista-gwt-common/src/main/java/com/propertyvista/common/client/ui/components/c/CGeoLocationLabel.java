@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.ui.IFormat;
 
 import com.propertyvista.domain.GeoLocation;
 
+@Deprecated
 public class CGeoLocationLabel extends CAbstractLabel<GeoLocation> {
 
     public CGeoLocationLabel() {

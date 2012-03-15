@@ -18,6 +18,7 @@ import com.pyx4j.forms.client.ui.IFormat;
 
 import com.propertyvista.domain.contact.Phone;
 
+@Deprecated
 public class CPhoneLabel extends CAbstractLabel<Phone> {
 
     public CPhoneLabel() {
