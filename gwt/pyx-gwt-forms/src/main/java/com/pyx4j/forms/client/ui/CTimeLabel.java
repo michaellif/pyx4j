@@ -12,6 +12,7 @@ import java.sql.Time;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
+@Deprecated
 public class CTimeLabel extends CAbstractLabel<Time> {
 
     public CTimeLabel() {

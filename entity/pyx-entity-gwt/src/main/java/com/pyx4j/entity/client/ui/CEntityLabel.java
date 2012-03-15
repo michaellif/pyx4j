@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CAbstractLabel;
 import com.pyx4j.forms.client.ui.IFormat;
 
+@Deprecated
 public class CEntityLabel<E extends IEntity> extends CAbstractLabel<E> {
 
     public CEntityLabel() {

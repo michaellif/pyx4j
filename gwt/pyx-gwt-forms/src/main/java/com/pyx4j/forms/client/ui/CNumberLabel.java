@@ -14,6 +14,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 
+@Deprecated
 public class CNumberLabel extends CAbstractLabel<Number> {
 
     public void setNumberFormat(String format, boolean useMessageFormat) {

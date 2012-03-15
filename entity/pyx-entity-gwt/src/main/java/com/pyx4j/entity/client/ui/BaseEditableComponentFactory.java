@@ -43,7 +43,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CLongField;
-import com.pyx4j.forms.client.ui.CMoneyField_New;
+import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
@@ -108,7 +108,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                 return comp;
             }
             case money:
-                return new CMoneyField_New();
+                return new CMoneyField();
             case email:
                 return new CEmailField();
             case phone:

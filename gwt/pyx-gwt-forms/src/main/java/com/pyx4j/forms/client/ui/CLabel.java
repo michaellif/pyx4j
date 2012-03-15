@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-
+@Deprecated
 public class CLabel extends CAbstractLabel<String> {
 
     public CLabel() {

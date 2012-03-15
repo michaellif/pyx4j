@@ -8,7 +8,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-
+@Deprecated
 public class CEnumLabel extends CAbstractLabel<Enum<?>> {
 
 }

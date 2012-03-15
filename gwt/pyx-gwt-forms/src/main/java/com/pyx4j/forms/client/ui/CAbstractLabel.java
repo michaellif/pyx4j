@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+@Deprecated
 public class CAbstractLabel<E> extends CReference<E, NativeLabel<E>> {
 
     public CAbstractLabel() {
