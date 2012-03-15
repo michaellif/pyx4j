@@ -23,6 +23,7 @@ package com.pyx4j.entity.client.ui.datatable.filter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.EnumSet;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -33,6 +34,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CriteriaEditableComponentFactory;
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -187,10 +189,16 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         } else if ((member.getMeta().getObjectClassType() == ObjectClassType.EntityList)
                 || (member.getMeta().getObjectClassType() == ObjectClassType.EntitySet)) {
             options = EnumSet.of(Operators.is, Operators.isNot);
+        } else if (valueClass.equals(Date.class) || valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class)) {
+            options = EnumSet.of(Operators.is, Operators.isNot, Operators.earlierThan, Operators.laterThan);
         } else {
             options = EnumSet.allOf(Operators.class);
         }
         operandsList.setOptions(options);
-        operandsList.setValue(Operators.is);
+        if (options.contains(Operators.like)) {
+            operandsList.setValue(Operators.like);
+        } else {
+            operandsList.setValue(Operators.is);
+        }
     }
 }
