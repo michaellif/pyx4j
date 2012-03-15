@@ -39,6 +39,7 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
         if (!fromList) {
             Persistence.service().retrieveMember(in.amenities());
             dto.amenities().setAttachLevel(AttachLevel.Attached);
+            dto.amenities().clear();
             dto.amenities().addAll(in.amenities());
             Persistence.service().retrieve(dto.media());
         }

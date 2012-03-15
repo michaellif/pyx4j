@@ -35,6 +35,7 @@ public class LeaseAdjustmentPolicyCrudServiceImpl extends GenericPolicyCrudServi
         if (!fromList) {
             Persistence.service().retrieveMember(in.policyItems());
             dto.policyItems().setAttachLevel(AttachLevel.Attached);
+            dto.policyItems().clear();
             dto.policyItems().addAll(in.policyItems());
         }
     }
