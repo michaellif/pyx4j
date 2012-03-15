@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionData;
+import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
@@ -74,6 +75,10 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         setForm(form);
     }
 
+    public Button getEditButton() {
+        return editButton;
+    }
+
     protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass, final AbstractListService<V> entityVersionService) {
 
         selectVersion = new Button(i18n.tr("Select Version"), new ClickHandler() {
@@ -111,16 +116,25 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     @Override
     public void populate(E value) {
         super.populate(value);
-        ((CrmTitleBar) getHeader()).setCaption(defaultCaption + " " + value.getStringView());
+        String caption = (defaultCaption + " " + value.getStringView());
+
         if (editButton != null) {
             editButton.setEnabled(super.getPresenter().canEdit());
         }
 
-        if (finalizeButton != null) {
-            // TODO check on dirty draft present here...
-            if (false) {
-                finalizeButton.setVisible(false);
+        if (selectVersion != null) {
+            if (((IVersionedEntity<?>) value).version().versionNumber().isNull()) {
+                caption = caption + " (" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + ")";
+            } else {
+                caption = caption + ", " + i18n.tr("version") + " #" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + " ("
+                        + ((IVersionedEntity<?>) value).version().fromDate().getStringView() + ")";
             }
         }
+
+        if (finalizeButton != null) {
+            finalizeButton.setVisible(((IVersionedEntity<?>) value).version().versionNumber().isNull());
+        }
+
+        ((CrmTitleBar) getHeader()).setCaption(caption);
     }
 }

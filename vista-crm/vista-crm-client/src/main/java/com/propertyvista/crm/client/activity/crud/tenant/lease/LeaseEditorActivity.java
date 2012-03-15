@@ -108,6 +108,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
             // set selected service:
             currentValue.leaseProducts().serviceItem().set(createBillableItem(serviceItem));
+            currentValue.leaseProducts().serviceItem().effectiveDate().setValue(currentValue.leaseFrom().getValue());
 
             // pre-populate utilities for the new service:
             for (ProductItem item : currentValue.selectedUtilityItems()) {
