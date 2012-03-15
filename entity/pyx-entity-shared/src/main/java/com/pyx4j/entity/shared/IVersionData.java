@@ -44,9 +44,11 @@ public interface IVersionData<VERSIONED_ENTITY extends IVersionedEntity<?>> exte
     @Format(value = "#", nil = "Draft")
     IPrimitive<Integer> versionNumber();
 
+    @Format("MM/dd/yyyy, HH:mm:ss")
     @Indexed(group = { "h,2" })
     IPrimitive<Date> fromDate();
 
+    @Format("MM/dd/yyyy, HH:mm:ss")
     @Indexed(group = { "h,3" })
     IPrimitive<Date> toDate();
 
