@@ -62,17 +62,9 @@ public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisMana
         LogicalDate leaseFrom = lease.leaseFrom().getValue();
         LogicalDate beginningOfTheMonth = new LogicalDate(leaseFrom.getYear(), leaseFrom.getMonth(), 1);
 
-        // FIXME after retrieve member fixed the following code should look approximately like:
-//        if (lease.unit().belongsTo().isValueDetached()) {
-//            Persistence.service().retrieveMember(lease.unit().belongsTo(), AttachLevel.IdOnly);
-//        }
-        if (lease.unit().belongsTo().isValueDetached()) {
-            Persistence.service().retrieve(lease.unit().belongsTo());
-        }
-
         // check if we have lease that ended on the same month
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit().belongsTo(), lease.unit().belongsTo()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), lease.unit()));
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), beginningOfTheMonth));
         criteria.add(PropertyCriterion.lt(criteria.proto().dateTo(), leaseFrom));
         criteria.add(PropertyCriterion.eq(criteria.proto().status(), AptUnitOccupancySegment.Status.leased));
