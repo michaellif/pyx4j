@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,10 +29,14 @@ public interface TurnoverAnalysisMetadata extends GadgetMetadata {
     IPrimitive<Boolean> isTurnoverMeasuredByPercent();
 
     /**
-     * This is not going to be used int first version: the resolution is always one month.
+     * This is not going to be used in the first released version: the resolution is always one month.
      * 
      * @return
      */
     @Deprecated
     IPrimitive<AnalysisResolution> turnoverAnalysisResolution();
+
+    IPrimitive<Boolean> customizeDate();
+
+    IPrimitive<LogicalDate> asOf();
 }

@@ -29,6 +29,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RadioButton;
@@ -37,6 +38,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
@@ -47,6 +50,7 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -93,6 +97,8 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         private RadioButton number;
     
         private final AvailabilityReportService service;
+
+        private CDatePicker asOf;
                     
         //@formatter:on
 
@@ -134,11 +140,11 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
 
         @Override
         public boolean isSetupable() {
-            return false;
+            return true;
         }
 
         public boolean isTunoverMeasuredByPercent() {
-            return percent.getValue();
+            return getMetadata().isTurnoverMeasuredByPercent().isBooleanTrue();
         }
 
         public void setTurnoverAnalysisData(List<UnitTurnoversPerIntervalDTO> data) {
@@ -214,7 +220,20 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         }
 
         private LogicalDate getStatusDate() {
-            return new LogicalDate();
+            return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate();
+        }
+
+        private Widget initAsOfBannerPanel() {
+            HorizontalPanel asForBannerPanel = new HorizontalPanel();
+            asForBannerPanel.setWidth("100%");
+            asForBannerPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+
+            asOf = new CDatePicker();
+            asOf.setValue(getStatusDate());
+            asOf.setViewable(true);
+
+            asForBannerPanel.add(asOf);
+            return asForBannerPanel.asWidget();
         }
 
         @Override
@@ -269,6 +288,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
 
             layoutPanel.setSize("100%", defineHeight());
 
+            layoutPanel.add(initAsOfBannerPanel());
             layoutPanel.add(graph);
             layoutPanel.setWidgetTopHeight(graph, 0, Unit.EM, GRAPH_HEIGHT, Unit.EM);
             layoutPanel.setWidgetLeftWidth(graph, 0, Unit.PCT, 100, Unit.PCT);
@@ -276,6 +296,38 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
             layoutPanel.setWidgetTopHeight(controls, GRAPH_HEIGHT, Unit.EM, CONTROLS_HEIGHT, Unit.EM);
             layoutPanel.setWidgetLeftWidth(controls, 0, Unit.PCT, 100, Unit.PCT);
             return layoutPanel;
+        }
+
+        @Override
+        public ISetup getSetup() {
+            return new SetupForm(new CEntityDecoratableEditor<TurnoverAnalysisMetadata>(TurnoverAnalysisMetadata.class) {
+                @Override
+                public IsWidget createContent() {
+                    FormFlexPanel p = new FormFlexPanel();
+                    int row = -1;
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
+                    get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<Boolean> event) {
+                            if (event.getValue() != null) {
+                                get(proto().asOf()).setVisible(event.getValue());
+                            }
+                        }
+                    });
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
+                    get(proto().asOf()).setVisible(false);
+                    return p;
+                }
+
+                @Override
+                protected void onPopulate() {
+                    super.onPopulate();
+                    get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
+                }
+
+            });
+
         }
 
         @Override
