@@ -18,15 +18,15 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.domain.tenant.TenantInLease;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface EmailTemplateContext extends IEntity {
-    TenantUser tenant();
-
-    CrmUser crmUser();
-
     IPrimitive<String> accessToken();
+
+    AbstractUser user();
+
+    TenantInLease tenantInLease();
 }

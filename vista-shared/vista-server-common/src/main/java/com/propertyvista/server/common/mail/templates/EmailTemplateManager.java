@@ -41,6 +41,7 @@ import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
 public class EmailTemplateManager {
     public static List<IEntity> getTemplateDataObjects(EmailTemplateType template) {
         List<IEntity> values = new Vector<IEntity>();
+        // add PortalLinks to all templates
         values.add(EntityFactory.create(PortalLinksT.class));
         switch (template) {
         case PasswordRetrievalCrm:
@@ -50,7 +51,10 @@ public class EmailTemplateManager {
             values.add(EntityFactory.create(PasswordRequestT.class));
             break;
         case ApplicationApproved:
+            values.add(EntityFactory.create(ApplicationT.class));
             values.add(EntityFactory.create(LeaseT.class));
+            values.add(EntityFactory.create(BuildingT.class));
+            break;
         case ApplicationCreatedApplicant:
         case ApplicationCreatedCoApplicant:
         case ApplicationCreatedGuarantor:
@@ -95,7 +99,7 @@ public class EmailTemplateManager {
             final int varStart = start + 2;
             final int varEnd = htmlTemplate.indexOf('}', varStart);
             if (varEnd != -1) {
-                final String varName = htmlTemplate.substring(varStart + 2, varEnd - 1);
+                final String varName = htmlTemplate.substring(varStart, varEnd);
                 final String value = getVarValue(varName, data);
                 if (value == null) {
                     throw new IllegalArgumentException("Missing value of ${" + varName + "}");
@@ -122,7 +126,7 @@ public class EmailTemplateManager {
                 return (T) obj;
             }
         }
-        return null;
+        throw new Error("Invalid proto " + tClass.getName() + " for template " + type.name());
     }
 
     public static String getVarname(IObject<?> member) {

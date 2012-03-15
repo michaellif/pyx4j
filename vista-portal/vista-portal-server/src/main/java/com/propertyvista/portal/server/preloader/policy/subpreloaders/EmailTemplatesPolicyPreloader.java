@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -82,10 +81,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("New Password Retrieval"));
-        IPrimitive<String> name = pwdReqT.requestorName();
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
                 "Dear " +
-                EmailTemplateManager.getVarname(name) + ",<br/>\n" +
+                EmailTemplateManager.getVarname(pwdReqT.requestorName()) + ",<br/>\n" +
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
                 "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n" +
                 "    <a style=\"color:#929733\" href=\"" +

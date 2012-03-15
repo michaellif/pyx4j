@@ -24,7 +24,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -36,9 +35,7 @@ import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.AbstractUser;
-import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -83,20 +80,18 @@ public class MessageTemplates {
         return null;
     }
 
-    public static String createApplicationApprovedEmail(TenantUser tenantUser) {
+    public static String createApplicationApprovedEmail(TenantInLease tenantInLease) {
         EmailTemplateType type = EmailTemplateType.ApplicationApproved;
 
         // get building policy node
-        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().tenant().id(), tenantUser.id()));
-        TenantInLease til = Persistence.service().retrieve(criteria);
-        Persistence.service().retrieve(til.lease().unit().floorplan().building());
-        Building building = til.lease().unit().floorplan().building();
-        EmailTemplate emailTemplate = getEmailTemplate(type, building);
+        Persistence.service().retrieve(tenantInLease.lease());
+        Persistence.service().retrieve(tenantInLease.lease().unit());
+        Persistence.service().retrieve(tenantInLease.lease().unit().belongsTo());
+        EmailTemplate emailTemplate = getEmailTemplate(type, tenantInLease.lease().unit().belongsTo());
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         // populate context properties required by template type
-        context.tenant().set(tenantUser);
+        context.tenantInLease().set(tenantInLease);
 
         ArrayList<IEntity> data = new ArrayList<IEntity>();
         for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
@@ -110,32 +105,21 @@ public class MessageTemplates {
     public static String createPasswordResetEmail(VistaBasicBehavior application, AbstractUser user, String token) {
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         context.accessToken().setValue(token);
+        context.user().set(user);
+
+        // get company policy node
+        EntityQueryCriteria<OrganizationPoliciesNode> nodeCrit = EntityQueryCriteria.create(OrganizationPoliciesNode.class);
+        PolicyNode policyNode = Persistence.service().retrieve(nodeCrit);
 
         EmailTemplateType templateType = null;
-        PolicyNode policyNode = null;
 
         switch (application) {
         case CRM:
             templateType = EmailTemplateType.PasswordRetrievalCrm;
-
-            // get company policy node
-            EntityQueryCriteria<OrganizationPoliciesNode> nodeCrit = EntityQueryCriteria.create(OrganizationPoliciesNode.class);
-            policyNode = Persistence.service().retrieve(nodeCrit);
-
-            context.crmUser().set(user);
             break;
         case ProspectiveApp:
         case TenantPortal:
             templateType = EmailTemplateType.PasswordRetrievalTenant;
-
-            // get building policy node
-            EntityQueryCriteria<TenantInLease> tilCrit = EntityQueryCriteria.create(TenantInLease.class);
-            tilCrit.add(PropertyCriterion.eq(tilCrit.proto().tenant().id(), user.id()));
-            TenantInLease til = Persistence.service().retrieve(tilCrit);
-            Persistence.service().retrieve(til.lease().unit().floorplan().building());
-            policyNode = til.lease().unit().floorplan().building();
-
-            context.tenant().set(user);
             break;
         default:
             throw new Error("Not implemented behavior");
@@ -149,6 +133,7 @@ public class MessageTemplates {
         return EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data);
     }
 
+    @Deprecated
     public static String createPasswordResetEmail(VistaBasicBehavior application, String name, String token) {
         String url;
         switch (application) {
