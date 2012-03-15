@@ -18,8 +18,6 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColors;
 
-import com.propertyvista.common.client.resources.VistaImages;
-
 public class CrmSitePanelTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
@@ -48,7 +46,8 @@ public class CrmSitePanelTheme extends Theme {
 
         // Footer:
         style = new Style(".", CrmSitePanelTheme.StyleName.SiteViewFooter.name());
-        style.addProperty("background", "url('" + VistaImages.INSTANCE.logo().getSafeUri().asString() + "') no-repeat scroll left center transparent");
+//        style.addProperty("background", "url('" + VistaImages.INSTANCE.logo().getSafeUri().asString() + "') no-repeat scroll left center transparent");
+        style.addProperty("background-color", ThemeColors.object1);
         style.addProperty("background-color", ThemeColors.object1);
         addStyle(style);
 
