@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.ImageButton;
+import com.pyx4j.widgets.client.IconButton;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -89,7 +89,7 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
         @Override
         protected CEntityFolderItem<Note> createItem(boolean first) {
             final CEntityFolderItem<Note> item = super.createItem(first);
-            ImageButton button = new ImageButton(CrmImages.INSTANCE.edit(), CrmImages.INSTANCE.editHover(), i18n.tr("Edit Note"));
+            IconButton button = new IconButton(i18n.tr("Edit Note"), CrmImages.INSTANCE.editButton());
             button.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {

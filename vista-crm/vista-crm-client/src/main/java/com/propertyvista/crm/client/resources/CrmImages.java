@@ -15,6 +15,10 @@ package com.propertyvista.crm.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
+import com.google.gwt.resources.client.ImageResource.RepeatStyle;
+
+import com.pyx4j.widgets.client.images.IconButtonImages;
 
 import com.propertyvista.common.client.resources.VistaImages;
 
@@ -192,9 +196,22 @@ public interface CrmImages extends VistaImages {
     @Source("Company_normal.png")
     ImageResource companyNormal();
 
-    @Source("edit.png")
-    ImageResource edit();
+    EditIconButtonImages editButton();
 
-    @Source("edit_hover.png")
-    ImageResource editHover();
+    public interface EditIconButtonImages extends IconButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("edit.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("edit_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("edit.png")
+        ImageResource pushed();
+    }
 }
