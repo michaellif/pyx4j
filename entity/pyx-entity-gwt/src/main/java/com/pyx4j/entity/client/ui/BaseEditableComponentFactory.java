@@ -47,6 +47,7 @@ import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -107,6 +108,8 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                 }
                 return comp;
             }
+            case percentage:
+                return new CPercentageField();
             case money:
                 return new CMoneyField();
             case email:

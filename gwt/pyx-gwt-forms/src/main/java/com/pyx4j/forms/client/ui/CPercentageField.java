@@ -68,10 +68,8 @@ public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDec
                 return null; // empty value case
             }
             try {
-                string = string.replaceAll("[,$]+", "");
-                // f and d are parsed by Double but we want to show error (VISTA-996)
-                string = string.replaceAll("[fd]+", "a");
-                return new BigDecimal(string);
+                string = string.replaceAll("[,%]+", "");
+                return new BigDecimal(string).divide(new BigDecimal("100"));
             } catch (NumberFormatException e) {
                 throw new ParseException(i18n.tr("Invalid money format. Enter valid number"), 0);
             }

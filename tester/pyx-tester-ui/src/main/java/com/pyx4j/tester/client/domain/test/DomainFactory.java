@@ -58,6 +58,8 @@ public class DomainFactory {
 
     private static BigDecimal moneyvalues[] = { new BigDecimal("20.33"), new BigDecimal("0.00"), new BigDecimal("77.00"), new BigDecimal("8.00") };
 
+    private static BigDecimal percentvalues[] = { new BigDecimal("20"), new BigDecimal("12"), new BigDecimal("88.5"), new BigDecimal("8.0") };
+
     private static Boolean boolradiovalues[] = { true, false, true, false };
 
     private static Integer intradiovalues[] = { 0, 1, 2, 3 };
@@ -118,6 +120,8 @@ public class DomainFactory {
         retVal.email().setValue(emailvalues[pos]);
 
         retVal.money().setValue(moneyvalues[pos]);
+
+        retVal.percent().setValue(percentvalues[pos]);
 
         retVal.booleanRadioGroupHorizontal().setValue(boolradiovalues[pos]);
         retVal.booleanRadioGroupVertical().setValue(boolradiovalues[pos]);

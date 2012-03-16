@@ -88,7 +88,8 @@ public interface EntityI extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> money();
 
-    IPrimitive<Double> mandatoryMoney();
+    @Editor(type = EditorType.percentage)
+    IPrimitive<BigDecimal> percent();
 
     @Owned
     IList<EntityII> entityIIList();
