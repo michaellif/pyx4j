@@ -35,6 +35,8 @@ public interface IVersionedEntity<VERSIONED_ITEM extends IVersionData<?>> extend
     @Owned
     IList<VERSIONED_ITEM> versions();
 
+    public static boolean TODO_FIX_UPDATE_FINAL = true;
+
     public enum SaveAction {
 
         saveAsDraft, // Default: When saving owner save child as Draft : default 

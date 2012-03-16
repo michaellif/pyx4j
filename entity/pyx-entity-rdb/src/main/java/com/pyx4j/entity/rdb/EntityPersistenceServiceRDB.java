@@ -512,8 +512,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getVersionInfoMembers()) {
-                for (IVersionData<IVersionedEntity<?>> memeberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, member)) {
-                    merge(tableModel(memeberEntity.getEntityMeta()), memeberEntity);
+                if (!((IEntity) member.getMember(entity)).isValueDetached()) {
+                    for (IVersionData<IVersionedEntity<?>> memeberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, member)) {
+                        merge(tableModel(memeberEntity.getEntityMeta()), memeberEntity);
+                    }
                 }
             }
 
