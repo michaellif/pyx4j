@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -175,6 +176,9 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                 if (!retriveDetachedMember((IEntity) dboM)) {
                     throw new Error("Copying detached entity " + ((IEntity) dboM).getDebugExceptionInfoString());
                 }
+            } else if (dboM.getAttachLevel() == AttachLevel.Detached) {
+                dto.setAttachLevel(AttachLevel.Detached);
+                continue;
             }
 
             if (b.binder == null) {
