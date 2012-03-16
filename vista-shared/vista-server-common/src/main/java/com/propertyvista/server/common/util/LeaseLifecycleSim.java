@@ -15,6 +15,7 @@ package com.propertyvista.server.common.util;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -25,6 +26,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.server.billing.BillingFacade;
 import com.propertyvista.server.common.util.LeaseManager.TimeContextProvider;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
@@ -80,6 +82,11 @@ public class LeaseLifecycleSim {
     }
 
     public Lease activate(Key leaseId, LogicalDate eventDate) {
+        // confirm latest bill before activation :
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
+        billing.confirmBill(billing.getLatestBill(lease.billingAccount()));
+
         return leaseManager(eventDate).activate(leaseId);
     }
 

@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
@@ -82,7 +83,11 @@ public class TaxUtils {
             criteria.add(PropertyCriterion.eq(criteria.proto().taxPolicy(), productTaxPolicy));
             productTaxPolicyItem = Persistence.service().retrieve(criteria);
         }
-        return productTaxPolicyItem.taxes();
-    }
 
+        // TODO Misha: what to do if there are no taxes for the product defined?
+        if (productTaxPolicyItem != null) {
+            return productTaxPolicyItem.taxes();
+        }
+        return new LinkedList<Tax>(); // currently  - let's return empty list...
+    }
 }

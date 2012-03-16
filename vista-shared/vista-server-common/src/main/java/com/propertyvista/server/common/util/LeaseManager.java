@@ -16,15 +16,19 @@ package com.propertyvista.server.common.util;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.server.billing.BillingFacade;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManager;
@@ -200,14 +204,12 @@ public class LeaseManager {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.Approved);
         // finalize approved leases while saving:
-// TODO : uncomment when version item save will be fixed (exception in @link LeaseManager.activate() on secureSave(lease) in preloader!):        
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).approveLease();
 
-//        // TODO uncomment when project dependencies will be corrected:        
-//        BillingFacade.runBilling(lease);
+        ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         return lease;
     }
 
@@ -238,22 +240,21 @@ public class LeaseManager {
     public Lease activate(Key leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
 
-// TODO uncomment when project dependencies will be corrected:        
-//        // set lease status to active ONLY if first (latest till now) bill is confirmed: 
-//        if (BillingFacade.getLatestBill(lease.billingAccount()).billStatus().getValue() == Bill.BillStatus.Confirmed) {
-        lease.status().setValue(Status.Active);
+        // set lease status to active ONLY if first (latest till now) bill is confirmed: 
+        if (ServerSideFactory.create(BillingFacade.class).getLatestBill(lease.billingAccount()).billStatus().getValue() == Bill.BillStatus.Confirmed) {
+            lease.status().setValue(Status.Active);
 
-        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
-            // TODO vladS this is HAck!
-            lease.version().setAttachLevel(AttachLevel.Detached);
+            if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
+                // TODO vladS this is HAck!
+                lease.version().setAttachLevel(AttachLevel.Detached);
+            }
+
+            Persistence.secureSave(lease);
+
+            turnoverAnalysisManager.propagateLeaseActivationToTurnoverReport(lease);
+        } else {
+            throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
         }
-
-        Persistence.secureSave(lease);
-//
-//            turnoverAnalysisManager.propagateLeaseActivationToTurnoverReport(lease);
-//        } else {
-//            throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
-//        }
 
         return lease;
     }
