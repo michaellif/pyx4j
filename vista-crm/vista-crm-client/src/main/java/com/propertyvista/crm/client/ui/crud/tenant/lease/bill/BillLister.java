@@ -26,13 +26,32 @@ public class BillLister extends ListerBase<Bill> {
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().billType()).build(),
+
+            new MemberColumnDescriptor.Builder(proto().billingPeriodStartDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().billingPeriodEndDate()).build(),
+            
+            new MemberColumnDescriptor.Builder(proto().currentAmount()).build(),
+            new MemberColumnDescriptor.Builder(proto().taxes()).build(),
+            new MemberColumnDescriptor.Builder(proto().totalDueAmount()).build(),
+            
             new MemberColumnDescriptor.Builder(proto().billStatus()).build(),
-            new MemberColumnDescriptor.Builder(proto().oneTimeFeatureCharges()).build(),
-            new MemberColumnDescriptor.Builder(proto().recurringFeatureCharges()).build(),
-            new MemberColumnDescriptor.Builder(proto().totalAdjustments()).build(),
-            new MemberColumnDescriptor.Builder(proto().previousBalanceAmount()).build(),
-            new MemberColumnDescriptor.Builder(proto().paymentReceivedAmount()).build(),
-            new MemberColumnDescriptor.Builder(proto().pastDueAmount()).build()
+            
+            new MemberColumnDescriptor.Builder(proto().previousBalanceAmount(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().paymentReceivedAmount(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().depositRefundAmount(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().immediateAdjustments(),false).build(),
+            
+            new MemberColumnDescriptor.Builder(proto().totalAdjustments(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().depositPaidAmount(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().latePaymentCharges(),false).build(),
+            
+            new MemberColumnDescriptor.Builder(proto().pastDueAmount(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().serviceCharge(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().recurringFeatureCharges(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().oneTimeFeatureCharges(),false).build(),
+            
+            new MemberColumnDescriptor.Builder(proto().billingRun().executionDate()).build()
         );//@formatter:on
     }
 }
