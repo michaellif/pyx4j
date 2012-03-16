@@ -67,6 +67,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
                         && ((entityId.getVersion() == Key.VERSION_DRAFT) || (retrieveTraget == RetrieveTraget.Edit))) {
                     result.version().set(EntityGraph.businessDuplicate(result.version()));
                 }
+                callback.onSuccess(result);
             }
         }, entityId, retrieveTraget);
     }
