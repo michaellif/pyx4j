@@ -17,6 +17,9 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -112,6 +115,12 @@ public class LeaseManager {
         lease.completion().setValue(CompletionType.Notice);
         lease.moveOutNotice().setValue(noticeDay);
         lease.expectedMoveOut().setValue(moveOutDay);
+
+        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
+            // TODO vladS this is HAck!
+            lease.version().setAttachLevel(AttachLevel.Detached);
+        }
+
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).endLease();
@@ -129,6 +138,12 @@ public class LeaseManager {
         lease.completion().setValue(null);
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
+
+        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
+            // TODO vladS this is HAck!
+            lease.version().setAttachLevel(AttachLevel.Detached);
+        }
+
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).cancelEndLease();
@@ -146,6 +161,12 @@ public class LeaseManager {
         lease.completion().setValue(CompletionType.Eviction);
         lease.moveOutNotice().setValue(evictionDay);
         lease.expectedMoveOut().setValue(moveOutDay);
+
+        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
+            // TODO vladS this is HAck!
+            lease.version().setAttachLevel(AttachLevel.Detached);
+        }
+
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).endLease();
@@ -163,6 +184,12 @@ public class LeaseManager {
         lease.completion().setValue(null);
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
+
+        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
+            // TODO vladS this is HAck!
+            lease.version().setAttachLevel(AttachLevel.Detached);
+        }
+
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).cancelEndLease();
@@ -174,7 +201,7 @@ public class LeaseManager {
         lease.status().setValue(Status.Approved);
         // finalize approved leases while saving:
 // TODO : uncomment when version item save will be fixed (exception in @link LeaseManager.activate() on secureSave(lease) in preloader!):        
-//        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).approveLease();
@@ -196,6 +223,12 @@ public class LeaseManager {
     public Lease cancelApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.ApplicationCancelled);
+
+        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
+            // TODO vladS this is HAck!
+            lease.version().setAttachLevel(AttachLevel.Detached);
+        }
+
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).unreserve();
@@ -209,6 +242,12 @@ public class LeaseManager {
 //        // set lease status to active ONLY if first (latest till now) bill is confirmed: 
 //        if (BillingFacade.getLatestBill(lease.billingAccount()).billStatus().getValue() == Bill.BillStatus.Confirmed) {
         lease.status().setValue(Status.Active);
+
+        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
+            // TODO vladS this is HAck!
+            lease.version().setAttachLevel(AttachLevel.Detached);
+        }
+
         Persistence.secureSave(lease);
 //
 //            turnoverAnalysisManager.propagateLeaseActivationToTurnoverReport(lease);
@@ -223,6 +262,12 @@ public class LeaseManager {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.actualLeaseTo().setValue(timeContextProvider.getTimeContext());
         lease.status().setValue(Status.Completed);
+
+        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
+            // TODO vladS this is HAck!
+            lease.version().setAttachLevel(AttachLevel.Detached);
+        }
+
         Persistence.secureSave(lease);
         return lease;
     }
