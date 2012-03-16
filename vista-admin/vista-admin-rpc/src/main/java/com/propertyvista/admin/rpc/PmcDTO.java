@@ -23,7 +23,10 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.PmcDnsName;
 
 @Transient
 @Caption(name = "Property Management Company (PMC)")
@@ -36,6 +39,8 @@ public interface PmcDTO extends IEntity {
     @NotNull
     @Caption(name = "DNS name")
     IPrimitive<String> dnsName();
+
+    IList<PmcDnsName> dnsNameAliases();
 
     @Editor(type = EditorType.email)
     @NotNull
