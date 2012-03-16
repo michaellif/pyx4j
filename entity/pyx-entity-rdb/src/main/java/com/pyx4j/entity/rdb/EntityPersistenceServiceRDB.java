@@ -681,8 +681,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
                 // ignore version data in non versioned key
                 if (memberMeta.getAnnotation(Versioned.class) == null) {
-                    value = ((Key) value).asCurrentKey();
-                    lastValue = ((Key) lastValue).asCurrentKey();
+                    if (value != null) {
+                        value = ((Key) value).asCurrentKey();
+                    }
+                    if (lastValue != null) {
+                        lastValue = ((Key) lastValue).asCurrentKey();
+                    }
                 }
             } else {
                 value = member.getMemberValue(entity);
