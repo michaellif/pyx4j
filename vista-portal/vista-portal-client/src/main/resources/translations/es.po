@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-16 14:02-0400\n"
+"POT-Creation-Date: 2012-03-16 15:09-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5717,6 +5717,10 @@ msgstr "Cargos prorrateados"
 msgid "Proration Method"
 msgstr ""
 
+#: com/propertyvista/domain/PmcDnsName.java:1
+msgid "Prospect Portal"
+msgstr ""
+
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Prospect Portal Title"
 msgstr "Título del portal de posible clientes"
@@ -6006,6 +6010,10 @@ msgstr "Reajustar la contraseña"
 #: com/propertyvista/portal/domain/dto/ResidentDTO.java:0
 msgid "Resident"
 msgstr "Residente"
+
+#: com/propertyvista/domain/PmcDnsName.java:1
+msgid "Resident Portal"
+msgstr ""
 
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Resident Portal Promotions"
@@ -7430,6 +7438,10 @@ msgstr "Vista"
 
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Vista Account Owner"
+msgstr ""
+
+#: com/propertyvista/domain/PmcDnsName.java:1
+msgid "Vista Crm"
 msgstr ""
 
 #. Building Amenity Type

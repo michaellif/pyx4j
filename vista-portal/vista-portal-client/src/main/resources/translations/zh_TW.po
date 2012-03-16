@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-16 14:02-0400\n"
+"POT-Creation-Date: 2012-03-16 15:09-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5695,6 +5695,10 @@ msgstr "分攤費用"
 msgid "Proration Method"
 msgstr ""
 
+#: com/propertyvista/domain/PmcDnsName.java:1
+msgid "Prospect Portal"
+msgstr ""
+
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Prospect Portal Title"
 msgstr "預期門戶名稱"
@@ -5984,6 +5988,10 @@ msgstr "重設密碼"
 #: com/propertyvista/portal/domain/dto/ResidentDTO.java:0
 msgid "Resident"
 msgstr "住戶"
+
+#: com/propertyvista/domain/PmcDnsName.java:1
+msgid "Resident Portal"
+msgstr ""
 
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Resident Portal Promotions"
@@ -7403,6 +7411,10 @@ msgstr "遠景"
 msgid "Vista Account Owner"
 msgstr ""
 
+#: com/propertyvista/domain/PmcDnsName.java:1
+msgid "Vista Crm"
+msgstr ""
+
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "Volleyball Court"
@@ -7668,7 +7680,7 @@ msgstr "電子支票"
 #: com/pyx4j/forms/client/ui/CTimeField.java:36
 #, java-format
 msgid "h:mm a"
-msgstr "小時：分鐘"
+msgstr "h:mm a"
 
 #: com/propertyvista/common/client/ui/validators/DateInPeriodValidation.java:45
 msgid "herp derp error message"
@@ -7689,7 +7701,7 @@ msgstr "毫秒"
 #: com/propertyvista/domain/tenant/lease/extradata/Vehicle.java:2
 #, java-format
 msgid "yyyy"
-msgstr "年"
+msgstr "yyyy"
 
 #. Price Selection
 #. java-format
@@ -7698,14 +7710,14 @@ msgstr "年"
 msgid ""
 "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - "
 "${1}}}"
-msgstr "{0,選擇,空#任何|0#小於 ${1}|0<{1,choice,null#超過${0}|0<${0} - ${1}}}"
+msgstr "{0,choice,null#任何|0#小於 ${1}|0<{1,choice,null#超過${0}|0<${0} - ${1}}}"
 
 #. Number Of Bedrooms
 #. java-format
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:106
 #, java-format
 msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
-msgstr "{0,選擇,空#任何|0#少於 {1}|0<{0}{1,choice,null# 且更多|0<}}"
+msgstr "{0,choice,null#任何|0#少於 {1}|0<{0}{1,choice,null# 且更多|0<}}"
 
 #. java-format
 #: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:0
@@ -7744,13 +7756,13 @@ msgstr "{1}中的{0}"
 #: com/propertyvista/domain/File.java:0
 #, java-format
 msgid "{0} {1,size}"
-msgstr "{0} {1,大小}"
+msgstr "{0} {1,size}"
 
 #. java-format
 #: com/propertyvista/domain/GeoLocation.java:0
 #, java-format
 msgid "{0} {1} & {2} {3}"
-msgstr "{0} {1} 和 {2} {3}"
+msgstr "{0} {1} & {2} {3}"
 
 #. java-format
 #: com/propertyvista/domain/financial/offering/ProductItem.java:0

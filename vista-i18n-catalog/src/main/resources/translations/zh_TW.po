@@ -176,7 +176,7 @@ msgstr "60 -90 天"
 #: com/propertyvista/pmsite/server/panels/InquiryPanel.java:143
 #, java-format
 msgid "<b>{0}</b> - {1} Bed, {2} Bath, {3,choice,null#price not available|!null#from ${3}}"
-msgstr "<b>{0}</b> - {1} 臥室, {2} 浴室, {3,choice,null#價位不詳|!零#起於${3}}"
+msgstr "<b>{0}</b> - {1} 臥室, {2} 浴室, {3,choice,null#價位不詳|!null#起於${3}}"
 
 #: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:98
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:204
@@ -9384,7 +9384,7 @@ msgstr "為了您的未來的家庭!"
 #: com/pyx4j/forms/client/ui/CTimeField.java:36
 #, java-format
 msgid "h:mm a"
-msgstr "小時：分鐘"
+msgstr "h:mm a"
 
 #: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:216
 #: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:89
@@ -9455,21 +9455,21 @@ msgstr "到"
 #: com/propertyvista/domain/tenant/lease/extradata/Vehicle.java:2
 #, java-format
 msgid "yyyy"
-msgstr "年"
+msgstr "yyyy"
 
 #. Price Selection
 #. java-format
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:73
 #, java-format
 msgid "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - ${1}}}"
-msgstr "{0,選擇,空#任何|0#小於 ${1}|0<{1,choice,null#超過${0}|0<${0} - ${1}}}"
+msgstr "{0,choice,null#任何|0#小於 ${1}|0<{1,choice,null#超過${0}|0<${0} - ${1}}}"
 
 #. Number Of Bedrooms
 #. java-format
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:106
 #, java-format
 msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
-msgstr "{0,選擇,空#任何|0#少於 {1}|0<{0}{1,choice,null# 且更多|0<}}"
+msgstr "{0,choice,null#任何|0#少於 {1}|0<{0}{1,choice,null# 且更多|0<}}"
 
 #. java-format
 #: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:0
@@ -9526,13 +9526,13 @@ msgstr "{1}中的{0}"
 #: com/propertyvista/domain/File.java:0
 #, java-format
 msgid "{0} {1,size}"
-msgstr "{0} {1,大小}"
+msgstr "{0} {1,size}"
 
 #. java-format
 #: com/propertyvista/domain/GeoLocation.java:0
 #, java-format
 msgid "{0} {1} & {2} {3}"
-msgstr "{0} {1} 和 {2} {3}"
+msgstr "{0} {1} & {2} {3}"
 
 #. java-format
 #: com/propertyvista/domain/financial/offering/Concession.java:0

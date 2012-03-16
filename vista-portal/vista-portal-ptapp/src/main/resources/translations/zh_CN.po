@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-16 14:02-0400\n"
+"POT-Creation-Date: 2012-03-16 15:09-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: com/propertyvista/portal/domain/dto/FloorplanDTO.java:2
 #, java-format
 msgid "#0.#"
-msgstr ""
+msgstr "#0.#"
 
 #. java-format
 #: com/propertyvista/domain/PriorAddress.java:2
@@ -65,25 +65,25 @@ msgstr ""
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 #, java-format
 msgid "#0.00"
-msgstr ""
+msgstr "#0.00"
 
 #. java-format
 #: com/propertyvista/domain/GeoLocation.java:2
 #, java-format
 msgid "#0.000000"
-msgstr ""
+msgstr "#0.000000"
 
 #. java-format
 #: com/propertyvista/domain/financial/Money.java:0
 #, java-format
 msgid "${0,number,#0.00}"
-msgstr "${0,数字,#0.00}"
+msgstr "${0,number,#0.00}"
 
 #. java-format
 #: com/propertyvista/domain/charges/ChargeLine.java:0
 #, java-format
 msgid "${0}, {1}"
-msgstr ""
+msgstr "${0}, {1}"
 
 #: com/propertyvista/domain/policy/policies/LateFeePolicy.java:1
 msgid "% Monthly Rent"
@@ -2448,7 +2448,7 @@ msgstr "输入代码"
 
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Equifax"
-msgstr ""
+msgstr "Equifax"
 
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
@@ -3167,7 +3167,7 @@ msgstr "您是怎么听说我们的"
 
 #: com/propertyvista/domain/site/HtmlContent.java:2
 msgid "Html"
-msgstr ""
+msgstr "Html"
 
 #: com/propertyvista/domain/site/HtmlContent.java:0
 msgid "Html Content"
@@ -3352,7 +3352,7 @@ msgstr "保单"
 #: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/domain/payment/PaymentType.java:1
 msgid "Interac"
-msgstr ""
+msgstr "Interac"
 
 #: com/propertyvista/domain/payment/InteracInfo.java:0
 msgid "Interac Info"
@@ -4714,7 +4714,7 @@ msgstr "数值的"
 #: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:294
 #: com/pyx4j/widgets/client/dialog/Dialog.java:305
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: com/propertyvista/domain/site/SitePalette.java:2
 msgid "Object 1"
@@ -5757,6 +5757,10 @@ msgstr "分摊费用"
 msgid "Proration Method"
 msgstr ""
 
+#: com/propertyvista/domain/PmcDnsName.java:1
+msgid "Prospect Portal"
+msgstr ""
+
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Prospect Portal Title"
 msgstr "预期门户标题"
@@ -6042,6 +6046,10 @@ msgstr "重置密码"
 #: com/propertyvista/portal/domain/dto/ResidentDTO.java:0
 msgid "Resident"
 msgstr "居民"
+
+#: com/propertyvista/domain/PmcDnsName.java:1
+msgid "Resident Portal"
+msgstr ""
 
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Resident Portal Promotions"
@@ -7455,10 +7463,14 @@ msgstr "可见性"
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 #: com/propertyvista/dto/ImportAdapterType.java:1
 msgid "Vista"
-msgstr ""
+msgstr "Vista"
 
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Vista Account Owner"
+msgstr ""
+
+#: com/propertyvista/domain/PmcDnsName.java:1
+msgid "Vista Crm"
 msgstr ""
 
 #. Building Amenity Type
@@ -7686,7 +7698,7 @@ msgstr "您应商定期限"
 
 #: com/propertyvista/domain/media/Media.java:1
 msgid "YouTube"
-msgstr ""
+msgstr "YouTube"
 
 #: com/propertyvista/domain/media/Media.java:2
 msgid "YouTube Video ID"
@@ -7739,7 +7751,7 @@ msgstr "为您未来的家！"
 #: com/pyx4j/forms/client/ui/CTimeField.java:36
 #, java-format
 msgid "h:mm a"
-msgstr "小时：分钟 a"
+msgstr "h:mm a"
 
 #: com/propertyvista/common/client/ui/validators/DateInPeriodValidation.java:45
 msgid "herp derp error message"
@@ -7784,7 +7796,7 @@ msgstr "{0,choice,null#任何|0#少于 {1}|0<{0}{1,choice,null# 以及更多|0<}
 #: com/propertyvista/domain/tenant/lease/BillableItem.java:0
 #, java-format
 msgid "{0}"
-msgstr ""
+msgstr "{0}"
 
 #. java-format
 #: com/propertyvista/domain/financial/GlCode.java:0
@@ -7797,7 +7809,7 @@ msgstr ""
 #: com/propertyvista/domain/tenant/TenantInLease.java:0
 #, java-format
 msgid "{0} - {1}, {2}"
-msgstr ""
+msgstr "{0} - {1}, {2}"
 
 #. java-format
 #: com/pyx4j/forms/client/ui/CNumberField.java:103
@@ -7815,20 +7827,20 @@ msgstr "{1}中的{0}"
 #: com/propertyvista/domain/File.java:0
 #, java-format
 msgid "{0} {1,size}"
-msgstr "{0} {1,大小}"
+msgstr "{0} {1,size}"
 
 #. java-format
 #: com/propertyvista/domain/GeoLocation.java:0
 #, java-format
 msgid "{0} {1} & {2} {3}"
-msgstr ""
+msgstr "{0} {1} & {2} {3}"
 
 #. java-format
 #: com/propertyvista/domain/financial/offering/ProductItem.java:0
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:0
 #, java-format
 msgid "{0}, ${1}"
-msgstr ""
+msgstr "{0}, ${1}"
 
 #. java-format
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustmentReason.java:0
@@ -7851,7 +7863,7 @@ msgstr ""
 #: com/propertyvista/dto/ApplicationUserDTO.java:0
 #, java-format
 msgid "{0}, {1}"
-msgstr ""
+msgstr "{0}, {1}"
 
 #. java-format
 #: com/propertyvista/domain/financial/offering/Concession.java:0
@@ -7869,7 +7881,7 @@ msgstr ""
 #: com/pyx4j/entity/client/ui/datatable/PageNavigBar.java:208
 #, java-format
 msgid "{0}-{1} of {2}"
-msgstr ""
+msgstr "{0}-{1} of {2}"
 
 #. java-format
 #: com/propertyvista/domain/contact/Phone.java:0
@@ -7877,7 +7889,7 @@ msgstr ""
 #: com/propertyvista/domain/property/PropertyPhone.java:0
 #, java-format
 msgid "{0}{1,choice,null#|!null# ex.{1}}"
-msgstr "{0}{1,选择,null#|!null# 分机{1}}"
+msgstr "{0}{1,choice,null#|!null# 分机{1}}"
 
 #. java-format
 #: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:0
