@@ -29,6 +29,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
+import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.RepaymentMode;
 
 public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<DepositPolicyDTO> {
 
@@ -53,7 +54,6 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prorate())).build());
         panel.setWidget(++row, 0, inject(proto().policyItems(), new DepositPolicyItemEditorFolder()));
 
         return panel;
@@ -75,6 +75,15 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
             }
         }
 
+        @Override
+        protected void addItem(DepositPolicyItem newEntity) {
+            if (newEntity.isEmpty()) {
+                newEntity.repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
+            }
+
+            super.addItem(newEntity);
+        }
+
         private static class DepositPolicyItemEditor extends CEntityDecoratableEditor<DepositPolicyItem> {
 
             public DepositPolicyItemEditor() {
@@ -86,14 +95,14 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
                 FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().appliedTo()), 20).build());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().value()), 10).build());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().valueType()), 10).build());
+                content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
                 row = -1;
-                content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appliedTo()), 20).build());
-                content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().repaymentMode()), 10).build());
-                content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().applyToRepayAt()), 10).build());
+                content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
+                content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().repaymentMode()), 20).build());
 
                 content.getColumnFormatter().setWidth(0, "50%");
                 content.getColumnFormatter().setWidth(1, "50%");

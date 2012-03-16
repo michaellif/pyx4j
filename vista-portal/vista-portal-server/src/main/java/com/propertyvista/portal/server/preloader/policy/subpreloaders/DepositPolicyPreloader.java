@@ -26,7 +26,6 @@ import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType.Type;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ApplyToRepayAt;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.RepaymentMode;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueType;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
@@ -42,13 +41,11 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
     @Override
     protected DepositPolicy createPolicy(StringBuilder log) {
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
-        policy.prorate().setValue(true);
 
         DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
-        item.name().setValue(i18n.tr("Security Depisit"));
-        item.applyToRepayAt().setValue(ApplyToRepayAt.leaseEnd);
+        item.description().setValue(i18n.tr("Security Depisit"));
         item.value().setValue(new BigDecimal(500.00));
-        item.repaymentMode().setValue(RepaymentMode.returned);
+        item.repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
         item.valueType().setValue(ValueType.amount);
 
         policy.policyItems().add(item);
@@ -62,10 +59,9 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
             if (pit.type().getValue() == Type.feature && pit.featureType().getValue() == Feature.Type.parking) { // do not process all items...
                 item = EntityFactory.create(DepositPolicyItem.class);
 
-                item.name().setValue(i18n.tr("First Month Parking"));
-                item.applyToRepayAt().setValue(ApplyToRepayAt.firstMonth);
-                item.value().setValue(new BigDecimal(100.00));
-                item.repaymentMode().setValue(RepaymentMode.apply);
+                item.description().setValue(i18n.tr("First Month Parking"));
+                item.value().setValue(new BigDecimal(10.00));
+                item.repaymentMode().setValue(RepaymentMode.applyToFirstMonth);
                 item.valueType().setValue(ValueType.percentage);
                 item.appliedTo().set(pit);
 

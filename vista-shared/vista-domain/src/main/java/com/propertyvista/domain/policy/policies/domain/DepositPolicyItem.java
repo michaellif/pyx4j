@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 
 import javax.xml.bind.annotation.XmlType;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -26,33 +25,18 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-@ToStringFormat("{2}, {1}, {0}, {3}, {4}")
+@ToStringFormat("{2}, {1}, {0}, {3}")
 public interface DepositPolicyItem extends IEntity {
-
-    @I18n
-    @XmlType(name = "ApplyToRepayAt")
-    public enum ApplyToRepayAt {
-        leaseEnd, firstMonth, lastMonth;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
 
     @I18n
     @XmlType(name = "RepaymentMode")
     public enum RepaymentMode {
-        @Translate("Apply")
-        apply,
 
-        @Translate("Return")
-        returned;
+        applyToFirstMonth, applyToLastMonth, returnAtLeaseEnd;
 
         @Override
         public String toString() {
@@ -85,16 +69,11 @@ public interface DepositPolicyItem extends IEntity {
     @NotNull
     @Length(20)
     @ToString(index = 2)
-    IPrimitive<String> name();
+    IPrimitive<String> description();
 
     @NotNull
     @ToString(index = 3)
     IPrimitive<RepaymentMode> repaymentMode();
-
-    @NotNull
-    @Caption(name = "Apply to/Re-payed at")
-    @ToString(index = 4)
-    IPrimitive<ApplyToRepayAt> applyToRepayAt();
 
     /**
      * Could be null for security deposits

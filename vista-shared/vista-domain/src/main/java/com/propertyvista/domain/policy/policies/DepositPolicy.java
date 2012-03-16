@@ -16,15 +16,12 @@ package com.propertyvista.domain.policy.policies;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.BuildingPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 
 @DiscriminatorValue("DepositPolicy")
 public interface DepositPolicy extends BuildingPolicy {
-
-    IPrimitive<Boolean> prorate();
 
     @Owned
     IList<DepositPolicyItem> policyItems();

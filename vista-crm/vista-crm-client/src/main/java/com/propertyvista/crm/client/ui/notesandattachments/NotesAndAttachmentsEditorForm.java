@@ -106,7 +106,7 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
         @Override
         protected void addItem(Note newEntity) {
             newItemAdded = newEntity.isEmpty();
-            System.out.println("addItem");
+
             super.addItem(newEntity);
         }
 
