@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-29 13:10-0500\n"
+"POT-Creation-Date: 2012-03-16 14:03-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,7 @@ msgid ""
 "agents will get back to you shortly.\n"
 "\t\t\t\t\t\t\t\t"
 msgstr ""
+"\t\t\t\t\t\t\t\t谢谢您提交预约申请，我们的工作人员之一会尽快与您联络。\n"
 
 #. java-format
 #: com/propertyvista/domain/property/asset/LockerArea.java:2
@@ -30,7 +31,7 @@ msgstr ""
 #: com/propertyvista/portal/domain/dto/FloorplanDTO.java:2
 #, java-format
 msgid "#0.#"
-msgstr "0.#"
+msgstr ""
 
 #. java-format
 #: com/propertyvista/domain/PriorAddress.java:2
@@ -38,6 +39,7 @@ msgstr "0.#"
 #: com/propertyvista/domain/charges/ChargeLineList.java:2
 #: com/propertyvista/domain/charges/Charge_OLD.java:2
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:2
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportSummaryDTO.java:2
@@ -72,25 +74,37 @@ msgstr "0.#"
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 #, java-format
 msgid "#0.00"
-msgstr "0.00"
+msgstr ""
 
 #. java-format
 #: com/propertyvista/domain/GeoLocation.java:2
 #, java-format
 msgid "#0.000000"
-msgstr "#0.000000"
+msgstr ""
 
 #. java-format
 #: com/propertyvista/domain/financial/Money.java:0
 #, java-format
 msgid "${0,number,#0.00}"
-msgstr "${0,number,#0.00}"
+msgstr "${0,数字,#0.00}"
 
 #. java-format
 #: com/propertyvista/domain/charges/ChargeLine.java:0
 #, java-format
 msgid "${0}, {1}"
-msgstr "${0}, {1}"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:1
+msgid "% Monthly Rent"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:1
+msgid "% Owed-month"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:1
+msgid "% Owed-total"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:2
 msgid "% Ownership"
@@ -98,9 +112,10 @@ msgstr "% 所有权"
 
 #: com/propertyvista/misc/EquifaxApproval.java:2
 msgid "% Rent Approved"
-msgstr "% 租金批准"
+msgstr "% 租赁批准"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:2
 msgid "0 - 30 Days"
 msgstr "0 - 30天"
 
@@ -112,6 +127,10 @@ msgstr "1 小时"
 msgid "12 months"
 msgstr "12涓湀"
 
+#: com/propertyvista/domain/policy/policies/BackgroundCheckPolicy.java:1
+msgid "12M"
+msgstr ""
+
 #: com/propertyvista/domain/dashboard/gadgets/type/GadgetMetadata.java:1
 msgid "15 min"
 msgstr "15分钟"
@@ -122,17 +141,22 @@ msgstr "18个月"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
 msgid "1st Missed Payment Letter Served"
-msgstr "已解决第一封未付款信"
+msgstr "已送出第一封未付款信"
 
 #: com/propertyvista/domain/dashboard/gadgets/type/GadgetMetadata.java:1
 msgid "2 hours"
 msgstr "2 小时"
 
+#: com/propertyvista/domain/policy/policies/BackgroundCheckPolicy.java:1
+msgid "24M"
+msgstr ""
+
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
 msgid "2nd Missed Payment Letter Served"
-msgstr "已解决第二封未付款信"
+msgstr "已送出第二封未付款信"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:2
 msgid "30 - 60 Days"
 msgstr "30 - 60 天"
 
@@ -140,15 +164,20 @@ msgstr "30 - 60 天"
 msgid "30 min"
 msgstr "30 分钟"
 
+#: com/propertyvista/domain/policy/policies/BackgroundCheckPolicy.java:1
+msgid "36M"
+msgstr ""
+
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
 msgid "3rd Missed Payment Letter Served"
-msgstr "已解决第三封未付款信"
+msgstr "已送出第三封未付款信"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "6 months"
 msgstr "6 个月"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:2
 msgid "60- 90 Days"
 msgstr "60- 90 天"
 
@@ -158,11 +187,8 @@ msgstr "60- 90 天"
 msgid ""
 "<b>{0}</b> - {1} Bed, {2} Bath, {3,choice,null#price not "
 "available|!null#from ${3}}"
-msgstr ""
-"<b>{0}</b> - {1} 床, {2} 卫生间, {3,choice,null#price not available|!null#from "
-"${3}}"
+msgstr "<b>{0}</b> - {1} 床, {2} 卫生间, {3,choice,null#价位不详|!null#起于 ${3}}"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:96
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:204
 msgid ""
 "<h3>Congratulations {applicant.firstname}!</h3><br/><br/>You have "
@@ -180,12 +206,11 @@ msgid ""
 "office, the admin, etc}<br/>"
 msgstr ""
 ""
-"<h3>恭喜您，{applicant.firstname}!</h3><br/><br/>您已经成功完成您的在线申请。<br/><br/>请查找附件中的PDF副本作为个人存档。<br/><br/>申请参考编号为：{#reference}<br/><br/>请给我们一些时间仔细审查您的申请。我们会尽快与您联系，一般为48小时，并告知我们的决定。要查看申请的状态，您可以访问：{pmc.prospecportalsite.com}并用您的用户名和密码访问您的账号。如果您有任何问题和关注点，请直接拨打{PMC"
-" CHOSEN NUMBER}联系我们并提供您的申请参考编号。 <br/<br/>此致<br/><br/>  {PMC COMPANY NAME} "
-"团队<br/>{PMC CHOSEN CONTACT PERSON... could be the Superintendent, the "
-"office, the admin, etc}<br/>"
+"恭喜您{申请人.名字}!</h3><br/><br/>您已顺利完成线上申请程序。br/><br/>请找到附上的PDF版本作为参考。<br/><br/>您的申请参考编号是：{#参考编号}"
+" "
+"请允许我们一些时间审查您的申请。我们会在24小时之内与您联络告知您我们的决定。如果您想要查询您的申请状态的话，可以上网到{pmc.prospectportalsite.com}使用您的密码登入您的帐户。同时，您若有任何疑问顾虑的话，请直接与我们联络，并提供您的申请编号。<br/<br/>此致,<br/><br/>{PMC"
+" 公司名称} 团队<br/>{PMC 选择的联络人... 可以是主管、办公室、行政单位等}<br/>"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:123
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:231
 msgid ""
 "<h3>Thank you, {co-applicant.firstname}!<h3/><br/><br/>You have successfully"
@@ -201,14 +226,12 @@ msgid ""
 "available.Sincerely,{PMC COMPANY NAME} Team <br/>{PMC CHOSEN CONTACT "
 "PERSON... could be the Superintendent, the office, the admin, etc} "
 msgstr ""
-"<h3>谢谢{co-applicant.firstname}!<h3/><br/><br/> "
-"您已经成功完成在线申请。请找到附上的PDF版本作为参考。您的申请参考编号是：{#reference} "
+"<h3>谢谢{共同申请人.名字}!<h3/><br/><br/> "
+"您已经成功完成在线申请。请找到附上的PDF版本作为参考。您的申请参考编号是：{#参考编号} "
 "在整个申请完成后，我们将处理申请并向您发送一封单独的邮件确认。要查看申请的状态，您可以访问{pmc.prospecportalsite.com} "
-"然后使用您的用户名和密码访问您的账号。同时，如果您有任何关注点和问题，请直接联系我们： {PMC CHOSEN NUMBER} "
-"并提供您的申请编号。此致，敬礼！{PMC COMPANY NAME} 团队 <br/>{PMC CHOSEN CONTACT PERSON... "
-"could be the Superintendent, the office, the admin, etc} "
+"然后使用您的用户名和密码访问您的账号。同时，如果您有任何关注点和问题，请直接联系我们： {PMC 选择号码} 并提供您的申请编号。此致，敬礼！{PMC "
+"公司名称} 团队 <br/>{PMC 选择的联络人... 可以是主管、办公室、行政单位等} "
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:153
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:261
 msgid ""
 "<h3>Thank you, {guarantor.firstname}!<h3/>You have successfully completed "
@@ -224,15 +247,13 @@ msgid ""
 "available.Sincerely,(Options here){PMC COMPANY NAME} Team {PMC CHOSEN "
 "CONTACT PERSON... could be the Superintendent, the office, the admin, etc}"
 msgstr ""
-""
-"<h3>非常感谢，{guarantor.firstname}!<h3/>您已成功完成了您的担保人协议。<br/><br/>请找到附件的担保人协议PDF副本作为参考。<br/><br/>您的申请参考编号是："
-" {#reference}<br/><br/> "
-"在整个申请完成后，我们将处理申请并向您发送单独的邮件通知。要查看申请的状态，您可以访问：{pmc.prospecportalsite.com}并用您的用户名和密码访问网站。如果您有任何问题和关注点，请直接拨打{PMC"
-" CHOSEN NUMBER}联系我们并提供您的申请参考编号。此致，敬礼(此处选项) {PMC COMPANY NAME} 团队{PMC CHOSEN "
-"CONTACT PERSON... could be the Superintendent, the office, the admin, etc} "
+"<h3>谢谢您， "
+"{guarantor.firstname}!<h3/>您已经顺利完成了您的担保同意书。<br/><br/>请找到附上的担保同意书PDF版本作为参考 "
+"<br/><br/>您的申请参考编号是：{#参考编号}<br/><br/>一旦整个申请完成后，我们会处理您的申请，并各别发出一封电邮给您。若要查看申请的状态，您可以访问{pmc.prospecportalsite.com}"
+" 然后使用您现有的用户名和密码进入网址。同时，如果您有任何关注点和问题，请直接联系我们： {PMC 选择号码} "
+"并提供您的申请编号。此致，(选项){PMC 公司名称} 团队 {PMC 选择的联络人... 可以是主管、办公室、行政单位等} "
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:184
-#: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:292
+#: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:291
 msgid ""
 "<h3>Welcome {applicant.firstName} to your new home!</h3><br/><br/>Your "
 "Application To Lease has been approved!</br><br/> +As per your application, "
@@ -249,18 +270,19 @@ msgid ""
 "contact us directly.<br/><br/>Sincerely,<br/><br/>{pmc.companyName} "
 "Team<br/>{pmc.contanctPerson}<br/>"
 msgstr ""
-"<h3>欢迎{applicant.firstName}来到您的新家！</h3><br/><br/> 您的租约申请已经批准！</br><br/> + "
-"根据您的申请，您的租约开始日期为{lease.startDateWeekday}, {lease.startDate}<br/></br> "
-"非常高兴您成为我们的邻居。请保存好您在申请流程中使用的用户名和密码。该用户名和密码将在您的整个租约期间使用，您可以用于访问我们的在线租户门户。您可以随时访问我们的网站{pmc.website}并在居民下点击访问门户。您也可以直接访问{pmc.tenantportalsite.com}。<br/><br/>"
-" 我们的团队成员将尽快联系您进行搬入安排。<br/><br/> "
-"同时，如果您有任何问题或关注点，请直接联系我们。<br/><br/>此致，敬礼！<br/><br/>{pmc.companyName} "
-"团队<br/>{pmc.contanctPerson}<br/>"
+"<h3>欢迎{申请人.名字} 光临您的新家!</h3><br/><br/>您的租约申请已获批准！</br><br/> "
+"+根据您的申请，您的租约开始日期是your lease start date is on {租约.开始之周日期}, "
+"{租约.开始日期}<br/></br>我们很兴奋您加入我们。请保管好您申请时的用户名和密码。这用户名和密码在您租赁期间可用来进入我们的在线租户门户。您可随时造访{pmc.website}\""
+" "
+"\"点选住户项进入该门户。或者，您也可直接前往{pmc.tenantportalsite.com}.<br/><br/>我们的团队成员之一不久会跟您接洽安排搬入事宜。<br/><br/>同时，如果您有任何关注点和问题，请直接联系我们。<br/><br/>次致,<br/><br/>{pmc.公司名称}"
+" 团队<br/>{pmc.联络人}<br/>"
 
 #: com/propertyvista/pmsite/server/pages/SignInPage.java:43
 msgid "A link to the password reset page was sent to your email address"
 msgstr "向您邮箱地址发送了到一个密码重置页面的链接"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:2
 msgid "AR Balance"
 msgstr "应收款余额"
 
@@ -271,10 +293,6 @@ msgstr "关于我们"
 #: com/propertyvista/server/domain/security/AbstractUserCredential.java:0
 msgid "Abstract User Credential"
 msgstr "提取用户证书"
-
-#: com/propertyvista/domain/financial/billing/Payment.java:1
-msgid "Accepted"
-msgstr ""
 
 #: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:2
 msgid "Access All Buildings"
@@ -297,6 +315,7 @@ msgstr "账户"
 msgid "Account Creation Request"
 msgstr "账户创建请求"
 
+#: com/propertyvista/domain/financial/BillingAccount.java:2
 #: com/propertyvista/domain/payment/EcheckInfo.java:2
 #: com/propertyvista/domain/payment/InteracInfo.java:2
 msgid "Account Number"
@@ -310,12 +329,18 @@ msgstr "账户类型"
 msgid "Acknowledged"
 msgstr "确认"
 
+#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
+#: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:2
+msgid "Action Type"
+msgstr ""
+
 #: com/propertyvista/pmsite/server/pages/PwdChangePage.java:214
 #: com/propertyvista/pmsite/server/pages/PwdResetPage.java:135
 #: com/propertyvista/pmsite/server/panels/SignInPanel.java:172
 msgid "Action failed. Please try again later."
 msgstr "动作失败。请重试。"
 
+#: com/propertyvista/domain/security/UserCredentialEditDTO.java:2
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "Active"
 msgstr "有效"
@@ -352,7 +377,7 @@ msgstr "适配器类型"
 
 #: com/propertyvista/domain/financial/offering/Feature.java:1
 msgid "Add-On"
-msgstr "闄勫姞"
+msgstr "附加零件"
 
 #: com/propertyvista/pmsite/server/panels/InquiryPanel.html:62
 #: com/propertyvista/portal/rpc/portal/dto/MaintenanceRequestDTO.java:2
@@ -366,7 +391,6 @@ msgstr "更多存储空间"
 #: com/propertyvista/domain/EmergencyContact.java:2
 #: com/propertyvista/domain/communication/ContactPostal.java:2
 #: com/propertyvista/domain/contact/Email.java:2
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:2
 #: com/propertyvista/domain/tenant/income/IEmploymentInfo.java:2
 #: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:2
@@ -485,10 +509,6 @@ msgstr "警告"
 msgid "Alerts"
 msgstr "警告"
 
-#: com/propertyvista/domain/dashboard/gadgets/type/UnitAvailability.java:1
-msgid "All"
-msgstr "全部"
-
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Alley"
@@ -504,7 +524,7 @@ msgstr ""
 
 #: com/propertyvista/domain/maintenance/IssueElementType.java:1
 #: com/propertyvista/domain/property/asset/Floorplan.java:2
-#: com/propertyvista/dto/BuildingDTO.java:2
+#: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:29
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:36
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:87
@@ -566,6 +586,11 @@ msgstr "公寓汇总"
 #: com/propertyvista/domain/maintenance/IssueElementType.java:1
 msgid "Apartment Unit"
 msgstr "公寓单位"
+
+#: com/propertyvista/dto/ApplicationUserDTO.java:1
+msgctxt "Application User"
+msgid "Applicant"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/TenantInLease.java:1
 msgid "Applicant"
@@ -644,6 +669,10 @@ msgstr "申请状态"
 msgid "Application Status Summary"
 msgstr "申请状态汇总"
 
+#: com/propertyvista/dto/ApplicationUserDTO.java:0
+msgid "Application User"
+msgstr ""
+
 #: com/pyx4j/essentials/server/admin/SystemMaintenance.java:130
 msgid ""
 "Application is Unavailable due to short maintenance.\n"
@@ -664,14 +693,14 @@ msgstr "申请"
 #: com/propertyvista/domain/policy/framework/PolicyDTOBase.java:2
 #: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:2
 msgid "Applied To"
-msgstr "申请到"
+msgstr "适用于"
 
 #: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:1
-msgid "Apply"
-msgstr "申请"
+msgid "Apply To First Month"
+msgstr ""
 
-#: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:2
-msgid "Apply to/Re-payed at"
+#: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:1
+msgid "Apply To Last Month"
 msgstr ""
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
@@ -717,6 +746,10 @@ msgstr ""
 #: com/propertyvista/misc/EquifaxApproval.java:1
 msgid "Approve"
 msgstr "批准"
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/ApproveLeaseConstraintsDTO.java:0
+msgid "Approve Lease Constraints"
+msgstr ""
 
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
 msgctxt "Reservation"
@@ -769,7 +802,7 @@ msgstr "公寓单位占用段"
 #: com/propertyvista/interfaces/importer/BuildingUpdater.java:292
 #, java-format
 msgid "AptUnit ''{0}'' in building ''{1}'' not found"
-msgstr "楼 ''{1}'' 中的公寓单位 ''{0}'' 未找到"
+msgstr "楼''{1}''中的公寓单位''{0}'' 未找到"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -799,6 +832,11 @@ msgstr "欠款"
 msgid "Arrears"
 msgstr "欠款"
 
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:0
+#: com/propertyvista/domain/tenant/Tenant.java:2
+msgid "Arrears State"
+msgstr ""
+
 #: com/propertyvista/domain/dashboard/gadgets/type/ArrearsStatus.java:0
 msgid "Arrears Status"
 msgstr "欠款状态"
@@ -816,6 +854,12 @@ msgstr "欠款汇总"
 msgid "Arrears YOY Analysis"
 msgstr "欠款按年分析"
 
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:2
+#: com/propertyvista/domain/dashboard/gadgets/type/AvailabilitySummary.java:2
+#: com/propertyvista/domain/dashboard/gadgets/type/UnitAvailability.java:2
+msgid "As Of"
+msgstr ""
+
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:2
 msgid "Asset Type"
 msgstr "资产类型"
@@ -824,6 +868,10 @@ msgstr "资产类型"
 #: com/propertyvista/dto/TenantFinancialDTO.java:2
 msgid "Assets"
 msgstr "资产"
+
+#: com/propertyvista/domain/note/Note.java:2
+msgid "Attachments"
+msgstr ""
 
 #: com/propertyvista/domain/communication/Campaign.java:2
 msgid "Audience"
@@ -916,6 +964,15 @@ msgstr "返回到"
 msgid "Background"
 msgstr "背景"
 
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Background Check"
+msgstr ""
+
+#: com/propertyvista/domain/policy/dto/BackgroundCheckPolicyDTO.java:0
+#: com/propertyvista/domain/policy/policies/BackgroundCheckPolicy.java:0
+msgid "Background Check Policy"
+msgstr ""
+
 #: com/propertyvista/interfaces/importer/RentRollCSV.java:2
 msgid "Balance"
 msgstr "余额"
@@ -935,11 +992,15 @@ msgstr "银行名称"
 
 #: com/propertyvista/domain/payment/InteracInfo.java:2
 msgid "Bank Number"
-msgstr "閾惰鍙风爜"
+msgstr "银行号码"
 
 #: com/propertyvista/domain/payment/CreditCardInfo.java:2
 msgid "Bank Phone"
 msgstr "银行电话"
+
+#: com/propertyvista/domain/policy/policies/BackgroundCheckPolicy.java:2
+msgid "Bankruptcy"
+msgstr ""
 
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
 msgid "Banner"
@@ -948,6 +1009,22 @@ msgstr "横幅"
 #: com/propertyvista/domain/dashboard/gadgets/type/demo/BarChart2D.java:0
 msgid "Bar Chart 2D"
 msgstr "二维条状图"
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Base Fee"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Base Fee 2"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Base Fee Type"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Base Fee Type 2"
+msgstr ""
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -1003,6 +1080,7 @@ msgstr "行为"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsSummary.java:2
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitTurnoverStats.java:2
 #: com/propertyvista/domain/property/asset/Equipment.java:2
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:2
 #: com/propertyvista/domain/property/asset/Locker.java:2
@@ -1026,16 +1104,16 @@ msgstr ""
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/billing/Bill.java:0
 #: com/propertyvista/domain/financial/billing/BillEntry.java:2
-#: com/propertyvista/domain/financial/billing/BillPayment.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:0
 #: com/propertyvista/portal/domain/dto/BillDTO.java:1
+#: com/propertyvista/server/billing/print/BillData.java:2
 msgid "Bill"
 msgstr "账单"
 
 #. This is demo content
 #: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:273
 msgid "Bill B., London, Ontario"
-msgstr "Bill B., London, Ontario"
+msgstr ""
 
 #: com/propertyvista/domain/financial/billing/BillCharge.java:0
 msgid "Bill Charge"
@@ -1053,9 +1131,21 @@ msgstr "账单费用税"
 msgid "Bill Counter"
 msgstr "点钞机"
 
+#: com/propertyvista/server/billing/print/BillData.java:0
+msgid "Bill Data"
+msgstr ""
+
 #: com/propertyvista/domain/financial/billing/BillEntry.java:0
 msgid "Bill Entry"
 msgstr "账单录入"
+
+#: com/propertyvista/domain/financial/billing/BillEntryAdjustment.java:0
+msgid "Bill Entry Adjustment"
+msgstr ""
+
+#: com/propertyvista/domain/financial/billing/Bill.java:2
+msgid "Bill Entry Adjustments"
+msgstr ""
 
 #: com/propertyvista/domain/financial/billing/BillLeaseAdjustment.java:0
 msgid "Bill Lease Adjustment"
@@ -1066,17 +1156,12 @@ msgid "Bill List"
 msgstr "账单列表"
 
 #: com/propertyvista/domain/financial/billing/BillPayment.java:0
-#: com/propertyvista/domain/financial/billing/Payment.java:2
 msgid "Bill Payment"
 msgstr "账单支付"
 
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Bill Payments"
 msgstr "账单支付"
-
-#: com/propertyvista/domain/financial/billing/Bill.java:2
-msgid "Bill Proration"
-msgstr ""
 
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Bill Sequence Number"
@@ -1108,7 +1193,7 @@ msgstr "计费"
 #: com/propertyvista/domain/financial/BillingAccount.java:0
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 #: com/propertyvista/domain/financial/billing/Payment.java:2
-#: com/propertyvista/domain/tenant/lease/LeaseFinancial.java:2
+#: com/propertyvista/domain/tenant/lease/Lease.java:2
 msgid "Billing Account"
 msgstr "计费账户"
 
@@ -1141,9 +1226,9 @@ msgid "Billing Period Number"
 msgstr "计费期数"
 
 #: com/propertyvista/crm/rpc/services/billing/StartBuildingBillingDTO.java:2
+#: com/propertyvista/domain/financial/BillingAccount.java:2
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 #: com/propertyvista/domain/financial/billing/BillingRun.java:2
-#: com/propertyvista/domain/tenant/lease/LeaseFinancial.java:2
 msgid "Billing Period Start Date"
 msgstr "计费期起始日期"
 
@@ -1158,6 +1243,10 @@ msgstr "开票运行"
 
 #: com/propertyvista/domain/financial/billing/BillingCycle.java:2
 msgid "Billing Run Target Day"
+msgstr ""
+
+#: com/propertyvista/domain/financial/billing/Payment.java:2
+msgid "Billing Status"
 msgstr ""
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
@@ -1214,7 +1303,7 @@ msgstr "面包屑"
 
 #: com/propertyvista/domain/tenant/lease/extradata/Pet.java:2
 msgid "Breed"
-msgstr "类型"
+msgstr "品种"
 
 #. Construction type
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
@@ -1236,7 +1325,7 @@ msgstr "预算"
 
 #: com/propertyvista/domain/property/asset/Equipment.java:2
 msgid "Build"
-msgstr "建造"
+msgstr "厂牌"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:1
@@ -1260,15 +1349,14 @@ msgstr "建筑"
 #: com/propertyvista/interfaces/importer/ImportPersister.java:159
 #, java-format
 msgid "Building ''{0}'' floorplan ''{1}'' media error {2}"
-msgstr "建筑 ''{0}'' 平面图 ''{1}'' 媒体错误"
+msgstr "建筑''{0}''平面图''{1}''媒体错误"
 
 #. java-format
 #: com/propertyvista/interfaces/importer/ImportPersister.java:101
 #, java-format
 msgid "Building ''{0}'' media error {1}"
-msgstr "建筑 ''{0}'' 媒体错误"
+msgstr "建筑''{0}''媒体错误"
 
-#: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/portal/domain/dto/FloorplanDetailsDTO.java:2
 msgid "Building Amenities"
 msgstr "建筑便利设施"
@@ -1307,7 +1395,6 @@ msgid "Building Lister"
 msgstr "建筑制表人"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Building Name"
 msgstr "建筑名称"
 
@@ -1320,10 +1407,6 @@ msgstr "建造政策"
 #: com/propertyvista/domain/property/asset/Complex.java:2
 msgid "Buildings"
 msgstr "建筑"
-
-#: com/propertyvista/domain/dashboard/DashboardMetadata.java:2
-msgid "Buildings String View"
-msgstr "建筑串视图"
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -1359,7 +1442,7 @@ msgstr ""
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Bypass"
-msgstr "旁路"
+msgstr "外环道 "
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:2
 msgid "Cabinets Install Date"
@@ -1380,6 +1463,20 @@ msgstr "电缆"
 #: com/propertyvista/domain/communication/Campaign.java:0
 msgid "Campaign"
 msgstr "活动"
+
+#. java-format
+#: com/propertyvista/server/common/ptapp/ApplicationManager.java:99
+#, java-format
+msgid "Can't create application user for tenant  {0} without e-mail address"
+msgstr ""
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/CancelEndLeaseConstraintsDTO.java:0
+msgid "Cancel End Lease Constraints"
+msgstr ""
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/CancelReservationConstraintsDTO.java:0
+msgid "Cancel Reservation Constraints"
+msgstr ""
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
 msgctxt "Maintenance Request"
@@ -1445,6 +1542,10 @@ msgstr "目录"
 msgid "Category"
 msgstr "类目"
 
+#: com/propertyvista/domain/financial/GlCodeCategory.java:2
+msgid "Category Id"
+msgstr ""
+
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Causeway"
@@ -1480,21 +1581,33 @@ msgstr "变换状态"
 msgid "Charge Adjustments"
 msgstr "费用调整"
 
-#: com/propertyvista/domain/tenant/lease/ServiceAgreement.java:2
+#: com/propertyvista/domain/tenant/lease/LeaseProducts.java:2
 msgid "Charge Items"
 msgstr "费用项目"
 
 #: com/propertyvista/domain/charges/ChargeLine.java:0
 msgid "Charge Line"
-msgstr "费用线"
+msgstr "收费线"
 
 #: com/propertyvista/domain/charges/ChargeLineList.java:0
 msgid "Charge Line List"
 msgstr "收费线列表"
 
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Charge Notice Resident"
+msgstr ""
+
 #: com/propertyvista/domain/charges/Charge_OLD.java:0
 msgid "Charge OLD"
 msgstr "旧费用"
+
+#: com/propertyvista/domain/policy/policies/BackgroundCheckPolicy.java:2
+msgid "Charge Off"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Charge Past Resident"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
 msgid "Charge Type"
@@ -1534,12 +1647,12 @@ msgstr "儿童保育"
 
 #: com/propertyvista/domain/site/Descriptor.java:2
 msgid "Child Pages"
-msgstr "儿童页面"
+msgstr "亲子页面"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Circle"
-msgstr "圆圈"
+msgstr "街（Circle）"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -1551,7 +1664,11 @@ msgstr "电路"
 msgid "Circus"
 msgstr "圆形广场"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/ApplicationDocumentationPolicyPreloader.java:45
+#: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:1
+msgid "Citizenship"
+msgstr ""
+
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/ApplicationDocumentationPolicyPreloader.java:43
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:121
 msgid "Citizenship Card"
 msgstr "公民卡"
@@ -1592,7 +1709,7 @@ msgstr ""
 #: com/pyx4j/security/server/AuthenticationServiceImpl.java:71
 #, java-format
 msgid "Client version {0} does not match server version {1}"
-msgstr "客户端版本 {0} 与服务器版本 {1} 不匹配"
+msgstr "客户端版本{0}与服务器版本{1}不匹配"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -1618,6 +1735,11 @@ msgstr "俱乐部折扣"
 msgid "Club House"
 msgstr "俱乐部会所"
 
+#: com/propertyvista/dto/ApplicationUserDTO.java:1
+msgctxt "Application User"
+msgid "Co Applicant"
+msgstr ""
+
 #: com/propertyvista/domain/tenant/TenantInLease.java:1
 msgid "Co-Applicant"
 msgstr "共同申请人"
@@ -1625,6 +1747,14 @@ msgstr "共同申请人"
 #: com/propertyvista/domain/ref/Province.java:2
 msgid "Code"
 msgstr "代码"
+
+#: com/propertyvista/domain/financial/GlCode.java:2
+msgid "Code Id"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/BackgroundCheckPolicy.java:2
+msgid "Collection"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/lease/extradata/Pet.java:2
 #: com/propertyvista/domain/tenant/lease/extradata/Vehicle.java:2
@@ -1730,7 +1860,6 @@ msgid "Complex"
 msgstr "综合体"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Complex Name"
 msgstr "综合体名称"
 
@@ -1752,10 +1881,14 @@ msgstr "围居区"
 msgid "Concession"
 msgstr "让价"
 
+#: com/propertyvista/domain/financial/offering/Concession.java:0
+msgid "Concession V"
+msgstr ""
+
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/ProductCatalog.java:2
 #: com/propertyvista/domain/financial/offering/Service.java:2
-#: com/propertyvista/domain/tenant/lease/ServiceAgreement.java:2
+#: com/propertyvista/domain/tenant/lease/LeaseProducts.java:2
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Concessions"
@@ -1790,7 +1923,7 @@ msgstr "确认新密码"
 msgid "Confirm Password"
 msgstr "确认密码"
 
-#: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:2
+#: com/propertyvista/domain/security/UserCredentialEditDTO.java:2
 msgid "Confirm password"
 msgstr "确认密码"
 
@@ -1842,7 +1975,6 @@ msgstr "联系人职务"
 
 #: com/propertyvista/domain/company/Company.java:2
 #: com/propertyvista/domain/property/asset/building/Building.java:2
-#: com/propertyvista/domain/property/asset/building/BuildingContactInfo.java:2
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Contacts"
 msgstr "联系人"
@@ -1866,7 +1998,7 @@ msgstr "内容Mime类型"
 #. Type of foundation
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Continuous Footing"
-msgstr ""
+msgstr "连续基脚"
 
 #: com/propertyvista/domain/property/vendor/Contract.java:0
 msgid "Contract"
@@ -1936,6 +2068,10 @@ msgstr "台面价值"
 msgid "Country"
 msgstr "国家"
 
+#: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:2
+msgid "Country/Organization Issued the Document"
+msgstr ""
+
 #: com/propertyvista/domain/contact/AddressStructured.java:2
 msgid "County"
 msgstr "县"
@@ -1943,7 +2079,7 @@ msgstr "县"
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Court"
-msgstr "法院"
+msgstr "街（Court）"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
 msgid "Court Hearing Date"
@@ -1975,10 +2111,21 @@ msgstr "有遮盖的停车位"
 msgid "Create Date"
 msgstr "创建日期"
 
+#: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgctxt "Lease Status"
+msgid "Created"
+msgstr ""
+
 #: com/propertyvista/admin/rpc/PmcDTO.java:2
+#: com/propertyvista/domain/note/Note.java:2
 #: com/propertyvista/domain/security/AbstractUser.java:2
 msgid "Created"
 msgstr "已创建"
+
+#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
+msgid "Created"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:2
@@ -1990,7 +2137,11 @@ msgstr "创建人"
 msgid "Created When"
 msgstr "创建日期"
 
-#: com/propertyvista/crm/server/services/reports/ReportsDeferredProcess.java:125
+#: com/propertyvista/crm/server/services/billing/BillPrintDeferredProcess.java:78
+msgid "Creating Bill..."
+msgstr ""
+
+#: com/propertyvista/crm/server/services/reports/ReportsDeferredProcess.java:142
 msgid "Creating Report..."
 msgstr "正在创建报告……"
 
@@ -2031,15 +2182,15 @@ msgstr "货币"
 
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 msgid "Current Address"
-msgstr "货币地址"
+msgstr "目前地址"
 
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Current Amount"
-msgstr "货币金额"
+msgstr "目前金额"
 
 #: com/propertyvista/portal/rpc/portal/dto/BillInfoDTO.java:2
 msgid "Current Balance"
-msgstr "货币余额"
+msgstr "目前余额"
 
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 #: com/propertyvista/portal/rpc/portal/dto/TenantDashboardDTO.java:2
@@ -2058,10 +2209,19 @@ msgstr "当前密码"
 msgid "Current Value"
 msgstr "当前值"
 
+#: com/propertyvista/domain/dashboard/gadgets/type/AvailabilitySummary.java:2
+#: com/propertyvista/domain/dashboard/gadgets/type/UnitAvailability.java:2
+msgid "Customize Date"
+msgstr ""
+
 #: com/propertyvista/admin/rpc/PmcDTO.java:2
 #: com/propertyvista/portal/rpc/corp/PmcAccountCreationRequest.java:2
 msgid "DNS name"
 msgstr "DNS名称"
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Daily Fee"
+msgstr ""
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:0
@@ -2112,10 +2272,10 @@ msgstr "女儿"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Days Vacant"
-msgstr "空闲天数"
+msgstr "空置天数"
 
 #. java-format
-#: com/propertyvista/server/common/mail/MessageTemplates.java:137
+#: com/propertyvista/server/common/mail/MessageTemplates.java:166
 #, java-format
 msgid ""
 "Dear {0},<br/>\n"
@@ -2124,12 +2284,13 @@ msgid ""
 "Click the link below to go to the Property Vista site:<br/>\n"
 "    <a style=\"color:#929733\" href=\"{1}\">Application</a>"
 msgstr ""
-"向您发送此邮件作为您申请 Property Vista 公寓的回复。<br/>\n"
-"点击下面的链接访问 Property Vista 的网站：<br/> \n"
-"    <a style=\"color:#929733\" href=\"{1}\">申请</a> "
+"亲爱的{0},<br/>\n"
+"这封邮件是回复您申请Property Vista公寓。<br/>\n"
+"请按下列链接前往Property Vista网站：<br/>\n"
+"    <a style=\"color:#929733\" href=\"{1}\">申请</a>"
 
 #. java-format
-#: com/propertyvista/server/common/mail/MessageTemplates.java:127
+#: com/propertyvista/server/common/mail/MessageTemplates.java:156
 #, java-format
 msgid ""
 "Dear {0},<br/>\n"
@@ -2139,13 +2300,12 @@ msgid ""
 "password for your account:<br/>\n"
 "    <a style=\"color:#929733\" href=\"{1}\">Change Your Password</a>"
 msgstr ""
-"尊敬的 {0},<br/>\n"
-"向您发送此邮件作为您申请修改 Property Vista 账户密码的回复。<br/>\n"
-"点击下面的链接访问 Property Vista 的网站为您的账号创建新的密码：<br/> \n"
-"    <a style=\"color:#929733\" href=\"{1}\">修改您的密码</a> "
+"亲爱的 {0},<br/>\n"
+"这封邮件是回复您申请修改您的Property Vista 帐户密码。<br/>\n"
+"请按下列链接前往Property Vista网站更改新的密码：:<br/>\n"
+"    <a style=\"color:#929733\" href=\"{1}\">更改您的密码</a>"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:75
-#: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:183
+#: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:182
 msgid ""
 "Dear {userName},<br/>\n"
 "This email was sent to you in response to your request to modify your "
@@ -2155,10 +2315,10 @@ msgid ""
 "    <a style=\"color:#929733\" href=\"{passwordResetUrl}\">Change Your "
 "Password</a>"
 msgstr ""
-"尊敬的 {userName},<br/>\n"
-"向您发送此邮件作为您申请修改 Property Vista 账户密码的回复。<br/>\n"
-"点击下面的链接访问 Property Vista 的网站为您的账号创建新的密码：<br/> \n"
-"    <a style=\"color:#929733\" href=\"{1}\">修改您的密码</a> "
+"亲爱的 {userName},<br/>\n"
+"这封邮件是回复您修改您的Property Vista 帐户密码。。<br/>\n"
+"请按下列链接前往Property Vista网站更改新的密码：:<br/>\n"
+"    <a style=\"color:#929733\" href=\"{passwordResetUrl}\">更改您的密码</a>"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 msgid "Decided By"
@@ -2258,9 +2418,9 @@ msgstr ""
 msgid "Deposit Policy Item"
 msgstr ""
 
-#: com/propertyvista/domain/financial/offering/Product.java:2
-msgid "Deposit Type"
-msgstr "定金类型"
+#: com/propertyvista/domain/financial/billing/Bill.java:2
+msgid "Deposit Refund Amount"
+msgstr ""
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Deposits"
@@ -2273,6 +2433,7 @@ msgstr ""
 #: com/propertyvista/domain/contact/Phone.java:2
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:2
 #: com/propertyvista/domain/financial/GlCode.java:2
+#: com/propertyvista/domain/financial/GlCodeCategory.java:2
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 #: com/propertyvista/domain/financial/offering/Product.java:2
 #: com/propertyvista/domain/financial/offering/ProductItem.java:2
@@ -2280,6 +2441,9 @@ msgstr ""
 #: com/propertyvista/domain/maintenance/SurveyResponse.java:2
 #: com/propertyvista/domain/marketing/Marketing.java:2
 #: com/propertyvista/domain/marketing/yield/Amenity.java:2
+#: com/propertyvista/domain/note/Note.java:2
+#: com/propertyvista/domain/note/NoteAttachment.java:2
+#: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:2
 #: com/propertyvista/domain/policy/policies/domain/LegalTermsDescriptor.java:2
 #: com/propertyvista/domain/property/PropertyContact.java:2
 #: com/propertyvista/domain/property/PropertyPhone.java:2
@@ -2346,10 +2510,6 @@ msgstr "禁用"
 msgid "Disabled Spaces"
 msgstr "禁用空间"
 
-#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:1
-msgid "Discount"
-msgstr "折扣"
-
 #: com/propertyvista/domain/payment/PaymentType.java:1
 msgid "Discover"
 msgstr "发现"
@@ -2392,6 +2552,14 @@ msgstr "停靠"
 msgid "Document"
 msgstr "文件"
 
+#: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:2
+msgid "Document ID"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:2
+msgid "Document Issuer"
+msgstr ""
+
 #: com/propertyvista/domain/media/ApplicationDocumentHolder.java:2
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 msgid "Documents"
@@ -2419,22 +2587,20 @@ msgctxt "Concession Status"
 msgid "Draft"
 msgstr "草案"
 
-#: com/propertyvista/domain/tenant/lease/Lease.java:1
-msgctxt "Lease Status"
-msgid "Draft"
-msgstr "草案"
-
-#: com/propertyvista/domain/financial/billing/Bill.java:1
+#: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Draft"
 msgstr ""
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Drive"
-msgstr "开车"
+msgstr "街（Drive)"
+
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/ApplicationDocumentationPolicyPreloader.java:48
+msgid "Driver License"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/ApplicationDocumentationPolicyPreloader.java:41
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:117
 msgid "Drivers License"
 msgstr "驾照"
@@ -2521,7 +2687,7 @@ msgstr "节点出的有效政策"
 #: com/propertyvista/pmsite/server/model/WicketUtils.java:411
 #, java-format
 msgid "Either one of {0} or {1} must be provided"
-msgstr "必须提供 {0} 或 {1} 之一"
+msgstr "必须提供{0}或{1}之一"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
 msgid "Electrical"
@@ -2553,7 +2719,6 @@ msgstr "电梯"
 #: com/propertyvista/domain/contact/Email.java:0
 #: com/propertyvista/domain/person/Person.java:2
 #: com/propertyvista/domain/property/PropertyContact.java:2
-#: com/propertyvista/domain/property/asset/building/BuildingContactInfo.java:2
 #: com/propertyvista/domain/security/AbstractUser.java:2
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
 #: com/propertyvista/portal/rpc/corp/PmcAccountCreationRequest.java:2
@@ -2644,6 +2809,10 @@ msgstr "结束"
 msgid "End Date"
 msgstr "结束日期"
 
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/EndLeaseConstraintsDTO.java:0
+msgid "End Lease Constraints"
+msgstr ""
+
 #: com/propertyvista/shared/CompiledLocale.java:1
 msgid "English"
 msgstr "英语"
@@ -2670,7 +2839,7 @@ msgstr "输入代码"
 
 #: com/propertyvista/domain/security/VistaCrmBehavior.java:1
 msgid "Equifax"
-msgstr "Equifax"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
@@ -2710,14 +2879,14 @@ msgstr ""
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
 msgid "Eviction Letter Served"
-msgstr "驱逐信"
+msgstr "驱逐信已发出"
 
 #: com/propertyvista/domain/financial/billing/BillingRun.java:2
 msgid "Execution Date"
 msgstr "执行日期"
 
-#: com/propertyvista/domain/tenant/lease/BillableItem.java:2
-msgid "Exempt From Tax"
+#: com/propertyvista/domain/financial/billing/BillingRun.java:2
+msgid "Execution Target Date"
 msgstr ""
 
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
@@ -2763,7 +2932,7 @@ msgstr "外部ID"
 
 #: com/propertyvista/domain/media/Media.java:1
 msgid "External URL"
-msgstr "外部URL"
+msgstr "外部统一资源定位符（URL）"
 
 #: com/propertyvista/domain/financial/offering/ProductCatalog.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
@@ -2823,6 +2992,10 @@ msgstr "特色项类型"
 msgid "Feature Type"
 msgstr "特色类型"
 
+#: com/propertyvista/domain/financial/offering/Feature.java:0
+msgid "Feature V"
+msgstr ""
+
 #: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:138
 msgid "Featured Apartments"
 msgstr "特色公寓"
@@ -2843,6 +3016,7 @@ msgstr "研究领域"
 #: com/propertyvista/domain/File.java:0
 #: com/propertyvista/domain/media/Media.java:1
 #: com/propertyvista/domain/media/Media.java:2
+#: com/propertyvista/domain/note/NoteAttachment.java:2
 msgid "File"
 msgstr "文件"
 
@@ -2872,7 +3046,7 @@ msgstr "文件上传错误"
 #: com/pyx4j/essentials/server/upload/AbstractUploadServlet.java:187
 #, java-format
 msgid "File upload size exceeds maximum of {0} megabytes"
-msgstr "文件上传大小超过最大值 {0}M"
+msgstr "文件上传大小超过最大值{0}M"
 
 #: com/propertyvista/portal/domain/dto/PropertyListDTO.java:2
 msgid "Filter Ids"
@@ -2884,7 +3058,7 @@ msgstr ""
 
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
 msgctxt "Lease Status"
-msgid "Finalised"
+msgid "Final Bill Issued"
 msgstr ""
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
@@ -2926,16 +3100,16 @@ msgstr "消防监控"
 msgid "Fireplace"
 msgstr "火炉"
 
+#: com/propertyvista/domain/financial/billing/Bill.java:1
+msgid "First"
+msgstr ""
+
 #: com/propertyvista/domain/financial/offering/Concession.java:1
 msgctxt "Concession Term"
 msgid "First Month"
 msgstr "第一个月"
 
-#: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:1
-msgid "First Month"
-msgstr ""
-
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/DepositPolicyPreloader.java:65
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/DepositPolicyPreloader.java:62
 msgid "First Month Parking"
 msgstr ""
 
@@ -2969,14 +3143,14 @@ msgctxt "Lease Term"
 msgid "Fixed"
 msgstr "已修复"
 
-#: com/propertyvista/domain/financial/offering/DepositType.java:1
-msgid "Fixed"
-msgstr "已修复"
-
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Flat"
 msgstr "公寓"
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:1
+msgid "Flat Amount"
+msgstr ""
 
 #: com/propertvista/generator/BuildingsGenerator.java:1
 msgid "Flat Roof"
@@ -2984,7 +3158,7 @@ msgstr "平房"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitInfo.java:2
 msgid "Floor"
-msgstr "地板"
+msgstr "楼层"
 
 #: com/propertyvista/domain/property/asset/Floorplan.java:2
 msgid "Floor Count"
@@ -3027,11 +3201,6 @@ msgstr "楼层平面图便利设施"
 msgid "Floorplan Details"
 msgstr "楼层平面图详细信息"
 
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
-msgid "Floorplan Marketing Name"
-msgstr "楼层平面图营销名称"
-
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 #: com/propertyvista/portal/rpc/portal/dto/TenantGeneralInfoDTO.java:2
 msgid "Floorplan Name"
 msgstr "楼层平面图名称"
@@ -3078,10 +3247,6 @@ msgstr "基础墙"
 msgid "Four"
 msgstr "四"
 
-#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:1
-msgid "Free"
-msgstr "免费"
-
 #: com/propertyvista/domain/financial/offering/Concession.java:1
 msgctxt "Concession Type"
 msgid "Free"
@@ -3109,7 +3274,7 @@ msgstr "法语（加拿大）"
 msgid "Friend"
 msgstr "朋友"
 
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
+#: com/propertyvista/domain/financial/billing/BillEntry.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 msgid "From Date"
 msgstr "起始日期"
@@ -3165,7 +3330,7 @@ msgstr "车库"
 #: com/propertyvista/domain/property/asset/Parking.java:1
 msgctxt "Parking Type"
 msgid "Garage Lot"
-msgstr "车库"
+msgstr "停车场"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -3219,14 +3384,6 @@ msgstr "地理点"
 msgid "Geolocation"
 msgstr "地理位置"
 
-#: com/propertyvista/domain/financial/GlCodeCategory.java:2
-msgid "Gl Category Description"
-msgstr ""
-
-#: com/propertyvista/domain/financial/GlCodeCategory.java:2
-msgid "Gl Category Id"
-msgstr "GI类目ID"
-
 #: com/propertyvista/domain/financial/GlCode.java:0
 #: com/propertyvista/domain/financial/offering/ProductItemType.java:2
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustmentReason.java:2
@@ -3242,13 +3399,9 @@ msgstr "GI代码类目"
 msgid "Gl Codes"
 msgstr ""
 
-#: com/propertyvista/domain/financial/GlCode.java:2
-msgid "Gl Id"
-msgstr "GI ID"
-
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
-msgid "GlCode"
-msgstr "GI代码"
+msgid "GlCode Category"
+msgstr ""
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "GlCodes"
@@ -3262,11 +3415,19 @@ msgstr "林间空地"
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Glen"
+msgstr "狭窄谷地"
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Grace Period"
 msgstr ""
 
 #: com/pyx4j/essentials/rpc/admin/SystemMaintenanceState.java:2
 msgid "Grace Period (min)"
-msgstr "宽限期 （分钟）"
+msgstr "宽限期（分钟）"
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Grace Period 2"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:1
 msgid "Graduate"
@@ -3282,7 +3443,7 @@ msgstr "祖母"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Granite"
-msgstr "大理石"
+msgstr "花岗岩"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -3314,6 +3475,11 @@ msgstr "担保"
 #: com/propertyvista/dto/GuarantorDTO.java:0
 msgid "Guarantor"
 msgstr "担保人"
+
+#: com/propertyvista/dto/ApplicationUserDTO.java:1
+msgctxt "Application User"
+msgid "Guarantor"
+msgstr ""
 
 #: com/propertyvista/domain/policy/policies/LeaseTermsPolicy.java:2
 msgid "Guarantor Summary Terms"
@@ -3410,12 +3576,12 @@ msgstr "公路"
 
 #: com/propertvista/generator/BuildingsGenerator.java:1
 msgid "Hip Roof"
-msgstr "四坡屋顶f"
+msgstr "四坡屋顶"
 
 #: com/propertyvista/domain/contact/Email.java:1
 #: com/propertyvista/domain/contact/Phone.java:1
 msgid "Home"
-msgstr "首页"
+msgstr "住家"
 
 #: com/propertyvista/domain/person/Person.java:2
 msgid "Home Phone"
@@ -3441,7 +3607,7 @@ msgstr "您是怎么听说我们的"
 
 #: com/propertyvista/domain/site/HtmlContent.java:2
 msgid "Html"
-msgstr "Html"
+msgstr ""
 
 #: com/propertyvista/domain/site/HtmlContent.java:0
 msgid "Html Content"
@@ -3469,10 +3635,8 @@ msgid ""
 "what Starlight has to offer I can only be thankful that I found this great "
 "place to call home."
 msgstr ""
-"我刚在我们楼与你们的管理员接触过。我是三周前刚搬入的，立刻受到了楼代表 Manolo 的欢迎。我是一个很挑剔的人，但对我的任何问题和关注点， "
-"Manolo总是马上给予帮助。我和贝尔一个问题， "
-"Manolo与电缆技术员联系，确保我的公寓一切正常并让我满意。你们有Manolo这样的好员工。如果我第一个月的经历展示了 Starlight "
-"的服务，我非常感谢找到了一个宾至如归的好地方。"
+""
+"我很荣幸能在所住大楼里跟大楼负责人相处。我在三个星期前刚搬进大楼时就很热烈地受到大楼代表曼诺洛的接待。我是个极挑剔的人，但是不论我将任何难题丢给曼诺洛，他都能够立刻协助处理。当我跟Bell电话公司有纠纷时，他甚至亲自跟电览技术工作人员一同处理以确保我的公寓能以我所喜爱的方式安装。在曼诺洛先生身上我能看到贵公司的出色职员。如果我在这大楼里头一个月的经历能代表贵公司所提供的服务的话，那么我要向你们表示十分感激能在这里找到了我的家。"
 
 #. This is demo content
 #: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:278
@@ -3485,12 +3649,17 @@ msgid ""
 "Thank you again."
 msgstr ""
 ""
-"我想让您知道您的管理员Sean工作非常出色。他最近帮我修好了水龙头，而且非常专业和礼貌。他不仅立刻来修复了问题，还告诉我如何以后避免问题的发生。这栋楼是我的家，现在接管的Starlight很快有了成效。"
-" 再次感谢。"
+"我想要让你们知道贵公司的大楼主管尚恩先生的杰出服务。日前尚恩先生帮我修理水龙头时既专业又有礼，他不仅及时赶来为我解决问题，还提供我建议如何避免日后问题再发生。这大楼已是我的家，而贵公司的接管有立竿见影之效。"
+" \n"
+"在此再次感谢。"
 
 #: com/propertyvista/portal/domain/ptapp/IAgree.java:0
 msgid "IAgree"
 msgstr "我同意"
+
+#: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:2
+msgid "ID Name"
+msgstr ""
 
 #: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:2
 msgid "ID Type"
@@ -3498,7 +3667,7 @@ msgstr "ID类型"
 
 #: com/propertyvista/domain/policy/policies/ApplicationDocumentationPolicy.java:2
 msgid "IDs/Documentations that accepted as valid IDs"
-msgstr "接受的作为有效ID的ID/文件"
+msgstr "接受的作为有效的ID/文件"
 
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 msgid "IP Address"
@@ -3519,7 +3688,7 @@ msgstr "身份证件"
 
 #: com/propertyvista/admin/rpc/PmcImportDTO.java:2
 msgid "Ignore Missing Media"
-msgstr "忽略缺失的媒体"
+msgstr "忽略缺少的媒体"
 
 #: com/propertyvista/domain/site/PageContent.java:2
 msgid "Image"
@@ -3533,9 +3702,18 @@ msgstr "图像资源"
 msgid "Images"
 msgstr "图像"
 
+#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:1
+#: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:1
+msgid "Immediate"
+msgstr ""
+
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Immediate Adjustments"
 msgstr "直接调整"
+
+#: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:1
+msgid "Immigration"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "Import"
@@ -3678,6 +3856,14 @@ msgstr "内部"
 msgid "Internet"
 msgstr "互联网"
 
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitTurnoversPerIntervalDTO.java:2
+msgid "Interval Size"
+msgstr ""
+
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitTurnoversPerIntervalDTO.java:2
+msgid "Interval Value"
+msgstr ""
+
 #: com/propertyvista/portal/server/ptapp/services/ActivationServiceImpl.java:95
 msgid "Invalid Email"
 msgstr "无效的电子邮件"
@@ -3718,7 +3904,7 @@ msgstr "无效的用户账户。请联系技术支持"
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:199
 #, java-format
 msgid "Invalid YouTube Video ID ''{0}''"
-msgstr "无效的 YouTube 视频 ID ''{0}''"
+msgstr "无效的YouTube视频ID''{0}''"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
@@ -3728,6 +3914,10 @@ msgstr "邀请"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Irregular"
 msgstr "不符合规格"
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/CancelEndLeaseConstraintsDTO.java:2
+msgid "Is Cancellable"
+msgstr ""
 
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:2
 msgid "Is Favorite"
@@ -3741,17 +3931,9 @@ msgstr "针对搬出"
 msgid "Is Fully Owned"
 msgstr "全部所有"
 
-#: com/propertyvista/domain/financial/offering/Feature.java:2
-msgid "Is Mandatory"
-msgstr "是强制的"
-
 #: com/propertyvista/domain/property/asset/LockerArea.java:2
 msgid "Is Private"
 msgstr "是私人的"
-
-#: com/propertyvista/domain/financial/offering/Feature.java:2
-msgid "Is Recurring"
-msgstr "重复出现"
 
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:2
 msgid "Is Shared"
@@ -3787,7 +3969,11 @@ msgstr "项目"
 #. This is demo content
 #: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:278
 msgid "Jane L."
-msgstr "Jane L."
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/BackgroundCheckPolicy.java:2
+msgid "Judgment"
+msgstr ""
 
 #. Weight unit
 #: com/propertyvista/domain/tenant/lease/extradata/Pet.java:1
@@ -3805,7 +3991,7 @@ msgstr "L形"
 #. Weight unit
 #: com/propertyvista/domain/tenant/lease/extradata/Pet.java:1
 msgid "LB"
-msgstr ""
+msgstr "磅"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 msgid "LMR/Unit Rent, in $"
@@ -3887,7 +4073,6 @@ msgctxt "Concession Term"
 msgid "Last Month"
 msgstr "上个月"
 
-#: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:1
 #: com/propertyvista/portal/domain/dto/BillListDTO.java:1
 msgid "Last Month"
 msgstr "上个月"
@@ -3908,11 +4093,25 @@ msgid "Last Service Date"
 msgstr "上次服务日期"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
+#: com/propertyvista/domain/note/Note.java:2
 #: com/propertyvista/domain/tenant/lease/BillableItem.java:2
 #: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:2
 msgid "Last Updated"
 msgstr "上次更新"
+
+#: com/propertyvista/domain/policy/dto/LateFeePolicyDTO.java:0
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:0
+msgid "Late Fee Policy"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Late Fee Statement"
+msgstr ""
+
+#: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+msgid "Late Fees"
+msgstr ""
 
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Late Payment Charges"
@@ -3951,11 +4150,11 @@ msgid "Leads"
 msgstr "线索"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+#: com/propertyvista/domain/financial/BillingAccount.java:2
 #: com/propertyvista/domain/property/asset/unit/occupancy/AptUnitOccupancySegment.java:2
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 #: com/propertyvista/domain/tenant/lease/Lease.java:0
-#: com/propertyvista/domain/tenant/lease/LeaseFinancial.java:2
 #: com/propertyvista/domain/tenant/ptapp/Application.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 #: com/propertyvista/dto/LeaseDTO.java:0
@@ -3983,23 +4182,13 @@ msgid "Lease Adjustment Reason"
 msgstr "租约调整原因"
 
 #: com/propertyvista/domain/financial/billing/Bill.java:2
-#: com/propertyvista/domain/tenant/lease/LeaseFinancial.java:2
+#: com/propertyvista/domain/tenant/lease/LeaseProducts.java:2
 msgid "Lease Adjustments"
 msgstr "租约调整"
-
-#: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:1
-msgid "Lease End"
-msgstr ""
 
 #: com/propertyvista/interfaces/importer/RentRollCSV.java:2
 msgid "Lease Expiration"
 msgstr "租约到期"
-
-#: com/propertyvista/domain/financial/BillingAccount.java:2
-#: com/propertyvista/domain/tenant/lease/Lease.java:2
-#: com/propertyvista/domain/tenant/lease/LeaseFinancial.java:0
-msgid "Lease Financial"
-msgstr "租约财务情况"
 
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
@@ -4012,7 +4201,12 @@ msgstr "租约ID"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Lease Length"
-msgstr "租约长度"
+msgstr "租约期长度"
+
+#: com/propertyvista/domain/tenant/lease/Lease.java:2
+#: com/propertyvista/domain/tenant/lease/LeaseProducts.java:0
+msgid "Lease Products"
+msgstr ""
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/portal/rpc/ptapp/dto/SummaryDTO.java:2
@@ -4058,6 +4252,11 @@ msgstr "法律状态"
 msgid "Legal Terms Descriptor"
 msgstr "法律术语描述符"
 
+#: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgctxt "Lease Completion Type"
+msgid "Legal Vacate"
+msgstr ""
+
 #: com/propertyvista/domain/property/asset/LockerArea.java:2
 #: com/propertyvista/domain/property/asset/Parking.java:2
 msgid "Levels"
@@ -4069,6 +4268,7 @@ msgstr "等级"
 msgid "Library"
 msgstr "图书馆"
 
+#: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:1
 #: com/propertyvista/domain/property/vendor/License.java:0
 #: com/propertyvista/domain/property/vendor/LicensedWarrantedMaintained.java:2
 msgid "License"
@@ -4208,8 +4408,9 @@ msgstr "底层楼房"
 #: com/propertyvista/domain/PriorAddress.java:2
 #: com/propertyvista/domain/communication/Message.java:2
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitTurnoversPerIntervalDTO.java:2
 #: com/propertyvista/domain/financial/billing/Bill.java:2
+#: com/propertyvista/domain/financial/billing/BillEntry.java:2
 #: com/propertyvista/domain/financial/billing/BillingRun.java:2
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 #: com/propertyvista/domain/person/Person.java:2
@@ -4249,13 +4450,13 @@ msgstr "MM/dd/yyyy hh:mm a"
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 #, java-format
 msgid "MMM dd, yyyy"
-msgstr "月/日/年"
+msgstr "MMM dd, yyyy"
 
 #: com/propertyvista/domain/person/Name.java:2
 msgid "Maiden Name"
 msgstr "婚前姓"
 
-#: com/propertyvista/server/common/ptapp/ApplicationManager.java:258
+#: com/propertyvista/server/common/ptapp/ApplicationManager.java:296
 #: com/propertyvista/server/common/security/VistaAuthenticationServicesImpl.java:267
 msgid "Mail Service Is Temporary Unavailable. Please Try Again Later"
 msgstr "邮件服务暂时不可用。请稍后重试"
@@ -4309,9 +4510,10 @@ msgstr "维修请求"
 #: com/propertyvista/domain/property/asset/Equipment.java:2
 #: com/propertyvista/domain/tenant/lease/extradata/Vehicle.java:2
 msgid "Make"
-msgstr "整理"
+msgstr "厂牌"
 
 #: com/propertyvista/domain/property/asset/unit/occupancy/opconstraints/MakeVacantConstraintsDTO.java:0
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/MakeVacantConstraintsDTO.java:0
 msgid "Make Vacant Constraints"
 msgstr ""
 
@@ -4322,7 +4524,7 @@ msgstr "男"
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Mall"
-msgstr "邮件"
+msgstr "购物商场"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Manage Dashboards"
@@ -4351,6 +4553,10 @@ msgstr "经理名字"
 #: com/propertyvista/domain/PriorAddress.java:2
 msgid "Manager Phone"
 msgstr "经理电话"
+
+#: com/propertyvista/domain/financial/offering/Feature.java:2
+msgid "Mandatory"
+msgstr ""
 
 #: com/propertvista/generator/BuildingsGenerator.java:1
 msgid "Mansard Roof"
@@ -4425,6 +4631,10 @@ msgstr "最大卫生间数"
 msgid "Max Beds"
 msgstr "最大床位数"
 
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Max Days"
+msgstr ""
+
 #: com/propertyvista/domain/policy/policies/domain/PetConstraints.java:2
 msgid "Max Number"
 msgstr "最大数量"
@@ -4451,7 +4661,16 @@ msgstr "最高价格"
 msgid "Max Total"
 msgstr "最高总和"
 
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Max Total Fee"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Max Total Fee Type"
+msgstr ""
+
 #: com/propertyvista/domain/property/asset/unit/occupancy/opconstraints/MakeVacantConstraintsDTO.java:2
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/MakeVacantConstraintsDTO.java:2
 msgid "Max Vacant From"
 msgstr ""
 
@@ -4514,7 +4733,7 @@ msgstr "媒体上传"
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:148
 #, java-format
 msgid "Media file not found ''{0}''"
-msgstr "媒体文件未找到 ''{0}''"
+msgstr "媒体文件未找到''{0}''"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Melamine"
@@ -4583,6 +4802,10 @@ msgstr "军事"
 msgid "Min"
 msgstr "最小"
 
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/ScopeAvailableConstraintsDTO.java:2
+msgid "Min Avaiable From"
+msgstr ""
+
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "Min Baths"
 msgstr "最小卫生间数"
@@ -4591,12 +4814,45 @@ msgstr "最小卫生间数"
 msgid "Min Beds"
 msgstr "最小床位数"
 
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/CancelReservationConstraintsDTO.java:2
+msgid "Min Cancel From"
+msgstr ""
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/EndLeaseConstraintsDTO.java:2
+msgid "Min Lease End"
+msgstr ""
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/ApproveLeaseConstraintsDTO.java:2
+msgid "Min Lease From"
+msgstr ""
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/ScopeOffMarketConstraintsDTO.java:2
+msgid "Min Off Market From"
+msgstr ""
+
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "Min Price"
 msgstr "最低价格"
 
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/ScopeRenovationConstraintsDTO.java:2
+msgid "Min Renovation End"
+msgstr ""
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/ScopeRenovationConstraintsDTO.java:2
+msgid "Min Renovation Start"
+msgstr ""
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/ReserveConstraintsDTO.java:2
+msgid "Min Reserve From"
+msgstr ""
+
 #: com/propertyvista/domain/property/asset/unit/occupancy/opconstraints/MakeVacantConstraintsDTO.java:2
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/MakeVacantConstraintsDTO.java:2
 msgid "Min Vacant From"
+msgstr ""
+
+#: com/propertyvista/domain/policy/policies/LateFeePolicy.java:2
+msgid "Minimum Amoun Due"
 msgstr ""
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
@@ -4637,17 +4893,20 @@ msgstr "模拟欠款状态"
 msgid "Mockup Arrears States"
 msgstr "模拟欠款状态"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/LeaseTermsPolicyPreloader.java:64
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/LeaseTermsPolicyPreloader.java:85
+msgid "Mockup Guarantor Terms"
+msgstr ""
+
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/LeaseTermsPolicyPreloader.java:89
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:348
 msgid "Mockup One Time Payment Terms"
 msgstr "模拟一次性付款方式"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/LeaseTermsPolicyPreloader.java:67
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/LeaseTermsPolicyPreloader.java:92
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:351
 msgid "Mockup Recurrent Time Payment Terms"
 msgstr "模拟周期时间付款方式"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/LeaseTermsPolicyPreloader.java:61
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:345
 msgid "Mockup Summary Terms"
 msgstr "模拟总结条件"
@@ -4656,6 +4915,10 @@ msgstr "模拟总结条件"
 #: com/propertyvista/domain/property/asset/unit/AptUnit.java:2
 msgid "Mockup Tenant"
 msgstr "模拟租户"
+
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/LeaseTermsPolicyPreloader.java:82
+msgid "Mockup Tenant Terms"
+msgstr ""
 
 #: com/propertyvista/domain/property/asset/Equipment.java:2
 #: com/propertyvista/domain/property/asset/unit/occupancy/AptUnitOccupancySegment.java:1
@@ -4718,7 +4981,7 @@ msgstr "更多"
 #: com/propertyvista/interfaces/importer/BuildingUpdater.java:294
 #, java-format
 msgid "More then one AptUnit ''{0}'' in building ''{1}''"
-msgstr "楼 ''{1}'' 内超过一个公寓单元 ''{0}''"
+msgstr "楼''{1}''内超过一个公寓单元''{0}''"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "Morning"
@@ -4729,12 +4992,12 @@ msgid "Mother"
 msgstr "母亲"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupTenant.java:2
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 #: com/propertyvista/interfaces/importer/RentRollCSV.java:2
 msgid "Move In"
 msgstr "搬入"
 
 #: com/propertyvista/domain/PriorAddress.java:2
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Move In Date"
 msgstr "搬入日期"
 
@@ -4745,10 +5008,6 @@ msgstr "搬出"
 
 #: com/propertyvista/domain/PriorAddress.java:2
 msgid "Move Out Date"
-msgstr "搬出日期"
-
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
-msgid "Move Out Day"
 msgstr "搬出日期"
 
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
@@ -4795,7 +5054,6 @@ msgstr "市"
 #: com/propertyvista/domain/marketing/yield/Amenity.java:2
 #: com/propertyvista/domain/person/Name.java:0
 #: com/propertyvista/domain/person/Person.java:2
-#: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:2
 #: com/propertyvista/domain/policy/policies/domain/LegalTermsDescriptor.java:2
 #: com/propertyvista/domain/property/PropertyContact.java:2
 #: com/propertyvista/domain/property/PropertyManager.java:2
@@ -4883,6 +5141,10 @@ msgstr "网络模拟"
 msgid "Never"
 msgstr "从不"
 
+#: com/propertyvista/domain/financial/billing/Payment.java:1
+msgid "New"
+msgstr ""
+
 #: com/propertyvista/admin/rpc/PmcImportDTO.java:1
 msgid "New Data"
 msgstr "新数据"
@@ -4891,6 +5153,11 @@ msgstr "新数据"
 #: com/pyx4j/security/rpc/PasswordChangeRequest.java:2
 msgid "New Password"
 msgstr "新密码"
+
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:103
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:83
+msgid "New Password Retrieval"
+msgstr ""
 
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "New Payment Method"
@@ -4980,14 +5247,33 @@ msgstr "不感兴趣"
 msgid "Not resident of Canada"
 msgstr "非加拿大居民"
 
+#: com/propertyvista/domain/note/Note.java:0
+#: com/propertyvista/domain/note/Note.java:2
+msgid "Note"
+msgstr "说明"
+
+#: com/propertyvista/domain/note/NoteAttachment.java:0
+msgid "Note Attachment"
+msgstr ""
+
 #: com/propertyvista/domain/Notes.java:0
 #: com/propertyvista/domain/Notes.java:2
+#: com/propertyvista/domain/note/NotesAndAttachments.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:25
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:32
 #: com/propertyvista/pmsite/server/panels/AptListPanel.html:23
 msgid "Notes"
 msgstr "说明"
+
+#: com/propertyvista/domain/note/NotesAndAttachments.java:0
+#: com/propertyvista/domain/note/NotesAndAttachmentsNode.java:2
+msgid "Notes And Attachments"
+msgstr ""
+
+#: com/propertyvista/domain/note/NotesAndAttachmentsNode.java:0
+msgid "Notes And Attachments Node"
+msgstr ""
 
 #: com/propertyvista/domain/dashboard/gadgets/type/UnitAvailability.java:1
 msgid "Notice"
@@ -5015,7 +5301,6 @@ msgid "Notifications"
 msgstr "通知"
 
 #: com/propertyvista/domain/contact/Phone.java:2
-#: com/propertyvista/domain/property/PropertyContact.java:2
 #: com/propertyvista/domain/property/PropertyPhone.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnitInfo.java:2
 #: com/propertyvista/domain/property/vendor/License.java:2
@@ -5034,14 +5319,9 @@ msgstr "员工数量"
 msgid "Number Of Guarantors"
 msgstr "担保人数量"
 
-#: com/propertyvista/dto/AptUnitDTO.java:2
 #: com/propertyvista/dto/MasterApplicationDTO.java:2
 msgid "Number Of Occupants"
 msgstr "居住者数量"
-
-#: com/propertyvista/domain/tenant/lease/Lease.java:2
-msgid "Number Of Periods"
-msgstr "期数"
 
 #: com/propertyvista/domain/policy/policies/ApplicationDocumentationPolicy.java:2
 msgid "Number Of Required IDs"
@@ -5055,7 +5335,7 @@ msgstr "单位数量"
 msgid "Number Of Units By Marketing Name"
 msgstr "按营销名称分的单位数量"
 
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitTurnoversPerIntervalDTO.java:2
 msgid "Number Of Units Turned Over"
 msgstr "周转的单位数量"
 
@@ -5063,7 +5343,7 @@ msgstr "周转的单位数量"
 msgid ""
 "Number of Occupants (N) per Bedroom in formula: Bedrooms x N = "
 "OccupantsPerUnit"
-msgstr "按以下公司计算的每个卧室的居住者数量：卧室 X N = 每个单位的居住者数量"
+msgstr "按以下公式计算的每个卧室的居住者数量：卧室 X N = 每个单位的居住者数量"
 
 #: com/propertyvista/domain/site/SitePalette.java:2
 msgid "Object 1"
@@ -5138,6 +5418,7 @@ msgid "One Month Deposit"
 msgstr "一个月定金"
 
 #: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:1
+#: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:1
 msgid "One Time"
 msgstr "一次性"
 
@@ -5169,6 +5450,10 @@ msgstr "订单列"
 #: com/propertyvista/domain/financial/billing/BillEntry.java:2
 msgid "Order Id"
 msgstr "订单ID"
+
+#: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:2
+msgid "Order In Building"
+msgstr ""
 
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 #: com/propertyvista/domain/financial/offering/Product.java:2
@@ -5218,8 +5503,13 @@ msgid "Organization Contact"
 msgstr "组织联系人"
 
 #: com/propertyvista/domain/company/OrganizationContacts.java:0
+#: com/propertyvista/domain/property/asset/building/BuildingContactInfo.java:2
 msgid "Organization Contacts"
 msgstr "组织联系人"
+
+#: com/propertyvista/domain/financial/billing/BillEntryAdjustment.java:2
+msgid "Original Bill Entry"
+msgstr ""
 
 #: com/propertyvista/domain/property/asset/Parking.java:1
 msgctxt "Parking Type"
@@ -5234,6 +5524,7 @@ msgstr "其他"
 #: com/propertyvista/domain/contact/Email.java:1
 #: com/propertyvista/domain/contact/Phone.java:1
 #: com/propertyvista/domain/financial/billing/Payment.java:1
+#: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:1
 #: com/propertyvista/domain/property/PropertyPhone.java:1
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -5274,19 +5565,24 @@ msgstr "其他价格"
 #. This is demo content
 #: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:293
 msgid "Ottawa, Toronto defy national sales trend ... for now"
-msgstr "渥太华、多伦多逆全国销售趋势"
+msgstr "渥太华、多伦多抗逆全国销售趋势"
 
 #: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:202
 msgid "Our Vision"
 msgstr "我们的愿景"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:2
 msgid "Over 90 Days"
 msgstr "超过90天"
 
 #: com/propertyvista/dto/MasterApplicationStatusDTO.java:2
 msgid "Overall Application Progress (%)"
 msgstr "总体申请进度（%）"
+
+#: com/propertyvista/crm/server/services/policies/GenericPolicyCrudService.java:79
+msgid "Overriding existing policy is forbidden!"
+msgstr ""
 
 #: com/propertyvista/domain/PriorAddress.java:1
 msgid "Owned"
@@ -5441,14 +5737,15 @@ msgstr "部件"
 msgid "Parts And Labor"
 msgstr "部件及人工"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/ApplicationDocumentationPolicyPreloader.java:37
+#: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:1
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/ApplicationDocumentationPolicyPreloader.java:38
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:113
 msgid "Passport"
 msgstr "护照"
 
 #: com/propertyvista/admin/rpc/PmcDTO.java:2
 #: com/propertyvista/crm/rpc/AccountCreationRequest.java:2
-#: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:2
+#: com/propertyvista/domain/security/UserCredentialEditDTO.java:2
 #: com/propertyvista/domain/settings/YardiConnection.java:2
 #: com/propertyvista/pmsite/server/panels/SignInPanel.html:9
 #: com/propertyvista/portal/rpc/corp/PmcAccountCreationRequest.java:2
@@ -5576,11 +5873,7 @@ msgstr "养老金"
 msgid "Percentage"
 msgstr "百分比"
 
-#: com/propertyvista/domain/financial/offering/DepositType.java:1
-msgid "Percentage From Price"
-msgstr "价格的百分比"
-
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitTurnoversPerIntervalDTO.java:2
 msgid "Percentage Of Units Turned Over"
 msgstr "周转的单位比例"
 
@@ -5588,6 +5881,10 @@ msgstr "周转的单位比例"
 msgctxt "Concession Type"
 msgid "Percentage Off"
 msgstr "百分比折扣"
+
+#: com/propertyvista/domain/financial/billing/BillEntry.java:2
+msgid "Period"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
 msgctxt "Lease Term"
@@ -5610,6 +5907,7 @@ msgstr "许可"
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 #: com/propertyvista/dto/ApplicationStatusDTO.java:2
+#: com/propertyvista/dto/ApplicationUserDTO.java:2
 #: com/propertyvista/dto/TenantApprovalDTO.java:2
 #: com/propertyvista/dto/TenantFinancialDTO.java:2
 #: com/propertyvista/dto/TenantInfoDTO.java:2
@@ -5662,6 +5960,7 @@ msgstr "宠物"
 #: com/propertyvista/domain/company/CompanyPhone.java:2
 #: com/propertyvista/domain/contact/Phone.java:0
 #: com/propertyvista/domain/payment/PaymentMethod.java:2
+#: com/propertyvista/domain/property/PropertyContact.java:2
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
 #: com/propertyvista/pmsite/server/panels/BuildingInfoPanel.html:19
 #: com/propertyvista/pmsite/server/panels/FloorplanInfoPanel.html:19
@@ -5674,7 +5973,6 @@ msgid "Phone Provider"
 msgstr "电话提供者"
 
 #: com/propertyvista/domain/company/Company.java:2
-#: com/propertyvista/domain/property/asset/building/BuildingContactInfo.java:2
 msgid "Phones"
 msgstr "电话"
 
@@ -5772,7 +6070,7 @@ msgstr "策略节点"
 #: com/propertyvista/domain/property/PropertyPhone.java:1
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "Pool"
-msgstr "池"
+msgstr "游泳池"
 
 #: com/propertyvista/domain/property/PropertyContact.java:1
 msgid "Pool Emergency"
@@ -5846,6 +6144,7 @@ msgid "Preload this PMC : Mockup version  (~5 minutes)"
 msgstr ""
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:2
 msgid "Prepayments"
 msgstr "预付款"
 
@@ -5937,6 +6236,10 @@ msgstr "私家天井"
 msgid "Private Well"
 msgstr "私家井"
 
+#: com/propertyvista/domain/financial/billing/Payment.java:1
+msgid "Processed"
+msgstr ""
+
 #: com/propertyvista/domain/financial/offering/ProductItem.java:2
 msgid "Product"
 msgstr "产品"
@@ -6024,7 +6327,6 @@ msgstr "物业"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsSummary.java:2
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/portal/domain/dto/PropertyDTO.java:2
 msgid "Property Code"
@@ -6036,6 +6338,10 @@ msgstr "物业公司"
 
 #: com/propertyvista/domain/property/PropertyContact.java:0
 msgid "Property Contact"
+msgstr ""
+
+#: com/propertyvista/domain/property/asset/building/BuildingContactInfo.java:2
+msgid "Property Contacts"
 msgstr ""
 
 #: com/propertyvista/portal/domain/dto/PropertyDetailsDTO.java:0
@@ -6085,10 +6391,6 @@ msgstr "物业搜索标准"
 msgid "Property Vista Password Reset"
 msgstr "Property Vista密码重置"
 
-#: com/propertyvista/domain/policy/policies/DepositPolicy.java:2
-msgid "Prorate"
-msgstr ""
-
 #: com/propertyvista/domain/charges/ChargeLine.java:1
 msgid "Prorated"
 msgstr "分摊"
@@ -6097,7 +6399,7 @@ msgstr "分摊"
 msgid "Prorated Charges"
 msgstr "分摊费用"
 
-#: com/propertyvista/domain/tenant/lease/LeaseFinancial.java:2
+#: com/propertyvista/domain/financial/BillingAccount.java:2
 msgid "Proration Method"
 msgstr ""
 
@@ -6119,19 +6421,21 @@ msgid "Province"
 msgstr "省"
 
 #: com/propertyvista/domain/contact/AddressSimple.java:2
+#: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:2
 #: com/propertyvista/domain/ref/City.java:2
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 #: com/propertyvista/domain/tenant/lease/extradata/Vehicle.java:2
 msgid "Province/State"
 msgstr "省/州"
 
+#: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:2
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 msgid "Province/State, In Which The License Has Been Issued"
 msgstr "发布许可的省/州"
 
 #: com/propertyvista/domain/ref/Country.java:2
 msgid "Provinces"
-msgstr "州"
+msgstr "省"
 
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
 msgid "Public"
@@ -6180,7 +6484,7 @@ msgstr "范围组"
 
 #: com/propertyvista/domain/financial/tax/Tax.java:2
 msgid "Rate"
-msgstr "评分"
+msgstr "税率"
 
 #: com/propertyvista/domain/maintenance/SurveyResponse.java:2
 #: com/propertyvista/portal/rpc/portal/dto/SatisfactionSurveyResponceDTO.java:2
@@ -6195,6 +6499,14 @@ msgstr "房地产物业"
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:2
 msgid "Reason"
 msgstr "原因"
+
+#: com/propertyvista/domain/financial/billing/Payment.java:1
+msgid "Received"
+msgstr ""
+
+#: com/propertyvista/domain/financial/billing/Payment.java:2
+msgid "Received Date"
+msgstr ""
 
 #: com/propertyvista/portal/rpc/portal/dto/BillInfoDTO.java:2
 msgid "Received On"
@@ -6218,6 +6530,10 @@ msgstr "娱乐室"
 msgid "Recurrent Payment Terms"
 msgstr "定期付款方式"
 
+#: com/propertyvista/domain/financial/offering/Feature.java:2
+msgid "Recurring"
+msgstr ""
+
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Recurring Feature Charges"
 msgstr "经常性费用"
@@ -6235,7 +6551,6 @@ msgid "Refrigerator"
 msgstr "冰箱"
 
 #: com/propertyvista/domain/dashboard/gadgets/CommonGadgetColumns.java:2
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Region"
 msgstr "区域"
 
@@ -6274,7 +6589,7 @@ msgstr "已拒绝"
 #: com/propertyvista/domain/tenant/PersonGuarantor.java:2
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
 msgid "Relationship"
-msgstr "关心"
+msgstr "关系"
 
 #: com/propertyvista/pmsite/server/panels/SignInPanel.html:15
 msgid "Remember Me"
@@ -6295,6 +6610,10 @@ msgstr "翻修"
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 msgid "Rent Arrears"
 msgstr "租金欠款"
+
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
+msgid "Rent End"
+msgstr ""
 
 #: com/propertyvista/dto/MasterApplicationDTO.java:2
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:53
@@ -6320,8 +6639,8 @@ msgid "Rented"
 msgstr "已租用"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
-msgid "Rented From Date"
-msgstr "租用开始日期"
+msgid "Rented From"
+msgstr ""
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Rented/Unrented/OffMarket"
@@ -6355,7 +6674,7 @@ msgstr "请求约见成功"
 msgid "Request for Guarantor or further information"
 msgstr "请求担保人或更多信息"
 
-#: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:2
+#: com/propertyvista/domain/security/UserCredentialEditDTO.java:2
 #: com/pyx4j/security/rpc/PasswordChangeRequest.java:2
 msgid "Require to change password on next sign in"
 msgstr "要求在下次登录时修改密码"
@@ -6388,6 +6707,10 @@ msgstr "预定"
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Reserve"
 msgstr "预定"
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/ReserveConstraintsDTO.java:0
+msgid "Reserve Constraints"
+msgstr ""
 
 #: com/propertyvista/domain/property/asset/unit/occupancy/AptUnitOccupancySegment.java:1
 msgid "Reserved"
@@ -6463,17 +6786,25 @@ msgstr "结果"
 msgid "Retired"
 msgstr "退休"
 
-#: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:1
-msgid "Return"
-msgstr ""
-
 #: com/pyx4j/entity/rpc/GeoCriteria.java:2
 msgid "Return Any Location"
 msgstr "返回任何地点"
 
+#: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:1
+msgid "Return At Lease End"
+msgstr ""
+
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Revenue Lost ($)"
 msgstr "收入损失($)"
+
+#: com/propertyvista/domain/financial/billing/Payment.java:1
+msgid "Reverted"
+msgstr ""
+
+#: com/propertyvista/domain/financial/billing/BillEntryAdjustment.java:2
+msgid "Revised Bill Entry"
+msgstr ""
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -6545,7 +6876,7 @@ msgstr "俄语"
 
 #: com/propertyvista/domain/tenant/PersonScreening.java:2
 msgid "SIN"
-msgstr ""
+msgstr "社会保险号码"
 
 #: com/propertyvista/domain/maintenance/IssuePriority.java:1
 msgid "STANDARD"
@@ -6598,6 +6929,18 @@ msgstr "学校"
 msgid "Scope"
 msgstr "范围"
 
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/ScopeAvailableConstraintsDTO.java:0
+msgid "Scope Available Constraints"
+msgstr ""
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/ScopeOffMarketConstraintsDTO.java:0
+msgid "Scope Off Market Constraints"
+msgstr ""
+
+#: com/propertyvista/server/common/util/occupancy/mk2/opconstraints/ScopeRenovationConstraintsDTO.java:0
+msgid "Scope Renovation Constraints"
+msgstr ""
+
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Scoping"
 msgstr "调查"
@@ -6645,7 +6988,7 @@ msgstr "第二选择"
 msgid "Secondary Caption"
 msgstr "副标题"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/DepositPolicyPreloader.java:48
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/DepositPolicyPreloader.java:46
 msgid "Security Depisit"
 msgstr ""
 
@@ -6653,17 +6996,17 @@ msgstr ""
 msgid "Seen"
 msgstr "已看到"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:71
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:70
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:83
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:89
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:52
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:86
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:51
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:64
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:70
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:67
 msgid "Select City"
 msgstr "选择城市"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:69
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:50
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:68
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:49
 msgid "Select Province"
 msgstr "选择省"
 
@@ -6721,16 +7064,11 @@ msgstr "服务器名称"
 msgid "Service"
 msgstr "服务"
 
-#: com/propertyvista/domain/tenant/lease/Lease.java:2
-#: com/propertyvista/domain/tenant/lease/ServiceAgreement.java:0
-msgid "Service Agreement"
-msgstr "服务协议"
-
 #: com/propertyvista/domain/financial/billing/Bill.java:2
 msgid "Service Charge"
 msgstr "服务费用"
 
-#: com/propertyvista/domain/tenant/lease/ServiceAgreement.java:2
+#: com/propertyvista/domain/tenant/lease/LeaseProducts.java:2
 msgid "Service Item"
 msgstr "服务项目"
 
@@ -6741,6 +7079,10 @@ msgstr "服务项目类型"
 #: com/propertyvista/domain/financial/offering/ProductItemType.java:2
 msgid "Service Type"
 msgstr "服务类型"
+
+#: com/propertyvista/domain/financial/offering/Service.java:0
+msgid "Service V"
+msgstr ""
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/ProductCatalog.java:2
@@ -6850,6 +7192,11 @@ msgstr "皮肤2"
 msgid "Skin 3"
 msgstr "皮肤3"
 
+#: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgctxt "Lease Completion Type"
+msgid "Skip"
+msgstr ""
+
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Skylight"
 msgstr "天窗"
@@ -6926,7 +7273,7 @@ msgstr "西南"
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "Spa"
-msgstr ""
+msgstr "水疗浴场"
 
 #: com/propertyvista/shared/CompiledLocale.java:1
 msgid "Spanish"
@@ -6936,15 +7283,15 @@ msgstr "西班牙"
 #: com/propertvista/generator/ProductCatalogGenerator.java:249
 #, java-format
 msgid "Special Promotion Applies, ${0} In Promotional Items Or Services"
-msgstr "特别推广适用，推广项目或服务中 ${0}"
+msgstr "特别推广适用，推广项目或服务中${0}"
 
 #. java-format
 #: com/propertvista/generator/ProductCatalogGenerator.java:246
 #, java-format
 msgid "Special Promotion Applies, ${0} Off The Value Of The Service"
-msgstr "特别推广适用，服务价格扣除 ${0}"
+msgstr "特别推广适用，服务价格扣除${0}"
 
-#: com/propertvista/generator/ProductCatalogGenerator.java:252
+#: com/propertvista/generator/ProductCatalogGenerator.java:253
 msgid "Special Promotion Applies, Everything Completely Free"
 msgstr "特别推广适用，所有完全免费"
 
@@ -6952,7 +7299,7 @@ msgstr "特别推广适用，所有完全免费"
 #: com/propertvista/generator/ProductCatalogGenerator.java:243
 #, java-format
 msgid "Special Promotion Applies, {0}% Off The Value Of The Service"
-msgstr "特别推广适用，服务价格扣除 {0}%"
+msgstr "特别推广适用，服务价格扣除{0}%"
 
 #: com/propertyvista/domain/tenant/PersonRelationship.java:1
 msgid "Spouse"
@@ -6970,12 +7317,12 @@ msgstr "平方英尺"
 
 #: com/propertyvista/domain/property/asset/AreaMeasurementUnit.java:1
 msgid "Sq. Meters"
-msgstr "平方米"
+msgstr "平方公尺"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Square"
-msgstr "平方"
+msgstr "广场"
 
 #: com/propertyvista/crm/rpc/services/billing/StartBuildingBillingDTO.java:0
 msgid "Start Building Billing"
@@ -7008,6 +7355,7 @@ msgstr "静态内容"
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 #: com/propertyvista/domain/tenant/ptapp/Application.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
+#: com/propertyvista/dto/ApplicationStatusDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/MaintananceDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApplicationStatusSummaryDTO.java:2
@@ -7039,6 +7387,10 @@ msgstr "储藏室"
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "Storage Space"
 msgstr "储藏空间"
+
+#: com/propertyvista/domain/policy/policies/BackgroundCheckPolicy.java:2
+msgid "Strategy Number"
+msgstr ""
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -7186,7 +7538,7 @@ msgstr "日光浴室"
 
 #: com/propertyvista/portal/rpc/portal/dto/TenantGeneralInfoDTO.java:2
 msgid "Super Intendant Phone"
-msgstr "超级管理员电话"
+msgstr "管理员电话"
 
 #: com/propertyvista/domain/property/PropertyContact.java:1
 msgid "Superintendent"
@@ -7253,6 +7605,10 @@ msgstr "取得所有权"
 msgid "Target"
 msgstr "目标"
 
+#: com/propertyvista/domain/financial/billing/Payment.java:2
+msgid "Target Date"
+msgstr ""
+
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Tarn"
@@ -7289,6 +7645,7 @@ msgstr "模板"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/communication/ContactInternal.java:2
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:2
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
 #: com/propertyvista/domain/payment/PaymentMethod.java:2
@@ -7329,7 +7686,7 @@ msgstr "租户财务信息"
 
 #: com/propertyvista/portal/rpc/ptapp/dto/SummaryTenantFinancialDTO.java:2
 msgid "Tenant Full Name"
-msgstr "租户全面"
+msgstr "租户全名"
 
 #: com/propertyvista/domain/tenant/Tenant.java:2
 #: com/propertyvista/dto/TenantInLeaseDTO.java:0
@@ -7391,15 +7748,6 @@ msgstr "租期"
 msgid "Term"
 msgstr "租期"
 
-#: com/propertyvista/domain/tenant/lease/BillableItemAdjustment.java:2
-msgid "Term Type"
-msgstr "租期类型"
-
-#: com/propertyvista/domain/tenant/lease/Lease.java:1
-msgctxt "Lease Completion Type"
-msgid "Termination"
-msgstr ""
-
 #: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:251
 msgid "Terms Of Use"
 msgstr "使用条款"
@@ -7439,6 +7787,7 @@ msgid "The number of the IDs that is required for an application"
 msgstr "申请要求的ID数"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:2
 msgid "This month"
 msgstr "本月"
 
@@ -7478,7 +7827,7 @@ msgstr "时间戳"
 msgid "Title"
 msgstr "标题"
 
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
+#: com/propertyvista/domain/financial/billing/BillEntry.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 msgid "To Date"
 msgstr "到目前为止"
@@ -7528,6 +7877,7 @@ msgid "Total Arrears"
 msgstr "总欠款"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
+#: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsState.java:2
 msgid "Total Balance"
 msgstr "总余额"
 
@@ -7585,6 +7935,10 @@ msgstr "运输"
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Trunkway"
 msgstr "围井通道"
+
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitTurnoverStats.java:2
+msgid "Turnovers"
+msgstr ""
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "Two"
@@ -7644,21 +7998,21 @@ msgstr "U形"
 
 #: com/propertyvista/domain/media/Media.java:2
 msgid "URL"
-msgstr ""
+msgstr "统一资源定位符（URL）"
 
 #. java-format
 #: com/propertyvista/server/common/blob/ImageResizer.java:112
 #: com/propertyvista/server/common/blob/ThumbnailService.java:103
 #, java-format
 msgid "Unable To Read The Image ''{0}''"
-msgstr "无法读取图像 ''{0}''"
+msgstr "无法读取图像''{0}''"
 
 #. java-format
 #: com/propertyvista/server/common/blob/ImageResizer.java:121
 #: com/propertyvista/server/common/blob/ThumbnailService.java:111
 #, java-format
 msgid "Unable To Resample The Image ''{0}''"
-msgstr "无法重新采样图像 ''{0}''"
+msgstr "无法重新采样图像''{0}''"
 
 #: com/propertyvista/domain/tenant/PersonRelationship.java:1
 msgid "Uncle"
@@ -7679,6 +8033,7 @@ msgstr "失业"
 #: com/propertyvista/domain/property/asset/unit/occupancy/AptUnitOccupancySegment.java:2
 #: com/propertyvista/domain/tenant/lead/Showing.java:2
 #: com/propertyvista/interfaces/importer/RentRollCSV.java:2
+#: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Unit"
 msgstr "单位"
 
@@ -7702,10 +8057,6 @@ msgstr "单位项目"
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Unit Items"
 msgstr "单位项目"
-
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
-msgid "Unit Name"
-msgstr "单位名称"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupTenant.java:2
 msgid "Unit Number"
@@ -7738,6 +8089,15 @@ msgstr "单位：平方英尺"
 msgid "Unit Trusts"
 msgstr "单位信托公司"
 
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitTurnoverStats.java:0
+#: com/propertyvista/domain/property/asset/building/Building.java:2
+msgid "Unit Turnover Stats"
+msgstr ""
+
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitTurnoversPerIntervalDTO.java:0
+msgid "Unit Turnovers Per Interval"
+msgstr ""
+
 #: com/propertyvista/interfaces/importer/RentRollCSV.java:2
 msgid "Unit Type"
 msgstr "单位类型"
@@ -7745,10 +8105,6 @@ msgstr "单位类型"
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportSummaryDTO.java:0
 msgid "Unit Vacancy Report Summary"
 msgstr "单位空置报告胡总"
-
-#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportTurnoverAnalysisDTO.java:0
-msgid "Unit Vacancy Report Turnover Analysis"
-msgstr "单位空置报告周转分析"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
@@ -7761,13 +8117,13 @@ msgstr "单元"
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:160
 #, java-format
 msgid "Unsupported Media File Type ''{0}'' Extension ''{1}''"
-msgstr "不支持的媒体文件类型 ''{0}'' 和扩展名 ''{1}''"
+msgstr "不支持的媒体文件类型''{0}''和扩展名 ''{1}''"
 
 #. java-format
 #: com/pyx4j/essentials/server/upload/UploadServiceImpl.java:99
 #, java-format
 msgid "Unsupported {0} File Type {1}"
-msgstr "不支持的 {0} 文件类型 {1}"
+msgstr "不支持的{0}文件类型{1}"
 
 #: com/propertyvista/admin/rpc/PmcImportDTO.java:1
 msgid "Update Data"
@@ -7791,14 +8147,24 @@ msgstr "更新上传"
 msgid "Updated"
 msgstr "已更新"
 
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitTurnoverStats.java:2
+msgid "Updated On"
+msgstr ""
+
+#: com/propertyvista/admin/rpc/AdminUserDTO.java:0
 #: com/propertyvista/domain/ISharedUserEntity.java:2
 #: com/propertyvista/domain/IUserEntity.java:2
 #: com/propertyvista/domain/company/Employee.java:2
+#: com/propertyvista/domain/note/Note.java:2
+#: com/propertyvista/domain/security/AdminUser.java:0
 #: com/propertyvista/domain/security/CrmUser.java:0
 #: com/propertyvista/domain/security/CrmUserBuildings.java:2
+#: com/propertyvista/domain/security/OnboardingUser.java:0
 #: com/propertyvista/domain/security/TenantUser.java:0
 #: com/propertyvista/domain/security/TenantUserHolder.java:2
 #: com/propertyvista/domain/tenant/ptapp/Application.java:2
+#: com/propertyvista/dto/ApplicationStatusDTO.java:2
+#: com/propertyvista/dto/ApplicationUserDTO.java:2
 #: com/propertyvista/server/domain/security/AbstractUserCredential.java:2
 msgid "User"
 msgstr "用户"
@@ -7811,6 +8177,10 @@ msgstr "用户访问"
 msgid "User Account"
 msgstr "用户账户"
 
+#: com/propertyvista/domain/security/UserCredentialEditDTO.java:0
+msgid "User Credential Edit"
+msgstr ""
+
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "User Role"
 msgstr "用户角色"
@@ -7818,6 +8188,10 @@ msgstr "用户角色"
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "User Roles"
 msgstr "用户角色"
+
+#: com/propertyvista/dto/ApplicationUserDTO.java:2
+msgid "User Type"
+msgstr ""
 
 #: com/propertyvista/pmsite/server/panels/SignInPanel.html:5
 msgid "Username"
@@ -7843,6 +8217,10 @@ msgstr "空置"
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Vacant Rented"
 msgstr "出租但空置"
+
+#: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
+msgid "Vacant Since"
+msgstr ""
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 #: com/propertyvista/domain/dashboard/gadgets/type/UnitAvailability.java:1
@@ -7902,7 +8280,11 @@ msgstr "可见性"
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 #: com/propertyvista/dto/ImportAdapterType.java:1
 msgid "Vista"
-msgstr "Vista"
+msgstr ""
+
+#: com/propertyvista/domain/security/VistaCrmBehavior.java:1
+msgid "Vista Account Owner"
+msgstr ""
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -7912,7 +8294,7 @@ msgstr "排球场"
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Walk"
-msgstr "走路"
+msgstr "步道"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Walk-up"
@@ -7959,7 +8341,7 @@ msgstr "Wd连接"
 
 #: com/propertyvista/domain/settings/YardiConnection.java:2
 msgid "Web Service URL"
-msgstr "网络服务URL"
+msgstr "网络服务统一资源定位符（URL）"
 
 #: com/propertyvista/domain/settings/YardiConnection.java:2
 msgid "Web Service User"
@@ -8035,12 +8417,6 @@ msgstr "工作"
 msgid "Work Phone"
 msgstr "工作电话"
 
-#: com/propertyvista/domain/policy/framework/EffectivePoliciesDTO.java:2
-#: com/propertyvista/domain/policy/framework/OrganizationPoliciesNode.java:2
-#: com/propertyvista/domain/policy/policies/PetPolicy.java:2
-msgid "X"
-msgstr "X"
-
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Yard"
@@ -8077,7 +8453,7 @@ msgstr "您未被分配申请"
 
 #: com/propertyvista/domain/media/Media.java:1
 msgid "YouTube"
-msgstr "YouTube"
+msgstr ""
 
 #: com/propertyvista/domain/media/Media.java:2
 msgid "YouTube Video ID"
@@ -8087,10 +8463,20 @@ msgstr "YouTube视频 ID"
 msgid "Your Account Is Suspended"
 msgstr "您的账号被暂停"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:182
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:125
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:163
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:198
+msgid "Your Application Confirmation"
+msgstr ""
+
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:236
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:290
 msgid "Your Application To Lease has been approved"
 msgstr "您的租约申请被批准"
+
+#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:276
+msgid "Your Application has been declined"
+msgstr ""
 
 #: com/propertyvista/portal/server/ptapp/services/steps/PaymentServiceImpl.java:102
 msgid "Your Card Has Been Declined"
@@ -8111,28 +8497,20 @@ msgstr "小房间"
 #: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/domain/payment/PaymentType.java:1
 msgid "eCheque"
-msgstr "电子支配"
+msgstr "电子支票"
 
 #. java-format
 #: com/propertyvista/domain/reservation/ReservationSchedule.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 #, java-format
 msgid "h:mm a"
-msgstr "h:mm a"
+msgstr "小时：分钟 a"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:214
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:87
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:195
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:322
 msgid "here be body"
 msgstr "这里是正文"
 
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:122
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:152
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:213
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:73
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:86
-#: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:95
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:181
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:194
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:203
@@ -8144,21 +8522,17 @@ msgstr "这里是主题"
 
 #: com/pyx4j/essentials/rpc/admin/NetworkSimulation.java:2
 msgid "milliseconds"
-msgstr "微妙"
-
-#: com/propertyvista/crm/server/services/policies/GenericPolicyCrudService.java:77
-msgid "not allowed to override existing policy"
-msgstr ""
+msgstr "微秒"
 
 #: com/pyx4j/essentials/server/ReCaptchaAntiBot.java:57
 msgid "reCAPTCHA Connection Failed"
 msgstr "验证码连接失败"
 
-#: com/propertyvista/portal/server/ptapp/services/steps/ApartmentServiceImpl.java:140
+#: com/propertyvista/portal/server/ptapp/services/steps/ApartmentServiceImpl.java:139
 msgid "separate WC"
 msgstr "单独卫生间"
 
-#: com/propertyvista/portal/server/ptapp/services/steps/ApartmentServiceImpl.java:143
+#: com/propertyvista/portal/server/ptapp/services/steps/ApartmentServiceImpl.java:142
 msgid "separate WCs"
 msgstr "单独卫生间"
 
@@ -8166,7 +8540,7 @@ msgstr "单独卫生间"
 #: com/propertyvista/crm/server/services/organization/PortfolioCrudServiceImpl.java:45
 #, java-format
 msgid "the portfolio contains the same building ${1} more than once"
-msgstr "资产组合包括同一栋楼 ${1} 超过一次"
+msgstr "资产组合包括同一栋楼${1}超过一次"
 
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:73
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:77
@@ -8189,16 +8563,14 @@ msgstr "yyyy"
 msgid ""
 "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - "
 "${1}}}"
-msgstr ""
-"{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - "
-"${1}}}"
+msgstr "{0,choice,null#任何|0#少于 ${1}|0<{1,choice,null#超过 ${0}|0<${0} - ${1}}}"
 
 #. Number Of Bedrooms
 #. java-format
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:106
 #, java-format
 msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
-msgstr ""
+msgstr "{0,choice,null#任何|0#少于 {1}|0<{0}{1,choice,null# 以及更多|0<}}"
 
 #. java-format
 #: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:0
@@ -8206,10 +8578,11 @@ msgstr ""
 #: com/propertyvista/domain/tenant/lease/BillableItem.java:0
 #, java-format
 msgid "{0}"
-msgstr "{0}"
+msgstr ""
 
 #. java-format
 #: com/propertyvista/domain/financial/GlCode.java:0
+#: com/propertyvista/domain/financial/GlCodeCategory.java:0
 #, java-format
 msgid "{0} ({1})"
 msgstr ""
@@ -8218,30 +8591,30 @@ msgstr ""
 #: com/propertyvista/domain/tenant/TenantInLease.java:0
 #, java-format
 msgid "{0} - {1}, {2}"
-msgstr "{0} - {1}, {2}"
+msgstr ""
 
 #. java-format
 #: com/propertyvista/pmsite/server/panels/AptListPanel.java:121
 #, java-format
 msgid ""
 "{0} Bed, {1} Bath, {2,choice,null#price not available|!null#from $ {2}}"
-msgstr "{0}  床, {1} 浴室, {2,choice,null#price not available|!null#from $ {2}} "
+msgstr "{0}  床, {1} 浴室, {2,选择,null#价格不详|!null#起自$ {2}} "
 
 #. java-format
-#: com/propertyvista/crm/server/openapi/model/util/Converter.java:219
+#: com/propertyvista/crm/server/openapi/model/util/Converter.java:217
 #, java-format
 msgid "{0} Bedroom"
-msgstr "{0} 卧室"
+msgstr "{0}卧室"
 
 #. java-format
-#: com/pyx4j/entity/rdb/EntityPersistenceServiceRDB.java:712
+#: com/pyx4j/entity/rdb/EntityPersistenceServiceRDB.java:755
 #, java-format
 msgid "{0} Updated Externally"
 msgstr "{0} 已外部更新"
 
 #. java-format
-#: com/pyx4j/entity/server/AbstractCrudServiceDtoImpl.java:56
-#: com/pyx4j/entity/server/AbstractCrudServiceImpl.java:55
+#: com/pyx4j/entity/server/AbstractCrudServiceDtoImpl.java:57
+#: com/pyx4j/entity/server/AbstractCrudServiceImpl.java:56
 #, java-format
 msgid "{0} not found"
 msgstr "{0} 未找到"
@@ -8250,25 +8623,25 @@ msgstr "{0} 未找到"
 #: com/propertyvista/domain/File.java:0
 #, java-format
 msgid "{0} {1,size}"
-msgstr "{0} {1, 锛屽ぇ灏弣}"
+msgstr "{0} {1,大小}"
 
 #. java-format
 #: com/propertyvista/domain/GeoLocation.java:0
 #, java-format
 msgid "{0} {1} & {2} {3}"
-msgstr "{0} {1} & {2} {3}"
+msgstr ""
 
 #. java-format
 #: com/propertyvista/domain/financial/offering/ProductItem.java:0
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustment.java:0
 #, java-format
 msgid "{0}, ${1}"
-msgstr "{0}, ${1}"
+msgstr ""
 
 #. java-format
 #: com/propertyvista/domain/tenant/lease/LeaseAdjustmentReason.java:0
 #, java-format
-msgid "{0}, GlCode: {1}"
+msgid "{0}, GL Code: {1}"
 msgstr ""
 
 #. java-format
@@ -8283,9 +8656,10 @@ msgstr ""
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:0
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:0
 #: com/propertyvista/domain/tenant/PersonGuarantor.java:0
+#: com/propertyvista/dto/ApplicationUserDTO.java:0
 #, java-format
 msgid "{0}, {1}"
-msgstr "{0}, {1}"
+msgstr ""
 
 #. java-format
 #: com/propertyvista/domain/financial/offering/Concession.java:0
@@ -8294,21 +8668,27 @@ msgid "{0}, {1}, ${2}"
 msgstr ""
 
 #. java-format
+#: com/propertyvista/domain/financial/tax/Tax.java:0
+#, java-format
+msgid "{0}, {1}, {2}"
+msgstr ""
+
+#. java-format
 #: com/propertyvista/domain/contact/Phone.java:0
 #: com/propertyvista/domain/property/PropertyContact.java:0
 #: com/propertyvista/domain/property/PropertyPhone.java:0
 #, java-format
 msgid "{0}{1,choice,null#|!null# ex.{1}}"
-msgstr "{0}{1,choice,null#|!null# ex.{1}}"
+msgstr "{0}{1,选择,null#|!null# 分机{1}}"
 
 #. java-format
 #: com/pyx4j/essentials/server/preloader/AddressInfo.java:0
 #, java-format
 msgid "{1} {2}, {3}"
-msgstr "{1} {2}, 锛寋 {3}"
+msgstr ""
 
 #. java-format
 #: com/propertyvista/domain/policy/policies/domain/DepositPolicyItem.java:0
 #, java-format
-msgid "{2}, {1}, {0}, {3}, {4}"
+msgid "{2}, {1}, {0}, {3}"
 msgstr ""
