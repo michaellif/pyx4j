@@ -139,6 +139,8 @@ public class MemberMetaImpl implements MemberMeta {
         objectClass = methodReturnType;
         fieldName = method.getName();
 
+        assert (valueClass != null) : "Data type error in method '" + method.getName() + "' of " + interfaceClass.getName();
+
         // Read Annotations
         Length lengthAnnotation = method.getAnnotation(Length.class);
         if (String.class.equals(valueClass)) {
