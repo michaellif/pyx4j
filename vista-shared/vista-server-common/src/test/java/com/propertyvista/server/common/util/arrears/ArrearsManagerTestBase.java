@@ -15,4 +15,55 @@ package com.propertyvista.server.common.util.arrears;
 
 public class ArrearsManagerTestBase {
 
+    public ArrearsStatusBuilder arrears() {
+        return new ArrearsStatusBuilder();
+    }
+
+    public void pay(String date, String amount) {
+
+    }
+
+    public void bill() {
+
+    }
+
+    public class ArrearsStatusBuilder {
+
+        public ArrearsStatusBuilder on(String date) {
+            return this;
+        }
+
+        public ArrearsStatusBuilder thisMonth(String amount) {
+            return this;
+        }
+
+        public ArrearsStatusBuilder arr0to30(String amount) {
+            return this;
+        }
+
+        public ArrearsStatusBuilder arr30to60(String amount) {
+            return this;
+        }
+
+        public ArrearsStatusBuilder arr60to90(String amount) {
+            return this;
+        }
+
+        public ArrearsStatusBuilder arrOver90(String amount) {
+            return this;
+        }
+
+        public ArrearsStatusBuilder total(String amount) {
+            return this;
+        }
+
+        public ArrearsStatusBuilder arBalance(String amount) {
+            return this;
+        }
+
+        public void assrt() {
+
+        }
+
+    }
 }
