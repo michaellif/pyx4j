@@ -177,7 +177,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                     throw new Error("Copying detached entity " + ((IEntity) dboM).getDebugExceptionInfoString());
                 }
             } else if (dboM.getAttachLevel() == AttachLevel.Detached) {
-                dto.setAttachLevel(AttachLevel.Detached);
+                dtoM.setAttachLevel(AttachLevel.Detached);
                 continue;
             }
 
@@ -192,6 +192,9 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                         }
                         ((ICollection<IEntity, ?>) dtoM).add(dboMi);
                     }
+                } else if (dboM.getAttachLevel() == AttachLevel.IdOnly) {
+                    ((IEntity) dtoM).setPrimaryKey(((IEntity) dboM).getPrimaryKey());
+                    dtoM.setAttachLevel(AttachLevel.Detached);
                 } else {
                     dtoM.setValue(dboM.getValue());
                 }
