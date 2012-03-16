@@ -47,6 +47,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.PersistenceContext.TransactionType;
@@ -677,6 +678,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 value = ((IEntity) member.getMember(entity)).getPrimaryKey();
                 lastValue = ((IEntity) member.getMember(baseEntity)).getPrimaryKey();
                 // TODO // merge incomplete data
+
+                // ignore version data in non versioned key
+                if (memberMeta.getAnnotation(Versioned.class) == null) {
+                    value = ((Key) value).asCurrentKey();
+                    lastValue = ((Key) lastValue).asCurrentKey();
+                }
             } else {
                 value = member.getMemberValue(entity);
                 lastValue = member.getMemberValue(baseEntity);
