@@ -29,9 +29,10 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IVersionData;
+import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -40,8 +41,9 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
 
-public interface Lease extends IEntity {
+public interface Lease extends IVersionedEntity<LeaseV> {
 
     @I18n(context = "Lease Status")
     @XmlType(name = "LeaseStatus")
@@ -153,11 +155,6 @@ public interface Lease extends IEntity {
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
-    @Detached
-    @JoinTable(value = TenantInLease.class, cascade = false)
-    @OrderBy(TenantInLease.OrderInLeaseId.class)
-    IList<TenantInLease> tenants();
-
     IPrimitive<PaymentFrequency> paymentFrequency();
 
     // or by dates:
@@ -190,12 +187,9 @@ public interface Lease extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();
 
-    @Owned(forceCreation = true)
     @JoinColumn
+    @Owned(forceCreation = true)
     BillingAccount billingAccount();
-
-    @EmbeddedEntity
-    LeaseProducts leaseProducts();
 
     @Detached
     // should be loaded in service when necessary!..
@@ -204,4 +198,14 @@ public interface Lease extends IEntity {
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createDate();
 
+    public interface LeaseV extends IVersionData<Lease> {
+
+        @Detached
+        @JoinTable(value = TenantInLease.class, cascade = false)
+        @OrderBy(TenantInLease.OrderInLeaseId.class)
+        IList<TenantInLease> tenants();
+
+        @EmbeddedEntity
+        LeaseProducts leaseProducts();
+    }
 }

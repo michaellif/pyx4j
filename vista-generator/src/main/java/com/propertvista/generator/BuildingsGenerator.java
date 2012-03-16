@@ -381,7 +381,7 @@ public class BuildingsGenerator {
         floorplan.description().setValue(CommonsGenerator.lipsum());
 
         floorplan.floorCount().setValue(1 + DataGenerator.randomInt(2));
-        floorplan.bedrooms().setValue(DataGenerator.randomInt(7));
+        floorplan.bedrooms().setValue(1 + DataGenerator.randomInt(4));
         floorplan.dens().setValue(DataGenerator.randomInt(2));
         floorplan.bathrooms().setValue(1 + DataGenerator.randomInt(3));
         floorplan.halfBath().setValue(DataGenerator.randomInt(2));

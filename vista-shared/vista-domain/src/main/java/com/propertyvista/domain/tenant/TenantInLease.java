@@ -65,7 +65,7 @@ public interface TenantInLease extends IBoundToApplication {
     @Detached
     @Indexed
     @JoinColumn
-    Lease lease();
+    Lease.LeaseV lease();
 
     interface OrderInLeaseId extends ColumnId {
 

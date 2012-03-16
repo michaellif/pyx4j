@@ -109,7 +109,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
         EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), PtAppContext.getCurrentUserLease()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease().holder(), PtAppContext.getCurrentUserLease()));
         for (TenantInLease tenantInfo : Persistence.secureQuery(criteria)) {
             if (tenantInfo.role().getValue().equals(TenantInLease.Role.Applicant)) {
                 TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantInfo.getPrimaryKey());

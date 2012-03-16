@@ -51,7 +51,7 @@ public class LeaseDataModel {
 
         lease.unit().set(serviceItem.element());
 
-        lease.leaseProducts().serviceItem().item().set(serviceItem);
+        lease.version().leaseProducts().serviceItem().item().set(serviceItem);
 
         lease.leaseFrom().setValue(new LogicalDate(111, 1, 25));
         lease.approvalDate().setValue(lease.leaseFrom().getValue());
@@ -75,7 +75,7 @@ public class LeaseDataModel {
         TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
         tenantInLease.tenant().set(tenantDataModel.getTenant());
         tenantInLease.role().setValue(Role.Applicant);
-        lease.tenants().add(tenantInLease);
+        lease.version().tenants().add(tenantInLease);
     }
 
     public ProductItem getServiceItem() {

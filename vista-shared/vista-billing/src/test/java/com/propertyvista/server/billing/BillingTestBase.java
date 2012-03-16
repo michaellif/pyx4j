@@ -218,7 +218,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
                 billableItem.item().set(feature.version().items().get(0));
                 billableItem.effectiveDate().setValue(effectiveDate);
                 billableItem.expirationDate().setValue(expirationDate);
-                lease.leaseProducts().featureItems().add(billableItem);
+                lease.version().leaseProducts().featureItems().add(billableItem);
 
                 Persistence.service().persist(lease);
                 Persistence.service().commit();

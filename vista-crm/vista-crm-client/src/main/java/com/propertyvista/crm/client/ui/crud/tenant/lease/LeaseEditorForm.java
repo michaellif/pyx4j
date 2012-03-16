@@ -211,9 +211,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         if (isEditable()) {
-            main.setWidget(0, 0, inject(proto().tenants(), new TenantInLeaseFolder(this, (LeaseEditorView) getParentView())));
+            main.setWidget(0, 0, inject(proto().version().tenants(), new TenantInLeaseFolder(this, (LeaseEditorView) getParentView())));
         } else {
-            main.setWidget(0, 0, inject(proto().tenants(), new TenantInLeaseFolder(this)));
+            main.setWidget(0, 0, inject(proto().version().tenants(), new TenantInLeaseFolder(this)));
         }
 
         return new CrmScrollPanel(main);
@@ -223,7 +223,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
-        serviceItemPanel.add(inject(proto().leaseProducts().serviceItem(), new BillableItemEditor(this)));
+        serviceItemPanel.add(inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this)));
         if (isEditable()) {
             serviceItemPanel.add(serviceSelector = new AnchorButton("Select...", new ClickHandler() {
                 @Override
@@ -263,14 +263,14 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setH1(++row, 0, 2, i18n.tr("Information"));
         main.setWidget(++row, 0, serviceItemPanel);
 
-        main.setH1(++row, 0, 2, proto().leaseProducts().featureItems().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this)));
+        main.setH1(++row, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this)));
 
-        main.setH1(++row, 0, 2, proto().leaseProducts().concessions().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
+        main.setH1(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
 
-        main.setH1(++row, 0, 2, proto().leaseProducts().adjustments().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().leaseProducts().adjustments(), new LeaseAdjustmentFolder(isEditable(), this)));
+        main.setH1(++row, 0, 2, proto().version().leaseProducts().adjustments().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().version().leaseProducts().adjustments(), new LeaseAdjustmentFolder(isEditable(), this)));
 
         return new CrmScrollPanel(main);
     }

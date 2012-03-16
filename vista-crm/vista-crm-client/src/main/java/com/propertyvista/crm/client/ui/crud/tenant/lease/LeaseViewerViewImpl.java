@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -37,8 +38,10 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.selections.version.LeaseVersionService;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.dto.LeaseDTO;
@@ -65,6 +68,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
+        enableVersioning(Lease.LeaseV.class, GWT.<LeaseVersionService> create(LeaseVersionService.class));
 
         billLister = new ListerInternalViewImplBase<Bill>(new BillLister());
 

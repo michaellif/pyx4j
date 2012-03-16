@@ -67,7 +67,7 @@ public class AccessRulesTest extends VistaDBTestBase {
             Persistence.service().persist(lease);
 
             TenantInLease tl2 = EntityFactory.create(TenantInLease.class);
-            tl2.lease().set(lease);
+            tl2.lease().set(lease.version());
             tl2.tenant().set(t2);
             Persistence.service().persist(tl2);
         }
@@ -96,9 +96,9 @@ public class AccessRulesTest extends VistaDBTestBase {
         Persistence.service().persist(t1);
 
         TenantInLease tl1 = EntityFactory.create(TenantInLease.class);
-        Building building = tl1.lease().unit().belongsTo();
-        Persistence.service().persist(tl1.lease().unit().belongsTo());
-        Persistence.service().persist(tl1.lease().unit());
+        Building building = tl1.lease().holder().unit().belongsTo();
+        Persistence.service().persist(tl1.lease().holder().unit().belongsTo());
+        Persistence.service().persist(tl1.lease().holder().unit());
         Persistence.service().persist(tl1.lease());
 
         tl1.tenant().set(t1);

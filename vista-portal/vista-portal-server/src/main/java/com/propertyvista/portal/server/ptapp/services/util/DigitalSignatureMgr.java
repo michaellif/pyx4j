@@ -26,7 +26,6 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class DigitalSignatureMgr {
 
@@ -36,8 +35,8 @@ public class DigitalSignatureMgr {
 
     static public void update(Application application) {
         Persistence.service().retrieve(application.lease());
-        TenantInLeaseRetriever.UpdateLeaseTenants(application.lease());
-        update(application, application.lease().tenants());
+        Persistence.service().retrieve(application.lease().version().tenants());
+        update(application, application.lease().version().tenants());
     }
 
     static public void update(Application application, IList<TenantInLease> tenants) {

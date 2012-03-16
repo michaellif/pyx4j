@@ -126,8 +126,8 @@ public class ApplicationManager {
         ma.status().setValue(MasterApplication.Status.Created);
         Persistence.service().persist(ma);
 
-        Persistence.service().retrieve(lease.tenants());
-        for (TenantInLease tenantInLease : lease.tenants()) {
+        Persistence.service().retrieve(lease.version().tenants());
+        for (TenantInLease tenantInLease : lease.version().tenants()) {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
                 Application a = EntityFactory.create(Application.class);
                 a.belongsTo().set(ma);
@@ -148,10 +148,10 @@ public class ApplicationManager {
     }
 
     public static void sendMasterApplicationEmail(MasterApplication ma) {
-        if (ma.lease().tenants().getAttachLevel() != AttachLevel.Attached) {
-            Persistence.service().retrieve(ma.lease().tenants());
+        if (ma.lease().version().tenants().getAttachLevel() != AttachLevel.Attached) {
+            Persistence.service().retrieve(ma.lease().version().tenants());
         }
-        for (TenantInLease tenantInLease : ma.lease().tenants()) {
+        for (TenantInLease tenantInLease : ma.lease().version().tenants()) {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
                 Persistence.service().retrieve(tenantInLease.tenant().user());
                 try {
@@ -205,8 +205,8 @@ public class ApplicationManager {
 
         // Invite CoApplicants:
         if (isPrimary) {
-            Persistence.service().retrieve(lease.tenants());
-            for (TenantInLease tenantInLease : lease.tenants()) {
+            Persistence.service().retrieve(lease.version().tenants());
+            for (TenantInLease tenantInLease : lease.version().tenants()) {
                 if ((TenantInLease.Role.CoApplicant == tenantInLease.role().getValue() && (!tenantInLease.takeOwnership().isBooleanTrue()))) {
                     tenantInLease.application().set(
                             inviteUser(ma, tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveCoApplicant));

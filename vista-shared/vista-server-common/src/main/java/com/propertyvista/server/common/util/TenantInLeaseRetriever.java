@@ -13,18 +13,12 @@
  */
 package com.propertyvista.server.common.util;
 
-import java.util.List;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantInLease.Role;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class TenantInLeaseRetriever extends TenantRetriever {
 
@@ -55,25 +49,5 @@ public class TenantInLeaseRetriever extends TenantRetriever {
         }
 
         super.retrieve(tenantInLease.tenant().getPrimaryKey());
-    }
-
-    // Lease management:
-    static public void UpdateLeaseTenants(Lease lease) {
-        // update Tenants double links:
-        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
-        criteria.asc(criteria.proto().orderInLease());
-        List<TenantInLease> tenants = Persistence.service().query(criteria);
-
-        // here: clear the current list, add queried tenants placing Applicant first:  
-        lease.tenants().clear();
-        for (TenantInLease til : tenants) {
-            if (Role.Applicant == til.role().getValue()) {
-                lease.tenants().add(til);
-                tenants.remove(til);
-                break;
-            }
-        }
-        lease.tenants().addAll(tenants);
     }
 }

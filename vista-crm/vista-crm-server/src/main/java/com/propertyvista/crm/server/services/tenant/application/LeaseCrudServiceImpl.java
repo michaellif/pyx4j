@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -27,7 +28,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -44,9 +44,8 @@ import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.LeaseManager;
-import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
-public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
+public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
 
     private static final I18n i18n = I18n.get(LeaseCrudServiceImpl.class);
 
@@ -55,40 +54,47 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    protected void enhanceDTO(Lease in, LeaseDTO dto, boolean fromList) {
-
-        Persistence.service().retrieve(dto.unit());
-        Persistence.service().retrieve(dto.unit().belongsTo());
-
-        if (!fromList) {
-            // load detached entities:
-            Persistence.service().retrieve(dto.documents());
-            if (!dto.unit().isNull()) {
-                // fill selected building by unit:
-                dto.selectedBuilding().set(dto.unit().belongsTo());
-                syncBuildingProductCatalog(dto.selectedBuilding());
-            }
-
-            // update Tenants double links:
-            TenantInLeaseRetriever.UpdateLeaseTenants(dto);
-
-            // calculate price adjustments:
-            PriceCalculationHelpers.calculateChargeItemAdjustments(dto.leaseProducts().serviceItem());
-            for (BillableItem item : dto.leaseProducts().featureItems()) {
-                PriceCalculationHelpers.calculateChargeItemAdjustments(item);
-            }
-
-            EntityQueryCriteria<MasterApplication> criteria = EntityQueryCriteria.create(MasterApplication.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
-            dto.application().set(Persistence.service().retrieve(criteria));
-        }
+    protected void bind() {
+        bind(Lease.class, dtoProto, dboProto);
     }
 
     @Override
-    protected void persistDBO(Lease dbo, LeaseDTO in) {
+    protected void enhanceRetrieved(Lease in, LeaseDTO dto) {
+        Persistence.service().retrieve(dto.unit());
+        Persistence.service().retrieve(dto.unit().belongsTo());
 
-        for (BillableItem item : dbo.leaseProducts().featureItems()) {
-            // save extra data:
+        // load detached entities:
+        Persistence.service().retrieve(dto.documents());
+        if (!dto.unit().isNull()) {
+            // fill selected building by unit:
+            dto.selectedBuilding().set(dto.unit().belongsTo());
+            syncBuildingProductCatalog(dto.selectedBuilding());
+        }
+
+        // update Tenants double links:
+        Persistence.service().retrieve(dto.version().tenants());
+
+        // calculate price adjustments:
+        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.version().leaseProducts().serviceItem());
+        for (BillableItem item : dto.version().leaseProducts().featureItems()) {
+            PriceCalculationHelpers.calculateChargeItemAdjustments(item);
+        }
+
+        EntityQueryCriteria<MasterApplication> criteria = EntityQueryCriteria.create(MasterApplication.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
+        dto.application().set(Persistence.service().retrieve(criteria));
+    }
+
+    @Override
+    protected void enhanceListRetrieved(Lease entity, LeaseDTO dto) {
+        Persistence.service().retrieve(dto.unit());
+        Persistence.service().retrieve(dto.unit().belongsTo());
+    }
+
+    @Override
+    protected void persist(Lease dbo, LeaseDTO in) {
+        // save extra data:
+        for (BillableItem item : dbo.version().leaseProducts().featureItems()) {
             if (!item.extraData().isNull()) {
                 Persistence.service().merge(item.extraData());
             }
@@ -99,8 +105,8 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         new LeaseManager().save(dbo);
 
         int no = 0;
-        for (TenantInLease item : dbo.tenants()) {
-            item.lease().set(dbo);
+        for (TenantInLease item : dbo.version().tenants()) {
+            item.lease().set(dbo.version());
             item.orderInLease().setValue(no++);
             Persistence.service().merge(item);
         }
@@ -109,15 +115,15 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     private void updateAdjustments(Lease lease) {
         // ServiceItem Adjustments:
-        updateAdjustments(lease.leaseProducts().serviceItem());
+        updateAdjustments(lease.version().leaseProducts().serviceItem());
 
         // BillableItem Adjustments:
-        for (BillableItem ci : lease.leaseProducts().featureItems()) {
+        for (BillableItem ci : lease.version().leaseProducts().featureItems()) {
             updateAdjustments(ci);
         }
 
         // Lease Financial Adjustments:
-        updateAdjustments(lease.leaseProducts());
+        updateAdjustments(lease.version().leaseProducts());
     }
 
     private void updateAdjustments(BillableItem item) {
@@ -208,7 +214,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId, boolean invite) {
         Lease lease = Persistence.service().retrieve(dboClass, entityId);
-        Persistence.service().retrieve(lease.tenants());
+        Persistence.service().retrieve(lease.version().tenants());
         MasterApplication ma = ApplicationManager.createMasterApplication(lease);
         if (invite) {
             ApplicationManager.sendMasterApplicationEmail(ma);

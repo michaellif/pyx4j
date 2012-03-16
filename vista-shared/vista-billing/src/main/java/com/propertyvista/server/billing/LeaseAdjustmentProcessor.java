@@ -30,7 +30,7 @@ public class LeaseAdjustmentProcessor {
     }
 
     void createLeaseAdjustments() {
-        for (LeaseAdjustment item : billing.getNextPeriodBill().billingAccount().lease().leaseProducts().adjustments()) {
+        for (LeaseAdjustment item : billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().adjustments()) {
             createLeaseAdjustment(item);
         }
     }

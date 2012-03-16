@@ -40,7 +40,6 @@ import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.portal.server.ptapp.util.ChargesServerCalculation;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.policy.PolicyManager;
-import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements ChargesService {
 
@@ -69,15 +68,14 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
 
     public Charges retrieveData() {
         Lease lease = PtAppContext.getCurrentUserLease();
-        TenantInLeaseRetriever.UpdateLeaseTenants(lease);
-        Persistence.service().retrieve(lease.tenants());
+        Persistence.service().retrieve(lease.version().tenants());
 
         Charges charges = retrieveApplicationEntity(Charges.class);
         if (charges == null) {
             log.debug("Creating new charges");
             charges = EntityFactory.create(Charges.class);
             charges.application().set(PtAppContext.getCurrentUserApplication());
-            ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.tenants());
+            ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.version().tenants());
         }
 
         MiscPolicy miscPolicy = PolicyManager.obtainEffectivePolicy(lease.unit(), MiscPolicy.class);
@@ -85,7 +83,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             throw new Error("There is no MiscPolicy for the Unit!?.");
         }
 
-        BillableItem serviceItem = lease.leaseProducts().serviceItem();
+        BillableItem serviceItem = lease.version().leaseProducts().serviceItem();
         if (serviceItem != null && !serviceItem.isNull()) {
             charges.monthlyCharges().charges().clear();
 
@@ -107,7 +105,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.oneTimePayment, new BigDecimal("24.99"))); // get value from policy ! 
 
             // fill agreed items:
-            for (BillableItem item : lease.leaseProducts().featureItems()) {
+            for (BillableItem item : lease.version().leaseProducts().featureItems()) {
                 if (item.item().type().type().getValue().equals(ProductItemType.Type.feature)) {
                     PriceCalculationHelpers.calculateChargeItemAdjustments(item);
 

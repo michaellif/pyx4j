@@ -437,7 +437,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         mainApp.tenant().set(tenant);
         mainApp.role().setValue(TenantInLease.Role.Applicant);
         mainApp.application().set(application);
-        mainApp.lease().set(lease);
+        mainApp.lease().set(lease.version());
         Persistence.service().persist(mainApp);
 
         // load main co-applicant
@@ -451,7 +451,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         coApp.tenant().set(tenant);
         coApp.role().setValue(TenantInLease.Role.CoApplicant);
         coApp.application().set(application);
-        coApp.lease().set(lease);
+        coApp.lease().set(lease.version());
         Persistence.service().persist(coApp);
 
         // TODO load guarantor

@@ -62,11 +62,10 @@ public class LeaseManager {
         boolean doUnreserve = false;
 
         Lease oldLease = null;
-
         if (isNewLease) {
             doReserve = lease.unit().getPrimaryKey() != null;
         } else {
-            oldLease = Persistence.secureRetrieve(Lease.class, lease.getPrimaryKey());
+            oldLease = Persistence.secureRetrieve(Lease.class, lease.getPrimaryKey().asCurrentKey());
 
             // check if unit reservation has changed
             Persistence.service().retrieve(oldLease.unit());
@@ -114,8 +113,8 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(noticeDay);
         lease.expectedMoveOut().setValue(moveOutDay);
         Persistence.secureSave(lease);
-        occupancyManager(lease.unit().getPrimaryKey()).endLease();
 
+        occupancyManager(lease.unit().getPrimaryKey()).endLease();
         return lease;
     }
 
@@ -131,6 +130,7 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);
+
         occupancyManager(lease.unit().getPrimaryKey()).cancelEndLease();
         return lease;
     }
@@ -147,6 +147,7 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(evictionDay);
         lease.expectedMoveOut().setValue(moveOutDay);
         Persistence.secureSave(lease);
+
         occupancyManager(lease.unit().getPrimaryKey()).endLease();
         return lease;
     }
@@ -163,6 +164,7 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
         Persistence.secureSave(lease);
+
         occupancyManager(lease.unit().getPrimaryKey()).cancelEndLease();
         return lease;
     }
@@ -170,13 +172,15 @@ public class LeaseManager {
     public Lease approveApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.Approved);
+        // finalize approved leases while saving:
+// TODO : uncomment when version item save will be fixed (exception in @link LeaseManager.activate() on secureSave(lease) in preloader!):        
+//        lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).approveLease();
 
 //        // TODO uncomment when project dependencies will be corrected:        
 //        BillingFacade.runBilling(lease);
-
         return lease;
     }
 
@@ -184,6 +188,7 @@ public class LeaseManager {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.Declined);
         Persistence.secureSave(lease);
+
         occupancyManager(lease.unit().getPrimaryKey()).unreserve();
         return lease;
     }
@@ -192,6 +197,7 @@ public class LeaseManager {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         lease.status().setValue(Status.ApplicationCancelled);
         Persistence.secureSave(lease);
+
         occupancyManager(lease.unit().getPrimaryKey()).unreserve();
         return lease;
     }

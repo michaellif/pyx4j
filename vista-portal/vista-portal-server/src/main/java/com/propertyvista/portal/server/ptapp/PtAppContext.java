@@ -89,7 +89,7 @@ public class PtAppContext extends VistaContext {
     }
 
     public static Lease getCurrentUserLease() {
-        return Persistence.service().retrieve(Lease.class, PtAppContext.getCurrentUserApplication().lease().getPrimaryKey());
+        return Persistence.service().retrieve(Lease.class, PtAppContext.getCurrentUserApplication().lease().getPrimaryKey().asDraftKey());
     }
 
     public static Tenant getCurrentUserTenant() {

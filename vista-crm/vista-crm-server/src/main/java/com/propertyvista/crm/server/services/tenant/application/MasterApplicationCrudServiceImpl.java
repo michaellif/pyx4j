@@ -65,13 +65,13 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         Persistence.service().retrieve(dto.lease());
         Persistence.service().retrieve(dto.lease().unit());
         Persistence.service().retrieve(dto.lease().unit().belongsTo());
+        Persistence.service().retrieve(dto.lease().version().tenants());
 
-        TenantInLeaseRetriever.UpdateLeaseTenants(dto.lease());
-        dto.numberOfOccupants().setValue(dto.lease().tenants().size());
+        dto.numberOfOccupants().setValue(dto.lease().version().tenants().size());
         dto.numberOfCoApplicants().setValue(0);
         dto.numberOfGuarantors().setValue(0);
 
-        for (TenantInLease tenantInLease : dto.lease().tenants()) {
+        for (TenantInLease tenantInLease : dto.lease().version().tenants()) {
             Persistence.service().retrieve(tenantInLease);
 
             if (tenantInLease.role().getValue() == Role.Applicant) {
@@ -140,14 +140,14 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
 
     private void calculatePrices(MasterApplication in, MasterApplicationDTO dto) {
         // calculate price adjustments:
-        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().leaseProducts().serviceItem());
+        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().version().leaseProducts().serviceItem());
 
-        dto.rentPrice().setValue(dto.lease().leaseProducts().serviceItem()._currentPrice().getValue());
+        dto.rentPrice().setValue(dto.lease().version().leaseProducts().serviceItem()._currentPrice().getValue());
         dto.parkingPrice().setValue(new BigDecimal(0));
         dto.otherPrice().setValue(new BigDecimal(0));
         dto.deposit().setValue(new BigDecimal(0));
 
-        for (BillableItem item : dto.lease().leaseProducts().featureItems()) {
+        for (BillableItem item : dto.lease().version().leaseProducts().featureItems()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(item); // calculate price adjustments
             if (item.item().product() instanceof Feature) {
                 switch (((Feature) item.item().product()).version().type().getValue()) {
@@ -161,7 +161,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
             }
         }
 
-        dto.discounts().setValue(!dto.lease().leaseProducts().concessions().isEmpty());
+        dto.discounts().setValue(!dto.lease().version().leaseProducts().concessions().isEmpty());
     }
 
     @Override
@@ -174,8 +174,9 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         Vector<ApplicationUserDTO> users = new Vector<ApplicationUserDTO>();
 
         Persistence.service().retrieve(entity.lease());
-        TenantInLeaseRetriever.UpdateLeaseTenants(entity.lease());
-        for (TenantInLease tenantInLease : entity.lease().tenants()) {
+        Persistence.service().retrieve(entity.lease().version().tenants());
+
+        for (TenantInLease tenantInLease : entity.lease().version().tenants()) {
             Persistence.service().retrieve(tenantInLease);
             switch (tenantInLease.role().getValue()) {
             case Applicant:

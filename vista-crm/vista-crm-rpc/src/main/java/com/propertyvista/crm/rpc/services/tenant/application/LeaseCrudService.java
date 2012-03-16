@@ -19,14 +19,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
+public interface LeaseCrudService extends AbstractVersionedCrudService<LeaseDTO> {
 
     void setSelectededUnit(AsyncCallback<AptUnit> callback, Key unitId);
 

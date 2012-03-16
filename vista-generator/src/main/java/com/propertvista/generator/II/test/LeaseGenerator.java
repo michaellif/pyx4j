@@ -42,7 +42,7 @@ public class LeaseGenerator implements TreeGenerator<Lease> {
 
         }
         TenantInLease tl = EntityFactory.create(TenantInLease.class);
-        lease.tenants().add(tl);
+        lease.version().tenants().add(tl);
         tl.role().setValue(Role.Applicant);
         // tl.tenant().set(dataSource.retreive(Tenant.class, null));
 

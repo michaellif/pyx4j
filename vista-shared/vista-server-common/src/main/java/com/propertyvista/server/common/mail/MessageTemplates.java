@@ -85,9 +85,9 @@ public class MessageTemplates {
 
         // get building policy node
         Persistence.service().retrieve(tenantInLease.lease());
-        Persistence.service().retrieve(tenantInLease.lease().unit());
-        Persistence.service().retrieve(tenantInLease.lease().unit().belongsTo());
-        EmailTemplate emailTemplate = getEmailTemplate(type, tenantInLease.lease().unit().belongsTo());
+        Persistence.service().retrieve(tenantInLease.lease().holder().unit());
+        Persistence.service().retrieve(tenantInLease.lease().holder().unit().belongsTo());
+        EmailTemplate emailTemplate = getEmailTemplate(type, tenantInLease.lease().holder().unit().belongsTo());
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         // populate context properties required by template type

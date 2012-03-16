@@ -123,11 +123,11 @@ public class UnitTurnoverAnalysisManagerTestBase {
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
-        tenantInLease.lease().set(lease);
+        tenantInLease.lease().set(lease.version());
         tenantInLease.tenant().set(tenant);
         tenantInLease.orderInLease().setValue(1);
         tenantInLease.role().setValue(TenantInLease.Role.Applicant);
-        lease.tenants().add(tenantInLease);
+        lease.version().tenants().add(tenantInLease);
         Persistence.secureSave(lease);
 
         AptUnitOccupancySegment leased = AptUnitOccupancyManagerHelper.split(unit, asDate(dateFrom), new SplittingHandler() {

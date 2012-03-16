@@ -56,13 +56,13 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
 
         TenantInLease tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.lease());
-        Persistence.service().retrieve(tenantInLease.lease().unit());
-        Persistence.service().retrieve(tenantInLease.lease().unit().floorplan());
-        Persistence.service().retrieve(tenantInLease.lease().unit().belongsTo());
+        Persistence.service().retrieve(tenantInLease.lease().holder().unit());
+        Persistence.service().retrieve(tenantInLease.lease().holder().unit().floorplan());
+        Persistence.service().retrieve(tenantInLease.lease().holder().unit().belongsTo());
 
-        dashboard.general().floorplanName().set(tenantInLease.lease().unit().floorplan().marketingName());
-        AddressStructured address = tenantInLease.lease().unit().belongsTo().info().address().duplicate();
-        address.suiteNumber().set(tenantInLease.lease().unit().info().number());
+        dashboard.general().floorplanName().set(tenantInLease.lease().holder().unit().floorplan().marketingName());
+        AddressStructured address = tenantInLease.lease().holder().unit().belongsTo().info().address().duplicate();
+        address.suiteNumber().set(tenantInLease.lease().holder().unit().info().number());
         dashboard.general().tenantAddress().setValue(address.getStringView());
 
         dashboard.general().superIntendantPhone().setValue("(416) 333-22-44");

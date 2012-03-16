@@ -121,9 +121,9 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
         for (TenantSummaryGDO tenantSummary : summary.tenants()) {
             Persistence.service().persist(tenantSummary.tenant());
 
-            tenantSummary.tenantInLease().lease().set(summary.lease());
+            tenantSummary.tenantInLease().lease().set(summary.lease().version());
             Persistence.service().persist(tenantSummary.tenantInLease());
-            summary.lease().tenants().add(tenantSummary.tenantInLease());
+            summary.lease().version().tenants().add(tenantSummary.tenantInLease());
 
             Persistence.service().persist(tenantSummary.tenantScreening());
 

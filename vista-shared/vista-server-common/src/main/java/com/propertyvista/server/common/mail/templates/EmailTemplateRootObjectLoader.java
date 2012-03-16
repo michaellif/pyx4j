@@ -144,7 +144,7 @@ public class EmailTemplateRootObjectLoader {
             Persistence.service().retrieve(tenantInLease.lease());
         }
         if (tenantInLease.lease() != null) {
-            return tenantInLease.lease();
+            return tenantInLease.lease().holder();
         } else {
             throw new Error("Invalid context. No lease found.");
         }

@@ -14,7 +14,11 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.ManagedColumn;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.offering.Concession;
@@ -43,4 +47,16 @@ public interface LeaseDTO extends Lease {
     // -----------------------------------------------------
 
     MasterApplication application();
+
+    // TODO temporary hack ;)
+
+    @Override
+    @Detached(level = AttachLevel.Detached)
+    @Owned
+    IList<Lease.LeaseV> versions();
+
+    @Override
+    @ManagedColumn
+    @ToString(index = 1)
+    Lease.LeaseV version();
 }

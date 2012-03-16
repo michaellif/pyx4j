@@ -42,7 +42,6 @@ import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.portal.server.ptapp.util.ChargesServerCalculation;
 import com.propertyvista.server.common.policy.PolicyManager;
 import com.propertyvista.server.common.util.TenantConverter;
-import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class TenantServiceImpl extends ApplicationEntityServiceImpl implements TenantService {
 
@@ -58,10 +57,10 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         Application application = PtAppContext.getCurrentUserApplication();
 
         Lease lease = PtAppContext.getCurrentUserLease();
-        TenantInLeaseRetriever.UpdateLeaseTenants(lease);
+        Persistence.service().retrieve(lease.version().tenants());
 
-        List<TenantInLease> existingTenants = new Vector<TenantInLease>(lease.tenants());
-        lease.tenants().clear();
+        List<TenantInLease> existingTenants = new Vector<TenantInLease>(lease.version().tenants());
+        lease.version().tenants().clear();
 
         TenantInApplicationListDTO currentTenants = EntityFactory.create(TenantInApplicationListDTO.class);
         int no = 0;
@@ -86,12 +85,12 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             }
 
             // save Tenant in Lease: 
-            tenantInLease.lease().set(lease);
+            tenantInLease.lease().set(lease.version());
             tenantInLease.orderInLease().setValue(no++);
             new TenantConverter.TenantEditorConverter().copyDTOtoDBO(tenantInApplication, tenantInLease);
             Persistence.service().merge(tenantInLease.tenant());
             Persistence.service().merge(tenantInLease);
-            lease.tenants().add(tenantInLease);
+            lease.version().tenants().add(tenantInLease);
 
             // update current tenants:
             tenantInApplication.setPrimaryKey(tenantInLease.getPrimaryKey());
@@ -103,13 +102,13 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             Persistence.service().delete(orphan);
         }
 
-        DigitalSignatureMgr.update(application, lease.tenants());
+        DigitalSignatureMgr.update(application, lease.version().tenants());
         ApplicationProgressMgr.syncroizeApplicationProgress(application, tenants.tenants());
 
         // re-calculate charges:
         Charges charges = retrieveApplicationEntity(Charges.class);
         if (charges != null) {
-            if (ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.tenants())) {
+            if (ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.version().tenants())) {
                 ApplicationProgressMgr.invalidateChargesStep(application);
                 Persistence.secureSave(charges);
 
@@ -129,10 +128,10 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
     public TenantInApplicationListDTO retrieveData() {
         Lease lease = PtAppContext.getCurrentUserLease();
-        TenantInLeaseRetriever.UpdateLeaseTenants(lease);
+        Persistence.service().retrieve(lease.version().tenants());
 
         TenantInApplicationListDTO tenants = EntityFactory.create(TenantInApplicationListDTO.class);
-        for (TenantInLease tenantInLease : lease.tenants()) {
+        for (TenantInLease tenantInLease : lease.version().tenants()) {
             Persistence.service().retrieve(tenantInLease);
             tenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }

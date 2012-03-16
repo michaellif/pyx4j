@@ -54,7 +54,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     @Override
     public void onPopulateSuccess(LeaseDTO result) {
         fillserviceItems(result);
-        fillServiceEligibilityData(result, result.leaseProducts().serviceItem().item());
+        fillServiceEligibilityData(result, result.version().leaseProducts().serviceItem().item());
 
         super.onPopulateSuccess(result);
     }
@@ -107,12 +107,12 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             clearServiceAgreement(currentValue, false);
 
             // set selected service:
-            currentValue.leaseProducts().serviceItem().set(createBillableItem(serviceItem));
-            currentValue.leaseProducts().serviceItem().effectiveDate().setValue(currentValue.leaseFrom().getValue());
+            currentValue.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem));
+            currentValue.version().leaseProducts().serviceItem().effectiveDate().setValue(currentValue.leaseFrom().getValue());
 
             // pre-populate utilities for the new service:
             for (ProductItem item : currentValue.selectedUtilityItems()) {
-                currentValue.leaseProducts().featureItems().add(createBillableItem(item));
+                currentValue.version().leaseProducts().featureItems().add(createBillableItem(item));
             }
 
             view.populate(currentValue);
@@ -140,10 +140,10 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     private void clearServiceAgreement(LeaseDTO currentValue, boolean all) {
         if (all) {
-            currentValue.leaseProducts().serviceItem().set(null);
+            currentValue.version().leaseProducts().serviceItem().set(null);
         }
-        currentValue.leaseProducts().featureItems().clear();
-        currentValue.leaseProducts().concessions().clear();
+        currentValue.version().leaseProducts().featureItems().clear();
+        currentValue.version().leaseProducts().concessions().clear();
     }
 
     private void fillserviceItems(LeaseDTO currentValue) {

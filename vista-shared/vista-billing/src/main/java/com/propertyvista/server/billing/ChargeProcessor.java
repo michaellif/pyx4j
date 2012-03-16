@@ -46,10 +46,10 @@ public class ChargeProcessor {
 
     void createCharges() {
         if (!Bill.BillType.Final.equals(billing.getNextPeriodBill().billType().getValue())) {
-            createChargeForNextPeriod(billing.getNextPeriodBill().billingAccount().lease().leaseProducts().serviceItem());
+            createChargeForNextPeriod(billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().serviceItem());
         }
 
-        for (BillableItem billableItem : billing.getNextPeriodBill().billingAccount().lease().leaseProducts().featureItems()) {
+        for (BillableItem billableItem : billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().featureItems()) {
             if (billableItem.isNull()) {
                 throw new BillingException("Service Item is mandatory in lease");
             }
