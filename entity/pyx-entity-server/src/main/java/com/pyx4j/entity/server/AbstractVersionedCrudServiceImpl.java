@@ -37,7 +37,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
     }
 
     @Override
-    public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveTraget retrieveTraget) {
+    protected E retrieve(Key entityId, RetrieveTraget retrieveTraget) {
         Key primaryKey;
         // Force draft for edit
         if (retrieveTraget == RetrieveTraget.Edit) {
@@ -45,18 +45,30 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
         } else {
             primaryKey = entityId;
         }
-        E entity = Persistence.secureRetrieve(entityClass, primaryKey);
-
-        enhanceRetrieved(entity);
-
-        // If draft do not exists, return data from current version
+        E entity = super.retrieve(primaryKey, retrieveTraget);
         if (primaryKey.getVersion() == Key.VERSION_DRAFT && entity.version().isNull()) {
-            E entityCurrent = Persistence.secureRetrieve(entityClass, primaryKey.asCurrentKey());
-            enhanceRetrieved(entityCurrent);
-            entity.version().set(EntityGraph.businessDuplicate(entityCurrent.version()));
+            entity = super.retrieve(primaryKey.asCurrentKey(), retrieveTraget);
         }
+        return entity;
+    }
 
-        callback.onSuccess(entity);
+    @Override
+    public void retrieve(final AsyncCallback<E> callback, final Key entityId, final RetrieveTraget retrieveTraget) {
+        super.retrieve(new AsyncCallback<E>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+
+            @Override
+            public void onSuccess(E result) {
+                // If draft do not exists, we return clone of the data from current version
+                if ((result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)
+                        && ((entityId.getVersion() == Key.VERSION_DRAFT) || (retrieveTraget == RetrieveTraget.Edit))) {
+                    result.version().set(EntityGraph.businessDuplicate(result.version()));
+                }
+            }
+        }, entityId, retrieveTraget);
     }
 
     @Override

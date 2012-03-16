@@ -25,6 +25,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEntity<?>, DTO extends IVersionedEntity<?>> extends
@@ -35,8 +37,47 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
     }
 
     @Override
+    protected E retrieve(Key entityId, RetrieveTraget retrieveTraget) {
+        Key primaryKey;
+        // Force draft for edit
+        if (retrieveTraget == RetrieveTraget.Edit) {
+            primaryKey = entityId.asDraftKey();
+        } else {
+            primaryKey = entityId;
+        }
+        E entity = super.retrieve(primaryKey, retrieveTraget);
+        if (primaryKey.getVersion() == Key.VERSION_DRAFT && entity.version().isNull()) {
+            entity = super.retrieve(primaryKey.asCurrentKey(), retrieveTraget);
+        }
+        return entity;
+    }
+
+    @Override
+    public void retrieve(final AsyncCallback<DTO> callback, final Key entityId, final RetrieveTraget retrieveTraget) {
+        super.retrieve(new AsyncCallback<DTO>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+
+            @Override
+            public void onSuccess(DTO result) {
+                // If draft do not exists, we return clone of the data from current version
+                if ((result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)
+                        && ((entityId.getVersion() == Key.VERSION_DRAFT) || (retrieveTraget == RetrieveTraget.Edit))) {
+                    result.version().set(EntityGraph.businessDuplicate(result.version()));
+                }
+            }
+        }, entityId, retrieveTraget);
+    }
+
+    @Override
     public void approveFinal(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        // TODO Auto-generated method stub
+        E entity = Persistence.secureRetrieve(entityClass, entityId.asDraftKey());
+        entity.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.secureSave(entity);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
 }
