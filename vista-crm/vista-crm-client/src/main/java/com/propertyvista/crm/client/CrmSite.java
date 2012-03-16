@@ -106,7 +106,7 @@ public class CrmSite extends VistaSite {
             public void onSuccess(SiteDefinitionsDTO descriptor) {
                 hideLoadingIndicator();
                 LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().crmHeader().getStringView(), descriptor.logoAvalable().isBooleanTrue());
-                Window.setTitle(i18n.tr("Vista CRM") + " - " + descriptor.siteTitles().crmHeader().getStringView());
+                Window.setTitle(i18n.tr("Property Vista") + " - " + descriptor.siteTitles().crmHeader().getStringView());
                 StyleManger.installTheme(new CrmTheme(), new VistaPalette(descriptor.palette()));
                 obtainAuthenticationData();
             }
