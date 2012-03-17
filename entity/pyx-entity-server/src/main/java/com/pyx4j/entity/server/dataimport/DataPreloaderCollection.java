@@ -153,7 +153,11 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
                 success = true;
             } finally {
                 if (!success) {
-                    Persistence.service().rollback();
+                    try {
+                        Persistence.service().rollback();
+                    } catch (Throwable ignore) {
+                        log.error("error in rollback", ignore);
+                    }
                 }
                 Persistence.service().endTransaction();
             }
