@@ -158,16 +158,16 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         CompletionType completion = value.version().completion().getValue();
 
         // disable editing for completed/closed leases:
-        getEditButton().setVisible(status != Status.Completed && status != Status.Closed);
+        getEditButton().setVisible(status != Status.Closed);
 
         createApplication.setVisible(status == Status.Created);
 
         runBill.setVisible(status == Status.Active);
 
         notice.setVisible(status == Status.Active && completion == null);
-        cancelNotice.setVisible(completion == CompletionType.Notice);
+        cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
         evict.setVisible(status == Status.Active && completion == null);
-        cancelEvict.setVisible(completion == CompletionType.Eviction);
+        cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
     }
 
     @Override
