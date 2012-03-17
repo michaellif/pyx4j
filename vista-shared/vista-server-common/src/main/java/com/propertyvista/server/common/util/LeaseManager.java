@@ -110,13 +110,13 @@ public class LeaseManager {
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
         }
-        if (lease.status().getValue() != Status.Active) {
+        if (lease.version().status().getValue() != Status.Active) {
             throw new IllegalStateException("lease " + leaseId + " must be " + Status.Active + " in order to perform 'Notice'");
         }
 
-        lease.completion().setValue(CompletionType.Notice);
-        lease.moveOutNotice().setValue(noticeDay);
-        lease.expectedMoveOut().setValue(moveOutDay);
+        lease.version().completion().setValue(CompletionType.Notice);
+        lease.version().moveOutNotice().setValue(noticeDay);
+        lease.version().expectedMoveOut().setValue(moveOutDay);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
@@ -130,12 +130,12 @@ public class LeaseManager {
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
         }
-        if (lease.completion().getValue() != CompletionType.Notice | lease.moveOutNotice().isNull()) {
+        if (lease.version().completion().getValue() != CompletionType.Notice | lease.version().moveOutNotice().isNull()) {
             throw new IllegalStateException("lease " + leaseId + " must have notice in order to perform 'cancelNotice'");
         }
-        lease.completion().setValue(null);
-        lease.moveOutNotice().setValue(null);
-        lease.expectedMoveOut().setValue(null);
+        lease.version().completion().setValue(null);
+        lease.version().moveOutNotice().setValue(null);
+        lease.version().expectedMoveOut().setValue(null);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
@@ -149,12 +149,12 @@ public class LeaseManager {
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
         }
-        if (lease.status().getValue() != Status.Active) {
+        if (lease.version().status().getValue() != Status.Active) {
             throw new IllegalStateException("lease " + leaseId + " must be " + Status.Active + " in order to perform 'Evict'");
         }
-        lease.completion().setValue(CompletionType.Eviction);
-        lease.moveOutNotice().setValue(evictionDay);
-        lease.expectedMoveOut().setValue(moveOutDay);
+        lease.version().completion().setValue(CompletionType.Eviction);
+        lease.version().moveOutNotice().setValue(evictionDay);
+        lease.version().expectedMoveOut().setValue(moveOutDay);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
@@ -168,12 +168,12 @@ public class LeaseManager {
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
         }
-        if (lease.completion().getValue() != CompletionType.Notice | lease.moveOutNotice().isNull()) {
+        if (lease.version().completion().getValue() != CompletionType.Notice | lease.version().moveOutNotice().isNull()) {
             throw new IllegalStateException("lease " + leaseId + " must have eviction in order to perform 'cancelEvict'");
         }
-        lease.completion().setValue(null);
-        lease.moveOutNotice().setValue(null);
-        lease.expectedMoveOut().setValue(null);
+        lease.version().completion().setValue(null);
+        lease.version().moveOutNotice().setValue(null);
+        lease.version().expectedMoveOut().setValue(null);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
@@ -184,7 +184,7 @@ public class LeaseManager {
 
     public Lease approveApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
-        lease.status().setValue(Status.Approved);
+        lease.version().status().setValue(Status.Approved);
         // finalize approved leases while saving:
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
@@ -197,7 +197,7 @@ public class LeaseManager {
 
     public Lease declineApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
-        lease.status().setValue(Status.Declined);
+        lease.version().status().setValue(Status.Declined);
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
@@ -207,7 +207,7 @@ public class LeaseManager {
 
     public Lease cancelApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
-        lease.status().setValue(Status.ApplicationCancelled);
+        lease.version().status().setValue(Status.ApplicationCancelled);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
@@ -218,10 +218,9 @@ public class LeaseManager {
 
     public Lease activate(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
-
         // set lease status to active ONLY if first (latest till now) bill is confirmed: 
         if (ServerSideFactory.create(BillingFacade.class).getLatestBill(lease.billingAccount()).billStatus().getValue() == Bill.BillStatus.Confirmed) {
-            lease.status().setValue(Status.Active);
+            lease.version().status().setValue(Status.Active);
 
             lease.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.secureSave(lease);
@@ -230,14 +229,22 @@ public class LeaseManager {
         } else {
             throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
         }
-
         return lease;
     }
 
     public Lease complete(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
-        lease.actualLeaseTo().setValue(timeContextProvider.getTimeContext());
-        lease.status().setValue(Status.Completed);
+        lease.version().actualLeaseTo().setValue(timeContextProvider.getTimeContext());
+        lease.version().status().setValue(Status.Completed);
+
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.secureSave(lease);
+        return lease;
+    }
+
+    public Lease close(Key leaseId) {
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+        lease.version().status().setValue(Status.Closed);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
@@ -254,7 +261,6 @@ public class LeaseManager {
     }
 
     public interface TimeContextProvider {
-
         LogicalDate getTimeContext();
     }
 }

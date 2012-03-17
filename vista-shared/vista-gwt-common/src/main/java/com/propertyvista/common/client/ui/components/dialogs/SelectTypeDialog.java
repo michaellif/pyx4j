@@ -29,7 +29,6 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
-
 public abstract class SelectTypeDialog<E extends Enum<E>> extends OkDialog {
     public static interface CellTemplate extends SafeHtmlTemplates {
         @Template("{0}")
@@ -48,7 +47,7 @@ public abstract class SelectTypeDialog<E extends Enum<E>> extends OkDialog {
         setWidth(defineWidth());
     }
 
-    private static <E extends Enum<E>> Widget initBody(SelectionModel<E> selectionModel, EnumSet<E> values, String height) {
+    protected <E extends Enum<E>> Widget initBody(SelectionModel<E> selectionModel, EnumSet<E> values, String height) {
         CellList<E> list = new CellList<E>(new AbstractCell<E>() {
             @Override
             public void render(com.google.gwt.cell.client.Cell.Context context, E value, SafeHtmlBuilder sb) {

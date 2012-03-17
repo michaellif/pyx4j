@@ -107,7 +107,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 new TermLeaseBox(CompletionType.Notice) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) presenter).notice(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
+                        ((LeaseViewerView.Presenter) presenter).notice(getValue().version().moveOutNotice().getValue(), getValue().version().expectedMoveOut()
+                                .getValue());
                         return true;
                     }
                 }.show();
@@ -129,7 +130,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 new TermLeaseBox(CompletionType.Eviction) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) presenter).evict(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
+                        ((LeaseViewerView.Presenter) presenter).evict(getValue().version().moveOutNotice().getValue(), getValue().version().expectedMoveOut()
+                                .getValue());
                         return true;
                     }
                 }.show();
@@ -152,8 +154,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         super.populate(value);
 
         // set buttons state:
-        Status status = value.status().getValue();
-        CompletionType completion = value.completion().getValue();
+        Status status = value.version().status().getValue();
+        CompletionType completion = value.version().completion().getValue();
 
         // disable editing for completed/closed leases:
         getEditButton().setVisible(status != Status.Completed && status != Status.Closed);
@@ -199,13 +201,13 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                     FormFlexPanel main = new FormFlexPanel();
                     switch (action) {
                     case Notice:
-                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).customLabel(i18n.tr("Notice Date")).build());
+                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().version().moveOutNotice()), 9).customLabel(i18n.tr("Notice Date")).build());
                         break;
                     case Eviction:
-                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).customLabel(i18n.tr("Evict Date")).build());
+                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().version().moveOutNotice()), 9).customLabel(i18n.tr("Evict Date")).build());
                         break;
                     }
-                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
+                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().version().expectedMoveOut()), 9).build());
 
                     // just for validation purpose:
                     inject(proto().leaseFrom());
@@ -218,12 +220,12 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 protected void onPopulate() {
                     super.onPopulate();
 
-                    if (getValue().moveOutNotice().isNull()) {
-                        get(proto().moveOutNotice()).setValue(new LogicalDate());
+                    if (getValue().version().moveOutNotice().isNull()) {
+                        get(proto().version().moveOutNotice()).setValue(new LogicalDate());
                     }
 
-                    if (getValue().expectedMoveOut().isNull()) {
-                        get(proto().expectedMoveOut()).setValue(new LogicalDate());
+                    if (getValue().version().expectedMoveOut().isNull()) {
+                        get(proto().version().expectedMoveOut()).setValue(new LogicalDate());
                     }
                 }
 
@@ -231,15 +233,17 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 public void addValidations() {
                     super.addValidations();
 
-                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().moveOutNotice()), get(proto().leaseTo()),
+                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().version().moveOutNotice()), get(proto().leaseTo()),
                             i18n.tr("The Date Should Be Within The Lease Period"));
-                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveOut()), get(proto().leaseTo()),
+                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().version().expectedMoveOut()), get(proto().leaseTo()),
                             i18n.tr("The Date Should Be Within The Lease Period"));
 
-                    new StartEndDateValidation(get(proto().moveOutNotice()), get(proto().expectedMoveOut()),
+                    new StartEndDateValidation(get(proto().version().moveOutNotice()), get(proto().version().expectedMoveOut()),
                             i18n.tr("The Notice Date Must Be Earlier Than The Expected Move Out date"));
-                    get(proto().moveOutNotice()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
-                    get(proto().expectedMoveOut()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().moveOutNotice())));
+                    get(proto().version().moveOutNotice())
+                            .addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().expectedMoveOut())));
+                    get(proto().version().expectedMoveOut())
+                            .addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().moveOutNotice())));
                 }
             };
 

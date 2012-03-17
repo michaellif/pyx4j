@@ -112,14 +112,14 @@ public class UnitTurnoverAnalysisManagerTestBase {
         Persistence.service().merge(tenant);
 
         final Lease lease = EntityFactory.create(Lease.class);
-        lease.status().setValue(Lease.Status.Active);
+        lease.version().status().setValue(Lease.Status.Active);
         lease.leaseID().setValue("lease: " + dateFrom + " " + dateTo);
         lease.unit().set(unit);
         lease.type().setValue(Service.Type.residentialUnit);
         lease.createDate().setValue(asDate(dateFrom));
         lease.leaseFrom().setValue(asDate(dateFrom));
         lease.leaseTo().setValue(asDate(dateTo));
-        lease.expectedMoveIn().setValue(asDate(dateFrom));
+        lease.version().expectedMoveIn().setValue(asDate(dateFrom));
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);

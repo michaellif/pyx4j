@@ -98,7 +98,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         // disable some editing on signed lease:
         if (isEditable()) {
-            boolean isLeaseSigned = !getValue().approvalDate().isNull();
+            boolean isLeaseSigned = !getValue().version().approvalDate().isNull();
 
             tabPanel.setTabDisabled(detailsTab, isLeaseSigned);
 
@@ -113,8 +113,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseID()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().status(), new CEnumLabel())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().completion(), new CEnumLabel())).build());
         if (!isEditable()) {
             main.setWidget(
                     ++row,
@@ -173,21 +173,20 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
         leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseTo()), 9).build());
         leaseDates.setBR(++datesRow, 0, 1);
-        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
-        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
-        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
+        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().expectedMoveIn()), 9).build());
+        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().moveOutNotice()), 9).build());
+        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().expectedMoveOut()), 9).build());
 
         datesRow = -1; // second column:
         leaseDates.setBR(++datesRow, 1, 1);
-        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualLeaseTo()), 9).build());
+        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualLeaseTo()), 9).build());
         leaseDates.setBR(++datesRow, 1, 1);
-        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
+        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualMoveIn()), 9).build());
         leaseDates.setBR(++datesRow, 1, 1);
-        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).build());
+        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualMoveOut()), 9).build());
 
-        get(proto().actualLeaseTo()).setViewable(true);
-        get(proto().moveOutNotice()).setViewable(true);
-        get(proto().expectedMoveOut()).setViewable(true);
+        get(proto().version().moveOutNotice()).setViewable(true);
+        get(proto().version().expectedMoveOut()).setViewable(true);
 
         leaseDates.getColumnFormatter().setWidth(0, "40%");
         leaseDates.getColumnFormatter().setWidth(1, "60%");
@@ -197,10 +196,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setBR(++row, 0, 1);
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().approvalDate()), 9).build());
 
         get(proto().createDate()).setViewable(true);
-        get(proto().approvalDate()).setViewable(true);
+        get(proto().version().approvalDate()).setViewable(true);
 
         return new CrmScrollPanel(main);
     }
@@ -278,13 +277,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         super.addValidations();
 
         validate(get(proto().leaseFrom()), get(proto().leaseTo()), null);
-        validate(get(proto().leaseFrom()), get(proto().actualLeaseTo()), null);
-        validate(get(proto().actualMoveIn()), get(proto().actualMoveOut()), null);
+        validate(get(proto().leaseFrom()), get(proto().version().actualLeaseTo()), null);
+        validate(get(proto().version().actualMoveIn()), get(proto().version().actualMoveOut()), null);
 
-        new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveIn()), get(proto().leaseTo()),
+        new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().version().expectedMoveIn()), get(proto().leaseTo()),
                 i18n.tr("The Date Should Be Within The Lease Period"));
-        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
-        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
+        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().expectedMoveIn())));
+        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().expectedMoveIn())));
 
     }
 

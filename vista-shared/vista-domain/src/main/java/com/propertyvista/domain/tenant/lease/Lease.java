@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
@@ -136,14 +137,12 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     }
 
     @NotNull
+    @ReadOnly
     @ToString(index = 0)
     IPrimitive<String> leaseID();
 
-    IPrimitive<Status> status();
-
-    IPrimitive<CompletionType> completion();
-
     @NotNull
+    @ReadOnly
     @MemberColumn(name = "leaseType")
     IPrimitive<Service.Type> type();
 
@@ -153,8 +152,6 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
-    IPrimitive<PaymentFrequency> paymentFrequency();
-
     // or by dates:
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseFrom();
@@ -162,28 +159,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseTo();
 
-    // other dates:
-
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> actualLeaseTo();
-
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> expectedMoveIn();
-
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> expectedMoveOut();
-
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> actualMoveIn();
-
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> actualMoveOut();
-
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> moveOutNotice();
-
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> approvalDate();
+    IPrimitive<PaymentFrequency> paymentFrequency();
 
     @JoinColumn
     @Owned(forceCreation = true)
@@ -197,6 +173,33 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     IPrimitive<LogicalDate> createDate();
 
     public interface LeaseV extends IVersionData<Lease> {
+
+        IPrimitive<Status> status();
+
+        IPrimitive<CompletionType> completion();
+
+        // various dates:
+
+        @Format("MM/dd/yyyy")
+        IPrimitive<LogicalDate> actualLeaseTo();
+
+        @Format("MM/dd/yyyy")
+        IPrimitive<LogicalDate> expectedMoveIn();
+
+        @Format("MM/dd/yyyy")
+        IPrimitive<LogicalDate> expectedMoveOut();
+
+        @Format("MM/dd/yyyy")
+        IPrimitive<LogicalDate> actualMoveIn();
+
+        @Format("MM/dd/yyyy")
+        IPrimitive<LogicalDate> actualMoveOut();
+
+        @Format("MM/dd/yyyy")
+        IPrimitive<LogicalDate> moveOutNotice();
+
+        @Format("MM/dd/yyyy")
+        IPrimitive<LogicalDate> approvalDate();
 
         @Detached
         @JoinTable(value = TenantInLease.class, cascade = false)

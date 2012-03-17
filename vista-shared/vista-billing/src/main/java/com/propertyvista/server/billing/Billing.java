@@ -168,9 +168,9 @@ class Billing {
 
                 Persistence.service().persist(bill);
 
-                bill.draft().setValue(Status.Created.equals(billingAccount.lease().status().getValue()));
+                bill.draft().setValue(Status.Created.equals(billingAccount.lease().version().status().getValue()));
 
-                if (Status.Approved.equals(billingAccount.lease().status().getValue())) {// first bill should be issued
+                if (Status.Approved.equals(billingAccount.lease().version().status().getValue())) {// first bill should be issued
                     bill.billType().setValue(Bill.BillType.First);
                     bill.billingPeriodStartDate().setValue(billingAccount.lease().leaseFrom().getValue());
 
@@ -183,7 +183,7 @@ class Billing {
                         throw new BillingException("Lease already ended");
                     }
 
-                } else if (Status.Completed.equals(billingAccount.lease().status().getValue())) {// final bill should be issued
+                } else if (Status.Completed.equals(billingAccount.lease().version().status().getValue())) {// final bill should be issued
                     bill.billType().setValue(Bill.BillType.Final);
                 } else {
                     bill.billType().setValue(Bill.BillType.Regular);

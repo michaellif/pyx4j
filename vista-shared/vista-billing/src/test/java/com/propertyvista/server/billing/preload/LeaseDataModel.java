@@ -57,7 +57,7 @@ public class LeaseDataModel {
         lease.version().leaseProducts().serviceItem().item().set(serviceItem);
 
         lease.leaseFrom().setValue(new LogicalDate(111, 1, 25));
-        lease.approvalDate().setValue(lease.leaseFrom().getValue());
+        lease.version().approvalDate().setValue(lease.leaseFrom().getValue());
 
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(lease.leaseFrom().getValue());

@@ -36,7 +36,7 @@ public class LeaseLifecycleSim {
     public Lease newLease(final LogicalDate eventDate, String leaseId, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo, LogicalDate expectedMoveIn,
             PaymentFrequency paymentFrequency, Tenant tenant) {
         final Lease lease = EntityFactory.create(Lease.class);
-        lease.status().setValue(Lease.Status.Created);
+        lease.version().status().setValue(Lease.Status.Created);
         lease.leaseID().setValue(leaseId);
         lease.unit().set(unit);
 
@@ -46,7 +46,7 @@ public class LeaseLifecycleSim {
         lease.createDate().setValue(eventDate);
         lease.leaseFrom().setValue(leaseFrom);
         lease.leaseTo().setValue(leaseTo);
-        lease.expectedMoveIn().setValue(expectedMoveIn);
+        lease.version().expectedMoveIn().setValue(expectedMoveIn);
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         if (tenant != null) {
@@ -63,8 +63,8 @@ public class LeaseLifecycleSim {
     }
 
     public Lease createApplication(Key leaseId, LogicalDate eventDate) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        lease.status().setValue(Status.ApplicationInProgress);
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+        lease.version().status().setValue(Status.ApplicationInProgress);
         leaseManager(eventDate).save(lease);
         return lease;
     }
@@ -107,14 +107,13 @@ public class LeaseLifecycleSim {
     }
 
     /** completes the lease and makes the unit "available" */
-    public Lease complete(Key leaseId, final LogicalDate completetionDay) {
-        Lease lease = leaseManager(completetionDay).complete(leaseId);
+    public Lease complete(Key leaseId, final LogicalDate completionDay) {
+        Lease lease = leaseManager(completionDay).complete(leaseId);
 
         AptUnitOccupancyManagerImpl.get(lease.unit().getPrimaryKey(), new NowSource() {
             @Override
             public LogicalDate getNow() {
-
-                return completetionDay;
+                return completionDay;
             }
         }).scopeAvailable();
 
@@ -122,10 +121,7 @@ public class LeaseLifecycleSim {
     }
 
     public Lease close(Key leaseId, LogicalDate closingDay) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        lease.status().setValue(Status.Closed);
-        Persistence.secureSave(lease);
-        return lease;
+        return leaseManager(closingDay).close(leaseId);
     }
 
     private LeaseManager leaseManager(final LogicalDate eventDate) {

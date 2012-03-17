@@ -148,7 +148,7 @@ public class AvailabilityReportManager {
             if (segment.status().getValue() == Status.leased | segment.status().getValue() == Status.reserved) {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
-                status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
+                status.moveInDay().setValue(segment.lease().version().expectedMoveIn().getValue());
                 break;
             }
         }
@@ -164,7 +164,7 @@ public class AvailabilityReportManager {
 
         status.rentedStatus().setValue(RentedStatus.Rented);
         status.rentedFromDay().setValue(current.lease().leaseFrom().getValue());
-        status.moveInDay().setValue(current.lease().expectedMoveIn().getValue());
+        status.moveInDay().setValue(current.lease().version().expectedMoveIn().getValue());
     }
 
     private void leased(UnitAvailabilityStatus status, AptUnitOccupancySegment current, List<AptUnitOccupancySegment> future) {
@@ -215,7 +215,7 @@ public class AvailabilityReportManager {
                     }
                     status.rentedStatus().setValue(RentedStatus.Rented);
                     status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
-                    status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
+                    status.moveInDay().setValue(segment.lease().version().expectedMoveIn().getValue());
                 }
                 break;
             default:
@@ -240,7 +240,7 @@ public class AvailabilityReportManager {
             if (segment.status().getValue() == Status.leased | segment.status().getValue() == Status.reserved) {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
-                status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
+                status.moveInDay().setValue(segment.lease().version().expectedMoveIn().getValue());
                 break;
             }
         }

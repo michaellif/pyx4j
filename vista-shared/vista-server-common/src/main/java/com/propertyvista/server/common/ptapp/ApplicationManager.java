@@ -118,7 +118,7 @@ public class ApplicationManager {
     }
 
     public static MasterApplication createMasterApplication(Lease lease) {
-        lease.status().setValue(Lease.Status.ApplicationInProgress);
+        lease.version().status().setValue(Lease.Status.ApplicationInProgress);
         Persistence.service().persist(lease);
 
         MasterApplication ma = EntityFactory.create(MasterApplication.class);

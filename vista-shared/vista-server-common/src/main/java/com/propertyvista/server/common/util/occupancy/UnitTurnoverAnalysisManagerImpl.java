@@ -49,7 +49,7 @@ public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisMana
 
     @Override
     public void propagateLeaseActivationToTurnoverReport(Lease lease) {
-        if (lease.status().getValue() != Lease.Status.Active) {
+        if (lease.version().status().getValue() != Lease.Status.Active) {
             throw new IllegalStateException("this function is only applicable to ACTIVE leases");
         }
 

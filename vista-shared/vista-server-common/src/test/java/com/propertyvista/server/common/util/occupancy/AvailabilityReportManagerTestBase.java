@@ -114,7 +114,7 @@ public class AvailabilityReportManagerTestBase {
             Lease lease = EntityFactory.create(Lease.class);
             lease.unit().set(unit);
             lease.leaseFrom().setValue(asDate(leaseFrom));
-            lease.expectedMoveIn().setValue(asDate(moveIn));
+            lease.version().expectedMoveIn().setValue(asDate(moveIn));
             lease.leaseTo().setValue(asDate(leaseTo));
             Persistence.service().merge(lease);
             return lease;

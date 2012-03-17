@@ -109,8 +109,8 @@ public class UnitOccupancyManagerTest extends UnitOccupancyManagerTestBase {
         s().from("2011-01-15").toTheEndOfTime().status(Status.leased).lease(lease).x();
 
         // TODO Artyom: I couldn't find any specification for this issue, but for now let's pretend "moveOutNotice" in lease means the date when the move out notice was given  
-        lease.moveOutNotice().setValue(asDate("2011-08-01"));
-        lease.expectedMoveOut().setValue(asDate("2011-10-23")); // two days before leaseTo() date
+        lease.version().moveOutNotice().setValue(asDate("2011-08-01"));
+        lease.version().expectedMoveOut().setValue(asDate("2011-10-23")); // two days before leaseTo() date
         updateLease(lease);
 
         om().endLease(unitId(), asDate("2011-10-25"));

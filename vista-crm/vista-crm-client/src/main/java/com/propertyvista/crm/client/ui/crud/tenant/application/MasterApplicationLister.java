@@ -47,11 +47,11 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
                 new MemberColumnDescriptor.Builder(proto().lease().leaseFrom(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().leaseTo(), true).build(),
 
-                new MemberColumnDescriptor.Builder(proto().lease().expectedMoveIn(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().lease().expectedMoveOut(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().lease().actualMoveIn(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().lease().actualMoveOut(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().lease().moveOutNotice(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().lease().version().expectedMoveIn(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().lease().version().expectedMoveOut(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().lease().version().actualMoveIn(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().lease().version().actualMoveOut(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().lease().version().moveOutNotice(), false).build(),
 
                 new MemberColumnDescriptor.Builder(proto().status(), true).build(),
 

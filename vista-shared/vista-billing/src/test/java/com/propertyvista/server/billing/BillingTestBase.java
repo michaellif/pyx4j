@@ -163,7 +163,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
     protected void setLeaseStatus(Lease.Status status) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
-        lease.status().setValue(status);
+        lease.version().status().setValue(status);
 
         if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
             // TODO vladS this is HAck!
