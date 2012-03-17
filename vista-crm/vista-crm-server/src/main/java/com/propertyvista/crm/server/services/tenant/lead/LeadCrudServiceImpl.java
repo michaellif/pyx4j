@@ -19,6 +19,7 @@ import com.propertvista.generator.util.RandomUtil;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.tenant.lead.LeadCrudService;
@@ -58,7 +59,6 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
 
     @Override
     public void convertToLease(AsyncCallback<Lease> callback, Key entityId) {
-
         Lead lead = Persistence.service().retrieve(dboClass, entityId);
         if (!lead.lease().isNull()) {
             callback.onFailure(new UserRuntimeException("The Lead is converted to Lease already!"));
@@ -69,18 +69,20 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             Persistence.service().merge(tenant);
 
             Lease lease = EntityFactory.create(Lease.class);
+// TODO generate LeaseId here:
             lease.leaseID().setValue(RandomUtil.randomLetters(10));
             lease.type().setValue(RandomUtil.randomEnum(Service.Type.class));
             lease.version().status().setValue(Lease.Status.Created);
             lease.leaseFrom().setValue(lead.moveInDate().getValue());
             lease.version().expectedMoveIn().setValue(lead.moveInDate().getValue());
-            Persistence.service().merge(lease);
+            lease.saveAction().setValue(SaveAction.saveAsDraft);
+            Persistence.service().persist(lease);
 
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
             tenantInLease.tenant().set(tenant);
             tenantInLease.lease().set(lease.version());
             tenantInLease.role().setValue(TenantInLease.Role.Applicant);
-            Persistence.service().merge(tenantInLease);
+            Persistence.service().persist(tenantInLease);
 
 //            // update lease tenants list:
 //            lease.tenants().add(tenantInLease);
@@ -90,6 +92,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             lead.lease().set(lease);
             Persistence.service().merge(lead);
 
+            Persistence.service().commit();
             callback.onSuccess(lease);
         }
     }
