@@ -394,7 +394,7 @@ public class TableModel {
                 }
                 parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, childEntity);
             } else {
-                parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, member.getMemberValue(entity));
+                parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, member.getPersistMemberValue(entity));
             }
         }
         for (MemberOperationsMeta member : entityOperationsMeta.getIndexMembers()) {

@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.mapping;
 
 import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.annotations.GeneratedValue;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -47,6 +48,8 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     private String sqlSequenceName;
 
+    private final GeneratedValue generatedValue;
+
     public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath) {
         this(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, null, null, false);
     }
@@ -66,6 +69,7 @@ public class MemberOperationsMeta implements EntityMemberAccess {
         this.indexAdapterClass = indexAdapterClass;
         this.indexValueClass = indexValueClass;
         this.ownerColumn = ownerColumn;
+        this.generatedValue = memberMeta.getAnnotation(GeneratedValue.class);
     }
 
     public boolean isOwnerColumn() {
@@ -95,6 +99,15 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     public String sqlName() {
         return sqlName;
+    }
+
+    public Object getPersistMemberValue(IEntity entity) {
+        Object value = getMemberValue(entity);
+        if ((value == null) && (generatedValue != null)) {
+            value = ValueGenerator.generate(generatedValue, getMemberMeta());
+            setMemberValue(entity, value);
+        }
+        return value;
     }
 
     @Override
