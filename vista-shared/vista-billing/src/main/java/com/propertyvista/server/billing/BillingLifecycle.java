@@ -27,8 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -168,12 +166,7 @@ public class BillingLifecycle {
         if (billingAccount.billingCycle().isNull()) {
             billingAccount.billingCycle().set(BillingCycleManger.ensureBillingCycle(lease));
             billingAccount.billCounter().setValue(1);
-
-            if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
-                // TODO vladS this is HAck!
-                lease.version().setAttachLevel(AttachLevel.Detached);
-            }
-            Persistence.service().persist(lease);
+            Persistence.service().persist(billingAccount);
         }
         return billingAccount;
 

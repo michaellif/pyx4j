@@ -22,16 +22,16 @@ package com.propertyvista.server.billing;
 
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
-import com.propertyvista.domain.financial.offering.Service.ServiceV;
+import com.propertyvista.domain.financial.offering.Service;
 
 public class BillingUtils {
 
     public static boolean isService(Product.ProductV product) {
-        return product.cast().isAssignableFrom(ServiceV.class);
+        return product.cast() instanceof Service.ServiceV;
     }
 
     public static boolean isFeature(Product.ProductV product) {
-        return product.cast().isAssignableFrom(Feature.FeatureV.class);
+        return product.cast() instanceof Feature.FeatureV;
     }
 
     public static boolean isRecurringFeature(Product.ProductV product) {

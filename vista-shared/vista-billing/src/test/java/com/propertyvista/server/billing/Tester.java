@@ -16,11 +16,14 @@ package com.propertyvista.server.billing;
 import junit.framework.AssertionFailedError;
 
 public class Tester {
+
     protected static void assertEquals(String message, Object expected, Object actual) {
-        if ((expected == null) && (actual == null))
+        if ((expected == null) && (actual == null)) {
             return;
-        if ((expected != null) && (expected.equals(actual)))
+        }
+        if ((expected != null) && (expected.equals(actual))) {
             return;
+        }
         if (false) {
             System.out.println(format(message, expected, actual));
             Thread.dumpStack();

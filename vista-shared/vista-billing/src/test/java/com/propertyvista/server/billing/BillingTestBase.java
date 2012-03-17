@@ -29,7 +29,10 @@ import java.util.Date;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 import com.pyx4j.gwt.server.DateUtils;
@@ -77,7 +80,6 @@ abstract class BillingTestBase extends VistaDBTestBase {
     }
 
     protected void preloadData() {
-
         LocationsDataModel locationsDataModel = new LocationsDataModel();
         locationsDataModel.generate(true);
 
@@ -150,6 +152,10 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
         lease.billingAccount().billingPeriodStartDate().setValue(billingPeriodStartDate);
 
+        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
+            // TODO vladS this is HAck!
+            lease.version().setAttachLevel(AttachLevel.Detached);
+        }
         Persistence.service().persist(lease);
         Persistence.service().commit();
 
@@ -159,6 +165,10 @@ abstract class BillingTestBase extends VistaDBTestBase {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         lease.status().setValue(status);
 
+        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
+            // TODO vladS this is HAck!
+            lease.version().setAttachLevel(AttachLevel.Detached);
+        }
         Persistence.service().persist(lease);
         Persistence.service().commit();
 
@@ -220,6 +230,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
                 billableItem.expirationDate().setValue(expirationDate);
                 lease.version().leaseProducts().featureItems().add(billableItem);
 
+                lease.saveAction().setValue(SaveAction.saveAsFinal);
                 Persistence.service().persist(lease);
                 Persistence.service().commit();
 

@@ -20,6 +20,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -42,6 +43,8 @@ public class LeaseDataModel {
         this.tenantDataModel = tenantDataModel;
 
     }
+
+    Lease lease2;
 
     public void generate(boolean persist) {
 
@@ -67,7 +70,10 @@ public class LeaseDataModel {
         addTenants();
 
         if (persist) {
+            lease.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.service().persist(lease);
+
+            lease2 = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
         }
     }
 
