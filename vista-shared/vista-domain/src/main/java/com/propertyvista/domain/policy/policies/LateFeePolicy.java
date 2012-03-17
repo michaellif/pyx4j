@@ -18,9 +18,6 @@ import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
@@ -39,10 +36,7 @@ public interface LateFeePolicy extends BuildingPolicy {
         @Translate("% Monthly Rent")
         PercentMonthlyRent,
 
-        FlatAmount,
-
-        @Translate("% Owed-month")
-        PrecentOwedMonth;
+        FlatAmount;
 
         @Override
         public String toString() {
@@ -50,18 +44,15 @@ public interface LateFeePolicy extends BuildingPolicy {
         }
     }
 
-    @XmlType(name = "BaseFeeType")
+    @XmlType(name = "MaxTotalFeeType")
     public enum MaxTotalFeeType {
-        @Translate("% Owed-total")
-        PercentOwedTotal,
 
         @Translate("% Monthly Rent")
         PercentMonthlyRent,
 
         FlatAmount,
 
-        @Translate("% Owed-month")
-        PrecentOwedMonth;
+        Unlimited;
 
         @Override
         public String toString() {
@@ -76,39 +67,11 @@ public interface LateFeePolicy extends BuildingPolicy {
     IPrimitive<BaseFeeType> baseFeeType();
 
     @NotNull
-    IPrimitive<Integer> gracePeriod();
-
-    IPrimitive<BigDecimal> baseFee2();
-
-    IPrimitive<BaseFeeType> baseFeeType2();
-
-    IPrimitive<Integer> gracePeriod2();
-
-    @NotNull
     IPrimitive<BigDecimal> maxTotalFee();
 
     @NotNull
     IPrimitive<MaxTotalFeeType> maxTotalFeeType();
 
     @NotNull
-    IPrimitive<BigDecimal> dailyFee();
-
-    @NotNull
-    IPrimitive<Integer> maxDays();
-
-    @NotNull
     IPrimitive<BigDecimal> minimumAmounDue();
-
-    @NotNull
-    IPrimitive<Boolean> chargeNoticeResident();
-
-    @NotNull
-    IPrimitive<Boolean> chargePastResident();
-
-    @NotNull
-    @Owned
-    @Length(2845)
-    @Editor(type = Editor.EditorType.richtextarea)
-    //TODO Blob
-    IPrimitive<String> lateFeeStatement();
 }

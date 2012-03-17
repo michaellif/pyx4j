@@ -36,24 +36,10 @@ public class LateFeePolicyPreloader extends AbstractPolicyPreloader<LateFeePolic
         LateFeePolicy policy = EntityFactory.create(LateFeePolicy.class);
 
         policy.baseFee().setValue(new BigDecimal(500.00));
-        policy.baseFeeType().setValue(BaseFeeType.PercentOwedTotal);
-        policy.gracePeriod().setValue(2);
-
-        policy.baseFee2().setValue(new BigDecimal(100.00));
-        policy.baseFeeType2().setValue(BaseFeeType.PercentMonthlyRent);
-        policy.gracePeriod2().setValue(3);
-
+        policy.baseFeeType().setValue(BaseFeeType.FlatAmount);
         policy.maxTotalFee().setValue(new BigDecimal(1000.00));
         policy.maxTotalFeeType().setValue(MaxTotalFeeType.FlatAmount);
-
-        policy.dailyFee().setValue(new BigDecimal(50.00));
-        policy.maxDays().setValue(30);
-
         policy.minimumAmounDue().setValue(new BigDecimal(30));
-        policy.chargeNoticeResident().setValue(true);
-        policy.chargePastResident().setValue(false);
-
-        policy.lateFeeStatement().setValue("Put statement here");
 
         return policy;
     }

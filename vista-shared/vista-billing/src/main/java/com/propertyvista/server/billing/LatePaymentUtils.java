@@ -14,18 +14,52 @@
 package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-import com.pyx4j.commons.LogicalDate;
-
-import com.propertyvista.domain.financial.billing.BillPayment;
+import com.propertyvista.domain.policy.policies.LateFeePolicy;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.server.common.policy.PolicyManager;
 
 public class LatePaymentUtils {
 
-    public static BigDecimal latePayment(BigDecimal amount, LogicalDate dueDate, List<BillPayment> latePayments, Building building) {
-        //TODO YS to get detailes of types and rules for late payment fee
-        return amount.multiply(new BigDecimal("0.05"));
+    public static BigDecimal latePayment(BigDecimal amount, BigDecimal monthlyRent, Building building) {
+        LateFeePolicy lateFeePolicy = PolicyManager.obtainEffectivePolicy(building, LateFeePolicy.class);
+
+        if (amount.compareTo(lateFeePolicy.minimumAmounDue().getValue()) <= 0)
+            return new BigDecimal(0.0); // Don't bother with small amount...
+
+        return calculateFee(lateFeePolicy, amount, monthlyRent);
     }
 
+    private static BigDecimal calculateFee(LateFeePolicy policy, BigDecimal amount, BigDecimal monthlyRent) {
+        BigDecimal fee = new BigDecimal(0.0);
+
+        switch (policy.baseFeeType().getValue()) {
+        case FlatAmount:
+            fee = policy.baseFee().getValue();
+            break;
+
+        case PercentOwedTotal:
+            fee = amount.multiply(policy.baseFee().getValue());
+            break;
+
+        case PercentMonthlyRent:
+            fee = monthlyRent.multiply(policy.baseFee().getValue());
+            break;
+        }
+
+        switch (policy.maxTotalFeeType().getValue()) {
+        case FlatAmount:
+            fee = fee.min(policy.maxTotalFee().getValue());
+            break;
+
+        case PercentMonthlyRent:
+            fee = fee.min(monthlyRent.multiply(policy.maxTotalFee().getValue()));
+            break;
+
+        case Unlimited:
+            break;
+        }
+
+        return fee;
+    }
 }

@@ -45,31 +45,16 @@ public class LateFeePolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<La
 
     private Widget createFeesPanel() {
         FormFlexPanel panel = new FormFlexPanel();
+
         int row = -1;
-
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().baseFee())).build());
-        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().baseFee2())).build());
-
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().baseFeeType())).build());
-        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().baseFeeType2())).build());
-
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().gracePeriod())).build());
-        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().gracePeriod2())).build());
-
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxTotalFee())).build());
-        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().maxTotalFeeType())).build());
-
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dailyFee())).build());
-        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().maxDays())).build());
-
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().baseFee())).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().minimumAmounDue())).build());
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeNoticeResident())).build());
-        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().chargePastResident())).build());
-
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lateFeeStatement())).build());
-        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+        row = -1;
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().maxTotalFeeType())).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().maxTotalFee())).build());
 
         panel.getColumnFormatter().setWidth(0, "50%");
         panel.getColumnFormatter().setWidth(1, "50%");
