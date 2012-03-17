@@ -153,12 +153,9 @@ class Billing {
     static void createBill(BillingRun billingRun, BillingAccount billingAccount) {
         Persistence.service().retrieveMember(billingAccount.payments());
         Persistence.service().retrieve(billingAccount.lease());
-
         Bill bill = EntityFactory.create(Bill.class);
-
         try {
-            Persistence.service().startBackgroundProcessTransaction();
-
+            Persistence.service().startTransaction();
             try {
                 bill.billStatus().setValue(Bill.BillStatus.Running);
                 bill.billingAccount().set(billingAccount);
