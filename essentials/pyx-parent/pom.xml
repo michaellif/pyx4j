@@ -558,6 +558,12 @@
                 <version>${batikVersion}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-transcoder</artifactId>
+                <version>${batikVersion}</version>
+            </dependency>
+
         </dependencies>
 
     </dependencyManagement>
