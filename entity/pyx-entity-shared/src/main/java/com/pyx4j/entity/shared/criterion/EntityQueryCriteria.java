@@ -46,6 +46,8 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
     private E entityPrototype;
 
+    private VersionedCriteria versionedCriteria = VersionedCriteria.onlyFinalized;
+
     public static class Sort implements Serializable {
 
         private static final long serialVersionUID = -9007568149350718889L;
@@ -78,10 +80,12 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
     }
 
-    // for Versioned Enity
-    // OnlyFinalized,
-    // FinalizedOrDraft
-    // 
+    public enum VersionedCriteria {
+
+        onlyFinalized,
+
+        finalizedOrDraft
+    }
 
     protected EntityQueryCriteria() {
 
@@ -174,6 +178,14 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         return sorts;
     }
 
+    public VersionedCriteria getVersionedCriteria() {
+        return versionedCriteria;
+    }
+
+    public void setVersionedCriteria(VersionedCriteria versionedCriteria) {
+        this.versionedCriteria = versionedCriteria;
+    }
+
     public void setSorts(List<Sort> sorts) {
         if (sorts == null) {
             this.sorts = null;
@@ -261,4 +273,5 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         builder.append(" sorts=").append(getSorts());
         return builder.toString();
     }
+
 }
