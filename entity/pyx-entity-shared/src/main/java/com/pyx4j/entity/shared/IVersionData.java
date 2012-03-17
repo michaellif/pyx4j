@@ -29,6 +29,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.i18n.annotations.I18n;
 
 @AbstractEntity(generateMetadata = false)
@@ -53,5 +54,9 @@ public interface IVersionData<VERSIONED_ENTITY extends IVersionedEntity<?>> exte
     IPrimitive<Date> toDate();
 
     IPrimitive<Key> createdByUserKey();
+
+    //TODO make Abstract user part of the framework
+    @Transient
+    IPrimitive<String> createdByUser();
 
 }
