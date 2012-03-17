@@ -18,8 +18,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -108,7 +106,7 @@ public class LeaseManager {
     }
 
     public Lease notice(Key leaseId, LogicalDate noticeDay, LogicalDate moveOutDay) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
         }
@@ -120,11 +118,7 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(noticeDay);
         lease.expectedMoveOut().setValue(moveOutDay);
 
-        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
-            // TODO vladS this is HAck!
-            lease.version().setAttachLevel(AttachLevel.Detached);
-        }
-
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).endLease();
@@ -132,7 +126,7 @@ public class LeaseManager {
     }
 
     public Lease cancelNotice(Key leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
         }
@@ -143,11 +137,7 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
 
-        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
-            // TODO vladS this is HAck!
-            lease.version().setAttachLevel(AttachLevel.Detached);
-        }
-
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).cancelEndLease();
@@ -155,7 +145,7 @@ public class LeaseManager {
     }
 
     public Lease evict(Key leaseId, LogicalDate evictionDay, LogicalDate moveOutDay) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
         }
@@ -166,11 +156,7 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(evictionDay);
         lease.expectedMoveOut().setValue(moveOutDay);
 
-        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
-            // TODO vladS this is HAck!
-            lease.version().setAttachLevel(AttachLevel.Detached);
-        }
-
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).endLease();
@@ -178,7 +164,7 @@ public class LeaseManager {
     }
 
     public Lease cancelEvict(Key leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
         }
@@ -189,11 +175,7 @@ public class LeaseManager {
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
 
-        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
-            // TODO vladS this is HAck!
-            lease.version().setAttachLevel(AttachLevel.Detached);
-        }
-
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).cancelEndLease();
@@ -201,7 +183,7 @@ public class LeaseManager {
     }
 
     public Lease approveApplication(Key leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         lease.status().setValue(Status.Approved);
         // finalize approved leases while saving:
         lease.saveAction().setValue(SaveAction.saveAsFinal);
@@ -214,8 +196,9 @@ public class LeaseManager {
     }
 
     public Lease declineApplication(Key leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         lease.status().setValue(Status.Declined);
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).unreserve();
@@ -223,14 +206,10 @@ public class LeaseManager {
     }
 
     public Lease cancelApplication(Key leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         lease.status().setValue(Status.ApplicationCancelled);
 
-        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
-            // TODO vladS this is HAck!
-            lease.version().setAttachLevel(AttachLevel.Detached);
-        }
-
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).unreserve();
@@ -238,17 +217,13 @@ public class LeaseManager {
     }
 
     public Lease activate(Key leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
 
         // set lease status to active ONLY if first (latest till now) bill is confirmed: 
         if (ServerSideFactory.create(BillingFacade.class).getLatestBill(lease.billingAccount()).billStatus().getValue() == Bill.BillStatus.Confirmed) {
             lease.status().setValue(Status.Active);
 
-            if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
-                // TODO vladS this is HAck!
-                lease.version().setAttachLevel(AttachLevel.Detached);
-            }
-
+            lease.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.secureSave(lease);
 
             turnoverAnalysisManager.propagateLeaseActivationToTurnoverReport(lease);
@@ -260,15 +235,11 @@ public class LeaseManager {
     }
 
     public Lease complete(Key leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         lease.actualLeaseTo().setValue(timeContextProvider.getTimeContext());
         lease.status().setValue(Status.Completed);
 
-        if (IVersionedEntity.TODO_FIX_UPDATE_FINAL) {
-            // TODO vladS this is HAck!
-            lease.version().setAttachLevel(AttachLevel.Detached);
-        }
-
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
         return lease;
     }
