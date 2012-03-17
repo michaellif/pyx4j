@@ -49,6 +49,8 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
         E entity = super.retrieve(primaryKey, retrieveTraget);
         if (primaryKey.getVersion() == Key.VERSION_DRAFT && entity.version().isNull()) {
             entity = super.retrieve(primaryKey.asCurrentKey(), retrieveTraget);
+        } else if (primaryKey.getVersion() == Key.VERSION_CURRENT && entity.version().isNull()) {
+            entity = super.retrieve(primaryKey.asDraftKey(), retrieveTraget);
         }
         return entity;
     }
