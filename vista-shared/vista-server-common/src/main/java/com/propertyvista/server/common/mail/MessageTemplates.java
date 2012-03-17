@@ -85,6 +85,7 @@ public class MessageTemplates {
 
         // get building policy node
         Persistence.service().retrieve(tenantInLease.lease());
+        Persistence.service().retrieve(tenantInLease.lease().holder());
         Persistence.service().retrieve(tenantInLease.lease().holder().unit());
         Persistence.service().retrieve(tenantInLease.lease().holder().unit().belongsTo());
         EmailTemplate emailTemplate = getEmailTemplate(type, tenantInLease.lease().holder().unit().belongsTo());

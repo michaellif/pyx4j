@@ -23,6 +23,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -424,6 +425,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         lease = EntityFactory.create(Lease.class);
         lease.unit().set(unit);
         lease.leaseFrom().setValue(new LogicalDate());
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(lease);
 
         // load main applicant
