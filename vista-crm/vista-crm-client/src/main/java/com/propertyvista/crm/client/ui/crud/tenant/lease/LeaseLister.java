@@ -31,7 +31,6 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().type()).build(),
             new Builder(proto().status()).build(),
             new Builder(proto().completion()).build(),
-            new Builder(proto().transferred(), false).build(),
             new Builder(proto().leaseFrom()).build(),
             new Builder(proto().leaseTo()).build(),
             new Builder(proto().expectedMoveIn()).build(),

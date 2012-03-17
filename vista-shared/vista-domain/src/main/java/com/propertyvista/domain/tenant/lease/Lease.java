@@ -143,8 +143,6 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
     IPrimitive<CompletionType> completion();
 
-    IPrimitive<Boolean> transferred();
-
     @NotNull
     @MemberColumn(name = "leaseType")
     IPrimitive<Service.Type> type();
