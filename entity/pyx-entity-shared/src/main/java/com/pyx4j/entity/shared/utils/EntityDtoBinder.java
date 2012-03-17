@@ -176,12 +176,11 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                 if (!retriveDetachedMember((IEntity) dboM)) {
                     throw new Error("Copying detached entity " + ((IEntity) dboM).getDebugExceptionInfoString());
                 }
-            } else if (dboM.getAttachLevel() == AttachLevel.Detached) {
-                dtoM.setAttachLevel(AttachLevel.Detached);
-                continue;
             }
 
-            if (b.binder == null) {
+            if (dboM.getAttachLevel() == AttachLevel.Detached) {
+                dtoM.setAttachLevel(AttachLevel.Detached);
+            } else if (b.binder == null) {
                 if (dboM instanceof ICollection) {
                     ((ICollection<IEntity, ?>) dtoM).clear();
                     for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
@@ -224,12 +223,18 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         for (Binding b : binding) {
             IObject dtoM = dto.getMember(b.dtoMemberPath);
             IObject dboM = dbo.getMember(b.dboMemberPath);
-            if (b.binder == null) {
+
+            if (dtoM.getAttachLevel() == AttachLevel.Detached) {
+                dboM.setAttachLevel(AttachLevel.Detached);
+            } else if (b.binder == null) {
                 if (dtoM instanceof ICollection) {
                     ((ICollection<IEntity, ?>) dboM).clear();
                     for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
                         ((ICollection<IEntity, ?>) dboM).add(dtoMi);
                     }
+                } else if (dtoM.getAttachLevel() == AttachLevel.IdOnly) {
+                    ((IEntity) dboM).setPrimaryKey(((IEntity) dtoM).getPrimaryKey());
+                    dboM.setAttachLevel(AttachLevel.Detached);
                 } else {
                     dboM.setValue(dtoM.getValue());
                 }
