@@ -27,6 +27,7 @@ import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntity<?>> extends AbstractCrudServiceImpl<E> implements
@@ -66,6 +67,8 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
                 if ((result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)
                         && ((entityId.getVersion() == Key.VERSION_DRAFT) || (retrieveTraget == RetrieveTraget.Edit))) {
                     result.version().set(EntityGraph.businessDuplicate(result.version()));
+                    VersionedEntityUtils.setAsDraft(result.version());
+                    result.setPrimaryKey(entityId.asDraftKey());
                 }
                 callback.onSuccess(result);
             }

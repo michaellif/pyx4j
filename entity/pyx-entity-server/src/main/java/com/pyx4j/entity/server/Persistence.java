@@ -32,8 +32,11 @@ import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -135,6 +138,22 @@ public class Persistence {
         //TODO we should apply DatasetAccessRule
 
         Persistence.service().merge(entity);
+    }
+
+    public static <T extends IVersionedEntity<?>> T secureRetrieveDraft(Class<T> entityClass, Key primaryKey) {
+        // TODO  vlads
+        return retrieveDraft(entityClass, primaryKey);
+    }
+
+    public static <T extends IVersionedEntity<?>> T retrieveDraft(Class<T> entityClass, Key primaryKey) {
+        T entity = service().retrieve(entityClass, primaryKey.asDraftKey());
+        if (entity.version().isNull()) {
+            entity = service().retrieve(entityClass, primaryKey.asCurrentKey());
+            entity.version().set(EntityGraph.businessDuplicate(entity.version()));
+            VersionedEntityUtils.setAsDraft(entity.version());
+            entity.setPrimaryKey(primaryKey.asDraftKey());
+        }
+        return entity;
     }
 
 }
