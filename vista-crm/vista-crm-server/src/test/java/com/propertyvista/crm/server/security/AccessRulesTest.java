@@ -20,6 +20,7 @@ import junit.framework.Assert;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
@@ -64,6 +65,7 @@ public class AccessRulesTest extends VistaDBTestBase {
             Persistence.service().persist(t2);
 
             Lease lease = EntityFactory.create(Lease.class);
+            lease.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.service().persist(lease);
 
             TenantInLease tl2 = EntityFactory.create(TenantInLease.class);
@@ -95,12 +97,17 @@ public class AccessRulesTest extends VistaDBTestBase {
         t1.person().name().firstName().setValue(setId);
         Persistence.service().persist(t1);
 
-        TenantInLease tl1 = EntityFactory.create(TenantInLease.class);
-        Building building = tl1.lease().holder().unit().belongsTo();
-        Persistence.service().persist(tl1.lease().holder().unit().belongsTo());
-        Persistence.service().persist(tl1.lease().holder().unit());
-        Persistence.service().persist(tl1.lease());
+        Lease lease = EntityFactory.create(Lease.class);
+        Building building = lease.unit().belongsTo();
+        Persistence.service().persist(building);
+        Persistence.service().persist(lease.unit());
 
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.service().persist(lease);
+
+        TenantInLease tl1 = EntityFactory.create(TenantInLease.class);
+
+        tl1.lease().set(lease.version());
         tl1.tenant().set(t1);
         Persistence.service().persist(tl1);
 
