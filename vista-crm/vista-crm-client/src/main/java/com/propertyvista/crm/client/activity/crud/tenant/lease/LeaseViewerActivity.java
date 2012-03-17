@@ -96,6 +96,7 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
         preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Payment.class).billingAccount().id().getPath(), Operators.is, result
                 .billingAccount().getPrimaryKey()));
         paymentLister.setPreDefinedFilters(preDefinedFilters);
+        paymentLister.setParent(result.billingAccount().getPrimaryKey());
         paymentLister.populate();
     }
 

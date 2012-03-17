@@ -27,13 +27,7 @@ import com.propertyvista.domain.financial.billing.Payment;
 public class PaymentListerActivity extends ListerActivityBase<Payment> {
 
     public PaymentListerActivity(Place place) {
-        super(place,
-
-        SettingsViewFactory.instance(PaymentListerView.class),
-
-        GWT.<AbstractListService<Payment>> create(PaymentCrudService.class),
-
-        Payment.class);
+        super(place, SettingsViewFactory.instance(PaymentListerView.class), GWT.<AbstractListService<Payment>> create(PaymentCrudService.class), Payment.class);
     }
 
 }
