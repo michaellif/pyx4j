@@ -71,10 +71,14 @@ public class TableModleVersioned {
 
     public static List<IVersionData<IVersionedEntity<?>>> update(PersistenceContext persistenceContext, Mappings mappings, IEntity entity,
             MemberOperationsMeta member) {
+
         List<IVersionData<IVersionedEntity<?>>> update = new ArrayList<IVersionData<IVersionedEntity<?>>>();
+        IVersionedEntity<?> versionedEntity = (IVersionedEntity<?>) entity;
+
         @SuppressWarnings("unchecked")
         IVersionData<IVersionedEntity<?>> memeberEntity = (IVersionData<IVersionedEntity<?>>) member.getMember(entity);
-        if (memeberEntity.isNull()) {
+        // Force creation of the data entity on finalize
+        if (memeberEntity.isNull() && (versionedEntity.saveAction().getValue() != SaveAction.saveAsFinal)) {
             return update;
         }
         @SuppressWarnings("unchecked")
@@ -95,7 +99,6 @@ public class TableModleVersioned {
             existingDraft = draftsExisting.get(0);
         }
 
-        IVersionedEntity<?> versionedEntity = (IVersionedEntity<?>) entity;
         memeberEntity.holder().set(versionedEntity);
         memeberEntity.createdByUserKey().setValue(persistenceContext.getCurrentUserKey());
 
