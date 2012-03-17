@@ -42,6 +42,9 @@ import javassist.CtField;
 import javassist.CtMethod;
 import javassist.Modifier;
 import javassist.NotFoundException;
+import javassist.bytecode.AnnotationsAttribute;
+import javassist.bytecode.ConstPool;
+import javassist.bytecode.annotation.Annotation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -369,6 +372,7 @@ public class EntityImplGenerator {
                 CtMethod member = new CtMethod(type, method.getName(), null, implClass);
                 member.setBody("return (" + type.getName() + ")getMember(\"" + method.getName() + "\");");
                 implClass.addMethod(member);
+                addAnnotation(member, Override.class);
                 if (membersNamesStringArray.length() > 0) {
                     membersNamesStringArray.append(", ");
                 }
@@ -454,6 +458,17 @@ public class EntityImplGenerator {
         if (!ownedReferenceFound) {
             //throw new AssertionError("Missing @Owned member of type " + interfaceCtClass.getName() + " in " + ownerType.getName());
         }
+    }
 
+    private void addAnnotation(CtMethod member, Class<?> annotationClass) throws NotFoundException {
+        CtClass implClass = member.getDeclaringClass();
+        ConstPool constPool = implClass.getClassFile().getConstPool();
+        AnnotationsAttribute attr = (AnnotationsAttribute) member.getMethodInfo().getAttribute(AnnotationsAttribute.visibleTag);
+        if (attr == null) {
+            attr = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
+        }
+        Annotation annotation = new Annotation(constPool, pool.get(annotationClass.getName()));
+        attr.addAnnotation(annotation);
+        member.getMethodInfo().addAttribute(attr);
     }
 }

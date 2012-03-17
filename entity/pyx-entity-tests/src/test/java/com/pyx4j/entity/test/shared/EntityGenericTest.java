@@ -27,6 +27,7 @@ import com.pyx4j.entity.test.shared.domain.parametrized.ConcreteParametrizedEnti
 import com.pyx4j.entity.test.shared.domain.parametrized.DetailParameter;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
 import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
+import com.pyx4j.entity.test.shared.domain.version.ItemADTO;
 
 public class EntityGenericTest extends InitializerTestBase {
 
@@ -69,6 +70,9 @@ public class EntityGenericTest extends InitializerTestBase {
         MemberMeta versionMember = itemAMeta.getMemberMeta("version");
         assertEquals("Meta valueClass", ItemAVersion.class, versionMember.getValueClass());
 
+        MemberMeta versionsMember = itemAMeta.getMemberMeta("versions");
+        assertEquals("Meta valueClass", ItemAVersion.class, versionsMember.getValueClass());
+
         ItemA itemA1 = EntityFactory.create(ItemA.class);
         // Test Meta
         assertEquals("Parameterized member valueClass", ItemAVersion.class, itemA1.version().getValueClass());
@@ -85,5 +89,27 @@ public class EntityGenericTest extends InitializerTestBase {
 
         //vi.version().set(itemA1.version());
 
+    }
+
+    public void testVersionedEntityDTOManipulations() {
+        EntityMeta itemAMeta = EntityFactory.getEntityMeta(ItemADTO.class);
+
+        //version is generic member
+        MemberMeta versionMember = itemAMeta.getMemberMeta("version");
+        assertEquals("Meta valueClass", ItemAVersion.class, versionMember.getValueClass());
+
+        MemberMeta versionsMember = itemAMeta.getMemberMeta("versions");
+        assertEquals("Meta valueClass", ItemAVersion.class, versionsMember.getValueClass());
+
+        ItemADTO itemA1 = EntityFactory.create(ItemADTO.class);
+
+        // Test Meta
+        assertEquals("Parameterized member valueClass", ItemAVersion.class, itemA1.version().getValueClass());
+        assertEquals("Parameterized member objectClass", ItemAVersion.class, itemA1.version().getObjectClass());
+        assertEquals("Parameterized member valueClass", ItemA.class, itemA1.version().holder().getValueClass());
+        assertEquals("Parameterized member objectClass", ItemA.class, itemA1.version().holder().getObjectClass());
+
+        itemA1.version().testId().setValue("1");
+        itemA1.version().name().setValue("2");
     }
 }

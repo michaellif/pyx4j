@@ -54,4 +54,17 @@ public class ResolveGenericTest extends TestCase {
         method = interfaceClass.getMethod("getCE", (Class[]) null);
         Assert.assertEquals(Integer.class, EntityImplReflectionHelper.resolveGenericType(method.getGenericReturnType(), interfaceClass));
     }
+
+    private static interface D1 extends C<Integer> {
+
+    }
+
+    private static interface D2 extends D1 {
+    }
+
+    public void testInheritanceMethodReturnType() throws NoSuchMethodException, SecurityException {
+        Class<?> interfaceClass = D2.class;
+        Method method = interfaceClass.getMethod("getCE", (Class[]) null);
+        Assert.assertEquals(Integer.class, EntityImplReflectionHelper.resolveGenericType(method.getGenericReturnType(), interfaceClass));
+    }
 }

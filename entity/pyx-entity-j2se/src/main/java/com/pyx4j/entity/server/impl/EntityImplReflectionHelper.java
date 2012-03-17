@@ -85,6 +85,13 @@ public class EntityImplReflectionHelper {
                     }
                 }
             }
+            // if not found try super class
+            for (Class<?> superInterfaceClass : interfaceClass.getInterfaces()) {
+                Class<?> resolved = resolveGenericType(genericType, superInterfaceClass);
+                if (resolved != null) {
+                    return resolved;
+                }
+            }
         }
         return null;
     }
