@@ -28,6 +28,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
@@ -103,6 +104,7 @@ public class UnitOccupancyManagerTestBase {
     }
 
     protected void updateLease(Lease lease) {
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().merge(lease);
     }
 
@@ -166,7 +168,7 @@ public class UnitOccupancyManagerTestBase {
         if (expected.lease().isNull()) {
             Assert.assertEquals(msg, expected.lease().isNull(), actual.lease().isNull());
         } else {
-            Assert.assertEquals(msg, expected.lease().getPrimaryKey(), actual.lease().getPrimaryKey());
+            Assert.assertEquals(msg, expected.lease().getPrimaryKey().asLong(), actual.lease().getPrimaryKey().asLong());
         }
     }
 
