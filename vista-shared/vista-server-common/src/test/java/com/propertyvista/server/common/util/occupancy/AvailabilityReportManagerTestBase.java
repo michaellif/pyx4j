@@ -25,6 +25,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
@@ -116,15 +117,12 @@ public class AvailabilityReportManagerTestBase {
             lease.leaseFrom().setValue(asDate(leaseFrom));
             lease.version().expectedMoveIn().setValue(asDate(moveIn));
             lease.leaseTo().setValue(asDate(leaseTo));
-            Persistence.service().merge(lease);
+            lease.saveAction().setValue(SaveAction.saveAsFinal);
+            Persistence.service().persist(lease);
             return lease;
         } else {
             throw new IllegalStateException("can't create a lease without a unit");
         }
-    }
-
-    protected void updateLease(Lease lease) {
-        Persistence.service().merge(lease);
     }
 
     protected SetupBuilder setup() {
