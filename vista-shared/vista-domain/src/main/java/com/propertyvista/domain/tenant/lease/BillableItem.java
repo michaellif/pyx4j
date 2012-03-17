@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.GeneratedValue;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -31,6 +32,9 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 
 @ToStringFormat("{0}")
 public interface BillableItem extends IEntity {
+
+    @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
+    IPrimitive<String> originalId();
 
     @ToString(index = 0)
     @Caption(name = "Product Item")

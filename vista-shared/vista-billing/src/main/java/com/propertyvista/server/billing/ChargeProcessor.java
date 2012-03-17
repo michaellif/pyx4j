@@ -71,6 +71,10 @@ public class ChargeProcessor {
         addCharge(createCharge(billableItem, billing.getNextPeriodBill(), BillEntry.Period.next));
     }
 
+    private boolean sameBillableItem(BillableItem billableItem1, BillableItem billableItem2) {
+        return billableItem1.originalId().equals(billableItem2.originalId());
+    }
+
     private void updateChargeForCurrentPeriod(BillableItem billableItem) {
         if (billing.getCurrentPeriodBill() == null) {
             return;
@@ -81,7 +85,7 @@ public class ChargeProcessor {
         BillCharge originalCharge = null;
 
         for (BillCharge charge : billing.getCurrentPeriodBill().charges()) {
-            if (billableItem.equals(charge.billableItem()) && BillEntry.Period.next.equals(charge.period().getValue())) {
+            if (sameBillableItem(billableItem, charge.billableItem()) && BillEntry.Period.next.equals(charge.period().getValue())) {
                 originalCharge = charge;
                 break;
             }
