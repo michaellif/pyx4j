@@ -60,7 +60,7 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
                 item = EntityFactory.create(DepositPolicyItem.class);
 
                 item.description().setValue(i18n.tr("First Month Parking"));
-                item.value().setValue(new BigDecimal(10.00));
+                item.value().setValue(new BigDecimal(0.1));
                 item.repaymentMode().setValue(RepaymentMode.applyToFirstMonth);
                 item.valueType().setValue(ValueType.percentage);
                 item.appliedTo().set(pit);

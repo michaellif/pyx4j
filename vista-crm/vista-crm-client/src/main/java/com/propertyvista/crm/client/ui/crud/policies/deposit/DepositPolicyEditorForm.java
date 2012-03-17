@@ -16,11 +16,15 @@ package com.propertyvista.crm.client.ui.crud.policies.deposit;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CMoneyField;
+import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -30,6 +34,7 @@ import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBas
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.RepaymentMode;
+import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueType;
 
 public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<DepositPolicyDTO> {
 
@@ -86,29 +91,70 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
 
         private static class DepositPolicyItemEditor extends CEntityDecoratableEditor<DepositPolicyItem> {
 
+            private final FormFlexPanel content = new FormFlexPanel();
+
+            private int valueRow;
+
             public DepositPolicyItemEditor() {
                 super(DepositPolicyItem.class);
             }
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel content = new FormFlexPanel();
+                //FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
 
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().appliedTo()), 20).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().value()), 10).build());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().valueType()), 10).build());
-                content.getFlexCellFormatter().setColSpan(row, 0, 2);
+                valueRow = ++row;
+
+                content.getFlexCellFormatter().setColSpan(valueRow, 0, 2);
 
                 row = -1;
                 content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
                 content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().repaymentMode()), 20).build());
+
+                get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<DepositPolicyItem.ValueType>() {
+
+                    @Override
+                    public void onValueChange(ValueChangeEvent<ValueType> event) {
+                        bindValueEditor(event.getValue(), false);
+                    }
+                });
 
                 content.getColumnFormatter().setWidth(0, "50%");
                 content.getColumnFormatter().setWidth(1, "50%");
 
                 return content;
             }
+
+            @Override
+            protected void onPopulate() {
+                super.onPopulate();
+
+                bindValueEditor(getValue().valueType().getValue(), true);
+            }
+
+            private void bindValueEditor(ValueType valueType, boolean repopulatevalue) {
+                CComponent<?, ?> comp = null;
+
+                if (valueType == ValueType.amount) {
+                    comp = new CMoneyField();
+
+                } else if (valueType == ValueType.percentage) {
+                    comp = new CPercentageField();
+                }
+
+                if (comp != null) {
+                    unbind(proto().value());
+                    content.setWidget(valueRow, 0, new DecoratorBuilder(inject(proto().value(), comp), 10).build());
+
+                    if (repopulatevalue) {
+                        get(proto().value()).populate(getValue().value().getValue());
+                    }
+                }
+            }
+
         }
     }
 }
