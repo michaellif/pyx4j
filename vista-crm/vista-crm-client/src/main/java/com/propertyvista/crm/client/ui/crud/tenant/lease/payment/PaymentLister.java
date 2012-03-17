@@ -30,7 +30,9 @@ public class PaymentLister extends ListerBase<Payment> {
             new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
             new MemberColumnDescriptor.Builder(proto().depositDate()).build(),
             new MemberColumnDescriptor.Builder(proto().amount()).build(),
-            new MemberColumnDescriptor.Builder(proto().type()).build()
+            new MemberColumnDescriptor.Builder(proto().type()).build(),
+            new MemberColumnDescriptor.Builder(proto().paymentStatus(), false).build(),
+            new MemberColumnDescriptor.Builder(proto().billingStatus(), false).build()
         );//@formatter:on
     }
 }

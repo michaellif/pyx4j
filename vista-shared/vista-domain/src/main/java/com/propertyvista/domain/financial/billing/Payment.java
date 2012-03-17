@@ -100,7 +100,9 @@ public interface Payment extends IEntity {
 
     IPrimitive<LogicalDate> receivedDate();
 
-    //Do not post before that date
+    /**
+     * Do not post before that date
+     */
     IPrimitive<LogicalDate> targetDate();
 
     IPrimitive<LogicalDate> depositDate();
