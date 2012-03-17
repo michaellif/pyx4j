@@ -47,7 +47,8 @@ public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends E
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().versionNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().fromDate()).build()
+                new MemberColumnDescriptor.Builder(proto().fromDate()).build(),
+                new MemberColumnDescriptor.Builder(proto().createdByUser()).build()
             );//@formatter:on
     }
 }

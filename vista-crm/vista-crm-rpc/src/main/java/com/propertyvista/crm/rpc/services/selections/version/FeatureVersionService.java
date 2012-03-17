@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services.selections.version;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 
 import com.propertyvista.domain.financial.offering.Feature;
 
-public interface FeatureVersionService extends AbstractListService<Feature.FeatureV> {
+public interface FeatureVersionService extends AbstractVersionDataListService<Feature.FeatureV> {
 }

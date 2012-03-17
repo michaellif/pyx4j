@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
@@ -79,7 +80,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         return editButton;
     }
 
-    protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass, final AbstractListService<V> entityVersionService) {
+    protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass, final AbstractVersionDataListService<V> entityVersionService) {
 
         selectVersion = new Button(i18n.tr("Select Version"), new ClickHandler() {
             @Override

@@ -13,12 +13,10 @@
  */
 package com.propertyvista.crm.server.services.selections.version;
 
-import com.pyx4j.entity.server.AbstractListServiceImpl;
-
 import com.propertyvista.crm.rpc.services.selections.version.FeatureVersionService;
 import com.propertyvista.domain.financial.offering.Feature;
 
-public class FeatureVersionServiceImpl extends AbstractListServiceImpl<Feature.FeatureV> implements FeatureVersionService {
+public class FeatureVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<Feature.FeatureV> implements FeatureVersionService {
 
     public FeatureVersionServiceImpl() {
         super(Feature.FeatureV.class);

@@ -13,14 +13,13 @@
  */
 package com.propertyvista.crm.server.services.selections.version;
 
-import com.pyx4j.entity.server.AbstractListServiceImpl;
-
 import com.propertyvista.crm.rpc.services.selections.version.LeaseVersionService;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class LeaseVersionServiceImpl extends AbstractListServiceImpl<Lease.LeaseV> implements LeaseVersionService {
+public class LeaseVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<Lease.LeaseV> implements LeaseVersionService {
 
     public LeaseVersionServiceImpl() {
         super(Lease.LeaseV.class);
     }
+
 }

@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services.selections.version;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface LeaseVersionService extends AbstractListService<Lease.LeaseV> {
+public interface LeaseVersionService extends AbstractVersionDataListService<Lease.LeaseV> {
 }
