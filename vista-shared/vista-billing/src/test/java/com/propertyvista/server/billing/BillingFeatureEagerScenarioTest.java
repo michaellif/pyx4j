@@ -33,16 +33,16 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         setLeaseConditions("23-Mar-2011", "3-Aug-2011", 1);
 
         BillableItem parking1 = addParking();
-        addBillableItemAdjustment(parking1, "-10", AdjustmentType.monetary, ActionType.inLease);
+        addBillableItemAdjustment(parking1.originalId().getValue(), "-10", AdjustmentType.monetary, ActionType.inLease);
 
         BillableItem parking2 = addParking("23-Apr-2011", null);
-        addBillableItemAdjustment(parking2, "-10", AdjustmentType.monetary, ActionType.inLease);
+        addBillableItemAdjustment(parking2.originalId().getValue(), "-10", AdjustmentType.monetary, ActionType.inLease);
 
         BillableItem locker1 = addLocker();
-        addBillableItemAdjustment(locker1, "-0.2", AdjustmentType.percentage, ActionType.inLease);
+        addBillableItemAdjustment(locker1.originalId().getValue(), "-0.2", AdjustmentType.percentage, ActionType.inLease);
 
         BillableItem pet1 = addPet();
-        addBillableItemAdjustment(pet1, "-1", AdjustmentType.percentage, ActionType.inLease);
+        addBillableItemAdjustment(pet1.originalId().getValue(), "-1", AdjustmentType.percentage, ActionType.inLease);
 
         //==================== RUN 1 ======================//
 
@@ -95,7 +95,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
 
         setSysDate("18-Apr-2011");
         BillableItem pet2 = addPet("10-Apr-2011", null);
-        changeBillableItem(parking1, null, "20-May-2011");
+        changeBillableItem(parking1.originalId().getValue(), null, "20-May-2011");
 
         bill = runBilling(true, true);
 
@@ -119,7 +119,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
 
         setSysDate("18-May-2011");
         //TODO calculate arrears
-        changeBillableItem(parking1, null, "10-May-2011");
+        changeBillableItem(parking1.originalId().getValue(), null, "10-May-2011");
 
         bill = runBilling(true, true);
 

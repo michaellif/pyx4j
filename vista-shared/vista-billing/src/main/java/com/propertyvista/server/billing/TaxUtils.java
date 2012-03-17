@@ -81,13 +81,10 @@ public class TaxUtils {
         {
             EntityQueryCriteria<ProductTaxPolicyItem> criteria = new EntityQueryCriteria<ProductTaxPolicyItem>(ProductTaxPolicyItem.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().taxPolicy(), productTaxPolicy));
+            criteria.add(PropertyCriterion.eq(criteria.proto().productItemType(), productItemType));
             productTaxPolicyItem = Persistence.service().retrieve(criteria);
         }
 
-        // TODO Misha: what to do if there are no taxes for the product defined?
-        if (productTaxPolicyItem != null) {
-            return productTaxPolicyItem.taxes();
-        }
-        return new LinkedList<Tax>(); // currently  - let's return empty list...
+        return productTaxPolicyItem == null ? new LinkedList<Tax>() : productTaxPolicyItem.taxes();
     }
 }

@@ -110,14 +110,14 @@ public class ChargeProcessor {
         BillCharge originalCharge = null;
 
         for (BillCharge charge : billing.getPreviousPeriodBill().charges()) {
-            if (billableItem.equals(charge.billableItem()) && BillEntry.Period.next.equals(charge.period().getValue())) {
+            if (sameBillableItem(billableItem, charge.billableItem()) && BillEntry.Period.next.equals(charge.period().getValue())) {
                 originalCharge = charge;
                 break;
             }
         }
 
         for (BillCharge charge : billing.getCurrentPeriodBill().charges()) {
-            if (billableItem.equals(charge.billableItem()) && BillEntry.Period.current.equals(charge.period().getValue())) {
+            if (sameBillableItem(billableItem, charge.billableItem()) && BillEntry.Period.current.equals(charge.period().getValue())) {
                 originalCharge = charge;
                 break;
             }

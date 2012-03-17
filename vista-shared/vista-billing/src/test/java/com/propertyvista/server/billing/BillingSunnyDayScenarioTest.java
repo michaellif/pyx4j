@@ -33,16 +33,16 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1);
 
         BillableItem parking1 = addParking();
-        addBillableItemAdjustment(parking1, "-10", AdjustmentType.monetary, ActionType.inLease);
+        addBillableItemAdjustment(parking1.originalId().getValue(), "-10", AdjustmentType.monetary, ActionType.inLease);
 
         BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011");
-        addBillableItemAdjustment(parking2, "-10", AdjustmentType.monetary, ActionType.inLease);
+        addBillableItemAdjustment(parking2.originalId().getValue(), "-10", AdjustmentType.monetary, ActionType.inLease);
 
         BillableItem locker1 = addLocker();
-        addBillableItemAdjustment(locker1, "-0.2", AdjustmentType.percentage, ActionType.inLease);
+        addBillableItemAdjustment(locker1.originalId().getValue(), "-0.2", AdjustmentType.percentage, ActionType.inLease);
 
         BillableItem pet1 = addPet();
-        addBillableItemAdjustment(pet1, "-1", AdjustmentType.percentage, ActionType.inLease);
+        addBillableItemAdjustment(pet1.originalId().getValue(), "-1", AdjustmentType.percentage, ActionType.inLease);
 
         //==================== RUN 1 ======================//
 
