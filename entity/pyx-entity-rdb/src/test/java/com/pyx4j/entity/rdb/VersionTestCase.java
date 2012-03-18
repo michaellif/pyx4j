@@ -607,4 +607,45 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         }
 
     }
+
+    public void testDelete() {
+        String testId = uniqueString();
+        //srv.startTransaction();
+
+        // Initial item
+        OwnedByVerOneToManyParent o = EntityFactory.create(OwnedByVerOneToManyParent.class);
+        o.testId().setValue(testId);
+        o.version().name().setValue(uniqueString());
+        o.version().testId().setValue(testId);
+
+        o.version().children().add(EntityFactory.create(OwnedByVerOneToManyChild.class));
+        o.version().children().add(EntityFactory.create(OwnedByVerOneToManyChild.class));
+        o.version().children().get(0).testId().setValue(testId);
+        o.version().children().get(0).name().setValue(uniqueString());
+        o.version().children().get(1).testId().setValue(testId);
+
+        //Save initial value
+        o.saveAction().setValue(SaveAction.saveAsFinal);
+        srv.persist(o);
+        {
+            OwnedByVerOneToManyParent itemA1r = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asDraftKey());
+            itemA1r.version().name().setValue(uniqueString());
+            itemA1r.version().testId().setValue(testId);
+            srv.persist(itemA1r);
+        }
+
+        //DO delete
+        {
+            EntityQueryCriteria<OwnedByVerOneToManyParent> criteria = EntityQueryCriteria.create(OwnedByVerOneToManyParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            assertEquals("removed", 1, srv.delete(criteria));
+            assertEquals("remain", 0, srv.count(criteria));
+        }
+
+        {
+            EntityQueryCriteria<OwnedByVerOneToManyChild> criteriaChildren = EntityQueryCriteria.create(OwnedByVerOneToManyChild.class);
+            criteriaChildren.add(PropertyCriterion.eq(criteriaChildren.proto().testId(), testId));
+            assertEquals("ChildrenRemain", 0, srv.count(criteriaChildren));
+        }
+    }
 }
