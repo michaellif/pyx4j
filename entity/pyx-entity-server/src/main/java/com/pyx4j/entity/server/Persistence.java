@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
@@ -149,11 +150,23 @@ public class Persistence {
         T entity = service().retrieve(entityClass, primaryKey.asDraftKey());
         if (entity.version().isNull()) {
             entity = service().retrieve(entityClass, primaryKey.asCurrentKey());
+            retrieveOwned(entity.version());
             entity.version().set(EntityGraph.businessDuplicate(entity.version()));
             VersionedEntityUtils.setAsDraft(entity.version());
             entity.setPrimaryKey(primaryKey.asDraftKey());
         }
         return entity;
+    }
+
+    public static <T extends IEntity> void retrieveOwned(T rootEntity) {
+        EntityGraph.applyRecursively(rootEntity, new ApplyMethod() {
+            @Override
+            public void apply(IEntity entity) {
+                if (entity.isValueDetached() && entity.getMeta().isOwnedRelationships()) {
+                    service().retrieve(entity);
+                }
+            }
+        });
     }
 
 }
