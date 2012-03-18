@@ -85,6 +85,7 @@ public class InquiryPanel extends Panel {
                 }
                 lead.createDate().setValue(new LogicalDate());
                 Persistence.service().persist(lead);
+                Persistence.service().commit();
                 PageParameters params = new PageParameters();
                 if (fp != null) {
                     params.set(PMSiteApplication.ParamNameFloorplan, fp.id().getValue().asLong());
