@@ -213,7 +213,7 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
 
     @Override
     public void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId, boolean invite) {
-        Lease lease = Persistence.service().retrieve(dboClass, entityId);
+        Lease lease = Persistence.secureRetrieveDraft(dboClass, entityId);
         Persistence.service().retrieve(lease.version().tenants());
         MasterApplication ma = ApplicationManager.createMasterApplication(lease);
         if (invite) {
