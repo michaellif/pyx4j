@@ -140,9 +140,13 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
             ((AbstractVersionedCrudService<?>) service).approveFinal(new DefaultAsyncCallback<VoidSerializable>() {
                 @Override
                 public void onSuccess(VoidSerializable result) {
-                    populate();
+                    goToViewer(entityId.asCurrentKey());
                 }
             }, entityId);
         }
+    }
+
+    protected void goToViewer(Key entityID) {
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(entityID, view.getActiveTab()));
     }
 }

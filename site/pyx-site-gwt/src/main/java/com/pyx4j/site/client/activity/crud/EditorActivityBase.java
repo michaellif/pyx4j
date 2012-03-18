@@ -258,7 +258,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected void onSaveSuccess(E result) {
         view.reset();
-        goToViewer(new Key(result.getPrimaryKey().asLong()));
+        goToViewer(result.getPrimaryKey());
     }
 
     protected void onSaveFail(Throwable caught) {
