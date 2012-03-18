@@ -23,7 +23,7 @@
             <artifactId>vista-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-server-config</artifactId>
@@ -35,25 +35,25 @@
             <artifactId>vista-generator</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
-       
+
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-rdb</artifactId>
             <version>${pyxVersion}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-data</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-report</artifactId>
             <version>${pyxVersion}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -72,13 +72,13 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
     </dependencies>
 
     <build>
@@ -88,10 +88,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <forkMode>always</forkMode>
-                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    
+
 </project>
