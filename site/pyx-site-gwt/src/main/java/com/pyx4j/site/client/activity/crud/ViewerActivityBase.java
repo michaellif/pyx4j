@@ -117,9 +117,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void edit() {
         if (canEdit()) {
-            CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-            place.formEditorPlace(entityId, view.getActiveTab());
-            AppSite.getPlaceController().goTo(place);
+            goToEditor(entityId.asDraftKey());
         }
     }
 
@@ -148,5 +146,9 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected void goToViewer(Key entityID) {
         AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(entityID, view.getActiveTab()));
+    }
+
+    protected void goToEditor(Key entityID) {
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formEditorPlace(entityID, view.getActiveTab()));
     }
 }
