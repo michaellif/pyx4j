@@ -14,6 +14,9 @@
 package com.propertyvista.admin.client.ui;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -29,6 +32,14 @@ public class FooterViewImpl extends SimplePanel implements FooterView {
         HTML label = new HTML(ClientApplicationVersion.instance().getBuildInformation());
         label.getElement().getStyle().setFontSize(1.2, Unit.EM);
         label.getElement().getStyle().setColor("white");
+        label.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                Window.open("config", "new", null);
+
+            }
+        });
         setWidget(label);
     }
 }
