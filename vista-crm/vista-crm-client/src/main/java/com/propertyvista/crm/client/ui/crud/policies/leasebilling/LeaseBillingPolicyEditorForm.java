@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -50,10 +54,26 @@ public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
 
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prorationMethod())).build());
-        CCheckBox chb = new CCheckBox();
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useBillingPeriodSartDay(), chb)).build());
+        CCheckBox checkBox = new CCheckBox();
+        checkBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriodStartDay())).build());
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().billingPeriodStartDay()).setEnabled(event.getValue());
+
+            }
+        });
+
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useBillingPeriodSartDay(), checkBox)).build());
+
+        ArrayList<Integer> options = new ArrayList<Integer>();
+        for (int i = 1; i < 29; i++) {
+            options.add(i);
+        }
+
+        CComboBox<Integer> comboBox = new CComboBox<Integer>();
+        comboBox.setOptions(options);
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriodStartDay(), comboBox), 20).build());
 
         return panel;
     }
@@ -73,5 +93,12 @@ public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
         panel.getColumnFormatter().setWidth(1, "50%");
 
         return panel;
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        get(proto().billingPeriodStartDay()).setEnabled(getValue().useBillingPeriodSartDay().getValue());
     }
 }

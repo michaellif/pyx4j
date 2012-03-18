@@ -18,10 +18,10 @@ import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 
-public class LeaseBillingPolicyCrudServiceImpl extends GenericPolicyCrudService<LeaseBillingPolicy, LeaseBillingPolicyDTO> implements LeaseBillingPolicyCrudService {
+public class LeaseBillingPolicyCrudServiceImpl extends GenericPolicyCrudService<LeaseBillingPolicy, LeaseBillingPolicyDTO> implements
+        LeaseBillingPolicyCrudService {
 
     public LeaseBillingPolicyCrudServiceImpl() {
         super(LeaseBillingPolicy.class, LeaseBillingPolicyDTO.class);
     }
-
 }

@@ -31,6 +31,7 @@ public interface LeaseBillingPolicy extends BuildingPolicy {
     @NotNull
     IPrimitive<Boolean> useBillingPeriodSartDay();
 
+    @NotNull
     IPrimitive<Integer> billingPeriodStartDay();
 
     @Owned
