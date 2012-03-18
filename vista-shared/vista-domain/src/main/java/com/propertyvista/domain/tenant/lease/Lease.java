@@ -21,7 +21,6 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
@@ -202,7 +201,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
         IPrimitive<LogicalDate> approvalDate();
 
         @Detached
-        @JoinTable(value = TenantInLease.class, cascade = false)
+        @Owned
         @OrderBy(TenantInLease.OrderInLeaseId.class)
         IList<TenantInLease> tenants();
 
