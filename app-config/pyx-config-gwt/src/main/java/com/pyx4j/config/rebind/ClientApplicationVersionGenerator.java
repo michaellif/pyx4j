@@ -20,10 +20,14 @@
  */
 package com.pyx4j.config.rebind;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.net.URL;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Properties;
 
 import com.google.gwt.core.ext.BadPropertyValueException;
 import com.google.gwt.core.ext.ConfigurationProperty;
@@ -56,6 +60,10 @@ public class ClientApplicationVersionGenerator extends Generator {
 
     public static final String BUILD_FORCE_RPC_VERSION = "pyx.build.forceRPCVersion";
 
+    public static final String SCM_REVISION = "pyx.compileTimeSystemProperty.scm.revision";
+
+    private static final String PYX_BUILD_PROPERTIES_FILE = "com/pyx4j/config/generated/pyx-build.version.properties";
+
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
         TypeOracle oracle = context.getTypeOracle();
@@ -70,6 +78,7 @@ public class ClientApplicationVersionGenerator extends Generator {
         String buildLabel = getConfigurationProperty(logger, context, BUILD_LABEL);
         String buildTime = getConfigurationProperty(logger, context, BUILD_TIME);
         String buildFromat = getConfigurationProperty(logger, context, BUILD_TIME_FORMAT);
+        String scmRevision = getConfigurationProperty(logger, context, SCM_REVISION);
 
         boolean forceRPCVersion = false;
         if (CommonsStringUtils.isStringSet(buildLabel)) {
@@ -85,6 +94,30 @@ public class ClientApplicationVersionGenerator extends Generator {
             if (CommonsStringUtils.isStringSet(value)) {
                 forceRPCVersion = Boolean.valueOf(value);
             }
+        }
+
+        String pyxScmRevision = "";
+        {
+            Properties properties = new Properties();
+            // find the resource in the classPath
+            URL url = Thread.currentThread().getContextClassLoader().getResource(PYX_BUILD_PROPERTIES_FILE);
+            if (url != null) {
+                InputStream is = null;
+                try {
+                    is = url.openStream();
+                    properties.load(is);
+                } catch (IOException e) {
+                } finally {
+                    if (is != null) {
+                        try {
+                            is.close();
+                        } catch (IOException ignore) {
+                            is = null;
+                        }
+                    }
+                }
+            }
+            pyxScmRevision = properties.getProperty("scm.revision", "");
         }
 
         String implName = interfaceType.getName();
@@ -127,6 +160,26 @@ public class ClientApplicationVersionGenerator extends Generator {
             }
             writer.print(String.valueOf(buildDate));
             writer.println("L);");
+            writer.outdent();
+            writer.println("}");
+            writer.println();
+
+            writer.println();
+            writer.println("public final String getScmRevision() {");
+            writer.indent();
+            writer.print("return \"");
+            writer.print(scmRevision);
+            writer.println("\";");
+            writer.outdent();
+            writer.println("}");
+            writer.println();
+
+            writer.println();
+            writer.println("public final String getPyxScmRevision() {");
+            writer.indent();
+            writer.print("return \"");
+            writer.print(pyxScmRevision);
+            writer.println("\";");
             writer.outdent();
             writer.println("}");
             writer.println();

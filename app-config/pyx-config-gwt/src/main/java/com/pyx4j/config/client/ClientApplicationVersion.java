@@ -24,6 +24,8 @@ import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.config.shared.ApplicationMode;
+
 public abstract class ClientApplicationVersion {
 
     private static ClientApplicationVersion instance = GWT.create(ClientApplicationVersion.class);
@@ -35,4 +37,17 @@ public abstract class ClientApplicationVersion {
     public abstract String getBuildLabel();
 
     public abstract Date getBuildDate();
+
+    public abstract String getScmRevision();
+
+    public abstract String getPyxScmRevision();
+
+    public String getBuildInformation() {
+        String version = "";
+        if (ApplicationMode.isDevelopment()) {
+            version = "Dev Mode ";
+        }
+        version += getBuildLabel() + " " + getBuildDate() + " svn:" + getScmRevision() + " pyx.svn:" + getPyxScmRevision();
+        return version;
+    }
 }

@@ -50,8 +50,13 @@ public class ConfigInfoServlet extends HttpServlet {
 
     protected String buildConfigurationText() {
         StringBuilder b = new StringBuilder();
-        b.append("Application Version   : ").append(ApplicationVersion.getBuildLabel()).append("\n");
-        b.append("Application BuildTime : ").append(ApplicationVersion.getBuildTime()).append("\n\n");
+        b.append("Application Version     : ").append(ApplicationVersion.getBuildLabel()).append("\n");
+        b.append("Application BuildTime   : ").append(ApplicationVersion.getBuildDate()).append("\n");
+        b.append("Application ScmRevision : ").append(ApplicationVersion.getScmRevision()).append("\n\n");
+
+        b.append("Pyx4j Version     : ").append(ApplicationVersion.getPyxBuildLabel()).append("\n");
+        b.append("Pyx4j BuildTime   : ").append(ApplicationVersion.getPyxBuildDate()).append("\n");
+        b.append("Pyx4j ScmRevision : ").append(ApplicationVersion.getPyxScmRevision()).append("\n\n");
 
         b.append("ContextName : ").append(LoggerConfig.getContextName()).append("\n");
 

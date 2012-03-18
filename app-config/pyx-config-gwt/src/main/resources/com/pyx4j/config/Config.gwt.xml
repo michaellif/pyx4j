@@ -11,6 +11,9 @@
     <define-configuration-property name="pyx.compileTimeSystemProperty.build.time" is-multi-valued="false" />
     <set-configuration-property name="pyx.compileTimeSystemProperty.build.time" value="build.time" />
     
+    <define-configuration-property name="pyx.compileTimeSystemProperty.scm.revision" is-multi-valued="false" />
+    <set-configuration-property name="pyx.compileTimeSystemProperty.scm.revision" value="scm.revision" />
+    
     <define-configuration-property name="pyx.compileTimeSystemProperty.build.timeFormat" is-multi-valued="false" />
     <set-configuration-property name="pyx.compileTimeSystemProperty.build.timeFormat" value="yyyyMMdd HH:mm" />
 

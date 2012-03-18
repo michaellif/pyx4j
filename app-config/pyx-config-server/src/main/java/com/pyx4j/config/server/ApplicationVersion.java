@@ -40,6 +40,8 @@ public class ApplicationVersion {
 
     private static final String BUILD_PROPERTIES_FILE = "generated/build.version.properties";
 
+    private static final String PYX_BUILD_PROPERTIES_FILE = "com/pyx4j/config/generated/pyx-build.version.properties";
+
     private static final String POM_VERSION = "pom.version";
 
     private static final String BUILD_NUMBER = "build.number";
@@ -57,6 +59,14 @@ public class ApplicationVersion {
     private static String buildLabel;
 
     private static Date buildTimestamp;
+
+    private static String scmRevision;
+
+    private static String pyxBuildLabel;
+
+    private static String pyxScmRevision;
+
+    private static Date pyxBuildTimestamp;
 
     public static void initVersionInfo() {
         if (productVersion != null) {
@@ -96,6 +106,7 @@ public class ApplicationVersion {
         } else {
             productVersion = buildLabel;
         }
+        scmRevision = properties.getProperty("scm.revision", "");
         try {
             String bildTimeString = properties.getProperty(BUILD_TIME);
             if ((bildTimeString == null) || (bildTimeString.startsWith("${"))) {
@@ -112,6 +123,59 @@ public class ApplicationVersion {
         } catch (ParseException e) {
             log.error("build timestamp error", e);
             buildTimestamp = null;
+        }
+        initPyxVersionInfo();
+    }
+
+    public static void initPyxVersionInfo() {
+        Properties properties = new Properties();
+
+        // find the resource in the classPath
+        URL url = Thread.currentThread().getContextClassLoader().getResource(PYX_BUILD_PROPERTIES_FILE);
+        if (url == null) {
+            url = ApplicationVersion.class.getResource(PYX_BUILD_PROPERTIES_FILE);
+        }
+
+        if (url != null) {
+            log.debug("Load pyx build version from {}", url);
+            InputStream is = null;
+            try {
+                is = url.openStream();
+                properties.load(is);
+            } catch (IOException e) {
+                log.error("error reading build info", e);
+            } finally {
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException ignore) {
+                        is = null;
+                    }
+                }
+            }
+        }
+
+        pyxBuildLabel = properties.getProperty(BUILD_NUMBER, "n/a");
+        if (pyxBuildLabel.startsWith("${") || buildLabel.endsWith("-SNAPSHOT")) {
+            pyxBuildLabel = "n/a";
+        }
+        pyxScmRevision = properties.getProperty("scm.revision", "");
+        try {
+            String bildTimeString = properties.getProperty(BUILD_TIME);
+            if ((bildTimeString == null) || (bildTimeString.startsWith("${"))) {
+                pyxBuildTimestamp = null;
+            } else {
+                pyxBuildTimestamp = new SimpleDateFormat(BUILD_TIME_FORMAT).parse(bildTimeString);
+            }
+            if (pyxBuildTimestamp == null) {
+                bildTimeString = properties.getProperty(BUILD_TIMESTAMP);
+                if ((bildTimeString != null) && (!bildTimeString.startsWith("${"))) {
+                    pyxBuildTimestamp = new SimpleDateFormat(BUILD_TIMESTAMP_FORMAT).parse(bildTimeString);
+                }
+            }
+        } catch (ParseException e) {
+            log.error("build timestamp error", e);
+            pyxBuildTimestamp = null;
         }
     }
 
@@ -143,5 +207,25 @@ public class ApplicationVersion {
     public static Date getBuildDate() {
         initVersionInfo();
         return buildTimestamp;
+    }
+
+    public static String getScmRevision() {
+        initVersionInfo();
+        return scmRevision;
+    }
+
+    public static String getPyxBuildLabel() {
+        initVersionInfo();
+        return pyxBuildLabel;
+    }
+
+    public static String getPyxScmRevision() {
+        initVersionInfo();
+        return pyxScmRevision;
+    }
+
+    public static Date getPyxBuildDate() {
+        initVersionInfo();
+        return pyxBuildTimestamp;
     }
 }
