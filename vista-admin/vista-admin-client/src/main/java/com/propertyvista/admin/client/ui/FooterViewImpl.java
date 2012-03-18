@@ -13,7 +13,11 @@
  */
 package com.propertyvista.admin.client.ui;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import com.pyx4j.config.client.ClientApplicationVersion;
 
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 
@@ -22,8 +26,9 @@ public class FooterViewImpl extends SimplePanel implements FooterView {
     public FooterViewImpl() {
         setSize("100%", "100%");
         setStyleName(CrmSitePanelTheme.StyleName.SiteViewFooter.name());
-//        HTML label = new HTML("&copy;2011-All Rights Reserved.");
-//        label.getElement().getStyle().setFontSize(1.2, Unit.EM);
-//        setWidget(label);
+        HTML label = new HTML(ClientApplicationVersion.instance().getBuildInformation());
+        label.getElement().getStyle().setFontSize(1.2, Unit.EM);
+        label.getElement().getStyle().setColor("white");
+        setWidget(label);
     }
 }
