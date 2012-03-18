@@ -71,7 +71,10 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             Lease lease = EntityFactory.create(Lease.class);
 // TODO generate LeaseId here:
             lease.leaseID().setValue(RandomUtil.randomLetters(10));
-            lease.type().setValue(RandomUtil.randomEnum(Service.Type.class));
+
+            // TODO this should be selected on UI 
+            lease.type().setValue(Service.Type.residentialUnit);
+
             lease.version().status().setValue(Lease.Status.Created);
             lease.leaseFrom().setValue(lead.moveInDate().getValue());
             lease.version().expectedMoveIn().setValue(lead.moveInDate().getValue());
