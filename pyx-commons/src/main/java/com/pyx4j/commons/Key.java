@@ -58,7 +58,10 @@ public class Key implements java.io.Serializable {
         assert (dbPrimaryKey != 0);
         this.longValue = dbPrimaryKey;
         this.versionValue = dbVersion;
-        value = String.valueOf(longValue) + "." + String.valueOf(dbVersion);
+        value = String.valueOf(longValue);
+        if (dbVersion != VERSION_CURRENT) {
+            value += "." + String.valueOf(dbVersion);
+        }
     }
 
     public Key asDraftKey() {

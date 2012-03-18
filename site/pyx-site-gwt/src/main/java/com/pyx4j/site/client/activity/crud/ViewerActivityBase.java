@@ -117,7 +117,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void edit() {
         if (canEdit()) {
-            goToEditor(entityId.asDraftKey());
+            goToEditor(entityId);
         }
     }
 
