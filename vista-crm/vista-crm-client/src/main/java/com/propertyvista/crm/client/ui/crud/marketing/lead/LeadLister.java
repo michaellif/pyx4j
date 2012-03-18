@@ -31,8 +31,7 @@ public class LeadLister extends ListerBase<Lead> {
             new MemberColumnDescriptor.Builder(proto().moveInDate(), true).build(),
             new MemberColumnDescriptor.Builder(proto().leaseTerm(), true).build(),
             new MemberColumnDescriptor.Builder(proto().floorplan(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().createDate(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().status(), true).build()
+            new MemberColumnDescriptor.Builder(proto().createDate(), true).build()
         );//@formatter:on
     }
 }

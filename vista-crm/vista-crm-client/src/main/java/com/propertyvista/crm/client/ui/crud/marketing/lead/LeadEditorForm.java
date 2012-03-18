@@ -31,7 +31,6 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
@@ -114,7 +113,6 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
 
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().agent()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CLabel()), 15).build());
 
         row = -1;
         if (isEditable()) {
