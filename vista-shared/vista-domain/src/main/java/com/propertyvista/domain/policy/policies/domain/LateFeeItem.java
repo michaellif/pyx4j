@@ -7,26 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 10, 2012
- * @author igor
+ * Created on Jan 30, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies;
+package com.propertyvista.domain.policy.policies.domain;
 
 import java.math.BigDecimal;
 
 import javax.xml.bind.annotation.XmlType;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.policy.framework.BuildingPolicy;
-
-@DiscriminatorValue("LateFeePolicy")
-public interface LateFeePolicy extends BuildingPolicy {
+public interface LateFeeItem extends IEntity {
 
     @XmlType(name = "BaseFeeType")
     public enum BaseFeeType {
@@ -71,7 +68,4 @@ public interface LateFeePolicy extends BuildingPolicy {
 
     @NotNull
     IPrimitive<MaxTotalFeeType> maxTotalFeeType();
-
-    @NotNull
-    IPrimitive<BigDecimal> minimumAmounDue();
 }

@@ -141,12 +141,12 @@ import com.propertyvista.crm.client.activity.policies.deposit.DepositPolicyViewe
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.latefee.LateFeePolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.latefee.LateFeePolicyListerActivity;
-import com.propertyvista.crm.client.activity.policies.latefee.LateFeePolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyViewerActivity;
@@ -832,16 +832,16 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new BackgroundCheckPolicyViewerActivity(place);
                         break;
                     }
-                } else if (place instanceof CrmSiteMap.Settings.Policies.LateFees) {
+                } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseBilling) {
                     switch (((CrudAppPlace) place).getType()) {
                     case lister:
-                        activity = new LateFeePolicyListerActivity(place);
+                        activity = new LeaseBillingPolicyListerActivity(place);
                         break;
                     case editor:
-                        activity = new LateFeePolicyEditorActivity(place);
+                        activity = new LeaseBillingPolicyEditorActivity(place);
                         break;
                     case viewer:
-                        activity = new LateFeePolicyViewerActivity(place);
+                        activity = new LeaseBillingPolicyViewerActivity(place);
                         break;
                     }
                 }

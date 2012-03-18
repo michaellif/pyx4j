@@ -11,12 +11,12 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.latefee;
+package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.domain.policy.dto.LateFeePolicyDTO;
+import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 
-public interface LateFeePolicyListerView extends IListerView<LateFeePolicyDTO> {
+public interface LeaseBillingPolicyViewerView extends IViewerView<LeaseBillingPolicyDTO> {
 
 }

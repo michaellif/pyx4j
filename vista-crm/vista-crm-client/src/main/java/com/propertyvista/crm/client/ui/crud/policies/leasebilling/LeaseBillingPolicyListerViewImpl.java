@@ -11,24 +11,24 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.latefee;
+package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.policy.dto.LateFeePolicyDTO;
+import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 
-public class LateFeePolicyListerViewImpl extends CrmListerViewImplBase<LateFeePolicyDTO> implements LateFeePolicyListerView {
+public class LeaseBillingPolicyListerViewImpl extends CrmListerViewImplBase<LeaseBillingPolicyDTO> implements LeaseBillingPolicyListerView {
 
-    public LateFeePolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LateFees.class);
+    public LeaseBillingPolicyListerViewImpl() {
+        super(CrmSiteMap.Settings.Policies.LeaseBilling.class);
         setLister(new LateFeePolicyLister());
     }
 
-    private static class LateFeePolicyLister extends PolicyListerBase<LateFeePolicyDTO> {
+    private static class LateFeePolicyLister extends PolicyListerBase<LeaseBillingPolicyDTO> {
 
         public LateFeePolicyLister() {
-            super(LateFeePolicyDTO.class, CrmSiteMap.Settings.Policies.LateFees.class);
+            super(LeaseBillingPolicyDTO.class, CrmSiteMap.Settings.Policies.LeaseBilling.class);
         }
     }
 

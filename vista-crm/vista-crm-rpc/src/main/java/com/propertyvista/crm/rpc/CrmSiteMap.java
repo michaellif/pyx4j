@@ -351,9 +351,9 @@ public class CrmSiteMap implements SiteMap {
 
             }
 
-            @PlaceProperties(caption = "Late Fees")
-            @NavigationItem(navigLabel = "Late Fees")
-            public static class LateFees extends CrudAppPlace {
+            @PlaceProperties(caption = "Lease Billing")
+            @NavigationItem(navigLabel = "Lease Billing")
+            public static class LeaseBilling extends CrudAppPlace {
 
             }
         }

@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.propertyvista.crm.rpc.services.policies.policy.LateFeePolicyCrudService;
+import com.propertyvista.crm.rpc.services.policies.policy.LeaseBillingPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
-import com.propertyvista.domain.policy.dto.LateFeePolicyDTO;
-import com.propertyvista.domain.policy.policies.LateFeePolicy;
+import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 
-public class LateFeePolicyCrudServiceImpl extends GenericPolicyCrudService<LateFeePolicy, LateFeePolicyDTO> implements LateFeePolicyCrudService {
+public class LeaseBillingPolicyCrudServiceImpl extends GenericPolicyCrudService<LeaseBillingPolicy, LeaseBillingPolicyDTO> implements LeaseBillingPolicyCrudService {
 
-    public LateFeePolicyCrudServiceImpl() {
-        super(LateFeePolicy.class, LateFeePolicyDTO.class);
+    public LeaseBillingPolicyCrudServiceImpl() {
+        super(LeaseBillingPolicy.class, LeaseBillingPolicyDTO.class);
     }
 
 }

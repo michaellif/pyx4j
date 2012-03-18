@@ -38,18 +38,18 @@ import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplat
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyEditorView;
-import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyListerView;
-import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyViewerView;
-import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerView;
@@ -135,12 +135,12 @@ public class PolicyViewFactory extends ViewFactoryBase {
             } else if (BackgroundCheckPolicyViewerView.class.equals(type)) {
                 map.put(BackgroundCheckPolicyViewerView.class, new BackgroundCheckPolicyViewerViewImpl());
 
-            } else if (LateFeePolicyListerView.class.equals(type)) {
-                map.put(LateFeePolicyListerView.class, new LateFeePolicyListerViewImpl());
-            } else if (LateFeePolicyEditorView.class.equals(type)) {
-                map.put(LateFeePolicyEditorView.class, new LateFeePolicyEditorViewImpl());
-            } else if (LateFeePolicyViewerView.class.equals(type)) {
-                map.put(LateFeePolicyViewerView.class, new LateFeePolicyViewerViewImpl());
+            } else if (LeaseBillingPolicyListerView.class.equals(type)) {
+                map.put(LeaseBillingPolicyListerView.class, new LeaseBillingPolicyListerViewImpl());
+            } else if (LeaseBillingPolicyEditorView.class.equals(type)) {
+                map.put(LeaseBillingPolicyEditorView.class, new LeaseBillingPolicyEditorViewImpl());
+            } else if (LeaseBillingPolicyViewerView.class.equals(type)) {
+                map.put(LeaseBillingPolicyViewerView.class, new LeaseBillingPolicyViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

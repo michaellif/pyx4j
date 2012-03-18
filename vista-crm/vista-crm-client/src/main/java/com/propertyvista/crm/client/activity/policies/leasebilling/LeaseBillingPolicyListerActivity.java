@@ -11,23 +11,23 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.policies.latefee;
+package com.propertyvista.crm.client.activity.policies.leasebilling;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.policies.latefee.LateFeePolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
-import com.propertyvista.crm.rpc.services.policies.policy.LateFeePolicyCrudService;
-import com.propertyvista.domain.policy.dto.LateFeePolicyDTO;
+import com.propertyvista.crm.rpc.services.policies.policy.LeaseBillingPolicyCrudService;
+import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 
-public class LateFeePolicyListerActivity extends ListerActivityBase<LateFeePolicyDTO> {
+public class LeaseBillingPolicyListerActivity extends ListerActivityBase<LeaseBillingPolicyDTO> {
 
-    public LateFeePolicyListerActivity(Place place) {
-        super(place, PolicyViewFactory.instance(LateFeePolicyListerView.class), GWT.<LateFeePolicyCrudService> create(LateFeePolicyCrudService.class),
-                LateFeePolicyDTO.class);
+    public LeaseBillingPolicyListerActivity(Place place) {
+        super(place, PolicyViewFactory.instance(LeaseBillingPolicyListerView.class), GWT.<LeaseBillingPolicyCrudService> create(LeaseBillingPolicyCrudService.class),
+                LeaseBillingPolicyDTO.class);
     }
 
 }

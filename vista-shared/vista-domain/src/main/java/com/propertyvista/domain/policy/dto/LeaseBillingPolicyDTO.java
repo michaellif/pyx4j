@@ -16,9 +16,9 @@ package com.propertyvista.domain.policy.dto;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
-import com.propertyvista.domain.policy.policies.LateFeePolicy;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 
 @Transient
-public interface LateFeePolicyDTO extends PolicyDTOBase, LateFeePolicy {
+public interface LeaseBillingPolicyDTO extends PolicyDTOBase, LeaseBillingPolicy {
 
 }

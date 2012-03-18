@@ -15,45 +15,42 @@ package com.propertyvista.server.billing;
 
 import java.math.BigDecimal;
 
-import com.propertyvista.domain.policy.policies.LateFeePolicy;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.server.common.policy.PolicyManager;
 
 public class LatePaymentUtils {
 
     public static BigDecimal latePayment(BigDecimal amount, BigDecimal monthlyRent, Building building) {
-        LateFeePolicy lateFeePolicy = PolicyManager.obtainEffectivePolicy(building, LateFeePolicy.class);
+        LeaseBillingPolicy leaseBillingPolicy = PolicyManager.obtainEffectivePolicy(building, LeaseBillingPolicy.class);
 
-        if (amount.compareTo(lateFeePolicy.minimumAmounDue().getValue()) <= 0)
-            return new BigDecimal(0.0); // Don't bother with small amount...
-
-        return calculateFee(lateFeePolicy, amount, monthlyRent);
+        return calculateFee(leaseBillingPolicy, amount, monthlyRent);
     }
 
-    private static BigDecimal calculateFee(LateFeePolicy policy, BigDecimal amount, BigDecimal monthlyRent) {
+    private static BigDecimal calculateFee(LeaseBillingPolicy policy, BigDecimal amount, BigDecimal monthlyRent) {
         BigDecimal fee = new BigDecimal(0.0);
 
-        switch (policy.baseFeeType().getValue()) {
+        switch (policy.lateFee().baseFeeType().getValue()) {
         case FlatAmount:
-            fee = policy.baseFee().getValue();
+            fee = policy.lateFee().baseFee().getValue();
             break;
 
         case PercentOwedTotal:
-            fee = amount.multiply(policy.baseFee().getValue());
+            fee = amount.multiply(policy.lateFee().baseFee().getValue());
             break;
 
         case PercentMonthlyRent:
-            fee = monthlyRent.multiply(policy.baseFee().getValue());
+            fee = monthlyRent.multiply(policy.lateFee().baseFee().getValue());
             break;
         }
 
-        switch (policy.maxTotalFeeType().getValue()) {
+        switch (policy.lateFee().maxTotalFeeType().getValue()) {
         case FlatAmount:
-            fee = fee.min(policy.maxTotalFee().getValue());
+            fee = fee.min(policy.lateFee().maxTotalFee().getValue());
             break;
 
         case PercentMonthlyRent:
-            fee = fee.min(monthlyRent.multiply(policy.maxTotalFee().getValue()));
+            fee = fee.min(monthlyRent.multiply(policy.lateFee().maxTotalFee().getValue()));
             break;
 
         case Unlimited:
