@@ -148,6 +148,9 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             }
 
             if (editor != null) {
+                if (this.contains(proto().extraData())) {
+                    this.unbind(proto().extraData());
+                }
                 this.inject(proto().extraData(), editor);
                 editor.populate(extraData.cast());
                 extraDataPanel.setWidget(editor);
