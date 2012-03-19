@@ -112,6 +112,10 @@ public class Visit implements Serializable {
                 || ((clientAclTimeStamp != null) && (aclTimeStamp != Long.parseLong(clientAclTimeStamp)));
     }
 
+    public void setAclRevalidationRequired() {
+        aclRevalidationTimeStamp = 0;
+    }
+
     public long getAclTimeStamp() {
         return aclTimeStamp;
     }
