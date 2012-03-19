@@ -81,7 +81,8 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         }
 
         EntityQueryCriteria<MasterApplication> criteria = EntityQueryCriteria.create(MasterApplication.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
+        // Ignore version in query
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in.getPrimaryKey()));
         dto.application().set(Persistence.service().retrieve(criteria));
     }
 
