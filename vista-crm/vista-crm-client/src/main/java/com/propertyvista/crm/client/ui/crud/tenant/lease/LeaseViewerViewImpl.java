@@ -78,7 +78,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         setForm(new LeaseEditorForm(true));
 
         // Add actions:
-        createApplication = new Button(i18n.tr("Create Application"), new ClickHandler() {
+        createApplication = new Button(i18n.tr("Create Online Application"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 new ApplicationBox() {
