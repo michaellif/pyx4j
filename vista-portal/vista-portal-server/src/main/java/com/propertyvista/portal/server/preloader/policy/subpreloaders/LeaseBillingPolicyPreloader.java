@@ -40,14 +40,10 @@ public class LeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBi
         policy.useBillingPeriodSartDay().setValue(false);
         policy.prorationMethod().setValue(ProrationMethod.Standard);
 
-        LateFeeItem item = EntityFactory.create(LateFeeItem.class);
-
-        item.baseFee().setValue(new BigDecimal(50.00));
-        item.baseFeeType().setValue(BaseFeeType.FlatAmount);
-        item.maxTotalFee().setValue(new BigDecimal(1000.00));
-        item.maxTotalFeeType().setValue(LateFeeItem.MaxTotalFeeType.FlatAmount);
-
-        policy.lateFee().set(item);
+        policy.lateFee().baseFee().setValue(new BigDecimal(50.00));
+        policy.lateFee().baseFeeType().setValue(BaseFeeType.FlatAmount);
+        policy.lateFee().maxTotalFee().setValue(new BigDecimal(1000.00));
+        policy.lateFee().maxTotalFeeType().setValue(LateFeeItem.MaxTotalFeeType.FlatAmount);
 
         return policy;
     }

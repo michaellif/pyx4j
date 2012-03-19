@@ -15,18 +15,32 @@ package com.propertyvista.crm.client.activity.policies.leasebilling;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseBillingPolicyCrudService;
+import com.propertyvista.domain.financial.BillingAccount.ProrationMethod;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 
 public class LeaseBillingPolicyEditorActivity extends EditorActivityBase<LeaseBillingPolicyDTO> {
 
     public LeaseBillingPolicyEditorActivity(Place place) {
-        super(place, PolicyViewFactory.instance(LeaseBillingPolicyEditorView.class), GWT.<LeaseBillingPolicyCrudService> create(LeaseBillingPolicyCrudService.class),
-                LeaseBillingPolicyDTO.class);
+        super(place, PolicyViewFactory.instance(LeaseBillingPolicyEditorView.class), GWT
+                .<LeaseBillingPolicyCrudService> create(LeaseBillingPolicyCrudService.class), LeaseBillingPolicyDTO.class);
+    }
+
+    @Override
+    protected void createNewEntity(AsyncCallback<LeaseBillingPolicyDTO> callback) {
+        LeaseBillingPolicyDTO entity = EntityFactory.create(entityClass);
+
+        entity.billingPeriodStartDay().setValue(1);
+        entity.useBillingPeriodSartDay().setValue(false);
+        entity.prorationMethod().setValue(ProrationMethod.Standard);
+
+        callback.onSuccess(entity);
     }
 }
