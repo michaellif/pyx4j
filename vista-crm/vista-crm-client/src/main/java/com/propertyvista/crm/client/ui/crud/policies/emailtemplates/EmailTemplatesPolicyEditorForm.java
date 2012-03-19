@@ -48,6 +48,7 @@ import com.pyx4j.widgets.client.richtext.ExtendedRichTextToolbar.RichTextAction;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
@@ -139,6 +140,7 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).build());
                 if (isEditable()) {
                     CRichTextArea editor = new CRichTextArea();
+                    editor.setImageProvider(new SiteImageResourceProvider());
                     content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor)).build());
                     // create variable selection button
                     final PushButton pb = editor.getWidget().getEditor().getCustomButton();
