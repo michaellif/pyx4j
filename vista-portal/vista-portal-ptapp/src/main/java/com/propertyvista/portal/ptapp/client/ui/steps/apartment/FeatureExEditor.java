@@ -96,7 +96,8 @@ class FeatureExEditor extends CEntityDecoratableEditor<BillableItem> {
             }
 
             if (editor != null) {
-                this.inject(proto().extraData(), editor);
+                unbind(proto().extraData());
+                inject(proto().extraData(), editor);
                 editor.populate(extraData.cast());
                 extraDataPanel.setWidget(editor);
             }
