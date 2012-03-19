@@ -159,6 +159,10 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         // disable editing for completed/closed leases:
         getEditButton().setVisible(status != Status.Closed);
+        // tweak finalizing availability:
+        if (getFinalizeButton().isVisible()) {
+            getFinalizeButton().setVisible(status == Status.Active || status == Status.Completed);
+        }
 
         createApplication.setVisible(status == Status.Created);
 

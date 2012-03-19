@@ -80,6 +80,39 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         return editButton;
     }
 
+    public Button getSelectVersion() {
+        return selectVersion;
+    }
+
+    public Button getFinalizeButton() {
+        return finalizeButton;
+    }
+
+    @Override
+    public void populate(E value) {
+        super.populate(value);
+        String caption = (defaultCaption + " " + value.getStringView());
+
+        if (editButton != null) {
+            editButton.setEnabled(super.getPresenter().canEdit());
+        }
+
+        if (selectVersion != null) {
+            if (((IVersionedEntity<?>) value).version().versionNumber().isNull()) {
+                caption = caption + " (" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + ")";
+            } else {
+                caption = caption + ", " + i18n.tr("version") + " #" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + " ("
+                        + ((IVersionedEntity<?>) value).version().fromDate().getStringView() + ")";
+            }
+        }
+
+        if (finalizeButton != null) {
+            finalizeButton.setVisible(((IVersionedEntity<?>) value).version().versionNumber().isNull());
+        }
+
+        ((CrmTitleBar) getHeader()).setCaption(caption);
+    }
+
     protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass, final AbstractVersionDataListService<V> entityVersionService) {
 
         selectVersion = new Button(i18n.tr("Select Version"), new ClickHandler() {
@@ -112,30 +145,5 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         if (editButton != null) {
             editButton.setCaption(i18n.tr("Edit Draft"));
         }
-    }
-
-    @Override
-    public void populate(E value) {
-        super.populate(value);
-        String caption = (defaultCaption + " " + value.getStringView());
-
-        if (editButton != null) {
-            editButton.setEnabled(super.getPresenter().canEdit());
-        }
-
-        if (selectVersion != null) {
-            if (((IVersionedEntity<?>) value).version().versionNumber().isNull()) {
-                caption = caption + " (" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + ")";
-            } else {
-                caption = caption + ", " + i18n.tr("version") + " #" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + " ("
-                        + ((IVersionedEntity<?>) value).version().fromDate().getStringView() + ")";
-            }
-        }
-
-        if (finalizeButton != null) {
-            finalizeButton.setVisible(((IVersionedEntity<?>) value).version().versionNumber().isNull());
-        }
-
-        ((CrmTitleBar) getHeader()).setCaption(caption);
     }
 }
