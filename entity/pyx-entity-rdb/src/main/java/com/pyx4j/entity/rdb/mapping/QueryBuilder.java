@@ -37,6 +37,7 @@ import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
@@ -73,13 +74,36 @@ public class QueryBuilder<T extends IEntity> {
         this.dialect = persistenceContext.getDialect();
         this.mainTableSqlAlias = alias;
 
-        this.queryJoin = new QueryJoinBuilder(persistenceContext, mappings, operationsMeta, alias);
+        this.queryJoin = new QueryJoinBuilder(persistenceContext, mappings, operationsMeta, alias, criteria.getVersionedCriteria());
 
         boolean firstCriteria = true;
         if (dialect.isMultitenant()) {
             sql.append(alias).append('.').append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             firstCriteria = false;
         }
+
+        if (IVersionedEntity.class.isAssignableFrom(operationsMeta.entityMeta().getEntityClass())) {
+            IVersionedEntity<?> versionedProto = (IVersionedEntity<?>) criteria.proto();
+            switch (criteria.getVersionedCriteria()) {
+            case onlyFinalized:
+                appendPropertyCriterion(PropertyCriterion.isNotNull(versionedProto.version().fromDate()), firstCriteria);
+                firstCriteria = false;
+                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().toDate()), firstCriteria);
+                break;
+            case onlyDraft:
+                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().fromDate()), firstCriteria);
+                firstCriteria = false;
+                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().toDate()), firstCriteria);
+                break;
+            case finalizedOrDraft:
+                break;
+            case finalizedAsOfNow:
+                appendPropertyCriterion(PropertyCriterion.isNotNull(versionedProto.version()), firstCriteria);
+                firstCriteria = false;
+                break;
+            }
+        }
+
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
             appendFilters(criteria.getFilters(), firstCriteria);
         }
@@ -129,6 +153,15 @@ public class QueryBuilder<T extends IEntity> {
                 throw new RuntimeException("Unsupported Operator " + cr.getClass());
             }
         }
+    }
+
+    private void appendPropertyCriterion(PropertyCriterion propertyCriterion, boolean firstInSentence) {
+        if (firstInSentence) {
+            firstInSentence = false;
+        } else {
+            sql.append(" AND ");
+        }
+        appendPropertyCriterion(propertyCriterion);
     }
 
     private void appendPropertyCriterion(PropertyCriterion propertyCriterion) {
@@ -243,6 +276,10 @@ public class QueryBuilder<T extends IEntity> {
         }
     }
 
+    boolean addDistinct() {
+        return queryJoin.addDistinct;
+    }
+
     String getSQL(String mainTableSqlName) {
         return getJoins(mainTableSqlName) + getWhere() + getSorts();
     }
@@ -292,6 +329,7 @@ public class QueryBuilder<T extends IEntity> {
 
     int bindParameters(PersistenceContext persistenceContext, PreparedStatement stmt) throws SQLException {
         int parameterIndex = 1;
+        parameterIndex = this.queryJoin.bindParameters(parameterIndex, persistenceContext, stmt);
         if (dialect.isMultitenant()) {
             stmt.setString(parameterIndex, NamespaceManager.getNamespace());
             parameterIndex++;

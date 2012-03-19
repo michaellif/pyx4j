@@ -20,6 +20,11 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,6 +34,7 @@ import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 
 class QueryJoinBuilder {
 
@@ -41,6 +47,8 @@ class QueryJoinBuilder {
     final EntityOperationsMeta operationsMeta;
 
     private final String mainTableSqlAlias;
+
+    private final VersionedCriteria versionedCriteria;
 
     private static class JoinDef {
 
@@ -80,12 +88,18 @@ class QueryJoinBuilder {
     //keep the keys in the order they were inserted.
     private final Map<String, JoinDef> memberJoinAliases = new LinkedHashMap<String, JoinDef>();
 
-    QueryJoinBuilder(PersistenceContext persistenceContext, Mappings mappings, EntityOperationsMeta operationsMeta, String mainTableSqlAlias) {
+    private int nowParameters = 0;
+
+    boolean addDistinct = false;
+
+    QueryJoinBuilder(PersistenceContext persistenceContext, Mappings mappings, EntityOperationsMeta operationsMeta, String mainTableSqlAlias,
+            VersionedCriteria versionedCriteria) {
         this.persistenceContext = persistenceContext;
         this.dialect = persistenceContext.getDialect();
         this.mappings = mappings;
         this.operationsMeta = operationsMeta;
         this.mainTableSqlAlias = mainTableSqlAlias;
+        this.versionedCriteria = versionedCriteria;
     }
 
     QueryMember buildQueryMember(String propertyPath, boolean leftJoin) {
@@ -185,6 +199,38 @@ class QueryJoinBuilder {
             condition.append(memberJoin.alias).append('.').append(memberOper.sqlOwnerName());
             condition.append(" = ");
             condition.append(fromAlias).append('.').append(dialect.getNamingConvention().sqlIdColumnName());
+
+            if (memberOper instanceof MemberVersionDataOperationsMeta) {
+                MemberVersionDataOperationsMeta memberVersionDataOper = (MemberVersionDataOperationsMeta) memberOper;
+                condition.append(" AND (");
+                switch (versionedCriteria) {
+                case onlyFinalized:
+                    condition.append(memberJoin.alias).append('.').append(memberVersionDataOper.getSqlFromDateColumnName()).append(" IS NOT NULL");
+                    condition.append(" AND ");
+                    condition.append(memberJoin.alias).append('.').append(memberVersionDataOper.getSqlToDateColumnName()).append(" IS NULL");
+                    break;
+                case onlyDraft:
+                    condition.append(memberJoin.alias).append('.').append(memberVersionDataOper.getSqlFromDateColumnName()).append(" IS NULL");
+                    condition.append(" AND ");
+                    condition.append(memberJoin.alias).append('.').append(memberVersionDataOper.getSqlToDateColumnName()).append(" IS NULL");
+                    break;
+                case finalizedOrDraft:
+                    condition.append(memberJoin.alias).append('.').append(memberVersionDataOper.getSqlToDateColumnName()).append(" IS NULL");
+                    addDistinct = true;
+                    break;
+                case finalizedAsOfNow:
+                    condition.append(memberJoin.alias).append('.').append(memberVersionDataOper.getSqlFromDateColumnName()).append(" <= ?");
+                    condition.append(" AND (");
+                    condition.append(memberJoin.alias).append('.').append(memberVersionDataOper.getSqlToDateColumnName()).append(" > ?");
+                    condition.append(" OR ");
+                    condition.append(memberJoin.alias).append('.').append(memberVersionDataOper.getSqlToDateColumnName()).append(" IS NULL");
+                    condition.append(")");
+                    nowParameters += 2;
+                    break;
+                }
+                condition.append(")");
+            }
+
             memberJoin.condition = condition.toString();
         }
         return memberJoin;
@@ -251,5 +297,20 @@ class QueryJoinBuilder {
             sql.append(memberJoin.alias);
             sql.append(" ON ").append(memberJoin.condition);
         }
+    }
+
+    int bindParameters(int parameterIndex, PersistenceContext persistenceContext, PreparedStatement stmt) throws SQLException {
+        if (nowParameters > 0) {
+            Date forDate = persistenceContext.getTimeNow();
+            Calendar c = new GregorianCalendar();
+            c.setTime(forDate);
+            // DB does not store Milliseconds
+            c.set(Calendar.MILLISECOND, 0);
+            for (int i = 0; i < nowParameters; i++) {
+                stmt.setTimestamp(parameterIndex, new java.sql.Timestamp(c.getTimeInMillis()));
+                parameterIndex++;
+            }
+        }
+        return parameterIndex;
     }
 }

@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
@@ -580,32 +581,71 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         String testId = uniqueString();
         srv.startTransaction();
 
-        // Initial item
+        // Initial item without version
+        ItemA itemA0 = EntityFactory.create(ItemA.class);
+        itemA0.testId().setValue(testId);
+        itemA0.name().setValue("A0-" + uniqueString());
+        srv.persist(itemA0);
+
+        // Initial item with final
         ItemA itemA1 = EntityFactory.create(ItemA.class);
         itemA1.testId().setValue(testId);
-        itemA1.version().name().setValue("A1-" + uniqueString());
+        itemA1.name().setValue("A1-" + uniqueString());
+        itemA1.version().name().setValue("VA1-" + uniqueString());
         itemA1.version().testId().setValue(testId);
-
-        //Save initial value
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
 
+        // Initial item with draft
         ItemA itemA2 = EntityFactory.create(ItemA.class);
         itemA2.testId().setValue(testId);
-        itemA2.version().name().setValue("A2-" + uniqueString());
+        itemA2.name().setValue("A2-" + uniqueString());
+        itemA2.version().name().setValue("VA2-" + uniqueString());
         itemA2.version().testId().setValue(testId);
-
-        //Save initial value
         itemA2.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA2);
 
-        if (false) {
+        // Initial item with final and draft
+        ItemA itemA3 = EntityFactory.create(ItemA.class);
+        itemA3.testId().setValue(testId);
+        itemA3.name().setValue("A3-" + uniqueString());
+        itemA3.version().name().setValue("VA3v-" + uniqueString());
+        itemA3.version().testId().setValue(testId);
+        itemA3.saveAction().setValue(SaveAction.saveAsFinal);
+        srv.persist(itemA3);
+
+        itemA3.version().setPrimaryKey(null);
+        itemA3.version().name().setValue("VA3d-" + uniqueString());
+        itemA3.version().testId().setValue(testId);
+        itemA3.saveAction().setValue(SaveAction.saveAsDraft);
+        srv.persist(itemA3);
+
+        // List/Find only Finalized
+        {
             EntityQueryCriteria<ItemA> criteria = EntityQueryCriteria.create(ItemA.class);
+            criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             List<ItemA> list = srv.query(criteria);
-            assertEquals("final data", 1, list.size());
+            assertEquals("final data", 2, list.size());
         }
 
+        // List/Find only Finalized by version() data
+        {
+            EntityQueryCriteria<ItemA> criteria = EntityQueryCriteria.create(ItemA.class);
+            criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+            criteria.add(PropertyCriterion.eq(criteria.proto().version().testId(), testId));
+            List<ItemA> list = srv.query(criteria);
+            assertEquals("final data", 2, list.size());
+        }
+
+        // List/Find Finalized and Draft by version() data
+        {
+            EntityQueryCriteria<ItemA> criteria = EntityQueryCriteria.create(ItemA.class);
+            criteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+            criteria.add(PropertyCriterion.eq(criteria.proto().version().testId(), testId));
+            List<ItemA> list = srv.query(criteria);
+            assertEquals("final and draft data", 3, list.size());
+        }
     }
 
     public void testDelete() {

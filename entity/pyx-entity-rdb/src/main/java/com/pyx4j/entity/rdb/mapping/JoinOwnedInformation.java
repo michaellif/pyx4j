@@ -24,7 +24,6 @@ import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
@@ -33,12 +32,12 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class JoinOwnedInformation extends JoinInformation {
 
-    MemberMeta memberMeta;
+    private final MemberMeta memberMeta;
 
-    EntityMeta entityMeta;
+    private final EntityMeta entityMeta;
 
     // Relationship is managed in CHILD table using PARENT column.
-    public JoinOwnedInformation(Dialect dialect, NamingConvention namingConvention, EntityMeta entityMeta, MemberMeta memberMeta, MemberMeta ownerMemberMeta) {
+    public JoinOwnedInformation(Dialect dialect, EntityMeta entityMeta, MemberMeta memberMeta, MemberMeta ownerMemberMeta) {
         this.entityMeta = entityMeta;
         this.memberMeta = memberMeta;
         @SuppressWarnings("unchecked")
@@ -50,7 +49,7 @@ public class JoinOwnedInformation extends JoinInformation {
         sqlValueName = dialect.getNamingConvention().sqlIdColumnName();
         joinTableSameAsTarget = true;
 
-        sqlOwnerName = namingConvention.sqlFieldName(EntityOperationsMeta.memberPersistenceName(ownerMemberMeta));
+        sqlOwnerName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(ownerMemberMeta));
         ownerValueAdapter = EntityOperationsMeta.createEntityValueAdapter(dialect, ownerMemberMeta);
 
         if (memberMeta.getObjectClassType() == ObjectClassType.EntityList) {

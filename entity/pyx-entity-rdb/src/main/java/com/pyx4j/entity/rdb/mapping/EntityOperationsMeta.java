@@ -47,7 +47,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -80,7 +79,7 @@ public class EntityOperationsMeta {
 
     private final List<MemberExternalOperationsMeta> externalMembers = new Vector<MemberExternalOperationsMeta>();
 
-    private final List<MemberOperationsMeta> versionInfoMembers = new Vector<MemberOperationsMeta>();
+    private final List<MemberExternalOperationsMeta> versionInfoMembers = new Vector<MemberExternalOperationsMeta>();
 
     private final List<MemberOperationsMeta> indexMembers = new Vector<MemberOperationsMeta>();
 
@@ -159,7 +158,7 @@ public class EntityOperationsMeta {
                     ValueAdapter valueAdapter = createEntityValueAdapter(dialect, memberMeta);
 
                     MemberCollectionOperationsMeta member;
-                    JoinInformation joinInfo = JoinInformation.build(dialect, namingConvention, rootEntityMeta, entityMeta, memberMeta);
+                    JoinInformation joinInfo = JoinInformation.build(dialect, rootEntityMeta, entityMeta, memberMeta);
                     if (joinInfo == null) {
                         String sqlName;
                         if (namesPath != null) {
@@ -194,11 +193,10 @@ public class EntityOperationsMeta {
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    if (memberMeta.getAnnotation(ManagedColumn.class) != null) {
-
-                        // TODO consider code reuse
-                        ValueAdapter valueAdapter = createEntityValueAdapter(dialect, memberMeta);
-                        MemberOperationsMeta member;
+                    ValueAdapter valueAdapter = createEntityValueAdapter(dialect, memberMeta);
+                    MemberOperationsMeta member;
+                    JoinInformation joinInfo = JoinInformation.build(dialect, rootEntityMeta, entityMeta, memberMeta);
+                    if (joinInfo == null) {
                         String sqlName;
                         if (namesPath != null) {
                             sqlName = namingConvention.sqlEmbededFieldName(namesPath, memberPersistenceName);
@@ -208,66 +206,43 @@ public class EntityOperationsMeta {
                         member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
                                 + Path.PATH_SEPARATOR, memberName.equals(ownerMemberName));
 
-                        if (IVersionData.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                            versionInfoMembers.add(member);
-                        }
-
-                        switch (memberMeta.getAttachLevel()) {
-                        case ToStringMembers:
-                            cascadeRetrieveMembers.add(member);
-                            break;
-                        case Attached:
-                            cascadeRetrieveMembers.add(member);
-                            break;
-                        case Detached:
-                            detachedMembers.add(member);
-                            break;
-                        }
+                        columnMembers.add(member);
                     } else {
-                        ValueAdapter valueAdapter = createEntityValueAdapter(dialect, memberMeta);
-                        MemberOperationsMeta member;
-                        JoinInformation joinInfo = JoinInformation.build(dialect, namingConvention, rootEntityMeta, entityMeta, memberMeta);
-                        if (joinInfo == null) {
-                            String sqlName;
-                            if (namesPath != null) {
-                                sqlName = namingConvention.sqlEmbededFieldName(namesPath, memberPersistenceName);
-                            } else {
-                                sqlName = namingConvention.sqlFieldName(memberPersistenceName);
-                            }
-                            member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
-                                    + Path.PATH_SEPARATOR, memberName.equals(ownerMemberName));
-
-                            columnMembers.add(member);
+                        if (joinInfo instanceof JoinVersionDataInformation) {
+                            member = new MemberVersionDataOperationsMeta(dialect, memberAccess, valueAdapter, joinInfo.sqlName, memberMeta, path
+                                    + Path.PATH_SEPARATOR + memberName + Path.PATH_SEPARATOR, joinInfo.joinTableClass, joinInfo.joinTableSameAsTarget,
+                                    joinInfo.sqlOwnerName, joinInfo.ownerValueAdapter, joinInfo.sqlValueName);
+                            versionInfoMembers.add((MemberExternalOperationsMeta) member);
                         } else {
                             member = new MemberExternalOperationsMeta(memberAccess, valueAdapter, joinInfo.sqlName, memberMeta, path + Path.PATH_SEPARATOR
                                     + memberName + Path.PATH_SEPARATOR, joinInfo.joinTableClass, joinInfo.joinTableSameAsTarget, joinInfo.sqlOwnerName,
                                     joinInfo.ownerValueAdapter, joinInfo.sqlValueName);
                             externalMembers.add((MemberExternalOperationsMeta) member);
                         }
+                    }
 
-                        membersByPath.put(member.getMemberPath(), member);
-                        allMembers.add(member);
-                        if (memberMeta.isOwnedRelationships()) {
-                            if (joinInfo == null) {
-                                cascadePersistMembers.add(member);
-                            } else {
-                                cascadePersistMembersSecondPass.add(member);
-                            }
-                            cascadeDeleteMembers.add(member);
-                        } else if (memberMeta.getAnnotation(Reference.class) != null) {
+                    membersByPath.put(member.getMemberPath(), member);
+                    allMembers.add(member);
+                    if (memberMeta.isOwnedRelationships()) {
+                        if (joinInfo == null) {
                             cascadePersistMembers.add(member);
+                        } else {
+                            cascadePersistMembersSecondPass.add(member);
                         }
-                        switch (memberMeta.getAttachLevel()) {
-                        case ToStringMembers:
-                            cascadeRetrieveMembers.add(member);
-                            break;
-                        case Attached:
-                            cascadeRetrieveMembers.add(member);
-                            break;
-                        case Detached:
-                            detachedMembers.add(member);
-                            break;
-                        }
+                        cascadeDeleteMembers.add(member);
+                    } else if (memberMeta.getAnnotation(Reference.class) != null) {
+                        cascadePersistMembers.add(member);
+                    }
+                    switch (memberMeta.getAttachLevel()) {
+                    case ToStringMembers:
+                        cascadeRetrieveMembers.add(member);
+                        break;
+                    case Attached:
+                        cascadeRetrieveMembers.add(member);
+                        break;
+                    case Detached:
+                        detachedMembers.add(member);
+                        break;
                     }
                 } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     String sqlName;
@@ -481,7 +456,7 @@ public class EntityOperationsMeta {
         return externalMembers;
     }
 
-    public List<MemberOperationsMeta> getVersionInfoMembers() {
+    public List<MemberExternalOperationsMeta> getVersionInfoMembers() {
         return versionInfoMembers;
     }
 
