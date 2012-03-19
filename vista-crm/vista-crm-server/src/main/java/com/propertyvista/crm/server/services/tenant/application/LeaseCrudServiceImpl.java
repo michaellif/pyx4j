@@ -90,6 +90,12 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
     protected void enhanceListRetrieved(Lease entity, LeaseDTO dto) {
         Persistence.service().retrieve(dto.unit());
         Persistence.service().retrieve(dto.unit().belongsTo());
+
+        // TODO this should be part of EntityQueryCriteria.finalizedOrDraft
+        if (entity.version().isNull()) {
+            Lease draft = Persistence.service().retrieve(entityClass, entity.getPrimaryKey().asDraftKey());
+            dto.version().set(draft.version());
+        }
     }
 
     @Override
