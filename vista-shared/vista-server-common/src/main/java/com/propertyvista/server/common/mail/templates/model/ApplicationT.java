@@ -24,4 +24,6 @@ public interface ApplicationT extends IEntity {
     IPrimitive<String> applicant();
 
     IPrimitive<String> refNumber();
+
+    IPrimitive<String> applicationUrl();
 }

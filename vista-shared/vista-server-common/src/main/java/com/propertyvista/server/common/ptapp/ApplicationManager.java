@@ -155,7 +155,7 @@ public class ApplicationManager {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
                 Persistence.service().retrieve(tenantInLease.tenant().user());
                 try {
-                    sendInvitationEmail(tenantInLease.tenant().user(), EmailTemplateType.ApplicationCreatedApplicant);
+                    sendInvitationEmail(tenantInLease.tenant().user(), ma.lease(), EmailTemplateType.ApplicationCreatedApplicant);
                 } catch (Exception e) {
                     break;
                 }
@@ -260,13 +260,13 @@ public class ApplicationManager {
         try {
             switch (behaviour) {
             case ProspectiveApplicant:
-                sendInvitationEmail(application.user(), EmailTemplateType.ApplicationCreatedApplicant);
+                sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedApplicant);
                 break;
             case ProspectiveCoApplicant:
-                sendInvitationEmail(application.user(), EmailTemplateType.ApplicationCreatedCoApplicant);
+                sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedCoApplicant);
                 break;
             case Guarantor:
-                sendInvitationEmail(application.user(), EmailTemplateType.ApplicationCreatedGuarantor);
+                sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedGuarantor);
                 break;
             }
         } catch (Exception e) {
@@ -279,7 +279,7 @@ public class ApplicationManager {
         return application;
     }
 
-    private static void sendInvitationEmail(TenantUser user, EmailTemplateType emailTemplateType) {
+    private static void sendInvitationEmail(TenantUser user, Lease lease, EmailTemplateType emailTemplateType) {
         // Create Token and other stuff
         String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
         if (token == null) {
@@ -289,8 +289,8 @@ public class ApplicationManager {
         MailMessage m = new MailMessage();
         m.setTo(user.email().getValue());
         m.setSender(MessageTemplates.getSender());
-        m.setSubject("Property Vista application TODO " + emailTemplateType);
-        m.setHtmlBody(MessageTemplates.createMasterApplicationInvitationEmail(user.name().getValue(), token));
+        // set email subject and body from the template
+        MessageTemplates.createMasterApplicationInvitationEmail(m, user, emailTemplateType, lease, token);
 
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));

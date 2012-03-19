@@ -128,9 +128,9 @@ public final class PwdResetPage extends BasePage {
                 public void onFailure(Throwable caught) {
                     // show error message
                     if (caught instanceof UserRuntimeException) {
-                        error(caught.getMessage());
+                        error(i18n.tr("Action failed.") + (caught.getMessage() == null ? "" : " " + caught.getMessage()));
                     } else if (ApplicationMode.isDevelopment()) {
-                        error(caught.getMessage());
+                        error(i18n.tr("Action failed.") + (caught.getMessage() == null ? "" : " " + caught.getMessage()));
                     } else {
                         error(i18n.tr("Action failed. Please try again later."));
                     }

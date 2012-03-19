@@ -116,32 +116,25 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateApplicationCreatedApplicant() {
         EmailTemplateType type = EmailTemplateType.ApplicationCreatedApplicant;
 
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your Application Confirmation"));
+        template.subject().setValue(i18n.tr("Your Lease Application Created"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
-                "<h3>Congratulations " +
-                EmailTemplateManager.getVarname(appT.applicant()) + "!</h3><br/><br/>" +
+                "Dear " +
+                EmailTemplateManager.getVarname(appT.applicant()) + ",<br/><br/>" +
 
-                "You have successfully completed your application online.<br/><br/>" +
-
-                "Please find attached a PDF copy of your application for your personal records.<br/><br/>" +
-
-                "The Application Reference Number is: " +
+                "Your lease application has been created. The Application Reference Number is: " +
                 EmailTemplateManager.getVarname(appT.refNumber()) + "<br/><br/>" +
 
-                "Please allow us some time to review your application in full. " + 
-                "We will be in touch with you shortly, typically within 48 hours, with our decision. " + 
-                "Should you wish to check on the status of your application, " + 
-                "you can go online to " +
-                EmailTemplateManager.getVarname(portalT.ptappHomeUrl()) + " " +
-                "and use your username and password to access your account." +
-                "In the meantime, should you have any concerns or questions, " +
-                "please do not hesitate to contact us directly and have your Application Reference Number available.<br/<br/>" +
+                "You can now start completing it online by logging to your account using following link: <br/><br/>" +
+                EmailTemplateManager.getVarname(appT.applicationUrl()) + "<br/><br/>" +
+
+                "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
+                EmailTemplateManager.getVarname(bldT.mainOffice().phone()) +
+                "Please have your Application Reference Number available.<br/><br/>" +
                 
                 "Sincerely,<br/><br/>" +
                 
@@ -160,20 +153,17 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your Application Confirmation"));
+        template.subject().setValue(i18n.tr("Your Lease Application Created"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
-                "<h3>Thank you, " +
-                EmailTemplateManager.getVarname(appT.applicant()) + "!</h3><br/><br/>" +
+                "Dear " +
+                EmailTemplateManager.getVarname(appT.applicant()) + ",<br/><br/>" +
 
-                "You have successfully completed your part of the application online." + 
-                "Please find attached the PDF copy of your application for your reference." +
-                "Your Application Reference Number is: " +
+                "Your lease application has been created. The Application Reference Number is: " +
                 EmailTemplateManager.getVarname(appT.refNumber()) + "<br/><br/>" +
 
-                "Once the entire application is completed successfully, we will process the application and a seperate email notification will be sent out to you." + 
-                "To check on the status of the application, you can go to " +
-                EmailTemplateManager.getVarname(portalT.ptappHomeUrl()) + " " +
-                "and use your existing username and password to access the site." +
+                "You can now start completing it online by logging to your account using following link: <br/><br/>" +
+                EmailTemplateManager.getVarname(appT.applicationUrl()) + "<br/><br/>" +
+
                 "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
                 EmailTemplateManager.getVarname(bldT.mainOffice().phone()) +
                 "Please have your Application Reference Number available.<br/><br/>" +
@@ -195,23 +185,18 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your Application Confirmation"));
+        template.subject().setValue(i18n.tr("Your Guarantor Application Created"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
-                "<h3>Thank you, " +
-                EmailTemplateManager.getVarname(appT.applicant()) + "!</h3><br/><br/>" +
+                "Dear " +
+                EmailTemplateManager.getVarname(appT.applicant()) + ",<br/><br/>" +
 
-                "You have successfully completed your Guarantor agreement.<br/><br/>" + 
-
-                "Please find attached the PDF copy of your Guarantor Agreement for your reference. <br/><br/>" +
-
-                "Your Application Reference Number is: " +
+                "Your guarantor application has been created. The Application Reference Number is: " +
                 EmailTemplateManager.getVarname(appT.refNumber()) + "<br/><br/>" +
 
-                "Once the entire application is completed successfully, we will process the application and a seperate email notification will be sent out to you." +
-                "To check on the status of the application, you can go to " +
-                EmailTemplateManager.getVarname(portalT.ptappHomeUrl()) + " " +
-                "and use your existing username and password to access the site." +
-                "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at "+
+                "You can now start completing it online using following link: <br/><br/>" +
+                EmailTemplateManager.getVarname(appT.applicationUrl()) + "<br/><br/>" +
+
+                "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
                 EmailTemplateManager.getVarname(bldT.mainOffice().phone()) +
                 "Please have your Application Reference Number available.<br/><br/>" +
 

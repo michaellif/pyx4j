@@ -63,7 +63,7 @@ public class EmailTemplateManager {
             values.add(EntityFactory.create(BuildingT.class));
             break;
         default:
-            throw new Error("We missed it");
+            throw new Error("Unknown EmailTemplateType: " + template.name());
         }
         return values;
     }
