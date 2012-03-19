@@ -15,17 +15,34 @@ package com.propertyvista.crm.server.services.reports.directory;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.batik.svggen.SVGGraphics2D;
+import org.apache.batik.svggen.SVGGraphics2DIOException;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.ImageTranscoder;
+import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.w3c.dom.Document;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
+import com.pyx4j.svg.chart.DataSource;
+import com.pyx4j.svg.chart.GridBasedChartConfigurator;
+import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.j2se.SvgFactoryForBatik;
 import com.pyx4j.svg.j2se.SvgRootImpl;
 
@@ -38,17 +55,19 @@ import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 
 public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCreator<TurnoverAnalysisMetadata> {
 
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM-yy");
+
     public TurnoverAnalysisReportCreator() {
         super(TurnoverAnalysisMetadata.class);
     }
 
     @Override
-    protected void convert(AsyncCallback<com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator.ConvertedGadgetMetadata> callback,
+    protected void convert(
+            final AsyncCallback<com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator.ConvertedGadgetMetadata> callback,
             GadgetMetadata gadgetMetadata) {
-        // TODO Auto-generated method stub
         final TurnoverAnalysisMetadata turnoverAnalysisMetadata = (TurnoverAnalysisMetadata) gadgetMetadata;
-        final int HEIGHT = 200;
-        final int WIDTH = 555;
+        final int HEIGHT = 250;
+        final int WIDTH = 554;
         AvailabilityReportService service = new AvailabilityReportServiceImpl();
 
         service.turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
@@ -58,24 +77,88 @@ public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCrea
             }
 
             @Override
-            public void onSuccess(Vector<UnitTurnoversPerIntervalDTO> arg0) {
+            public void onSuccess(Vector<UnitTurnoversPerIntervalDTO> data) {
 
-                BufferedImage graph = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+                DataSource ds = new DataSource();
+                for (UnitTurnoversPerIntervalDTO intervalData : data) {
+                    ArrayList<Double> values = new ArrayList<Double>();
+                    if (!turnoverAnalysisMetadata.isTurnoverMeasuredByPercent().isBooleanTrue()) {
+                        values.add((double) intervalData.unitsTurnedOverAbs().getValue().intValue());
+                    } else {
+                        values.add(intervalData.unitsTurnedOverPct().getValue());
+                    }
+
+                    ds.addDataSet(ds.new Metric(DATE_FORMAT.format(intervalData.intervalValue().getValue())), values);
+                }
 
                 SvgFactory factory = new SvgFactoryForBatik();
+
+                GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, WIDTH, HEIGHT);
+                BufferedImage graph = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
                 SvgRoot svgroot = factory.getSvgRoot();
                 ((SvgRootImpl) svgroot).setAttributeNS(null, "width", String.valueOf(WIDTH));
                 ((SvgRootImpl) svgroot).setAttributeNS(null, "height", String.valueOf(HEIGHT));
+
+                svgroot.add(new LineChart(config));
+
                 Document doc = ((SvgRootImpl) svgroot).getDocument();
+
+//                Element e = doc.createElementNS(null, "path");
+//                e.setAttributeNS(null, "d", "M150 0 L75 200 L225 200 Z");
+//                ((SvgRootImpl) svgroot).getRootNode().appendChild(e);
+//
+                // just for debugging
                 SVGGraphics2D g = new SVGGraphics2D(doc);
                 g.setSVGCanvasSize(new Dimension(WIDTH, HEIGHT));
+                Writer out;
 
-                //JSVGCanvas canvas = new JSVGCanvas();
-                //canvas.setSVGDocument((SVGDocument) doc);
+                try {
+                    out = new OutputStreamWriter(System.out, "UTF-8");
+                    g.stream(((SvgRootImpl) svgroot).getRootNode(), out, true, true);
+                } catch (UnsupportedEncodingException e1) {
+                    // TODO Auto-generated catch block
+                    throw new RuntimeException(e1);
+                } catch (SVGGraphics2DIOException e2) {
+                    // TODO Auto-generated catch block
+                    throw new RuntimeException(e2);
+                }
 
+//                PNGTranscoder transcoder = new PNGTranscoder();
+                BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
+//                transcoder.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(0.8));
+                transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, new Float(WIDTH));
+                transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, new Float(HEIGHT));
+                try {
+                    transcoder.transcode(new TranscoderInput(doc), null);
+                    graph = transcoder.getImage();
+                } catch (TranscoderException exeption) {
+                    throw new RuntimeException(exeption);
+                }
+                HashMap<String, Object> parameters = new HashMap<String, Object>();
+                parameters.put("GRAPH", graph);
+                callback.onSuccess(new ConvertedGadgetMetadata((List<? extends IEntity>) java.util.Collections.emptyList(), parameters));
             }
         }, new Vector<Key>(), new LogicalDate());
     }
 
+    public class BufferedImageTranscoder extends ImageTranscoder {
+
+        private BufferedImage image = null;
+
+        @Override
+        public BufferedImage createImage(int width, int height) {
+            BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            return bi;
+        }
+
+        @Override
+        public void writeImage(BufferedImage image, TranscoderOutput out) throws TranscoderException {
+            this.image = image;
+        }
+
+        public BufferedImage getImage() {
+            return this.image;
+        }
+    }
 }
