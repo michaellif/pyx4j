@@ -22,6 +22,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
@@ -69,7 +70,11 @@ public class UnitTurnoverAnalysisManagerTestBase {
         Persistence.service().delete(EntityQueryCriteria.create(UnitTurnoverStats.class));
         Persistence.service().delete(EntityQueryCriteria.create(AptUnitOccupancySegment.class));
         Persistence.service().delete(EntityQueryCriteria.create(UnitAvailabilityStatus.class));
-        Persistence.service().delete(EntityQueryCriteria.create(Lease.class));
+        {
+            EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
+            leaseCriteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+            Persistence.service().delete(leaseCriteria);
+        }
         Persistence.service().delete(EntityQueryCriteria.create(AptUnit.class));
         Persistence.service().delete(EntityQueryCriteria.create(Floorplan.class));
         Persistence.service().delete(EntityQueryCriteria.create(ProductCatalog.class));

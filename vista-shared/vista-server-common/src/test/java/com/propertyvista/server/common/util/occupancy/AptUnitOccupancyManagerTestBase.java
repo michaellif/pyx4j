@@ -29,6 +29,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
@@ -72,7 +73,11 @@ public class AptUnitOccupancyManagerTestBase {
 
         Persistence.service().delete(new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class));
         Persistence.service().delete(new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class));
-        Persistence.service().delete(new EntityQueryCriteria<Lease>(Lease.class));
+        {
+            EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
+            leaseCriteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+            Persistence.service().delete(leaseCriteria);
+        }
         Persistence.service().delete(new EntityQueryCriteria<AptUnit>(AptUnit.class));
 
         unit = EntityFactory.create(AptUnit.class);
