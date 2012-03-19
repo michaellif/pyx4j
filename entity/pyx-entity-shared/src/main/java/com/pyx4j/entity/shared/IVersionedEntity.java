@@ -31,12 +31,6 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface IVersionedEntity<VERSIONED_ITEM extends IVersionData<?>> extends IEntity {
 
-    @Detached(level = AttachLevel.Detached)
-    @Owned
-    IList<VERSIONED_ITEM> versions();
-
-    public static boolean TODO_FIX_UPDATE_FINAL = true;
-
     public enum SaveAction {
 
         saveAsDraft, // Default: When saving owner save child as Draft : default 
@@ -50,27 +44,12 @@ public interface IVersionedEntity<VERSIONED_ITEM extends IVersionData<?>> extend
     @ManagedColumn
     IPrimitive<SaveAction> saveAction();
 
-//    /**
-//     * Finalize: Triggered by Not draft and not empty version() member.
-//     */
-//    @ManagedColumn
-//    IPrimitive<Boolean> draft();
-//
-//    /**
-//     * null for draft
-//     * 
-//     * On persist (only draft):
-//     * version() contains Draft
-//     * 
-//     * On finalised:
-//     * version == null, draft from versions -> finalised (from date is set to current date)
-//     * version != null, only for preloader and with condition that versions() is detached
-//     */
-//    @ManagedColumn
-//    IPrimitive<Date> forDate();
-
     @ManagedColumn
     @ToString(index = 1)
     VERSIONED_ITEM version();
+
+    @Detached(level = AttachLevel.Detached)
+    @Owned
+    IList<VERSIONED_ITEM> versions();
 
 }
