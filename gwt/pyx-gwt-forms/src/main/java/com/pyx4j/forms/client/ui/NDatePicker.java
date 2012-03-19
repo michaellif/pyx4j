@@ -22,8 +22,8 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Date;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 
 import com.pyx4j.forms.client.ImageFactory;
 
@@ -39,31 +39,28 @@ public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<
     @Override
     protected void onEditorCreate() {
         super.onEditorCreate();
-        getEditor().addClickHandler(new ClickHandler() {
+        getEditor().addMouseDownHandler(new MouseDownHandler() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void onMouseDown(MouseDownEvent event) {
                 if (datePickerDropDown != null) {
                     datePickerDropDown.hideDatePicker();
                 }
             }
         });
-
     }
 
     @Override
-    public void onTriggerOn() {
+    public void onToggle() {
         if (datePickerDropDown == null) {
-            datePickerDropDown = new DatePickerDropDownPanel(NDatePicker.this);
-            datePickerDropDown.addFocusHandler(getGroupFocusHandler());
-            datePickerDropDown.addBlurHandler(getGroupFocusHandler());
-        }
-        datePickerDropDown.showDatePicker();
-    }
-
-    @Override
-    public void onTriggerOff() {
-        if (datePickerDropDown != null) {
+            if (isToggledOn()) {
+                datePickerDropDown = new DatePickerDropDownPanel(NDatePicker.this);
+                datePickerDropDown.addFocusHandler(getGroupFocusHandler());
+                datePickerDropDown.addBlurHandler(getGroupFocusHandler());
+            }
+        } else if (datePickerDropDown.isShowing()) {
             datePickerDropDown.hideDatePicker();
+        } else {
+            datePickerDropDown.showDatePicker();
         }
     }
 

@@ -130,10 +130,15 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         return viewable;
     }
 
-    public void onTriggerOn() {
+    public void onToggle() {
     }
 
-    public void onTriggerOff() {
+    protected void toggleOn(boolean flag) {
+        triggerPanel.toggleOn(flag);
+    }
+
+    protected boolean isToggledOn() {
+        return triggerPanel.isToggledOn();
     }
 
     protected GroupFocusHandler getGroupFocusHandler() {

@@ -48,6 +48,8 @@ public class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandl
 
     private final GroupFocusHandler focusHandlerManager;
 
+    private boolean toggledOn = false;
+
     public TriggerPanel(final NComponent<?, ?, ?> component, ImageResource triggerImage) {
         super();
 
@@ -88,7 +90,7 @@ public class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandl
 
             @Override
             public void onClick(ClickEvent event) {
-                component.onTriggerOn();
+                toggleOn(!toggledOn);
             }
         });
 
@@ -100,10 +102,10 @@ public class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandl
                 case KeyCodes.KEY_TAB:
                 case KeyCodes.KEY_ESCAPE:
                 case KeyCodes.KEY_UP:
-                    component.onTriggerOff();
+                    toggleOn(false);
                     break;
                 case KeyCodes.KEY_DOWN:
-                    component.onTriggerOn();
+                    toggleOn(true);
                     break;
                 }
 
@@ -113,9 +115,18 @@ public class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandl
         this.addDoubleClickHandler(new DoubleClickHandler() {
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
-                component.onTriggerOn();
+                toggleOn(true);
             }
         });
+    }
+
+    protected void toggleOn(boolean flag) {
+        toggledOn = flag;
+        component.onToggle();
+    }
+
+    protected boolean isToggledOn() {
+        return toggledOn;
     }
 
     @Override
