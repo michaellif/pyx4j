@@ -88,7 +88,7 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
         } else {
             stmt.setLong(parameterIndex, primaryKey.asLong());
             Calendar c = new GregorianCalendar();
-            if (primaryKey.getVersion() > 0) {
+            if (primaryKey.getVersion() >= Key.VERSION_DRAFT) {
                 c.setTimeInMillis(primaryKey.getVersion());
             } else {
                 c.setTime(persistenceContext.getTimeNow());
