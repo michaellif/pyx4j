@@ -64,7 +64,7 @@ public class MasterApplicationViewerActivity extends CrmViewerActivity<MasterApp
         applicationLister.setParent(result.getPrimaryKey());
         applicationLister.populate();
 
-        tenantLister.setParent(result.lease().getPrimaryKey());
+        tenantLister.setParent(result.lease().version().getPrimaryKey());
         tenantLister.populate();
     }
 

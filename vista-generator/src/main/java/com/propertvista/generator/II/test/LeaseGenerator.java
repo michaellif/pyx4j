@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 
 public class LeaseGenerator implements TreeGenerator<Lease> {
@@ -37,6 +38,7 @@ public class LeaseGenerator implements TreeGenerator<Lease> {
     @Override
     public Lease generate() {
         Lease lease = EntityFactory.create(Lease.class);
+        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         for (int i = 0; i < config.numTenantsInLease; i++) {
 

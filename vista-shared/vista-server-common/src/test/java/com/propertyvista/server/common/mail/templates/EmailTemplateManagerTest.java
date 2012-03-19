@@ -45,6 +45,7 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -423,6 +424,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         unit.belongsTo().set(building);
         Persistence.service().persist(unit);
         lease = EntityFactory.create(Lease.class);
+        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         lease.unit().set(unit);
         lease.leaseFrom().setValue(new LogicalDate());
         lease.saveAction().setValue(SaveAction.saveAsFinal);

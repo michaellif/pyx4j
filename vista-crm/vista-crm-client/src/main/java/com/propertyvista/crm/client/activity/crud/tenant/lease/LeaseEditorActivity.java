@@ -42,6 +42,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements LeaseEditorView.Presenter {
@@ -66,6 +67,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             public void onSuccess(Service.Type type) {
                 LeaseDTO entity = EntityFactory.create(LeaseDTO.class);
                 entity.createDate().setValue(new LogicalDate());
+                entity.paymentFrequency().setValue(PaymentFrequency.Monthly);
                 entity.version().status().setValue(Lease.Status.Created);
                 entity.type().setValue(type);
 

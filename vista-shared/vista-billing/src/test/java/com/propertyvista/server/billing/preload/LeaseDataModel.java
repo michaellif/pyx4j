@@ -53,6 +53,7 @@ public class LeaseDataModel {
         lease = EntityFactory.create(Lease.class);
 
         lease.unit().set(serviceItem.element());
+        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         lease.version().leaseProducts().serviceItem().item().set(serviceItem);
 

@@ -34,6 +34,7 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class AccessRulesTest extends VistaDBTestBase {
 
@@ -65,6 +66,7 @@ public class AccessRulesTest extends VistaDBTestBase {
             Persistence.service().persist(t2);
 
             Lease lease = EntityFactory.create(Lease.class);
+            lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
             lease.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.service().persist(lease);
 
@@ -98,6 +100,7 @@ public class AccessRulesTest extends VistaDBTestBase {
         Persistence.service().persist(t1);
 
         Lease lease = EntityFactory.create(Lease.class);
+        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         Building building = lease.unit().belongsTo();
         Persistence.service().persist(building);
         Persistence.service().persist(lease.unit());

@@ -30,6 +30,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements LeadCrudService {
 
@@ -74,6 +75,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
 
             // TODO this should be selected on UI 
             lease.type().setValue(Service.Type.residentialUnit);
+            lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
             lease.version().status().setValue(Lease.Status.Created);
             lease.leaseFrom().setValue(lead.moveInDate().getValue());

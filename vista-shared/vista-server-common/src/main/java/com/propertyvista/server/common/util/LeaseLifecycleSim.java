@@ -37,6 +37,7 @@ public class LeaseLifecycleSim {
             PaymentFrequency paymentFrequency, Tenant tenant) {
         final Lease lease = EntityFactory.create(Lease.class);
         lease.version().status().setValue(Lease.Status.Created);
+        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         lease.leaseID().setValue(leaseId);
         lease.unit().set(unit);
 

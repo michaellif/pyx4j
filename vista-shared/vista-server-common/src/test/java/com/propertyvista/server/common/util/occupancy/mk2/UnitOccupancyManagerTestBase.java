@@ -43,6 +43,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 
 public class UnitOccupancyManagerTestBase {
@@ -93,6 +94,7 @@ public class UnitOccupancyManagerTestBase {
     protected Lease lease(String leaseFrom, String leaseTo) {
         if (unit != null) {
             Lease lease = EntityFactory.create(Lease.class);
+            lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
             lease.unit().set(unit);
             lease.leaseFrom().setValue(asDate(leaseFrom));
             lease.leaseTo().setValue(asDate(leaseTo));
