@@ -13,7 +13,9 @@
  */
 package com.propertyvista.server.config;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +27,15 @@ import com.propertyvista.domain.DemoData;
 public class VistaNamespaceResolver implements NamespaceResolver {
 
     public static final String demoNamespace = DemoData.DemoPmc.vista.name();
+
+    private final static Set<String> systemDns = new HashSet<String>();
+
+    static {
+        systemDns.add("residentportalsite.com");
+        systemDns.add("prospectportalsite.com");
+        systemDns.add("propertyvista.com");
+        systemDns.add("birchwoodsoftwaregroup.com");
+    }
 
     @Override
     public String getNamespace(HttpServletRequest httprequest) {

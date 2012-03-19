@@ -118,7 +118,8 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
             new LeaseManager().cancelApplication(dbo.lease().getPrimaryKey());
             break;
         }
-
+        // lease and Application changes upon approval in LeaseManager
+        dbo = Persistence.service().retrieve(dboClass, actionDTO.getPrimaryKey());
         MasterApplicationDTO dto2 = GenericConverter.convertDBO2DTO(dbo, dtoClass);
         enhanceDTO(dbo, dto2, false);
         Persistence.service().commit();

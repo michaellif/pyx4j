@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -47,6 +48,7 @@ public interface Application extends IEntity {
     TenantUser user();
 
     @Detached
+    @Versioned
     Lease lease();
 
     IPrimitive<Status> status();

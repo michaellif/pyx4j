@@ -19,6 +19,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -26,6 +28,8 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.server.billing.BillingFacade;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
@@ -189,6 +193,8 @@ public class LeaseManager {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
+        updateApplicationReferencesToFinalVersionOfLase(lease);
+
         occupancyManager(lease.unit().getPrimaryKey()).approveLease();
 
         ServerSideFactory.create(BillingFacade.class).runBilling(lease);
@@ -201,6 +207,8 @@ public class LeaseManager {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
+        updateApplicationReferencesToFinalVersionOfLase(lease);
+
         occupancyManager(lease.unit().getPrimaryKey()).unreserve();
         return lease;
     }
@@ -212,8 +220,25 @@ public class LeaseManager {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
+        updateApplicationReferencesToFinalVersionOfLase(lease);
+
         occupancyManager(lease.unit().getPrimaryKey()).unreserve();
         return lease;
+    }
+
+    private void updateApplicationReferencesToFinalVersionOfLase(Lease lease) {
+        // update reference to first version of Lease in MasterApplication and Applications
+        EntityQueryCriteria<MasterApplication> criteria = EntityQueryCriteria.create(MasterApplication.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease.getPrimaryKey().asDraftKey()));
+        MasterApplication ma = Persistence.service().retrieve(criteria);
+        if (ma != null) {
+            ma.lease().set(lease);
+            Persistence.service().retrieve(ma.applications());
+            for (Application app : ma.applications()) {
+                app.lease().set(lease);
+            }
+            Persistence.service().persist(ma);
+        }
     }
 
     public Lease activate(Key leaseId) {

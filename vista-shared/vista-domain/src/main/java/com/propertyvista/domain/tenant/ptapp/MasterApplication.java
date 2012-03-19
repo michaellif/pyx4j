@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -84,6 +85,7 @@ public interface MasterApplication extends IEntity {
     Notes notes();
 
     @Detached
+    @Versioned
     Lease lease();
 
     @Timestamp(Update.Created)
