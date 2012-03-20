@@ -75,7 +75,7 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
 
     @Override
     protected void removeItem(CEntityFolderItem<LeaseAdjustment> item) {
-        if (!lease.getValue().version().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
+        if (!lease.getValue().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
             item.getValue().expirationDate().setValue(new LogicalDate());
             item.setValue(item.getValue(), false);
             item.setEditable(false);
@@ -100,7 +100,7 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName() == PropertyName.repopulated) {
-                    if (isAddable() && !lease.getValue().version().approvalDate().isNull()) {
+                    if (isAddable() && !lease.getValue().approvalDate().isNull()) {
                         LogicalDate value = item.getValue().expirationDate().getValue();
                         if ((value != null) && !value.after(TimeUtils.today())) {
                             item.setViewable(true);

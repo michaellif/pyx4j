@@ -33,6 +33,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.BillingAccount;
@@ -53,6 +54,7 @@ public interface Payment extends IEntity {
 
         Cash,
 
+        @Translate("Cheque")
         Check,
 
         Other;

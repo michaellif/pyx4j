@@ -98,7 +98,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         // disable some editing on signed lease:
         if (isEditable()) {
-            boolean isLeaseSigned = !getValue().version().approvalDate().isNull();
+            boolean isLeaseSigned = !getValue().approvalDate().isNull();
 
             get(proto().leaseFrom()).setViewable(isLeaseSigned);
             get(proto().leaseTo()).setViewable(isLeaseSigned);
@@ -206,10 +206,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         // other dates:
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().approvalDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
 
         get(proto().createDate()).setViewable(true);
-        get(proto().version().approvalDate()).setViewable(true);
+        get(proto().approvalDate()).setViewable(true);
 
         return new CrmScrollPanel(main);
     }

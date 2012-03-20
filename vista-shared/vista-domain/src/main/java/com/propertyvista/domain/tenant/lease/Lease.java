@@ -171,6 +171,9 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createDate();
 
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> approvalDate();
+
     public interface LeaseV extends IVersionData<Lease> {
 
         IPrimitive<Status> status();
@@ -196,9 +199,6 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
         @Format("MM/dd/yyyy")
         IPrimitive<LogicalDate> moveOutNotice();
-
-        @Format("MM/dd/yyyy")
-        IPrimitive<LogicalDate> approvalDate();
 
         @Detached
         @Owned

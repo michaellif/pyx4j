@@ -189,7 +189,7 @@ public class LeaseManager {
     public Lease approveApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         lease.version().status().setValue(Status.Approved);
-        lease.version().approvalDate().setValue(timeContextProvider.getTimeContext());
+        lease.approvalDate().setValue(timeContextProvider.getTimeContext());
 
         // finalize approved leases while saving:
         lease.saveAction().setValue(SaveAction.saveAsFinal);
