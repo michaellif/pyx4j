@@ -72,7 +72,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         tabPanel.add(detailsTab = createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
-        tabPanel.add(createServiceAgreementTab(), i18n.tr("Products"));
+        tabPanel.add(createServiceAgreementTab(), i18n.tr("Charges"));
         tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
         tabPanel.setLastTabDisabled(isEditable());
         tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
@@ -100,7 +100,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         if (isEditable()) {
             boolean isLeaseSigned = !getValue().version().approvalDate().isNull();
 
-            tabPanel.setTabDisabled(detailsTab, isLeaseSigned);
+            get(proto().leaseFrom()).setViewable(isLeaseSigned);
+            get(proto().leaseTo()).setViewable(isLeaseSigned);
 
             unitSelector.setVisible(!isLeaseSigned);
             serviceSelector.setVisible(!isLeaseSigned);
@@ -124,6 +125,22 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().application(), new CEntityLabel<MasterApplication>()), 20).build());
         }
+
+        // Lease dates:
+        main.setBR(++row, 0, 1);
+        FormFlexPanel datesPanel = new FormFlexPanel();
+
+        int datesRow = -1; // first column:
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseTo()), 9).build());
+
+        datesRow = -1; // second column:
+        datesPanel.setBR(++datesRow, 1, 1);
+        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualLeaseTo()), 9).build());
+
+        datesPanel.getColumnFormatter().setWidth(0, "40%");
+        datesPanel.getColumnFormatter().setWidth(1, "60%");
+        main.setWidget(++row, 0, datesPanel);
 
         main.setBR(++row, 0, 1);
         if (isEditable()) {
@@ -165,35 +182,28 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                             .build());
         }
 
-        // Lease dates:
+        // Move dates:
         main.setBR(++row, 0, 1);
-        FormFlexPanel leaseDates = new FormFlexPanel();
+        datesPanel = new FormFlexPanel();
 
-        int datesRow = -1; // first column:
-        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
-        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseTo()), 9).build());
-        leaseDates.setBR(++datesRow, 0, 1);
-        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().expectedMoveIn()), 9).build());
-        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().moveOutNotice()), 9).build());
-        leaseDates.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().expectedMoveOut()), 9).build());
+        datesRow = -1; // first column:
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().expectedMoveIn()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().moveOutNotice()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().expectedMoveOut()), 9).build());
 
         datesRow = -1; // second column:
-        leaseDates.setBR(++datesRow, 1, 1);
-        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualLeaseTo()), 9).build());
-        leaseDates.setBR(++datesRow, 1, 1);
-        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualMoveIn()), 9).build());
-        leaseDates.setBR(++datesRow, 1, 1);
-        leaseDates.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualMoveOut()), 9).build());
+        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualMoveIn()), 9).build());
+        datesPanel.setBR(++datesRow, 1, 1);
+        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualMoveOut()), 9).build());
 
         get(proto().version().moveOutNotice()).setViewable(true);
         get(proto().version().expectedMoveOut()).setViewable(true);
 
-        leaseDates.getColumnFormatter().setWidth(0, "40%");
-        leaseDates.getColumnFormatter().setWidth(1, "60%");
-        main.setWidget(++row, 0, leaseDates);
+        datesPanel.getColumnFormatter().setWidth(0, "40%");
+        datesPanel.getColumnFormatter().setWidth(1, "60%");
+        main.setWidget(++row, 0, datesPanel);
 
         // other dates:
-        main.setBR(++row, 0, 1);
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().approvalDate()), 9).build());

@@ -332,7 +332,8 @@ public class ProductCatalogGenerator {
     }
 
     public List<ProductItem> createAptUnitServices(ProductCatalog catalog, AptUnit unit) {
-        Service.Type type = RandomUtil.random(EnumSet.of(Type.residentialUnit, Type.residentialShortTermUnit, Type.commercialUnit));
+//        Service.Type type = RandomUtil.random(EnumSet.of(Type.residentialUnit, Type.residentialShortTermUnit, Type.commercialUnit));
+        Service.Type type = Type.residentialUnit;
         List<ProductItem> serviceItems = createBuildingElementServices(catalog, unit, type);
         serviceItems.get(0).price().setValue(createUnitMarketRent(unit));
         unit.financial()._marketRent().set(serviceItems.get(0).price());

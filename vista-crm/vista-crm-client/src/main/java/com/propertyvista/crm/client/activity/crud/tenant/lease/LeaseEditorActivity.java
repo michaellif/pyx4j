@@ -91,6 +91,11 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
                 fillserviceItems(currentValue);
 
                 view.populate(currentValue);
+
+                // if there is only one service for the selected unit - pre-set it:
+                if (currentValue.selectedServiceItems().size() == 1) {
+                    setSelectedService(currentValue.selectedServiceItems().get(0));
+                }
             }
 
             @Override
