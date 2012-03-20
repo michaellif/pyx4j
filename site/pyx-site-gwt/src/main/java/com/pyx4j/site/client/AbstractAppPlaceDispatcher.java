@@ -23,11 +23,14 @@ package com.pyx4j.site.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.SecurityControllerEvent;
+import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SigningOutPlace;
@@ -37,6 +40,32 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
     private static final Logger log = LoggerFactory.getLogger(AbstractAppPlaceDispatcher.class);
 
     private AppPlace urlEntryTargetPlace = AppPlace.NOWHERE;
+
+    protected AbstractAppPlaceDispatcher() {
+
+        AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+
+            @Override
+            public void onSecurityContextChange(SecurityControllerEvent event) {
+                Place current = AppSite.getPlaceController().getWhere();
+                if ((current instanceof PublicPlace) || (!isApplicationAuthenticated())) {
+                    AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+                } else if (current instanceof AppPlace) {
+                    isPlaceNavigable((AppPlace) current, new DefaultAsyncCallback<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean result) {
+                            if (!result) {
+                                AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+                            }
+                        }
+                    });
+                }
+
+            }
+
+        });
+
+    }
 
     /**
      * Called when application is not authenticated and url points NOWHERE of hidden(authenticated only) place
