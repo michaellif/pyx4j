@@ -76,7 +76,7 @@ public class Lifecycle {
                         if (behaviours == null) {
                             endSession(session);
                             Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(true));
-                        } else if (behaviours != visit.getAcl().getBehaviours()) {
+                        } else if (!EqualsHelper.equals(behaviours, visit.getAcl().getBehaviours())) {
                             log.info("AuthorizationChanged {} -> {}", visit.getAcl().getBehaviours(), behaviours);
                             visit.beginSession(visit.getUserVisit(), SecurityController.instance().authenticate(behaviours));
                             visit.setAclChanged(true);
