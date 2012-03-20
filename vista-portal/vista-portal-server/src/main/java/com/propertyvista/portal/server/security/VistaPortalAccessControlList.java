@@ -163,6 +163,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaTenantBehavior.ProspectiveSubmittedApplicant, VistaTenantBehavior.ProspectiveSubmitted);
         grant(VistaTenantBehavior.ProspectiveSubmittedCoApplicant, VistaTenantBehavior.ProspectiveSubmitted);
+        grant(VistaTenantBehavior.GuarantorSubmitted, VistaTenantBehavior.ProspectiveSubmitted);
 
         // -------------
 

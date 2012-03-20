@@ -23,7 +23,7 @@ public enum VistaTenantBehavior implements Behavior {
 
     ProspectiveCoApplicant,
 
-    Guarantor,
+    Guarantor /* is as well Prospective see VistaPortalAccessControlList */,
 
     //-- Application Submitted 
 
@@ -33,7 +33,7 @@ public enum VistaTenantBehavior implements Behavior {
 
     ProspectiveSubmittedCoApplicant,
 
-    GuarantorSubmitted,
+    GuarantorSubmitted /* is as well ProspectiveSubmitted see VistaPortalAccessControlList */,
 
     // Application Approved - > Portal
 
