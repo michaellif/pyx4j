@@ -13,19 +13,13 @@
  */
 package com.propertyvista.crm.server.services.reports.directory;
 
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.batik.svggen.SVGGraphics2D;
-import org.apache.batik.svggen.SVGGraphics2DIOException;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -55,7 +49,17 @@ import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 
 public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCreator<TurnoverAnalysisMetadata> {
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM-yy");
+    private static final SimpleDateFormat MONTH_LABEL_FORMAT = new SimpleDateFormat("MMM-yy");
+
+    private static final SimpleDateFormat REPORT_FORMAT = new SimpleDateFormat("yyyy-MMM-dd");
+
+    private static final int HEIGHT = 250;
+
+    private static final int WIDTH = 554;
+
+    protected static final String GRAPH = "GRAPH";
+
+    protected static final String AS_OF = "AS_OF";
 
     public TurnoverAnalysisReportCreator() {
         super(TurnoverAnalysisMetadata.class);
@@ -66,8 +70,8 @@ public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCrea
             final AsyncCallback<com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator.ConvertedGadgetMetadata> callback,
             GadgetMetadata gadgetMetadata) {
         final TurnoverAnalysisMetadata turnoverAnalysisMetadata = (TurnoverAnalysisMetadata) gadgetMetadata;
-        final int HEIGHT = 250;
-        final int WIDTH = 554;
+        final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().isBooleanTrue() ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate();
+
         AvailabilityReportService service = new AvailabilityReportServiceImpl();
 
         service.turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
@@ -88,7 +92,7 @@ public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCrea
                         values.add(intervalData.unitsTurnedOverPct().getValue());
                     }
 
-                    ds.addDataSet(ds.new Metric(DATE_FORMAT.format(intervalData.intervalValue().getValue())), values);
+                    ds.addDataSet(ds.new Metric(MONTH_LABEL_FORMAT.format(intervalData.intervalValue().getValue())), values);
                 }
 
                 SvgFactory factory = new SvgFactoryForBatik();
@@ -104,31 +108,10 @@ public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCrea
 
                 Document doc = ((SvgRootImpl) svgroot).getDocument();
 
-//                Element e = doc.createElementNS(null, "path");
-//                e.setAttributeNS(null, "d", "M150 0 L75 200 L225 200 Z");
-//                ((SvgRootImpl) svgroot).getRootNode().appendChild(e);
-//
-                // just for debugging
-                SVGGraphics2D g = new SVGGraphics2D(doc);
-                g.setSVGCanvasSize(new Dimension(WIDTH, HEIGHT));
-                Writer out;
-
-                try {
-                    out = new OutputStreamWriter(System.out, "UTF-8");
-                    g.stream(((SvgRootImpl) svgroot).getRootNode(), out, true, true);
-                } catch (UnsupportedEncodingException e1) {
-                    // TODO Auto-generated catch block
-                    throw new RuntimeException(e1);
-                } catch (SVGGraphics2DIOException e2) {
-                    // TODO Auto-generated catch block
-                    throw new RuntimeException(e2);
-                }
-
-//                PNGTranscoder transcoder = new PNGTranscoder();
                 BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
-//                transcoder.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(0.8));
                 transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, new Float(WIDTH));
                 transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, new Float(HEIGHT));
+
                 try {
                     transcoder.transcode(new TranscoderInput(doc), null);
                     graph = transcoder.getImage();
@@ -136,11 +119,13 @@ public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCrea
                     throw new RuntimeException(exeption);
                 }
                 HashMap<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put("GRAPH", graph);
-                List<? extends IEntity> emptyData = java.util.Collections.emptyList();
-                callback.onSuccess(new ConvertedGadgetMetadata(emptyData, parameters));
+
+                parameters.put(AS_OF, REPORT_FORMAT.format(asOf));
+                parameters.put(GRAPH, graph);
+
+                callback.onSuccess(new ConvertedGadgetMetadata((List<? extends IEntity>) java.util.Collections.emptyList(), parameters));
             }
-        }, new Vector<Key>(), new LogicalDate());
+        }, new Vector<Key>(), asOf);
     }
 
     public class BufferedImageTranscoder extends ImageTranscoder {
@@ -149,7 +134,7 @@ public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCrea
 
         @Override
         public BufferedImage createImage(int width, int height) {
-            BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
             return bi;
         }
 

@@ -17,21 +17,22 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="GRAPH" class="java.awt.Image"/>
+	<parameter name="AS_OF" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>	
 	<title>
-		<band height="50" splitType="Stretch">
+		<band height="31" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="554" height="49" />
+				<reportElement x="0" y="0" width="554" height="30" />
 				<box border="1Point"/>					
 				<textField>		
-					<reportElement x="0" y="0" width="553" height="48"/>				
+					<reportElement x="0" y="0" width="553" height="29"/>				
 					<textElement textAlignment="Center" verticalAlignment="Middle">					
 						<font size="10"/>
 					</textElement>
 					<textFieldExpression>
-						<![CDATA["Turnover Analysis"]]>
+						<![CDATA["Turnover Analysis as of " + $P{AS_OF}]]>
 					</textFieldExpression>
 				</textField>			
 			</frame>
