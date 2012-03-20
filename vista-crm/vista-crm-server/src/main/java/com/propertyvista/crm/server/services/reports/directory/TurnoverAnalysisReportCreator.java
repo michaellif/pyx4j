@@ -17,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Vector;
 
 import org.apache.batik.transcoder.TranscoderException;
@@ -31,7 +30,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.chart.DataSource;
@@ -123,7 +121,7 @@ public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCrea
                 parameters.put(AS_OF, REPORT_FORMAT.format(asOf));
                 parameters.put(GRAPH, graph);
 
-                callback.onSuccess(new ConvertedGadgetMetadata((List<? extends IEntity>) java.util.Collections.emptyList(), parameters));
+                callback.onSuccess(new ConvertedGadgetMetadata(null, parameters));
             }
         }, new Vector<Key>(), asOf);
     }
