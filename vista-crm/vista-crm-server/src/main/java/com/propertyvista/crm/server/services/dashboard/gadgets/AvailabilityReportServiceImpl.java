@@ -44,7 +44,7 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailab
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO.AnalysisResolution;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -207,7 +207,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     }
 
     @Override
-    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, Vector<Key> buildings, LogicalDate toDate) {
+    public void summary(AsyncCallback<UnitAvailabilityReportSummaryDTO> callback, Vector<Key> buildings, LogicalDate toDate) {
         if (buildings == null) {
             callback.onFailure(new Error("the set of buildings was not provided."));
             return;
@@ -226,7 +226,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         List<UnitAvailabilityStatus> unitStatuses = Persistence.service().query(criteria);
 
-        UnitVacancyReportSummaryDTO summary = EntityFactory.create(UnitVacancyReportSummaryDTO.class);
+        UnitAvailabilityReportSummaryDTO summary = EntityFactory.create(UnitAvailabilityReportSummaryDTO.class);
 
         int total = 0;
 

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AvailabilitySummary" pageWidth="555" pageHeight="350" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="10" bottomMargin="10">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1"/>
+	<parameter name="SUMMARY" class="com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO"/>
+	<parameter name="AS_OF" class="java.lang.String"/>
+	<field name="occupancyAbsolute" class="java.lang.Integer"/>
+	<field name="occupancyRelative" class="java.lang.Double"/>
+	<field name="noticeAbsolute" class="java.lang.Integer"/>
+	<field name="noticeRelative" class="java.lang.Double"/>
+	<field name="vacancyAbsolute" class="java.lang.Integer"/>
+	<field name="vacancyRelative" class="java.lang.Double"/>
+	<field name="netExposureAbsolute" class="java.lang.Integer"/>
+	<field name="netExposureRelative" class="java.lang.Double"/>
+	<field name="total" class="java.lang.Integer"/>
+	<field name="vacantRented" class="java.lang.Integer"/>
+	<field name="noticeRented" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="31" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="554" height="30"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textField>
+					<reportElement x="0" y="0" width="553" height="29"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["AvailabilitySummary as of " + $P{AS_OF}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="178" splitType="Stretch">
+			<rectangle>
+				<reportElement x="19" y="7" width="100" height="160"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="119" y="7" width="100" height="160"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="219" y="7" width="100" height="160"/>
+			</rectangle>
+			<textField>
+				<reportElement x="119" y="27" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{occupancyAbsolute}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="19" y="27" width="100" height="20"/>
+				<textElement>
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Occupied]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="19" y="87" width="100" height="20"/>
+				<textElement>
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Vacant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="19" y="127" width="100" height="20"/>
+				<textElement>
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Net Exposure]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="19" y="47" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Notice]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="19" y="147" width="100" height="20"/>
+				<textElement>
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="119" y="7" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="219" y="7" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<textField pattern="###0.00">
+				<reportElement x="219" y="27" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{occupancyRelative}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="119" y="47" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{noticeAbsolute}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="219" y="47" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{noticeRelative}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="119" y="87" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vacancyAbsolute}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="219" y="87" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vacancyRelative}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="119" y="127" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{netExposureAbsolute}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="219" y="127" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{netExposureRelative}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="119" y="147" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="19" y="107" width="100" height="20"/>
+				<textElement>
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Vacant Rented]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="119" y="107" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vacantRented}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="19" y="67" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Notice Rented]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="119" y="67" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{noticeRented}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

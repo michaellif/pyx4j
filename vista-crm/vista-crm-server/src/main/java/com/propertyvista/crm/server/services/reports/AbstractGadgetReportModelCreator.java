@@ -23,7 +23,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.crm.server.services.reports.directory.BuildingListerReportCreator;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public abstract class AbstractGadgetReportModelCreator<G extends GadgetMetadata> implements GadgetReportModelCreator {
@@ -56,9 +55,9 @@ public abstract class AbstractGadgetReportModelCreator<G extends GadgetMetadata>
                 public void onSuccess(ConvertedGadgetMetadata reportData) {
                     callback.onSuccess(new JasperReportModel(designName(gadgetMetadataClass), reportData.data, reportData.parameters));
                 }
-            }, gadgetMetadata);
+            }, gadgetMetadata, selectedBuildings);
         } else {
-            callback.onFailure(new Error(BuildingListerReportCreator.class.getSimpleName() + " can't handle a gadget metadata class "
+            callback.onFailure(new Error(this.getClass().getSimpleName() + " can't handle a gadget metadata class "
                     + gadgetMetadata.getInstanceValueClass().getSimpleName()));
         }
     }
@@ -71,7 +70,7 @@ public abstract class AbstractGadgetReportModelCreator<G extends GadgetMetadata>
         return class1.equals(this.gadgetMetadataClass);
     }
 
-    protected abstract void convert(AsyncCallback<ConvertedGadgetMetadata> callback, GadgetMetadata gadgetMetadata);
+    protected abstract void convert(AsyncCallback<ConvertedGadgetMetadata> callback, GadgetMetadata gadgetMetadata, List<Key> selectedBuildings);
 
     public static class ConvertedGadgetMetadata {
 

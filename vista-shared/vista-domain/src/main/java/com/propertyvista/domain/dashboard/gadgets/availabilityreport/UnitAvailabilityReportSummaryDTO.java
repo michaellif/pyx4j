@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
-public interface UnitVacancyReportSummaryDTO extends IEntity {
+public interface UnitAvailabilityReportSummaryDTO extends IEntity {
     public enum SummarySubject {
         Complex, Region, Ownership, PropertyManager;
 

@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.batik.transcoder.TranscoderException;
@@ -66,7 +67,7 @@ public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCrea
     @Override
     protected void convert(
             final AsyncCallback<com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator.ConvertedGadgetMetadata> callback,
-            GadgetMetadata gadgetMetadata) {
+            GadgetMetadata gadgetMetadata, List<Key> selectedBuildings) {
         final TurnoverAnalysisMetadata turnoverAnalysisMetadata = (TurnoverAnalysisMetadata) gadgetMetadata;
         final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().isBooleanTrue() ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate();
 

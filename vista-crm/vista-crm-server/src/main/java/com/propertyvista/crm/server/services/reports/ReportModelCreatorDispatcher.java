@@ -25,6 +25,8 @@ import com.pyx4j.entity.report.JasperReportModel;
 
 import com.propertyvista.crm.server.services.reports.directory.BuildingListerReportCreator;
 import com.propertyvista.crm.server.services.reports.directory.TurnoverAnalysisReportCreator;
+import com.propertyvista.crm.server.services.reports.directory.UnitAvailabilitySummaryReportCreator;
+import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
@@ -41,7 +43,9 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
         map = new ConcurrentHashMap<Class<? extends GadgetMetadata>, AbstractGadgetReportModelCreator<?>>();
 
         map.put(BuildingLister.class, new BuildingListerReportCreator());
+
         map.put(TurnoverAnalysisMetadata.class, new TurnoverAnalysisReportCreator());
+        map.put(AvailabilitySummary.class, new UnitAvailabilitySummaryReportCreator());
 
         // add more GadgetReportModelCreators here
     }

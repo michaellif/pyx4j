@@ -14,9 +14,11 @@
 package com.propertyvista.crm.server.services.reports.directory;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -36,34 +38,34 @@ public class BuildingListerReportCreator extends AbstractGadgetReportModelCreato
     }
 
     @Override
-    protected void convert(final AsyncCallback<ConvertedGadgetMetadata> callback, GadgetMetadata gadgetMetadata) {
-            final BuildingLister lister = (BuildingLister) gadgetMetadata;
+    protected void convert(final AsyncCallback<ConvertedGadgetMetadata> callback, GadgetMetadata gadgetMetadata, List<Key> selectedBuildings) {
+        final BuildingLister lister = (BuildingLister) gadgetMetadata;
 
-            BuildingCrudService service = new BuildingCrudServiceImpl();
+        BuildingCrudService service = new BuildingCrudServiceImpl();
 
-            service.list(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
+        service.list(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
 
-                @Override
-                public void onSuccess(EntitySearchResult<BuildingDTO> result) {
+            @Override
+            public void onSuccess(EntitySearchResult<BuildingDTO> result) {
 
-                    // Create map of column properties to names
-                    // for columns that appear in the report
-                    HashMap<String, String> columns = new HashMap<String, String>();
-                    for (ColumnDescriptorEntity column : lister.columnDescriptors()) {
-                        if (column.visiblily().getValue())
-                            columns.put(column.propertyPath().getValue(), column.title().getValue());
-                    }
-
-                    HashMap<String, Object> parameters = new HashMap<String, Object>();
-                    parameters.put("COLUMNS", columns);
-                    callback.onSuccess(new ConvertedGadgetMetadata(result.getData(), parameters));
+                // Create map of column properties to names
+                // for columns that appear in the report
+                HashMap<String, String> columns = new HashMap<String, String>();
+                for (ColumnDescriptorEntity column : lister.columnDescriptors()) {
+                    if (column.visiblily().getValue())
+                        columns.put(column.propertyPath().getValue(), column.title().getValue());
                 }
 
-                @Override
-                public void onFailure(Throwable arg0) {
-                    callback.onFailure(arg0);
-                }
-            }, convertToCriteria(gadgetMetadata.duplicate(BuildingLister.class)));
+                HashMap<String, Object> parameters = new HashMap<String, Object>();
+                parameters.put("COLUMNS", columns);
+                callback.onSuccess(new ConvertedGadgetMetadata(result.getData(), parameters));
+            }
+
+            @Override
+            public void onFailure(Throwable arg0) {
+                callback.onFailure(arg0);
+            }
+        }, convertToCriteria(gadgetMetadata.duplicate(BuildingLister.class)));
     }
 
     private EntityListCriteria<BuildingDTO> convertToCriteria(BuildingLister metadata) {

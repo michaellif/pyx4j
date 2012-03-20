@@ -100,7 +100,7 @@ public class PTGenerator {
     public PTGenerator(VistaDevPreloadConfig config) {
         this.seed = config.ptGenerationSeed;
         DataGenerator.setRandomSeed(config.ptGenerationSeed);
-        this.rnd = new Random(seed);
+        this.rnd = new Random(666l);
         this.config = config;
     }
 

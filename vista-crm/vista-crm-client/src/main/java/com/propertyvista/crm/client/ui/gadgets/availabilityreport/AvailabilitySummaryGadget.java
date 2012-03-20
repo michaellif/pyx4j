@@ -43,7 +43,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -54,7 +54,7 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
 
     public static class AvailabiltySummaryGadgetInstance extends GadgetInstanceBase<AvailabilitySummary> implements IBuildingBoardGadgetInstance {
 
-        public CrmEntityForm<UnitVacancyReportSummaryDTO> form;
+        public CrmEntityForm<UnitAvailabilityReportSummaryDTO> form;
 
         public Panel panel;
 
@@ -96,7 +96,7 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
 
             panel.add(initAsOfBannerPanel());
 
-            form = new CrmEntityForm<UnitVacancyReportSummaryDTO>(UnitVacancyReportSummaryDTO.class, true) {
+            form = new CrmEntityForm<UnitAvailabilityReportSummaryDTO>(UnitAvailabilityReportSummaryDTO.class, true) {
 
                 @Override
                 public IsWidget createContent() {
@@ -160,7 +160,7 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
             return true;
         }
 
-        private void setData(UnitVacancyReportSummaryDTO summary) {
+        private void setData(UnitAvailabilityReportSummaryDTO summary) {
             form.populate(summary);
         }
 
@@ -170,9 +170,9 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
                 buildingPks.add(b.getPrimaryKey());
             }
 
-            service.summary(new AsyncCallback<UnitVacancyReportSummaryDTO>() {
+            service.summary(new AsyncCallback<UnitAvailabilityReportSummaryDTO>() {
                 @Override
-                public void onSuccess(UnitVacancyReportSummaryDTO result) {
+                public void onSuccess(UnitAvailabilityReportSummaryDTO result) {
                     setData(result);
                     populateSucceded();
                 }
