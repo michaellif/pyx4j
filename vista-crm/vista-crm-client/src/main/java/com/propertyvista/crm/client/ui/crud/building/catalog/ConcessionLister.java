@@ -14,6 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -33,5 +35,11 @@ public class ConcessionLister extends ListerBase<Concession> {
             new MemberColumnDescriptor.Builder(proto().version().status()).build(), new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(),
             new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build()
         );//@formatter:on
+    }
+
+    @Override
+    protected EntityListCriteria<Concession> updateCriteria(EntityListCriteria<Concession> criteria) {
+        criteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+        return super.updateCriteria(criteria);
     }
 }

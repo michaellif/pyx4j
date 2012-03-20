@@ -14,6 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -30,5 +32,11 @@ public class ServiceLister extends ListerBase<Service> {
             new MemberColumnDescriptor.Builder(proto().version().type()).build(),
             new MemberColumnDescriptor.Builder(proto().version().name()).build()
         );//@formatter:on
+    }
+
+    @Override
+    protected EntityListCriteria<Service> updateCriteria(EntityListCriteria<Service> criteria) {
+        criteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+        return super.updateCriteria(criteria);
     }
 }

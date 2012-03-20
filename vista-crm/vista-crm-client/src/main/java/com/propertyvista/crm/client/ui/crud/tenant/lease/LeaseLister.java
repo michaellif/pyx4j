@@ -14,6 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -41,5 +43,11 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().version().approvalDate()).build(),
             new Builder(proto().createDate()).build()
         );//@formatter:on
+    }
+
+    @Override
+    protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
+        criteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+        return super.updateCriteria(criteria);
     }
 }
