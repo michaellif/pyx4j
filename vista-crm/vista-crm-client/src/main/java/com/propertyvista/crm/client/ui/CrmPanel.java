@@ -48,6 +48,10 @@ public class CrmPanel extends LayoutPanel {
 
     public CrmPanel() {
 
+        HTML feedbackWidgetContainer = new HTML();
+        feedbackWidgetContainer.getElement().setAttribute("id", "feedback_widget_container"); //getSatisfaction button container
+        add(feedbackWidgetContainer); //must be done before add(contentPanel) else the container blocks all interaction with site
+
         EventBus eventBus = AppSite.getEventBus();
 
         setStyleName(CrmSitePanelTheme.StyleName.SiteView.name());
@@ -83,9 +87,6 @@ public class CrmPanel extends LayoutPanel {
          */
         LayoutPanel centerAreaContent = new LayoutPanel();
         centerAreaContent.ensureDebugId("just_checking");
-        HTML feedbackWidgetContainer = new HTML();
-        feedbackWidgetContainer.getElement().setAttribute("id", "feedback_widget_container"); //getSatisfaction button container
-        centerAreaContent.add(feedbackWidgetContainer);
         contentPanel.add(centerAreaContent);
 
         //================ Main application area - splitter with navig menu and content =======
