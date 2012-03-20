@@ -76,17 +76,20 @@ public class Lifecycle {
                         if (behaviours == null) {
                             endSession(session);
                             Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(true));
-                        } else if (!EqualsHelper.equals(behaviours, visit.getAcl().getBehaviours())) {
-                            log.info("AuthorizationChanged {} -> {}", visit.getAcl().getBehaviours(), behaviours);
-                            visit.beginSession(visit.getUserVisit(), SecurityController.instance().authenticate(behaviours));
-                            visit.setAclChanged(true);
-                            Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
                         } else {
-                            if ((clientAclTimeStamp != null) && (visit.getAclTimeStamp() != Long.parseLong(clientAclTimeStamp))) {
-                                log.info("AuthorizationChanged client needs sync {}", visit.getAcl().getBehaviours());
+                            Set<Behavior> assignedBehaviours = SecurityController.instance().getAllBehaviors(behaviours);
+                            if (!EqualsHelper.equals(assignedBehaviours, visit.getAcl().getBehaviours())) {
+                                log.info("AuthorizationChanged {} -> {}", visit.getAcl().getBehaviours(), assignedBehaviours);
+                                visit.beginSession(visit.getUserVisit(), SecurityController.instance().authenticate(behaviours));
+                                visit.setAclChanged(true);
                                 Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
+                            } else {
+                                if ((clientAclTimeStamp != null) && (visit.getAclTimeStamp() != Long.parseLong(clientAclTimeStamp))) {
+                                    log.info("AuthorizationChanged client needs sync {}", visit.getAcl().getBehaviours());
+                                    Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
+                                }
+                                visit.aclRevalidated();
                             }
-                            visit.aclRevalidated();
                         }
                     }
                 }
