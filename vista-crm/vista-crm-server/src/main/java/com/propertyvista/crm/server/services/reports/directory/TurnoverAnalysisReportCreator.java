@@ -137,7 +137,8 @@ public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCrea
                 }
                 HashMap<String, Object> parameters = new HashMap<String, Object>();
                 parameters.put("GRAPH", graph);
-                callback.onSuccess(new ConvertedGadgetMetadata((List<? extends IEntity>) java.util.Collections.emptyList(), parameters));
+                List<? extends IEntity> emptyData = java.util.Collections.emptyList();
+                callback.onSuccess(new ConvertedGadgetMetadata(emptyData, parameters));
             }
         }, new Vector<Key>(), new LogicalDate());
     }
