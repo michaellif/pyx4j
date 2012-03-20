@@ -48,15 +48,6 @@ public class DateCell extends Label {
     }
 
     public void addHandlers() {
-//        this.addClickHandler(new ClickHandler() {
-//            @Override
-//            public void onClick(ClickEvent event) {
-//                DateCell cell = (DateCell) event.getSource();
-//
-//                cell.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.selected.name(), cell.isEnabled() && !cell.isEmpty());
-//            }
-//        });
-
         this.addMouseOverHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {

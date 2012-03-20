@@ -85,22 +85,6 @@ public class DateGrid extends Grid {
         for (int row = 1; row < this.numRows; row++) {
             for (int col = 0; col < this.numColumns; col++) {
                 cell = new DateCell();
-//                cell.addClickHandler(new ClickHandler() {
-//                    @Override
-//                    public void onClick(ClickEvent event) {
-//                        DateCell clickedCell = (DateCell) event.getSource();
-//
-//                        if (!clickedCell.isEmpty() && clickedCell.isEnabled()) {
-//                            if (selectedCell != null) {
-//                                selectedCell.setSelected(false);
-//                            }
-//
-//                            selectedCell = clickedCell;
-//                            selectedDate = selectedCell.getDate();
-//                            selectedCell.setSelected(selectedCell.isEnabled());
-//                        }
-//                    }
-//                });
                 setWidget(row, col, cell);
             }
         }

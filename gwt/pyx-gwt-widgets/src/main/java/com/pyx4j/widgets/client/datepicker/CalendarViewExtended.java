@@ -27,6 +27,7 @@ import java.util.Date;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormatInfo;
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -56,8 +57,15 @@ public class CalendarViewExtended extends CalendarView {
                 DateGrid grid = (DateGrid) event.getSource();
 
                 Date selectedDate = grid.getSelectedValue();
-                if (selectedDate != null)
-                    picker.setValue(grid.getSelectedValue(), true);
+                if (selectedDate != null) {
+                    if (picker.getValue() != null && picker.getValue().equals(selectedDate)) {
+                        picker.setValue(selectedDate, true);
+
+                        ValueChangeEvent.fire(picker, selectedDate); // Fix to close dropdown panel. DatePicker will not fire event for the same date
+                    } else {
+                        picker.setValue(selectedDate, true);
+                    }
+                }
             }
         });
     }
@@ -137,7 +145,7 @@ public class CalendarViewExtended extends CalendarView {
                 grid.getCellFormatter().addStyleName(0, i, DefaultDatePickerTheme.StyleName.DatePickerWeekendDayLabel.name());
             }
         }
-        //grid.getRowFormatter().setStyleName(0, "datePickerGridDaysRow");
+
         grid.getRowFormatter().setStyleName(0, DefaultDatePickerTheme.StyleName.DatePickerGridDaysRow.name());
         initWidget(grid);
     }
