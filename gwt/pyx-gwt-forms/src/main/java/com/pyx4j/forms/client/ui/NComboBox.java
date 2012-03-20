@@ -26,6 +26,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.CComboBox.NotInOptionsPolicy;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
@@ -34,7 +35,7 @@ import com.pyx4j.widgets.client.ListBox;
 /**
  *
  */
-public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> implements INativeFocusComponent<E> {
+public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>, HTML> implements INativeFocusComponent<E> {
 
     private E value;
 
@@ -53,6 +54,11 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
     @Override
     protected ListBox createEditor() {
         return new ListBox();
+    }
+
+    @Override
+    protected HTML createViewer() {
+        return new HTML();
     }
 
     @Override

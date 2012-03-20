@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -30,7 +31,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.MonthYearPicker;
 
-public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMonthYearPicker> implements INativeFocusComponent<Date> {
+public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMonthYearPicker, HTML> implements INativeFocusComponent<Date> {
 
     private static final I18n i18n = I18n.get(NMonthYearPicker.class);
 
@@ -43,6 +44,11 @@ public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMo
     @Override
     protected MonthYearPicker createEditor() {
         return new MonthYearPicker(getCComponent().getYearRange(), getCComponent().isYearOnly());
+    }
+
+    @Override
+    protected HTML createViewer() {
+        return new HTML();
     }
 
     @Override

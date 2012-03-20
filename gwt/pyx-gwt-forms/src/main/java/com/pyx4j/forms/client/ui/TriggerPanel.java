@@ -42,7 +42,7 @@ import com.pyx4j.widgets.client.GroupFocusHandler;
 
 public class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandlers {
 
-    private final NComponent<?, ?, ?> component;
+    private final NComponent<?, ?, ?, ?> component;
 
     private final Button triggerButton;
 
@@ -50,7 +50,7 @@ public class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandl
 
     private boolean toggledOn = false;
 
-    public TriggerPanel(final NComponent<?, ?, ?> component, ImageResource triggerImage) {
+    public TriggerPanel(final NComponent<?, ?, ?, ?> component, ImageResource triggerImage) {
         super();
 
         setStyleName(DefaultCCOmponentsTheme.StyleName.TriggerPannel.name());
@@ -63,8 +63,8 @@ public class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandl
         focusHandlerManager = new GroupFocusHandler(this);
 
         if (component.getEditor() instanceof NFocusComponent) {
-            ((NFocusComponent<?, ?, ?>) component.getEditor()).addFocusHandler(focusHandlerManager);
-            ((NFocusComponent<?, ?, ?>) component.getEditor()).addBlurHandler(focusHandlerManager);
+            ((NFocusComponent<?, ?, ?, ?>) component.getEditor()).addFocusHandler(focusHandlerManager);
+            ((NFocusComponent<?, ?, ?, ?>) component.getEditor()).addBlurHandler(focusHandlerManager);
         }
 
         triggerButton = new Button(new Image(triggerImage));

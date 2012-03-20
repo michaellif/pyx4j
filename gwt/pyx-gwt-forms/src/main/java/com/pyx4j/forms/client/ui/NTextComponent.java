@@ -26,11 +26,12 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.widgets.client.ITextWidget;
 
-public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP extends CTextComponent<DATA, ?>> extends NFocusComponent<DATA, WIDGET, CCOMP>
-        implements INativeTextComponent<DATA> {
+public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP extends CTextComponent<DATA, ?>> extends
+        NFocusComponent<DATA, WIDGET, CCOMP, HTML> implements INativeTextComponent<DATA> {
 
     public NTextComponent(CCOMP cComponent) {
         this(cComponent, null);
@@ -39,6 +40,11 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
     public NTextComponent(CCOMP cComponent, ImageResource triggerImage) {
         super(cComponent, triggerImage);
 
+    }
+
+    @Override
+    protected HTML createViewer() {
+        return new HTML();
     }
 
     @Override

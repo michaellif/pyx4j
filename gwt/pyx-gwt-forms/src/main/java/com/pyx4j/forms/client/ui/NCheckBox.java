@@ -22,11 +22,12 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.CCheckBox.Alignment;
 import com.pyx4j.widgets.client.CheckBox;
 
-public class NCheckBox extends NFocusComponent<Boolean, CheckBox, CCheckBox> implements INativeFocusComponent<Boolean> {
+public class NCheckBox extends NFocusComponent<Boolean, CheckBox, CCheckBox, HTML> implements INativeFocusComponent<Boolean> {
 
     public NCheckBox(final CCheckBox checkBox) {
         super(checkBox);
@@ -35,6 +36,11 @@ public class NCheckBox extends NFocusComponent<Boolean, CheckBox, CCheckBox> imp
     @Override
     protected CheckBox createEditor() {
         return new CheckBox();
+    }
+
+    @Override
+    protected HTML createViewer() {
+        return new HTML();
     }
 
     @Override

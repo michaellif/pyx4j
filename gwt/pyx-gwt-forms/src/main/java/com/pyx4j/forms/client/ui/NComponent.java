@@ -21,8 +21,8 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -31,11 +31,12 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
 
-public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CComponent<DATA, ?>> extends SimplePanel implements INativeComponent<DATA> {
+public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CComponent<DATA, ?>, VIEWER extends Widget> extends SimplePanel implements
+        INativeComponent<DATA> {
 
     private WIDGET editor;
 
-    private HTML viewer;
+    private VIEWER viewer;
 
     private final CCOMP cComponent;
 
@@ -66,7 +67,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         return triggerPanel == null ? null : triggerPanel.getTriggerButton();
     }
 
-    public HTML getViewer() {
+    public VIEWER getViewer() {
         return viewer;
     }
 
@@ -77,9 +78,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     protected abstract WIDGET createEditor();
 
-    protected HTML createViewer() {
-        return new HTML();
-    }
+    protected abstract VIEWER createViewer();
 
     protected void onEditorCreate() {
         editor.asWidget().setWidth(getCComponent().getWidth());
@@ -133,7 +132,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     public void onToggle() {
     }
 
-    protected void toggleOn(boolean flag) {
+    protected void setToggleOn(boolean flag) {
         triggerPanel.toggleOn(flag);
     }
 

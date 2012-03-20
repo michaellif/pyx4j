@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.WatermarkComponent;
@@ -37,6 +38,11 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
     public NTextFieldBase(CCOMP cComponent, ImageResource triggerImage) {
         super(cComponent, triggerImage);
 
+    }
+
+    @Override
+    protected HTML createViewer() {
+        return new HTML();
     }
 
     @Override
