@@ -9561,7 +9561,7 @@ msgstr "{0}, {1}"
 #: com/pyx4j/entity/client/ui/datatable/PageNavigBar.java:208
 #, java-format
 msgid "{0}-{1} of {2}"
-msgstr "{2} 的 {0}-{1}"
+msgstr "第{0}-{1}頁，共{2}頁"
 
 #. java-format
 #: com/propertyvista/crm/client/ui/components/cms/FileUploadHyperlink.java:66
