@@ -152,17 +152,17 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaTenantBehavior.Guarantor, VistaTenantBehavior.Prospective);
 
         // Submitted prospective:
-        grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(ApplicationService.class));
-        grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(ApplicationStatusService.class));
-        grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(SummaryService.class));
-        grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(ChargesService.class));
+        grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ApplicationService.class));
+        grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ApplicationStatusService.class));
+        grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(SummaryService.class));
+        grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ChargesService.class));
 
-        grant(VistaTenantBehavior.ProspectiveSubmited, new EntityPermission(MasterApplication.class, EntityPermission.READ));
-        grant(VistaTenantBehavior.ProspectiveSubmited, new EntityPermission(Summary.class, EntityPermission.READ));
-        grant(VistaTenantBehavior.ProspectiveSubmited, new EntityPermission(Charges.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.ProspectiveSubmitted, new EntityPermission(MasterApplication.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.ProspectiveSubmitted, new EntityPermission(Summary.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.ProspectiveSubmitted, new EntityPermission(Charges.class, EntityPermission.READ));
 
-        grant(VistaTenantBehavior.ProspectiveApplicantSubmited, VistaTenantBehavior.ProspectiveSubmited);
-        grant(VistaTenantBehavior.ProspectiveCoApplicantSubmited, VistaTenantBehavior.ProspectiveSubmited);
+        grant(VistaTenantBehavior.ProspectiveSubmittedApplicant, VistaTenantBehavior.ProspectiveSubmitted);
+        grant(VistaTenantBehavior.ProspectiveSubmittedCoApplicant, VistaTenantBehavior.ProspectiveSubmitted);
 
         // -------------
 

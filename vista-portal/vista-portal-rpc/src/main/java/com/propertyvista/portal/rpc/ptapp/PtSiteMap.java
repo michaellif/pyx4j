@@ -88,7 +88,7 @@ public class PtSiteMap implements SiteMap {
 
     @NavigationItem(navigLabel = "Completion")
     @PlaceProperties(caption = "Completion")
-    public static class Completion extends AppPlace implements WizardStepPlace {
+    public static class Completion extends AppPlace {
     }
 
     @PlaceProperties(caption = "")

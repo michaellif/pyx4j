@@ -124,8 +124,8 @@ public class PtAppWizardManager {
     }
 
     private boolean isStepNavigable(AppPlace place) {
-        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveSubmited)) {
-            return (place instanceof PtSiteMap.ApplicationStatus);
+        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveSubmitted)) {
+            return (place instanceof PtSiteMap.ApplicationStatus) || (place instanceof PtSiteMap.Completion);
         } else {
             for (ApplicationWizardStep step : application.steps()) {
                 if (place.getPlaceId().equals(step.placeId().getValue()) && (!ApplicationWizardStep.Status.notVisited.equals(step.status().getValue()))) {
@@ -146,7 +146,7 @@ public class PtAppWizardManager {
     }
 
     protected void obtainPlace(AsyncCallback<AppPlace> callback) {
-        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveSubmited)) {
+        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveSubmitted)) {
             callback.onSuccess(new PtSiteMap.ApplicationStatus());
         } else {
             forwardByApplicationProgress(callback);

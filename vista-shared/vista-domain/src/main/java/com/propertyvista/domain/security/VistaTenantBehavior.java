@@ -25,13 +25,17 @@ public enum VistaTenantBehavior implements Behavior {
 
     Guarantor,
 
-    GuarantorSubmited,
+    //-- Application Submitted 
 
-    ProspectiveSubmited,
+    ProspectiveSubmitted,
 
-    ProspectiveApplicantSubmited,
+    ProspectiveSubmittedApplicant,
 
-    ProspectiveCoApplicantSubmited,
+    ProspectiveSubmittedCoApplicant,
+
+    GuarantorSubmitted,
+
+    // Application Approved - > Portal
 
     Tenant,
 

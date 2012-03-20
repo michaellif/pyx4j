@@ -53,8 +53,6 @@ public class PtAppSite extends VistaSite {
 
     private PtAppWizardManager wizardManager;
 
-    private boolean initialized = false;
-
     public PtAppSite() {
         super(PtSiteMap.class, new PtAppPlaceDispatcher());
     }
@@ -85,9 +83,6 @@ public class PtAppSite extends VistaSite {
                     PtAppViewFactory.clear();
                     WizardStepsViewFactory.clear();
                 }
-                if (initialized) {
-                    AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
-                }
             }
         });
 
@@ -115,7 +110,6 @@ public class PtAppSite extends VistaSite {
                     @Override
                     public void onSuccess(Boolean result) {
                         PtAppSite.getHistoryHandler().handleCurrentHistory();
-                        initialized = true;
                     }
 
                     @Override

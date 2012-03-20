@@ -26,8 +26,6 @@ import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.security.client.SessionInactiveEvent;
 import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
@@ -53,8 +51,6 @@ public class CrmSite extends VistaSite {
 
     private static final I18n i18n = I18n.get(CrmSite.class);
 
-    private boolean initialized = false;
-
     public CrmSite() {
         super(CrmSiteMap.class, new CrmSiteAppPlaceDispatcher());
     }
@@ -77,17 +73,6 @@ public class CrmSite extends VistaSite {
             public void onSessionInactive(SessionInactiveEvent event) {
                 ClientContext.logout((AuthenticationService) GWT.create(CrmAuthenticationService.class), null);
             }
-        });
-
-        AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
-
-            @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
-                if (initialized) {
-                    AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
-                }
-            }
-
         });
 
         initSiteTheme();
@@ -120,7 +105,6 @@ public class CrmSite extends VistaSite {
             @Override
             public void onSuccess(Boolean result) {
                 AppSite.getHistoryHandler().handleCurrentHistory();
-                initialized = true;
             }
 
             @Override

@@ -85,7 +85,7 @@ public class ApplicationManager {
         return progress;
     }
 
-    static TenantUser ensureTenantUser(TenantUserHolder tenant, Person person, VistaTenantBehavior behavior) {
+    static TenantUser ensureProspectiveTenantUser(TenantUserHolder tenant, Person person, VistaTenantBehavior behavior) {
         TenantUser user = tenant.user();
         if (user.getPrimaryKey() == null) {
             if (person.email().isNull()) {
@@ -104,6 +104,7 @@ public class ApplicationManager {
             //TODO use tokens
             credential.credential().setValue(PasswordEncryptor.encryptPassword(person.email().getValue()));
             credential.enabled().setValue(Boolean.TRUE);
+            credential.behaviors().add(VistaTenantBehavior.Prospective);
             credential.behaviors().add(behavior);
             Persistence.service().persist(credential);
         }
@@ -126,7 +127,7 @@ public class ApplicationManager {
                 a.belongsTo().set(ma);
                 a.status().setValue(MasterApplication.Status.Created);
                 a.steps().addAll(ApplicationManager.createApplicationProgress(VistaTenantBehavior.ProspectiveApplicant));
-                a.user().set(ensureTenantUser(tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveApplicant));
+                a.user().set(ensureProspectiveTenantUser(tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveApplicant));
                 a.lease().set(ma.lease());
                 Persistence.service().persist(a);
 
@@ -167,12 +168,22 @@ public class ApplicationManager {
         TenantUser user = application.user();
         TenantUserCredential credential = Persistence.service().retrieve(TenantUserCredential.class, user.getPrimaryKey());
         boolean isApplicant = credential.behaviors().contains(VistaTenantBehavior.ProspectiveApplicant);
+        boolean isCoApplicant = credential.behaviors().contains(VistaTenantBehavior.ProspectiveCoApplicant);
         boolean isGuarantor = credential.behaviors().contains(VistaTenantBehavior.Guarantor);
 
         credential.behaviors().clear();
-        credential.behaviors().add(VistaTenantBehavior.ProspectiveSubmited);
+        credential.behaviors().add(VistaTenantBehavior.ProspectiveSubmitted);
+        if (isApplicant) {
+            credential.behaviors().add(VistaTenantBehavior.ProspectiveSubmittedApplicant);
+        } else if (isGuarantor) {
+            credential.behaviors().add(VistaTenantBehavior.GuarantorSubmitted);
+        } else if (isCoApplicant) {
+            credential.behaviors().add(VistaTenantBehavior.ProspectiveSubmittedCoApplicant);
+        }
+
         Persistence.service().persist(credential);
         if (Context.isUserLoggedIn() && user.getPrimaryKey().equals(VistaContext.getCurrentUserPrimaryKey())) {
+            Context.getVisit().setAclRevalidationRequired();
             Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
         }
 
@@ -244,7 +255,7 @@ public class ApplicationManager {
             application.lease().set(ma.lease());
             application.status().setValue(MasterApplication.Status.Created);
             application.steps().addAll(ApplicationManager.createApplicationProgress(behaviour));
-            application.user().set(ensureTenantUser(tenant, person, behaviour));
+            application.user().set(ensureProspectiveTenantUser(tenant, person, behaviour));
 
             Persistence.service().persist(application);
             ma.applications().add(application);

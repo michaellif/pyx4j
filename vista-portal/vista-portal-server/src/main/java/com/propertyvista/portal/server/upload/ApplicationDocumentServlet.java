@@ -59,7 +59,7 @@ public class ApplicationDocumentServlet extends HttpServlet {
             return;
         }
 
-        if (SecurityController.checkAnyBehavior(VistaTenantBehavior.Prospective, VistaTenantBehavior.ProspectiveSubmited)) {
+        if (SecurityController.checkAnyBehavior(VistaTenantBehavior.Prospective, VistaTenantBehavior.ProspectiveSubmitted)) {
             // assert access to the document
             if (false) {
                 log.debug("no access to document {} {}", id, filename);

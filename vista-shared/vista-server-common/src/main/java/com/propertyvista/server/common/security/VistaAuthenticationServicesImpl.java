@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -200,6 +201,17 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         } else {
             return beginSession(user, cr);
         }
+    }
+
+    public Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey) {
+        E userCredential = Persistence.service().retrieve(credentialClass, principalPrimaryKey);
+        if ((userCredential == null) || (!userCredential.enabled().isBooleanTrue())) {
+            return null;
+        }
+        Set<Behavior> behaviors = new HashSet<Behavior>();
+        behaviors.add(getApplicationBehavior());
+        addBehaviors(userCredential, behaviors);
+        return behaviors;
     }
 
     public AuthenticationResponse authenticate(E credentials) {

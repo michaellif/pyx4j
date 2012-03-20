@@ -27,12 +27,14 @@ import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
+import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.common.security.VistaAntiBot;
 import com.propertyvista.server.security.VistaAccessControlList;
+import com.propertyvista.server.security.VistaAclRevalidator;
 
 public class VistaServerSideConfiguration extends EssentialsServerSideConfiguration {
 
@@ -93,6 +95,11 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     @Override
     public AclCreator getAclCreator() {
         return new VistaAccessControlList();
+    }
+
+    @Override
+    public AclRevalidator getAclRevalidator() {
+        return new VistaAclRevalidator();
     }
 
     @Override
