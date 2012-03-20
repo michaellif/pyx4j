@@ -104,6 +104,9 @@ public class LineChart extends GridBasedChart {
                 ++metricIdx;
 
             }
+            if (path.endsWith("L")) {
+                path = path.substring(0, path.length() - 1);
+            }
             Path line = factory.createPath(path);
             line.setStroke(color);
             line.setStrokeWidth(LINE_WIDTH);
