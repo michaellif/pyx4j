@@ -186,7 +186,7 @@ public class AptUnitOccupancyManagerTestBase {
         if (expected.lease().isNull()) {
             Assert.assertEquals(msg, expected.lease().isNull(), actual.lease().isNull());
         } else {
-            Assert.assertEquals(msg, expected.lease().getPrimaryKey(), actual.lease().getPrimaryKey());
+            Assert.assertEquals(msg, expected.lease().getPrimaryKey().asCurrentKey(), actual.lease().getPrimaryKey().asCurrentKey());
         }
     }
 
