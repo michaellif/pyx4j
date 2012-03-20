@@ -67,7 +67,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
         return false;
     }
 
-    public static void syncroizeApplicationProgress(Application application, List<TenantInLeaseDTO> tenants) {
+    public static void syncronizeApplicationProgress(Application application, List<TenantInLeaseDTO> tenants) {
         ApplicationWizardStep infoStep = findWizardStep(application, PtSiteMap.Info.class);
         ApplicationWizardStep financialStep = findWizardStep(application, PtSiteMap.Financial.class);
 

@@ -67,7 +67,7 @@ public class ApplicationManager {
         return ws;
     }
 
-    public static List<ApplicationWizardStep> createApplicationProgress() {
+    public static List<ApplicationWizardStep> createApplicationProgress(VistaTenantBehavior behaviour) {
         List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
         progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
         progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
@@ -75,19 +75,12 @@ public class ApplicationManager {
         progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
         progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
         progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
-        return progress;
-    }
-
-    public static List<ApplicationWizardStep> createGuarantorApplicationProgress() {
-        List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
-        progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-        progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
+        switch (behaviour) {
+        case ProspectiveApplicant:
+        case ProspectiveCoApplicant:
+            progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
+            break;
+        }
         progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
         return progress;
     }
@@ -132,7 +125,7 @@ public class ApplicationManager {
                 Application a = EntityFactory.create(Application.class);
                 a.belongsTo().set(ma);
                 a.status().setValue(MasterApplication.Status.Created);
-                a.steps().addAll(ApplicationManager.createApplicationProgress());
+                a.steps().addAll(ApplicationManager.createApplicationProgress(VistaTenantBehavior.ProspectiveApplicant));
                 a.user().set(ensureTenantUser(tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveApplicant));
                 a.lease().set(ma.lease());
                 Persistence.service().persist(a);
@@ -173,7 +166,9 @@ public class ApplicationManager {
 
         TenantUser user = application.user();
         TenantUserCredential credential = Persistence.service().retrieve(TenantUserCredential.class, user.getPrimaryKey());
-        boolean isPrimary = credential.behaviors().contains(VistaTenantBehavior.ProspectiveApplicant);
+        boolean isApplicant = credential.behaviors().contains(VistaTenantBehavior.ProspectiveApplicant);
+        boolean isGuarantor = credential.behaviors().contains(VistaTenantBehavior.Guarantor);
+
         credential.behaviors().clear();
         credential.behaviors().add(VistaTenantBehavior.ProspectiveSubmited);
         Persistence.service().persist(credential);
@@ -183,12 +178,11 @@ public class ApplicationManager {
 
         MasterApplication ma = application.belongsTo();
         Persistence.service().retrieve(ma);
-        Lease lease = ma.lease();
-        Persistence.service().retrieve(lease);
+        Persistence.service().retrieve(ma.lease());
         boolean allApplicationsSubmited = false;
 
         // Invite Guarantors:
-        {
+        if (!isGuarantor) {
             EntityQueryCriteria<TenantInLease> criteriaTL = EntityQueryCriteria.create(TenantInLease.class);
             criteriaTL.add(PropertyCriterion.eq(criteriaTL.proto().application(), application));
             TenantInLease tenantInLease = Persistence.service().retrieve(criteriaTL);
@@ -204,9 +198,9 @@ public class ApplicationManager {
         }
 
         // Invite CoApplicants:
-        if (isPrimary) {
-            Persistence.service().retrieve(lease.version().tenants());
-            for (TenantInLease tenantInLease : lease.version().tenants()) {
+        if (isApplicant) {
+            Persistence.service().retrieve(ma.lease().version().tenants());
+            for (TenantInLease tenantInLease : ma.lease().version().tenants()) {
                 if ((TenantInLease.Role.CoApplicant == tenantInLease.role().getValue() && (!tenantInLease.takeOwnership().isBooleanTrue()))) {
                     tenantInLease.application().set(
                             inviteUser(ma, tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveCoApplicant));
@@ -215,6 +209,7 @@ public class ApplicationManager {
             }
         } else {
             allApplicationsSubmited = true;
+            Persistence.service().retrieve(ma.applications());
             for (Application app : ma.applications()) {
                 if (!app.status().getValue().equals(MasterApplication.Status.Submitted)) {
                     allApplicationsSubmited = false;
@@ -248,7 +243,7 @@ public class ApplicationManager {
             application.belongsTo().set(ma);
             application.lease().set(ma.lease());
             application.status().setValue(MasterApplication.Status.Created);
-            application.steps().addAll(ApplicationManager.createApplicationProgress());
+            application.steps().addAll(ApplicationManager.createApplicationProgress(behaviour));
             application.user().set(ensureTenantUser(tenant, person, behaviour));
 
             Persistence.service().persist(application);

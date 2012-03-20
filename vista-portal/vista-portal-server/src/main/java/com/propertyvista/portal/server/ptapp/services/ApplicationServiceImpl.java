@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
@@ -28,6 +30,7 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
@@ -178,10 +181,30 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
     }
 
     private void onStepCompleted(Application application, ApplicationWizardStep currentStep) {
-        if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Payment.class))) {
-            ApplicationManager.makeApplicationCompleted(application);
-        }
+        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant)) {
+            if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Payment.class))) {
+                ApplicationManager.makeApplicationCompleted(application);
+            }
+        } else if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveCoApplicant)) {
+            if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Payment.class))) {
+                EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+                criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), PtAppContext.getCurrentUserTenant()));
+                TenantInLease tenantInLease = Persistence.service().retrieve(criteria);
 
+                if (tenantInLease.percentage().isNull() || tenantInLease.percentage().getValue() == 0) {
+                    if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Summary.class))) {
+                        ApplicationManager.makeApplicationCompleted(application);
+                    }
+                } else if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Payment.class))) {
+                    ApplicationManager.makeApplicationCompleted(application);
+                }
+            }
+        } else if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+            if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Summary.class))) {
+                ApplicationManager.makeApplicationCompleted(application);
+            }
+        }
     }
 
     private boolean selectSubStep(ApplicationWizardStep currentStep, int startWithSubIndex) {

@@ -55,15 +55,15 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
         HorizontalPanel actions = new HorizontalPanel();
 
-        Button backAction = new Button(i18n.tr("View Status"));
-        backAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        backAction.addClickHandler(new ClickHandler() {
+        Button viewAction = new Button(i18n.tr("View Status"));
+        viewAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        viewAction.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(ApplicationStatus.class));
             }
         });
-        actions.add(backAction);
+        actions.add(viewAction);
 
         Button logoutAction = new Button(i18n.tr("Log Out"));
         logoutAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
