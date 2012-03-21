@@ -14,7 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -22,6 +26,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -29,15 +36,20 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceRequestDTO> {
@@ -143,7 +155,41 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel()), 10).build());
 
         row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().tenant()), 10).build());
+        main.setWidget(
+                ++row,
+                1,
+                new DecoratorBuilder(inject(proto().tenant(),
+                        new CEntitySelectorHyperlink<Tenant>(Tenant.class, MainActivityMapper.getCrudAppPlace(Tenant.class)) {
+                            @Override
+                            public EntitySelectorDialog<Tenant> getSelectorDialog() {
+                                return new EntitySelectorDialog<Tenant>(Tenant.class, false, new ArrayList<Tenant>(), "Select Item") {
+
+                                    @Override
+                                    public boolean onClickOk() {
+                                        if (getSelectedItems().isEmpty()) {
+                                            return false;
+                                        }
+                                        setValue(getSelectedItems().get(0));
+                                        return true;
+                                    }
+                                    @Override
+                                    protected List<ColumnDescriptor> defineColumnDescriptors() {
+                                        return Arrays.asList(//@formatter:off
+                                                new MemberColumnDescriptor.Builder(proto().type()).build(),
+                                                new MemberColumnDescriptor.Builder(proto().person().name()).build(),
+                                                new MemberColumnDescriptor.Builder(proto().person().birthDate()).build(),
+                                                new MemberColumnDescriptor.Builder(proto().person().email()).build(),
+                                                new MemberColumnDescriptor.Builder(proto().person().homePhone()).build()
+                                        );//@formatter:on
+                                    }
+
+                                    @Override
+                                    protected AbstractListService<Tenant> getSelectService() {
+                                        return GWT.<AbstractListService<Tenant>> create(SelectTenantListService.class);
+                                    }
+                                };
+                            }
+                        }), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
