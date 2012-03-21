@@ -461,6 +461,15 @@
         </profile>
 
         <profile>
+            <id>deploy-target-prod02</id>
+            <properties>
+                <deployContext>vista-pangroup</deployContext>
+                <vista-app-ping-url>http://pangroup.residentportalsite.com</vista-app-ping-url>
+                <vista-tomcat-url>http://prod02A.birchwoodsoftwaregroup.com</vista-tomcat-url>
+            </properties>
+        </profile>
+
+        <profile>
             <id>deploy</id>
             <build>
                 <plugins>
