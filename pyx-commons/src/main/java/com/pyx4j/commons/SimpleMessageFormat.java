@@ -280,9 +280,10 @@ public class SimpleMessageFormat {
     private static double toDouble(Object value) {
         if (value instanceof Number) {
             return ((Number) value).doubleValue();
+        } else if (value instanceof Boolean) {
+            return (value == Boolean.TRUE) ? 1 : 0;
         } else {
             throw new IllegalArgumentException("number expected instead of " + value.getClass());
         }
     }
-
 }

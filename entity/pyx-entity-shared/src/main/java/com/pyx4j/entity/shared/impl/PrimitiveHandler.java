@@ -34,19 +34,37 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.i18n.annotations.I18nComment;
+import com.pyx4j.i18n.shared.I18n;
 
 public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrimitive<TYPE> {
 
     private static final long serialVersionUID = 5565143015625424503L;
+
+    private static final I18n i18n = I18n.get(PrimitiveHandler.class);
 
     //Avoid problems in some java code parsing implementations.
     public static final Class<?> BYTE_ARRAY_CLASS = byte[].class;
 
     private final Class<TYPE> valueClass;
 
+    private static final String trueText = defaultYesText();
+
+    private static final String falseText = defaultNoText();
+
     public PrimitiveHandler(IEntity parent, String fieldName, Class<TYPE> valueClass) {
         super(IPrimitive.class, parent, fieldName);
         this.valueClass = valueClass;
+    }
+
+    @I18nComment("As an answer to a question")
+    private static final String defaultNoText() {
+        return i18n.tr("No");
+    }
+
+    @I18nComment("As an answer to a question")
+    private static final String defaultYesText() {
+        return i18n.tr("Yes");
     }
 
     @SuppressWarnings("unchecked")
@@ -244,9 +262,17 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
         String format = mm.getFormat();
         TYPE thisValue = this.getValue();
         if (thisValue == null) {
-            return mm.getNullString();
+            if (valueClass.equals(Boolean.class)) {
+                return falseText;
+            } else {
+                return mm.getNullString();
+            }
         } else if (format == null) {
-            return String.valueOf(thisValue);
+            if (valueClass.equals(Boolean.class)) {
+                return isBooleanTrue() ? trueText : falseText;
+            } else {
+                return String.valueOf(thisValue);
+            }
         }
         if (mm.useMessageFormat()) {
             return SimpleMessageFormat.format(format, thisValue);
@@ -255,6 +281,8 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
                 return SimpleMessageFormat.format("{0,date," + format + "}", thisValue);
             } else if (thisValue instanceof Number) {
                 return SimpleMessageFormat.format("{0,number," + format + "}", thisValue);
+            } else if (valueClass.equals(Boolean.class)) {
+                return SimpleMessageFormat.format("{0,choice," + format + "}", thisValue);
             } else {
                 return String.valueOf(thisValue);
             }
