@@ -301,7 +301,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<TenantInLease>>() {
             @Override
             public ValidationFailure isValid(CComponent<List<TenantInLease>, ?> component, List<TenantInLease> value) {
-                return (value.isEmpty() ? new ValidationFailure(i18n.tr("At least one tenant should be selected!")) : null);
+                if (value != null) {
+                    return (value.isEmpty() ? new ValidationFailure(i18n.tr("At least one tenant should be selected!")) : null);
+                }
+                return null;
             }
         });
     }
