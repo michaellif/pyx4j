@@ -34,6 +34,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.PmcDnsName;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
@@ -61,6 +62,15 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     @Override
     public void createAccount(AsyncCallback<PmcDTO> callback, PmcAccountCreationRequest request) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    protected void persist(Pmc entity, PmcDTO dto) {
+        entity.dnsName().setValue(entity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
+        for (PmcDnsName alias : entity.dnsNameAliases()) {
+            alias.dnsName().setValue(alias.dnsName().getValue().toLowerCase(Locale.ENGLISH));
+        }
+        super.persist(entity, dto);
     }
 
     @Override
