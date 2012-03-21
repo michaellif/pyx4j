@@ -342,7 +342,6 @@ public class ApplicationManager {
             //TODO use tokens
             credential.credential().setValue(PasswordEncryptor.encryptPassword(person.email().getValue()));
             credential.enabled().setValue(Boolean.TRUE);
-            credential.behaviors().add(VistaTenantBehavior.Prospective);
             credential.behaviors().add(behavior);
             Persistence.service().persist(credential);
         }
