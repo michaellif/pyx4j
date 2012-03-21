@@ -13,21 +13,10 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
-
 import com.propertyvista.domain.charges.Charge_OLD;
-import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.TenantInLease;
 
 public interface TenantCharge extends Charge_OLD {
 
-    @Detached
     TenantInLease tenant();
-
-    @Transient
-    Name tenantName();
-
-    IPrimitive<Integer> percentage();
 }

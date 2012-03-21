@@ -24,8 +24,8 @@ public class DomainUtil {
     public static TenantCharge createTenantCharge(int percentage, BigDecimal money) {
         TenantCharge tc = EntityFactory.create(TenantCharge.class);
 
+        tc.tenant().percentage().setValue(percentage);
         tc.amount().setValue(money);
-        tc.percentage().setValue(percentage);
 
         return tc;
     }

@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
@@ -33,6 +34,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
@@ -46,8 +48,8 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     static {
         TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenantName(), "33em"));
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.percentage(), "7em"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenant().tenant().person().name(), "33em"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenant().percentage(), "7em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.amount(), "7em"));
     }
 
@@ -80,7 +82,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
                     if (charge.tenant().role().getValue() == Role.Applicant) {
                         continue; // Ignore main applicant, since it is read-only!
                     }
-                    Integer p = charge.percentage().getValue();
+                    Integer p = charge.tenant().percentage().getValue();
                     if (p != null) {
                         totalPrc += p.intValue();
                     }
@@ -99,10 +101,12 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject() == proto().percentage() && editable) {
+            if (column.getObject() == proto().tenant().percentage() && editable) {
                 CComponent<?, ?> comp = inject(column.getObject());
                 comp.inheritViewable(false); // always not viewable!
                 return comp;
+            } else if (column.getObject() == proto().tenant().tenant().person().name()) {
+                return inject(column.getObject(), new CEntityLabel<Name>());
             }
             return super.createCell(column);
         }
@@ -111,7 +115,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?, ?> component, String width) {
             Widget w = super.createCellDecorator(column, component, width);
 
-            if (column.getObject() == proto().percentage()) {
+            if (column.getObject() == proto().tenant().percentage()) {
                 FlowPanel wrap = new FlowPanel();
                 wrap.add(DecorationUtils.inline(w, "3em", "right"));
                 wrap.add(DecorationUtils.inline(new HTML("%"), "1em"));
@@ -126,15 +130,15 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         protected void propagateValue(TenantCharge entity, boolean fireEvent, boolean populate) {
             super.propagateValue(entity, fireEvent, populate);
             if ((getValue().tenant().role().getValue() == Role.Applicant)) {
-                get(proto().percentage()).setEditable(false);
-                get(proto().percentage()).setViewable(true);
+                get(proto().tenant().percentage()).setEditable(false);
+                get(proto().tenant().percentage()).setViewable(true);
             }
         }
 
         @SuppressWarnings("unchecked")
         @Override
         public void addValidations() {
-            CComponent<Integer, ?> prc = get(proto().percentage());
+            CComponent<Integer, ?> prc = get(proto().tenant().percentage());
             if (prc instanceof CNumberField) {
                 ((CNumberField<Integer>) prc).setRange(0, 100);
             }

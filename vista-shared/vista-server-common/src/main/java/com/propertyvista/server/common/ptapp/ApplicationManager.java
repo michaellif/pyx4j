@@ -60,81 +60,31 @@ public class ApplicationManager {
 
     private static final I18n i18n = I18n.get(ApplicationManager.class);
 
-    private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {
-        ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
-        ws.placeId().setValue(AppPlaceInfo.getPlaceId(place));
-        ws.status().setValue(status);
-        return ws;
-    }
-
-    public static List<ApplicationWizardStep> createApplicationProgress(VistaTenantBehavior behaviour) {
-        List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
-        progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-        progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
-        switch (behaviour) {
-        case ProspectiveApplicant:
-        case ProspectiveCoApplicant:
-            progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-            break;
-        }
-        progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
-        return progress;
-    }
-
-    static TenantUser ensureProspectiveTenantUser(TenantUserHolder tenant, Person person, VistaTenantBehavior behavior) {
-        TenantUser user = tenant.user();
-        if (user.getPrimaryKey() == null) {
-            if (person.email().isNull()) {
-                throw new UnRecoverableRuntimeException(i18n.tr("Can't create application user for tenant  {0} without e-mail address", person.name()
-                        .getStringView()));
-            }
-            user.name().setValue(person.name().getStringView());
-            user.email().setValue(person.email().getValue());
-            Persistence.service().persist(user);
-            Persistence.service().persist(tenant);
-
-            TenantUserCredential credential = EntityFactory.create(TenantUserCredential.class);
-            credential.setPrimaryKey(user.getPrimaryKey());
-
-            credential.user().set(user);
-            //TODO use tokens
-            credential.credential().setValue(PasswordEncryptor.encryptPassword(person.email().getValue()));
-            credential.enabled().setValue(Boolean.TRUE);
-            credential.behaviors().add(behavior);
-            Persistence.service().persist(credential);
-        }
-        return tenant.user();
-    }
-
     public static MasterApplication createMasterApplication(Lease lease) {
         lease.version().status().setValue(Lease.Status.ApplicationInProgress);
         Persistence.service().persist(lease);
 
-        MasterApplication ma = EntityFactory.create(MasterApplication.class);
-        ma.lease().set(lease);
-        ma.status().setValue(MasterApplication.Status.Created);
-        Persistence.service().persist(ma);
+        MasterApplication mapp = EntityFactory.create(MasterApplication.class);
+        mapp.lease().set(lease);
+        mapp.status().setValue(MasterApplication.Status.Created);
+        Persistence.service().persist(mapp);
 
         Persistence.service().retrieve(lease.version().tenants());
         for (TenantInLease tenantInLease : lease.version().tenants()) {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
-                Application a = EntityFactory.create(Application.class);
-                a.belongsTo().set(ma);
-                a.status().setValue(MasterApplication.Status.Created);
-                a.steps().addAll(ApplicationManager.createApplicationProgress(VistaTenantBehavior.ProspectiveApplicant));
-                a.user().set(ensureProspectiveTenantUser(tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveApplicant));
-                a.lease().set(ma.lease());
-                Persistence.service().persist(a);
+                Application app = EntityFactory.create(Application.class);
+                app.belongsTo().set(mapp);
+                app.status().setValue(MasterApplication.Status.Created);
+                app.steps().addAll(ApplicationManager.createApplicationProgress(app, tenantInLease.tenant(), VistaTenantBehavior.ProspectiveApplicant));
+                app.user().set(ensureProspectiveTenantUser(tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveApplicant));
+                app.lease().set(mapp.lease());
+                Persistence.service().persist(app);
 
-                tenantInLease.application().set(a);
+                tenantInLease.application().set(app);
                 Persistence.service().persist(tenantInLease);
 
-                ma.applications().add(a);
-                return ma;
+                mapp.applications().add(app);
+                return mapp;
             }
         }
         throw new Error("Main applicant not found");
@@ -171,6 +121,7 @@ public class ApplicationManager {
         boolean isGuarantor = credential.behaviors().contains(VistaTenantBehavior.Guarantor);
 
         credential.behaviors().clear();
+        credential.behaviors().add(VistaTenantBehavior.ProspectiveSubmitted);
         if (isApplicant) {
             credential.behaviors().add(VistaTenantBehavior.ProspectiveSubmittedApplicant);
         } else if (isGuarantor) {
@@ -252,7 +203,7 @@ public class ApplicationManager {
             application.belongsTo().set(ma);
             application.lease().set(ma.lease());
             application.status().setValue(MasterApplication.Status.Created);
-            application.steps().addAll(ApplicationManager.createApplicationProgress(behaviour));
+            application.steps().addAll(ApplicationManager.createApplicationProgress(application, tenant, behaviour));
             application.user().set(ensureProspectiveTenantUser(tenant, person, behaviour));
 
             Persistence.service().persist(application);
@@ -281,24 +232,6 @@ public class ApplicationManager {
         application.status().setValue(MasterApplication.Status.Invited);
         Persistence.service().persist(application);
         return application;
-    }
-
-    private static void sendInvitationEmail(TenantUser user, Lease lease, EmailTemplateType emailTemplateType) {
-        // Create Token and other stuff
-        String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
-        if (token == null) {
-            throw new UserRuntimeException("Invalid user account");
-        }
-
-        MailMessage m = new MailMessage();
-        m.setTo(user.email().getValue());
-        m.setSender(MessageTemplates.getSender());
-        // set email subject and body from the template
-        MessageTemplates.createMasterApplicationInvitationEmail(m, user, emailTemplateType, lease, token);
-
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
     }
 
     public static MasterApplicationStatusDTO calculateStatus(MasterApplication ma) {
@@ -358,5 +291,89 @@ public class ApplicationManager {
 
         maStatus.progress().setValue(progressSum / ma.applications().size());
         return maStatus;
+    }
+
+    private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {
+        ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
+        ws.placeId().setValue(AppPlaceInfo.getPlaceId(place));
+        ws.status().setValue(status);
+        return ws;
+    }
+
+    // internals:
+
+    private static List<ApplicationWizardStep> createApplicationProgress(Application application, TenantUserHolder tenant, VistaTenantBehavior behaviour) {
+        List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
+        progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
+        progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
+        switch (behaviour) {
+        case ProspectiveApplicant:
+            progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
+        case ProspectiveCoApplicant:
+            if (isTenantInSplitCharge(application, tenant)) {
+                progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
+            }
+            break;
+        }
+        progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
+        return progress;
+    }
+
+    private static TenantUser ensureProspectiveTenantUser(TenantUserHolder tenant, Person person, VistaTenantBehavior behavior) {
+        TenantUser user = tenant.user();
+        if (user.getPrimaryKey() == null) {
+            if (person.email().isNull()) {
+                throw new UnRecoverableRuntimeException(i18n.tr("Can't create application user for tenant  {0} without e-mail address", person.name()
+                        .getStringView()));
+            }
+            user.name().setValue(person.name().getStringView());
+            user.email().setValue(person.email().getValue());
+            Persistence.service().persist(user);
+            Persistence.service().persist(tenant);
+
+            TenantUserCredential credential = EntityFactory.create(TenantUserCredential.class);
+            credential.setPrimaryKey(user.getPrimaryKey());
+
+            credential.user().set(user);
+            //TODO use tokens
+            credential.credential().setValue(PasswordEncryptor.encryptPassword(person.email().getValue()));
+            credential.enabled().setValue(Boolean.TRUE);
+            credential.behaviors().add(VistaTenantBehavior.Prospective);
+            credential.behaviors().add(behavior);
+            Persistence.service().persist(credential);
+        }
+        return tenant.user();
+    }
+
+    public static boolean isTenantInSplitCharge(Application application, TenantUserHolder tenant) {
+        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+// TODO: make sure we get user from necessary application (if he participate in more than one):         
+//        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
+        TenantInLease tenantInLease = Persistence.service().retrieve(criteria);
+
+        return !(tenantInLease.percentage().isNull() || tenantInLease.percentage().getValue() == 0);
+    }
+
+    private static void sendInvitationEmail(TenantUser user, Lease lease, EmailTemplateType emailTemplateType) {
+        // Create Token and other stuff
+        String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
+        if (token == null) {
+            throw new UserRuntimeException("Invalid user account");
+        }
+
+        MailMessage m = new MailMessage();
+        m.setTo(user.email().getValue());
+        m.setSender(MessageTemplates.getSender());
+        // set email subject and body from the template
+        MessageTemplates.createMasterApplicationInvitationEmail(m, user, emailTemplateType, lease, token);
+
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
     }
 }

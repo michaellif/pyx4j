@@ -399,7 +399,7 @@ public class PTGenerator {
             tenantSummary.tenantInLease().relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
         }
 
-// TODO check %-ge correctness bettween tenants here:
+// TODO check %-ge correctness between tenants here:
         tenantSummary.tenantInLease().percentage().setValue(RandomUtil.randomInt(100));
 
         if (EnumSet.of(PersonRelationship.Daughter, PersonRelationship.Son).contains(tenantSummary.tenantInLease().relationship().getValue())) {

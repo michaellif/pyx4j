@@ -104,7 +104,7 @@ public class ChargesSharedCalculation {
             if (totalSplitPrc == -1) { // first (main) applicant
                 totalSplitPrc = 0; // reset first (main) applicant flag
             } else {
-                totalSplitPrc += charge.percentage().getValue();
+                totalSplitPrc += charge.tenant().percentage().getValue();
             }
         }
 
@@ -122,16 +122,17 @@ public class ChargesSharedCalculation {
                 mainApplicantCharge = charge;
             } else {
                 charge.amount().setValue(
-                        DomainUtil.roundMoney(charges.monthlyCharges().total().getValue().multiply(new BigDecimal(charge.percentage().getValue() / 100d))));
+                        DomainUtil.roundMoney(charges.monthlyCharges().total().getValue()
+                                .multiply(new BigDecimal(charge.tenant().percentage().getValue() / 100d))));
 
-                totalSplitPrc += charge.percentage().getValue();
+                totalSplitPrc += charge.tenant().percentage().getValue();
                 totalSplitVal = totalSplitVal.add(charge.amount().getValue());
             }
         }
 
         if (mainApplicantCharge != null) {
             mainApplicantCharge.amount().setValue(charges.monthlyCharges().total().getValue().subtract(totalSplitVal));
-            mainApplicantCharge.percentage().setValue(100 - totalSplitPrc);
+            mainApplicantCharge.tenant().percentage().setValue(100 - totalSplitPrc);
         }
 
         calculateTotal(charges.paymentSplitCharges());

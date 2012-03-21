@@ -38,7 +38,7 @@ public class ChargesSharedCalculationTest extends TestCase {
 
         ChargesSharedCalculation.calculatePaymentSplitCharges(charges);
 
-        Assert.assertEquals("prc", 100 - 2 * splitPrc, charges.paymentSplitCharges().charges().get(0).percentage().getValue().intValue());
+        Assert.assertEquals("prc", 100 - 2 * splitPrc, charges.paymentSplitCharges().charges().get(0).tenant().percentage().getValue().intValue());
     }
 
 }

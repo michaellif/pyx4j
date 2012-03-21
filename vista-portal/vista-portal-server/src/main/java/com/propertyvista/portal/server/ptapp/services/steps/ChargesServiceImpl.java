@@ -57,6 +57,11 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
 
         saveApplicationEntity(entity);
 
+        // update tenant's percentage:
+        for (TenantCharge charge : entity.paymentSplitCharges().charges()) {
+            Persistence.service().merge(charge.tenant());
+        }
+
         DigitalSignatureMgr.resetAll();
         Persistence.service().commit();
 
@@ -126,15 +131,9 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             }
 
             charges.rentStart().setValue(lease.leaseFrom().getValue());
-
-            ChargesSharedCalculation.calculateCharges(charges);
         }
 
-        // load transient data:
-        for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
-            Persistence.service().retrieve(charge.tenant());
-            charge.tenantName().set(charge.tenant().tenant().person().name().detach());
-        }
+        ChargesSharedCalculation.calculateCharges(charges);
 
         return charges;
     }
