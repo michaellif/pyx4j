@@ -39,12 +39,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.util.SortingFactory;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO.AnalysisResolution;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -255,14 +255,14 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
                 if (vacancyStatus == null) {
                     continue;
 
-                } else if (Vacancy.Vacant.equals(vacancyStatus)) {
+                } else if (vacancyStatus == Vacancy.Vacant) {
                     ++vacant;
-                    if (RentedStatus.Rented.equals(unitStatus.rentedStatus().getValue())) {
+                    if (unitStatus.rentedStatus().getValue() == RentedStatus.Rented) {
                         ++vacantRented;
                     }
                 } else if (Vacancy.Notice.equals(vacancyStatus)) {
                     ++notice;
-                    if (RentedStatus.Rented.equals(unitStatus.rentedStatus().getValue())) {
+                    if (unitStatus.rentedStatus().getValue() == RentedStatus.Rented) {
                         ++noticeRented;
                     }
                 }
@@ -349,7 +349,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         Key[] buildingsArray = buidlings.toArray(new Key[buidlings.size()]);
         int totalTurnovers = 0;
-        // sketch
+
         while (endOfTheMonth.before(reportDate)) {
             UnitTurnoversPerIntervalDTO intervalStats = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
             intervalStats.intervalSize().setValue(AnalysisResolution.Month);
