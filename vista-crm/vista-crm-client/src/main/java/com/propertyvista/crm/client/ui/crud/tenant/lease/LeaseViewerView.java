@@ -29,7 +29,7 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
         IListerView.Presenter<Payment> getPaymentListerPresenter();
 
-        void createMasterApplication(boolean invite);
+        void startApplication();
 
         void startBilling();
 

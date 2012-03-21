@@ -18,7 +18,6 @@ import java.util.Vector;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -61,6 +60,11 @@ public class ApplicationManager {
     private static final I18n i18n = I18n.get(ApplicationManager.class);
 
     public static MasterApplication createMasterApplication(Lease lease) {
+        if (!lease.application().isNull()) {
+            Persistence.service().retrieve(lease.application());
+            return lease.application();
+        }
+
         MasterApplication mapp = EntityFactory.create(MasterApplication.class);
         mapp.lease().set(lease);
         mapp.status().setValue(MasterApplication.Status.Created);
@@ -80,7 +84,6 @@ public class ApplicationManager {
                 tenantInLease.application().set(app);
                 Persistence.service().persist(tenantInLease);
 
-//                lease.version().status().setValue(Lease.Status.ApplicationInProgress);
                 lease.application().set(mapp);
                 Persistence.service().merge(lease);
 
@@ -96,9 +99,8 @@ public class ApplicationManager {
     }
 
     public static void sendMasterApplicationEmail(MasterApplication mapp) {
-        if (mapp.lease().version().tenants().getAttachLevel() != AttachLevel.Attached) {
-            Persistence.service().retrieve(mapp.lease().version().tenants());
-        }
+        Persistence.service().retrieve(mapp.lease());
+        Persistence.service().retrieve(mapp.lease().version().tenants());
         for (TenantInLease tenantInLease : mapp.lease().version().tenants()) {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
                 Persistence.service().retrieve(tenantInLease.tenant().user());

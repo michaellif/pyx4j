@@ -19,7 +19,6 @@ import com.propertvista.generator.util.RandomUtil;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.tenant.lead.LeadCrudService;
@@ -30,7 +29,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.server.common.util.LeaseManager;
 
 public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements LeadCrudService {
 
@@ -46,7 +45,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
         }
 
         if (fromList) {
-            // just clear unnecessary data before serialisation: 
+            // just clear unnecessary data before serialization: 
             entity.comments().setValue(null);
         }
     }
@@ -67,31 +66,18 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             Tenant tenant = EntityFactory.create(Tenant.class);
             tenant.type().setValue(Tenant.Type.person);
             tenant.person().set(lead.person());
-            Persistence.service().merge(tenant);
+            Persistence.service().persist(tenant);
 
-            Lease lease = EntityFactory.create(Lease.class);
-// TODO generate LeaseId here:
-            lease.leaseID().setValue(RandomUtil.randomLetters(10));
-
-            // TODO this should be selected on UI 
-            lease.type().setValue(Service.Type.residentialUnit);
-            lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-
-            lease.version().status().setValue(Lease.Status.Created);
-            lease.leaseFrom().setValue(lead.moveInDate().getValue());
+            LeaseManager lm = new LeaseManager();
+            Lease lease = lm.create(RandomUtil.randomLetters(10), Service.Type.residentialUnit, null, lead.moveInDate().getValue(), null);
             lease.version().expectedMoveIn().setValue(lead.moveInDate().getValue());
-            lease.saveAction().setValue(SaveAction.saveAsDraft);
-            Persistence.service().persist(lease);
 
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
             tenantInLease.tenant().set(tenant);
-            tenantInLease.lease().set(lease.version());
             tenantInLease.role().setValue(TenantInLease.Role.Applicant);
-            Persistence.service().persist(tenantInLease);
+            lease.version().tenants().add(tenantInLease);
 
-//            // update lease tenants list:
-//            lease.tenants().add(tenantInLease);
-//            Persistence.service().merge(lease);
+            lm.save(lease);
 
             // mark Lead as converted:
             lead.lease().set(lease);

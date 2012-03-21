@@ -73,7 +73,6 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
-
         PTGenerator generator = new PTGenerator(config());
 
         // Get the fist building

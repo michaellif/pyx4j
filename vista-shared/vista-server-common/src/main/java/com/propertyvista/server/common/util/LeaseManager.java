@@ -118,7 +118,8 @@ public class LeaseManager {
 
         Persistence.secureSave(lease);
 
-        if (isNewLease || lease.application().isNull()) { // always create application for new lease: 
+        // always create application for new lease (check if exist for others): 
+        if (isNewLease || lease.application().isNull()) {
             try {
                 ApplicationManager.createMasterApplication(lease);
             } catch (Exception e) {

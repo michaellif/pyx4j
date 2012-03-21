@@ -54,7 +54,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     private final IListerView<Payment> paymentLister;
 
-    private final Button createApplication;
+    private final Button onlineApplication;
 
     private final Button runBill;
 
@@ -78,19 +78,13 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         setForm(new LeaseEditorForm(true));
 
         // Add actions:
-        createApplication = new Button(i18n.tr("Create Online Application"), new ClickHandler() {
+        onlineApplication = new Button(i18n.tr("Start Online Application"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new ApplicationBox() {
-                    @Override
-                    public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) presenter).createMasterApplication(isInvite());
-                        return true;
-                    }
-                }.show();
+                ((LeaseViewerView.Presenter) presenter).startApplication();
             }
         });
-        addToolbarItem(createApplication.asWidget());
+        addToolbarItem(onlineApplication.asWidget());
 
         runBill = new Button(i18n.tr("Run Bill"), new ClickHandler() {
 
@@ -164,7 +158,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             getFinalizeButton().setVisible(status == Status.Active || status == Status.Completed);
         }
 
-        createApplication.setVisible(status == Status.Created);
+        onlineApplication.setVisible(status == Status.Created);
 
         runBill.setVisible(status == Status.Active);
 

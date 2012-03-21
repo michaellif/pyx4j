@@ -57,7 +57,7 @@ public class LeaseLifecycleSim {
     public Lease createApplication(Key leaseId, LogicalDate eventDate) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         lease.version().status().setValue(Status.ApplicationInProgress);
-        leaseManager(eventDate).save(lease);
+        Persistence.secureSave(lease);
         return lease;
     }
 
