@@ -135,6 +135,8 @@ public interface Lease extends IVersionedEntity<LeaseV> {
         }
     }
 
+    // Data: ----------------------------------------------
+
     @NotNull
     @ReadOnly
     @ToString(index = 0)
@@ -151,13 +153,15 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
-    // or by dates:
+    @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseFrom();
 
+    @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseTo();
 
+    @NotNull
     IPrimitive<PaymentFrequency> paymentFrequency();
 
     @JoinColumn
@@ -168,11 +172,15 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     // should be loaded in service when necessary!..
     IList<Document> documents();
 
+    // internals:
+
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createDate();
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();
+
+    // Versioned part:
 
     public interface LeaseV extends IVersionData<Lease> {
 
