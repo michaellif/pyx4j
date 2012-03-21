@@ -19,4 +19,9 @@ import com.propertyvista.admin.rpc.PmcDTO;
 
 public interface PmcViewerView extends IViewerView<PmcDTO> {
 
+    interface Presenter extends IViewerView.Presenter {
+
+        void resetCache();
+    }
+
 }

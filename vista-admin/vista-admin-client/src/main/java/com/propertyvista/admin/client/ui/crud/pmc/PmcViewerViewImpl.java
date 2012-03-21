@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.PmcDTO;
@@ -52,5 +53,14 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
             }
         });
         addToolbarItem(downloadNoImages.asWidget());
+
+        Button resetCache = new Button("Reset Cache", new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((PmcViewerActivity) presenter).resetCache();
+            }
+        });
+        addToolbarItem(resetCache);
     }
 }

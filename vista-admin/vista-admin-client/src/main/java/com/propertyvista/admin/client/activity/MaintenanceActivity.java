@@ -18,11 +18,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
 import com.propertyvista.admin.client.ui.administration.MaintenanceView;
@@ -30,6 +34,8 @@ import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFacto
 import com.propertyvista.admin.rpc.services.VistaAdminService;
 
 public class MaintenanceActivity extends AbstractActivity implements IEditorView.Presenter {
+
+    private final static I18n i18n = I18n.get(MaintenanceActivity.class);
 
     private final MaintenanceView view;
 
@@ -46,6 +52,7 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         view.reset();
+        view.setPresenter(this);
         populate();
         container.setWidget(view);
     }
@@ -103,5 +110,16 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
                 }
             }
         }, view.getValue());
+    }
+
+    public void resetGlobalCache() {
+        VistaAdminService service = GWT.create(VistaAdminService.class);
+        service.resetGlobalCache(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                Window.alert(i18n.tr("The global cache was reset succsessfully"));
+            }
+        });
     }
 }
