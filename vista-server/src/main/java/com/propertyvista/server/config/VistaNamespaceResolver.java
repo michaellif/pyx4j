@@ -91,10 +91,10 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 }
             } else if (prodSystemDnsBase.contains(dnsBase)) {
                 pmcNamespace = parts[parts.length - 3];
-            } else {
-                pmcNamespace = demoNamespace;
             }
-        } else {
+        }
+
+        if (pmcNamespace == null) {
             pmcNamespace = demoNamespace;
         }
 
