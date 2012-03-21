@@ -101,6 +101,7 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
         EntityListCriteria<E> criteria = EntityListCriteria.create(dboClass);
         criteria.setPageNumber(dtoCriteria.getPageNumber());
         criteria.setPageSize(dtoCriteria.getPageSize());
+        criteria.setVersionedCriteria(dtoCriteria.getVersionedCriteria());
         enhanceListCriteria(criteria, dtoCriteria);
         EntitySearchResult<E> dbResults = Persistence.secureQuery(criteria);
 
