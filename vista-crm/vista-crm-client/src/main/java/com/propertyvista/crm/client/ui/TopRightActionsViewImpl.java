@@ -3,28 +3,22 @@ package com.propertyvista.crm.client.ui;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Tooltip;
 
+import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
-import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.shared.CompiledLocale;
 
 public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
@@ -51,11 +45,19 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final HorizontalPanel locales;
 
-    private final Image message;
+    private CompiledLocale language;
 
-    private final Image alert;
+    MenuBar languageMenu;
 
-    private final SearchBox search;
+    MenuBar languages;
+
+/* Everything related to Search, Alerts and Messages is commented out and awaits implementation */
+
+//    private final Image message;
+
+//    private final Image alert;
+
+//    private final SearchBox search;
 
     private final CHyperlink getSatisfaction;
 
@@ -117,41 +119,38 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
         locales = new HorizontalPanel();
         locales.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+        locales.setVisible(false);
 
-        alert = new Image(CrmImages.INSTANCE.alert());
-        alert.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showAlerts();
-            }
-        });
-        //  alert.getElement().getStyle().setMarginRight(1, Unit.EM);
-        alert.getElement().getStyle().setCursor(Cursor.POINTER);
+        languageMenu = new MenuBar();
+        languageMenu.setAutoOpen(true);
+        languageMenu.setAnimationEnabled(true);
+        languages = new MenuBar(true);
+        languageMenu.addItem(new MenuItem(ClentNavigUtils.getCurrentLocale().toString(), languages));
+        languageMenu.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        message = new Image(CrmImages.INSTANCE.message());
-        message.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showMessages();
-            }
-        });
-        //    message.getElement().getStyle().setMarginRight(1, Unit.EM);
-        //   message.getElement().getStyle().setMarginLeft(1, Unit.EM);
-        message.getElement().getStyle().setCursor(Cursor.POINTER);
-
-        search = new SearchBox();
+//        alert = new Image(CrmImages.INSTANCE.alert());
+//        alert.addClickHandler(new ClickHandler() {
+//            @Override
+//            public void onClick(ClickEvent event) {
+//                presenter.showAlerts();
+//            }
+//        });
+//        alert.getElement().getStyle().setCursor(Cursor.POINTER);
+//
+//        message = new Image(CrmImages.INSTANCE.message());
+//        message.addClickHandler(new ClickHandler() {
+//            @Override
+//            public void onClick(ClickEvent event) {
+//                presenter.showMessages();
+//            }
+//        });
+//        message.getElement().getStyle().setCursor(Cursor.POINTER);
+//
+//        search = new SearchBox();
 
         getSatisfaction = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
-//                new OkCancelDialog("ytuyrt") {
-//
-//                    @Override
-//                    public boolean onClickOk() {
-//                        // TODO Auto-generated method stub
-//                        return true;
-//                    }
-//                }.show();
                 presenter.getSatisfaction();
             }
         });
@@ -164,27 +163,27 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
          * the following set of wrappers keep login/logout group relatively steady when
          * the elements right of it disappear
          */
-        SimplePanel searchwr = new SimplePanel();
-        searchwr.getElement().setAttribute("style", "min-width:12em");
-        searchwr.add(search);
-
-        SimplePanel messagewr = new SimplePanel();
-        messagewr.getElement().setAttribute("style", "min-width:3em");
-        messagewr.add(message);
-
-        SimplePanel alertwr = new SimplePanel();
-        alertwr.getElement().setAttribute("style", "min-width:3em");
-        alertwr.add(alert);
+//        SimplePanel searchwr = new SimplePanel();
+//        searchwr.getElement().setAttribute("style", "min-width:12em");
+//        searchwr.add(search);
+//
+//        SimplePanel messagewr = new SimplePanel();
+//        messagewr.getElement().setAttribute("style", "min-width:3em");
+//        messagewr.add(message);
+//
+//        SimplePanel alertwr = new SimplePanel();
+//        alertwr.getElement().setAttribute("style", "min-width:3em");
+//        alertwr.add(alert);
 
         container.add(greetings);
         container.add(account);
         container.add(settings);
         container.add(login);
         container.add(logout);
-        container.add(searchwr);
-        container.add(messagewr);
-        container.add(alertwr);
-        container.add(locales);
+//        container.add(searchwr);
+//        container.add(messagewr);
+//        container.add(alertwr);
+        container.add(languageMenu);
         container.add(getSatisfaction);
         add(container);
     }
@@ -206,9 +205,9 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     @Override
     public void onLogedOut() {
         logout.setVisible(false);
-        alert.setVisible(false);
-        message.setVisible(false);
-        search.setVisible(false);
+//        alert.setVisible(false);
+//        message.setVisible(false);
+//        search.setVisible(false);
         account.setVisible(false);
         settings.setVisible(false);
         login.setVisible(true);
@@ -220,32 +219,27 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     public void onLogedIn(String userName) {
         logout.setVisible(true);
         login.setVisible(false);
-        alert.setVisible(true);
-        message.setVisible(true);
+//        alert.setVisible(true);
+//        message.setVisible(true);
+//        search.setVisible(true);
         account.setVisible(true);
         settings.setVisible(true);
-        search.setVisible(true);
         getSatisfaction.setVisible(true);
         greetings.setHTML(i18n.tr("Welcome &nbsp;{0}", userName));
     }
 
     @Override
     public void setAvailableLocales(List<CompiledLocale> localeList) {
-        locales.clear();
+        languages.clearItems();
         for (final CompiledLocale compiledLocale : localeList) {
-            CHyperlink link = new CHyperlink(null, new Command() {
+            Command changeLanguage = new Command() {
                 @Override
                 public void execute() {
                     presenter.setLocale(compiledLocale);
                 }
-            });
-            link.setValue(compiledLocale.getLanguage());
-            locales.add(link);
-            Tooltip.tooltip(link.getWidget(), LocaleInfo.getLocaleNativeDisplayName(compiledLocale.name()));
-            locales.add(new Label("/"));
+            };
+            languages.addItem(new MenuItem(compiledLocale.getNativeDisplayName(), changeLanguage));
         }
-        if (locales.getWidgetCount() > 0) {
-            locales.remove(locales.getWidgetCount() - 1);
-        }
+        languages.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
     }
 }
