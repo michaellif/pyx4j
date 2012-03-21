@@ -19,6 +19,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
+import com.propertyvista.server.common.util.VistaDeployment;
+
 public class GwtInclude extends Panel {
 
     private static final long serialVersionUID = 1L;
@@ -26,7 +28,8 @@ public class GwtInclude extends Panel {
     public GwtInclude(String id) {
         super(id);
 
-        Label script = new Label("gwtAuthenticationToken", "function gwtToken() { return \"" + getAuthenticationToken() + "\";}");
+        Label script = new Label("gwtAuthenticationToken", "function gwtToken() { return \"" + getAuthenticationToken()
+                + "\";} function gwtPortalGoogleAPIKey() { return \"" + VistaDeployment.getPortalGoogleAPIKey() + "\";}");
         script.setEscapeModelStrings(false); // do not HTML escape JavaScript code
         add(script);
 

@@ -58,4 +58,18 @@ public class VistaDeployment {
             throw new IllegalArgumentException();
         }
     }
+
+    public static String getPortalGoogleAPIKey() {
+        Pmc pmc = getCurrentPmc();
+        for (PmcDnsName alias : pmc.dnsNameAliases()) {
+            if (alias.target().getValue() == DnsNameTarget.residentPortal) {
+                if (!alias.googleAPIKey().isNull()) {
+                    return alias.googleAPIKey().getValue();
+                } else {
+                    return "";
+                }
+            }
+        }
+        return "";
+    }
 }

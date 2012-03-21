@@ -40,6 +40,10 @@ public class PortalEntryPoint implements EntryPoint {
             // Key for .birchwoodsoftwaregroup.com
             GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
         }
+        String customKey = getPortalGoogleAPIKey();
+        if ((customKey != null) && (customKey.length() > 0)) {
+            GoogleAPI.setGoogleAPIKey(customKey);
+        }
 
         if (RootPanel.get(APTLIST_MAP_INSERTION_ID) != null) {
             RootPanel.get(APTLIST_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());
@@ -54,4 +58,8 @@ public class PortalEntryPoint implements EntryPoint {
         }
 
     }
+
+    public final native String getPortalGoogleAPIKey() /*-{
+		return $wnd.gwtPortalGoogleAPIKey();
+    }-*/;
 }
