@@ -22,10 +22,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.rpc.PmcDTO;
@@ -107,6 +110,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     public void save(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
+            CacheService.reset();
             super.save(callback, editableEntity);
         } finally {
             NamespaceManager.remove();
@@ -128,6 +132,19 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
             super.delete(callback, entityId);
+        } finally {
+            NamespaceManager.remove();
+        }
+    }
+
+    @Override
+    public void reset(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        try {
+            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
+            NamespaceManager.setNamespace(pmc.dnsName().getValue());
+            CacheService.reset();
+            callback.onSuccess(null);
         } finally {
             NamespaceManager.remove();
         }

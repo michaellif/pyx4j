@@ -13,10 +13,20 @@
  */
 package com.propertyvista.admin.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.essentials.server.admin.AdminServiceImpl;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.admin.rpc.services.VistaAdminService;
 
 public class VistaAdminServiceImpl extends AdminServiceImpl implements VistaAdminService {
+
+    @Override
+    public void resetGlobalCache(AsyncCallback<VoidSerializable> callback) {
+        CacheService.resetAll();
+        callback.onSuccess(null);
+    }
 
 }

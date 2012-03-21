@@ -15,7 +15,9 @@ package com.propertyvista.admin.rpc.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
@@ -23,5 +25,7 @@ import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 public interface PmcCrudService extends AbstractCrudService<PmcDTO> {
 
     public void createAccount(AsyncCallback<PmcDTO> callback, PmcAccountCreationRequest request);
+
+    public void reset(AsyncCallback<VoidSerializable> callback, Key entityId);
 
 }

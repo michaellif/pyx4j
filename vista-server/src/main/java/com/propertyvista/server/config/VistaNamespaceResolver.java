@@ -20,21 +20,26 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import com.pyx4j.config.server.NamespaceResolver;
-import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.server.domain.admin.Pmc;
 
 public class VistaNamespaceResolver implements NamespaceResolver {
 
     public static final String demoNamespace = DemoData.DemoPmc.vista.name();
 
-    private final static Set<String> systemDns = new HashSet<String>();
+    private final static Set<String> prodSystemDnsBase = new HashSet<String>();
 
     static {
-        systemDns.add("residentportalsite.com");
-        systemDns.add("prospectportalsite.com");
-        systemDns.add("propertyvista.com");
-        systemDns.add("birchwoodsoftwaregroup.com");
+        prodSystemDnsBase.add("residentportalsite.com");
+        prodSystemDnsBase.add("prospectportalsite.com");
+        prodSystemDnsBase.add("propertyvista.com");
+        prodSystemDnsBase.add("propertyvista.ca");
     }
 
     @Override
@@ -53,18 +58,53 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 return demoNamespace;
             }
         }
+        host = host.toLowerCase(Locale.ENGLISH);
+
+        String pmcNamespace;
+        try {
+            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            pmcNamespace = CacheService.get(host);
+            if (pmcNamespace == null) {
+                EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().enabled(), Boolean.TRUE));
+                criteria.add(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().dnsName(), host));
+                Pmc pmc = Persistence.service().retrieve(criteria);
+                if (pmc != null) {
+                    pmcNamespace = pmc.dnsName().getValue();
+                    CacheService.put(host, pmcNamespace);
+                }
+            }
+            if (pmcNamespace != null) {
+                return pmcNamespace;
+            }
+        } finally {
+            NamespaceManager.remove();
+        }
+
         String[] parts = host.split("\\.");
-        if (ApplicationMode.isDevelopment()) {
-            if (parts.length >= 4) {
-                return parts[parts.length - 4].toLowerCase(Locale.ENGLISH);
-            } else if (parts.length == 3) {
-                return parts[parts.length - 3].toLowerCase(Locale.ENGLISH);
+
+        if (parts.length >= 3) {
+            String dnsBase = parts[parts.length - 2] + "." + parts[parts.length - 1];
+            if (dnsBase.equals("birchwoodsoftwaregroup.com")) {
+                if (parts.length >= 4) {
+                    pmcNamespace = parts[parts.length - 4];
+                }
+            } else if (prodSystemDnsBase.contains(dnsBase)) {
+                pmcNamespace = parts[parts.length - 3];
+            } else {
+                pmcNamespace = demoNamespace;
             }
         } else {
-            if (parts.length >= 3) {
-                return parts[parts.length - 3].toLowerCase(Locale.ENGLISH);
-            }
+            pmcNamespace = demoNamespace;
         }
-        return demoNamespace;
+
+        // Avoid Query for every request
+        try {
+            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            CacheService.put(host, pmcNamespace);
+        } finally {
+            NamespaceManager.remove();
+        }
+        return pmcNamespace;
     }
 }

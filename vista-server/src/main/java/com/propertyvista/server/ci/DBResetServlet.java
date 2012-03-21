@@ -93,7 +93,13 @@ public class DBResetServlet extends HttpServlet {
 
         clearPmc,
 
-        dropForeignKeys;
+        dropForeignKeys,
+
+        @Translate("Reset Data Cache for this PMC")
+        resetPmcCache,
+
+        @Translate("Reset Data Cache for All PMC")
+        resetAllCache;
 
         @Override
         public String toString() {
@@ -139,56 +145,64 @@ public class DBResetServlet extends HttpServlet {
                     buf.append("</table>");
                 } else {
                     buf.append("Requested : '" + type.name() + "' " + type.toString());
-                    Persistence.service().startBackgroundProcessTransaction();
-                    Lifecycle.startElevatedUserContext();
-                    try {
-                        if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
-                            SchedulerHelper.shutdown();
-                            RDBUtils.dropAllEntityTables();
-                            SchedulerHelper.dbReset();
-                            SchedulerHelper.init();
-                        }
+                    if (type == ResetType.resetPmcCache) {
                         CacheService.reset();
-
-                        switch (type) {
-                        case all:
-                        case allWithMockup:
-                        case allAddMockup:
-                        case allMini:
-                            for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
-                                preloadPmc(req, buf, demoPmc.name(), type);
+                        buf.append("\nCacheService.reset Ok");
+                    } else if (type == ResetType.resetAllCache) {
+                        CacheService.resetAll();
+                        buf.append("\nCacheService.resetAll Ok");
+                    } else {
+                        Persistence.service().startBackgroundProcessTransaction();
+                        Lifecycle.startElevatedUserContext();
+                        try {
+                            if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
+                                SchedulerHelper.shutdown();
+                                RDBUtils.dropAllEntityTables();
+                                SchedulerHelper.dbReset();
+                                SchedulerHelper.init();
+                                CacheService.resetAll();
                             }
-                            break;
-                        case addPmcMockup:
-                        case addPmcMockupTest1:
-                        case preloadPmcWithMockup:
-                        case preloadPmc:
-                            preloadPmc(req, buf, NamespaceManager.getNamespace(), type);
-                            break;
-                        case clearPmc: {
-                            String thisPmcName = NamespaceManager.getNamespace();
-                            buf.append("\n--- PMC  '" + thisPmcName + "' ---\n");
-                            RDBUtils.deleteFromAllEntityTables();
-                            NamespaceManager.setNamespace(Pmc.adminNamespace);
-                            EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                            criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), thisPmcName));
-                            Persistence.service().delete(criteria);
-                            Persistence.service().commit();
-                        }
-                            break;
-                        case dropForeignKeys:
-                            RDBUtils.dropAllForeignKeys();
-                            break;
-                        default:
-                            throw new Error("unimplemented: " + type);
-                        }
 
-                        buf.append("\nTotal time: " + TimeUtils.secSince(start));
-                        log.info("DB reset {} {}", type, TimeUtils.secSince(start));
-                        buf.insert(0, "Processing total time: " + TimeUtils.secSince(start) + "\n");
-                    } finally {
-                        Lifecycle.endElevatedUserContext();
-                        Persistence.service().endTransaction();
+                            switch (type) {
+                            case all:
+                            case allWithMockup:
+                            case allAddMockup:
+                            case allMini:
+                                for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
+                                    preloadPmc(req, buf, demoPmc.name(), type);
+                                }
+                                break;
+                            case addPmcMockup:
+                            case addPmcMockupTest1:
+                            case preloadPmcWithMockup:
+                            case preloadPmc:
+                                preloadPmc(req, buf, NamespaceManager.getNamespace(), type);
+                                break;
+                            case clearPmc: {
+                                String thisPmcName = NamespaceManager.getNamespace();
+                                buf.append("\n--- PMC  '" + thisPmcName + "' ---\n");
+                                RDBUtils.deleteFromAllEntityTables();
+                                NamespaceManager.setNamespace(Pmc.adminNamespace);
+                                EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                                criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), thisPmcName));
+                                Persistence.service().delete(criteria);
+                                Persistence.service().commit();
+                            }
+                                break;
+                            case dropForeignKeys:
+                                RDBUtils.dropAllForeignKeys();
+                                break;
+                            default:
+                                throw new Error("unimplemented: " + type);
+                            }
+
+                            buf.append("\nTotal time: " + TimeUtils.secSince(start));
+                            log.info("DB reset {} {}", type, TimeUtils.secSince(start));
+                            buf.insert(0, "Processing total time: " + TimeUtils.secSince(start) + "\n");
+                        } finally {
+                            Lifecycle.endElevatedUserContext();
+                            Persistence.service().endTransaction();
+                        }
                     }
                 }
 
@@ -234,6 +248,7 @@ public class DBResetServlet extends HttpServlet {
         if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.addPmcMockup, ResetType.allAddMockup, ResetType.addPmcMockupTest1).contains(type)) {
             RDBUtils.deleteFromAllEntityTables();
         }
+        CacheService.reset();
 
         DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
         VistaDevPreloadConfig cfg;
