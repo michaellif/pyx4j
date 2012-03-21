@@ -105,7 +105,7 @@ public class VistaAccessControlListTest {
     }
 
     @Test
-    public void tenantServicePermissions() {
+    public void prospectiveTenantServicePermissions() {
         TestLifecycle.testSession(null, VistaTenantBehavior.Prospective);
         TestLifecycle.beginRequest();
         assertPermission(true, ApplicationService.class);
@@ -117,6 +117,22 @@ public class VistaAccessControlListTest {
         assertPermission(true, SummaryService.class);
         assertPermission(true, PaymentService.class);
 
+        TestLifecycle.endRequest();
+    }
+
+    @Test
+    public void prospectiveSubmittedTenantServicePermissions() {
+        TestLifecycle.testSession(null, VistaTenantBehavior.ProspectiveSubmitted);
+        TestLifecycle.beginRequest();
+        assertPermission(true, ApplicationService.class);
+        assertPermission(false, ApartmentService.class);
+        assertPermission(false, TenantService.class);
+        assertPermission(false, TenantInfoService.class);
+        assertPermission(false, TenantFinancialService.class);
+        assertPermission(false, ChargesService.class);
+        assertPermission(false, PaymentService.class);
+
+        assertPermission(true, SummaryService.class);
         assertPermission(true, ApplicationStatusService.class);
 
         TestLifecycle.endRequest();
