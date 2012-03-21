@@ -46,7 +46,6 @@ import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
@@ -91,8 +90,6 @@ public class VistaAccessControlListTest {
     @Test
     public void publicServicePermissions() {
         TestLifecycle.beginRequest();
-        assertPermission(true, ActivationService.class);
-
         assertPermission(false, ApplicationService.class);
         assertPermission(false, ApartmentService.class);
         assertPermission(false, TenantService.class);
@@ -111,8 +108,6 @@ public class VistaAccessControlListTest {
     public void tenantServicePermissions() {
         TestLifecycle.testSession(null, VistaTenantBehavior.Prospective);
         TestLifecycle.beginRequest();
-        assertPermission(true, ActivationService.class);
-
         assertPermission(true, ApplicationService.class);
         assertPermission(true, ApartmentService.class);
         assertPermission(true, TenantService.class);

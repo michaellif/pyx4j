@@ -31,7 +31,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
@@ -42,7 +42,7 @@ import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.util.LegalStuffUtils;
-import com.propertyvista.server.common.util.TenantInLeaseRetriever;
+import com.propertyvista.server.common.util.TenantRetriever;
 import com.propertyvista.server.domain.CampaignTrigger;
 
 public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements PaymentService {
@@ -108,14 +108,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease().holder(), PtAppContext.getCurrentUserLease()));
-        for (TenantInLease tenantInfo : Persistence.secureQuery(criteria)) {
-            if (tenantInfo.role().getValue().equals(TenantInLease.Role.Applicant)) {
-                TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantInfo.getPrimaryKey());
-                callback.onSuccess(r.tenantScreening.currentAddress().duplicate(AddressStructured.class));
-                break;
-            }
-        }
+        TenantRetriever r = new TenantRetriever(Tenant.class, PtAppContext.getCurrentUserTenant().getPrimaryKey());
+        callback.onSuccess(r.tenantScreening.currentAddress().duplicate(AddressStructured.class));
     }
 }
