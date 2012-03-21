@@ -105,7 +105,6 @@ public class Lifecycle {
 
     public static void endRequest() {
         try {
-            //        PersistenceServicesFactory.getPersistenceService().endRequest();
             HttpSession session = Context.getSession();
             if (session != null) {
                 Visit visit = Context.getVisit();
@@ -118,7 +117,9 @@ public class Lifecycle {
                     // Force object update in GAE session.
                     session.setAttribute(Context.SESSION_VISIT, visit);
                 }
-            } else if (Context.getRequest().getAttribute(END_SESSION_ATR) != null) {
+            }
+            HttpServletRequest request = Context.getRequest();
+            if ((request != null) && (request.getAttribute(END_SESSION_ATR) != null)) {
                 // Remove Session Cookie 
                 Cookie c = new Cookie(ServerSideConfiguration.instance().getSessionCookieName(), "");
                 c.setPath("/");
