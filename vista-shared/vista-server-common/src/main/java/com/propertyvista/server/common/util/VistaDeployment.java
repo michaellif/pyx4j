@@ -38,7 +38,7 @@ public class VistaDeployment {
         }
     }
 
-    public static String getBaseApplicationURL(DnsNameTarget target) {
+    public static String getBaseApplicationURL(DnsNameTarget target, boolean secure) {
         Pmc pmc = getCurrentPmc();
         for (PmcDnsName alias : pmc.dnsNameAliases()) {
             if (alias.target().getValue() == target) {

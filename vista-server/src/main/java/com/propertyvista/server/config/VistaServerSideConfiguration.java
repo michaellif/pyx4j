@@ -24,19 +24,20 @@ import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
-import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
 import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.common.security.VistaAntiBot;
 import com.propertyvista.server.security.VistaAccessControlList;
 import com.propertyvista.server.security.VistaAclRevalidator;
 
-public class VistaServerSideConfiguration extends EssentialsServerSideConfiguration {
+public class VistaServerSideConfiguration extends AbstractVistaServerSideConfiguration {
 
     static final String recaptchaPrivateKey = "6LfVZMESAAAAANrD2Ln5t4yWg3czLMBjQRuKosGx";
 
@@ -85,6 +86,21 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
 
     public String getApplicationURLNamespace() {
         return ".22.birchwoodsoftwaregroup.com/";
+    }
+
+    @Override
+    public String getDefaultBaseURLresidentPortal(boolean secure) {
+        return getMainApplicationURL() + DeploymentConsts.PORTAL_URL;
+    }
+
+    @Override
+    public String getDefaultBaseURLvistaCrm() {
+        return getMainApplicationURL() + DeploymentConsts.CRM_URL;
+    }
+
+    @Override
+    public String getDefaultBaseURLprospectPortal() {
+        return getMainApplicationURL() + DeploymentConsts.PTAPP_URL;
     }
 
     @Override
@@ -153,6 +169,7 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
         return true;
     }
 
+    @Override
     public boolean openIdrequired() {
         return true;
     }
