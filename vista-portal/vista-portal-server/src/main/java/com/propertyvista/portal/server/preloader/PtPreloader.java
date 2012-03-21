@@ -53,6 +53,7 @@ import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
+import com.propertyvista.server.common.util.LeaseLifecycleSim;
 import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
@@ -157,6 +158,8 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
         // save lease (tenants):
         new LeaseManager().save(summary.lease());
+
+        LeaseLifecycleSim.startApplication(summary.lease().getPrimaryKey());
 
         // Create working appl. only for first half 
         if (cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {

@@ -159,12 +159,6 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
                 if (eventDate.after(now)) {
                     break;
                 }
-                lease = leaseSim.createApplication(lease.getPrimaryKey(), eventDate);
-
-                eventDate = new LogicalDate(random(eventDate.getTime(), lease.leaseFrom().getValue().getTime()));
-                if (eventDate.after(now)) {
-                    break;
-                }
                 lease = leaseSim.approveApplication(lease.getPrimaryKey(), eventDate);
 
                 eventDate = lease.leaseFrom().getValue();

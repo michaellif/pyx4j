@@ -54,10 +54,16 @@ public class LeaseLifecycleSim {
         return lease;
     }
 
-    public Lease createApplication(Key leaseId, LogicalDate eventDate) {
+    // emulate invitation to online application:
+    public static Lease startApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         lease.version().status().setValue(Status.ApplicationInProgress);
         Persistence.secureSave(lease);
+
+        Persistence.service().retrieve(lease.application());
+        lease.application().status().setValue(com.propertyvista.domain.tenant.ptapp.MasterApplication.Status.Invited);
+        Persistence.service().merge(lease.application());
+
         return lease;
     }
 
