@@ -92,6 +92,9 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         adjustmentPanel.setH3(0, 0, 1, i18n.tr("Adjustments"));
         adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
 
+        get(proto().effectiveDate()).setVisible(false);
+        get(proto().expirationDate()).setVisible(false);
+
         return main;
     }
 
@@ -103,6 +106,10 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         if (!getValue().item().isEmpty()) {
             switch (getValue().item().type().type().getValue()) {
             case feature:
+                // show effective dates:
+                get(proto().effectiveDate()).setVisible(true);
+                get(proto().expirationDate()).setVisible(true);
+
                 if (getValue().item().type().featureType().getValue() == Feature.Type.utility) {
                     // correct folder item:
                     if (getParent() instanceof CEntityFolderItem) {
