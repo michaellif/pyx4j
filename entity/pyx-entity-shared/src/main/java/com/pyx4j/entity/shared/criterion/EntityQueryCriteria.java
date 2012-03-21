@@ -224,6 +224,9 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         if (this.entityPrototype.getEntityMeta() != t.entityPrototype.getEntityMeta()) {
             return false;
         }
+        if (this.getVersionedCriteria() != t.getVersionedCriteria()) {
+            return false;
+        }
         if (!EqualsHelper.equals(filters, t.filters)) {
             return false;
         }
@@ -238,6 +241,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         int hashCode = 0;
         hashCode += this.entityPrototype.getEntityMeta().hashCode();
         hashCode *= 0x1F;
+        hashCode += versionedCriteria.hashCode();
         if (filters != null) {
             hashCode += filters.hashCode();
         }
@@ -273,6 +277,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("domainName=").append(this.entityPrototype.getEntityMeta().getCaption());
+        builder.append(" ").append(getVersionedCriteria());
         builder.append(" filters=").append(getFilters());
         builder.append(" sorts=").append(getSorts());
         return builder.toString();
