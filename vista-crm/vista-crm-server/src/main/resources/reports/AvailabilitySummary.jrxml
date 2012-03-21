@@ -65,18 +65,18 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="178" splitType="Stretch">
+		<band height="169" splitType="Stretch">
 			<rectangle>
-				<reportElement x="19" y="7" width="100" height="160"/>
+				<reportElement x="0" y="27" width="119" height="140"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="119" y="7" width="100" height="160"/>
+				<reportElement x="119" y="0" width="100" height="167"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="219" y="7" width="100" height="160"/>
+				<reportElement x="219" y="0" width="100" height="167"/>
 			</rectangle>
 			<textField>
-				<reportElement x="119" y="27" width="100" height="20"/>
+				<reportElement x="119" y="27" width="90" height="20"/>
 				<textElement textAlignment="Right">
 					<font fontName="Tahoma"/>
 				</textElement>
@@ -115,71 +115,57 @@
 				</textElement>
 				<text><![CDATA[Total]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="119" y="7" width="100" height="20"/>
-				<textElement textAlignment="Right">
-					<font fontName="Tahoma"/>
-				</textElement>
-				<text><![CDATA[#]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="219" y="7" width="100" height="20"/>
-				<textElement textAlignment="Right">
-					<font fontName="Tahoma"/>
-				</textElement>
-				<text><![CDATA[%]]></text>
-			</staticText>
 			<textField pattern="###0.00">
-				<reportElement x="219" y="27" width="100" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<reportElement x="219" y="27" width="84" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{occupancyRelative}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="47" width="100" height="20"/>
+				<reportElement x="119" y="47" width="90" height="20"/>
 				<textElement textAlignment="Right">
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{noticeAbsolute}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00">
-				<reportElement x="219" y="47" width="100" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<reportElement x="219" y="47" width="84" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{noticeRelative}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="87" width="100" height="20"/>
+				<reportElement x="119" y="87" width="90" height="20"/>
 				<textElement textAlignment="Right">
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{vacancyAbsolute}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00">
-				<reportElement x="219" y="87" width="100" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<reportElement x="219" y="87" width="84" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{vacancyRelative}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="127" width="100" height="20"/>
+				<reportElement x="119" y="127" width="90" height="20"/>
 				<textElement textAlignment="Right">
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{netExposureAbsolute}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00">
-				<reportElement x="219" y="127" width="100" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<reportElement x="219" y="127" width="84" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{netExposureRelative}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="147" width="100" height="20"/>
+				<reportElement x="119" y="147" width="90" height="20"/>
 				<textElement textAlignment="Right">
 					<font fontName="Tahoma" isBold="true"/>
 				</textElement>
@@ -193,7 +179,7 @@
 				<text><![CDATA[Vacant Rented]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="119" y="107" width="100" height="20"/>
+				<reportElement x="119" y="107" width="90" height="20"/>
 				<textElement textAlignment="Right">
 					<font fontName="Tahoma"/>
 				</textElement>
@@ -205,12 +191,29 @@
 				<text><![CDATA[Notice Rented]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="119" y="67" width="100" height="20"/>
+				<reportElement x="119" y="67" width="90" height="20"/>
 				<textElement textAlignment="Right">
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{noticeRented}]]></textFieldExpression>
 			</textField>
+			<rectangle>
+				<reportElement x="119" y="0" width="200" height="27"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="119" y="7" width="90" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="219" y="7" width="84" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>

@@ -25,11 +25,13 @@ import com.pyx4j.entity.report.JasperReportModel;
 
 import com.propertyvista.crm.server.services.reports.directory.BuildingListerReportCreator;
 import com.propertyvista.crm.server.services.reports.directory.TurnoverAnalysisReportCreator;
+import com.propertyvista.crm.server.services.reports.directory.UnitAvailabilityStatusReportCreator;
 import com.propertyvista.crm.server.services.reports.directory.UnitAvailabilitySummaryReportCreator;
 import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 
 public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
 
@@ -45,6 +47,7 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
         map.put(BuildingLister.class, new BuildingListerReportCreator());
 
         map.put(TurnoverAnalysisMetadata.class, new TurnoverAnalysisReportCreator());
+        map.put(UnitAvailability.class, new UnitAvailabilityStatusReportCreator());
         map.put(AvailabilitySummary.class, new UnitAvailabilitySummaryReportCreator());
 
         // add more GadgetReportModelCreators here

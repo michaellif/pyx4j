@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Unit Availability" pageWidth="555" pageHeight="300" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="10" bottomMargin="10">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+        <style name="table">
+            <box>
+		<pen lineWidth="0.5" lineColor="#666666"/>
+            </box>
+	</style>
+	<style name="table_TH" style="table" mode="Opaque" forecolor="#FFFFFF" backcolor="#C2C2C2">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="table_TD" style="table" mode="Opaque" forecolor="#666666" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="table_text" fontSize="6"/>
+	<style name="table_TH_text" style="table_text" forecolor="#FFFFFF"/>
+	<style name="table_TD_text" style="table_text" forecolor="#666666"/>
+	<subDataset name="Dataset">
+            <parameter name="COLUMNS" class="java.util.HashMap"/>
+            <field name="vacancyStatus" class="com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy"/>
+<field name="rentedStatus" class="com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus"/>
+<field name="scoping" class="com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Scoping"/>
+<field name="rentReadinessStatus" class="com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadiness"/>
+<field name="unitRent" class="java.math.BigDecimal"/>
+<field name="marketRent" class="java.math.BigDecimal"/>
+<field name="rentDeltaAbsolute" class="java.math.BigDecimal"/>
+<field name="rentDeltaRelative" class="java.math.BigDecimal"/>
+<field name="rentEndDay" class="com.pyx4j.commons.LogicalDate"/>
+<field name="moveInDay" class="com.pyx4j.commons.LogicalDate"/>
+<field name="rentedFromDay" class="com.pyx4j.commons.LogicalDate"/>
+<field name="daysVacant" class="java.lang.Integer"/>
+<field name="revenueLost" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="COLUMNS" class="java.util.HashMap"/>
+	<parameter name="AS_OF" class="java.lang.String"/>
+	<title>
+		<band height="100" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="554" height="30"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textField>
+					<reportElement x="0" y="0" width="553" height="29"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{AS_OF}]]></textFieldExpression>
+				</textField>
+			</frame>
+                        <componentElement>
+                            <reportElement key="table" x="0" y="31" width="555" height="30"/>
+                            <jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+				<datasetRun subDataset="Dataset">
+                                    <parametersMapExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></parametersMapExpression>
+                                    <dataSourceExpression><![CDATA[((com.pyx4j.entity.report.JRIEntityCollectionDataSource)$P{REPORT_DATA_SOURCE}).cloneDataSource()]]></dataSourceExpression>
+				</datasetRun>
+				
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/vacancyStatus/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/vacancyStatus/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{vacancyStatus}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/rentedStatus/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/rentedStatus/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{rentedStatus}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/scoping/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/scoping/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{scoping}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/rentReadinessStatus/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/rentReadinessStatus/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{rentReadinessStatus}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/unitRent/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/unitRent/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{unitRent}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/marketRent/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/marketRent/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{marketRent}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/rentDeltaAbsolute/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/rentDeltaAbsolute/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{rentDeltaAbsolute}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/rentDeltaRelative/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/rentDeltaRelative/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{rentDeltaRelative}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/rentEndDay/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/rentEndDay/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{rentEndDay}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/moveInDay/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/moveInDay/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{moveInDay}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/rentedFromDay/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/rentedFromDay/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{rentedFromDay}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/daysVacant/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/daysVacant/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{daysVacant}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+
+<jr:column width="45">
+    <printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("UnitAvailabilityStatus/revenueLost/")]]></printWhenExpression>
+        <jr:columnHeader style="table_TH" height="10" rowSpan="1">
+            <textField isStretchWithOverflow="true">
+                <reportElement style="table_TH_text" x="0" y="0" width="42" height="10"/>
+		<textElement markup="none"/>
+		<textFieldExpression><![CDATA[$P{COLUMNS}.get("UnitAvailabilityStatus/revenueLost/")]]></textFieldExpression>
+            </textField>
+    </jr:columnHeader>
+    <jr:detailCell style="table_TD" height="10" rowSpan="1">
+        <textField isStretchWithOverflow="true">
+            <reportElement style="table_TD_text" x="0" y="0" width="42" height="10"/>
+            <textElement/>
+            <textFieldExpression><![CDATA[$F{revenueLost}]]></textFieldExpression>
+        </textField>
+    </jr:detailCell>
+</jr:column>
+
+			    </jr:table>
+                        </componentElement>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
