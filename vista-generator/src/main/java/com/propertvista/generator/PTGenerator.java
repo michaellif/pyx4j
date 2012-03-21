@@ -45,6 +45,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
@@ -63,7 +64,6 @@ import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
@@ -72,7 +72,7 @@ import com.propertyvista.misc.EquifaxApproval.Decision;
 import com.propertyvista.misc.EquifaxResult;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.common.reference.SharedData;
-import com.propertyvista.server.common.util.LeaseLifecycleSim;
+import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class PTGenerator {
@@ -123,14 +123,10 @@ public class PTGenerator {
 
         createTenantList(user, summary.tenants());
 
-        // lease:
-        // FIXME since it's a gnerator, not sure if accessing the db via LeaseLifecycleSim is a good idea.
-        // FIXME generate a lease with all the underground occupancy related stuff via LeaseLifecycleSim
-        LeaseLifecycleSim sim = new LeaseLifecycleSim();
-
         if (selectedUnit.availableForRent().isNull()) {
             return null;
         }
+
         LogicalDate effectiveAvailableForRent = new LogicalDate(Math.max(selectedUnit.availableForRent().getValue().getTime(),
                 RandomUtil.randomLogicalDate(2012, 2012).getTime()));
         LogicalDate createdDate = new LogicalDate(effectiveAvailableForRent.getTime() + Math.abs(rnd.nextLong()) % MAX_CREATE_WAIT);
@@ -140,8 +136,10 @@ public class PTGenerator {
                 % (MAX_LEASE_DURATION - MIN_LEASE_DURATION));
         LogicalDate expectedMoveIn = leaseFrom; // for simplicity's sake
 
-        Lease lease = sim.newLease(createdDate, RandomUtil.randomLetters(8), selectedUnit, leaseFrom, leaseTo, expectedMoveIn, PaymentFrequency.Monthly, null);
+        Lease lease = new LeaseManager().create(RandomUtil.randomLetters(8), Service.Type.residentialUnit, selectedUnit, leaseFrom, leaseTo);
         summary.lease().set(lease);
+        summary.lease().createDate().setValue(createdDate);
+        summary.lease().version().expectedMoveIn().setValue(expectedMoveIn);
 
         return summary;
     }

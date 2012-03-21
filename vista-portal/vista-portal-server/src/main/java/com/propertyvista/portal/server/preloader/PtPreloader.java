@@ -116,21 +116,15 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
         for (TenantSummaryGDO tenantSummary : summary.tenants()) {
             Persistence.service().persist(tenantSummary.tenant());
-
-            tenantSummary.tenantInLease().lease().set(summary.lease().version());
-            Persistence.service().persist(tenantSummary.tenantInLease());
             summary.lease().version().tenants().add(tenantSummary.tenantInLease());
-            new LeaseManager().save(summary.lease());
 
             Persistence.service().persist(tenantSummary.tenantScreening());
-
             for (PersonGuarantor pg : tenantSummary.tenantScreening().guarantors()) {
                 // TODO remove this set, it should be automatic
                 pg.guarantee().set(tenantSummary.tenantScreening());
                 Persistence.service().persist(pg.guarantor());
             }
             Persistence.service().persist(tenantSummary.tenantScreening().guarantors());
-
             Persistence.service().persist(tenantSummary.guarantorScreening());
 
             int no = 0;
@@ -161,6 +155,9 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
                 Persistence.service().persist(tenantSummary.tenantScreening().equifaxApproval());
             }
         }
+
+        // save lease (tenants):
+        new LeaseManager().save(summary.lease());
 
         // Create working appl. only for first half 
         if (cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {
