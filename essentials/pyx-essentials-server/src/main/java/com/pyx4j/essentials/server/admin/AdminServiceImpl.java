@@ -26,7 +26,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.rpc.admin.AdminService;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 
-public class AdminServiceImpl implements AdminService {
+public abstract class AdminServiceImpl implements AdminService {
 
     @Override
     public void getSystemReadOnlyStatus(AsyncCallback<Boolean> callback) {

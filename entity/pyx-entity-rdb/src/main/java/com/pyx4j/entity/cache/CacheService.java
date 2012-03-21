@@ -97,6 +97,13 @@ public class CacheService {
         getCache().removeAll();
     }
 
+    public static void resetAll() {
+        List<CacheManager> knownCacheManagers = CacheManager.ALL_CACHE_MANAGERS;
+        for (CacheManager cm : knownCacheManagers) {
+            cm.removalAll();
+        }
+    }
+
     public static void shutdown() {
         log.info("CacheManager.shutdown");
         shutdown = true;

@@ -23,6 +23,7 @@ package com.pyx4j.essentials.rpc.admin;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AdminService extends IService {
 
@@ -31,5 +32,7 @@ public interface AdminService extends IService {
     public void getSystemMaintenanceState(AsyncCallback<SystemMaintenanceState> callback);
 
     public void setSystemMaintenanceState(AsyncCallback<SystemMaintenanceState> callback, SystemMaintenanceState state);
+
+    public void resetGlobalCache(AsyncCallback<VoidSerializable> callback);
 
 }
