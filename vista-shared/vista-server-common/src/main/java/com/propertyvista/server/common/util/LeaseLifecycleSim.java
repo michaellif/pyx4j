@@ -35,20 +35,10 @@ public class LeaseLifecycleSim {
 
     public Lease newLease(final LogicalDate eventDate, String leaseId, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo, LogicalDate expectedMoveIn,
             PaymentFrequency paymentFrequency, Tenant tenant) {
-        final Lease lease = EntityFactory.create(Lease.class);
-        lease.version().status().setValue(Lease.Status.Created);
-        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        lease.leaseID().setValue(leaseId);
-        lease.unit().set(unit);
-
-        // TODO fix this to match unit type
-        lease.type().setValue(Service.Type.residentialUnit);
-
+        Lease lease = leaseManager(eventDate).create(leaseId, Service.Type.residentialUnit, unit, leaseFrom, leaseTo);
         lease.createDate().setValue(eventDate);
-        lease.leaseFrom().setValue(leaseFrom);
-        lease.leaseTo().setValue(leaseTo);
+
         lease.version().expectedMoveIn().setValue(expectedMoveIn);
-        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         if (tenant != null) {
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
@@ -58,6 +48,7 @@ public class LeaseLifecycleSim {
             tenantInLease.role().setValue(TenantInLease.Role.Applicant);
             lease.version().tenants().add(tenantInLease);
         }
+
         leaseManager(eventDate).save(lease);
 
         return lease;

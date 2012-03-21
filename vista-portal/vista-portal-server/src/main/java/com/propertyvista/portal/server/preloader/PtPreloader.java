@@ -53,7 +53,7 @@ import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
-import com.propertyvista.server.common.ptapp.ApplicationManager;
+import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class PtPreloader extends BaseVistaDevDataPreloader {
@@ -111,11 +111,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
     }
 
     private void persistFullApplication(ApplicationSummaryGDO summary, PTGenerator generator, int cnt) {
-
         LeaseHelper.updateLease(summary.lease());
-
-        Persistence.service().persist(summary.lease());
-
         Double overalPercentageApproval = 0.0, maxPercentageApproval = 0.0;
 
         for (TenantSummaryGDO tenantSummary : summary.tenants()) {
@@ -124,6 +120,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             tenantSummary.tenantInLease().lease().set(summary.lease().version());
             Persistence.service().persist(tenantSummary.tenantInLease());
             summary.lease().version().tenants().add(tenantSummary.tenantInLease());
+            new LeaseManager().save(summary.lease());
 
             Persistence.service().persist(tenantSummary.tenantScreening());
 
@@ -167,7 +164,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
         // Create working appl. only for first half 
         if (cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {
-            MasterApplication ma = ApplicationManager.createMasterApplication(summary.lease());
+            MasterApplication ma = summary.lease().application();
             if (PTGenerator.equifaxDemo) {
                 ma.equifaxApproval().percenrtageApproved().setValue(overalPercentageApproval);
 
@@ -195,9 +192,6 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
                     ma.decisionReason().setValue("Decided according current application state and Equifax check results");
                 }
 
-                ma.createDate().setValue(summary.lease().createDate().getValue());
-
-                Persistence.service().persist(summary.lease());
                 Persistence.service().persist(ma.equifaxApproval().checkResultDetails());
                 Persistence.service().persist(ma.equifaxApproval());
                 Persistence.service().persist(ma);

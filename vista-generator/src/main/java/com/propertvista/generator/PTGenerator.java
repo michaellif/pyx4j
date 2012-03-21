@@ -143,17 +143,6 @@ public class PTGenerator {
         Lease lease = sim.newLease(createdDate, RandomUtil.randomLetters(8), selectedUnit, leaseFrom, leaseTo, expectedMoveIn, PaymentFrequency.Monthly, null);
         summary.lease().set(lease);
 
-        // This is actually update during save to match real unit data
-//        summary.lease().type().setValue(Service.Type.residentialUnit);
-//        summary.lease().status().setValue(Lease.Status.Created);
-//        summary.lease().unit().set(selectedUnit);
-//        summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2012, 2012));
-//        summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2013, 2015));
-//        summary.lease().expectedMoveIn().setValue(summary.lease().leaseFrom().getValue());
-//        summary.lease().createDate().setValue(RandomUtil.randomLogicalDate(2011, 2011));
-//
-        //summary.charges().set(createCharges(summary, selectedUnit));
-
         return summary;
     }
 

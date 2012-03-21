@@ -148,7 +148,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             LogicalDate leaseTo = add(leaseFrom, random(MIN_LEASE_TERM, MAX_LEASE_TERM));
             Lease lease = leaseSim.newLease(eventDate, RandomUtil.randomLetters(8), unit, leaseFrom, leaseTo, expectedMoveIn, PaymentFrequency.Monthly, tenant);
             LeaseHelper.updateLease(lease);
-            Persistence.service().persist(lease);
+            Persistence.service().merge(lease);
 
             do {
                 if (eventDate.after(now)) {

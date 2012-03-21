@@ -42,6 +42,7 @@ import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 
 public interface Lease extends IVersionedEntity<LeaseV> {
 
@@ -179,6 +180,9 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();
+
+    @Detached
+    MasterApplication application();
 
     // Versioned part:
 

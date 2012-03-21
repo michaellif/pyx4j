@@ -21,8 +21,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -64,7 +62,8 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         Persistence.service().retrieve(dto.unit().belongsTo());
 
         // load detached entities:
-        Persistence.service().retrieve(dto.documents());
+        Persistence.service().retrieve(dto.application());
+//        Persistence.service().retrieve(dto.documents());
         if (!dto.unit().isNull()) {
             // fill selected building by unit:
             dto.selectedBuilding().set(dto.unit().belongsTo());
@@ -79,11 +78,6 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         for (BillableItem item : dto.version().leaseProducts().featureItems()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(item);
         }
-
-        EntityQueryCriteria<MasterApplication> criteria = EntityQueryCriteria.create(MasterApplication.class);
-        // Ignore version in query
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in.getPrimaryKey()));
-        dto.application().set(Persistence.service().retrieve(criteria));
     }
 
     @Override

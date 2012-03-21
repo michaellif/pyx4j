@@ -18,6 +18,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -25,12 +26,16 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.server.billing.BillingFacade;
+import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManager;
@@ -64,15 +69,30 @@ public class LeaseManager {
         this.turnoverAnalysisManager = turnoverAnalysisManager;
     }
 
+    public Lease create(String leaseId, Service.Type type, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo) {
+        Lease lease = EntityFactory.create(Lease.class);
+
+        lease.leaseID().setValue(leaseId);
+        lease.type().setValue(type);
+        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        lease.unit().set(unit);
+        lease.leaseFrom().setValue(leaseFrom);
+        lease.leaseTo().setValue(leaseTo);
+
+        lease.version().status().setValue(Lease.Status.Created);
+
+        return lease;
+    }
+
     public Lease save(Lease lease) {
-        boolean isNewLease = lease.getPrimaryKey() == null;
+        boolean isNewLease = (lease.getPrimaryKey() == null);
         boolean isUnitChanged = isNewLease;
         boolean doReserve = false;
         boolean doUnreserve = false;
 
         Lease oldLease = null;
         if (isNewLease) {
-            doReserve = lease.unit().getPrimaryKey() != null;
+            doReserve = (lease.unit().getPrimaryKey() != null);
         } else {
             oldLease = Persistence.secureRetrieve(Lease.class, lease.getPrimaryKey().asCurrentKey());
 
@@ -98,6 +118,16 @@ public class LeaseManager {
 
         Persistence.secureSave(lease);
 
+        if (isNewLease || lease.application().isNull()) { // always create application for new lease: 
+            try {
+                ApplicationManager.createMasterApplication(lease);
+            } catch (Exception e) {
+                // ok, it seems there is no main applicant still...
+                if (!isNewLease)
+                    throw new Error(e);
+            }
+        }
+
         if (isUnitChanged) {
             if (doUnreserve) {
                 occupancyManager(oldLease.unit().getPrimaryKey()).unreserve();
@@ -106,6 +136,7 @@ public class LeaseManager {
                 occupancyManager(lease.unit().getPrimaryKey()).reserve(lease);
             }
         }
+
         return lease;
     }
 

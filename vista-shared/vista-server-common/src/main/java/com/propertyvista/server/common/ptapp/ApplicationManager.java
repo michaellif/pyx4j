@@ -61,9 +61,6 @@ public class ApplicationManager {
     private static final I18n i18n = I18n.get(ApplicationManager.class);
 
     public static MasterApplication createMasterApplication(Lease lease) {
-        lease.version().status().setValue(Lease.Status.ApplicationInProgress);
-        Persistence.service().persist(lease);
-
         MasterApplication mapp = EntityFactory.create(MasterApplication.class);
         mapp.lease().set(lease);
         mapp.status().setValue(MasterApplication.Status.Created);
@@ -83,28 +80,39 @@ public class ApplicationManager {
                 tenantInLease.application().set(app);
                 Persistence.service().persist(tenantInLease);
 
+//                lease.version().status().setValue(Lease.Status.ApplicationInProgress);
+                lease.application().set(mapp);
+                Persistence.service().merge(lease);
+
                 mapp.applications().add(app);
+                Persistence.service().merge(mapp);
                 return mapp;
             }
         }
-        throw new Error("Main applicant not found");
+
+        // oops:
+        Persistence.service().delete(mapp);
+        throw new UserRuntimeException("Main applicant not found");
     }
 
-    public static void sendMasterApplicationEmail(MasterApplication ma) {
-        if (ma.lease().version().tenants().getAttachLevel() != AttachLevel.Attached) {
-            Persistence.service().retrieve(ma.lease().version().tenants());
+    public static void sendMasterApplicationEmail(MasterApplication mapp) {
+        if (mapp.lease().version().tenants().getAttachLevel() != AttachLevel.Attached) {
+            Persistence.service().retrieve(mapp.lease().version().tenants());
         }
-        for (TenantInLease tenantInLease : ma.lease().version().tenants()) {
+        for (TenantInLease tenantInLease : mapp.lease().version().tenants()) {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
                 Persistence.service().retrieve(tenantInLease.tenant().user());
                 try {
-                    sendInvitationEmail(tenantInLease.tenant().user(), ma.lease(), EmailTemplateType.ApplicationCreatedApplicant);
+                    sendInvitationEmail(tenantInLease.tenant().user(), mapp.lease(), EmailTemplateType.ApplicationCreatedApplicant);
                 } catch (Exception e) {
                     break;
                 }
 
-                ma.status().setValue(MasterApplication.Status.Invited);
-                Persistence.service().persist(ma);
+                mapp.status().setValue(MasterApplication.Status.Invited);
+                Persistence.service().persist(mapp);
+
+                mapp.lease().version().status().setValue(Lease.Status.ApplicationInProgress);
+                Persistence.service().merge(mapp.lease());
                 break;
             }
         }
