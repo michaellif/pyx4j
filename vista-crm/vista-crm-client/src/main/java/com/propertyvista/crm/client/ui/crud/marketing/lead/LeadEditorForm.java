@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -61,7 +60,8 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.add(createGeneralTab(), i18n.tr("General"));
+        tabPanel.add(createGuestsTab(), i18n.tr("Guests"));
+        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createAppointmentsTab(), i18n.tr("Appointments"));
         tabPanel.setLastTabDisabled(isEditable());
 
@@ -79,51 +79,32 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         return tabPanel.getSelectedIndex();
     }
 
-    private Widget createGeneralTab() {
+    private Widget createGuestsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 20).build());
-        } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Person")).build());
-            get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-            get(proto().person().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
-            main.setBR(++row, 0, 1);
-        }
-
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
+        main.setWidget(++row, 0, inject(proto().guests(), new GuestFolder(isEditable())));
 
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refSource()), 20).build());
 
         main.setBR(++row, 0, 1);
-        main.setBR(++row, 0, 1);
-        if (!isEditable()) {
-            main.setBR(++row, 0, 1);
-        }
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 55).build());
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 50).build());
 
-        main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().agent()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
+        return new CrmScrollPanel(main);
+    }
 
-        row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().moveInDate()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().leaseTerm()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().leaseType()), 18).build());
+    private Widget createDetailsTab() {
+        FormFlexPanel main = new FormFlexPanel();
+
+        int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseType()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveInDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTerm()), 9).build());
 
         if (isEditable()) {
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().building(), new CEntityLabel()), 20).build());
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().floorplan(), new CEntityLabel()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new CEntityLabel()), 20).build());
 
             AnchorButton select = new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
@@ -142,15 +123,21 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
                 }
             });
             select.asWidget().getElement().getStyle().setMarginLeft(15, Unit.EM);
-            main.setWidget(++row, 1, select);
+            main.setWidget(++row, 0, select);
         } else {
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().building()), 20).build());
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
         }
 
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().agent()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
+
+        row = -1;
+        main.setH4(++row, 1, 1, i18n.tr("Prefered Appontment Times") + ":");
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentDate1()), 9).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentTime1()), 9).build());
-
         main.setBR(++row, 1, 1);
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentDate2()), 9).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentTime2()), 9).build());
@@ -187,20 +174,20 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
                     // building columns                    
-                    new MemberColumnDescriptor.Builder(proto().building().info().address().country(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().address().province(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().address().city(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetName(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetNumber(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().type(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().name(), true).build(),
-
                     new MemberColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().complex(), true).build(),
-
-                    new MemberColumnDescriptor.Builder(proto().building().marketing().name(), true).title(i18n.tr("Marketing Name")).build(),
-
+                    new MemberColumnDescriptor.Builder(proto().building().complex(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().propertyManager(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().name(), true).title(i18n.tr("Building")).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().type(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().shape(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetNumber(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetNumberSuffix(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetName(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetType(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetDirection(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().city(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().province(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().country(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().totalStoreys(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().residentialStoreys(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().structureType(), false).build(),
@@ -212,10 +199,16 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
                     new MemberColumnDescriptor.Builder(proto().building().info().waterSupply(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().centralAir(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().centralHeat(), false).build(),
-
-                    new MemberColumnDescriptor.Builder(proto().building().info().address(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().contacts().website(), false).build(),
-                    
+                    new MemberColumnDescriptor.Builder(proto().building().financial().dateAcquired(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().financial().purchasePrice(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().financial().marketPrice(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().financial().lastAppraisalDate(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().financial().lastAppraisalValue(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().financial().currency().name(), false).title(proto().building().financial().currency())
+                            .build(),
+                    new MemberColumnDescriptor.Builder(proto().building().marketing().name(), false).title(i18n.tr("Building Marketing Name")).build(),
+
                     // floorplan columns
                     new MemberColumnDescriptor.Builder(proto().name(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().marketingName(), true).build(),

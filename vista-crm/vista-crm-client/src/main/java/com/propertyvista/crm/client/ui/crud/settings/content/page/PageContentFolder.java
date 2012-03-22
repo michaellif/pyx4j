@@ -43,6 +43,7 @@ import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 
 class PageContentFolder extends VistaBoxFolder<PageContent> {
+
     private static final I18n i18n = I18n.get(PageContentFolder.class);
 
     private final CEntityEditor<PageDescriptor> parent;

@@ -27,7 +27,7 @@ public class LeadLister extends ListerBase<Lead> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().id(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().person(), true).sortable(!VistaTODO.entityAsStringQueryCriteria).build(),
+            new MemberColumnDescriptor.Builder(proto().guests(), true).sortable(!VistaTODO.entityAsStringQueryCriteria).build(),
             new MemberColumnDescriptor.Builder(proto().moveInDate(), true).build(),
             new MemberColumnDescriptor.Builder(proto().leaseTerm(), true).build(),
             new MemberColumnDescriptor.Builder(proto().floorplan(), true).build(),

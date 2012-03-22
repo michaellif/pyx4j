@@ -34,6 +34,7 @@ import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
+import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 
@@ -101,7 +102,11 @@ public class TenantsGenerator {
         item.createDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
         item.status().setValue(Lead.Status.active);
 
-        item.person().set(CommonsGenerator.createPerson());
+        for (int i = 0; i < 1 + RandomUtil.randomInt(2); ++i) {
+            Guest guest = EntityFactory.create(Guest.class);
+            guest.person().set(CommonsGenerator.createPerson());
+            item.guests().add(guest);
+        }
 
         item.moveInDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
         item.leaseTerm().setValue(RandomUtil.randomEnum(Lead.LeaseTerm.class));

@@ -30,6 +30,7 @@ import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.LeaseManager;
@@ -66,11 +67,6 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
         if (!lead.lease().isNull()) {
             callback.onFailure(new UserRuntimeException("The Lead is converted to Lease already!"));
         } else {
-            Tenant tenant = EntityFactory.create(Tenant.class);
-            tenant.type().setValue(Tenant.Type.person);
-            tenant.person().set(lead.person());
-            Persistence.service().persist(tenant);
-
             Date leaseEnd = null;
             switch (lead.leaseTerm().getValue()) {
             case months6:
@@ -91,10 +87,19 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             Lease lease = lm.create(RandomUtil.randomLetters(10), lead.leaseType().getValue(), null, lead.moveInDate().getValue(), new LogicalDate(leaseEnd));
             lease.version().expectedMoveIn().setValue(lead.moveInDate().getValue());
 
-            TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
-            tenantInLease.tenant().set(tenant);
-            tenantInLease.role().setValue(TenantInLease.Role.Applicant);
-            lease.version().tenants().add(tenantInLease);
+            boolean asApplicant = true;
+            for (Guest guest : lead.guests()) {
+                Tenant tenant = EntityFactory.create(Tenant.class);
+                tenant.type().setValue(Tenant.Type.person);
+                tenant.person().set(guest.person());
+                Persistence.service().persist(tenant);
+
+                TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
+                tenantInLease.tenant().set(tenant);
+                tenantInLease.role().setValue(asApplicant ? TenantInLease.Role.Applicant : TenantInLease.Role.CoApplicant);
+                lease.version().tenants().add(tenantInLease);
+                asApplicant = false;
+            }
 
             lm.save(lease);
 
