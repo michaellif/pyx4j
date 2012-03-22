@@ -16,13 +16,7 @@ package com.propertyvista.server.config;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 
-
 public class VistaServerSideConfigurationProdStarlight extends VistaServerSideConfigurationProd {
-
-    @Override
-    public String getApplicationURLDefault() {
-        return "http://prod01.birchwoodsoftwaregroup.com/";
-    }
 
     @Override
     public String getApplicationURLNamespace() {

@@ -15,7 +15,6 @@ package com.propertyvista.server.config;
 
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 public class VistaServerSideConfiguration11 extends VistaServerSideConfiguration {
 
@@ -40,28 +39,13 @@ public class VistaServerSideConfiguration11 extends VistaServerSideConfiguration
     }
 
     @Override
-    public String getApplicationURLDefault() {
-        return "http://www11.birchwoodsoftwaregroup.com/";
+    protected String getApplicationDeploymentProtocol() {
+        return "https";
     }
 
     @Override
     public String getApplicationURLNamespace() {
         return ".11.birchwoodsoftwaregroup.com/";
-    }
-
-    @Override
-    public String getMainApplicationURL() {
-        return "https://" + NamespaceManager.getNamespace() + getApplicationURLNamespace();
-    }
-
-    @Override
-    public String getDefaultBaseURLresidentPortal(boolean secure) {
-        String url = super.getDefaultBaseURLresidentPortal(secure);
-        if (secure) {
-            return url;
-        } else {
-            return url.replace("https://", "http://");
-        }
     }
 
     @Override

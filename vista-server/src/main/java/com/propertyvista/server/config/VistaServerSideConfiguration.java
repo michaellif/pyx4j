@@ -77,11 +77,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getMainApplicationURL() {
-        return "http://" + NamespaceManager.getNamespace() + getApplicationURLNamespace();
+        return getApplicationDeploymentProtocol() + "://" + NamespaceManager.getNamespace() + getApplicationURLNamespace();
     }
 
-    public String getApplicationURLDefault() {
-        return "http://www.birchwoodsoftwaregroup.com/";
+    protected String getApplicationDeploymentProtocol() {
+        return "http";
     }
 
     public String getApplicationURLNamespace() {
@@ -90,7 +90,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLresidentPortal(boolean secure) {
-        return getMainApplicationURL() + DeploymentConsts.PORTAL_URL;
+        String url = getMainApplicationURL() + DeploymentConsts.PORTAL_URL;
+        if (secure) {
+            return url;
+        } else {
+            return url.replace("https://", "http://");
+        }
     }
 
     @Override

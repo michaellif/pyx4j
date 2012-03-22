@@ -16,13 +16,7 @@ package com.propertyvista.server.config;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 
-
 public class VistaServerSideConfigurationST22 extends VistaServerSideConfiguration {
-
-    @Override
-    public String getApplicationURLDefault() {
-        return "http://st34289.pyx4j.com/";
-    }
 
     @Override
     public String getApplicationURLNamespace() {

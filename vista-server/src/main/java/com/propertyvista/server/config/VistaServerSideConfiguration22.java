@@ -16,7 +16,6 @@ package com.propertyvista.server.config;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 
-
 public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration {
 
     @Override
@@ -45,8 +44,8 @@ public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration
     }
 
     @Override
-    public String getApplicationURLDefault() {
-        return "http://www22.birchwoodsoftwaregroup.com/";
+    protected String getApplicationDeploymentProtocol() {
+        return "https";
     }
 
     @Override

@@ -59,11 +59,6 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
     }
 
     @Override
-    public String getApplicationURLDefault() {
-        return getConfigProperties().getValue("ApplicationURLDefault");
-    }
-
-    @Override
     public String getApplicationURLNamespace() {
         return getConfigProperties().getValue("ApplicationURLNamespace");
     }

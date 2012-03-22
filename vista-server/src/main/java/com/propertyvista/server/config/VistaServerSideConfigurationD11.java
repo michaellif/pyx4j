@@ -16,7 +16,6 @@ package com.propertyvista.server.config;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 
-
 public class VistaServerSideConfigurationD11 extends VistaServerSideConfigurationDemo {
 
     @Override
@@ -37,11 +36,6 @@ public class VistaServerSideConfigurationD11 extends VistaServerSideConfiguratio
                 return "vista11";
             }
         };
-    }
-
-    @Override
-    public String getApplicationURLDefault() {
-        return "http://www11.propertyvista.com/";
     }
 
     @Override
