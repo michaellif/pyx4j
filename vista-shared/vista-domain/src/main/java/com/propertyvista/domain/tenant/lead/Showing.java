@@ -47,9 +47,7 @@ public interface Showing extends IEntity {
 
         interested,
 
-        notInterested,
-
-        tookApplication;
+        notInterested
 
         @Override
         public String toString() {

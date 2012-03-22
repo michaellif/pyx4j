@@ -35,6 +35,8 @@ public interface LeadViewerView extends IViewerView<Lead> {
         void getInterestedUnits(AsyncCallback<List<AptUnit>> callback);
 
         void convertToLease(Key unitId);
+
+        void close();
     }
 
     IListerView<Appointment> getAppointmentsListerView();

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.tenant.lead;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Vector;
 
@@ -36,6 +37,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.LeaseManager;
@@ -129,11 +131,19 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
 
             // mark Lead as converted:
             lead.lease().set(lease);
-            Persistence.service().merge(lead);
+            Persistence.secureSave(lead);
 
             Persistence.service().commit();
             callback.onSuccess(lease);
         }
     }
 
+    @Override
+    public void close(AsyncCallback<Serializable> callback, Key leadId) {
+        Lead lead = Persistence.service().retrieve(dboClass, leadId);
+        lead.status().setValue(Status.closed);
+        Persistence.secureSave(lead);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
 }

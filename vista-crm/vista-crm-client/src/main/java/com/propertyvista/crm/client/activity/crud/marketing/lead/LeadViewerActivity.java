@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud.marketing.lead;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
@@ -107,5 +108,15 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
     public void onStop() {
         ((AbstractActivity) appointmentsLister).onStop();
         super.onStop();
+    }
+
+    @Override
+    public void close() {
+        ((LeadCrudService) service).close(new DefaultAsyncCallback<Serializable>() {
+            @Override
+            public void onSuccess(Serializable result) {
+                populate();
+            }
+        }, entityId);
     }
 }

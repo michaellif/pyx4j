@@ -89,8 +89,6 @@ public interface Lead extends IEntity {
 
         closed,
 
-        declined,
-
         rented; // corresponds to Lease.Status.Active 
 
         @Override

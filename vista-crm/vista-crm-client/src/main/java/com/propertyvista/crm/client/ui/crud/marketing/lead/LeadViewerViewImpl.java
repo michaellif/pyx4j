@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -32,20 +33,23 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements LeadViewerView {
 
     private static final I18n i18n = I18n.get(LeadViewerViewImpl.class);
 
-    private final Button btnconvert;
+    private final Button convertAction;
+
+    private final Button closeAction;
 
     private final IListerView<Appointment> appointmentLister;
 
     public LeadViewerViewImpl() {
         super(Marketing.Lead.class);
 
-        btnconvert = new Button(i18n.tr("Convert to Lease"), new ClickHandler() {
+        convertAction = new Button(i18n.tr("Convert to Lease"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 ((LeadViewerView.Presenter) presenter).getInterestedUnits(new DefaultAsyncCallback<List<AptUnit>>() {
@@ -74,8 +78,21 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
             }
         });
-        btnconvert.addStyleName(btnconvert.getStylePrimaryName() + CrmTheme.StyleSuffixEx.ActionButton);
-        addToolbarItem(btnconvert);
+        convertAction.addStyleName(convertAction.getStylePrimaryName() + CrmTheme.StyleSuffixEx.ActionButton);
+        addToolbarItem(convertAction);
+
+        closeAction = new Button(i18n.tr("Close Lead"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to close the Lead?"), new Command() {
+                    @Override
+                    public void execute() {
+                        ((LeadViewerView.Presenter) presenter).close();
+                    }
+                });
+            }
+        });
+        addToolbarItem(closeAction.asWidget());
 
         appointmentLister = new ListerInternalViewImplBase<Appointment>(new AppointmentLister());
 
@@ -85,14 +102,15 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
     @Override
     public void populate(Lead value) {
-        btnconvert.setVisible(value.lease().isNull());
+        convertAction.setVisible(value.status().getValue() != Status.closed && value.lease().isNull());
+        closeAction.setVisible(value.status().getValue() != Status.closed);
         super.populate(value);
     }
 
     @Override
     public void onLeaseConvertionSuccess(Lease result) {
         MessageDialog.info(i18n.tr("Information"), i18n.tr("Conversion is succeeded!"));
-        btnconvert.setVisible(false);
+        convertAction.setVisible(false);
     }
 
     @Override

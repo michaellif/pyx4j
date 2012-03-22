@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services.tenant.lead;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -32,4 +33,6 @@ public interface LeadCrudService extends AbstractCrudService<Lead> {
     void getInterestedUnits(AsyncCallback<Vector<AptUnit>> callback, Key leadId);
 
     void convertToLease(AsyncCallback<Lease> callback, Key leadId, Key unitId);
+
+    void close(AsyncCallback<Serializable> callback, Key leadId);
 }
