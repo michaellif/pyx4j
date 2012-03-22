@@ -74,9 +74,15 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
             @Override
             public void run() {
                 Persistence.service().startTransaction();
+                boolean ok = false;
                 try {
                     runImport(data, process, response);
+                    Persistence.service().commit();
+                    ok = true;
                 } finally {
+                    if (!ok) {
+                        Persistence.service().rollback();
+                    }
                     Persistence.service().endTransaction();
                 }
             }

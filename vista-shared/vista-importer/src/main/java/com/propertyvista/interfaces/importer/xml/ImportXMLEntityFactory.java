@@ -17,6 +17,11 @@ import com.pyx4j.essentials.server.xml.XMLEntityFactoryStrict;
 
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.property.PropertyPhone;
+import com.propertyvista.domain.property.asset.Boiler;
+import com.propertyvista.domain.property.asset.Elevator;
+import com.propertyvista.domain.property.asset.LockerArea;
+import com.propertyvista.domain.property.asset.Roof;
+import com.propertyvista.domain.property.vendor.WarrantyItem;
 import com.propertyvista.interfaces.importer.model.AddressIO;
 import com.propertyvista.interfaces.importer.model.AdvertisingBlurbIO;
 import com.propertyvista.interfaces.importer.model.AmenityIO;
@@ -52,5 +57,10 @@ public class ImportXMLEntityFactory extends XMLEntityFactoryStrict {
         // Taken from domain directly
         bind(Phone.class);
         bind(PropertyPhone.class);
+        bind(Elevator.class);
+        bind(Boiler.class);
+        bind(Roof.class);
+        bind(LockerArea.class);
+        bind(WarrantyItem.class);
     }
 }

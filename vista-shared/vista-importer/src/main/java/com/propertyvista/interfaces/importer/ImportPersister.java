@@ -28,6 +28,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
+import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -70,6 +71,17 @@ class ImportPersister {
 
         // Set defaults
         setBuildingDfaults(building);
+
+        if (!building.complex().isNull()) {
+            EntityQueryCriteria<Complex> criteria = EntityQueryCriteria.create(Complex.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().name(), building.complex().name()));
+            Complex complex = Persistence.service().retrieve(criteria);
+            if (complex != null) {
+                building.complex().set(complex);
+            } else {
+                Persistence.service().persist(building.complex());
+            }
+        }
 
         // Save Employee or find existing one
         for (OrganizationContact organisationContact : building.contacts().organizationContacts()) {
