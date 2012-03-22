@@ -312,19 +312,14 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
     public static void onSecurePage(Request request) {
         HttpServletRequest httpServletRequest = ((ServletWebRequest) request).getContainerRequest();
-        Url url = request.getUrl();
         // redirect if not secure
         String secureBaseUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true);
-        String secureUrl = secureBaseUrl + url.toString();
-        String requestUrl = ServletUtils.getActualRequestURL(httpServletRequest, true);
-        if (!requestUrl.equalsIgnoreCase(secureUrl)) {
+        String requestUrl = ServletUtils.getActualRequestURL(httpServletRequest, false);
+        if (!requestUrl.startsWith(secureBaseUrl)) {
+            String secureUrl = secureBaseUrl + request.getUrl().toString();
             log.info("secure redirect: " + secureUrl);
             throw new RedirectToUrlException(secureUrl);
         }
     }
 
-    public String getApplicationBaseURL(boolean secure) {
-        //TODO VladS use Pmc configuration
-        return ServerSideConfiguration.instance().getMainApplicationURL();
-    }
 }
