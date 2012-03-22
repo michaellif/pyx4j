@@ -32,10 +32,8 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
@@ -54,10 +52,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         sqlTypeKey = dialect.getTargetSqlType(Long.class);
         sqlTypeDiscriminator = dialect.getTargetSqlType(String.class);
 
-        for (Class<? extends IEntity> ec : ServerEntityFactory.getAllAssignableFrom(entityClass)) {
-            if (ec.getAnnotation(Transient.class) != null) {
-                continue;
-            }
+        for (Class<? extends IEntity> ec : Mappings.getPersistableAssignableFrom(entityClass)) {
             DiscriminatorValue discriminator = ec.getAnnotation(DiscriminatorValue.class);
             if (discriminator != null) {
                 if (CommonsStringUtils.isEmpty(discriminator.value())) {

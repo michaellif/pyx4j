@@ -24,8 +24,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -37,11 +40,13 @@ import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
@@ -100,6 +105,16 @@ public class Mappings {
         if (entityMeta.getAnnotation(EmbeddedEntity.class) != null) {
             throw new Error("Can't operate on Embedded Entity " + entityMeta.getEntityClass().getName());
         }
+    }
+
+    public static Collection<Class<? extends IEntity>> getPersistableAssignableFrom(Class<? extends IEntity> entityClass) {
+        List<Class<? extends IEntity>> allAssignableClasses = new ArrayList<Class<? extends IEntity>>();
+        for (Class<? extends IEntity> ec : ServerEntityFactory.getAllAssignableFrom(entityClass)) {
+            if ((ec.getAnnotation(Transient.class) == null) && (ec.getAnnotation(AbstractEntity.class) == null)) {
+                allAssignableClasses.add(ec);
+            }
+        }
+        return allAssignableClasses;
     }
 
     public TableModel ensureTable(Connection connection, Dialect dialect, EntityMeta entityMeta) {
@@ -179,16 +194,29 @@ public class Mappings {
                     Class<? extends IEntity> entityClass = (Class<IEntity>) member.getMemberMeta().getValueClass();
                     if (entityClass.getAnnotation(AbstractEntity.class) == null) {
                         this.getTableModel(connection, entityClass);
+                    } else {
+                        for (Class<? extends IEntity> persistableEntityClass : getPersistableAssignableFrom(entityClass)) {
+                            this.getTableModel(connection, persistableEntityClass);
+                        }
                     }
                 }
             }
             for (MemberCollectionOperationsMeta member : model.operationsMeta().getJoinTablesCollectionMembers()) {
-                this.getTableModel(connection, member.joinTableClass());
-            }
-            for (MemberExternalOperationsMeta member : model.operationsMeta().getExternalMembers()) {
-                // TODO create all Polymorphic variations
                 if (member.joinTableClass().getAnnotation(AbstractEntity.class) == null) {
                     this.getTableModel(connection, member.joinTableClass());
+                } else {
+                    for (Class<? extends IEntity> persistableEntityClass : getPersistableAssignableFrom(member.joinTableClass())) {
+                        this.getTableModel(connection, persistableEntityClass);
+                    }
+                }
+            }
+            for (MemberExternalOperationsMeta member : model.operationsMeta().getExternalMembers()) {
+                if (member.joinTableClass().getAnnotation(AbstractEntity.class) == null) {
+                    this.getTableModel(connection, member.joinTableClass());
+                } else {
+                    for (Class<? extends IEntity> persistableEntityClass : getPersistableAssignableFrom(member.joinTableClass())) {
+                        this.getTableModel(connection, persistableEntityClass);
+                    }
                 }
             }
 
@@ -199,6 +227,10 @@ public class Mappings {
                     Class<? extends IEntity> entityClass = (Class<IEntity>) member.getMemberMeta().getValueClass();
                     if (entityClass.getAnnotation(AbstractEntity.class) == null) {
                         this.getTableModel(connection, entityClass);
+                    } else {
+                        for (Class<? extends IEntity> persistableEntityClass : getPersistableAssignableFrom(entityClass)) {
+                            this.getTableModel(connection, persistableEntityClass);
+                        }
                     }
                 }
             }
