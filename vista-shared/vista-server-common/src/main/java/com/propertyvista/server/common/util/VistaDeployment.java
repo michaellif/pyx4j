@@ -19,9 +19,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.PmcDnsName;
 import com.propertyvista.domain.PmcDnsName.DnsNameTarget;
-import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.domain.admin.Pmc;
 
 public class VistaDeployment {
@@ -49,18 +49,24 @@ public class VistaDeployment {
         Pmc pmc = getCurrentPmc();
         for (PmcDnsName alias : pmc.dnsNameAliases()) {
             if (alias.target().getValue() == target) {
-                //TODO https
-                return "http://" + alias.dnsName().getValue();
+                if (secure && !alias.httpsEnabled().isBooleanTrue()) {
+                    // Fallback to default
+                    continue;
+                }
+                String protocol = "http://";
+                if (secure) {
+                    protocol = "https://";
+                }
+                return protocol + alias.dnsName().getValue();
             }
         }
-        String defaultUrlBase = ServerSideConfiguration.instance().getMainApplicationURL();
         switch (target) {
         case prospectPortal:
-            return defaultUrlBase + DeploymentConsts.PTAPP_URL;
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLprospectPortal();
         case residentPortal:
-            return defaultUrlBase + DeploymentConsts.PORTAL_URL;
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLresidentPortal(secure);
         case vistaCrm:
-            return defaultUrlBase + DeploymentConsts.CRM_URL;
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaCrm();
         default:
             throw new IllegalArgumentException();
         }
