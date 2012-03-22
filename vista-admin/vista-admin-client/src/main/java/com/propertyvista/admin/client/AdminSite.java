@@ -22,22 +22,17 @@ import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.ClientSecurityController;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
-import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.admin.client.ui.AdminPanel;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.domain.security.VistaBasicBehavior;
 
 public class AdminSite extends VistaSite {
 
     public AdminSite() {
-        super(AdminSiteMap.class);
+        super(AdminSiteMap.class, new AdminSiteAppPlaceDispatcher());
     }
 
     @Override
@@ -47,24 +42,10 @@ public class AdminSite extends VistaSite {
         DefaultErrorHandlerDialog.register();
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), new AdminSiteMap.Management());
-
         RootPanel.get().add(RootLayoutPanel.get());
-
         RootLayoutPanel.get().add(new AdminPanel());
-
         hideLoadingIndicator();
-
         SessionInactiveDialog.register();
-
-        AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
-
-            @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
-                init();
-            }
-
-        });
-
         obtainAuthenticationData();
     }
 
@@ -74,27 +55,13 @@ public class AdminSite extends VistaSite {
         //TODO getPlaceController().goTo(new AdminSiteMap.GenericMessage());
     }
 
-    private void init() {
-        if (ClientSecurityController.checkBehavior(VistaBasicBehavior.Admin)) {
-            if (AdminSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
-                AppSite.getPlaceController().goTo(new AdminSiteMap.Management());
-            } else {
-                AdminSite.getHistoryHandler().handleCurrentHistory();
-            }
-        } else if (ClientSecurityController.checkBehavior(VistaBasicBehavior.AdminPasswordChangeRequired)) {
-            AppSite.getPlaceController().goTo(new AdminSiteMap.PasswordReset());
-        } else {
-            AppSite.getPlaceController().goTo(new AdminSiteMap.Login());
-        }
-    }
-
     private void obtainAuthenticationData() {
         ClientContext.obtainAuthenticationData(((AdminAuthenticationService) GWT.create(AdminAuthenticationService.class)),
                 new DefaultAsyncCallback<Boolean>() {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        init();
+                        AdminSite.getHistoryHandler().handleCurrentHistory();
                     }
 
                     @Override
