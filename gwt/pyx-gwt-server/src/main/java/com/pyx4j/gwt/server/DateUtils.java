@@ -97,6 +97,14 @@ public class DateUtils extends TimeUtils {
         return c.getTime();
     }
 
+    public static Date monthAdd(Date date, int months) {
+        Calendar c = new GregorianCalendar();
+        c.setTime(date);
+        c.add(Calendar.MONTH, months);
+
+        return c.getTime();
+    }
+
     public static boolean isSameDay(Calendar d1, Calendar d2) {
         if (d1 == null || d2 == null) {
             return false;
