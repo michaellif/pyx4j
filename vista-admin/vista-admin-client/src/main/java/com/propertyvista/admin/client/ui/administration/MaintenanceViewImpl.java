@@ -13,17 +13,37 @@
  */
 package com.propertyvista.admin.client.ui.administration;
 
-import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
+
+import com.propertyvista.admin.client.activity.MaintenanceActivity;
 import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class MaintenanceViewImpl extends AdminEditorViewImplBase<SystemMaintenanceState> implements MaintenanceView {
+
+    private final static I18n i18n = I18n.get(MaintenanceViewImpl.class);
 
     public MaintenanceViewImpl() {
         super(AdminSiteMap.Administration.Maintenance.class, new MaintenanceEditorForm());
 
         // hide save button:
         btnSave.setVisible(false);
+
+        Toolbar footer = ((Toolbar) getFooter());
+
+        Button btnResetCache = new Button(i18n.tr("Reset Global Cache"), new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((MaintenanceActivity) getPresenter()).resetGlobalCache();
+            }
+        });
+        footer.addItem(btnResetCache);
     }
 }

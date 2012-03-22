@@ -17,11 +17,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 
+import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.rpc.AdminUserDTO;
 
-public class AdminUserEditorForm extends CrudEntityForm<AdminUserDTO> {
+public class AdminUserEditorForm extends AdminEntityForm<AdminUserDTO> {
 
     private final static I18n i18n = I18n.get(AdminUserEditorForm.class);
 
@@ -37,14 +37,14 @@ public class AdminUserEditorForm extends CrudEntityForm<AdminUserDTO> {
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().name()));
-        content.setWidget(++row, 0, inject(proto().email()));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
 
         content.setH1(++row, 0, 1, i18n.tr("Security"));
-        content.setWidget(++row, 0, inject(proto().password()));
-        content.setWidget(++row, 0, inject(proto().passwordConfirm()));
-        content.setWidget(++row, 0, inject(proto().enabled()));
-        content.setWidget(++row, 0, inject(proto().requireChangePasswordOnNextLogIn()));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().passwordConfirm())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn())).build());
 
         return content;
     }

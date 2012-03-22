@@ -15,11 +15,10 @@ package com.propertyvista.admin.client.viewfactories.crud;
 
 import java.util.HashMap;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.crud.IView;
+import com.google.gwt.user.client.ui.IsWidget;
 
 public abstract class ViewFactoryBase {
 
-    protected static HashMap<Class<? extends IView<? extends IEntity>>, IView<? extends IEntity>> map = new HashMap<Class<? extends IView<? extends IEntity>>, IView<? extends IEntity>>();
+    protected static HashMap<Class<?>, IsWidget> map = new HashMap<Class<?>, IsWidget>();
 
 }

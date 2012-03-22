@@ -27,12 +27,13 @@ import com.propertyvista.admin.client.activity.AlertActivity;
 import com.propertyvista.admin.client.activity.MaintenanceActivity;
 import com.propertyvista.admin.client.activity.MessageActivity;
 import com.propertyvista.admin.client.activity.SettingsActivity;
-import com.propertyvista.admin.client.activity.adminusers.AdminUserEditorActivity;
-import com.propertyvista.admin.client.activity.adminusers.AdminUserListerActivity;
-import com.propertyvista.admin.client.activity.adminusers.AdminUserViewerActivity;
+import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserEditorActivity;
+import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserListerActivity;
+import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
+import com.propertyvista.admin.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class MainActivityMapper implements AppActivityMapper {
@@ -88,6 +89,9 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new AlertActivity(place);
                 } else if (place instanceof AdminSiteMap.Message) {
                     activity = new MessageActivity(place);
+
+                } else if (place instanceof AdminSiteMap.PasswordChange) {
+                    activity = new PasswordChangeActivity(place);
                 }
 
                 callback.onSuccess(activity);

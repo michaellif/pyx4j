@@ -13,10 +13,16 @@
  */
 package com.propertyvista.admin.client.ui.crud.adminusers;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
 import com.propertyvista.admin.rpc.AdminUserDTO;
 
 public interface AdminUserViewerView extends IViewerView<AdminUserDTO> {
 
+    interface Presenter extends IViewerView.Presenter {
+
+        void goToChangePassword(Key userId, String userName);
+
+    }
 }

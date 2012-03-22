@@ -13,15 +13,39 @@
  */
 package com.propertyvista.admin.client.ui.crud.adminusers;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.AdminUserDTO;
 
 public class AdminUserViewerViewImpl extends AdminViewerViewImplBase<AdminUserDTO> implements AdminUserViewerView {
 
+    private final static I18n i18n = I18n.get(AdminUserViewerViewImpl.class);
+
+    private final Button passwordAction;
+
     public AdminUserViewerViewImpl() {
         super(AdminSiteMap.Administration.AdminUsers.class);
         setForm(new AdminUserEditorForm(true));
+
+        passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((AdminUserViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().getPrimaryKey(), getForm().getValue().name()
+                        .getStringView());
+            }
+        });
+        addToolbarItem(passwordAction.asWidget());
     }
 
+    @Override
+    public void populate(AdminUserDTO value) {
+        super.populate(value);
+        passwordAction.setVisible(presenter.canEdit());
+    }
 }

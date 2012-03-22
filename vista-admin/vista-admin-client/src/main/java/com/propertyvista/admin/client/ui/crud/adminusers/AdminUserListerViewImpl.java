@@ -30,7 +30,7 @@ public class AdminUserListerViewImpl extends AdminListerViewImplBase<AdminUserDT
     private static class AdminUserLister extends ListerBase<AdminUserDTO> {
 
         public AdminUserLister() {
-            super(AdminUserDTO.class, AdminSiteMap.Administration.AdminUsers.class, true, true);
+            super(AdminUserDTO.class, AdminSiteMap.Administration.AdminUsers.class, false, true);
             setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().name()).build(),
                     new MemberColumnDescriptor.Builder(proto().email()).build(),

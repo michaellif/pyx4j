@@ -28,7 +28,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.admin.client.activity.MaintenanceActivity;
 import com.propertyvista.admin.client.themes.AdminTheme;
 import com.propertyvista.admin.client.ui.components.AnchorButton;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
@@ -45,8 +44,6 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
 
     protected EditMode mode;
 
-    protected Button btnResetCache;
-
     public AdminEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(new AdminHeaderDecorator(), new Toolbar(), AdminTheme.defaultHeaderHeight);
 
@@ -55,15 +52,6 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
         ((AdminHeaderDecorator) getHeader()).setCaption(defaultCaption);
 
         Toolbar footer = ((Toolbar) getFooter());
-
-        btnResetCache = new Button(i18n.tr("Reset Global Cache"), new ClickHandler() {
-
-            @Override
-            public void onClick(ClickEvent event) {
-                ((MaintenanceActivity) getPresenter()).resetGlobalCache();
-            }
-        });
-        footer.addItem(btnResetCache);
 
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override

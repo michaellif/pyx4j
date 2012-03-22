@@ -11,22 +11,22 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.admin.client.activity.adminusers;
+package com.propertyvista.admin.client.activity.crud.adminusers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
-import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserListerView;
+import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.admin.rpc.AdminUserDTO;
 import com.propertyvista.admin.rpc.services.AdminUserCrudService;
 
-public class AdminUserListerActivity extends ListerActivityBase<AdminUserDTO> {
+public class AdminUserEditorActivity extends EditorActivityBase<AdminUserDTO> {
 
-    public AdminUserListerActivity(Place place) {
-        super(place, AdministrationVeiwFactory.instance(AdminUserListerView.class), GWT.<AdminUserCrudService> create(AdminUserCrudService.class),
+    public AdminUserEditorActivity(Place place) {
+        super(place, AdministrationVeiwFactory.instance(AdminUserEditorView.class), GWT.<AdminUserCrudService> create(AdminUserCrudService.class),
                 AdminUserDTO.class);
     }
 
