@@ -26,6 +26,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
@@ -38,6 +39,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.dto.BuildingDTO;
 
 public class UnitAvailabilityStatusReportCreator extends AbstractGadgetReportModelCreator<UnitAvailability> {
+
+    private final static I18n i18n = I18n.get(UnitAvailabilityStatusReportCreator.class);
 
     private static final SimpleDateFormat REPORT_FORMAT = new SimpleDateFormat("yyyy-MMM-dd");
 
@@ -67,8 +70,10 @@ public class UnitAvailabilityStatusReportCreator extends AbstractGadgetReportMod
 
                 HashMap<String, Object> parameters = new HashMap<String, Object>();
                 parameters.put("COLUMNS", columns);
-                parameters.put("AS_OF", REPORT_FORMAT.format(asOf));
-
+                parameters.put(
+                        "TITLE",
+                        i18n.tr("Unit Availability Status Report as of {0}, filtering: {1}", REPORT_FORMAT.format(asOf), metadata.defaultFilteringPreset()
+                                .getValue().toString()));
                 callback.onSuccess(new ConvertedGadgetMetadata(result.getData(), parameters));
             }
 
