@@ -103,7 +103,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
                 UserPreloader.createCrmUser(email, email, email, defaultRole);
             }
         }
-
+        Persistence.service().commit();
     }
 
     @Override

@@ -57,4 +57,7 @@ public interface PmcDnsName extends IEntity {
 
     @Length(150)
     IPrimitive<String> googleAPIKey();
+
+    @Length(15)
+    IPrimitive<String> googleAnalyticsId();
 }
