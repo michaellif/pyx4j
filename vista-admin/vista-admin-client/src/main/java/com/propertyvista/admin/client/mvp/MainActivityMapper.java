@@ -27,6 +27,9 @@ import com.propertyvista.admin.client.activity.AlertActivity;
 import com.propertyvista.admin.client.activity.MaintenanceActivity;
 import com.propertyvista.admin.client.activity.MessageActivity;
 import com.propertyvista.admin.client.activity.SettingsActivity;
+import com.propertyvista.admin.client.activity.adminusers.AdminUserEditorActivity;
+import com.propertyvista.admin.client.activity.adminusers.AdminUserListerActivity;
+import com.propertyvista.admin.client.activity.adminusers.AdminUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
@@ -60,6 +63,19 @@ public class MainActivityMapper implements AppActivityMapper {
                     // - Administration:
                 } else if (place instanceof AdminSiteMap.Administration.Maintenance) {
                     activity = new MaintenanceActivity(place);
+
+                } else if (place instanceof AdminSiteMap.Administration.AdminUsers) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new AdminUserEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new AdminUserViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new AdminUserListerActivity(place);
+                        break;
+                    }
 
                     // - Settings:
                 } else if (place instanceof AdminSiteMap.Settings) {

@@ -18,6 +18,12 @@ import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.admin.client.ui.administration.MaintenanceView;
 import com.propertyvista.admin.client.ui.administration.MaintenanceViewImpl;
+import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserEditorView;
+import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserEditorViewImpl;
+import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserListerView;
+import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserListerViewImpl;
+import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserViewerView;
+import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserViewerViewImpl;
 
 public class AdministrationVeiwFactory extends ViewFactoryBase {
 
@@ -25,6 +31,12 @@ public class AdministrationVeiwFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (MaintenanceView.class.equals(type)) {
                 map.put(type, new MaintenanceViewImpl());
+            } else if (AdminUserViewerView.class.equals(type)) {
+                map.put(type, new AdminUserViewerViewImpl());
+            } else if (AdminUserEditorView.class.equals(type)) {
+                map.put(type, new AdminUserEditorViewImpl());
+            } else if (AdminUserListerView.class.equals(type)) {
+                map.put(type, new AdminUserListerViewImpl());
             }
         }
 

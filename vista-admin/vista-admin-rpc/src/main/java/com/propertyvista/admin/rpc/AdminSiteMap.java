@@ -44,12 +44,23 @@ public class AdminSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Property Management Companies (PMCs)")
         public static class PMC extends CrudAppPlace {
         }
+
+        @PlaceProperties(caption = "Onboarding Users")
+        @NavigationItem(navigLabel = "Onboarding Users")
+        public static class OnboardingUsers extends CrudAppPlace {
+
+        }
     }
 
     public static class Administration extends AppPlace {
         @PlaceProperties(caption = "System Maintenance")
         @NavigationItem(navigLabel = "System Maintenance")
         public static class Maintenance extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Users")
+        @NavigationItem(navigLabel = "Users")
+        public static class AdminUsers extends CrudAppPlace {
         }
     }
 

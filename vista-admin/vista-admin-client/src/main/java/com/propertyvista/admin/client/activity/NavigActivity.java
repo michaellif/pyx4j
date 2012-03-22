@@ -33,7 +33,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
     private final NavigView view;
 
     public NavigActivity(Place place) {
-        view = (NavigView) AdminVeiwFactory.instance(NavigView.class);
+        view = AdminVeiwFactory.instance(NavigView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -75,6 +75,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         // Administration
         folder = new NavigFolder("System Administration");
         folder.addNavigItem(new AdminSiteMap.Administration.Maintenance());
+        folder.addNavigItem(new AdminSiteMap.Administration.AdminUsers());
         list.add(folder);
 
         return list;
