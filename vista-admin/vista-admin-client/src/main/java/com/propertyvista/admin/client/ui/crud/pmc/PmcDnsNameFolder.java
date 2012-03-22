@@ -33,6 +33,7 @@ public class PmcDnsNameFolder extends VistaTableFolder<PmcDnsName> {
         columns.add(new EntityFolderColumnDescriptor(proto().enabled(), "6em"));
         columns.add(new EntityFolderColumnDescriptor(proto().dnsName(), "25em"));
         columns.add(new EntityFolderColumnDescriptor(proto().target(), "13em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().httpsEnabled(), "6em"));
         columns.add(new EntityFolderColumnDescriptor(proto().googleAPIKey(), "16em"));
         return columns;
     }

@@ -53,6 +53,8 @@ public interface PmcDnsName extends IEntity {
     @NotNull
     IPrimitive<DnsNameTarget> target();
 
+    IPrimitive<Boolean> httpsEnabled();
+
     @Length(150)
     IPrimitive<String> googleAPIKey();
 }

@@ -38,6 +38,13 @@ public class VistaDeployment {
         }
     }
 
+    /**
+     * @param target
+     *            residentPortal. Crm or PtApp
+     * @param secure
+     *            only matters for residentPortal, for other types will be ignored
+     * @return
+     */
     public static String getBaseApplicationURL(DnsNameTarget target, boolean secure) {
         Pmc pmc = getCurrentPmc();
         for (PmcDnsName alias : pmc.dnsNameAliases()) {
