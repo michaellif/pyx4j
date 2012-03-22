@@ -28,6 +28,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -285,6 +286,14 @@ public class LeaseManager {
             Persistence.secureSave(lease);
 
             turnoverAnalysisManager.propagateLeaseActivationToTurnoverReport(lease);
+
+            // update Lead state (if present)
+            EntityQueryCriteria<Lead> criteria = new EntityQueryCriteria<Lead>(Lead.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseId));
+            Lead lead = Persistence.secureRetrieve(criteria);
+            if (lead != null) {
+                lead.status().setValue(Lead.Status.rented);
+            }
         } else {
             throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
         }

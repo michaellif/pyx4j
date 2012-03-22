@@ -103,6 +103,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         if (isEditable()) {
             boolean isLeaseSigned = !getValue().approvalDate().isNull();
 
+            get(proto().leaseID()).setViewable(!getValue().leaseID().isNull());
+
             get(proto().leaseFrom()).setViewable(isLeaseSigned);
             get(proto().leaseTo()).setViewable(isLeaseSigned);
 

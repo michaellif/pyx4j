@@ -113,6 +113,8 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
 
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().agent()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
 
         row = -1;
         if (isEditable()) {
@@ -156,6 +158,9 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
+        get(proto().status()).setViewable(true);
+        get(proto().createDate()).setViewable(true);
+
         return new CrmScrollPanel(main);
     }
 
@@ -170,7 +175,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
 
         public FloorplanSelectorDialogDialog() {
             super(Floorplan.class, false, new ArrayList<Floorplan>(1), i18n.tr("Building/Floorplan Selection"));
-            setWidth("700px");
+            setWidth("600px");
         }
 
         @Override
@@ -209,7 +214,6 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
                     new MemberColumnDescriptor.Builder(proto().building().info().centralHeat(), false).build(),
 
                     new MemberColumnDescriptor.Builder(proto().building().info().address(), false).build(),
-
                     new MemberColumnDescriptor.Builder(proto().building().contacts().website(), false).build(),
                     
                     // floorplan columns

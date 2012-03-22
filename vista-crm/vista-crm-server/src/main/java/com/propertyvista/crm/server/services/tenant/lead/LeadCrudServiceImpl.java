@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.server.services.tenant.lead;
 
+import java.util.Date;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.tenant.lead.LeadCrudService;
@@ -68,8 +72,24 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             tenant.person().set(lead.person());
             Persistence.service().persist(tenant);
 
+            Date leaseEnd = null;
+            switch (lead.leaseTerm().getValue()) {
+            case months6:
+                leaseEnd = DateUtils.monthAdd(lead.moveInDate().getValue(), 6 + 1);
+                break;
+            case months12:
+                leaseEnd = DateUtils.monthAdd(lead.moveInDate().getValue(), 12 + 1);
+                break;
+            case months18:
+                leaseEnd = DateUtils.monthAdd(lead.moveInDate().getValue(), 18 + 1);
+                break;
+            case other:
+                leaseEnd = DateUtils.monthAdd(lead.moveInDate().getValue(), 12 + 1);
+                break;
+            }
+
             LeaseManager lm = new LeaseManager();
-            Lease lease = lm.create(RandomUtil.randomLetters(10), Service.Type.residentialUnit, null, lead.moveInDate().getValue(), null);
+            Lease lease = lm.create(RandomUtil.randomLetters(10), Service.Type.residentialUnit, null, lead.moveInDate().getValue(), new LogicalDate(leaseEnd));
             lease.version().expectedMoveIn().setValue(lead.moveInDate().getValue());
 
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);

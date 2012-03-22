@@ -28,6 +28,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.tenant.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Lead.Status;
 
 public class LeadEditorActivity extends EditorActivityBase<Lead> implements LeadEditorView.Presenter {
 
@@ -61,6 +62,7 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
     protected void createNewEntity(AsyncCallback<Lead> callback) {
         Lead entity = EntityFactory.create(entityClass);
         entity.createDate().setValue(new LogicalDate());
+        entity.status().setValue(Status.active);
         callback.onSuccess(entity);
     }
 }
