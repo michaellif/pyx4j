@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.domain.admin.Pmc;
 
 public class VistaNamespaceResolver implements NamespaceResolver {
@@ -44,6 +45,10 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
     @Override
     public String getNamespace(HttpServletRequest httprequest) {
+        if (httprequest.getServletPath() != null && httprequest.getServletPath().startsWith("/" + DeploymentConsts.ADMIN_URL)) {
+            return Pmc.adminNamespace;
+        }
+
         // Dev: Get the 4th part of URL.
         // www.ABC.22.birchwoodsoftwaregroup.com
         // www.ABC.dev.birchwoodsoftwaregroup.com 
