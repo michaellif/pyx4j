@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
 
+import com.propertyvista.admin.server.services.AdminAuthenticationServiceImpl;
 import com.propertyvista.crm.server.services.pub.CrmAuthenticationServiceImpl;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
@@ -33,8 +34,7 @@ public class VistaAclRevalidator implements AclRevalidator {
         if (currentBehaviours.contains(VistaBasicBehavior.CRM) || currentBehaviours.contains(VistaBasicBehavior.CRMPasswordChangeRequired)) {
             authenticationServices = new CrmAuthenticationServiceImpl();
         } else if (currentBehaviours.contains(VistaBasicBehavior.Admin) || currentBehaviours.contains(VistaBasicBehavior.AdminPasswordChangeRequired)) {
-            //TODO
-            return currentBehaviours;
+            authenticationServices = new AdminAuthenticationServiceImpl();
         } else if (currentBehaviours.contains(VistaBasicBehavior.ProspectiveApp)
                 || currentBehaviours.contains(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired)) {
             authenticationServices = new PtAuthenticationServiceImpl();
