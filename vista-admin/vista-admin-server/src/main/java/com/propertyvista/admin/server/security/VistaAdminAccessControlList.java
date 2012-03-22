@@ -14,7 +14,9 @@
 package com.propertyvista.admin.server.security;
 
 import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
+import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
@@ -28,6 +30,8 @@ import com.propertyvista.admin.rpc.services.PmcDataReportService;
 import com.propertyvista.admin.rpc.services.VistaAdminService;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.server.domain.admin.Pmc;
+import com.propertyvista.server.domain.security.AdminUserCredential;
+import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
 
@@ -36,6 +40,7 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.AdminPasswordChangeRequired, new IServiceExecutePermission(AdminPasswordResetService.class));
 
         grant(VistaBasicBehavior.Admin, new EntityPermission(Pmc.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.Admin, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
 
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(VistaAdminService.class));
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PmcCrudService.class));
@@ -45,5 +50,8 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(AdminUserCrudService.class));
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(OnboardingUserCrudService.class));
+
+        grant(VistaBasicBehavior.Admin, new EntityPermission(AdminUserCredential.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.Admin, new EntityPermission(OnboardingUserCredential.class, EntityPermission.ALL));
     }
 }

@@ -16,6 +16,8 @@ package com.propertyvista.crm.server.security;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.security.InstanceAccess;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
+import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
@@ -109,6 +111,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
             grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.ALL));
             grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.READ));
         }
+        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
+        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(EntityServices.Query.class));
+        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(ReportServices.class, "*"));
 
         grant(new IServiceExecutePermission(CrmAuthenticationService.class));
         grant(VistaBasicBehavior.CRMPasswordChangeRequired, new IServiceExecutePermission(CrmPasswordResetService.class));

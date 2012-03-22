@@ -17,8 +17,6 @@ import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.essentials.rpc.admin.AdminServices;
 import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
-import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.log4gwt.rpc.LogServices;
 import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
@@ -28,10 +26,7 @@ import com.pyx4j.security.shared.CoreBehavior;
 
 import com.propertyvista.admin.server.security.VistaAdminAccessControlList;
 import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class VistaAccessControlList extends ServletContainerAclBuilder {
 
@@ -57,15 +52,7 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         merge(new VistaCrmAccessControlList());
         merge(new VistaAdminAccessControlList());
 
-        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(EntityServices.Query.class));
-        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(ReportServices.class, "*"));
-
-        grant(VistaBasicBehavior.Admin, VistaBasicBehavior.CRM);
-        grant(VistaBasicBehavior.Admin, new EntityPermission(CrmUser.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.Admin, new EntityPermission(CrmUserCredential.class, EntityPermission.ALL));
-
         grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(DatastoreAdminServices.class, "*"));
-        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
         grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(AdminServices.class, "*"));
 
         freeze();
