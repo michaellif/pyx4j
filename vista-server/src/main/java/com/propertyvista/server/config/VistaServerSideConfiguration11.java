@@ -51,7 +51,7 @@ public class VistaServerSideConfiguration11 extends VistaServerSideConfiguration
 
     @Override
     public String getMainApplicationURL() {
-        return "http://" + NamespaceManager.getNamespace() + getApplicationURLNamespace();
+        return "https://" + NamespaceManager.getNamespace() + getApplicationURLNamespace();
     }
 
     @Override
