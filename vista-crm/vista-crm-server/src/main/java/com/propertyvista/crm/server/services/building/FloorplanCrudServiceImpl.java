@@ -17,7 +17,6 @@ import java.util.List;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -38,9 +37,7 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
 
         if (!fromList) {
             Persistence.service().retrieveMember(in.amenities());
-            dto.amenities().setAttachLevel(AttachLevel.Attached);
-            dto.amenities().clear();
-            dto.amenities().addAll(in.amenities());
+            dto.amenities().set(in.amenities());
             Persistence.service().retrieve(dto.media());
         }
     }

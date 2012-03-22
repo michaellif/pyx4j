@@ -85,12 +85,12 @@ public interface TenantInLease extends IBoundToApplication {
     @Detached
     Application application();
 
-    @ToString(index = 2)
     @NotNull
+    @ToString(index = 2)
     IPrimitive<PersonRelationship> relationship();
 
-    @ToString(index = 1)
     @NotNull
+    @ToString(index = 1)
     @MemberColumn(name = "status")
     IPrimitive<Role> role();
 

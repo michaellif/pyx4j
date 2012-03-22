@@ -212,8 +212,8 @@ public interface Lease extends IVersionedEntity<LeaseV> {
         @Format("MM/dd/yyyy")
         IPrimitive<LogicalDate> moveOutNotice();
 
-        @Detached
         @Owned
+        @Detached
         @OrderBy(TenantInLease.OrderInLeaseId.class)
         IList<TenantInLease> tenants();
 

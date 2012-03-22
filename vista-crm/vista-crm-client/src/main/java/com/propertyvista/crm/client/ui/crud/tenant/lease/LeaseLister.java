@@ -39,9 +39,10 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().version().expectedMoveOut(), false).build(),
             new Builder(proto().version().actualMoveIn(), false).build(),
             new Builder(proto().version().actualMoveOut(), false).build(),
-            new Builder(proto().version().moveOutNotice()).build(),
-            new Builder(proto().approvalDate()).build(),
-            new Builder(proto().createDate()).build()
+            new Builder(proto().version().moveOutNotice(), false).build(),
+            new Builder(proto().approvalDate(), false).build(),
+            new Builder(proto().createDate(), false).build(),
+            new Builder(proto().version().tenants()).build()
         );//@formatter:on
     }
 

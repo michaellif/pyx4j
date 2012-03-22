@@ -21,6 +21,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -62,6 +63,7 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         Persistence.service().retrieve(dto.unit().belongsTo());
 
         // load detached entities:
+        Persistence.service().retrieve(dto.version().tenants());
         Persistence.service().retrieve(dto.application());
 //        Persistence.service().retrieve(dto.documents());
         if (!dto.unit().isNull()) {
@@ -69,9 +71,6 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
             dto.selectedBuilding().set(dto.unit().belongsTo());
             syncBuildingProductCatalog(dto.selectedBuilding());
         }
-
-        // update Tenants double links:
-        Persistence.service().retrieve(dto.version().tenants());
 
         // calculate price adjustments:
         PriceCalculationHelpers.calculateChargeItemAdjustments(dto.version().leaseProducts().serviceItem());
@@ -81,15 +80,24 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
     }
 
     @Override
-    protected void enhanceListRetrieved(Lease entity, LeaseDTO dto) {
+    protected void enhanceListRetrieved(Lease in, LeaseDTO dto) {
         Persistence.service().retrieve(dto.unit());
         Persistence.service().retrieve(dto.unit().belongsTo());
 
+        Persistence.service().retrieveMember(in.version().tenants());
+        dto.version().tenants().setAttachLevel(AttachLevel.Attached);
+        dto.version().tenants().clear();
+        dto.version().tenants().addAll(in.version().tenants());
+
         // TODO this should be part of EntityQueryCriteria.finalizedOrDraft
-        if (entity.version().isNull()) {
-            Lease draft = Persistence.service().retrieve(entityClass, entity.getPrimaryKey().asDraftKey());
+        if (in.version().isNull()) {
+            Lease draft = Persistence.service().retrieve(entityClass, in.getPrimaryKey().asDraftKey());
             dto.version().set(draft.version());
         }
+
+        // place here versioned detached item retrieve: 
+        Persistence.service().retrieve(dto.version().tenants());
+
     }
 
     @Override
