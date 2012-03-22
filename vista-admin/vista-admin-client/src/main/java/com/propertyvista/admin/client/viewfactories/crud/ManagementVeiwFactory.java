@@ -16,6 +16,12 @@ package com.propertyvista.admin.client.viewfactories.crud;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
+import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserEditorView;
+import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserEditorViewImpl;
+import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserListerView;
+import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserListerViewImpl;
+import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserViewerView;
+import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserViewerViewImpl;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcEditorView;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcEditorViewImpl;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcListerView;
@@ -33,6 +39,13 @@ public class ManagementVeiwFactory extends ViewFactoryBase {
                 map.put(type, new PmcViewerViewImpl());
             } else if (PmcEditorView.class.equals(type)) {
                 map.put(type, new PmcEditorViewImpl());
+
+            } else if (OnboardingUserViewerView.class.equals(type)) {
+                map.put(type, new OnboardingUserViewerViewImpl());
+            } else if (OnboardingUserEditorView.class.equals(type)) {
+                map.put(type, new OnboardingUserEditorViewImpl());
+            } else if (OnboardingUserListerView.class.equals(type)) {
+                map.put(type, new OnboardingUserListerViewImpl());
             }
         }
 

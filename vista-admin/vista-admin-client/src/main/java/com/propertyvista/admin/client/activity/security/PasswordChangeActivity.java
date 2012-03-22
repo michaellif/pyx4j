@@ -79,7 +79,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
         case ADMIN:
             service = GWT.<AdminPasswordChangeUserService> create(AdminPasswordChangeUserService.class);
             break;
-        case PMC:
+        case ONBOARDING_PMC:
             break;
         }
         if (service == null) {
