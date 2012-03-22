@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.onboarding.CreateOnboardingUserRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
@@ -43,6 +44,7 @@ public class CreateOnboardingUserRequestHandler extends AbstractRequestHandler<C
         credential.user().set(user);
         credential.credential().setValue(PasswordEncryptor.encryptPassword(request.password().getValue()));
         credential.enabled().setValue(Boolean.TRUE);
+        credential.behavior().setValue(VistaOnboardingBehavior.ProspectiveClient);
         credential.onboardingAccountId().set(request.onboardingAccountId());
 
         Persistence.service().persist(credential);

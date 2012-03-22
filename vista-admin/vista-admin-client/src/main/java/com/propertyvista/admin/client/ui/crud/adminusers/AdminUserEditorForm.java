@@ -37,6 +37,7 @@ public class AdminUserEditorForm extends AdminEntityForm<AdminUserDTO> {
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
+        content.setH1(++row, 0, 1, i18n.tr("General"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
 
