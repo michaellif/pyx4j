@@ -13,7 +13,6 @@
  */
 package com.propertyvista.server.domain.security;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
@@ -30,7 +29,6 @@ import com.propertyvista.domain.security.VistaOnboardingBehavior;
 public interface OnboardingUserCredential extends AbstractUserCredential<OnboardingUser> {
 
     @Override
-    @Detached
     @MemberColumn(name = "usr")
     @ReadOnly
     OnboardingUser user();
