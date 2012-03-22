@@ -27,7 +27,6 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.tenant.lead.LeadCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -89,7 +88,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             }
 
             LeaseManager lm = new LeaseManager();
-            Lease lease = lm.create(RandomUtil.randomLetters(10), Service.Type.residentialUnit, null, lead.moveInDate().getValue(), new LogicalDate(leaseEnd));
+            Lease lease = lm.create(RandomUtil.randomLetters(10), lead.leaseType().getValue(), null, lead.moveInDate().getValue(), new LogicalDate(leaseEnd));
             lease.version().expectedMoveIn().setValue(lead.moveInDate().getValue());
 
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);

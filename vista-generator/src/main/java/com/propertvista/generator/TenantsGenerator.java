@@ -27,6 +27,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -104,6 +105,7 @@ public class TenantsGenerator {
 
         item.moveInDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
         item.leaseTerm().setValue(RandomUtil.randomEnum(Lead.LeaseTerm.class));
+        item.leaseType().setValue(RandomUtil.randomEnum(Service.Type.class));
 
         item.comments().setValue(CommonsGenerator.lipsum());
         item.refSource().setValue(RandomUtil.randomEnum(Lead.RefSource.class));

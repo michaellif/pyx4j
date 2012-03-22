@@ -34,6 +34,7 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -91,7 +92,7 @@ public interface Lead extends IEntity {
 
         declined,
 
-        rented;
+        rented; // corresponds to Lease.Status.Active 
 
         @Override
         public String toString() {
@@ -103,12 +104,19 @@ public interface Lead extends IEntity {
     @EmbeddedEntity
     Person person();
 
+    @NotNull
+    @ToString(index = 1)
     @Caption(name = "Move-in date")
     IPrimitive<LogicalDate> moveInDate();
 
-    @ToString(index = 1)
+    @NotNull
+    @ToString(index = 2)
     @Caption(name = "Lease Length")
     IPrimitive<LeaseTerm> leaseTerm();
+
+    @NotNull
+    @ToString(index = 3)
+    IPrimitive<Service.Type> leaseType();
 
     @Transient
     // calculated from selected unit below!
@@ -121,6 +129,7 @@ public interface Lead extends IEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> comments();
 
+    @NotNull
     @Caption(name = "How did you hear about us")
     IPrimitive<RefSource> refSource();
 
@@ -142,6 +151,7 @@ public interface Lead extends IEntity {
     @NotNull
     IPrimitive<Status> status();
 
+    @NotNull
     Employee agent();
 
     @Detached

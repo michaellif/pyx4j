@@ -117,6 +117,10 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
 
         row = -1;
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().moveInDate()), 9).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().leaseTerm()), 9).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().leaseType()), 18).build());
+
         if (isEditable()) {
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().building(), new CEntityLabel()), 20).build());
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().floorplan(), new CEntityLabel()), 20).build());
@@ -144,10 +148,6 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
         }
 
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().leaseTerm()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().moveInDate()), 9).build());
-
-        main.setBR(++row, 1, 1);
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentDate1()), 9).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentTime1()), 9).build());
 
