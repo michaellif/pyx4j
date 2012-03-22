@@ -60,7 +60,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 10).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 20).build());
             } else {
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Guest")).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Person")).build());
                 get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
                 get(proto().person().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
                 main.setBR(++row, 0, 1);

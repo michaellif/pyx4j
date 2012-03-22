@@ -100,7 +100,6 @@ public interface Lead extends IEntity {
     }
 
     @Owned
-    @ToString(index = 0)
     IList<Guest> guests();
 
     @NotNull

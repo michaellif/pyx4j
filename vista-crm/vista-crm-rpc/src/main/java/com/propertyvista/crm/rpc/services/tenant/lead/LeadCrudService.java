@@ -13,18 +13,23 @@
  */
 package com.propertyvista.crm.rpc.services.tenant.lead;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeadCrudService extends AbstractCrudService<Lead> {
 
-    public void setSelectedFloorplan(AsyncCallback<Floorplan> callback, Key id);
+    void setSelectedFloorplan(AsyncCallback<Floorplan> callback, Key floorplanId);
 
-    void convertToLease(AsyncCallback<Lease> callback, Key entityId);
+    void getInterestedUnits(AsyncCallback<Vector<AptUnit>> callback, Key leadId);
+
+    void convertToLease(AsyncCallback<Lease> callback, Key leadId, Key unitId);
 }

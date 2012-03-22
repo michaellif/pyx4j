@@ -13,9 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
+import java.util.List;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -24,9 +30,11 @@ public interface LeadViewerView extends IViewerView<Lead> {
 
     interface Presenter extends IViewerView.Presenter {
 
-        IListerView.Presenter getAppointmentsPresenter();
+        IListerView.Presenter<Appointment> getAppointmentsPresenter();
 
-        void convertToLease();
+        void getInterestedUnits(AsyncCallback<List<AptUnit>> callback);
+
+        void convertToLease(Key unitId);
     }
 
     IListerView<Appointment> getAppointmentsListerView();

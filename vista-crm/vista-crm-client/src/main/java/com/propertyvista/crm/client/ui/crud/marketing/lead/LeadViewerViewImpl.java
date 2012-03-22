@@ -13,18 +13,23 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -43,7 +48,30 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
         btnconvert = new Button(i18n.tr("Convert to Lease"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeadViewerView.Presenter) presenter).convertToLease();
+                ((LeadViewerView.Presenter) presenter).getInterestedUnits(new DefaultAsyncCallback<List<AptUnit>>() {
+                    @Override
+                    public void onSuccess(List<AptUnit> result) {
+                        int i = result.size();
+                        new SelectDialog<AptUnit>(i18n.tr("Select Unit To Lease"), false, result) {
+                            @Override
+                            public boolean onClickOk() {
+                                ((LeadViewerView.Presenter) presenter).convertToLease(getSelectedItems().get(0).getPrimaryKey());
+                                return true;
+                            }
+
+                            @Override
+                            public String defineWidth() {
+                                return "200px";
+                            }
+
+                            @Override
+                            public String defineHeight() {
+                                return "100px";
+                            }
+                        }.show();
+                    }
+                });
+
             }
         });
         btnconvert.addStyleName(btnconvert.getStylePrimaryName() + CrmTheme.StyleSuffixEx.ActionButton);
@@ -57,7 +85,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
     @Override
     public void populate(Lead value) {
-        btnconvert.setVisible(value.lease().isEmpty());
+        btnconvert.setVisible(value.lease().isNull());
         super.populate(value);
     }
 
