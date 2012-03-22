@@ -62,7 +62,8 @@ public class ResponseMessage {
     //@formatter:off
     @XmlElementWrapper
     @XmlElements({ 
-        @XmlElement(name = "response", type = Response.class)
+        @XmlElement(name = "response", type = Response.class),
+        @XmlElement(name = "onboardingUserAuthenticationResponse", type = OnboardingUserAuthenticationResponse.class)
         })
     //@formatter:on    
     public List<Response> responses;

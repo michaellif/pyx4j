@@ -7,24 +7,47 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-22
+ * Created on Mar 22, 2012
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.onboarding.example.model;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 
-@XmlSeeAlso({ CheckAvailabilityRequest.class, CreatePMCRequest.class })
-public abstract class Request {
+import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
+
+/**
+ * 
+ * @see OnboardingUserAuthenticationResponseIO
+ * 
+ */
+public class OnboardingUserAuthenticationResponse extends Response {
+
+    public enum AuthenticationStatusCode {
+
+        OK,
+
+        OK_PasswordChangeRequired,
+
+        PermissionDenied,
+
+        AuthenticationFailed,
+
+        PasswordChangeRequired,
+
+        ChallengeVerificationRequired;
+
+    }
 
     /**
-     * Optional unique identifier for Requests debug
+     * Status of the processing of complete request.
      */
-    @XmlElement
-    public String requestId;
-
     @XmlElement(required = true)
+    @NotNull
+    public AuthenticationStatusCode status;
+
+    @XmlElement
     public String onboardingAccountId;
 }

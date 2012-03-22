@@ -13,18 +13,25 @@
  */
 package com.propertyvista.onboarding.example.model;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 
-@XmlSeeAlso({ CheckAvailabilityRequest.class, CreatePMCRequest.class })
-public abstract class Request {
+import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 
-    /**
-     * Optional unique identifier for Requests debug
-     */
+/**
+ * @see OnboardingUserAuthenticationRequestIO
+ */
+public class OnboardingUserAuthenticationRequest extends Request {
+
+    @NotNull
     @XmlElement
-    public String requestId;
+    public String email;
 
-    @XmlElement(required = true)
+    @NotNull
+    @XmlElement
+    public String password;
+
+    @XmlTransient
     public String onboardingAccountId;
 }

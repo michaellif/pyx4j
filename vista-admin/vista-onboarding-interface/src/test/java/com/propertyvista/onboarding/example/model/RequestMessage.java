@@ -49,6 +49,8 @@ public class RequestMessage {
     //@formatter:off
     @XmlElementWrapper
     @XmlElements({ 
+        @XmlElement(name = "onboardingUserAuthenticationRequest", type = OnboardingUserAuthenticationRequest.class),
+        @XmlElement(name = "createOnboardingUserRequest", type = CreateOnboardingUserRequest.class),
         @XmlElement(name = "checkAvailabilityRequest", type = CheckAvailabilityRequest.class), 
         @XmlElement(name = "createPMCRequest", type = CreatePMCRequest.class) })
     //@formatter:on    

@@ -16,6 +16,8 @@ package com.propertyvista.onboarding.example.model;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
@@ -23,8 +25,19 @@ import javax.xml.bind.annotation.XmlElements;
 public class CreatePMCRequest extends Request {
 
     @NotNull
-    @XmlElement
+    @XmlElement(required = true)
     public String name;
+
+    /**
+     * May contain up to 63 characters. The characters allowed in a label are a subset of the ASCII character set, and includes the characters a through z, A
+     * through Z, digits 0 through 9, and
+     * the hyphen.
+     */
+    @XmlElement(required = true, name = "pmcId")
+    // name="" is  hack for jaxb  fields ending with Id
+    @Size(max = 64)
+    @Pattern(regexp = "[A-Za-z0-9]+")
+    public String pmcid;
 
     @XmlElementWrapper
     @XmlElements({ @XmlElement(name = "item") })

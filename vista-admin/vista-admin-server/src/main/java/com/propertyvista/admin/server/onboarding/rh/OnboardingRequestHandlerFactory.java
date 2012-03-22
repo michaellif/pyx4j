@@ -7,24 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-22
+ * Created on Mar 22, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding.example.model;
+package com.propertyvista.admin.server.onboarding.rh;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import com.propertyvista.admin.server.onboarding.rhf.RequestHandlerFactory;
 
-@XmlSeeAlso({ CheckAvailabilityRequest.class, CreatePMCRequest.class })
-public abstract class Request {
+public class OnboardingRequestHandlerFactory extends RequestHandlerFactory {
 
-    /**
-     * Optional unique identifier for Requests debug
-     */
-    @XmlElement
-    public String requestId;
+    @Override
+    protected void bind() {
+        bind(CreateOnboardingUserRequestHandler.class);
+        bind(OnboardingUserAuthenticationRequestHandler.class);
+    }
 
-    @XmlElement(required = true)
-    public String onboardingAccountId;
 }

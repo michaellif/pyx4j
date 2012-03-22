@@ -18,19 +18,17 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-/**
- * Expects current password and new password for user.
- */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CrmUserPasswordChangeRequestIO extends RequestIO {
+public interface CreateOnboardingUserRequestIO extends RequestIO {
+
+    @NotNull
+    IPrimitive<String> name();
 
     @NotNull
     IPrimitive<String> email();
 
     @NotNull
-    IPrimitive<String> currentPassword();
+    IPrimitive<String> password();
 
-    @NotNull
-    IPrimitive<String> newPassword();
 }

@@ -15,6 +15,8 @@ package com.propertyvista.onboarding;
 
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.pyx4j.commons.Pair;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -41,4 +43,10 @@ public interface OnboardingUserAuthenticationRequestIO extends RequestIO {
     @Override
     @XmlTransient
     IPrimitive<String> onboardingAccountId();
+
+    /**
+     * Text from image for human verification.
+     */
+    @Caption(name = "Enter the code")
+    IPrimitive<Pair<String, String>> captcha();
 }

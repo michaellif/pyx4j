@@ -19,6 +19,9 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.admin.server.onboarding.rh.OnboardingRequestHandlerFactory;
+import com.propertyvista.admin.server.onboarding.rhf.RequestHandler;
+import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 import com.propertyvista.onboarding.RequestIO;
 import com.propertyvista.onboarding.RequestMessageIO;
 import com.propertyvista.onboarding.ResponseIO;
@@ -29,12 +32,11 @@ class OnboardingProcessor {
     private final static Logger log = LoggerFactory.getLogger(OnboardingProcessor.class);
 
     OnboardingProcessor() {
-
     }
 
     public boolean isValid(RequestMessageIO message) {
         for (RequestIO request : message.requests()) {
-            if (request.onboardingAccountId().isNull()) {
+            if ((!(request instanceof OnboardingUserAuthenticationRequestIO)) && request.onboardingAccountId().isNull()) {
                 return false;
             }
         }
@@ -42,13 +44,22 @@ class OnboardingProcessor {
     }
 
     private ResponseIO execute(RequestIO request) {
-        ResponseIO response = EntityFactory.create(ResponseIO.class);
-        if (!request.requestId().isNull()) {
-            response.requestId().set(request.requestId());
+        RequestHandler<RequestIO> requestHandler = new OnboardingRequestHandlerFactory().createRequestHandler(request);
+        if (requestHandler != null) {
+            ResponseIO response = requestHandler.execute(request);
+            if (!request.requestId().isNull()) {
+                response.requestId().set(request.requestId());
+            }
+            return response;
+        } else {
+            ResponseIO response = EntityFactory.create(ResponseIO.class);
+            if (!request.requestId().isNull()) {
+                response.requestId().set(request.requestId());
+            }
+            response.success().setValue(Boolean.FALSE);
+            response.errorMessage().setValue("Not implemented");
+            return response;
         }
-        response.success().setValue(Boolean.FALSE);
-        response.errorMessage().setValue("Not implemented");
-        return response;
     }
 
     public ResponseMessageIO execute(RequestMessageIO message) {

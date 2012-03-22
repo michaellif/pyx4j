@@ -16,37 +16,21 @@ package com.propertyvista.onboarding;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 
 /**
- * Notifies and provides the detailed data about newly registered PMC.
- * 
- * Create user that can modify and activate this PMC
+ * Expects current password and new password for user.
  */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CreatePMCRequestIO extends RequestIO {
-
-    /**
-     * Company name
-     */
-    @NotNull
-    IPrimitive<String> name();
-
-    /**
-     * May contain up to 63 characters. The characters allowed in a label are a subset of the ASCII character set, and includes the characters a through z, A
-     * through Z, digits 0 through 9, and
-     * the hyphen.
-     */
-    @NotNull
-    IPrimitive<String> dnsName();
-
-    IPrimitiveSet<String> dnsNameAliases();
+public interface OnboardingUserPasswordChangeRequestIO extends RequestIO {
 
     @NotNull
-    IPrimitive<String> adminUserEmail();
+    IPrimitive<String> email();
 
     @NotNull
-    IPrimitive<String> adminUserpassword();
+    IPrimitive<String> currentPassword();
+
+    @NotNull
+    IPrimitive<String> newPassword();
 }

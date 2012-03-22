@@ -7,24 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-22
+ * Created on Mar 2, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding.example.model;
+package com.propertyvista.onboarding;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-@XmlSeeAlso({ CheckAvailabilityRequest.class, CreatePMCRequest.class })
-public abstract class Request {
+/**
+ * Request E-mail to be sent to customer with 'token' for PasswordReset.
+ */
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface OnboardingUserPasswordReminderRequestIO extends RequestIO {
 
-    /**
-     * Optional unique identifier for Requests debug
-     */
-    @XmlElement
-    public String requestId;
+    @NotNull
+    IPrimitive<String> email();
 
-    @XmlElement(required = true)
-    public String onboardingAccountId;
 }

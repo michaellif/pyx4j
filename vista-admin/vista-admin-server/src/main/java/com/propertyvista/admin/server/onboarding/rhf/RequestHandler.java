@@ -7,25 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 2, 2012
+ * Created on Mar 22, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding;
+package com.propertyvista.admin.server.onboarding.rhf;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
+import com.propertyvista.onboarding.RequestIO;
+import com.propertyvista.onboarding.ResponseIO;
 
-/**
- * Request E-mail to be sent to customer with 'token' for PasswordReset.
- */
-@Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CrmUserPasswordReminderRequestIO extends RequestIO {
+public interface RequestHandler<E extends RequestIO> {
 
-    @NotNull
-    IPrimitive<String> email();
+    ResponseIO execute(E request);
 
+    Class<E> getRequestClass();
 }

@@ -26,6 +26,8 @@ public interface OnboardingUserAuthenticationResponseIO extends ResponseIO {
 
         OK,
 
+        OK_PasswordChangeRequired,
+
         PermissionDenied,
 
         AuthenticationFailed,
