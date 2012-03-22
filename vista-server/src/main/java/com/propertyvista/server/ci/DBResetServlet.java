@@ -132,9 +132,10 @@ public class DBResetServlet extends HttpServlet {
                         buf.append("Invalid requests type=").append(tp).append("\n");
                     }
                 }
+                final String requestNamespace = NamespaceManager.getNamespace();
                 if ((req.getParameter("help") != null) || (type == null)) {
                     contentType = "text/html";
-                    buf.append("Current PMC is '").append(NamespaceManager.getNamespace()).append("'<br/>");
+                    buf.append("Current PMC is '").append(requestNamespace).append("'<br/>");
                     buf.append("Usage:<br/><table>");
                     for (ResetType t : EnumSet.allOf(ResetType.class)) {
                         buf.append("<tr><td><a href=\"");
@@ -162,7 +163,12 @@ public class DBResetServlet extends HttpServlet {
                                 SchedulerHelper.dbReset();
                                 SchedulerHelper.init();
                                 CacheService.resetAll();
-                                new VistaAminDataPreloaders().preloadAll();
+                                NamespaceManager.setNamespace(Pmc.adminNamespace);
+                                try {
+                                    new VistaAminDataPreloaders().preloadAll();
+                                } finally {
+                                    NamespaceManager.setNamespace(requestNamespace);
+                                }
                             }
 
                             switch (type) {
