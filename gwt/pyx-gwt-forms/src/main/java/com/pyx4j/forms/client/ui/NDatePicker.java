@@ -55,6 +55,7 @@ public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<
                 datePickerDropDown = new DatePickerDropDownPanel(NDatePicker.this);
                 datePickerDropDown.addFocusHandler(getGroupFocusHandler());
                 datePickerDropDown.addBlurHandler(getGroupFocusHandler());
+                datePickerDropDown.showDatePicker();
             }
         } else if (datePickerDropDown.isShowing()) {
             datePickerDropDown.hideDatePicker();
