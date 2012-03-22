@@ -60,6 +60,9 @@ public class OnboardingUserAuthenticationRun {
         {
             authRequest.email = createRequest.email;
             authRequest.password = createRequest.password;
+//            authRequest.captcha = new Captcha();
+//            authRequest.captcha.challenge = "123";
+//            authRequest.captcha.response = "rr";
 
             RequestMessage rm = new RequestMessage();
             rm.interfaceEntity = "rossul";

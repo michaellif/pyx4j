@@ -50,4 +50,9 @@ public class OnboardingUserAuthenticationResponse extends Response {
 
     @XmlElement
     public String onboardingAccountId;
+
+    /**
+     * Returned when status == ChallengeVerificationRequired
+     */
+    public String reCaptchaPublicKey;
 }

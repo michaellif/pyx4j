@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 2, 2012
+ * Created on Mar 22, 2012
  * @author vlads
  * @version $Id$
  */
@@ -15,37 +15,23 @@ package com.propertyvista.onboarding;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+/**
+ * Use reCaptchaPublicKey from OnboardingUserAuthenticationResponseIO
+ */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface OnboardingUserAuthenticationResponseIO extends ResponseIO {
+public interface CaptchaIO extends IEntity {
 
-    public enum AuthenticationStatusCode {
-
-        OK,
-
-        OK_PasswordChangeRequired,
-
-        PermissionDenied,
-
-        AuthenticationFailed,
-
-        ChallengeVerificationRequired;
-
-    }
+    @NotNull
+    IPrimitive<String> challenge();
 
     /**
-     * Status of the processing of complete request.
+     * Text from image for human verification.
      */
     @NotNull
-    IPrimitive<AuthenticationStatusCode> status();
-
-    IPrimitive<String> onboardingAccountId();
-
-    /**
-     * Returned when status == ChallengeVerificationRequired
-     */
-    IPrimitive<String> reCaptchaPublicKey();
+    IPrimitive<String> response();
 }

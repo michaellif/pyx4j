@@ -18,11 +18,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Pair;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
@@ -48,7 +51,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
         response.success().setValue(Boolean.TRUE);
 
         String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
-        AbstractAntiBot.assertLogin(email, request.captcha().getValue());
+        AbstractAntiBot.assertLogin(email, new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response().getValue()));
 
         EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -57,6 +60,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
             if (AbstractAntiBot.authenticationFailed(email)) {
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
+                response.reCaptchaPublicKey().setValue(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
                 return response;
             } else {
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
@@ -77,6 +81,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             log.info("Invalid password for user {}", email);
             if (AbstractAntiBot.authenticationFailed(email)) {
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
+                response.reCaptchaPublicKey().setValue(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
                 return response;
             } else {
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);

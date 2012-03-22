@@ -15,26 +15,23 @@ package com.propertyvista.onboarding.example.model;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 
 /**
- * @see OnboardingUserAuthenticationRequestIO
+ * @see http://www.google.com/recaptcha
+ * 
+ *      Use reCaptchaPublicKey from OnboardingUserAuthenticationResponse
  */
-public class OnboardingUserAuthenticationRequest extends Request {
+public class Captcha {
 
+    @XmlElement
     @NotNull
-    @XmlElement
-    public String email;
+    public String challenge;
 
+    /**
+     * Text from image for human verification.
+     */
+    @XmlElement
     @NotNull
-    @XmlElement
-    public String password;
+    public String response;
 
-    @XmlElement
-    public Captcha captcha;
-
-    @XmlTransient
-    public String onboardingAccountId;
 }
