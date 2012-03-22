@@ -35,7 +35,7 @@ import com.propertyvista.domain.PmcDnsName;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface Pmc extends IEntity {
 
-    public static final String adminNamespace = "-vista\u0010-";
+    public static final String adminNamespace = "-vista-admin\u0010-";
 
     @NotNull
     IPrimitive<String> name();

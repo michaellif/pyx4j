@@ -7,20 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-03-14
+ * Created on Mar 22, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.rpc;
+package com.propertyvista.admin.rpc.services;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.security.rpc.AbstractPasswordResetService;
 
-import com.propertyvista.domain.security.AdminUser;
-import com.propertyvista.domain.security.UserCredentialEditDTO;
-
-@Transient
-@Caption(name = "User")
-public interface AdminUserDTO extends AdminUser, UserCredentialEditDTO {
+public interface AdminPasswordResetService extends AbstractPasswordResetService {
 
 }

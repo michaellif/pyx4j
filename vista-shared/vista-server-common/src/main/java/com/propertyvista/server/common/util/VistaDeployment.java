@@ -22,6 +22,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.PmcDnsName;
 import com.propertyvista.domain.PmcDnsName.DnsNameTarget;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.server.domain.admin.Pmc;
 
 public class VistaDeployment {
@@ -45,7 +46,23 @@ public class VistaDeployment {
      *            only matters for residentPortal, for other types will be ignored
      * @return
      */
-    public static String getBaseApplicationURL(DnsNameTarget target, boolean secure) {
+    public static String getBaseApplicationURL(VistaBasicBehavior application, boolean secure) {
+        DnsNameTarget target;
+        switch (application) {
+        case Admin:
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaAdmin();
+        case CRM:
+            target = DnsNameTarget.vistaCrm;
+            break;
+        case ProspectiveApp:
+            target = DnsNameTarget.prospectPortal;
+            break;
+        case TenantPortal:
+            target = DnsNameTarget.residentPortal;
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
         Pmc pmc = getCurrentPmc();
         for (PmcDnsName alias : pmc.dnsNameAliases()) {
             if (alias.target().getValue() == target) {

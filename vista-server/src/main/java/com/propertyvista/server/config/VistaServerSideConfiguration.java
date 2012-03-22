@@ -109,6 +109,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public String getDefaultBaseURLvistaAdmin() {
+        return getMainApplicationURL() + DeploymentConsts.ADMIN_URL;
+    }
+
+    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista Support\" <nobody@birchwoodsoftwaregroup.com>";
     }

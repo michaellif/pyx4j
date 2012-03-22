@@ -18,7 +18,11 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
+import com.propertyvista.admin.rpc.services.AdminPasswordChangeUserService;
+import com.propertyvista.admin.rpc.services.AdminPasswordResetService;
+import com.propertyvista.admin.rpc.services.AdminUserCrudService;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
+import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.rpc.services.PmcDataReportService;
 import com.propertyvista.admin.rpc.services.VistaAdminService;
@@ -29,6 +33,7 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
 
     public VistaAdminAccessControlList() {
         grant(new IServiceExecutePermission(AdminAuthenticationService.class));
+        grant(VistaBasicBehavior.AdminPasswordChangeRequired, new IServiceExecutePermission(AdminPasswordResetService.class));
 
         grant(VistaBasicBehavior.Admin, new EntityPermission(Pmc.class, EntityPermission.ALL));
 
@@ -36,5 +41,9 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PmcCrudService.class));
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(ImportUploadService.class));
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PmcDataReportService.class));
+
+        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
+        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(AdminUserCrudService.class));
+        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(OnboardingUserCrudService.class));
     }
 }

@@ -25,4 +25,6 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract String getDefaultBaseURLprospectPortal();
 
+    public abstract String getDefaultBaseURLvistaAdmin();
+
 }

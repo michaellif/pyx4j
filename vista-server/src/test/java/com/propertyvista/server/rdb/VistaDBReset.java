@@ -26,6 +26,7 @@ import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.config.VistaNamespaceResolver;
@@ -71,6 +72,9 @@ public class VistaDBReset {
             pmc.name().setValue("Vista Demo");
             pmc.dnsName().setValue(VistaNamespaceResolver.demoNamespace);
             Persistence.service().persist(pmc);
+
+            new VistaAminDataPreloaders().preloadAll();
+
             Persistence.service().commit();
 
             log.info("Preload time: " + TimeUtils.secSince(start));

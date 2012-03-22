@@ -49,6 +49,7 @@ import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -161,6 +162,7 @@ public class DBResetServlet extends HttpServlet {
                                 SchedulerHelper.dbReset();
                                 SchedulerHelper.init();
                                 CacheService.resetAll();
+                                new VistaAminDataPreloaders().preloadAll();
                             }
 
                             switch (type) {
