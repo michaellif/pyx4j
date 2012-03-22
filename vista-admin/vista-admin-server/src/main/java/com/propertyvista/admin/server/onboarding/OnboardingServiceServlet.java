@@ -35,10 +35,12 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
 import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 import com.propertyvista.onboarding.RequestMessageIO;
 import com.propertyvista.onboarding.ResponseMessageIO;
+import com.propertyvista.server.domain.admin.Pmc;
 
 @SuppressWarnings("serial")
 public class OnboardingServiceServlet extends HttpServlet {
@@ -81,6 +83,7 @@ public class OnboardingServiceServlet extends HttpServlet {
             IOUtils.closeQuietly(is);
         }
 
+        NamespaceManager.setNamespace(Pmc.adminNamespace);
         OnboardingProcessor pp;
         try {
             pp = new OnboardingProcessor();
