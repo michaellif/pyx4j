@@ -315,7 +315,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         // redirect if not secure
         String secureBaseUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true);
         String requestUrl = ServletUtils.getActualRequestURL(httpServletRequest, false);
-        log.debug("requet: {} configured: {}", requestUrl, secureBaseUrl);
+        log.debug("request: {}; configured: {}", requestUrl, secureBaseUrl);
         if (!requestUrl.startsWith(secureBaseUrl)) {
             String secureUrl = secureBaseUrl + request.getUrl().toString();
             log.info("secure redirect {}", secureUrl);
