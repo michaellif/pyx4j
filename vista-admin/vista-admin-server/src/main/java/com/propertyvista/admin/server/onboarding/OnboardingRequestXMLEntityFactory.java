@@ -21,7 +21,7 @@ import com.propertyvista.onboarding.AccountInfoIO;
 import com.propertyvista.onboarding.ActivatePMCRequestIO;
 import com.propertyvista.onboarding.CheckAvailabilityRequestIO;
 import com.propertyvista.onboarding.CreatePMCRequestIO;
-import com.propertyvista.onboarding.CrmUserAuthenticationRequestIO;
+import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 import com.propertyvista.onboarding.CrmUserPasswordChangeRequestIO;
 import com.propertyvista.onboarding.CrmUserPasswordReminderRequestIO;
 import com.propertyvista.onboarding.GetAccountInfoRequestIO;
@@ -44,7 +44,7 @@ public class OnboardingRequestXMLEntityFactory extends XMLEntityFactoryStrict {
         bind(AddressIO.class);
         bind(CheckAvailabilityRequestIO.class);
         bind(CreatePMCRequestIO.class);
-        bind(CrmUserAuthenticationRequestIO.class);
+        bind(OnboardingUserAuthenticationRequestIO.class);
         bind(CrmUserPasswordChangeRequestIO.class);
         bind(CrmUserPasswordReminderRequestIO.class);
         bind(GetAccountInfoRequestIO.class);

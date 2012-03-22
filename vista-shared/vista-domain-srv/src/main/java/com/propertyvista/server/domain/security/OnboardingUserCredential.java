@@ -36,4 +36,6 @@ public interface OnboardingUserCredential extends AbstractUserCredential<Onboard
     OnboardingUser user();
 
     IPrimitive<VistaOnboardingBehavior> behavior();
+
+    IPrimitive<String> onboardingAccountId();
 }

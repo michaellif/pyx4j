@@ -20,7 +20,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CrmUserAuthenticationResponseIO extends ResponseIO {
+public interface OnboardingUserAuthenticationResponseIO extends ResponseIO {
 
     public enum AuthenticationStatusCode {
 
@@ -40,8 +40,5 @@ public interface CrmUserAuthenticationResponseIO extends ResponseIO {
     @NotNull
     IPrimitive<AuthenticationStatusCode> status();
 
-    /**
-     * May be used for password change
-     */
-    IPrimitive<String> sessionToken();
+    IPrimitive<String> onboardingAccountId();
 }

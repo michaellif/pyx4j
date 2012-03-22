@@ -13,25 +13,23 @@
  */
 package com.propertyvista.admin.server.preloader;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.security.AdminUserCredential;
+import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
-class AminUsersPreloader extends AbstractDataPreloader {
+class OnboardingUserPreloader extends AbstractDataPreloader {
 
-    public static AdminUser createAdminUser(String name, String email) {
-        AdminUser user = EntityFactory.create(AdminUser.class);
+    public static OnboardingUser createOnboardingUser(String name, String email) {
+        OnboardingUser user = EntityFactory.create(OnboardingUser.class);
         user.name().setValue(name);
         user.email().setValue(email);
         Persistence.service().persist(user);
 
-        AdminUserCredential credential = EntityFactory.create(AdminUserCredential.class);
+        OnboardingUserCredential credential = EntityFactory.create(OnboardingUserCredential.class);
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
@@ -45,20 +43,8 @@ class AminUsersPreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {
-
-        int cnt = 0;
-        if (ApplicationMode.isDevelopment()) {
-            for (int i = 1; i <= DemoData.UserType.ADMIN.getDefaultMax(); i++) {
-                String email = DemoData.UserType.ADMIN.getEmail(i);
-                createAdminUser(email, email);
-                cnt++;
-            }
-        }
-        cnt += 2;
-        createAdminUser("VladS", "vlads@propertyvista.com");
-        createAdminUser("VictorV", "vvassiliev@propertyvista.com");
-
-        return "Created " + cnt + " Admin Users";
+        createOnboardingUser("Roman Spakovych", "romans@rossul.com");
+        return "Created " + 1 + " OnboardingUser";
     }
 
     @Override

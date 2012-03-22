@@ -69,7 +69,7 @@ public class OnboardingExample {
         {
             cnt++;
             CheckAvailabilityRequestIO r = EntityFactory.create(CheckAvailabilityRequestIO.class);
-            r.pmcId().setValue("star");
+            r.onboardingAccountId().setValue("star");
             RequestMessageIO rm = createExampleRequest(r);
             writeXML(rm, cnt + "-request-Check.xml");
             writeXML(createExampleResponse(), cnt + "-response-Check.xml");
@@ -78,7 +78,7 @@ public class OnboardingExample {
         {
             cnt++;
             UpdateAccountInfoRequestIO r = EntityFactory.create(UpdateAccountInfoRequestIO.class);
-            r.pmcId().setValue("star");
+            r.onboardingAccountId().setValue("star");
             createAccountInfoIO(r.accountInfo());
 
             writeXML(createExampleRequest(r), cnt + "-request-UpdateAccountInfo.xml");
@@ -91,7 +91,7 @@ public class OnboardingExample {
         {
             cnt++;
             CreatePMCRequestIO r = EntityFactory.create(CreatePMCRequestIO.class);
-            r.pmcId().setValue("star");
+            r.onboardingAccountId().setValue("star");
             r.name().setValue("Star Starlight");
             r.dnsNameAliases().add("www.rentstarlight.com");
             r.dnsNameAliases().add("www.rentstarlight.ca");
@@ -104,7 +104,7 @@ public class OnboardingExample {
         {
             cnt++;
             ActivatePMCRequestIO r = EntityFactory.create(ActivatePMCRequestIO.class);
-            r.pmcId().setValue("star");
+            r.onboardingAccountId().setValue("star");
             r.country().setValue("Canada");
             r.license().setValue(VistaLicense.Unlimited);
             r.feature().setValue(VistaFeature.tbd1);
@@ -115,7 +115,7 @@ public class OnboardingExample {
         {
             cnt++;
             GetAccountInfoRequestIO r = EntityFactory.create(GetAccountInfoRequestIO.class);
-            r.pmcId().setValue("star");
+            r.onboardingAccountId().setValue("star");
             writeXML(createExampleRequest(r), cnt + "-request-GetAccountInfo.xml");
             AccountInfoResponseIO rs = EntityFactory.create(AccountInfoResponseIO.class);
             createAccountInfoIO(rs.accountInfo());
@@ -126,7 +126,7 @@ public class OnboardingExample {
         {
             cnt++;
             GetUsageRequestIO r = EntityFactory.create(GetUsageRequestIO.class);
-            r.pmcId().setValue("star");
+            r.onboardingAccountId().setValue("star");
             r.format().setValue(UsageReportFormatType.Short);
             r.from().setValue(DateUtils.detectDateformat("2011-01-01"));
             r.to().setValue(DateUtils.detectDateformat("2011-02-01"));
@@ -148,7 +148,7 @@ public class OnboardingExample {
         {
             cnt++;
             PaymentRequestIO pr = EntityFactory.create(PaymentRequestIO.class);
-            pr.pmcId().setValue("star");
+            pr.onboardingAccountId().setValue("star");
             pr.amount().setValue(new BigDecimal("25.00"));
             CreditCardPaymentInstrumentIO cc = EntityFactory.create(CreditCardPaymentInstrumentIO.class);
             pr.paymentInstrument().set(cc);

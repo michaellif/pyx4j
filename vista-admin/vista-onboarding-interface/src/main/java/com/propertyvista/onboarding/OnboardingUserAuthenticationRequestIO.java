@@ -13,6 +13,8 @@
  */
 package com.propertyvista.onboarding;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -21,15 +23,22 @@ import com.pyx4j.i18n.annotations.I18n;
 /**
  * Login using CRM user credentials
  * 
- * @see CrmUserAuthenticationResponseIO
+ * @see OnboardingUserAuthenticationResponseIO
  */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CrmUserAuthenticationRequestIO extends RequestIO {
+public interface OnboardingUserAuthenticationRequestIO extends RequestIO {
 
     @NotNull
     IPrimitive<String> email();
 
     @NotNull
     IPrimitive<String> password();
+
+    /**
+     * Do not send Id it will be returned in OnboardingUserAuthenticationResponseIO
+     */
+    @Override
+    @XmlTransient
+    IPrimitive<String> onboardingAccountId();
 }

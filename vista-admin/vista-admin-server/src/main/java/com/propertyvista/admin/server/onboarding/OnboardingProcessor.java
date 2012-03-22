@@ -34,7 +34,7 @@ class OnboardingProcessor {
 
     public boolean isValid(RequestMessageIO message) {
         for (RequestIO request : message.requests()) {
-            if (request.pmcId().isNull()) {
+            if (request.onboardingAccountId().isNull()) {
                 return false;
             }
         }

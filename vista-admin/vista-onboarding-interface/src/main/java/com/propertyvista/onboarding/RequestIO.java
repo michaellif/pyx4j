@@ -36,5 +36,5 @@ public interface RequestIO extends IEntity {
      * the hyphen.
      */
     @NotNull
-    IPrimitive<String> pmcId();
+    IPrimitive<String> onboardingAccountId();
 }

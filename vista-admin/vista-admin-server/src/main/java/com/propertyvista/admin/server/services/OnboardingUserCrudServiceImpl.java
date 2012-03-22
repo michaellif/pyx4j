@@ -30,6 +30,8 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
         bind(dtoProto.created(), dboProto.user().created());
         bind(dtoProto.updated(), dboProto.user().updated());
 
+        bind(dtoProto.role(), dboProto.behavior());
+        bind(dtoProto.onboardingAccountId(), dboProto.onboardingAccountId());
         bind(dtoProto.enabled(), dboProto.enabled());
         bind(dtoProto.updated(), dboProto.updated());
         bind(dtoProto.requireChangePasswordOnNextLogIn(), dboProto.requiredPasswordChangeOnNextLogIn());
