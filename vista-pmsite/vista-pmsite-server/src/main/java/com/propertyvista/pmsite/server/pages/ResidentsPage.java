@@ -21,6 +21,7 @@ import templates.TemplateResources;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.GwtInclude;
@@ -34,6 +35,9 @@ public class ResidentsPage extends BasePage {
 
     public ResidentsPage() {
         super();
+
+        // redirect if not secure
+        PMSiteApplication.onSecurePage(getRequest());
 
         add(new GwtInclude("gwtInclude"));
     }

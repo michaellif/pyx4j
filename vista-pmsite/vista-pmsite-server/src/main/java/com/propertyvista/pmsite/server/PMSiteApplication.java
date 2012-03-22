@@ -39,6 +39,7 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.handler.PageProvider;
 import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.http.WebRequest;
@@ -48,11 +49,15 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.time.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.security.rpc.AuthenticationService;
 
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
@@ -66,8 +71,11 @@ import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.SignInPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
+import com.propertyvista.server.common.util.VistaDeployment;
 
 public class PMSiteApplication extends AuthenticatedWebApplication {
+
+    private static final Logger log = LoggerFactory.getLogger(PMSiteApplication.class);
 
     private Exception internalError;
 
@@ -299,6 +307,19 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         } else {
             // redirect to home page
             throw new RestartResponseException(getHomePage());
+        }
+    }
+
+    public static void onSecurePage(Request request) {
+        HttpServletRequest httpServletRequest = ((ServletWebRequest) request).getContainerRequest();
+        Url url = request.getUrl();
+        // redirect if not secure
+        String secureBaseUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true);
+        String secureUrl = secureBaseUrl + url.toString();
+        String requestUrl = ServletUtils.getActualRequestURL(httpServletRequest, true);
+        if (!requestUrl.equalsIgnoreCase(secureUrl)) {
+            log.info("secure redirect: " + secureUrl);
+            throw new RedirectToUrlException(secureUrl);
         }
     }
 
