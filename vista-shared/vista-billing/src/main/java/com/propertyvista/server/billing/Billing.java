@@ -45,26 +45,29 @@ class Billing {
 
     private final PaymentProcessor paymentProcessor;
 
-    private final ChargeProcessor chargeProcessor;
-
     private final ChargeAdjustmentProcessor chargeAdjustmentProcessor;
 
     private final LeaseAdjustmentProcessor leaseAdjustmentProcessor;
 
     private final BillEntryAdjustmentProcessor billEntryAdjustmentProcessor;
 
+    private final _ProductChargeProcessor productChargeProcessor;
+
     private Billing(Bill bill) {
         this.nextPeriodBill = bill;
         if (!bill.previousBill().isNull()) {
             this.currentPeriodBill = bill.previousBill();
-            Persistence.service().retrieve(currentPeriodBill.charges());
+            Persistence.service().retrieve(currentPeriodBill.lineItems());
         }
         if (currentPeriodBill != null && !currentPeriodBill.previousBill().isNull()) {
             this.previousPeriodBill = currentPeriodBill.previousBill();
-            Persistence.service().retrieve(previousPeriodBill.charges());
+            Persistence.service().retrieve(previousPeriodBill.lineItems());
         }
+
+        productChargeProcessor = new _ProductChargeProcessor(this);
+
         paymentProcessor = new PaymentProcessor(this);
-        chargeProcessor = new ChargeProcessor(this);
+
         chargeAdjustmentProcessor = new ChargeAdjustmentProcessor(this);
         leaseAdjustmentProcessor = new LeaseAdjustmentProcessor(this);
         billEntryAdjustmentProcessor = new BillEntryAdjustmentProcessor(this);
@@ -86,8 +89,10 @@ class Billing {
 
         getPreviousTotals();
 
+        productChargeProcessor.createCharges();
+
         paymentProcessor.createPayments();
-        chargeProcessor.createCharges();
+        //       chargeProcessor.createCharges();
         chargeAdjustmentProcessor.createChargeAdjustments();
         leaseAdjustmentProcessor.createLeaseAdjustments();
 
@@ -132,10 +137,6 @@ class Billing {
 
     public PaymentProcessor getPaymentProcessor() {
         return paymentProcessor;
-    }
-
-    public ChargeProcessor getChargeProcessor() {
-        return chargeProcessor;
     }
 
     public ChargeAdjustmentProcessor getChargeAdjustmentProcessor() {

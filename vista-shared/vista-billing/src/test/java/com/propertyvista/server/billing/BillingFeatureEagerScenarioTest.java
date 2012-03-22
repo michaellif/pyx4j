@@ -59,7 +59,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
-        numOfCharges(4).
+        numOfProductCharges(4).
         numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
         serviceCharge("270.09").
@@ -82,7 +82,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
-        numOfCharges(5).
+        numOfProductCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
@@ -106,7 +106,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
-        numOfCharges(7).
+        numOfProductCharges(7).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
@@ -130,7 +130,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
-        numOfCharges(5).
+        numOfProductCharges(5).
         numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
@@ -152,7 +152,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
-        numOfCharges(5).
+        numOfProductCharges(5).
         numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
         serviceCharge("930.30").
@@ -174,7 +174,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Aug-2011").
         billingPeriodEndDate("03-Aug-2011").
-        numOfCharges(5).
+        numOfProductCharges(5).
         numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
         serviceCharge("90.03").

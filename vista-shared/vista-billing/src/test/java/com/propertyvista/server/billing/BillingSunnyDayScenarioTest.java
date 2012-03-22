@@ -58,7 +58,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
-        numOfCharges(4).
+        numOfProductCharges(4).
         numOfChargeAdjustments(3).
         numOfLeaseAdjustments(0).
         paymentReceivedAmount("0.00").
@@ -86,7 +86,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
-        numOfCharges(5).
+        numOfProductCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         paymentReceivedAmount("340.87").
@@ -117,7 +117,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
-        numOfCharges(6).
+        numOfProductCharges(6).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         paymentReceivedAmount("1195.01").
@@ -144,7 +144,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
-        numOfCharges(5).
+        numOfProductCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         paymentReceivedAmount("1364.50").
@@ -171,7 +171,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
-        numOfCharges(5).
+        numOfProductCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         paymentReceivedAmount("1252.50").
@@ -198,7 +198,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Aug-2011").
         billingPeriodEndDate("03-Aug-2011").
-        numOfCharges(5).
+        numOfProductCharges(5).
         numOfChargeAdjustments(4).
         numOfLeaseAdjustments(0).
         paymentReceivedAmount("1252.50").

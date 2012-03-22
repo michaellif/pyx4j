@@ -28,7 +28,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.BillCharge;
+import com.propertyvista.domain.financial.billing._InvoiceLineItem;
+import com.propertyvista.domain.financial.billing._InvoiceProductCharge;
 
 public class BillPrint {
 
@@ -46,9 +47,11 @@ public class BillPrint {
 
     public static void printBill(Bill bill, OutputStream pdf) {
 
-        Persistence.service().retrieve(bill.charges());
-        for (BillCharge billCharge : bill.charges()) {
-            Persistence.service().retrieve(billCharge.billableItem().item().product());
+        Persistence.service().retrieve(bill.lineItems());
+        for (_InvoiceLineItem lineItem : bill.lineItems()) {
+            if (_InvoiceProductCharge.class.isAssignableFrom(lineItem.getClass())) {
+                Persistence.service().retrieve(((_InvoiceProductCharge) lineItem).chargeSubLineItem().billableItem().item().product());
+            }
         }
         Persistence.service().retrieve(bill.chargeAdjustments());
         Persistence.service().retrieve(bill.leaseAdjustments());

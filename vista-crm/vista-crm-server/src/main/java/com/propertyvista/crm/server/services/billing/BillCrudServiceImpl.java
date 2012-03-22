@@ -33,7 +33,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceImpl<Bill> implement
     @Override
     protected void enhanceRetrieved(Bill entity) {
         // load detached entities:
-        Persistence.service().retrieve(entity.charges());
+        Persistence.service().retrieve(entity.lineItems());
     }
 
     @Override

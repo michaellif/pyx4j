@@ -21,17 +21,17 @@
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billPayments" class="com.pyx4j.entity.shared.IList"/>
-	<field name="charges" class="com.pyx4j.entity.shared.IList"/>
+	<field name="lineItems" class="com.pyx4j.entity.shared.IList"/>
 	<variable name="serviceCharges" class="java.util.List">
-		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getServiceCharges($F{charges})]]></variableExpression>
+		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getServiceCharges($F{lineItems})]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
 	<variable name="featureOneTimeCharges" class="java.util.List">
-		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getFeatureOneTimeCharges($F{charges})]]></variableExpression>
+		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getFeatureOneTimeCharges($F{lineItems})]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
 	<variable name="featureRecurringCharges" class="java.util.List">
-		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getFeatureRecurringCharges($F{charges})]]></variableExpression>
+		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getFeatureRecurringCharges($F{lineItems})]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
 	<background>
@@ -70,7 +70,7 @@
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{serviceCharges})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillCharge")]]></subreportExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.ProductCharge")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="33">
@@ -102,15 +102,15 @@
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Other Recurring Charges]]></text>
+				<text><![CDATA[Recurring Charges]]></text>
 			</staticText>
 		</band>
 		<band height="23">
 			<printWhenExpression><![CDATA[$V{featureRecurringCharges}.size()>0]]></printWhenExpression>
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($P{REPORT_SCRIPTLET}.getFeatureRecurringCharges($F{charges}))]]></dataSourceExpression>
-				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillCharge")]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{featureRecurringCharges})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.ProductCharge")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="33">
@@ -127,7 +127,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Other Recurring Charges]]></text>
+				<text><![CDATA[Recurring Charges]]></text>
 			</staticText>
 			<line>
 				<reportElement x="320" y="3" width="60" height="1"/>
@@ -150,8 +150,8 @@
 			<printWhenExpression><![CDATA[$V{featureOneTimeCharges}.size()>0]]></printWhenExpression>
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($P{REPORT_SCRIPTLET}.getFeatureOneTimeCharges($F{charges}))]]></dataSourceExpression>
-				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillCharge")]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{featureOneTimeCharges})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.ProductCharge")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="33">

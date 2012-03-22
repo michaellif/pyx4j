@@ -58,6 +58,11 @@ public interface BillingAccount extends IEntity {
     @Detached(level = AttachLevel.Detached)
     ISet<Bill> bills();
 
+    //TODO when VladS will provide deletion of polymorphic entities 
+    //@Owned
+    //@Detached(level = AttachLevel.Detached)
+    //ISet<_InvoiceLineItem> lineItems();
+
     IPrimitive<Integer> billCounter();
 
     IPrimitive<Double> total();
@@ -71,4 +76,7 @@ public interface BillingAccount extends IEntity {
 
     IPrimitive<Integer> billingPeriodStartDate();
     //Should have deposit value field
+
+    // atb report
+
 }

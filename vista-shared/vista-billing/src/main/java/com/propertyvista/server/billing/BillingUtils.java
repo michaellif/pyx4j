@@ -20,6 +20,13 @@
  */
 package com.propertyvista.server.billing;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing._InvoiceLineItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.Service;
@@ -42,4 +49,18 @@ public class BillingUtils {
         return isFeature(product) && !((Feature.FeatureV) product.cast()).recurring().getValue();
     }
 
+    public static <E extends _InvoiceLineItem> List<E> getLineItemsForType(Bill bill, Class<E> type) {
+        return getLineItemsForType(bill.lineItems(), type);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E extends _InvoiceLineItem> List<E> getLineItemsForType(IList<_InvoiceLineItem> lineItems, Class<E> type) {
+        List<E> items = new ArrayList<E>();
+        for (_InvoiceLineItem lineItem : lineItems) {
+            if (type.isAssignableFrom(lineItem.getClass())) {
+                items.add((E) lineItem);
+            }
+        }
+        return items;
+    }
 }

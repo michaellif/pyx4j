@@ -23,7 +23,8 @@ import net.sf.jasperreports.engine.JRScriptletException;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.financial.billing.BillCharge;
+import com.propertyvista.domain.financial.billing._InvoiceLineItem;
+import com.propertyvista.domain.financial.billing._InvoiceProductCharge;
 import com.propertyvista.server.billing.BillingUtils;
 
 public class BillPrintScriptlet extends JRDefaultScriptlet {
@@ -38,34 +39,37 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         return formatter.format(date);
     }
 
-    public List<BillCharge> getServiceCharges(IList<BillCharge> charges) {
-        List<BillCharge> featureCharges = new ArrayList<BillCharge>();
-        for (BillCharge charge : charges) {
-            if (BillingUtils.isService(charge.billableItem().item().product())) {
-                featureCharges.add(charge);
+    public List<_InvoiceProductCharge> getServiceCharges(IList<_InvoiceLineItem> lineItems) {
+        List<_InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, _InvoiceProductCharge.class);
+        List<_InvoiceProductCharge> filteredCharges = new ArrayList<_InvoiceProductCharge>();
+        for (_InvoiceProductCharge charge : charges) {
+            if (BillingUtils.isService(charge.chargeSubLineItem().billableItem().item().product())) {
+                filteredCharges.add(charge);
             }
         }
-        return featureCharges;
+        return filteredCharges;
     }
 
-    public List<BillCharge> getFeatureRecurringCharges(IList<BillCharge> charges) {
-        List<BillCharge> featureCharges = new ArrayList<BillCharge>();
-        for (BillCharge charge : charges) {
-            if (BillingUtils.isRecurringFeature(charge.billableItem().item().product())) {
-                featureCharges.add(charge);
+    public List<_InvoiceProductCharge> getFeatureRecurringCharges(IList<_InvoiceLineItem> lineItems) {
+        List<_InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, _InvoiceProductCharge.class);
+        List<_InvoiceProductCharge> filteredCharges = new ArrayList<_InvoiceProductCharge>();
+        for (_InvoiceProductCharge charge : charges) {
+            if (BillingUtils.isRecurringFeature(charge.chargeSubLineItem().billableItem().item().product())) {
+                filteredCharges.add(charge);
             }
         }
-        return featureCharges;
+        return filteredCharges;
     }
 
-    public List<BillCharge> getFeatureOneTimeCharges(IList<BillCharge> charges) {
-        List<BillCharge> featureCharges = new ArrayList<BillCharge>();
-        for (BillCharge charge : charges) {
-            if (BillingUtils.isOneTimeFeature(charge.billableItem().item().product())) {
-                featureCharges.add(charge);
+    public List<_InvoiceProductCharge> getFeatureOneTimeCharges(IList<_InvoiceLineItem> lineItems) {
+        List<_InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, _InvoiceProductCharge.class);
+        List<_InvoiceProductCharge> filteredCharges = new ArrayList<_InvoiceProductCharge>();
+        for (_InvoiceProductCharge charge : charges) {
+            if (BillingUtils.isOneTimeFeature(charge.chargeSubLineItem().billableItem().item().product())) {
+                filteredCharges.add(charge);
             }
         }
-        return featureCharges;
+        return filteredCharges;
     }
 
 }
