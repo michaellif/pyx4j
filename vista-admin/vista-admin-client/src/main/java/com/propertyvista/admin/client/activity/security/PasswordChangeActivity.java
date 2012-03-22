@@ -31,7 +31,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.admin.client.viewfactories.crud.SecurityViewFactory;
+import com.propertyvista.admin.client.viewfactories.SecurityViewFactory;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.services.AdminPasswordChangeUserService;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;

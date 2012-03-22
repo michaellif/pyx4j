@@ -18,6 +18,7 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 import com.propertyvista.admin.client.activity.login.LoginActivity;
+import com.propertyvista.admin.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class LoginActivityMapper implements ActivityMapper {
@@ -29,6 +30,8 @@ public class LoginActivityMapper implements ActivityMapper {
     public Activity getActivity(Place place) {
         if (place instanceof AdminSiteMap.Login) {
             return new LoginActivity(place);
+        } else if (place instanceof AdminSiteMap.LoginWithToken) {
+            return new LoginWithTokenActivity(place);
         }
         return null;
     }

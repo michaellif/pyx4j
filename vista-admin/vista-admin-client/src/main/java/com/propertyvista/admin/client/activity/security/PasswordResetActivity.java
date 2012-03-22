@@ -13,17 +13,20 @@
  */
 package com.propertyvista.admin.client.activity.security;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.admin.client.viewfactories.AdminVeiwFactory;
+import com.pyx4j.security.rpc.AbstractPasswordResetService;
+
+import com.propertyvista.admin.client.viewfactories.SecurityViewFactory;
+import com.propertyvista.admin.rpc.services.AdminPasswordResetService;
 import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 
-// TODO Admin Site: do we need Password Reset Feature???
 public class PasswordResetActivity extends AbstractPasswordResetActivity {
 
     public PasswordResetActivity(Place place) {
-        super(place, AdminVeiwFactory.instance(PasswordResetView.class), null);
+        super(place, SecurityViewFactory.instance(PasswordResetView.class), GWT.<AbstractPasswordResetService> create(AdminPasswordResetService.class));
     }
 
 }

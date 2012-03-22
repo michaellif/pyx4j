@@ -37,6 +37,7 @@ import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
 import com.propertyvista.admin.client.activity.security.PasswordChangeActivity;
+import com.propertyvista.admin.client.activity.security.PasswordResetRequesetActivity;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class MainActivityMapper implements AppActivityMapper {
@@ -108,6 +109,8 @@ public class MainActivityMapper implements AppActivityMapper {
 
                 } else if (place instanceof AdminSiteMap.PasswordChange) {
                     activity = new PasswordChangeActivity(place);
+                } else if (place instanceof AdminSiteMap.PasswordResetRequest) {
+                    activity = new PasswordResetRequesetActivity(place);
                 }
 
                 callback.onSuccess(activity);

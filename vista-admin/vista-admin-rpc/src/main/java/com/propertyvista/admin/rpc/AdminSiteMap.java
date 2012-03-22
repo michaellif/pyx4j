@@ -17,6 +17,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
+import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 public class AdminSiteMap implements SiteMap {
@@ -25,10 +26,19 @@ public class AdminSiteMap implements SiteMap {
     public static class Login extends AppPlace {
     }
 
+    /**
+     * Used while user is waiting for authentication required for password reset.
+     */
+    public static class LoginWithToken extends AppPlace implements PublicPlace {
+
+    }
+
     public static class SigningOut extends AppPlace {
     }
 
+    @PlaceProperties(caption = "Password Reset Request")
     public static class PasswordResetRequest extends AppPlace {
+
     }
 
     @PlaceProperties(caption = "Reset Password")

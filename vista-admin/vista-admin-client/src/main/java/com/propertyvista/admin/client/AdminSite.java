@@ -81,6 +81,8 @@ public class AdminSite extends VistaSite {
             } else {
                 AdminSite.getHistoryHandler().handleCurrentHistory();
             }
+        } else if (ClientSecurityController.checkBehavior(VistaBasicBehavior.AdminPasswordChangeRequired)) {
+            AppSite.getPlaceController().goTo(new AdminSiteMap.PasswordReset());
         } else {
             AppSite.getPlaceController().goTo(new AdminSiteMap.Login());
         }
