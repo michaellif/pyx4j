@@ -14,7 +14,6 @@
 package com.propertyvista.portal.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.gwt.geo.GoogleAPI;
@@ -30,19 +29,11 @@ public class PortalEntryPoint implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
-        if (Window.Location.getHost().endsWith("residentportalsite.com")) {
-            // Key for .residentportalsite.com
-            GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hShXpG0z1GYh8qtGf1RDMPw_eX7gBQVD9gTYQZV0bRTbYFAMAnoaOWTqQ");
-        } else if (Window.Location.getHost().endsWith("propertyvista.com")) {
-            // Key for propertyvista.com
-            GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hSyeUldaL5RpJeho94okp3eVm_TSRReYYuX9Yx5PqVq2CO9w36_0whAoQ");
-        } else {
-            // Key for .birchwoodsoftwaregroup.com
-            GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
-        }
         String customKey = getPortalGoogleAPIKey();
         if ((customKey != null) && (customKey.length() > 0)) {
             GoogleAPI.setGoogleAPIKey(customKey);
+        } else {
+            GoogleAPI.setGoogleAPIKey("AIzaSyAa7EDFOm17VLX7tLJqCZfn2SX8qT5kYcE");
         }
 
         if (RootPanel.get(APTLIST_MAP_INSERTION_ID) != null) {
