@@ -24,11 +24,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 class ValueAdapterString extends ValueAdapterPrimitive {
+
+    private static final Logger log = LoggerFactory.getLogger(ValueAdapterString.class);
 
     private final MemberMeta memberMeta;
 
@@ -59,6 +64,7 @@ class ValueAdapterString extends ValueAdapterPrimitive {
             }
             int size = str.length();
             if (size > maxLength) {
+                log.error("member '{}' size violation [{}]", memberMeta.getFieldName(), str);
                 throw new RuntimeException("Member size violation member '" + memberMeta.getFieldName() + "' size " + size + " is greater than max allowed "
                         + maxLength);
             }
