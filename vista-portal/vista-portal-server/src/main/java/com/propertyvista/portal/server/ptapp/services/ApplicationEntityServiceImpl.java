@@ -37,10 +37,11 @@ public class ApplicationEntityServiceImpl {
         }
         EntityGraph.applyRecursivelyAllObjects(entity, new EntityGraph.ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 if (entity instanceof IBoundToApplication) {
                     ((IBoundToApplication) entity).application().set(application);
                 }
+                return true;
             }
         });
         Persistence.secureSave(entity);
