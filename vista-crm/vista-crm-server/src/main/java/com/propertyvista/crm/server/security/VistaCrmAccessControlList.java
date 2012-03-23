@@ -41,11 +41,13 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
+import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.tenant.TenantCrudService;
 import com.propertyvista.crm.rpc.services.tenant.TenantInLeaseCrudService;
@@ -220,6 +222,11 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PortfolioCrudService.class));
 
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(ManagedCrmUserService.class));
+
+// -- Crm Users, Self management
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmPasswordChangeUserService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmUserService.class));
+
 // - Marketing-related:
 
 // - Administration:

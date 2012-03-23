@@ -7,20 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 20, 2012
- * @author ArtyomB
+ * Created on Mar 22, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.organization;
+package com.propertyvista.admin.server.services;
 
-import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
+import com.propertyvista.admin.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.server.common.security.VistaManagedPasswordChangeServiceImpl;
-import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.server.domain.security.AdminUserCredential;
 
-public class ManagedCrmUserServiceImpl extends VistaManagedPasswordChangeServiceImpl<CrmUserCredential> implements ManagedCrmUserService {
+public class AdminPasswordChangeManagedServiceImpl extends VistaManagedPasswordChangeServiceImpl<AdminUserCredential> implements
+        AdminPasswordChangeManagedService {
 
-    protected ManagedCrmUserServiceImpl() {
-        super(CrmUserCredential.class);
+    public AdminPasswordChangeManagedServiceImpl() {
+        super(AdminUserCredential.class);
     }
 
 }

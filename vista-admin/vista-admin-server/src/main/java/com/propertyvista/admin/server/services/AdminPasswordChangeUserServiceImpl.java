@@ -13,53 +13,14 @@
  */
 package com.propertyvista.admin.server.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.essentials.server.AbstractAntiBot;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.rpc.ChallengeVerificationRequired;
-import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.server.contexts.Context;
-
 import com.propertyvista.admin.rpc.services.AdminPasswordChangeUserService;
-import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.common.security.VistaContext;
+import com.propertyvista.server.common.security.VistaUserSelfPasswordChangeServiceImpl;
 import com.propertyvista.server.domain.security.AdminUserCredential;
 
-public class AdminPasswordChangeUserServiceImpl implements AdminPasswordChangeUserService {
+public class AdminPasswordChangeUserServiceImpl extends VistaUserSelfPasswordChangeServiceImpl<AdminUserCredential> implements AdminPasswordChangeUserService {
 
-    private static Logger log = LoggerFactory.getLogger(AdminPasswordChangeUserServiceImpl.class);
-
-    private static final I18n i18n = I18n.get(AdminPasswordChangeUserServiceImpl.class);
-
-    @Override
-    public void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request) {
-        AdminUserCredential cr = Persistence.service().retrieve(AdminUserCredential.class, VistaContext.getCurrentUserPrimaryKey());
-        if (!cr.enabled().isBooleanTrue()) {
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-        }
-        Persistence.service().retrieve(cr.user());
-        AbstractAntiBot.assertLogin(cr.user().email().getValue(), null);
-        if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), cr.credential().getValue())) {
-            log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
-            if (AbstractAntiBot.authenticationFailed(Context.getVisit().getUserVisit().getEmail())) {
-                throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
-            } else {
-                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-            }
-        }
-        cr.accessKey().setValue(null);
-        cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
-        Persistence.service().persist(cr);
-        log.info("password changed by user {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
-        callback.onSuccess(null);
-
+    public AdminPasswordChangeUserServiceImpl() {
+        super(AdminUserCredential.class);
     }
 
 }

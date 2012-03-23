@@ -7,21 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 27, 2012
+ * Created on Mar 23, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.crm.server.services.security;
 
-import com.propertyvista.portal.rpc.portal.services.TenantPasswordChangeUserService;
+import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.server.common.security.VistaUserSelfPasswordChangeServiceImpl;
-import com.propertyvista.server.domain.security.TenantUserCredential;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
-public class TenantPasswordChangeUserServiceImpl extends VistaUserSelfPasswordChangeServiceImpl<TenantUserCredential> implements
-        TenantPasswordChangeUserService {
+public class CrmPasswordChangeUserServiceImpl extends VistaUserSelfPasswordChangeServiceImpl<CrmUserCredential> implements CrmPasswordChangeUserService {
 
-    public TenantPasswordChangeUserServiceImpl() {
-        super(TenantUserCredential.class);
+    public CrmPasswordChangeUserServiceImpl() {
+        super(CrmUserCredential.class);
     }
-
 }

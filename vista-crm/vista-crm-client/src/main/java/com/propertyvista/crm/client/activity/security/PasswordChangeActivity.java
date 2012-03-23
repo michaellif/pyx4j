@@ -35,8 +35,8 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
+import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.crm.rpc.services.tenant.TenantPasswordChangeService;
 
 public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
@@ -85,7 +85,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
         if (principalClass.equals(PrincipalClass.EMPLOYEE)) {
             if (isSelfAdmin()) {
-                service = GWT.<CrmUserService> create(CrmUserService.class);
+                service = GWT.<CrmPasswordChangeUserService> create(CrmPasswordChangeUserService.class);
             } else {
                 service = GWT.<ManagedCrmUserService> create(ManagedCrmUserService.class);
             }
