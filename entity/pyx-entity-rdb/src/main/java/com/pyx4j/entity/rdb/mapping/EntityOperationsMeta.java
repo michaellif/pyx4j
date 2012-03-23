@@ -73,6 +73,8 @@ public class EntityOperationsMeta {
 
     private final List<MemberOperationsMeta> cascadeRetrieveMembers = new Vector<MemberOperationsMeta>();
 
+    private final List<MemberOperationsMeta> idOnlyMembers = new Vector<MemberOperationsMeta>();
+
     private final List<MemberOperationsMeta> detachedMembers = new Vector<MemberOperationsMeta>();
 
     private final List<MemberCollectionOperationsMeta> collectionMembers = new Vector<MemberCollectionOperationsMeta>();
@@ -183,6 +185,9 @@ public class EntityOperationsMeta {
                     case ToStringMembers:
                         cascadeRetrieveMembers.add(member);
                         break;
+                    case IdOnly:
+                        idOnlyMembers.add(member);
+                        break;
                     case Attached:
                         cascadeRetrieveMembers.add(member);
                         break;
@@ -236,6 +241,9 @@ public class EntityOperationsMeta {
                     switch (memberMeta.getAttachLevel()) {
                     case ToStringMembers:
                         cascadeRetrieveMembers.add(member);
+                        break;
+                    case IdOnly:
+                        idOnlyMembers.add(member);
                         break;
                     case Attached:
                         cascadeRetrieveMembers.add(member);
@@ -410,6 +418,10 @@ public class EntityOperationsMeta {
 
     public List<MemberOperationsMeta> getCascadeRetrieveMembers() {
         return cascadeRetrieveMembers;
+    }
+
+    public List<MemberOperationsMeta> getIdOnlyMembers() {
+        return idOnlyMembers;
     }
 
     public List<MemberOperationsMeta> getDetachedMembers() {

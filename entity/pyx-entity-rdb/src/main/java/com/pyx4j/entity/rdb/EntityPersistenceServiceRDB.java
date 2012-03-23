@@ -1054,43 +1054,58 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private <T extends IEntity> T cascadeRetrieveMembers(TableModel tm, T entity, AttachLevel attachLevel) {
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadeRetrieveMembers()) {
-            MemberMeta memberMeta = member.getMemberMeta();
-            // Do not retrieve Owner, since already retrieved
-            if ((entity.getOwner() != null) && (memberMeta.isOwner())) {
+            if ((attachLevel == AttachLevel.ToStringMembers) && (!member.getMemberMeta().isToStringMember())) {
                 continue;
             }
-            if ((attachLevel == AttachLevel.ToStringMembers) && (!memberMeta.isToStringMember())) {
-                continue;
-            }
-            if (memberMeta.isEntity()) {
-                IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
-                if (childEntity.getPrimaryKey() != null) {
-                    if (cascadeRetrieve(childEntity, member.getMemberMeta().getAttachLevel()) == null) {
-                        throw new RuntimeException("Entity '" + memberMeta.getCaption() + "' [primary key =  " + childEntity.getPrimaryKey() + "; path = "
-                                + childEntity.getPath() + "] is not found");
-                    }
-                    if (memberMeta.getAttachLevel() == AttachLevel.ToStringMembers) {
-                        childEntity.setAttachLevel(AttachLevel.ToStringMembers);
-                    }
-                }
-            } else {
-                @SuppressWarnings("unchecked")
-                ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
-                for (IEntity childEntity : iCollectionMember) {
-                    if (cascadeRetrieve(childEntity, member.getMemberMeta().getAttachLevel()) == null) {
-                        throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
-                                + childEntity.getPath() + " NotFound");
-                    }
-                    if (memberMeta.getAttachLevel() == AttachLevel.ToStringMembers) {
-                        childEntity.setAttachLevel(AttachLevel.ToStringMembers);
-                    }
-                }
-            }
+            cascadeRetrieveMember(entity, attachLevel, member);
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getDetachedMembers()) {
-            member.getMember(entity).setAttachLevel(AttachLevel.Detached);
+            if ((attachLevel == AttachLevel.ToStringMembers) && (member.getMemberMeta().isToStringMember())) {
+                cascadeRetrieveMember(entity, attachLevel, member);
+            } else {
+                member.getMember(entity).setAttachLevel(AttachLevel.Detached);
+            }
+        }
+        if (attachLevel == AttachLevel.ToStringMembers) {
+            for (MemberOperationsMeta member : tm.operationsMeta().getIdOnlyMembers()) {
+                if (member.getMemberMeta().isToStringMember()) {
+                    cascadeRetrieveMember(entity, attachLevel, member);
+                }
+            }
         }
         return entity;
+    }
+
+    private <T extends IEntity> void cascadeRetrieveMember(T entity, AttachLevel attachLevel, MemberOperationsMeta member) {
+        MemberMeta memberMeta = member.getMemberMeta();
+        // Do not retrieve Owner, since already retrieved
+        if ((entity.getOwner() != null) && (memberMeta.isOwner())) {
+            return;
+        }
+        if (memberMeta.isEntity()) {
+            IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
+            if (childEntity.getPrimaryKey() != null) {
+                if (cascadeRetrieve(childEntity, member.getMemberMeta().getAttachLevel()) == null) {
+                    throw new RuntimeException("Entity '" + memberMeta.getCaption() + "' [primary key =  " + childEntity.getPrimaryKey() + "; path = "
+                            + childEntity.getPath() + "] is not found");
+                }
+                if (memberMeta.getAttachLevel() == AttachLevel.ToStringMembers) {
+                    childEntity.setAttachLevel(AttachLevel.ToStringMembers);
+                }
+            }
+        } else {
+            @SuppressWarnings("unchecked")
+            ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+            for (IEntity childEntity : iCollectionMember) {
+                if (cascadeRetrieve(childEntity, member.getMemberMeta().getAttachLevel()) == null) {
+                    throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
+                            + childEntity.getPath() + " NotFound");
+                }
+                if (memberMeta.getAttachLevel() == AttachLevel.ToStringMembers) {
+                    childEntity.setAttachLevel(AttachLevel.ToStringMembers);
+                }
+            }
+        }
     }
 
     @Override
