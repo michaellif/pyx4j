@@ -44,8 +44,9 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
             TenantInLease til = in._tenantInLease().iterator().next();
             Persistence.service().retrieve(til.lease());
             dto.lease().set(til.lease().holder());
-            Persistence.service().retrieve(dto.lease());
-            Persistence.service().retrieve(dto.lease().unit());
+// TODO VladS: the first retrieve (with uncommented AttachLevel.ToStringMembers) should be enough to retrieve all detached @ToString-ed members!?   
+            Persistence.service().retrieve(dto.lease()/* , AttachLevel.ToStringMembers */);
+            Persistence.service().retrieve(dto.lease().unit(), AttachLevel.ToStringMembers);
         }
     }
 
@@ -57,9 +58,9 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
             TenantInLease til = in._tenantInLease().iterator().next();
             Persistence.service().retrieve(til.lease());
             dto.lease().set(til.lease().holder());
-            Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);
-            Persistence.service().retrieve(dto.lease().unit());
+// TODO VladS: the first retrieve (with uncommented AttachLevel.ToStringMembers) should be enough to retrieve all detached @ToString-ed members!?   
+            Persistence.service().retrieve(dto.lease()/* , AttachLevel.ToStringMembers */);
+            Persistence.service().retrieve(dto.lease().unit(), AttachLevel.ToStringMembers);
         }
     }
-
 }
