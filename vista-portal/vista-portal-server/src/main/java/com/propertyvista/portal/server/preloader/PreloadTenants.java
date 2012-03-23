@@ -196,6 +196,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             TenantUser user = UserPreloader.createTenantUser(email, email, null);
             Tenant tenant = generator.createTenant();
             tenant.person().email().setValue(email);
+            tenant.user().set(user);
             // Update user name
             user.name().setValue(tenant.person().name().getStringView());
             Persistence.service().persist(user);
