@@ -53,7 +53,6 @@ public class BillPrint {
                 Persistence.service().retrieve(((_InvoiceProductCharge) lineItem).chargeSubLineItem().billableItem().item().product());
             }
         }
-        Persistence.service().retrieve(bill.chargeAdjustments());
         Persistence.service().retrieve(bill.leaseAdjustments());
 
         try {

@@ -21,12 +21,14 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.BillChargeTax;
 import com.propertyvista.domain.financial.billing.BillEntryAdjustment;
+import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
+import com.propertyvista.domain.financial.billing._InvoiceAdjustmentSubLineItem;
+import com.propertyvista.domain.financial.billing._InvoiceConcessionSubLineItem;
 import com.propertyvista.domain.financial.billing._InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 
 public class _ProductChargeProcessor {
 
@@ -44,6 +46,7 @@ public class _ProductChargeProcessor {
     }
 
     void createCharges() {
+
         if (!Bill.BillType.Final.equals(billing.getNextPeriodBill().billType().getValue())) {
             createChargeForNextPeriod(billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().serviceItem());
         }
@@ -56,9 +59,9 @@ public class _ProductChargeProcessor {
 
             createChargeForNextPeriod(billableItem);
 
-            updateChargeForCurrentPeriod(billableItem);
+            reviseChargeForCurrentPeriod(billableItem);
 
-            updateChargeForPreviousPeriod(billableItem);
+            reviseChargeForPreviousPeriod(billableItem);
         }
     }
 
@@ -74,7 +77,7 @@ public class _ProductChargeProcessor {
         return billableItem1.originalId().equals(billableItem2.originalId());
     }
 
-    private void updateChargeForCurrentPeriod(BillableItem billableItem) {
+    private void reviseChargeForCurrentPeriod(BillableItem billableItem) {
         if (billing.getCurrentPeriodBill() == null) {
             return;
         }
@@ -100,7 +103,7 @@ public class _ProductChargeProcessor {
         }
     }
 
-    private void updateChargeForPreviousPeriod(BillableItem billableItem) {
+    private void reviseChargeForPreviousPeriod(BillableItem billableItem) {
         if (billing.getPreviousPeriodBill() == null) {
             return;
         }
@@ -145,9 +148,11 @@ public class _ProductChargeProcessor {
 
     private _InvoiceProductCharge createCharge(BillableItem billableItem, Bill bill, _InvoiceProductCharge.Period period) {
 
+        // Find if billable item period overlaps with the bill period. 
         DateRange overlap = DateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate().getValue()),
                 new DateRange(billableItem.effectiveDate().getValue(), billableItem.expirationDate().getValue()));
 
+        // If billable item is not in effect in this billing period do nothing
         if (overlap == null) {
             return null;
         }
@@ -155,18 +160,23 @@ public class _ProductChargeProcessor {
         _InvoiceProductCharge charge = EntityFactory.create(_InvoiceProductCharge.class);
 
         charge.billingAccount().set(bill.billingAccount());
-
         charge.bill().set(billing.getNextPeriodBill());
-        charge.chargeSubLineItem().billableItem().set(billableItem);
         charge.period().setValue(period);
-
         charge.fromDate().setValue(overlap.getFromDate());
         charge.toDate().setValue(overlap.getToDate());
 
-        if (BillingUtils.isOneTimeFeature(charge.chargeSubLineItem().billableItem().item().product())) {
-            charge.total().setValue(charge.chargeSubLineItem().billableItem().item().price().getValue());
-        } else {
-            prorate(charge);
+        createChargeSubLineItem(charge, billableItem);
+        createAdjustmentSubLineItems(charge, billableItem);
+        createConcessionSubLineItems(charge, billableItem);
+
+        charge.total().setValue(charge.chargeSubLineItem().amount().getValue());
+
+        for (_InvoiceAdjustmentSubLineItem subLineItem : charge.adjustmentSubLineItems()) {
+            charge.total().setValue(charge.total().getValue().add(subLineItem.amount().getValue()));
+        }
+
+        for (_InvoiceConcessionSubLineItem subLineItem : charge.concessionSubLineItems()) {
+            charge.total().setValue(charge.total().getValue().add(subLineItem.amount().getValue()));
         }
 
         calculateTax(charge);
@@ -176,10 +186,74 @@ public class _ProductChargeProcessor {
         return charge;
     }
 
-    private void prorate(_InvoiceProductCharge charge) {
+    private void createChargeSubLineItem(_InvoiceProductCharge charge, BillableItem billableItem) {
+        charge.chargeSubLineItem().billableItem().set(billableItem);
+
+        if (BillingUtils.isOneTimeFeature(charge.chargeSubLineItem().billableItem().item().product())) {
+            // do not prorate one-time charge
+            charge.chargeSubLineItem().amount().setValue(charge.chargeSubLineItem().billableItem().item().price().getValue());
+        } else {
+            charge.chargeSubLineItem().amount().setValue(prorate(charge));
+        }
+
+    }
+
+    private void createAdjustmentSubLineItems(_InvoiceProductCharge charge, BillableItem billableItem) {
+        for (BillableItemAdjustment adjustment : billableItem.adjustments()) {
+            createAdjustmentSubLineItem(adjustment, charge);
+        }
+    }
+
+    private void createAdjustmentSubLineItem(BillableItemAdjustment billableItemAdjustment, _InvoiceProductCharge charge) {
+        _InvoiceAdjustmentSubLineItem adjustment = EntityFactory.create(_InvoiceAdjustmentSubLineItem.class);
+
+        BigDecimal amount = null;
+
+        if (BillableItemAdjustment.AdjustmentType.percentage.equals(billableItemAdjustment.adjustmentType().getValue())) {
+            amount = billableItemAdjustment.billableItem().item().price().getValue().multiply(billableItemAdjustment.value().getValue());
+        } else if (BillableItemAdjustment.AdjustmentType.monetary.equals(billableItemAdjustment.adjustmentType().getValue())) {
+            amount = billableItemAdjustment.value().getValue();
+        }
+
+        if (Bill.BillType.Final.equals(billing.getNextPeriodBill().billType().getValue())) {
+            //TODO final bill
+            adjustment.amount().setValue(new BigDecimal("0.00"));
+        } else {
+            DateRange overlap = DateUtils.getOverlappingRange(new DateRange(billing.getNextPeriodBill().billingPeriodStartDate().getValue(), billing
+                    .getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(billableItemAdjustment.effectiveDate().getValue(),
+                    billableItemAdjustment.expirationDate().getValue()));
+
+            if (overlap == null) {
+                return;
+            }
+
+            overlap = DateUtils.getOverlappingRange(overlap, new DateRange(billableItemAdjustment.billableItem().effectiveDate().getValue(),
+                    billableItemAdjustment.billableItem().expirationDate().getValue()));
+
+            if (overlap == null) {
+                return;
+            }
+
+            //TODO use policy to determin proration type
+            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), billing.getNextPeriodBill().billingRun().building());
+            adjustment.amount().setValue(amount.multiply(proration));
+        }
+
+        adjustment.billableItemAdjustment().set(billableItemAdjustment);
+
+        charge.adjustmentSubLineItems().add(adjustment);
+
+    }
+
+    private void createConcessionSubLineItems(_InvoiceProductCharge charge, BillableItem billableItem) {
+        //TODO
+    }
+
+    private BigDecimal prorate(_InvoiceProductCharge charge) {
         //TODO use policy to determin proration type
-        BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), BillingAccount.ProrationMethod.Actual);
-        charge.total().setValue(charge.chargeSubLineItem().billableItem().item().price().getValue().multiply(proration));
+        BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), billing.getNextPeriodBill().billingRun()
+                .building());
+        return charge.chargeSubLineItem().billableItem().item().price().getValue().multiply(proration);
     }
 
     private void calculateTax(_InvoiceProductCharge charge) {
@@ -189,7 +263,7 @@ public class _ProductChargeProcessor {
                             .billingRun().building()));
         }
         charge.taxTotal().setValue(new BigDecimal(0));
-        for (BillChargeTax chargeTax : charge.taxes()) {
+        for (InvoiceChargeTax chargeTax : charge.taxes()) {
             charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
         }
     }

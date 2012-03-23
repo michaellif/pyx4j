@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.billing.BillChargeTax;
+import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.billing.BillLeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
@@ -50,7 +50,7 @@ public class LeaseAdjustmentProcessor {
                     TaxUtils.calculateTaxes(adjustment.amount().getValue(), item.reason(), billing.getNextPeriodBill().billingRun().building()));
         }
         adjustment.taxTotal().setValue(new BigDecimal(0));
-        for (BillChargeTax chargeTax : adjustment.taxes()) {
+        for (InvoiceChargeTax chargeTax : adjustment.taxes()) {
             adjustment.taxTotal().setValue(adjustment.taxTotal().getValue().add(chargeTax.amount().getValue()));
         }
 

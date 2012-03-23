@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.billing.BillChargeTax;
+import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxCalculationTest extends TestCase {
@@ -43,7 +43,7 @@ public class TaxCalculationTest extends TestCase {
         tax.compound().setValue(false);
         taxes.add(tax);
 
-        List<BillChargeTax> chargeTaxes = TaxUtils.calculateTaxes(new BigDecimal("100.00"), taxes);
+        List<InvoiceChargeTax> chargeTaxes = TaxUtils.calculateTaxes(new BigDecimal("100.00"), taxes);
 
         assertEquals(new BigDecimal("7.00"), chargeTaxes.get(0).amount().getValue());
         assertEquals(new BigDecimal("5.00"), chargeTaxes.get(1).amount().getValue());
@@ -69,7 +69,7 @@ public class TaxCalculationTest extends TestCase {
         taxes2.add(pst);
         taxes2.add(gst);
 
-        List<BillChargeTax> chargeTaxes = TaxUtils.calculateTaxes(new BigDecimal("100.04"), taxes1);
+        List<InvoiceChargeTax> chargeTaxes = TaxUtils.calculateTaxes(new BigDecimal("100.04"), taxes1);
 
         assertEquals(new BigDecimal("10.00"), chargeTaxes.get(0).amount().getValue());
         assertEquals("GST", chargeTaxes.get(0).tax().name().getValue());

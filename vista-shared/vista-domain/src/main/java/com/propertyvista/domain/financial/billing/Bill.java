@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -40,7 +41,7 @@ public interface Bill extends IEntity {
 
         Running,
 
-        Erred,
+        Failed,
 
         Finished,
 
@@ -80,6 +81,8 @@ public interface Bill extends IEntity {
      */
     IPrimitive<Boolean> draft();
 
+    IPrimitiveSet<String> warnings();
+
     Bill previousBill();
 
     @Format("MM/dd/yyyy")
@@ -103,11 +106,6 @@ public interface Bill extends IEntity {
     @Owned
     @OrderBy(BillPayment.OrderId.class)
     IList<BillPayment> billPayments();
-
-    @Detached
-    @Owned
-    @OrderBy(BillChargeAdjustment.OrderId.class)
-    IList<BillChargeAdjustment> chargeAdjustments();
 
     @Detached
     @Owned

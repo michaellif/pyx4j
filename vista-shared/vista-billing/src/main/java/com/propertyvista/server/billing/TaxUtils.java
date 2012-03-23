@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.financial.billing.BillChargeTax;
+import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
@@ -36,24 +36,25 @@ import com.propertyvista.server.common.policy.PolicyManager;
 
 public class TaxUtils {
 
-    public static List<BillChargeTax> calculateTaxes(final BigDecimal baseAmount, ProductItemType productItemType, Building building) {
-        List<Tax> taxes = retrieveTaxes(productItemType, building);
+    //TODO Calculate taxes for specific day
+    public static List<InvoiceChargeTax> calculateTaxes(final BigDecimal baseAmount, ProductItemType productItemType, Building building) {
+        List<Tax> taxes = retrieveTaxesForProductItemType(productItemType, building);
         return calculateTaxes(baseAmount, taxes);
     }
 
-    public static Collection<? extends BillChargeTax> calculateTaxes(BigDecimal value, LeaseAdjustmentReason reason, Building building) {
+    public static Collection<? extends InvoiceChargeTax> calculateTaxes(BigDecimal value, LeaseAdjustmentReason reason, Building building) {
         // TODO Auto-generated method stub
         return null;
     }
 
-    static List<BillChargeTax> calculateTaxes(final BigDecimal baseAmount, List<Tax> taxes) {
+    static List<InvoiceChargeTax> calculateTaxes(final BigDecimal baseAmount, List<Tax> taxes) {
 
-        List<BillChargeTax> chargeTaxes = new ArrayList<BillChargeTax>();
+        List<InvoiceChargeTax> chargeTaxes = new ArrayList<InvoiceChargeTax>();
         if (taxes != null) {
             BigDecimal interimAmount = baseAmount;
             for (Tax tax : taxes) {
                 if (!tax.compound().getValue()) {
-                    BillChargeTax chargeTax = EntityFactory.create(BillChargeTax.class);
+                    InvoiceChargeTax chargeTax = EntityFactory.create(InvoiceChargeTax.class);
                     chargeTax.tax().set(tax);
                     chargeTax.amount().setValue(baseAmount.multiply(tax.rate().getValue()).setScale(2, RoundingMode.HALF_UP));
                     chargeTaxes.add(chargeTax);
@@ -62,7 +63,7 @@ public class TaxUtils {
             }
             for (Tax tax : taxes) {
                 if (tax.compound().getValue()) {
-                    BillChargeTax chargeTax = EntityFactory.create(BillChargeTax.class);
+                    InvoiceChargeTax chargeTax = EntityFactory.create(InvoiceChargeTax.class);
                     chargeTax.tax().set(tax);
                     chargeTax.amount().setValue(interimAmount.multiply(tax.rate().getValue()).setScale(2, RoundingMode.HALF_UP));
                     chargeTaxes.add(chargeTax);
@@ -73,7 +74,7 @@ public class TaxUtils {
         return chargeTaxes;
     }
 
-    private static List<Tax> retrieveTaxes(ProductItemType productItemType, Building building) {
+    private static List<Tax> retrieveTaxesForProductItemType(ProductItemType productItemType, Building building) {
 
         ProductTaxPolicy productTaxPolicy = PolicyManager.obtainEffectivePolicy(building, ProductTaxPolicy.class);
 

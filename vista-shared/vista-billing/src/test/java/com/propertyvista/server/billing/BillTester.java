@@ -89,11 +89,6 @@ public class BillTester extends Tester {
         return this;
     }
 
-    public BillTester numOfChargeAdjustments(Integer num) {
-        assertEquals("Number of Charge Adjustments", num, bill.chargeAdjustments().size());
-        return this;
-    }
-
     public BillTester numOfLeaseAdjustments(Integer num) {
         assertEquals("Number of Lease Adjustments", num, bill.leaseAdjustments().size());
         return this;
@@ -101,11 +96,6 @@ public class BillTester extends Tester {
 
     public BillTester serviceCharge(String value) {
         assertEquals("Service Charge", new BigDecimal(value), bill.serviceCharge().getValue());
-        return this;
-    }
-
-    public BillTester totalAdjustments(String value) {
-        assertEquals("Total Adjustments", new BigDecimal(value), bill.totalAdjustments().getValue());
         return this;
     }
 

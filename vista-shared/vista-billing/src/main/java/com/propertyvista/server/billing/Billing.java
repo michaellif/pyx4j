@@ -45,8 +45,6 @@ class Billing {
 
     private final PaymentProcessor paymentProcessor;
 
-    private final ChargeAdjustmentProcessor chargeAdjustmentProcessor;
-
     private final LeaseAdjustmentProcessor leaseAdjustmentProcessor;
 
     private final BillEntryAdjustmentProcessor billEntryAdjustmentProcessor;
@@ -68,7 +66,6 @@ class Billing {
 
         paymentProcessor = new PaymentProcessor(this);
 
-        chargeAdjustmentProcessor = new ChargeAdjustmentProcessor(this);
         leaseAdjustmentProcessor = new LeaseAdjustmentProcessor(this);
         billEntryAdjustmentProcessor = new BillEntryAdjustmentProcessor(this);
 
@@ -92,8 +89,6 @@ class Billing {
         productChargeProcessor.createCharges();
 
         paymentProcessor.createPayments();
-        //       chargeProcessor.createCharges();
-        chargeAdjustmentProcessor.createChargeAdjustments();
         leaseAdjustmentProcessor.createLeaseAdjustments();
 
         calculateTotals();
@@ -137,10 +132,6 @@ class Billing {
 
     public PaymentProcessor getPaymentProcessor() {
         return paymentProcessor;
-    }
-
-    public ChargeAdjustmentProcessor getChargeAdjustmentProcessor() {
-        return chargeAdjustmentProcessor;
     }
 
     public LeaseAdjustmentProcessor getLeaseAdjustmentProcessor() {
@@ -209,7 +200,7 @@ class Billing {
                 bill.billStatus().setValue(Bill.BillStatus.Finished);
             } catch (Throwable e) {
                 log.error("Bill run error", e);
-                bill.billStatus().setValue(Bill.BillStatus.Erred);
+                bill.billStatus().setValue(Bill.BillStatus.Failed);
             }
             Persistence.service().persist(bill);
             Persistence.service().commit();

@@ -42,7 +42,7 @@ public interface BillEntry extends IEntity {
     IPrimitive<BigDecimal> amount();
 
     @Owned
-    IList<BillChargeTax> taxes();
+    IList<InvoiceChargeTax> taxes();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)

@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.tax.Tax;
 
-public interface BillChargeTax extends IEntity {
+public interface InvoiceChargeTax extends IEntity {
 
     Tax tax();
 

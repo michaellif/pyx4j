@@ -34,7 +34,7 @@ public interface _InvoiceDebit extends _InvoiceLineItem {
     IPrimitive<BigDecimal> total();
 
     @Owned
-    IList<BillChargeTax> taxes();
+    IList<InvoiceChargeTax> taxes();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
