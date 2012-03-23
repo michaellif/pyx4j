@@ -59,7 +59,7 @@ public class CEntityCrudHyperlink<E extends IEntity> extends CAbstractHyperlink<
         setCommand(new Command() {
             @Override
             public void execute() {
-                if (!getValue().id().isNull()) {
+                if (getValue().getPrimaryKey() != null) {
                     assert (place != null);
                     AppSite.getPlaceController().goTo(place.formViewerPlace(getValue().getPrimaryKey()));
                 }
