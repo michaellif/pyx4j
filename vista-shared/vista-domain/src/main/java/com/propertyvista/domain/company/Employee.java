@@ -30,7 +30,7 @@ import com.propertyvista.domain.security.CrmUser;
 @ToStringFormat("{0}, {1}")
 public interface Employee extends Person {
 
-    @ToString(index = 10)
+    @ToString(index = 64)
     IPrimitive<String> title();
 
     @Length(250)

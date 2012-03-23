@@ -27,7 +27,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.security.CrmUser;
 
 public interface Note extends IEntity {
+
     @NotNull
+    @Length(128)
     IPrimitive<String> description();
 
     @NotNull

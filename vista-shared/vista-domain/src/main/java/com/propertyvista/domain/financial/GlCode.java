@@ -37,7 +37,7 @@ public interface GlCode extends IEntity {
     IPrimitive<Integer> codeId();
 
     @NotNull
-    @Length(100)
+    @Length(128)
     @ToString(index = 0)
     @Editor(type = EditorType.text)
     IPrimitive<String> description();

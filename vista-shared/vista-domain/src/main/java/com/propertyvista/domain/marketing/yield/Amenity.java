@@ -20,10 +20,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Amenity extends IEntity {
 
-    @Length(35)
+    @Length(128)
     @ToString(index = 1)
     IPrimitive<String> name();
 
-    @Length(250)
+    @Length(2048)
     IPrimitive<String> description();
 }

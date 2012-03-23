@@ -68,7 +68,7 @@ public interface Phone extends IEntity {
     @ToString(index = 1)
     IPrimitive<Integer> extension();
 
-    @Length(100)
+    @Length(128)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 }

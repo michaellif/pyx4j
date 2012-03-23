@@ -28,7 +28,7 @@ public interface Marketing extends IEntity {
     IPrimitive<PublicVisibilityType> visibility();
 
     @ToString
-    @Length(25)
+    @Length(128)
     IPrimitive<String> name();
 
     @Length(20845)

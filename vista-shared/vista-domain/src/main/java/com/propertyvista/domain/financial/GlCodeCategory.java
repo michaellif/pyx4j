@@ -35,7 +35,7 @@ public interface GlCodeCategory extends IEntity {
     IPrimitive<Integer> categoryId();
 
     @NotNull
-    @Length(100)
+    @Length(128)
     @ToString(index = 1)
     @Editor(type = EditorType.text)
     IPrimitive<String> description();

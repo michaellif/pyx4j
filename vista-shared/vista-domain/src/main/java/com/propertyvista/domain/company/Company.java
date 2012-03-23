@@ -28,7 +28,7 @@ import com.propertyvista.domain.media.Media;
 public interface Company extends IEntity {
 
     @ToString
-    @Length(25)
+    @Length(128)
     IPrimitive<String> name();
 
     IList<AddressStructured> addresses();

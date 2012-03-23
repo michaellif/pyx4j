@@ -27,7 +27,7 @@ public interface Portfolio extends IEntity {
 
     @NotNull
     @ToString
-    @Length(25)
+    @Length(64)
     IPrimitive<String> name();
 
     @Length(250)

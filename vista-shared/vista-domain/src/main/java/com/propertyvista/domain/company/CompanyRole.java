@@ -19,6 +19,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface CompanyRole extends IEntity {
 
-    @Length(25)
+    @Length(128)
     IPrimitive<String> name();
 }
