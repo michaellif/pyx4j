@@ -33,7 +33,9 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.admin.client.viewfactories.SecurityViewFactory;
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.admin.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.admin.rpc.services.AdminPasswordChangeUserService;
+import com.propertyvista.admin.rpc.services.OnboardingUserPasswordChangeManagedService;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 
 public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
@@ -44,10 +46,12 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     private PrincipalClass principalClass;
 
+    private Key userPk;
+
     public PasswordChangeActivity(Place place) {
         view = SecurityViewFactory.instance(PasswordChangeView.class);
         view.setPresenter(this);
-        Key userPk;
+
         try {
             assert place instanceof AdminSiteMap.PasswordChange;
             String userPkStr = ((AppPlace) place).getFirstArg(PRINCIPAL_PK_ARG);
@@ -63,7 +67,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
             History.back();
             throw new Error("wrong principal information", ex);
         }
-        String userName = isSelfAdmin(userPk) ? null : ((AppPlace) place).getFirstArg(PRINCIPAL_NAME_ARG);
+        String userName = isSelfAdmin() & principalClass == PrincipalClass.ADMIN ? null : ((AppPlace) place).getFirstArg(PRINCIPAL_NAME_ARG);
         view.initialize(userPk, userName);
     }
 
@@ -77,9 +81,14 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
         AbstractPasswordChangeService service = null;
         switch (principalClass) {
         case ADMIN:
-            service = GWT.<AdminPasswordChangeUserService> create(AdminPasswordChangeUserService.class);
+            if (isSelfAdmin()) {
+                service = GWT.<AbstractPasswordChangeService> create(AdminPasswordChangeUserService.class);
+            } else {
+                service = GWT.<AbstractPasswordChangeService> create(AdminPasswordChangeManagedService.class);
+            }
             break;
         case ONBOARDING_PMC:
+            service = GWT.<AbstractPasswordChangeService> create(OnboardingUserPasswordChangeManagedService.class);
             break;
         }
         if (service == null) {
@@ -102,7 +111,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
         }
     }
 
-    private boolean isSelfAdmin(Key userPk) {
+    private boolean isSelfAdmin() {
         return EqualsHelper.equals(userPk, ClientContext.getUserVisit().getPrincipalPrimaryKey());
     }
 
