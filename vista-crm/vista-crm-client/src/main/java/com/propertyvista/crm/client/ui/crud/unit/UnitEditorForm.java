@@ -159,7 +159,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().area()), 8).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial()._unitRent(), new CNumberLabel()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial()._marketRent(), new CNumberLabel()), 10).build());
+        //main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial()._marketRent(), new CNumberLabel()), 10).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().servicePrices(), new UnitServicePriceFolder())).build());
 
         // restrict floorplan combo here to any free :
         CComponent<Floorplan, ?> comp = get(proto().floorplan());

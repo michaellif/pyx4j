@@ -13,6 +13,10 @@
  */
 package com.propertyvista.crm.server.services.unit;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -23,17 +27,22 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.AptUnitServicePriceDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
+
+    private static final Vector<Service.Type> SERVICES_PROVIDED_BY_UNIT = new Vector<Service.Type>(Arrays.asList(Service.Type.residentialUnit,
+            Service.Type.residentialShortTermUnit, Service.Type.commercialUnit));
 
     public UnitCrudServiceImpl() {
         super(AptUnit.class, AptUnitDTO.class);
@@ -52,6 +61,10 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
 
             Persistence.service().retrieve(dto.floorplan());
             Persistence.service().retrieve(dto.belongsTo());
+
+            // retrieve market rent prices
+            retrieveServicePrices(dto);
+
         } else {
             // load detached entities (temporary):
             Persistence.service().retrieve(dto.floorplan());
@@ -64,6 +77,7 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
                 dto.marketing().description().setValue(null);
             }
             dto.info().economicStatusDescription().setValue(null);
+
         }
 
         // Fill Unit financial data (transient):  
@@ -112,5 +126,27 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
         } else {
             return dboProto.getObjectClass().getSimpleName() + path.substring(path.indexOf(Path.PATH_SEPARATOR));
         }
+    }
+
+    private void retrieveServicePrices(AptUnitDTO dto) {
+        EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), dto.belongsTo()));
+        criteria.add(PropertyCriterion.in(criteria.proto().version().type(), SERVICES_PROVIDED_BY_UNIT));
+
+        List<Service> services = Persistence.secureQuery(criteria);
+        for (Service service : services) {
+            Persistence.service().retrieve(service.version().items());
+            for (ProductItem item : service.version().items()) {
+                if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(dto.getPrimaryKey())) {
+                    AptUnitServicePriceDTO serviceDTO = EntityFactory.create(AptUnitServicePriceDTO.class);
+                    serviceDTO.id().setValue(service.id().getValue());
+                    serviceDTO.type().setValue(service.version().type().getValue());
+                    serviceDTO.price().setValue(item.price().getValue());
+                    dto.servicePrices().add(serviceDTO);
+                }
+            }
+
+        }
+
     }
 }

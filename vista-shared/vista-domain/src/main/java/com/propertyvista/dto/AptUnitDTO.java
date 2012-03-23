@@ -14,6 +14,7 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -22,4 +23,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 public interface AptUnitDTO extends AptUnit {
 
     IPrimitive<String> buildingCode();
+
+    IList<AptUnitServicePriceDTO> servicePrices();
 }
