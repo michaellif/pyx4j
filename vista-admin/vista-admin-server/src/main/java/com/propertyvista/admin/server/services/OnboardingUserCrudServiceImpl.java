@@ -14,7 +14,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.admin.rpc.OnboardingUserDTO;
 import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.security.AdminUserCredential;
 import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<OnboardingUserCredential, OnboardingUserDTO> implements OnboardingUserCrudService {
@@ -33,23 +32,20 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
         bind(dtoProto.role(), dboProto.behavior());
         bind(dtoProto.onboardingAccountId(), dboProto.onboardingAccountId());
         bind(dtoProto.enabled(), dboProto.enabled());
-        bind(dtoProto.updated(), dboProto.updated());
         bind(dtoProto.requireChangePasswordOnNextLogIn(), dboProto.requiredPasswordChangeOnNextLogIn());
 
     }
 
     @Override
-    protected void persist(OnboardingUserCredential credential, OnboardingUserDTO dto) {
-        dto.email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
-        Persistence.service().merge(credential.user());
+    protected void persist(OnboardingUserCredential dbo, OnboardingUserDTO dto) {
+        dbo.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
+        Persistence.service().merge(dbo.user());
 
-        credential.setPrimaryKey(credential.user().getPrimaryKey());
-
-        AdminUserCredential crs = Persistence.service().retrieve(AdminUserCredential.class, credential.getPrimaryKey());
-        if ((crs == null) || (crs.isNull())) {
-            credential.credential().setValue(PasswordEncryptor.encryptPassword(dto.password().getValue()));
+        if (dbo.getPrimaryKey() == null) {
+            dbo.credential().setValue(PasswordEncryptor.encryptPassword(dto.password().getValue()));
         }
-        Persistence.service().merge(credential);
+        dbo.setPrimaryKey(dbo.user().getPrimaryKey());
+        Persistence.service().merge(dbo);
     }
 
 }

@@ -97,6 +97,10 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
         CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
         UserPreloader.createCrmUser(pmc.email().getValue(), pmc.email().getValue(), pmc.password().getValue(), defaultRole);
+
+        // Create support account by default
+        UserPreloader.createCrmUser("PropertyVista Support", "support@propertyvista.com", "Vista2012", defaultRole);
+
         if (ApplicationMode.isDevelopment()) {
             for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
                 String email = DemoData.UserType.PM.getEmail(i);

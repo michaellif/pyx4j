@@ -30,23 +30,20 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<AdminUs
         bind(dtoProto.updated(), dboProto.user().updated());
 
         bind(dtoProto.enabled(), dboProto.enabled());
-        bind(dtoProto.updated(), dboProto.updated());
         bind(dtoProto.requireChangePasswordOnNextLogIn(), dboProto.requiredPasswordChangeOnNextLogIn());
 
     }
 
     @Override
-    protected void persist(AdminUserCredential credential, AdminUserDTO dto) {
-        dto.email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
-        Persistence.service().merge(credential.user());
+    protected void persist(AdminUserCredential dbo, AdminUserDTO dto) {
+        dbo.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
+        Persistence.service().merge(dbo.user());
 
-        credential.setPrimaryKey(credential.user().getPrimaryKey());
-
-        AdminUserCredential crs = Persistence.service().retrieve(AdminUserCredential.class, credential.getPrimaryKey());
-        if ((crs == null) || (crs.isNull())) {
-            credential.credential().setValue(PasswordEncryptor.encryptPassword(dto.password().getValue()));
+        if (dbo.getPrimaryKey() == null) {
+            dbo.credential().setValue(PasswordEncryptor.encryptPassword(dto.password().getValue()));
         }
-        Persistence.service().merge(credential);
+        dbo.setPrimaryKey(dbo.user().getPrimaryKey());
+        Persistence.service().merge(dbo);
     }
 
 }

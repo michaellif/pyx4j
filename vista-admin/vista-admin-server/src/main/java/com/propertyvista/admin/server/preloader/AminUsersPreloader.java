@@ -54,7 +54,8 @@ class AminUsersPreloader extends AbstractDataPreloader {
                 cnt++;
             }
         }
-        cnt += 2;
+        cnt += 3;
+        createAdminUser("PropertyVista Support", "support@propertyvista.com");
         createAdminUser("VladS", "vlads@propertyvista.com");
         createAdminUser("VictorV", "vvassiliev@propertyvista.com");
 
