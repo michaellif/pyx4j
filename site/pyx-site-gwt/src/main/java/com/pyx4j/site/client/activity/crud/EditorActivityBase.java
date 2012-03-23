@@ -56,6 +56,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected Key parentID;
 
+    protected String parentClass;
+
     protected int tabIndex;
 
     protected Class<? extends CrudAppPlace> placeClass;
@@ -75,6 +77,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     private void setPlace(Place place) {
         entityID = null;
         parentID = null;
+        parentClass = null;
         tabIndex = -1;
 
         view.getMemento().setCurrentPlace(place);
@@ -101,6 +104,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
             } catch (NumberFormatException e) {
                 parentID = null;
             }
+        }
+        if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_PARENT_CLASS)) != null) {
+            // TODO: currently we can't restore java class by it's name in GWT - so use just name instead - find the solution...
+            parentClass = val;
         }
         if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
             tabIndex = Integer.parseInt(val);

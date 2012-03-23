@@ -160,8 +160,13 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID) {
         if (canEditNew()) {
-            AppSite.getPlaceController().goTo(
-                    AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID != null ? parentID : this.parentID));
+            if (parentClass != null) {
+                AppSite.getPlaceController().goTo(
+                        AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID != null ? parentID : this.parentID, parentClass));
+            } else {
+                AppSite.getPlaceController().goTo(
+                        AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID != null ? parentID : this.parentID));
+            }
         }
     }
 

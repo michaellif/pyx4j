@@ -111,7 +111,7 @@ public abstract class CrudAppPlace extends AppPlace {
         arg(ARG_NAME_ID, ARG_VALUE_NEW);
         if (parentID != null) {
             arg(ARG_NAME_PARENT_ID, parentID.toString());
-            arg(ARG_NAME_PARENT_CLASS, parentClass.toString());
+            arg(ARG_NAME_PARENT_CLASS, parentClass.getName());
         }
         return this;
     }
