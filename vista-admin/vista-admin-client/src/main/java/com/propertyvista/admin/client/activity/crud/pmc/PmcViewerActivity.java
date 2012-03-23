@@ -38,7 +38,7 @@ public class PmcViewerActivity extends ViewerActivityBase<PmcDTO> implements Pmc
     @Override
     public void resetCache() {
         PmcCrudService service = GWT.create(PmcCrudService.class);
-        service.reset(new DefaultAsyncCallback<VoidSerializable>() {
+        service.resetCache(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override
             public void onSuccess(VoidSerializable result) {

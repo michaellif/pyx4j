@@ -23,11 +23,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -71,96 +69,53 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             alias.dnsName().setValue(alias.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         }
         super.persist(entity, dto);
+        CacheService.reset();
     }
 
     @Override
     public void create(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
-        try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
-            editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
-
-            super.create(callback, editableEntity);
-
-            preloadPmc(editableEntity);
-
-        } finally {
-            NamespaceManager.remove();
-        }
+        editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
+        super.create(callback, editableEntity);
+        preloadPmc(editableEntity);
     }
 
     private static void preloadPmc(PmcDTO pmc) {
+        final String namespace = NamespaceManager.getNamespace();
         NamespaceManager.setNamespace(pmc.dnsName().getValue());
+        try {
 
-        AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
-        preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
-        log.info("Preload {}", preloader.create());
+            AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
+            preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
+            log.info("Preload {}", preloader.create());
 
-        CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
-        UserPreloader.createCrmUser(pmc.email().getValue(), pmc.email().getValue(), pmc.password().getValue(), defaultRole);
+            CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
+            UserPreloader.createCrmUser(pmc.email().getValue(), pmc.email().getValue(), pmc.password().getValue(), defaultRole);
 
-        // Create support account by default
-        UserPreloader.createCrmUser("PropertyVista Support", "support@propertyvista.com", "Vista2012", defaultRole);
+            // Create support account by default
+            UserPreloader.createCrmUser("PropertyVista Support", "support@propertyvista.com", "Vista2012", defaultRole);
 
-        if (ApplicationMode.isDevelopment()) {
-            for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
-                String email = DemoData.UserType.PM.getEmail(i);
-                UserPreloader.createCrmUser(email, email, email, defaultRole);
+            if (ApplicationMode.isDevelopment()) {
+                for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
+                    String email = DemoData.UserType.PM.getEmail(i);
+                    UserPreloader.createCrmUser(email, email, email, defaultRole);
+                }
             }
-        }
-        Persistence.service().commit();
-    }
-
-    @Override
-    public void retrieve(AsyncCallback<PmcDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
-        try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
-            super.retrieve(callback, entityId, retrieveTraget);
+            Persistence.service().commit();
         } finally {
-            NamespaceManager.remove();
+            NamespaceManager.setNamespace(namespace);
         }
     }
 
     @Override
-    public void save(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
+    public void resetCache(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        final String namespace = NamespaceManager.getNamespace();
+        Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
+        NamespaceManager.setNamespace(pmc.dnsName().getValue());
         try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
             CacheService.reset();
-            super.save(callback, editableEntity);
         } finally {
-            NamespaceManager.remove();
+            NamespaceManager.setNamespace(namespace);
         }
-    }
-
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<PmcDTO>> callback, EntityListCriteria<PmcDTO> criteria) {
-        try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
-            super.list(callback, criteria);
-        } finally {
-            NamespaceManager.remove();
-        }
-    }
-
-    @Override
-    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
-            super.delete(callback, entityId);
-        } finally {
-            NamespaceManager.remove();
-        }
-    }
-
-    @Override
-    public void reset(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
-            Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
-            NamespaceManager.setNamespace(pmc.dnsName().getValue());
-            CacheService.reset();
-            callback.onSuccess(null);
-        } finally {
-            NamespaceManager.remove();
-        }
+        callback.onSuccess(null);
     }
 }

@@ -26,6 +26,6 @@ public interface PmcCrudService extends AbstractCrudService<PmcDTO> {
 
     public void createAccount(AsyncCallback<PmcDTO> callback, PmcAccountCreationRequest request);
 
-    public void reset(AsyncCallback<VoidSerializable> callback, Key entityId);
+    public void resetCache(AsyncCallback<VoidSerializable> callback, Key entityId);
 
 }
