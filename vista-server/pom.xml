@@ -461,11 +461,12 @@
         </profile>
 
         <profile>
-            <id>deploy-target-prod02</id>
+            <id>deploy-target-prod02pg</id>
             <properties>
                 <deployContext>vista-pangroup</deployContext>
-                <vista-app-ping-url>http://pangroup.residentportalsite.com</vista-app-ping-url>
-                <vista-tomcat-url>http://prod02A.birchwoodsoftwaregroup.com</vista-tomcat-url>
+                <!--vista-app-ping-url>http://pangroup.residentportalsite.com</vista-app-ping-url-->
+                <vista-app-ping-url>http://prod02.residentportalsite.com</vista-app-ping-url>
+                <vista-tomcat-url>http://prod02.birchwoodsoftwaregroup.com</vista-tomcat-url>
             </properties>
         </profile>
 
