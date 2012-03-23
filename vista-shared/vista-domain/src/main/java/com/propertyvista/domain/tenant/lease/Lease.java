@@ -45,7 +45,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 
-@ToStringFormat("{0}, {1}, {2}")
+@ToStringFormat("{0}, {1}, {2}, {3}")
 public interface Lease extends IVersionedEntity<LeaseV> {
 
     @I18n(context = "Lease Status")
@@ -191,6 +191,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
     public interface LeaseV extends IVersionData<Lease> {
 
+        @ToString(index = 3)
         IPrimitive<Status> status();
 
         IPrimitive<CompletionType> completion();

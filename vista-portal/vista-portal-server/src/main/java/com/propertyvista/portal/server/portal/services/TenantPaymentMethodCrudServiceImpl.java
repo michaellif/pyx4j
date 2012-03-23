@@ -67,11 +67,11 @@ public class TenantPaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
         TenantInLease tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenantInLease.lease());
-        Persistence.service().retrieve(tenantInLease.lease().holder().unit());
-        Persistence.service().retrieve(tenantInLease.lease().holder().unit().belongsTo());
-        AddressStructured address = tenantInLease.lease().holder().unit().belongsTo().info().address().duplicate();
-        address.suiteNumber().set(tenantInLease.lease().holder().unit().info().number());
+        Persistence.service().retrieve(tenantInLease.leaseV());
+        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
+        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().belongsTo());
+        AddressStructured address = tenantInLease.leaseV().holder().unit().belongsTo().info().address().duplicate();
+        address.suiteNumber().set(tenantInLease.leaseV().holder().unit().info().number());
         callback.onSuccess(address);
     }
 }

@@ -33,7 +33,7 @@ public class TenantLister extends ListerBase<TenantDTO> {
                 new Builder(proto().person().name()).sortable(false).build(),
                 new Builder(proto().person().sex()).build(),
                 new Builder(proto().person().birthDate()).build(),
-                new Builder(proto().person().homePhone(), false).sortable(false).build(),
+                new Builder(proto().person().homePhone()).sortable(false).build(),
                 new Builder(proto().person().mobilePhone(), false).sortable(false).build(),
                 new Builder(proto().person().workPhone(), false).sortable(false).build(),
                 new Builder(proto().person().email()).title("E-mail address").build(),

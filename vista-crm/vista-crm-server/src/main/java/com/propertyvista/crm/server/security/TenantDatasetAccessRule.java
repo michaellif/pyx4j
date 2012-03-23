@@ -27,7 +27,7 @@ public class TenantDatasetAccessRule implements DatasetAccessRule<Tenant> {
 
         criteria.or()
 
-                .right(PropertyCriterion.eq(criteria.proto()._tenantInLease().$().lease().holder().unit().belongsTo().userAccess(), Context.getVisit()
+                .right(PropertyCriterion.eq(criteria.proto()._tenantInLease().$().leaseV().holder().unit().belongsTo().userAccess(), Context.getVisit()
                         .getUserVisit().getPrincipalPrimaryKey()))
 
                 .left(PropertyCriterion.isNull(criteria.proto()._tenantInLease()));

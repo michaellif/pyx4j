@@ -42,7 +42,7 @@ public class LeaseLifecycleSim {
 
         if (tenant != null) {
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
-            tenantInLease.lease().set(lease.version());
+            tenantInLease.leaseV().set(lease.version());
             tenantInLease.tenant().set(tenant);
             tenantInLease.orderInLease().setValue(1);
             tenantInLease.role().setValue(TenantInLease.Role.Applicant);

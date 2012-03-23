@@ -89,11 +89,11 @@ public class MessageTemplates {
         EmailTemplateType type = EmailTemplateType.ApplicationApproved;
 
         // get building policy node
-        Persistence.service().retrieve(tenantInLease.lease());
-        Persistence.service().retrieve(tenantInLease.lease().holder());
-        Persistence.service().retrieve(tenantInLease.lease().holder().unit());
-        Persistence.service().retrieve(tenantInLease.lease().holder().unit().belongsTo());
-        EmailTemplate emailTemplate = getEmailTemplate(type, tenantInLease.lease().holder().unit().belongsTo());
+        Persistence.service().retrieve(tenantInLease.leaseV());
+        Persistence.service().retrieve(tenantInLease.leaseV().holder());
+        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
+        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().belongsTo());
+        EmailTemplate emailTemplate = getEmailTemplate(type, tenantInLease.leaseV().holder().unit().belongsTo());
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         // populate context properties required by template type
@@ -132,11 +132,11 @@ public class MessageTemplates {
             tilCrit.add(PropertyCriterion.eq(tilCrit.proto().tenant().user(), user));
             TenantInLease til = Persistence.service().retrieve(tilCrit);
             if (til != null) {
-                Persistence.service().retrieve(til.lease());
-                Persistence.service().retrieve(til.lease().holder());
-                Persistence.service().retrieve(til.lease().holder().unit());
-                Persistence.service().retrieve(til.lease().holder().unit().belongsTo());
-                Building bldNode = til.lease().holder().unit().belongsTo();
+                Persistence.service().retrieve(til.leaseV());
+                Persistence.service().retrieve(til.leaseV().holder());
+                Persistence.service().retrieve(til.leaseV().holder().unit());
+                Persistence.service().retrieve(til.leaseV().holder().unit().belongsTo());
+                Building bldNode = til.leaseV().holder().unit().belongsTo();
                 if (bldNode != null && !bldNode.isNull()) {
                     policyNode = bldNode;
                 }

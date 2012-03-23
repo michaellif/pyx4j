@@ -85,7 +85,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             }
 
             // save Tenant in Lease: 
-            tenantInLease.lease().set(lease.version());
+            tenantInLease.leaseV().set(lease.version());
             tenantInLease.orderInLease().setValue(no++);
             new TenantConverter.TenantEditorConverter().copyDTOtoDBO(tenantInApplication, tenantInLease);
             Persistence.service().merge(tenantInLease.tenant());

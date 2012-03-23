@@ -115,7 +115,7 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
 
         int no = 0;
         for (TenantInLease item : dbo.version().tenants()) {
-            item.lease().set(dbo.version());
+            item.leaseV().set(dbo.version());
             item.orderInLease().setValue(no++);
             Persistence.service().merge(item);
         }

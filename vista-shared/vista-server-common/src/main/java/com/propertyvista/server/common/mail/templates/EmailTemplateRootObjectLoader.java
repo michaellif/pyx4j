@@ -205,11 +205,11 @@ public class EmailTemplateRootObjectLoader {
             throw new Error("Context cannot be null");
         }
 
-        if (tenantInLease.lease().isValueDetached()) {
-            Persistence.service().retrieve(tenantInLease.lease());
-            Persistence.service().retrieve(tenantInLease.lease().holder());
+        if (tenantInLease.leaseV().isValueDetached()) {
+            Persistence.service().retrieve(tenantInLease.leaseV());
+            Persistence.service().retrieve(tenantInLease.leaseV().holder());
         }
-        Lease lease = tenantInLease.lease().holder();
+        Lease lease = tenantInLease.leaseV().holder();
         if (lease == null || lease.isNull()) {
             throw new Error("Invalid context. No lease found.");
         }
