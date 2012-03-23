@@ -30,11 +30,17 @@ import com.pyx4j.entity.shared.IPrimitive;
 @DiscriminatorValue("ProductCharge")
 public interface _InvoiceProductCharge extends _InvoiceCharge {
 
+    enum ProductType {
+        service, recurringFeature, oneTimeFeature
+    }
+
     enum Period {
         previous, current, next
     }
 
     IPrimitive<Period> period();
+
+    IPrimitive<ProductType> productType();
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> fromDate();
@@ -43,7 +49,7 @@ public interface _InvoiceProductCharge extends _InvoiceCharge {
     IPrimitive<LogicalDate> toDate();
 
     @Owned
-    _InvoiceChargeSubLineItem chargeSubLineItem();
+    InvoiceChargeSubLineItem chargeSubLineItem();
 
     @Detached
     @Owned

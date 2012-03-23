@@ -80,7 +80,6 @@ class Billing {
         nextPeriodBill.totalAdjustments().setValue(new BigDecimal(0));
         nextPeriodBill.immediateAdjustments().setValue(new BigDecimal(0));
         nextPeriodBill.depositRefundAmount().setValue(new BigDecimal(0));
-        nextPeriodBill.latePaymentCharges().setValue(new BigDecimal(0));
         nextPeriodBill.taxes().setValue(new BigDecimal(0));
         nextPeriodBill.depositPaidAmount().setValue(new BigDecimal(0));
 
@@ -112,8 +111,7 @@ class Billing {
         nextPeriodBill.currentAmount().setValue(
                 nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.serviceCharge().getValue())
                         .add(nextPeriodBill.recurringFeatureCharges().getValue()).add(nextPeriodBill.oneTimeFeatureCharges().getValue())
-                        .add(nextPeriodBill.totalAdjustments().getValue()).subtract(nextPeriodBill.depositPaidAmount().getValue())
-                        .add(nextPeriodBill.latePaymentCharges().getValue()));
+                        .add(nextPeriodBill.totalAdjustments().getValue()).subtract(nextPeriodBill.depositPaidAmount().getValue()));
 
         nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue()));
     }

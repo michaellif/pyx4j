@@ -2,11 +2,10 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bill1" pageWidth="400" pageHeight="842" columnWidth="380" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="0" scriptletClass="com.propertyvista.server.billing.print.BillPrintScriptlet">
 	<property name="ireport.zoom" value="1.7715610000000057"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="672"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
 	<field name="pastDueAmount" class="java.math.BigDecimal"/>
 	<field name="totalDueAmount" class="java.math.BigDecimal"/>
-	<field name="latePaymentCharges" class="java.math.BigDecimal"/>
 	<field name="currentAmount" class="java.math.BigDecimal"/>
 	<field name="taxes" class="java.math.BigDecimal"/>
 	<field name="previousBalanceAmount" class="java.math.BigDecimal"/>
@@ -259,7 +258,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Late Fee(s)]]></text>
+				<text><![CDATA[Credit(s)]]></text>
 			</staticText>
 		</band>
 		<band height="23">

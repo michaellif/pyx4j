@@ -43,7 +43,7 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         List<_InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, _InvoiceProductCharge.class);
         List<_InvoiceProductCharge> filteredCharges = new ArrayList<_InvoiceProductCharge>();
         for (_InvoiceProductCharge charge : charges) {
-            if (BillingUtils.isService(charge.chargeSubLineItem().billableItem().item().product())) {
+            if (_InvoiceProductCharge.ProductType.service.equals(charge.productType().getValue())) {
                 filteredCharges.add(charge);
             }
         }
@@ -54,7 +54,7 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         List<_InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, _InvoiceProductCharge.class);
         List<_InvoiceProductCharge> filteredCharges = new ArrayList<_InvoiceProductCharge>();
         for (_InvoiceProductCharge charge : charges) {
-            if (BillingUtils.isRecurringFeature(charge.chargeSubLineItem().billableItem().item().product())) {
+            if (_InvoiceProductCharge.ProductType.recurringFeature.equals(charge.productType().getValue())) {
                 filteredCharges.add(charge);
             }
         }
@@ -65,7 +65,7 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         List<_InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, _InvoiceProductCharge.class);
         List<_InvoiceProductCharge> filteredCharges = new ArrayList<_InvoiceProductCharge>();
         for (_InvoiceProductCharge charge : charges) {
-            if (BillingUtils.isOneTimeFeature(charge.chargeSubLineItem().billableItem().item().product())) {
+            if (_InvoiceProductCharge.ProductType.oneTimeFeature.equals(charge.productType().getValue())) {
                 filteredCharges.add(charge);
             }
         }

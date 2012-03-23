@@ -44,7 +44,6 @@ public class BillLister extends ListerBase<Bill> {
             
             new MemberColumnDescriptor.Builder(proto().totalAdjustments(),false).build(),
             new MemberColumnDescriptor.Builder(proto().depositPaidAmount(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().latePaymentCharges(),false).build(),
             
             new MemberColumnDescriptor.Builder(proto().pastDueAmount(),false).build(),
             new MemberColumnDescriptor.Builder(proto().serviceCharge(),false).build(),

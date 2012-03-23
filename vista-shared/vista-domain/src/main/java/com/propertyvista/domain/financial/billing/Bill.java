@@ -157,12 +157,11 @@ public interface Bill extends IEntity {
 
     IPrimitive<BigDecimal> depositPaidAmount();
 
-    IPrimitive<BigDecimal> latePaymentCharges();
+    IPrimitive<BigDecimal> credits();
 
     /**
      * currentAmount = pastDueAmount + serviceCharge + recurringFeatureCharges +
-     * oneTimeFeatureCharges + totalAdjustments - depositPaidAmount +
-     * latePaymentCharges
+     * oneTimeFeatureCharges + totalAdjustments - depositPaidAmount
      */
     IPrimitive<BigDecimal> currentAmount();
 

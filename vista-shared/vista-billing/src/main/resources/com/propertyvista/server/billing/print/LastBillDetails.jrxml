@@ -6,7 +6,6 @@
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
 	<field name="pastDueAmount" class="java.math.BigDecimal"/>
 	<field name="totalDueAmount" class="java.math.BigDecimal"/>
-	<field name="latePaymentCharges" class="java.math.BigDecimal"/>
 	<field name="currentAmount" class="java.math.BigDecimal"/>
 	<field name="taxes" class="java.math.BigDecimal"/>
 	<field name="previousBalanceAmount" class="java.math.BigDecimal"/>

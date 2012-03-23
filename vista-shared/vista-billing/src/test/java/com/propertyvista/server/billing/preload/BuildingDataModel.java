@@ -73,6 +73,7 @@ public class BuildingDataModel {
         productItem.type().set(serviceMeta.get(Service.Type.residentialUnit).get(0));
         productItem.element().set(generateResidentialUnit());
         productItem.price().setValue(new BigDecimal("930.30"));
+        productItem.description().setValue(productItem.type().name().getValue());
 
         standardResidentialService.version().items().add(productItem);
 
@@ -207,6 +208,7 @@ public class BuildingDataModel {
         productItem.type().set(type);
         productItem.element().set(parking);
         productItem.price().setValue(new BigDecimal("80.00"));
+        productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);
     }
 
@@ -215,6 +217,7 @@ public class BuildingDataModel {
         productItem.type().set(type);
         productItem.element().set(lockerArea);
         productItem.price().setValue(new BigDecimal("60.00"));
+        productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);
     }
 
@@ -222,6 +225,7 @@ public class BuildingDataModel {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(type);
         productItem.price().setValue(new BigDecimal("40.00"));
+        productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);
     }
 
@@ -229,6 +233,7 @@ public class BuildingDataModel {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(type);
         productItem.price().setValue(new BigDecimal("20.00"));
+        productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);
     }
 
@@ -236,6 +241,7 @@ public class BuildingDataModel {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(type);
         productItem.price().setValue(new BigDecimal("100.00"));
+        productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);
     }
 

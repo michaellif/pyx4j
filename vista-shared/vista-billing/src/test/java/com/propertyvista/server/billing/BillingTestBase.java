@@ -269,6 +269,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
         adjustment.actionType().setValue(actionType);
         adjustment.effectiveDate().setValue(effectiveDate);
         adjustment.expirationDate().setValue(expirationDate);
+        adjustment.description().setValue(actionType.name());
 
         actualBillableItem.adjustments().add(adjustment);
 

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillEntryAdjustment;
@@ -31,6 +32,8 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 
 public class _ProductChargeProcessor {
+
+    private static final I18n i18n = I18n.get(_ProductChargeProcessor.class);
 
     private final static Logger log = LoggerFactory.getLogger(_ProductChargeProcessor.class);
 
@@ -97,7 +100,7 @@ public class _ProductChargeProcessor {
         if (revisedCharge != null && originalCharge == null) {
             addCharge(revisedCharge);
         } else if (revisedCharge != null && originalCharge != null) {
-            if (!revisedCharge.total().getValue().equals(originalCharge.total().getValue())) {
+            if (!revisedCharge.totalBeforeTax().getValue().equals(originalCharge.totalBeforeTax().getValue())) {
                 //TODO   billing.getBillEntryAdjustmentProcessor().createBillEntryAdjustment(originalCharge, revisedCharge);
             }
         }
@@ -165,18 +168,28 @@ public class _ProductChargeProcessor {
         charge.fromDate().setValue(overlap.getFromDate());
         charge.toDate().setValue(overlap.getToDate());
 
+        if (BillingUtils.isService(billableItem.item().product())) {
+            charge.productType().setValue(_InvoiceProductCharge.ProductType.service);
+        } else if (BillingUtils.isRecurringFeature(billableItem.item().product())) {
+            charge.productType().setValue(_InvoiceProductCharge.ProductType.recurringFeature);
+        } else if (BillingUtils.isOneTimeFeature(billableItem.item().product())) {
+            charge.productType().setValue(_InvoiceProductCharge.ProductType.oneTimeFeature);
+        } else {
+            throw new Error("Unknown product type");
+        }
+
         createChargeSubLineItem(charge, billableItem);
         createAdjustmentSubLineItems(charge, billableItem);
         createConcessionSubLineItems(charge, billableItem);
 
-        charge.total().setValue(charge.chargeSubLineItem().amount().getValue());
+        charge.totalBeforeTax().setValue(charge.chargeSubLineItem().amount().getValue());
 
         for (_InvoiceAdjustmentSubLineItem subLineItem : charge.adjustmentSubLineItems()) {
-            charge.total().setValue(charge.total().getValue().add(subLineItem.amount().getValue()));
+            charge.totalBeforeTax().setValue(charge.totalBeforeTax().getValue().add(subLineItem.amount().getValue()));
         }
 
         for (_InvoiceConcessionSubLineItem subLineItem : charge.concessionSubLineItems()) {
-            charge.total().setValue(charge.total().getValue().add(subLineItem.amount().getValue()));
+            charge.totalBeforeTax().setValue(charge.totalBeforeTax().getValue().add(subLineItem.amount().getValue()));
         }
 
         calculateTax(charge);
@@ -196,6 +209,7 @@ public class _ProductChargeProcessor {
             charge.chargeSubLineItem().amount().setValue(prorate(charge));
         }
 
+        charge.chargeSubLineItem().description().setValue(billableItem.item().description().getStringView());
     }
 
     private void createAdjustmentSubLineItems(_InvoiceProductCharge charge, BillableItem billableItem) {
@@ -239,6 +253,8 @@ public class _ProductChargeProcessor {
             adjustment.amount().setValue(amount.multiply(proration));
         }
 
+        adjustment.description().setValue(billableItemAdjustment.billableItem().item().type().featureType().getStringView() + " " + i18n.tr("Adjustment"));
+
         adjustment.billableItemAdjustment().set(billableItemAdjustment);
 
         charge.adjustmentSubLineItems().add(adjustment);
@@ -257,10 +273,10 @@ public class _ProductChargeProcessor {
     }
 
     private void calculateTax(_InvoiceProductCharge charge) {
-        if (!charge.total().isNull()) {
+        if (!charge.totalBeforeTax().isNull()) {
             charge.taxes().addAll(
-                    TaxUtils.calculateTaxes(charge.total().getValue(), charge.chargeSubLineItem().billableItem().item().type(), billing.getNextPeriodBill()
-                            .billingRun().building()));
+                    TaxUtils.calculateTaxes(charge.totalBeforeTax().getValue(), charge.chargeSubLineItem().billableItem().item().type(), billing
+                            .getNextPeriodBill().billingRun().building()));
         }
         charge.taxTotal().setValue(new BigDecimal(0));
         for (InvoiceChargeTax chargeTax : charge.taxes()) {
@@ -273,13 +289,13 @@ public class _ProductChargeProcessor {
             return;
         }
         if (BillingUtils.isService(charge.chargeSubLineItem().billableItem().item().product())) { //Service
-            billing.getNextPeriodBill().serviceCharge().setValue(charge.total().getValue());
+            billing.getNextPeriodBill().serviceCharge().setValue(charge.totalBeforeTax().getValue());
         } else if (BillingUtils.isRecurringFeature(charge.chargeSubLineItem().billableItem().item().product())) { //Recurring Feature
             billing.getNextPeriodBill().recurringFeatureCharges()
-                    .setValue(billing.getNextPeriodBill().recurringFeatureCharges().getValue().add(charge.total().getValue()));
+                    .setValue(billing.getNextPeriodBill().recurringFeatureCharges().getValue().add(charge.totalBeforeTax().getValue()));
         } else {
             billing.getNextPeriodBill().oneTimeFeatureCharges()
-                    .setValue(billing.getNextPeriodBill().oneTimeFeatureCharges().getValue().add(charge.total().getValue()));
+                    .setValue(billing.getNextPeriodBill().oneTimeFeatureCharges().getValue().add(charge.totalBeforeTax().getValue()));
         }
         billing.getNextPeriodBill().lineItems().add(charge);
         billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(charge.taxTotal().getValue()));

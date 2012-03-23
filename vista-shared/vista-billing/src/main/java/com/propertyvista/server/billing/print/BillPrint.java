@@ -50,7 +50,9 @@ public class BillPrint {
         Persistence.service().retrieve(bill.lineItems());
         for (_InvoiceLineItem lineItem : bill.lineItems()) {
             if (_InvoiceProductCharge.class.isAssignableFrom(lineItem.getClass())) {
-                Persistence.service().retrieve(((_InvoiceProductCharge) lineItem).chargeSubLineItem().billableItem().item().product());
+                Persistence.service().retrieve(((_InvoiceProductCharge) lineItem).chargeSubLineItem());
+                Persistence.service().retrieve(((_InvoiceProductCharge) lineItem).adjustmentSubLineItems());
+                Persistence.service().retrieve(((_InvoiceProductCharge) lineItem).concessionSubLineItems());
             }
         }
         Persistence.service().retrieve(bill.leaseAdjustments());
