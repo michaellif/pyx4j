@@ -1057,7 +1057,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if ((attachLevel == AttachLevel.ToStringMembers) && (!member.getMemberMeta().isToStringMember())) {
                 continue;
             }
-            cascadeRetrieveMember(entity, attachLevel, member);
+            cascadeRetrieveMember(entity, null, member);
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getDetachedMembers()) {
             if ((attachLevel == AttachLevel.ToStringMembers) && (member.getMemberMeta().isToStringMember())) {
@@ -1082,14 +1082,18 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if ((entity.getOwner() != null) && (memberMeta.isOwner())) {
             return;
         }
+        AttachLevel retriveAttachLevel = attachLevel;
+        if (retriveAttachLevel == null) {
+            retriveAttachLevel = memberMeta.getAttachLevel();
+        }
         if (memberMeta.isEntity()) {
             IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
             if (childEntity.getPrimaryKey() != null) {
-                if (cascadeRetrieve(childEntity, member.getMemberMeta().getAttachLevel()) == null) {
+                if (cascadeRetrieve(childEntity, retriveAttachLevel) == null) {
                     throw new RuntimeException("Entity '" + memberMeta.getCaption() + "' [primary key =  " + childEntity.getPrimaryKey() + "; path = "
                             + childEntity.getPath() + "] is not found");
                 }
-                if (memberMeta.getAttachLevel() == AttachLevel.ToStringMembers) {
+                if (retriveAttachLevel == AttachLevel.ToStringMembers) {
                     childEntity.setAttachLevel(AttachLevel.ToStringMembers);
                 }
             }
@@ -1097,11 +1101,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             @SuppressWarnings("unchecked")
             ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
             for (IEntity childEntity : iCollectionMember) {
-                if (cascadeRetrieve(childEntity, member.getMemberMeta().getAttachLevel()) == null) {
+                if (cascadeRetrieve(childEntity, retriveAttachLevel) == null) {
                     throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
                             + childEntity.getPath() + " NotFound");
                 }
-                if (memberMeta.getAttachLevel() == AttachLevel.ToStringMembers) {
+                if (retriveAttachLevel == AttachLevel.ToStringMembers) {
                     childEntity.setAttachLevel(AttachLevel.ToStringMembers);
                 }
             }
