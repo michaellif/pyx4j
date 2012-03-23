@@ -150,7 +150,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
     @NotNull
     @Detached
-    // should be loaded in service when necessary!..
+    @ToString(index = 1)
     @Caption(name = "Selected Unit")
     AptUnit unit();
 

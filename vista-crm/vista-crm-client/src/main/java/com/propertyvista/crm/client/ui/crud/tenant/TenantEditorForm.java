@@ -28,22 +28,27 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.components.folders.PhoneFolder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
     private static final I18n i18n = I18n.get(TenantEditorForm.class);
+
+    private final FormFlexPanel detailsContent = new FormFlexPanel();
 
     private final FormFlexPanel person = new FormFlexPanel();
 
@@ -64,9 +69,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     @Override
     public IsWidget createContent() {
 
+        // Person:
         int row = -1;
-
-        //Person
         if (isEditable()) {
             person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
             person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
@@ -89,7 +93,10 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
         person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 25).build());
 
-        //Company
+        // ------------------------------------------------------------------------------------------------------------
+
+        // Company:
+        row = -1;
         company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().company().name()), 25).build());
         company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().company().website()), 25).build());
 
@@ -100,6 +107,20 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         company.setWidget(++row, 0, inject(proto().company().emails(), new EmailFolder(isEditable())));
 
         contacts.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
+
+        // ------------------------------------------------------------------------------------------------------------
+
+        // form the hole combined content:
+        row = -1;
+        detailsContent.setWidget(++row, 0, person);
+        detailsContent.setWidget(++row, 0, company);
+        detailsContent.setBR(++row, 0, 1);
+        if (isEditable()) {
+            detailsContent.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease(), new CEntityLabel<Lease>())).build());
+        } else {
+            detailsContent.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(MainActivityMapper.getCrudAppPlace(Lease.class)))).build());
+        }
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
@@ -146,16 +167,23 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
     private void setVisibility() {
         tabPanel.clear();
+        person.setVisible(false);
+        company.setVisible(false);
+
         switch (getValue().type().getValue()) {
         case person:
-            tabPanel.add(new CrmScrollPanel(person), i18n.tr("Details"));
+            person.setVisible(true);
+            tabPanel.add(new CrmScrollPanel(detailsContent), i18n.tr("Details"));
             tabPanel.add(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
             tabPanel.setLastTabDisabled(isEditable());
             break;
         case company:
-            tabPanel.add(new CrmScrollPanel(company), proto().company().getMeta().getCaption());
+            company.setVisible(true);
+            tabPanel.add(new CrmScrollPanel(detailsContent), proto().company().getMeta().getCaption());
             break;
         }
+
+        get(proto().lease()).setVisible(!getValue().lease().isNull());
 
         tabPanel.add(new ScrollPanel(contacts), proto().emergencyContacts().getMeta().getCaption());
     }

@@ -13,24 +13,53 @@
  */
 package com.propertyvista.crm.server.services.tenant;
 
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.crm.rpc.services.tenant.TenantCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.TenantDTO;
 
-public class TenantCrudServiceImpl extends GenericCrudServiceDtoImpl<Tenant, TenantDTO> implements TenantCrudService {
+public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, TenantDTO> implements TenantCrudService {
 
     public TenantCrudServiceImpl() {
         super(Tenant.class, TenantDTO.class);
     }
 
     @Override
-    protected void enhanceDTO(Tenant in, TenantDTO dto, boolean fromList) {
-        if (!fromList) {
-            // load detached data:
-            Persistence.service().retrieve(dto.emergencyContacts());
+    protected void bind() {
+        bind(Tenant.class, dtoProto, dboProto);
+    }
+
+    @Override
+    protected void enhanceRetrieved(Tenant in, TenantDTO dto) {
+        // load detached data:
+        Persistence.service().retrieve(dto.emergencyContacts());
+
+        // find first corresponding lease(s):
+        Persistence.service().retrieveMember(in._tenantInLease());
+        if (!in._tenantInLease().isEmpty()) {
+            TenantInLease til = in._tenantInLease().iterator().next();
+            Persistence.service().retrieve(til.lease());
+            dto.lease().set(til.lease().holder());
+            Persistence.service().retrieve(dto.lease());
+            Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);
         }
     }
+
+    @Override
+    protected void enhanceListRetrieved(Tenant in, TenantDTO dto) {
+        // find first corresponding lease(s):
+        Persistence.service().retrieveMember(in._tenantInLease());
+        if (!in._tenantInLease().isEmpty()) {
+            TenantInLease til = in._tenantInLease().iterator().next();
+            Persistence.service().retrieve(til.lease());
+            dto.lease().set(til.lease().holder());
+            Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(dto.lease().unit(), AttachLevel.ToStringMembers);
+        }
+    }
+
 }
