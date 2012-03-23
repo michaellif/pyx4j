@@ -38,7 +38,7 @@ import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> implements GuarantorViewerView.Presenter {
 
-    private final IListerView.Presenter screeningLister;
+    private final IListerView.Presenter<PersonScreening> screeningLister;
 
     @SuppressWarnings("unchecked")
     public GuarantorViewerActivity(Place place) {
@@ -50,7 +50,7 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     }
 
     @Override
-    public Presenter getScreeningListerPresenter() {
+    public Presenter<PersonScreening> getScreeningListerPresenter() {
         return screeningLister;
     }
 

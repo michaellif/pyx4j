@@ -15,14 +15,18 @@ package com.propertyvista.crm.client.activity.crud.tenant.screening;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.tenant.screening.PersonScreeningCrudService;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.Tenant;
 
 public class PersonScreeningEditorActivity extends EditorActivityBase<PersonScreening> {
 
@@ -30,5 +34,18 @@ public class PersonScreeningEditorActivity extends EditorActivityBase<PersonScre
     public PersonScreeningEditorActivity(Place place) {
         super(place, TenantViewFactory.instance(PersonScreeningEditorView.class), (AbstractCrudService<PersonScreening>) GWT
                 .create(PersonScreeningCrudService.class), PersonScreening.class);
+    }
+
+    @Override
+    protected void createNewEntity(AsyncCallback<PersonScreening> callback) {
+        PersonScreening screening = EntityFactory.create(entityClass);
+
+        if (Tenant.class.getName().equals(parentClass)) {
+            screening.screene().set(EntityFactory.create(Tenant.class));
+        } else if (Guarantor.class.getName().equals(parentClass)) {
+            screening.screene().set(EntityFactory.create(Guarantor.class));
+        }
+
+        callback.onSuccess(screening);
     }
 }

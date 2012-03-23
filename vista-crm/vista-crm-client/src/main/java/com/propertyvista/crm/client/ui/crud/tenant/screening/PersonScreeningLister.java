@@ -34,7 +34,5 @@ public class PersonScreeningLister extends ListerBase<PersonScreening> {
             new MemberColumnDescriptor.Builder(proto().equifaxApproval().percenrtageApproved()).build(),
             new MemberColumnDescriptor.Builder(proto().equifaxApproval().suggestedDecision()).build()
         );//@formatter:on
-
     }
-
 }

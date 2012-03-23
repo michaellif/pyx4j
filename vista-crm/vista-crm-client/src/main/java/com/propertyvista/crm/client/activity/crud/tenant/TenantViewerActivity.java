@@ -40,7 +40,7 @@ import com.propertyvista.dto.TenantDTO;
 
 public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implements TenantViewerView.Presenter {
 
-    private final IListerView.Presenter<?> screeningLister;
+    private final IListerView.Presenter<PersonScreening> screeningLister;
 
     @SuppressWarnings("unchecked")
     public TenantViewerActivity(Place place) {
@@ -52,7 +52,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     }
 
     @Override
-    public Presenter<?> getScreeningListerPresenter() {
+    public Presenter<PersonScreening> getScreeningListerPresenter() {
         return screeningLister;
     }
 

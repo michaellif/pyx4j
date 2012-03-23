@@ -24,7 +24,7 @@ public interface TenantViewerView extends IViewerView<TenantDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
-        IListerView.Presenter getScreeningListerPresenter();
+        IListerView.Presenter<PersonScreening> getScreeningListerPresenter();
 
         void goToChangePassword(Key tenantPrincipalPk, String tenantName);
     }
