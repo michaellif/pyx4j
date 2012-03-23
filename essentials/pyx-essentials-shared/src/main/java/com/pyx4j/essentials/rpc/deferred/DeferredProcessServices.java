@@ -23,6 +23,7 @@ package com.pyx4j.essentials.rpc.deferred;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+@Deprecated
 public interface DeferredProcessServices {
 
     public interface GetStatus extends Service<String, DeferredProcessProgressResponse> {
