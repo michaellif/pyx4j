@@ -14,9 +14,8 @@
 package com.propertyvista.admin.server.security;
 
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
-import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
@@ -40,7 +39,7 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.AdminPasswordChangeRequired, new IServiceExecutePermission(AdminPasswordResetService.class));
 
         grant(VistaBasicBehavior.Admin, new EntityPermission(Pmc.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.Admin, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
+        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(DeferredProcessService.class));
 
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(VistaAdminService.class));
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PmcCrudService.class));
