@@ -36,6 +36,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 
+// TODO refactor a little bit, create status setting function for various cases and use them 
 public class AvailabilityReportManager {
 
     private final AptUnit unit;
@@ -149,6 +150,7 @@ public class AvailabilityReportManager {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
                 status.moveInDay().setValue(segment.lease().version().expectedMoveIn().getValue());
+                status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem()._currentPrice().getValue());
                 break;
             }
         }
@@ -165,6 +167,7 @@ public class AvailabilityReportManager {
         status.rentedStatus().setValue(RentedStatus.Rented);
         status.rentedFromDay().setValue(current.lease().leaseFrom().getValue());
         status.moveInDay().setValue(current.lease().version().expectedMoveIn().getValue());
+        status.unitRent().setValue(current.lease().version().leaseProducts().serviceItem()._currentPrice().getValue());
     }
 
     private void leased(UnitAvailabilityStatus status, AptUnitOccupancySegment current, List<AptUnitOccupancySegment> future) {
@@ -216,6 +219,7 @@ public class AvailabilityReportManager {
                     status.rentedStatus().setValue(RentedStatus.Rented);
                     status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
                     status.moveInDay().setValue(segment.lease().version().expectedMoveIn().getValue());
+                    status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem()._currentPrice().getValue());
                 }
                 break;
             default:
@@ -241,6 +245,7 @@ public class AvailabilityReportManager {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
                 status.moveInDay().setValue(segment.lease().version().expectedMoveIn().getValue());
+                status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem()._currentPrice().getValue());
                 break;
             }
         }
@@ -261,25 +266,14 @@ public class AvailabilityReportManager {
         status.building().set(unit.belongsTo());
         status.floorplan().set(unit.floorplan());
 
-        // TODO fill unit rent and market rent
-
-        // unit rent: get from the latest lease
-//            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-//            criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
-//            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.Approved, Lease.Status.Active, Lease.Status.Completed,
-//                    Lease.Status.Finalised, Lease.Status.Closed));
-//            criteria.desc(criteria.proto().leaseFrom());
-//            
-//            Lease lease = Persistence.secureRetrieve(criteria);
-//            lease.
-
-        // FIXME use real values
-        BigDecimal unitRent = new BigDecimal("1000");
-        BigDecimal marketRent = new BigDecimal("1100");
+        // TODO market rent (market rent should be fetched from building catalog
+        BigDecimal marketRent = null;
+        BigDecimal unitRent = status.unitRent().getValue();
 
         MathContext ctx = new MathContext(2, RoundingMode.UP);
         status.unitRent().setValue(unitRent);
         status.marketRent().setValue(marketRent);
+
         if (unitRent != null & marketRent != null) {
             status.rentDeltaAbsolute().setValue(unitRent.subtract(marketRent, ctx));
             if (marketRent.compareTo(BigDecimal.ZERO) != 0) {
