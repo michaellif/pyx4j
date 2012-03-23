@@ -55,7 +55,9 @@ public enum VistaCrmBehavior implements Behavior {
     Reports,
 
     //Onboarding
-    VistaAccountOwner;
+    PropertyVistaAccountOwner,
+
+    PropertyVistaSupport;
 
     @Override
     public String toString() {

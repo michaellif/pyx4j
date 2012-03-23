@@ -17,31 +17,35 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.UpdateUploadDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> implements BuildingListerView {
 
     private static final I18n i18n = I18n.get(BuildingListerViewImpl.class);
 
-    private final Button upload;
+    private Button upload;
 
     public BuildingListerViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
         setLister(new BuildingLister());
 
-        upload = new Button(i18n.tr("Upload Update"), new ClickHandler() {
+        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
+            upload = new Button(i18n.tr("Upload Update"), new ClickHandler() {
 
-            @Override
-            public void onClick(ClickEvent event) {
-                UpdateUploadDialog.show();
-            }
-        });
-        addActionButton(upload);
+                @Override
+                public void onClick(ClickEvent event) {
+                    UpdateUploadDialog.show();
+                }
+            });
+            addActionButton(upload);
+        }
 
     }
 }

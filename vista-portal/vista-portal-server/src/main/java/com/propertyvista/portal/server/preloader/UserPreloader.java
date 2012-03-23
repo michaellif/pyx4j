@@ -72,7 +72,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         return user;
     }
 
-    public static CrmUser createCrmUser(String name, String email, String password, CrmRole role) {
+    public static CrmUser createCrmUser(String name, String email, String password, CrmRole... roles) {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -96,7 +96,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.credential().setValue(PasswordEncryptor.encryptPassword(email));
         credential.enabled().setValue(Boolean.TRUE);
         credential.accessAllBuildings().setValue(Boolean.TRUE);
-        credential.roles().add(role);
+        credential.roles().addAll(Arrays.asList(roles));
 
         Persistence.service().persist(credential);
 

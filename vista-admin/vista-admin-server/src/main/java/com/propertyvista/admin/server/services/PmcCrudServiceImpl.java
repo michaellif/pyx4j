@@ -15,35 +15,23 @@ package com.propertyvista.admin.server.services;
 
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PmcDnsName;
-import com.propertyvista.domain.security.CrmRole;
-import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
-import com.propertyvista.portal.server.preloader.CrmRolesPreloader;
-import com.propertyvista.portal.server.preloader.UserPreloader;
-import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
+import com.propertyvista.portal.server.preloader.PmcCreator;
 import com.propertyvista.server.domain.admin.Pmc;
 
 public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> implements PmcCrudService {
-
-    private final static Logger log = LoggerFactory.getLogger(PmcCrudServiceImpl.class);
 
     public PmcCrudServiceImpl() {
         super(Pmc.class, PmcDTO.class);
@@ -76,34 +64,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     public void create(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
         editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         super.create(callback, editableEntity);
-        preloadPmc(editableEntity);
-    }
-
-    private static void preloadPmc(PmcDTO pmc) {
-        final String namespace = NamespaceManager.getNamespace();
-        NamespaceManager.setNamespace(pmc.dnsName().getValue());
-        try {
-
-            AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
-            preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
-            log.info("Preload {}", preloader.create());
-
-            CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
-            UserPreloader.createCrmUser(pmc.email().getValue(), pmc.email().getValue(), pmc.password().getValue(), defaultRole);
-
-            // Create support account by default
-            UserPreloader.createCrmUser("PropertyVista Support", "support@propertyvista.com", "Vista2012", defaultRole);
-
-            if (ApplicationMode.isDevelopment()) {
-                for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
-                    String email = DemoData.UserType.PM.getEmail(i);
-                    UserPreloader.createCrmUser(email, email, email, defaultRole);
-                }
-            }
-            Persistence.service().commit();
-        } finally {
-            NamespaceManager.setNamespace(namespace);
-        }
+        PmcCreator.preloadPmc(editableEntity);
     }
 
     @Override

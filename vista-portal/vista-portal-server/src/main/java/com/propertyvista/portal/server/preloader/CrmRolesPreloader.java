@@ -13,12 +13,15 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -32,6 +35,8 @@ import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
 
     public static final String DEFAULT_ACCESS_ALL_ROLE_NAME = "All";
+
+    public static final String DEFAULT_SUPPORT_ROLE_NAME = "PropertyVista Support";
 
     private final static Logger log = LoggerFactory.getLogger(CrmRolesPreloader.class);
 
@@ -52,9 +57,19 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         return Persistence.service().retrieve(criteria);
     }
 
+    public static CrmRole getSupportRole() {
+        EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_SUPPORT_ROLE_NAME));
+        return Persistence.service().retrieve(criteria);
+    }
+
     @Override
     public String create() {
-        createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, VistaCrmBehavior.values());
+        List<VistaCrmBehavior> allRoles = new ArrayList<VistaCrmBehavior>(Arrays.asList(VistaCrmBehavior.values()));
+        if (!ServerSideConfiguration.isStartedUnderEclipse()) {
+            allRoles.remove(VistaCrmBehavior.PropertyVistaSupport);
+        }
+        createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, allRoles.toArray(new VistaCrmBehavior[allRoles.size()]));
 
         createRole("Accountant", VistaCrmBehavior.ProductCatalog, VistaCrmBehavior.Billing, VistaCrmBehavior.Reports);
         createRole("Accounting", VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
@@ -72,6 +87,8 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         createRole("Owner", VistaCrmBehavior.BuildingFinancial, VistaCrmBehavior.Reports);
         createRole("PM", VistaCrmBehavior.Tenants, VistaCrmBehavior.Emergency, VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Occupancy,
                 VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
+
+        createRole(DEFAULT_SUPPORT_ROLE_NAME, VistaCrmBehavior.PropertyVistaSupport);
 
         if (ApplicationMode.isDevelopment()) {
             for (VistaCrmBehavior behavior : EnumSet.allOf(VistaCrmBehavior.class)) {
