@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -29,6 +32,7 @@ import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.server.common.mail.templates.model.ApplicationT;
@@ -39,6 +43,9 @@ import com.propertyvista.server.common.mail.templates.model.PasswordRequestT;
 import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
 
 public class EmailTemplateManager {
+
+    private static final Logger log = LoggerFactory.getLogger(EmailTemplateManager.class);
+
     public static List<IEntity> getTemplateDataObjects(EmailTemplateType template) {
         List<IEntity> values = new Vector<IEntity>();
         // add PortalLinks to all templates
@@ -102,7 +109,8 @@ public class EmailTemplateManager {
                 final String varName = htmlTemplate.substring(varStart, varEnd);
                 final String value = getVarValue(varName, data);
                 if (value == null) {
-                    throw new IllegalArgumentException("Missing value of ${" + varName + "}");
+                    log.error("Missing data value of {} in {}", varName, data);
+                    throw new UserRuntimeException("Missing data value of ${" + varName + "}");
                 } else {
                     buffer.append(value);
                 }

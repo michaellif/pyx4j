@@ -104,11 +104,7 @@ public class ApplicationManager {
         for (TenantInLease tenantInLease : mapp.lease().version().tenants()) {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
                 Persistence.service().retrieve(tenantInLease.tenant().user());
-                try {
-                    sendInvitationEmail(tenantInLease.tenant().user(), mapp.lease(), EmailTemplateType.ApplicationCreatedApplicant);
-                } catch (Exception e) {
-                    break;
-                }
+                sendInvitationEmail(tenantInLease.tenant().user(), mapp.lease(), EmailTemplateType.ApplicationCreatedApplicant);
 
                 mapp.status().setValue(MasterApplication.Status.Invited);
                 Persistence.service().persist(mapp);
@@ -221,21 +217,16 @@ public class ApplicationManager {
             Persistence.service().persist(ma);
         }
 
-        // actual invitation (send e-mail):
-        try {
-            switch (behaviour) {
-            case ProspectiveApplicant:
-                sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedApplicant);
-                break;
-            case ProspectiveCoApplicant:
-                sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedCoApplicant);
-                break;
-            case Guarantor:
-                sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedGuarantor);
-                break;
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
+        switch (behaviour) {
+        case ProspectiveApplicant:
+            sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedApplicant);
+            break;
+        case ProspectiveCoApplicant:
+            sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedCoApplicant);
+            break;
+        case Guarantor:
+            sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedGuarantor);
+            break;
         }
 
         // update app status:
