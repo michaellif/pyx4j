@@ -211,6 +211,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                 adopt(item);
                 getValue().add(result);
                 item.populate(result);
+
+                revalidate();
                 ValueChangeEvent.fire(CEntityFolder.this, getValue());
             }
         });
@@ -224,6 +226,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     protected void removeItem(CEntityFolderItem<E> item) {
         abandon(item);
         getValue().remove(item.getValue());
+        revalidate();
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
     }
 
@@ -253,6 +256,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         setNativeValue(getValue());
 
+        revalidate();
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
         return;
 
