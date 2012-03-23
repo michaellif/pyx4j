@@ -75,9 +75,18 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
         callback.onSuccess(dtoReturn);
     }
 
+    protected E retrieveForSave(DTO dto) {
+        E entity = Persistence.secureRetrieve(entityClass, dto.getPrimaryKey());
+        if (entity == null) {
+            entity = EntityFactory.create(dboClass);
+        }
+        return entity;
+    }
+
     @Override
     public void save(AsyncCallback<DTO> callback, DTO dto) {
-        E entity = createDBO(dto);
+        E entity = retrieveForSave(dto);
+        copyDTOtoDBO(dto, entity);
         persist(entity, dto);
         Persistence.service().commit();
         DTO dtoReturn = createDTO(entity);
