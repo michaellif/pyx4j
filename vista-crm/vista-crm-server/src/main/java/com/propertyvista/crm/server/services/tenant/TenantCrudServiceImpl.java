@@ -45,7 +45,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
             Persistence.service().retrieve(til.lease());
             dto.lease().set(til.lease().holder());
             Persistence.service().retrieve(dto.lease());
-            Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(dto.lease().unit());
         }
     }
 
@@ -58,7 +58,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
             Persistence.service().retrieve(til.lease());
             dto.lease().set(til.lease().holder());
             Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);
-            Persistence.service().retrieve(dto.lease().unit(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(dto.lease().unit());
         }
     }
 

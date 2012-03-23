@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -44,6 +45,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 
+@ToStringFormat("{0}, {1}, {2}")
 public interface Lease extends IVersionedEntity<LeaseV> {
 
     @I18n(context = "Lease Status")
@@ -145,12 +147,13 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
     @NotNull
     @ReadOnly
+    @ToString(index = 1)
     @MemberColumn(name = "leaseType")
     IPrimitive<Service.Type> type();
 
     @NotNull
     @Detached
-    @ToString(index = 1)
+    @ToString(index = 2)
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
