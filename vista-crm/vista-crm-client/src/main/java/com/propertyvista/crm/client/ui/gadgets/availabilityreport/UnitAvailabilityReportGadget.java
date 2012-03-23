@@ -225,7 +225,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
             return Arrays.asList(//@formatter:off
                     // references
                     new MemberColumnDescriptor.Builder(proto().building().propertyCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().externalId()).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().externalId()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().address()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
@@ -236,16 +236,16 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                     
                     // status
                     new MemberColumnDescriptor.Builder(proto().vacancyStatus()).build(),
-                    new MemberColumnDescriptor.Builder(proto().rentedStatus()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().scoping()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().rentReadinessStatus()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentedStatus()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto().scoping()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentReadinessStatus()).visible(true).build(),
                     new MemberColumnDescriptor.Builder(proto().unitRent()).build(),
                     new MemberColumnDescriptor.Builder(proto().marketRent()).build(),
-                    new MemberColumnDescriptor.Builder(proto().rentDeltaAbsolute()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentDeltaAbsolute()).visible(true).build(),
                     new MemberColumnDescriptor.Builder(proto().rentDeltaRelative()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().rentEndDay()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().moveInDay()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().rentedFromDay()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentEndDay()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto().moveInDay()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentedFromDay()).visible(true).build(),
                     new MemberColumnDescriptor.Builder(proto().daysVacant()).build(),
                     new MemberColumnDescriptor.Builder(proto().revenueLost()).build()
             );//@formatter:on
