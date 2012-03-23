@@ -452,6 +452,7 @@
         <profile>
             <id>target-prod</id>
             <properties>
+                <gwtDraftCompile>false</gwtDraftCompile>
                 <appGWTModuleSufix>Prod</appGWTModuleSufix>
             </properties>
         </profile>

@@ -4,4 +4,5 @@
 <module rename-to="admin">
     <inherits name='vista.admin'/>
     <set-property name="user.agent" value="safari"/>
+    <inherits name='com.google.gwt.user.Debug'/>
 </module>
