@@ -25,6 +25,7 @@ import com.propertyvista.admin.rpc.services.AdminPasswordResetService;
 import com.propertyvista.admin.rpc.services.AdminUserCrudService;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
 import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
+import com.propertyvista.admin.rpc.services.OnboardingUserPasswordChangeManagedService;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.rpc.services.PmcDataReportService;
 import com.propertyvista.admin.rpc.services.VistaAdminService;
@@ -51,6 +52,7 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(AdminPasswordChangeManagedService.class));
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(AdminUserCrudService.class));
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(OnboardingUserCrudService.class));
+        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(OnboardingUserPasswordChangeManagedService.class));
 
         grant(VistaBasicBehavior.Admin, new EntityPermission(AdminUserCredential.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.Admin, new EntityPermission(OnboardingUserCredential.class, EntityPermission.ALL));
