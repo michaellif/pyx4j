@@ -59,7 +59,7 @@ public class EntityGraph {
     }
 
     public static void applyRecursively(IEntity entity, ApplyMethod method) {
-        applyRecursively(entity, method, new HashSet<IEntity>(), new HashSet<Map<String, Object>>());
+        applyRecursively(entity, method, new HashSet<IEntity>(), new IdentityHashSet<Map<String, Object>>());
     }
 
     public static void applyRecursivelyAllObjects(IEntity entity, ApplyMethod method) {
@@ -371,7 +371,7 @@ public class EntityGraph {
      */
     public static <E extends IEntity> E businessDuplicate(E entity) {
         final E copy = entity.duplicate();
-        applyRecursively(copy, new ApplyMethod() {
+        applyRecursivelyAllObjects(copy, new ApplyMethod() {
             @Override
             public boolean apply(IEntity entity) {
                 if (entity == copy || entity.getMeta().isOwnedRelationships()) {
