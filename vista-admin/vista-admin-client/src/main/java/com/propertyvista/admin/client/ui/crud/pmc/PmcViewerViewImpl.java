@@ -41,7 +41,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         Button downloadFull = new Button("Download export.xml", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                Window.open(GWT.getModuleBaseURL() + "export.xml", null, null);
+                Window.open(GWT.getModuleBaseURL() + "export.xml?pmc=" + getForm().getValue().getPrimaryKey(), null, null);
             }
         });
         addToolbarItem(downloadFull.asWidget());
@@ -49,7 +49,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         Button downloadNoImages = new Button("Download export.xml (no images)", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                Window.open(GWT.getModuleBaseURL() + "export.xml?images=false", null, null);
+                Window.open(GWT.getModuleBaseURL() + "export.xml?pmc=" + getForm().getValue().getPrimaryKey() + "&images=false", null, null);
             }
         });
         addToolbarItem(downloadNoImages.asWidget());

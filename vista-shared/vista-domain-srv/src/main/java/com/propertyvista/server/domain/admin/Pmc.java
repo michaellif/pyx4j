@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -38,6 +39,7 @@ public interface Pmc extends IEntity {
     public static final String adminNamespace = "-vista-admin\u0010-";
 
     @NotNull
+    @ToString
     IPrimitive<String> name();
 
     @NotNull
