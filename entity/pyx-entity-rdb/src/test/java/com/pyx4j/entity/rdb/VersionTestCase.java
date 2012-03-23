@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
+import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
 import com.pyx4j.entity.test.shared.domain.version.ItemB;
 import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyChild;
 import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyParent;
@@ -171,6 +172,13 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             srv.retrieve(itemA1r);
             assertTrue("version is not null", !itemA1r.version().isNull());
             assertEquals("getSpecific", v1Name, itemA1r.version().name().getValue());
+
+            //assertEquals("version of Pk", DateUtils.detectDateformat("2011-01-01").getTime(), itemA1r.getPrimaryKey().getVersion());
+        }
+
+        // Retrieval of version Data by itself, verify PK of owner/holder
+        {
+            ItemAVersion itemA1r = srv.retrieve(ItemAVersion.class, itemA1.versions().get(0).getPrimaryKey());
         }
 
         // Retrieval of item itself, by default returns current

@@ -50,7 +50,11 @@ public class EntityGraph {
 
     public static interface ApplyMethod {
 
-        public void apply(IEntity entity);
+        /**
+         * @return true if we need to go recursively inside this entity.
+         */
+
+        public boolean apply(IEntity entity);
 
     }
 
@@ -369,9 +373,12 @@ public class EntityGraph {
         final E copy = entity.duplicate();
         applyRecursively(copy, new ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 if (entity == copy || entity.getMeta().isOwnedRelationships()) {
                     entity.setPrimaryKey(null);
+                    return true;
+                } else {
+                    return false;
                 }
             }
         });

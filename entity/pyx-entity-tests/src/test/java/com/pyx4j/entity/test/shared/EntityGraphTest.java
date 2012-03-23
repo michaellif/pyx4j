@@ -58,8 +58,9 @@ public class EntityGraphTest extends InitializerTestBase {
 
         EntityGraph.applyRecursivelyAllObjects(rootEntity, new EntityGraph.ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 counter.number().setValue(counter.number().getValue() + 1);
+                return true;
             }
         });
 
@@ -80,8 +81,9 @@ public class EntityGraphTest extends InitializerTestBase {
         counter.number().setValue(0);
         EntityGraph.applyRecursivelyAllObjects(rootEntity, new EntityGraph.ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 counter.number().setValue(counter.number().getValue() + 1);
+                return true;
             }
         });
 
@@ -91,8 +93,9 @@ public class EntityGraphTest extends InitializerTestBase {
         counter.number().setValue(0);
         EntityGraph.applyRecursively(rootEntity, new EntityGraph.ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 counter.number().setValue(counter.number().getValue() + 1);
+                return true;
             }
         });
 
@@ -114,10 +117,11 @@ public class EntityGraphTest extends InitializerTestBase {
 
         EntityGraph.applyRecursively(emp, new EntityGraph.ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 if (entity instanceof Task) {
                     counter.number().setValue(counter.number().getValue() + 1);
                 }
+                return true;
             }
         });
 
@@ -127,10 +131,11 @@ public class EntityGraphTest extends InitializerTestBase {
         counter.number().setValue(0);
         EntityGraph.applyRecursivelyAllObjects(emp, new EntityGraph.ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 if (entity instanceof Task) {
                     counter.number().setValue(counter.number().getValue() + 1);
                 }
+                return true;
             }
         });
 
@@ -147,8 +152,9 @@ public class EntityGraphTest extends InitializerTestBase {
 
         EntityGraph.applyRecursively(m, new EntityGraph.ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 counter.number().setValue(counter.number().getValue() + 1);
+                return true;
             }
         });
 
@@ -157,8 +163,9 @@ public class EntityGraphTest extends InitializerTestBase {
         counter.number().setValue(0);
         EntityGraph.applyRecursivelyAllObjects(m, new EntityGraph.ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 counter.number().setValue(counter.number().getValue() + 1);
+                return true;
             }
         });
 
@@ -200,9 +207,10 @@ public class EntityGraphTest extends InitializerTestBase {
 
         EntityGraph.applyRecursively(root, new EntityGraph.ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 //System.out.println("verify : " + entity.getPath() + " " + entity);
                 assertFalse("OwnedLeaf found in Graph" + entity.getPath(), olBase.equals(entity));
+                return true;
             }
         });
 
@@ -244,9 +252,10 @@ public class EntityGraphTest extends InitializerTestBase {
 
         EntityGraph.applyRecursively(root, new EntityGraph.ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 //System.out.println("verify : " + entity.getPath() + " " + entity);
                 assertFalse("OwnedLeaf found in Graph" + entity.getPath(), olBase.equals(entity));
+                return true;
             }
         });
 

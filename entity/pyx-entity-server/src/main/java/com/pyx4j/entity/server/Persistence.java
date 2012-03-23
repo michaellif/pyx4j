@@ -158,12 +158,17 @@ public class Persistence {
         return entity;
     }
 
-    public static <T extends IEntity> void retrieveOwned(T rootEntity) {
+    public static <T extends IEntity> void retrieveOwned(final T rootEntity) {
         EntityGraph.applyRecursively(rootEntity, new ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
-                if (entity.isValueDetached() && entity.getMeta().isOwnedRelationships()) {
-                    service().retrieve(entity);
+            public boolean apply(IEntity entity) {
+                if ((rootEntity == entity) || entity.getMeta().isOwnedRelationships()) {
+                    if (entity.isValueDetached()) {
+                        service().retrieve(entity);
+                    }
+                    return true;
+                } else {
+                    return false;
                 }
             }
         });

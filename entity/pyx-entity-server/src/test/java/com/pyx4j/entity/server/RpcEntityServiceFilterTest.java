@@ -76,10 +76,11 @@ public class RpcEntityServiceFilterTest extends TestCase {
         GraphItem rpcFiltered = (GraphItem) new RpcEntityServiceFilter().filterOutgoing(null, rootEntity);
         EntityGraph.applyRecursivelyAllObjects(rpcFiltered, new EntityGraph.ApplyMethod() {
             @Override
-            public void apply(IEntity entity) {
+            public boolean apply(IEntity entity) {
                 if (entity instanceof GraphItem) {
                     assertNull("filtered", ((GraphItem) entity).rpcTransientName().getValue());
                 }
+                return true;
             }
         });
     }
