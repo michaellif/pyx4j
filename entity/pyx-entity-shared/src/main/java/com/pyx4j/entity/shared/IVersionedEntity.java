@@ -45,7 +45,7 @@ public interface IVersionedEntity<VERSIONED_ITEM extends IVersionData<?>> extend
     IPrimitive<SaveAction> saveAction();
 
     @ManagedColumn
-    @ToString(index = 1)
+    @ToString(index = 100)
     VERSIONED_ITEM version();
 
     @Detached(level = AttachLevel.Detached)
