@@ -88,6 +88,7 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         createRole("PM", VistaCrmBehavior.Tenants, VistaCrmBehavior.Emergency, VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Occupancy,
                 VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
 
+        createRole(VistaCrmBehavior.PropertyVistaAccountOwner.name(), VistaCrmBehavior.PropertyVistaAccountOwner);
         createRole(DEFAULT_SUPPORT_ROLE_NAME, VistaCrmBehavior.PropertyVistaSupport);
 
         if (ApplicationMode.isDevelopment()) {
