@@ -107,7 +107,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
             NamespaceManager.setNamespace(pmc.dnsName().getValue());
 
             MediaConfig mediaConfig = new MediaConfig();
-            mediaConfig.baseFolder = "data";
+            mediaConfig.baseFolder = "data/" + NamespaceManager.getNamespace();
 
             ImportIO importIO = ImportUtils.parse(importDTO.adapterType().getValue(), data.data,
                     DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
