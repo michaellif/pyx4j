@@ -187,6 +187,21 @@
         <url-pattern>/o/debug/*</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>DebugServlet</servlet-name>
+        <url-pattern>/crm/debug/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DebugServlet</servlet-name>
+        <url-pattern>/ptapp/debug/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DebugServlet</servlet-name>
+        <url-pattern>/public/debug/*</url-pattern>
+    </servlet-mapping>
+            
     <servlet>
         <servlet-name>DBResetServlet</servlet-name>
         <servlet-class>com.propertyvista.server.ci.DBResetServlet</servlet-class>
