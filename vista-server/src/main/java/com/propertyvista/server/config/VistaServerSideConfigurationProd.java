@@ -17,12 +17,18 @@ import javax.servlet.ServletContext;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 
-public abstract class VistaServerSideConfigurationProd extends VistaServerSideConfiguration {
+public class VistaServerSideConfigurationProd extends VistaServerSideConfiguration {
 
     @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
-        // Disable environment selection.  All defined in tomcatX.wrapper.conf -Dcom.pyx4j.appConfig=
-        return this;
+        // This environment selector defined in tomcatX.wrapper.conf -Dcom.pyx4j.appConfig=Prod
+        if ("vista-pangroup".equals(contextName)) {
+            return new VistaServerSideConfigurationProdPangroup();
+        } else if ("vista-main".equals(contextName)) {
+            return new VistaServerSideConfigurationProdMain();
+        } else {
+            return new VistaServerSideConfigurationCustom();
+        }
     }
 
 }

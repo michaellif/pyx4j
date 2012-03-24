@@ -7,23 +7,45 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 16, 2011
+ * Created on Aug 26, 2011
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.server.config;
 
-import javax.servlet.ServletContext;
-
+import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
-import com.pyx4j.config.server.ServerSideConfiguration;
 
-public class VistaServerSideConfigurationProdStarlightB extends VistaServerSideConfigurationProdStarlight {
+public class VistaServerSideConfigurationProdMain extends VistaServerSideConfigurationProd {
 
     @Override
-    public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
-        // Disable environment selection.  All defined in tomcatX.wrapper.conf -Dcom.pyx4j.appConfig=
-        return this;
+    public String getApplicationURLNamespace() {
+        return ".prod02.birchwoodsoftwaregroup.com/";
+    }
+
+    @Override
+    public boolean isDevelopmentBehavior() {
+        return true;
+    }
+
+    @Override
+    public boolean openIdrequired() {
+        return true;
+    }
+
+    @Override
+    public boolean openDBReset() {
+        return false;
+    }
+
+    @Override
+    public String getApplicationEmailSender() {
+        return "\"Property Vista Support\" <support.www22@birchwoodsoftwaregroup.com>";
+    }
+
+    @Override
+    public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
+        return VistaSMTPMailServiceConfig.getGmailConfig("prod-main-");
     }
 
     @Override
@@ -32,12 +54,12 @@ public class VistaServerSideConfigurationProdStarlightB extends VistaServerSideC
 
             @Override
             public String dbName() {
-                return "vista_starB";
+                return "vista_main";
             }
 
             @Override
             public String userName() {
-                return "vista_starB";
+                return "vista_main";
             }
 
             @Override

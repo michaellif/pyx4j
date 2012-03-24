@@ -13,10 +13,19 @@
  */
 package com.propertyvista.server.config;
 
+import javax.servlet.ServletContext;
+
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration;
 
-public class VistaServerSideConfigurationProdStarlight extends VistaServerSideConfigurationProd {
+public class VistaServerSideConfigurationProdStarlight extends VistaServerSideConfiguration {
+
+    @Override
+    public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
+        // Disable environment selection.  All defined in tomcatX.wrapper.conf -Dcom.pyx4j.appConfig=
+        return this;
+    }
 
     @Override
     public String getApplicationURLNamespace() {
