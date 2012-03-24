@@ -26,46 +26,38 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.forms.client.ui.NFocusComponent;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink.NEntitySelectorHyperlink;
-import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.TextBox;
 
+/**
+ * Combo component to use as entity selector. In view mode renders a hyperlink that redirects to the target place
+ * (see {@link CEntitySelectorHyperlink#getTargetPlace()}). In edit mode renders s text label with an arrow image
+ * that triggers Entity Selector Dialog (see {@link CEntitySelectorHyperlink#getSelectorDialog()})
+ */
 public abstract class CEntitySelectorHyperlink<E extends IEntity> extends CTextFieldBase<E, NEntitySelectorHyperlink<E>> {
-    private final CrudAppPlace place;
-
-    private final Class<E> entityClass;
-
-    public CEntitySelectorHyperlink(Class<E> entityClass, CrudAppPlace place) {
-        this.entityClass = entityClass;
-        this.place = place;
-    }
-
-    public Class<E> getEntityClass() {
-        return entityClass;
-    }
-
-    public CrudAppPlace getPlace() {
-        return place;
-    }
-
     @Override
     protected NEntitySelectorHyperlink<E> createWidget() {
         return new NEntitySelectorHyperlink<E>(this);
     }
 
+    protected abstract AppPlace getTargetPlace();
+
+    protected abstract EntitySelectorDialog<E> getSelectorDialog();
+
     static class NEntitySelectorHyperlink<E extends IEntity> extends NFocusComponent<E, TextBox, CEntitySelectorHyperlink<E>, Anchor> implements
             INativeTextComponent<E> {
 
         public NEntitySelectorHyperlink(CEntitySelectorHyperlink<E> cComponent) {
-            super(cComponent, ImageFactory.getImages().arrowLightBlueRight());
+            super(cComponent, ImageFactory.getImages().comboBoxPicker());
         }
 
         @Override
@@ -74,9 +66,9 @@ public abstract class CEntitySelectorHyperlink<E extends IEntity> extends CTextF
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    E value = getNativeValue();
-                    if (!value.id().isNull() && getCComponent().getPlace() != null) {
-                        AppSite.getPlaceController().goTo(getCComponent().getPlace().formViewerPlace(value.getPrimaryKey()));
+                    AppPlace place = getCComponent().getTargetPlace();
+                    if (place != null) {
+                        AppSite.getPlaceController().goTo(place);
                     }
                 }
             });
@@ -134,6 +126,4 @@ public abstract class CEntitySelectorHyperlink<E extends IEntity> extends CTextF
             getCComponent().getSelectorDialog().show();
         }
     }
-
-    public abstract EntitySelectorDialog<E> getSelectorDialog();
 }
