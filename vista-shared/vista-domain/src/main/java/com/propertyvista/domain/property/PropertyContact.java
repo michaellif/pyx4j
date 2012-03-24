@@ -13,8 +13,6 @@
  */
 package com.propertyvista.domain.property;
 
-import javax.xml.bind.annotation.XmlType;
-
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -32,8 +30,7 @@ import com.propertyvista.domain.marketing.PublicVisibilityType;
 public interface PropertyContact extends IEntity {
 
     @I18n
-    @XmlType(name = "ContactType")
-    public enum Type {
+    public enum PropertyContactType {
 
         mainOffice,
 
@@ -62,7 +59,7 @@ public interface PropertyContact extends IEntity {
     }
 
     @MemberColumn(name = "phoneType")
-    IPrimitive<Type> type();
+    IPrimitive<PropertyContactType> type();
 
     IPrimitive<String> name();
 

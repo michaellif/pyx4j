@@ -161,7 +161,7 @@ public class CommonsGenerator {
     public static PropertyContact createPropertyContact() {
         PropertyContact contact = EntityFactory.create(PropertyContact.class);
         Name name = createName();
-        contact.type().setValue(RandomUtil.randomEnum(PropertyContact.Type.class));
+        contact.type().setValue(RandomUtil.randomEnum(PropertyContact.PropertyContactType.class));
         contact.name().setValue(name.getStringView());
         contact.description().setValue(lipsumShort());
         contact.phone().setValue(DataGenerator.randomPhone(RandomUtil.randomBoolean() ? "416" : "905"));

@@ -100,15 +100,15 @@ public class EmailTemplateRootObjectLoader {
             t.address().setValue(bld.info().address().getStringView());
             // set contact info
             for (PropertyContact cont : bld.contacts().propertyContacts()) {
-                if (cont.type().getValue().equals(PropertyContact.Type.administrator)) {
+                if (cont.type().getValue().equals(PropertyContact.PropertyContactType.administrator)) {
                     t.administrator().name().set(cont.name());
                     t.administrator().phone().set(cont.phone());
                     t.administrator().email().set(cont.email());
-                } else if (cont.type().getValue().equals(PropertyContact.Type.superintendent)) {
+                } else if (cont.type().getValue().equals(PropertyContact.PropertyContactType.superintendent)) {
                     t.superintendent().name().set(cont.name());
                     t.superintendent().phone().set(cont.phone());
                     t.superintendent().email().set(cont.email());
-                } else if (cont.type().getValue().equals(PropertyContact.Type.mainOffice)) {
+                } else if (cont.type().getValue().equals(PropertyContact.PropertyContactType.mainOffice)) {
                     t.mainOffice().name().set(cont.name());
                     t.mainOffice().phone().set(cont.phone());
                     t.mainOffice().email().set(cont.email());

@@ -31,6 +31,8 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
+import com.propertyvista.domain.property.PropertyContact;
+import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Boiler;
@@ -133,8 +135,22 @@ public class BuildingsGenerator {
             building.marketing().adBlurbs().add(item);
         }
 
+        Set<PropertyContactType> created = new HashSet<PropertyContactType>();
         for (int i = 0; i <= 1 + RandomUtil.randomInt(3); i++) {
-            building.contacts().propertyContacts().add(CommonsGenerator.createPropertyContact());
+            PropertyContact contact = CommonsGenerator.createPropertyContact();
+            created.add(contact.type().getValue());
+            building.contacts().propertyContacts().add(contact);
+        }
+        if (!created.contains(PropertyContactType.administrator)) {
+            PropertyContact contact = CommonsGenerator.createPropertyContact();
+            contact.type().setValue(PropertyContactType.administrator);
+            building.contacts().propertyContacts().add(contact);
+        }
+
+        if (!created.contains(PropertyContactType.mainOffice)) {
+            PropertyContact contact = CommonsGenerator.createPropertyContact();
+            contact.type().setValue(PropertyContactType.mainOffice);
+            building.contacts().propertyContacts().add(contact);
         }
 
         building.contacts().website().setValue(website);

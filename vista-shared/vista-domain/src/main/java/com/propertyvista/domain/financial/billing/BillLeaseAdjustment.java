@@ -19,7 +19,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 /**
  * 
- * @see {@link com.propertyvista.domain.financial.offering.Feature.Type.adjustment}
+ * @see {@link com.propertyvista.domain.financial.offering.Feature.PropertyContactType.adjustment}
  */
 @DiscriminatorValue("leaseAdjustment")
 public interface BillLeaseAdjustment extends BillEntry {

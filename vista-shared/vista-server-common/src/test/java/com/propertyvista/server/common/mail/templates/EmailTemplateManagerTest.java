@@ -412,7 +412,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         building.contacts().website().setValue("www.property-" + building.propertyCode().getValue() + ".com");
         // creaate admin contact
         PropertyContact admin = EntityFactory.create(PropertyContact.class);
-        admin.type().setValue(PropertyContact.Type.administrator);
+        admin.type().setValue(PropertyContact.PropertyContactType.administrator);
         admin.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
         admin.phone().setValue(TestLoaderRandomGen.createPhone());
         admin.email().setValue(admin.name().getValue().toLowerCase().replace(" ", ".") + "@propertyvista.com");
@@ -420,7 +420,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         adminName = admin.name().getValue();
         // creaate office contact
         PropertyContact office = EntityFactory.create(PropertyContact.class);
-        office.type().setValue(PropertyContact.Type.mainOffice);
+        office.type().setValue(PropertyContact.PropertyContactType.mainOffice);
         office.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
         office.phone().setValue(TestLoaderRandomGen.createPhone());
         office.email().setValue(office.name().getValue().toLowerCase().replace(" ", ".") + "@propertyvista.com");
@@ -428,7 +428,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         officePhone = office.phone().getValue();
         // creaate super contact
         PropertyContact superint = EntityFactory.create(PropertyContact.class);
-        superint.type().setValue(PropertyContact.Type.superintendent);
+        superint.type().setValue(PropertyContact.PropertyContactType.superintendent);
         superint.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
         superint.phone().setValue(TestLoaderRandomGen.createPhone());
         superint.email().setValue(superint.name().getValue().toLowerCase().replace(" ", ".") + "@propertyvista.com");
