@@ -544,7 +544,7 @@
                                         <groupId>${project.groupId}</groupId>
                                         <artifactId>${project.artifactId}</artifactId>
                                         <type>war</type>
-                                        <pingURL>${vista-app-ping-url}/o/status</pingURL>
+                                        <pingURL>${vista-app-ping-url}/public/status</pingURL>
                                         <!-- 5 min -->
                                         <pingTimeout>300000</pingTimeout>
                                         <properties>
