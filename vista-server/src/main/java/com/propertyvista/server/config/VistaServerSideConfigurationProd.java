@@ -16,6 +16,10 @@ package com.propertyvista.server.config;
 import javax.servlet.ServletContext;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.log4j.LoggerConfig;
+import com.pyx4j.server.contexts.NamespaceManager;
+
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class VistaServerSideConfigurationProd extends VistaServerSideConfiguration {
 
@@ -39,6 +43,31 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     @Override
     public boolean isDevelopmentBehavior() {
         return false;
+    }
+
+    @Override
+    public String getDefaultBaseURLvistaCrm() {
+        return "https://" + NamespaceManager.getNamespace() + ".propertyvista.com";
+    }
+
+    @Override
+    public String getDefaultBaseURLresidentPortal(boolean secure) {
+        String url = NamespaceManager.getNamespace() + ".residentportalsite.com";
+        if (secure) {
+            return "https://" + url;
+        } else {
+            return "http://" + url;
+        }
+    }
+
+    @Override
+    public String getDefaultBaseURLprospectPortal() {
+        return "https://" + NamespaceManager.getNamespace() + ".prospectportalsite.com";
+    }
+
+    @Override
+    public String getDefaultBaseURLvistaAdmin() {
+        return "http://prod02.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
     }
 
 }
