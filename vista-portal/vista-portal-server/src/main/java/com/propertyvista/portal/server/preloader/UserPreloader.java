@@ -93,7 +93,48 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(email));
+        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
+        credential.enabled().setValue(Boolean.TRUE);
+        credential.accessAllBuildings().setValue(Boolean.TRUE);
+        credential.roles().addAll(Arrays.asList(roles));
+
+        Persistence.service().persist(credential);
+
+        return user;
+    }
+
+    public static CrmUser createCrmEmployee(String firstName, String lastName, String email, String password, boolean isOwner, CrmRole... roles) {
+        if (!ApplicationMode.isDevelopment()) {
+            EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
+            List<CrmUser> users = Persistence.service().query(criteria);
+            if (users.size() != 0) {
+                log.debug("User already exists");
+                return users.get(0);
+            }
+        }
+        CrmUser user = EntityFactory.create(CrmUser.class);
+
+        user.name().setValue(firstName);
+        user.email().setValue(email);
+
+        Persistence.service().persist(user);
+
+        Employee employee = EntityFactory.create(Employee.class); //creates employee in crm
+        employee.user().set(user);
+        employee.name().firstName().setValue(firstName);
+        employee.name().lastName().setValue(lastName);
+        employee.email().setValue(email);
+        if (isOwner) {
+            employee.title().setValue("PMC Owner");
+        }
+        Persistence.service().persist(employee);
+
+        CrmUserCredential credential = EntityFactory.create(CrmUserCredential.class);
+        credential.setPrimaryKey(user.getPrimaryKey());
+
+        credential.user().set(user);
+        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
         credential.enabled().setValue(Boolean.TRUE);
         credential.accessAllBuildings().setValue(Boolean.TRUE);
         credential.roles().addAll(Arrays.asList(roles));

@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.PmcDnsName;
+import com.propertyvista.domain.person.Person;
 
 @Transient
 @Caption(name = "Property Management Company (PMC)")
@@ -42,6 +43,8 @@ public interface PmcDTO extends IEntity {
 
     IList<PmcDnsName> dnsNameAliases();
 
+    Person person();
+
     @Editor(type = EditorType.email)
     @NotNull
     IPrimitive<String> email();
@@ -53,4 +56,5 @@ public interface PmcDTO extends IEntity {
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
     IPrimitive<Date> created();
+
 }

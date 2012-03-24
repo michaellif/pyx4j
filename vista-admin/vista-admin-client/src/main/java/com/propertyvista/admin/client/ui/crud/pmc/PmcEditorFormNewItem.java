@@ -37,6 +37,8 @@ public class PmcEditorFormNewItem extends AdminEntityForm<PmcDTO> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password()), 15).build());
 

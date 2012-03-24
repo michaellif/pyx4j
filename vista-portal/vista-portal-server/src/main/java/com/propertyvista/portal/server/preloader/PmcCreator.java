@@ -40,7 +40,8 @@ public class PmcCreator {
             log.info("Preload {}", preloader.create());
 
             CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
-            UserPreloader.createCrmUser(pmc.email().getValue(), pmc.email().getValue(), pmc.password().getValue(), defaultRole);
+            UserPreloader.createCrmEmployee(pmc.person().name().firstName().getValue(), pmc.person().name().lastName().getValue(), pmc.email().getValue(), pmc
+                    .password().getValue(), true, defaultRole);
 
             // Create support account by default
             UserPreloader.createCrmUser("PropertyVista Support", "support@propertyvista.com", "Vista2012", defaultRole, CrmRolesPreloader.getSupportRole());
@@ -48,7 +49,7 @@ public class PmcCreator {
             if (ApplicationMode.isDevelopment()) {
                 for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
                     String email = DemoData.UserType.PM.getEmail(i);
-                    UserPreloader.createCrmUser(email, email, email, defaultRole);
+                    UserPreloader.createCrmEmployee(email, email, email, email, false, defaultRole);
                 }
             }
             Persistence.service().commit();
