@@ -465,7 +465,7 @@
             <properties>
                 <deployContext>vista-pangroup</deployContext>
                 <vista-tomcat-url>http://prod02.birchwoodsoftwaregroup.com</vista-tomcat-url>
-                <vista-app-ping-url>${vista-tomcat-url}/{deployContext}</vista-app-ping-url>
+                <vista-app-ping-url>${vista-tomcat-url}/${deployContext}</vista-app-ping-url>
             </properties>
         </profile>
 
@@ -474,7 +474,7 @@
             <properties>
                 <deployContext>vista-main</deployContext>
                 <vista-tomcat-url>http://prod02.birchwoodsoftwaregroup.com</vista-tomcat-url>
-                <vista-app-ping-url>${vista-tomcat-url}/{deployContext}</vista-app-ping-url>
+                <vista-app-ping-url>${vista-tomcat-url}/${deployContext}</vista-app-ping-url>
             </properties>
         </profile>
 
