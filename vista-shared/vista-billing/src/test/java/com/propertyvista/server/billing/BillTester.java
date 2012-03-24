@@ -19,7 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
-import com.propertyvista.domain.financial.billing._InvoiceProductCharge;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 
 public class BillTester extends Tester {
 
@@ -85,12 +85,7 @@ public class BillTester extends Tester {
     }
 
     public BillTester numOfProductCharges(Integer num) {
-        assertEquals("Number of Charges", num, BillingUtils.getLineItemsForType(bill, _InvoiceProductCharge.class).size());
-        return this;
-    }
-
-    public BillTester numOfLeaseAdjustments(Integer num) {
-        assertEquals("Number of Lease Adjustments", num, bill.leaseAdjustments().size());
+        assertEquals("Number of Charges", num, BillingUtils.getLineItemsForType(bill, InvoiceProductCharge.class).size());
         return this;
     }
 

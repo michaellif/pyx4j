@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.IPrimitive;
  * 
  */
 @DiscriminatorValue("ProductCharge")
-public interface _InvoiceProductCharge extends _InvoiceCharge {
+public interface InvoiceProductCharge extends InvoiceCharge {
 
     enum ProductType {
         service, recurringFeature, oneTimeFeature
@@ -53,12 +53,12 @@ public interface _InvoiceProductCharge extends _InvoiceCharge {
 
     @Detached
     @Owned
-    @OrderBy(_InvoiceSubLineItem.OrderId.class)
-    IList<_InvoiceAdjustmentSubLineItem> adjustmentSubLineItems();
+    @OrderBy(InvoiceSubLineItem.OrderId.class)
+    IList<InvoiceAdjustmentSubLineItem> adjustmentSubLineItems();
 
     @Detached
     @Owned
-    @OrderBy(_InvoiceSubLineItem.OrderId.class)
-    IList<_InvoiceConcessionSubLineItem> concessionSubLineItems();
+    @OrderBy(InvoiceSubLineItem.OrderId.class)
+    IList<InvoiceConcessionSubLineItem> concessionSubLineItems();
 
 }

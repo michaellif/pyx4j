@@ -16,7 +16,11 @@ package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-@DiscriminatorValue("Withdrawal")
-public interface _InvoiceWithdrawal extends _InvoiceDebit {
+import com.propertyvista.domain.financial.offering.Concession;
+
+@DiscriminatorValue("ConcessionSubLineItem")
+public interface InvoiceConcessionSubLineItem extends InvoiceSubLineItem {
+
+    Concession concession();
 
 }

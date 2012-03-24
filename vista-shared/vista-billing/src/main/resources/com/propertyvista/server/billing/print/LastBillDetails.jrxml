@@ -19,7 +19,11 @@
 	<field name="totalAdjustments" class="java.math.BigDecimal"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
-	<field name="billPayments" class="com.pyx4j.entity.shared.IList"/>
+	<field name="lineItems" class="com.pyx4j.entity.shared.IList"/>
+	<variable name="billPayments" class="java.util.List">
+		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getPayments($F{lineItems})]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -51,7 +55,7 @@
 			</textField>
 		</band>
 		<band height="30">
-			<printWhenExpression><![CDATA[$F{billPayments}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$V{billPayments}.size()>0]]></printWhenExpression>
 			<staticText>
 				<reportElement x="0" y="5" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">
@@ -61,15 +65,15 @@
 			</staticText>
 		</band>
 		<band height="24">
-			<printWhenExpression><![CDATA[$F{billPayments}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$V{billPayments}.size()>0]]></printWhenExpression>
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{billPayments})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{billPayments})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillPayment")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="33">
-			<printWhenExpression><![CDATA[$F{billPayments}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$V{billPayments}.size()>0]]></printWhenExpression>
 			<textField>
 				<reportElement x="280" y="8" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -103,7 +107,7 @@
 		<band height="24">
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{billPayments})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{billPayments})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillPayment")]]></subreportExpression>
 			</subreport>
 		</band>
@@ -141,7 +145,7 @@
 		<band height="24">
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{billPayments})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{billPayments})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.BillPayment")]]></subreportExpression>
 			</subreport>
 		</band>

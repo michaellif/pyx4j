@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="amount" class="java.math.BigDecimal"/>
-	<field name="payment/receivedDate" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="paymentRecord/receivedDate" class="com.pyx4j.commons.LogicalDate"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -22,7 +22,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDay($F{payment/receivedDate})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDay($F{paymentRecord/receivedDate})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="111" y="0" width="163" height="20"/>

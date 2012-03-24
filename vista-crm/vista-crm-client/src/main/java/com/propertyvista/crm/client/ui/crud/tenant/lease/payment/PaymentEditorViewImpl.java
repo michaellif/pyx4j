@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease.payment;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
-public class PaymentEditorViewImpl extends CrmEditorViewImplBase<Payment> implements PaymentEditorView {
+public class PaymentEditorViewImpl extends CrmEditorViewImplBase<PaymentRecord> implements PaymentEditorView {
     public PaymentEditorViewImpl() {
         super(CrmSiteMap.Tenants.Payment.class, new PaymentEditorForm());
     }

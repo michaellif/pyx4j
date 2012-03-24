@@ -23,8 +23,9 @@ import net.sf.jasperreports.engine.JRScriptletException;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.financial.billing._InvoiceLineItem;
-import com.propertyvista.domain.financial.billing._InvoiceProductCharge;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.server.billing.BillingUtils;
 
 public class BillPrintScriptlet extends JRDefaultScriptlet {
@@ -39,37 +40,41 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         return formatter.format(date);
     }
 
-    public List<_InvoiceProductCharge> getServiceCharges(IList<_InvoiceLineItem> lineItems) {
-        List<_InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, _InvoiceProductCharge.class);
-        List<_InvoiceProductCharge> filteredCharges = new ArrayList<_InvoiceProductCharge>();
-        for (_InvoiceProductCharge charge : charges) {
-            if (_InvoiceProductCharge.ProductType.service.equals(charge.productType().getValue())) {
+    public List<InvoiceProductCharge> getServiceCharges(IList<InvoiceLineItem> lineItems) {
+        List<InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, InvoiceProductCharge.class);
+        List<InvoiceProductCharge> filteredCharges = new ArrayList<InvoiceProductCharge>();
+        for (InvoiceProductCharge charge : charges) {
+            if (InvoiceProductCharge.ProductType.service.equals(charge.productType().getValue())) {
                 filteredCharges.add(charge);
             }
         }
         return filteredCharges;
     }
 
-    public List<_InvoiceProductCharge> getFeatureRecurringCharges(IList<_InvoiceLineItem> lineItems) {
-        List<_InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, _InvoiceProductCharge.class);
-        List<_InvoiceProductCharge> filteredCharges = new ArrayList<_InvoiceProductCharge>();
-        for (_InvoiceProductCharge charge : charges) {
-            if (_InvoiceProductCharge.ProductType.recurringFeature.equals(charge.productType().getValue())) {
+    public List<InvoiceProductCharge> getFeatureRecurringCharges(IList<InvoiceLineItem> lineItems) {
+        List<InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, InvoiceProductCharge.class);
+        List<InvoiceProductCharge> filteredCharges = new ArrayList<InvoiceProductCharge>();
+        for (InvoiceProductCharge charge : charges) {
+            if (InvoiceProductCharge.ProductType.recurringFeature.equals(charge.productType().getValue())) {
                 filteredCharges.add(charge);
             }
         }
         return filteredCharges;
     }
 
-    public List<_InvoiceProductCharge> getFeatureOneTimeCharges(IList<_InvoiceLineItem> lineItems) {
-        List<_InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, _InvoiceProductCharge.class);
-        List<_InvoiceProductCharge> filteredCharges = new ArrayList<_InvoiceProductCharge>();
-        for (_InvoiceProductCharge charge : charges) {
-            if (_InvoiceProductCharge.ProductType.oneTimeFeature.equals(charge.productType().getValue())) {
+    public List<InvoiceProductCharge> getFeatureOneTimeCharges(IList<InvoiceLineItem> lineItems) {
+        List<InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, InvoiceProductCharge.class);
+        List<InvoiceProductCharge> filteredCharges = new ArrayList<InvoiceProductCharge>();
+        for (InvoiceProductCharge charge : charges) {
+            if (InvoiceProductCharge.ProductType.oneTimeFeature.equals(charge.productType().getValue())) {
                 filteredCharges.add(charge);
             }
         }
         return filteredCharges;
+    }
+
+    public List<InvoicePayment> getPayments(IList<InvoiceLineItem> lineItems) {
+        return BillingUtils.getLineItemsForType(lineItems, InvoicePayment.class);
     }
 
 }

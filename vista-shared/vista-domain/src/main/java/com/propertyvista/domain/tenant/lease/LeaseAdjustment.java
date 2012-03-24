@@ -41,7 +41,7 @@ public interface LeaseAdjustment extends IEntity {
     @I18n
     @XmlType(name = "LeaseAdjustmentActionType")
     enum ActionType {
-        oneTime, immediate;
+        pending, immediate;
 
         @Override
         public String toString() {
@@ -51,10 +51,6 @@ public interface LeaseAdjustment extends IEntity {
 
     @NotNull
     IPrimitive<ActionType> actionType();
-
-    @Caption(name = "Last Updated")
-    @Timestamp
-    IPrimitive<LogicalDate> updated();
 
     @NotNull
     @ToString(index = 0)
@@ -81,7 +77,9 @@ public interface LeaseAdjustment extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> expirationDate();
 
-    IPrimitive<Integer> billingPeriodNumber();
+    @Caption(name = "Last Updated")
+    @Timestamp
+    IPrimitive<LogicalDate> updated();
 
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createdWhen();

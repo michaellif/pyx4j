@@ -18,13 +18,13 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsState;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
 public interface ArrearsManager {
 
     void processBill(Bill bill);
 
-    void processPayment(Payment payment);
+    void processPayment(PaymentRecord payment);
 
     ArrearsState arrears(Key tenant, LogicalDate asOf);
 }

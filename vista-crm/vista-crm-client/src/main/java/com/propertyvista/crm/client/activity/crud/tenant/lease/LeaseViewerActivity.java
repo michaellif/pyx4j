@@ -41,7 +41,7 @@ import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements LeaseViewerView.Presenter {
@@ -50,7 +50,7 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
 
     private final IListerView.Presenter<Bill> billLister;
 
-    private final IListerView.Presenter<Payment> paymentLister;
+    private final IListerView.Presenter<PaymentRecord> paymentLister;
 
     private LeaseDTO currentValue;
 
@@ -61,8 +61,8 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
         billLister = new ListerActivityBase<Bill>(place, ((LeaseViewerView) view).getBillListerView(),
                 (AbstractCrudService<Bill>) GWT.create(BillCrudService.class), Bill.class);
 
-        paymentLister = new ListerActivityBase<Payment>(place, ((LeaseViewerView) view).getPaymentListerView(),
-                (AbstractCrudService<Payment>) GWT.create(PaymentCrudService.class), Payment.class);
+        paymentLister = new ListerActivityBase<PaymentRecord>(place, ((LeaseViewerView) view).getPaymentListerView(),
+                (AbstractCrudService<PaymentRecord>) GWT.create(PaymentCrudService.class), PaymentRecord.class);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     }
 
     @Override
-    public Presenter<Payment> getPaymentListerPresenter() {
+    public Presenter<PaymentRecord> getPaymentListerPresenter() {
         return paymentLister;
     }
 
@@ -93,7 +93,7 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
 
     protected void populatePayments(LeaseDTO result) {
         List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
-        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Payment.class).billingAccount().id().getPath(), Operators.is, result
+        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(PaymentRecord.class).billingAccount().id().getPath(), Operators.is, result
                 .billingAccount().getPrimaryKey()));
         paymentLister.setPreDefinedFilters(preDefinedFilters);
         paymentLister.setParent(result.billingAccount().getPrimaryKey());

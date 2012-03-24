@@ -1,3 +1,4 @@
+package com.propertyvista.domain.financial.billing;
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
@@ -7,19 +8,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 25, 2012
+ * Created on Mar 20, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial.billing;
+
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-@DiscriminatorValue("entryAdjustment")
-public interface BillEntryAdjustment extends BillEntry {
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 
-    BillEntry originalBillEntry();
+@DiscriminatorValue("AdjustmentSubLineItem")
+public interface InvoiceAdjustmentSubLineItem extends InvoiceSubLineItem {
 
-    BillEntry revisedBillEntry();
+    BillableItemAdjustment billableItemAdjustment();
 
 }

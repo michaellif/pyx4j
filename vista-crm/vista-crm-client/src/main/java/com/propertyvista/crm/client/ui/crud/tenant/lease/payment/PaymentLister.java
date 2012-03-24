@@ -17,12 +17,12 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
-public class PaymentLister extends ListerBase<Payment> {
+public class PaymentLister extends ListerBase<PaymentRecord> {
 
     public PaymentLister() {
-        super(Payment.class, CrmSiteMap.Tenants.Payment.class, false, true);
+        super(PaymentRecord.class, CrmSiteMap.Tenants.Payment.class, false, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off
@@ -31,8 +31,7 @@ public class PaymentLister extends ListerBase<Payment> {
             new MemberColumnDescriptor.Builder(proto().depositDate()).build(),
             new MemberColumnDescriptor.Builder(proto().amount()).build(),
             new MemberColumnDescriptor.Builder(proto().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().paymentStatus(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().billingStatus(), false).build()
+            new MemberColumnDescriptor.Builder(proto().paymentStatus(), false).build()
         );//@formatter:on
     }
 }

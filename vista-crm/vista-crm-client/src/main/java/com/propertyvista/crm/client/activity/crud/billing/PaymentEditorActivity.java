@@ -22,18 +22,18 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
-public class PaymentEditorActivity extends EditorActivityBase<Payment> {
+public class PaymentEditorActivity extends EditorActivityBase<PaymentRecord> {
 
     public PaymentEditorActivity(Place place) {
         super(place,
 
         SettingsViewFactory.instance(PaymentEditorView.class),
 
-        GWT.<AbstractCrudService<Payment>> create(PaymentCrudService.class),
+        GWT.<AbstractCrudService<PaymentRecord>> create(PaymentCrudService.class),
 
-        Payment.class);
+        PaymentRecord.class);
     }
 
 }

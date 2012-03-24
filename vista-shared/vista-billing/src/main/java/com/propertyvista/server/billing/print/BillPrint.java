@@ -28,8 +28,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing._InvoiceLineItem;
-import com.propertyvista.domain.financial.billing._InvoiceProductCharge;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 
 public class BillPrint {
 
@@ -48,14 +48,13 @@ public class BillPrint {
     public static void printBill(Bill bill, OutputStream pdf) {
 
         Persistence.service().retrieve(bill.lineItems());
-        for (_InvoiceLineItem lineItem : bill.lineItems()) {
-            if (_InvoiceProductCharge.class.isAssignableFrom(lineItem.getClass())) {
-                Persistence.service().retrieve(((_InvoiceProductCharge) lineItem).chargeSubLineItem());
-                Persistence.service().retrieve(((_InvoiceProductCharge) lineItem).adjustmentSubLineItems());
-                Persistence.service().retrieve(((_InvoiceProductCharge) lineItem).concessionSubLineItems());
+        for (InvoiceLineItem lineItem : bill.lineItems()) {
+            if (InvoiceProductCharge.class.isAssignableFrom(lineItem.getClass())) {
+                Persistence.service().retrieve(((InvoiceProductCharge) lineItem).chargeSubLineItem());
+                Persistence.service().retrieve(((InvoiceProductCharge) lineItem).adjustmentSubLineItems());
+                Persistence.service().retrieve(((InvoiceProductCharge) lineItem).concessionSubLineItems());
             }
         }
-        Persistence.service().retrieve(bill.leaseAdjustments());
 
         try {
             JasperReportProcessor.createReport(BillPrint.createModel(bill), JasperFileFormat.PDF, pdf);

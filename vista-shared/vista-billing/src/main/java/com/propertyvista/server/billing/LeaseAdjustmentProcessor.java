@@ -13,12 +13,9 @@
  */
 package com.propertyvista.server.billing;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
-import com.propertyvista.domain.financial.billing.BillLeaseAdjustment;
+import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class LeaseAdjustmentProcessor {
@@ -29,38 +26,52 @@ public class LeaseAdjustmentProcessor {
         this.billing = billing;
     }
 
-    void createLeaseAdjustments() {
+    void createPendingLeaseAdjustments() {
         for (LeaseAdjustment item : billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().adjustments()) {
-            createLeaseAdjustment(item);
+            if (LeaseAdjustment.ActionType.pending.equals(item.actionType().getValue())) {
+                createPendingLeaseAdjustment(item);
+            }
         }
     }
 
-    private void createLeaseAdjustment(LeaseAdjustment item) {
+    void attachImmediateLeaseAdjustments() {
+        for (InvoiceAccountCredit adjustment : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(),
+                InvoiceAccountCredit.class)) {
+            attachImmediateLeaseAdjustment(adjustment);
+        }
+    }
+
+    private void createPendingLeaseAdjustment(LeaseAdjustment item) {
         if (!isLeaseAdjustmentApplicable(item)) {
             return;
         }
 
-        BillLeaseAdjustment adjustment = EntityFactory.create(BillLeaseAdjustment.class);
+        InvoiceAccountCredit adjustment = EntityFactory.create(InvoiceAccountCredit.class);
         adjustment.bill().set(billing.getNextPeriodBill());
-        billing.getNextPeriodBill().leaseAdjustments().add(adjustment);
-        billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(adjustment.amount().getValue()));
 
-        if (!adjustment.amount().isNull()) {
-            adjustment.taxes().addAll(
-                    TaxUtils.calculateTaxes(adjustment.amount().getValue(), item.reason(), billing.getNextPeriodBill().billingRun().building()));
-        }
-        adjustment.taxTotal().setValue(new BigDecimal(0));
-        for (InvoiceChargeTax chargeTax : adjustment.taxes()) {
-            adjustment.taxTotal().setValue(adjustment.taxTotal().getValue().add(chargeTax.amount().getValue()));
-        }
+        billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(item.amount().getValue()));
+
+//        if (!adjustment.amount().isNull()) {
+//            adjustment.taxes().addAll(
+//                    TaxUtils.calculateTaxes(adjustment.amount().getValue(), item.reason(), billing.getNextPeriodBill().billingRun().building()));
+//        }
+//        adjustment.taxTotal().setValue(new BigDecimal(0));
+//        for (InvoiceChargeTax chargeTax : adjustment.taxes()) {
+//            adjustment.taxTotal().setValue(adjustment.taxTotal().getValue().add(chargeTax.amount().getValue()));
+//        }
 
         addLeaseAdjustment(adjustment);
     }
 
-    private void addLeaseAdjustment(BillLeaseAdjustment item) {
+    private void addLeaseAdjustment(InvoiceAccountCredit item) {
         billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(item.amount().getValue()));
-        billing.getNextPeriodBill().leaseAdjustments().add(item);
-        billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(item.taxTotal().getValue()));
+        billing.getNextPeriodBill().lineItems().add(item);
+//        billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(item.taxTotal().getValue()));
+    }
+
+    private void attachImmediateLeaseAdjustment(InvoiceAccountCredit adjustment) {
+        // TODO Auto-generated method stub
+
     }
 
     private boolean isLeaseAdjustmentApplicable(LeaseAdjustment item) {

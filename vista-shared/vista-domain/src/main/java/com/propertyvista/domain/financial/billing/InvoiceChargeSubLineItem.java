@@ -19,7 +19,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
 @DiscriminatorValue("ChargeSubLineItem")
-public interface InvoiceChargeSubLineItem extends _InvoiceSubLineItem {
+public interface InvoiceChargeSubLineItem extends InvoiceSubLineItem {
 
     BillableItem billableItem();
 

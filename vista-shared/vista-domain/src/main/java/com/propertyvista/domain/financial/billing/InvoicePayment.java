@@ -1,3 +1,5 @@
+package com.propertyvista.domain.financial.billing;
+
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
@@ -7,23 +9,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 25, 2012
+ * Created on Mar 20, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
-/**
- * 
- * @see {@link com.propertyvista.domain.financial.offering.Feature.PropertyContactType.adjustment}
- */
-@DiscriminatorValue("leaseAdjustment")
-public interface BillLeaseAdjustment extends BillEntry {
+@DiscriminatorValue("Payment")
+public interface InvoicePayment extends InvoiceCredit {
 
-    LeaseAdjustment leaseAdjustment();
+    PaymentRecord paymentRecord();
 
 }

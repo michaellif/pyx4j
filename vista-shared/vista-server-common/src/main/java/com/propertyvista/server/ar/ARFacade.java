@@ -1,5 +1,3 @@
-package com.propertyvista.domain.financial.billing;
-
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
@@ -9,16 +7,18 @@ package com.propertyvista.domain.financial.billing;
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 20, 2012
- * @author michaellif
+ * Created on Mar 15, 2012
+ * @author vlads
  * @version $Id$
  */
+package com.propertyvista.server.ar;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
-@DiscriminatorValue("Payment")
-public interface _InvoicePayment extends _InvoiceCredit {
+public interface ARFacade {
 
-    Payment payment();
+    void postPayment(PaymentRecord payment);
+
+    void rejectPayment(PaymentRecord payment);
 
 }

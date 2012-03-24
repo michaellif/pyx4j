@@ -47,9 +47,7 @@ class Billing {
 
     private final LeaseAdjustmentProcessor leaseAdjustmentProcessor;
 
-    private final BillEntryAdjustmentProcessor billEntryAdjustmentProcessor;
-
-    private final _ProductChargeProcessor productChargeProcessor;
+    private final ProductChargeProcessor productChargeProcessor;
 
     private Billing(Bill bill) {
         this.nextPeriodBill = bill;
@@ -62,12 +60,11 @@ class Billing {
             Persistence.service().retrieve(previousPeriodBill.lineItems());
         }
 
-        productChargeProcessor = new _ProductChargeProcessor(this);
+        productChargeProcessor = new ProductChargeProcessor(this);
 
         paymentProcessor = new PaymentProcessor(this);
 
         leaseAdjustmentProcessor = new LeaseAdjustmentProcessor(this);
-        billEntryAdjustmentProcessor = new BillEntryAdjustmentProcessor(this);
 
     }
 
@@ -86,9 +83,10 @@ class Billing {
         getPreviousTotals();
 
         productChargeProcessor.createCharges();
+        leaseAdjustmentProcessor.createPendingLeaseAdjustments();
+        leaseAdjustmentProcessor.attachImmediateLeaseAdjustments();
 
-        paymentProcessor.createPayments();
-        leaseAdjustmentProcessor.createLeaseAdjustments();
+        paymentProcessor.attachPayments();
 
         calculateTotals();
 
@@ -136,13 +134,11 @@ class Billing {
         return leaseAdjustmentProcessor;
     }
 
-    public BillEntryAdjustmentProcessor getBillEntryAdjustmentProcessor() {
-        return billEntryAdjustmentProcessor;
-    }
-
     static void createBill(BillingRun billingRun, BillingAccount billingAccount) {
-        Persistence.service().retrieveMember(billingAccount.payments());
+        Persistence.service().retrieveMember(billingAccount.interimLineItems());
+
         Persistence.service().retrieve(billingAccount.lease());
+
         Bill bill = EntityFactory.create(Bill.class);
         try {
             Persistence.service().startTransaction();

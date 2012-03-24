@@ -1,3 +1,4 @@
+package com.propertyvista.domain.financial.billing;
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
@@ -7,24 +8,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 25, 2012
+ * Created on Mar 20, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.server.billing;
 
-import com.propertyvista.domain.financial.billing.BillEntry;
 
-public class BillEntryAdjustmentProcessor {
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-    private final Billing billing;
-
-    BillEntryAdjustmentProcessor(Billing billing) {
-        this.billing = billing;
-    }
-
-    protected void createBillEntryAdjustment(BillEntry originalEntry, BillEntry revisedEntry) {
-        //TODO
-    }
+@DiscriminatorValue("Withdrawal")
+public interface InvoiceWithdrawal extends InvoiceDebit {
 
 }

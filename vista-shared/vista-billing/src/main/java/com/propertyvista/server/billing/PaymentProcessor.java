@@ -13,10 +13,7 @@
  */
 package com.propertyvista.server.billing;
 
-import com.pyx4j.entity.shared.EntityFactory;
-
-import com.propertyvista.domain.financial.billing.BillPayment;
-import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
 
 public class PaymentProcessor {
 
@@ -26,33 +23,16 @@ public class PaymentProcessor {
         this.billing = billing;
     }
 
-    /**
-     * 
-     * Received || Posted && New (and targetDate is past) - next bill should pick it and process the payment (BillingStatus -> Processed)
-     * Rejected && New - apply NSF charge (v0.5) (BillingStatus -> Reverted)
-     * Accepted && Processed - N/A
-     * Posted && Processed - do nothing
-     * Rejected && Processed - apply NSF charge + revert payment using adjustment + late payment charge (v0.5) (BillingStatus -> Reverted)
-     * Reverted - do nothing
-     * 
-     */
-    void createPayments() {
-        for (Payment payment : billing.getNextPeriodBill().billingAccount().payments()) {
-            if (Payment.BillingStatus.New.equals(payment.billingStatus().getValue())
-                    && (Payment.PaymentStatus.Received.equals(payment.paymentStatus().getValue()) || Payment.PaymentStatus.Posted.equals(payment
-                            .paymentStatus().getValue()))) {
-                createPayment(payment);
-            }
+    void attachPayments() {
+        for (InvoicePayment payment : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(), InvoicePayment.class)) {
+            attachPayment(payment);
         }
     }
 
-    private void createPayment(Payment payment) {
-        BillPayment billPayment = EntityFactory.create(BillPayment.class);
-        billPayment.payment().set(payment);
-        billPayment.amount().setValue(payment.amount().getValue());
-        billing.getNextPeriodBill().billPayments().add(billPayment);
+    private void attachPayment(InvoicePayment payment) {
+        billing.getNextPeriodBill().lineItems().add(payment);
         billing.getNextPeriodBill().paymentReceivedAmount()
-                .setValue(billing.getNextPeriodBill().paymentReceivedAmount().getValue().add(billPayment.payment().amount().getValue()));
+                .setValue(billing.getNextPeriodBill().paymentReceivedAmount().getValue().add(payment.amount().getValue()));
     }
 
 }

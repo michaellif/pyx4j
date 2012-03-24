@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial.billing;
+package com.propertyvista.domain.tenant.lease;
 
 import java.math.BigDecimal;
 
@@ -40,14 +40,14 @@ import com.propertyvista.domain.financial.BillingAccount;
 
 /**
  * 
- * Actual payment record. {@link com.propertyvista.domain.financial.billing.BillPayment} captures payment portion for particular charge (in future version)
+ * Actual payment record. {@link com.propertyvista.domain.financial.billing.InvoicePayment} captures payment portion for particular charge (in future version)
  * Deposit is considered as payment and presented by this class (this statement requires
  * review, Alex S, see deposit properties in
  * com.propertyvista.domain.financial.payment.java)
  * 
  * @author Alexs
  */
-public interface Payment extends IEntity {
+public interface PaymentRecord extends IEntity {
 
     @I18n
     enum Type {
@@ -80,21 +80,6 @@ public interface Payment extends IEntity {
         }
     };
 
-    @I18n
-    enum BillingStatus {
-
-        New,
-
-        Processed,
-
-        Reverted;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    };
-
     @Override
     @Indexed
     @ToString
@@ -106,6 +91,8 @@ public interface Payment extends IEntity {
      * Do not post before that date
      */
     IPrimitive<LogicalDate> targetDate();
+
+    IPrimitive<LogicalDate> postedDate();
 
     IPrimitive<LogicalDate> depositDate();
 
@@ -119,8 +106,6 @@ public interface Payment extends IEntity {
     IPrimitive<Type> type();
 
     IPrimitive<PaymentStatus> paymentStatus();
-
-    IPrimitive<BillingStatus> billingStatus();
 
     @Owner
     @ReadOnly

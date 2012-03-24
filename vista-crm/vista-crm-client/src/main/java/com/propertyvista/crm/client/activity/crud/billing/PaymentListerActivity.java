@@ -22,12 +22,12 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
-public class PaymentListerActivity extends ListerActivityBase<Payment> {
+public class PaymentListerActivity extends ListerActivityBase<PaymentRecord> {
 
     public PaymentListerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(PaymentListerView.class), GWT.<AbstractListService<Payment>> create(PaymentCrudService.class), Payment.class);
+        super(place, SettingsViewFactory.instance(PaymentListerView.class), GWT.<AbstractListService<PaymentRecord>> create(PaymentCrudService.class), PaymentRecord.class);
     }
 
 }

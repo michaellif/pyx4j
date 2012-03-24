@@ -1,4 +1,5 @@
 package com.propertyvista.domain.financial.billing;
+
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
@@ -13,14 +14,9 @@ package com.propertyvista.domain.financial.billing;
  * @version $Id$
  */
 
-
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-
-@DiscriminatorValue("AdjustmentSubLineItem")
-public interface _InvoiceAdjustmentSubLineItem extends _InvoiceSubLineItem {
-
-    BillableItemAdjustment billableItemAdjustment();
+@DiscriminatorValue("AccountCredit")
+public interface InvoiceAccountCredit extends InvoiceCredit {
 
 }

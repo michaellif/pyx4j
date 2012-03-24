@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderBy;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -103,23 +102,8 @@ public interface Bill extends IEntity {
     BillingRun billingRun();
 
     @Detached
-    @Owned
-    @OrderBy(BillPayment.OrderId.class)
-    IList<BillPayment> billPayments();
-
-    @Detached
-    @Owned
-    @OrderBy(BillLeaseAdjustment.OrderId.class)
-    IList<BillLeaseAdjustment> leaseAdjustments();
-
-    @Detached
-    @Owned
-    @OrderBy(BillEntryAdjustment.OrderId.class)
-    IList<BillEntryAdjustment> billEntryAdjustments();
-
-    @Detached
-    @OrderBy(_InvoiceLineItem.OrderId.class)
-    IList<_InvoiceLineItem> lineItems();
+    @OrderBy(InvoiceLineItem.OrderId.class)
+    IList<InvoiceLineItem> lineItems();
 
     /**
      * The total amount due from the previous bill.

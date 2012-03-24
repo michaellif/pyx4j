@@ -20,16 +20,16 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
-public class PaymentEditorForm extends CrmEntityForm<Payment> {
+public class PaymentEditorForm extends CrmEntityForm<PaymentRecord> {
 
     public PaymentEditorForm() {
         this(false);
     }
 
     public PaymentEditorForm(boolean viewMode) {
-        super(Payment.class, viewMode);
+        super(PaymentRecord.class, viewMode);
     }
 
     @Override

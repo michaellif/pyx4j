@@ -59,7 +59,6 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
         numOfProductCharges(4).
-        numOfLeaseAdjustments(0).
         paymentReceivedAmount("0.00").
         serviceCharge("270.09").
         recurringFeatureCharges("34.26").
@@ -68,7 +67,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         totalDueAmount("340.87");
         // @formatter:on
 
-        receivePayment("19-Mar-2011", "340.87");
+        receiveAndPostPayment("19-Mar-2011", "340.87");
 
         //==================== RUN 2 ======================//
 
@@ -85,7 +84,6 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(5).
-        numOfLeaseAdjustments(0).
         paymentReceivedAmount("340.87").
         serviceCharge("930.30").
         recurringFeatureCharges("136.67").
@@ -94,9 +92,9 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         totalDueAmount("1195.01");
         // @formatter:on
 
-        receivePayment("19-Mar-2011", "995.01");
-        receivePayment("20-Mar-2011", "100.00");
-        receivePayment("21-Mar-2011", "100.00");
+        receiveAndPostPayment("19-Mar-2011", "995.01");
+        receiveAndPostPayment("20-Mar-2011", "100.00");
+        receiveAndPostPayment("21-Mar-2011", "100.00");
 
         //==================== RUN 3 ======================//
 
@@ -114,7 +112,6 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(6).
-        numOfLeaseAdjustments(0).
         paymentReceivedAmount("1195.01").
         serviceCharge("930.30").
         recurringFeatureCharges("188.00").
@@ -123,7 +120,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         totalDueAmount("1364.50");
         // @formatter:on
 
-        receivePayment("19-Apr-2011", "1364.50");
+        receiveAndPostPayment("19-Apr-2011", "1364.50");
 
         //==================== RUN 4 ======================//
 
@@ -139,7 +136,6 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
         numOfProductCharges(5).
-        numOfLeaseAdjustments(0).
         paymentReceivedAmount("1364.50").
         serviceCharge("930.30").
         recurringFeatureCharges("188.00").
@@ -148,7 +144,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         totalDueAmount("1252.50");
         // @formatter:on
 
-        receivePayment("19-May-2011", "1252.50");
+        receiveAndPostPayment("19-May-2011", "1252.50");
 
         //==================== RUN 5 ======================//
 
@@ -164,7 +160,6 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(5).
-        numOfLeaseAdjustments(0).
         paymentReceivedAmount("1252.50").
         serviceCharge("930.30").
         recurringFeatureCharges("188.00").
@@ -173,7 +168,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         totalDueAmount("1252.50");
         // @formatter:on
 
-        receivePayment("19-Jun-2011", "1252.50");
+        receiveAndPostPayment("19-Jun-2011", "1252.50");
 
         //==================== RUN 6 ======================//
 
@@ -189,7 +184,6 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("01-Aug-2011").
         billingPeriodEndDate("03-Aug-2011").
         numOfProductCharges(5).
-        numOfLeaseAdjustments(0).
         paymentReceivedAmount("1252.50").
         serviceCharge("90.03").
         recurringFeatureCharges("18.19").
@@ -198,7 +192,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         totalDueAmount("121.20");
         // @formatter:on
 
-        receivePayment("19-Jul-2011", "121.20");
+        receiveAndPostPayment("19-Jul-2011", "121.20");
 
         //==================== RUN final ======================//
 

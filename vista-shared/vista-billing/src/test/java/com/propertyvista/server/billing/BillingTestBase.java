@@ -37,7 +37,6 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.Payment;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -47,6 +46,8 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ActionType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
+import com.propertyvista.server.ar.ARFacade;
 import com.propertyvista.server.billing.preload.BuildingDataModel;
 import com.propertyvista.server.billing.preload.LeaseDataModel;
 import com.propertyvista.server.billing.preload.LocationsDataModel;
@@ -280,27 +281,36 @@ abstract class BillingTestBase extends VistaDBTestBase {
         return adjustment;
     }
 
-    protected Payment receivePayment(String receivedDate, String amount) {
+    protected PaymentRecord receivePayment(String receivedDate, String amount) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
 
-        Payment payment = EntityFactory.create(Payment.class);
-        payment.receivedDate().setValue(BillingTestUtils.getDate(receivedDate));
-        payment.amount().setValue(new BigDecimal(amount));
-        payment.paymentStatus().setValue(Payment.PaymentStatus.Posted);
-        payment.billingStatus().setValue(Payment.BillingStatus.New);
+        PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
+        paymentRecord.receivedDate().setValue(BillingTestUtils.getDate(receivedDate));
+        paymentRecord.amount().setValue(new BigDecimal(amount));
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
 
         Persistence.service().retrieveMember(lease.billingAccount().payments());
-        lease.billingAccount().payments().add(payment);
+        lease.billingAccount().payments().add(paymentRecord);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(lease);
         Persistence.service().commit();
 
-        return payment;
+        return paymentRecord;
     }
 
-    protected void rejectPayment(Payment payment) {
-        payment.paymentStatus().setValue(Payment.PaymentStatus.Rejected);
+    protected void postPayment(PaymentRecord paymentRecord) {
+        ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
+    }
+
+    protected PaymentRecord receiveAndPostPayment(String receivedDate, String amount) {
+        PaymentRecord paymentRecord = receivePayment(receivedDate, amount);
+        postPayment(paymentRecord);
+        return paymentRecord;
+    }
+
+    protected void rejectPayment(PaymentRecord paymentRecord) {
+        ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord);
     }
 
     private BillableItem findBillableItem(String billableItemId, Lease lease) {

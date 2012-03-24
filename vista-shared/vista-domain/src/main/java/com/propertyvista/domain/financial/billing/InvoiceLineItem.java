@@ -14,20 +14,38 @@ package com.propertyvista.domain.financial.billing;
  * @version $Id$
  */
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Inheritance
-@AbstractEntity
-public interface _InvoiceCredit extends _InvoiceLineItem {
+import com.propertyvista.domain.financial.BillingAccount;
 
-    @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> amount();
+@AbstractEntity
+@Inheritance
+public interface InvoiceLineItem extends IEntity {
+
+    //TODO See BillingAccount 
+    //@Owner
+    @Detached
+    @NotNull
+    @Indexed
+    @JoinColumn
+    BillingAccount billingAccount();
+
+    @Detached
+    Bill bill();
+
+    interface OrderId extends ColumnId {
+
+    }
+
+    @OrderColumn(OrderId.class)
+    IPrimitive<Integer> orderId();
 }

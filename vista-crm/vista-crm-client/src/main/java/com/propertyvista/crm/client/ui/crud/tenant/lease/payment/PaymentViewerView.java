@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease.payment;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
-public interface PaymentViewerView extends IViewerView<Payment> {
+public interface PaymentViewerView extends IViewerView<PaymentRecord> {
 
 }

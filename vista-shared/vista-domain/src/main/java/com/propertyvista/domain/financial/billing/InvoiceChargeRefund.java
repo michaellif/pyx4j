@@ -16,11 +16,7 @@ package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-/**
- * Account Charge - total charge for a Lease Adjustment
- * 
- */
-@DiscriminatorValue("AccountCharge")
-public interface _InvoiceAccountCharge extends _InvoiceCharge {
+@DiscriminatorValue("ChargeRefund")
+public interface InvoiceChargeRefund extends InvoiceCredit {
 
 }

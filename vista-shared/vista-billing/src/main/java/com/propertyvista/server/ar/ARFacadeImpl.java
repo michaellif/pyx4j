@@ -13,34 +13,18 @@
  */
 package com.propertyvista.server.ar;
 
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
-public class ARFacadeImpl {
+public class ARFacadeImpl implements ARFacade {
 
-//implements BillingFacade {
-//
-//    @Override
-//    public BillingRun runBilling(Lease lease) {
-//        return BillingLifecycle.runBilling(lease);
-//    }
-//
-//    @Override
-//    public Bill getLatestConfirmedBill(BillingAccount billingAccount) {
-//        return BillingLifecycle.getLatestConfirmedBill(billingAccount);
-//    }
-//
-//    @Override
-//    public Bill getLatestBill(BillingAccount billingAccount) {
-//        return BillingLifecycle.getLatestBill(billingAccount);
-//    }
-//
-//    @Override
-//    public void confirmBill(Bill bill) {
-//        BillingLifecycle.confirmBill(bill);
-//    }
-//
-//    @Override
-//    public void rejectBill(Bill bill) {
-//        BillingLifecycle.rejectBill(bill);
-//    }
+    @Override
+    public void postPayment(PaymentRecord paymentRecord) {
+        PaymentManager.postPayment(paymentRecord);
+    }
+
+    @Override
+    public void rejectPayment(PaymentRecord paymentRecord) {
+        PaymentManager.rejectPayment(paymentRecord);
+    }
 
 }

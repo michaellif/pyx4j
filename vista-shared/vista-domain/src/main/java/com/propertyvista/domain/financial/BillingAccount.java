@@ -28,8 +28,9 @@ import com.pyx4j.entity.shared.ISet;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
-import com.propertyvista.domain.financial.billing.Payment;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
 public interface BillingAccount extends IEntity {
 
@@ -58,6 +59,9 @@ public interface BillingAccount extends IEntity {
     @Detached(level = AttachLevel.Detached)
     ISet<Bill> bills();
 
+    @Detached
+    ISet<InvoiceLineItem> interimLineItems();
+
     //TODO when VladS will provide deletion of polymorphic entities 
     //@Owned
     //@Detached(level = AttachLevel.Detached)
@@ -68,9 +72,9 @@ public interface BillingAccount extends IEntity {
     IPrimitive<Double> total();
 
     @Owned
-    @OrderBy(Payment.OrderId.class)
+    @OrderBy(PaymentRecord.OrderId.class)
     @Detached(level = AttachLevel.Detached)
-    IList<Payment> payments();
+    IList<PaymentRecord> payments();
 
     IPrimitive<ProrationMethod> prorationMethod();
 

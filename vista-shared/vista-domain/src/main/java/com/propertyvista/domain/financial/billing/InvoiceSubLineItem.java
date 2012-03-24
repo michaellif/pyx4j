@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @Inheritance
 @AbstractEntity
-public interface _InvoiceSubLineItem extends IEntity {
+public interface InvoiceSubLineItem extends IEntity {
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
@@ -46,7 +46,7 @@ public interface _InvoiceSubLineItem extends IEntity {
     @NotNull
     @Indexed
     @JoinColumn
-    _InvoiceProductCharge lineItem();
+    InvoiceProductCharge lineItem();
 
     interface OrderId extends ColumnId {
 
