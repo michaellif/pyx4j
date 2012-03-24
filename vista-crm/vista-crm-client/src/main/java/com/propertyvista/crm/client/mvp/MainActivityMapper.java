@@ -141,6 +141,9 @@ import com.propertyvista.crm.client.activity.policies.deposit.DepositPolicyViewe
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyViewerActivity;
@@ -842,6 +845,18 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case viewer:
                         activity = new LeaseBillingPolicyViewerActivity(place);
+                        break;
+                    }
+                } else if (place instanceof CrmSiteMap.Settings.Policies.IdAssignment) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case lister:
+                        activity = new IdAssignmentPolicyListerActivity(place);
+                        break;
+                    case editor:
+                        activity = new IdAssignmentPolicyEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new IdAssignmentPolicyViewerActivity(place);
                         break;
                     }
                 }

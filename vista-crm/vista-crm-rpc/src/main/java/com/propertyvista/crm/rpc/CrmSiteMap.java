@@ -356,6 +356,12 @@ public class CrmSiteMap implements SiteMap {
             public static class LeaseBilling extends CrudAppPlace {
 
             }
+
+            @PlaceProperties(caption = "ID Assignment")
+            @NavigationItem(navigLabel = "ID Assignment")
+            public static class IdAssignment extends CrudAppPlace {
+
+            }
         }
 
         @PlaceProperties(caption = "Lease Terms")

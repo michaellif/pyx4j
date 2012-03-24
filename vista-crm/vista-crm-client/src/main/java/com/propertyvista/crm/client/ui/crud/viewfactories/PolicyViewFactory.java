@@ -38,6 +38,12 @@ import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplat
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.idassignment.IdAssignmentPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.idassignment.IdAssignmentPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.idassignment.IdAssignmentPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.idassignment.IdAssignmentPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.idassignment.IdAssignmentPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.idassignment.IdAssignmentPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyListerView;
@@ -141,7 +147,15 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(LeaseBillingPolicyEditorView.class, new LeaseBillingPolicyEditorViewImpl());
             } else if (LeaseBillingPolicyViewerView.class.equals(type)) {
                 map.put(LeaseBillingPolicyViewerView.class, new LeaseBillingPolicyViewerViewImpl());
+
+            } else if (IdAssignmentPolicyListerView.class.equals(type)) {
+                map.put(IdAssignmentPolicyListerView.class, new IdAssignmentPolicyListerViewImpl());
+            } else if (IdAssignmentPolicyEditorView.class.equals(type)) {
+                map.put(IdAssignmentPolicyEditorView.class, new IdAssignmentPolicyEditorViewImpl());
+            } else if (IdAssignmentPolicyViewerView.class.equals(type)) {
+                map.put(IdAssignmentPolicyViewerView.class, new IdAssignmentPolicyViewerViewImpl());
             }
+
         }
         @SuppressWarnings("unchecked")
         T impl = (T) map.get(type);

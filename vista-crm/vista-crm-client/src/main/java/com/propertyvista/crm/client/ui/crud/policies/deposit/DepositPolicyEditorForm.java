@@ -99,6 +99,16 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
                 super(DepositPolicyItem.class);
             }
 
+//            @Override
+//            public CComponent<?, ?> create(IObject<?> member) {
+//                if (member.getFieldName() == proto().appliedTo().getFieldName()) {
+//                    unbind(proto().appliedTo());
+//                    return inject(proto().appliedTo(), new CLabel());
+//                } else {
+//                    return super.create(member);
+//                }
+//            }
+
             @Override
             public IsWidget createContent() {
                 //FormFlexPanel content = new FormFlexPanel();
