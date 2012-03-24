@@ -464,7 +464,7 @@
             <id>deploy-target-prod02pg</id>
             <properties>
                 <deployContext>vista-pangroup</deployContext>
-                <vista-tomcat-url>http://prod02ô.birchwoodsoftwaregroup.com</vista-tomcat-url>
+                <vista-tomcat-url>http://prod02a.birchwoodsoftwaregroup.com</vista-tomcat-url>
                 <vista-app-ping-url>${vista-tomcat-url}/${deployContext}</vista-app-ping-url>
             </properties>
         </profile>
@@ -473,7 +473,7 @@
             <id>deploy-target-prod02main</id>
             <properties>
                 <deployContext>vista-main</deployContext>
-                <vista-tomcat-url>http://prod02ô.birchwoodsoftwaregroup.com</vista-tomcat-url>
+                <vista-tomcat-url>http://prod02a.birchwoodsoftwaregroup.com</vista-tomcat-url>
                 <vista-app-ping-url>${vista-tomcat-url}/${deployContext}</vista-app-ping-url>
             </properties>
         </profile>
