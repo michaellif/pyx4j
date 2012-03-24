@@ -38,6 +38,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
@@ -139,7 +140,6 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
                     comboReset(combo4, PropertyCriterion.eq(combo4.proto().subjectDetails(), event.getValue()), i18n.tr("Please Select"));
                 }
             });
-
         }
 
         // start panel layout
@@ -155,41 +155,43 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel()), 10).build());
 
         row = 0;
-        main.setWidget(
-                ++row,
-                1,
-                new DecoratorBuilder(inject(proto().tenant(),
-                        new CEntitySelectorHyperlink<Tenant>(Tenant.class, MainActivityMapper.getCrudAppPlace(Tenant.class)) {
-                            @Override
-                            public EntitySelectorDialog<Tenant> getSelectorDialog() {
-                                return new EntitySelectorDialog<Tenant>(Tenant.class, false, new ArrayList<Tenant>(), "Select Item") {
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().tenant(), new CEntitySelectorHyperlink<Tenant>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return MainActivityMapper.getCrudAppPlace(Tenant.class).formViewerPlace(getValue().getPrimaryKey());
+            }
 
-                                    @Override
-                                    public boolean onClickOk() {
-                                        if (getSelectedItems().isEmpty()) {
-                                            return false;
-                                        }
-                                        setValue(getSelectedItems().get(0));
-                                        return true;
-                                    }
-                                    @Override
-                                    protected List<ColumnDescriptor> defineColumnDescriptors() {
-                                        return Arrays.asList(//@formatter:off
-                                                new MemberColumnDescriptor.Builder(proto().type()).build(),
-                                                new MemberColumnDescriptor.Builder(proto().person().name()).build(),
-                                                new MemberColumnDescriptor.Builder(proto().person().birthDate()).build(),
-                                                new MemberColumnDescriptor.Builder(proto().person().email()).build(),
-                                                new MemberColumnDescriptor.Builder(proto().person().homePhone()).build()
-                                        );//@formatter:on
-                                    }
+            @Override
+            protected EntitySelectorDialog<Tenant> getSelectorDialog() {
+                return new EntitySelectorDialog<Tenant>(Tenant.class, false, new ArrayList<Tenant>(), "Select Item") {
 
-                                    @Override
-                                    protected AbstractListService<Tenant> getSelectService() {
-                                        return GWT.<AbstractListService<Tenant>> create(SelectTenantListService.class);
-                                    }
-                                };
-                            }
-                        }), 10).build());
+                    @Override
+                    public boolean onClickOk() {
+                        if (getSelectedItems().isEmpty()) {
+                            return false;
+                        }
+                        setValue(getSelectedItems().get(0));
+                        return true;
+                    }
+
+                    @Override
+                    protected List<ColumnDescriptor> defineColumnDescriptors() {
+                        return Arrays.asList(//@formatter:off
+                                new MemberColumnDescriptor.Builder(proto().type()).build(),
+                                new MemberColumnDescriptor.Builder(proto().person().name()).build(),
+                                new MemberColumnDescriptor.Builder(proto().person().birthDate()).build(),
+                                new MemberColumnDescriptor.Builder(proto().person().email()).build(),
+                                new MemberColumnDescriptor.Builder(proto().person().homePhone()).build()
+                        );//@formatter:on
+                    }
+
+                    @Override
+                    protected AbstractListService<Tenant> getSelectService() {
+                        return GWT.<AbstractListService<Tenant>> create(SelectTenantListService.class);
+                    }
+                };
+            }
+        }), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
