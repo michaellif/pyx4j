@@ -31,4 +31,14 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         }
     }
 
+    @Override
+    public boolean openDBReset() {
+        return false;
+    }
+
+    @Override
+    public boolean isDevelopmentBehavior() {
+        return false;
+    }
+
 }

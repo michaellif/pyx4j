@@ -65,6 +65,9 @@ public class DBResetServlet extends HttpServlet {
     @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
     private static enum ResetType {
 
+        @Translate("Drop All and Configure Vista Admin")
+        prodReset,
+
         @Translate("Drop All and Preload all demo PMC (~60 seconds) [No Mockup]")
         all,
 
@@ -157,7 +160,7 @@ public class DBResetServlet extends HttpServlet {
                         Persistence.service().startBackgroundProcessTransaction();
                         Lifecycle.startElevatedUserContext();
                         try {
-                            if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
+                            if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
                                 SchedulerHelper.shutdown();
                                 RDBUtils.dropAllEntityTables();
                                 SchedulerHelper.dbReset();
@@ -199,6 +202,8 @@ public class DBResetServlet extends HttpServlet {
                                 break;
                             case dropForeignKeys:
                                 RDBUtils.dropAllForeignKeys();
+                                break;
+                            case prodReset:
                                 break;
                             default:
                                 throw new Error("unimplemented: " + type);
