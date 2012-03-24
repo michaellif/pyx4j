@@ -25,8 +25,20 @@ import javax.servlet.http.HttpServletRequest;
 
 public class ServletUtils {
 
-    public static String getRequestServerName(HttpServletRequest request) {
+    public static String getForwardedHost(HttpServletRequest request) {
         String host = request.getHeader("x-forwarded-host");
+        if (host != null) {
+            if (host.contains(", ")) {
+                host = host.split(", ")[0];
+            }
+            return host;
+        } else {
+            return null;
+        }
+    }
+
+    public static String getRequestServerName(HttpServletRequest request) {
+        String host = getForwardedHost(request);
         if (host != null) {
             return host;
         } else {
@@ -40,7 +52,7 @@ public class ServletUtils {
 
     public static String getActualRequestURL(HttpServletRequest request, boolean queryString) {
         StringBuffer receivingURL;
-        String forwarded = request.getHeader("x-forwarded-host");
+        String forwarded = getForwardedHost(request);
         if (forwarded != null) {
             receivingURL = new StringBuffer();
             String forwardedProtocol = request.getHeader("x-forwarded-protocol");
@@ -68,7 +80,7 @@ public class ServletUtils {
 
     public static String getActualRequestBaseURL(HttpServletRequest request) {
         String receivingURL;
-        String forwarded = request.getHeader("x-forwarded-host");
+        String forwarded = getForwardedHost(request);
         if (forwarded != null) {
             String forwardedProtocol = request.getHeader("x-forwarded-protocol");
             if (forwardedProtocol == null) {
@@ -95,6 +107,9 @@ public class ServletUtils {
         if (request instanceof HttpServletRequest) {
             String forwarded = ((HttpServletRequest) request).getHeader("x-forwarded-for");
             if (forwarded != null) {
+                if (forwarded.contains(", ")) {
+                    forwarded = forwarded.split(", ")[0];
+                }
                 return forwarded;
             } else {
                 return request.getRemoteAddr();
