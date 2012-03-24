@@ -28,7 +28,7 @@ public class PaymentProcessor {
 
     /**
      * 
-     * Accepted || Posted && New (and targetDate is past) - next bill should pick it and process the payment (BillingStatus -> Processed)
+     * Received || Posted && New (and targetDate is past) - next bill should pick it and process the payment (BillingStatus -> Processed)
      * Rejected && New - apply NSF charge (v0.5) (BillingStatus -> Reverted)
      * Accepted && Processed - N/A
      * Posted && Processed - do nothing

@@ -1,4 +1,5 @@
 package com.propertyvista.domain.financial.billing;
+
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
@@ -13,10 +14,11 @@ package com.propertyvista.domain.financial.billing;
  * @version $Id$
  */
 
-
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
 @DiscriminatorValue("Payment")
 public interface _InvoicePayment extends _InvoiceCredit {
+
+    Payment payment();
 
 }
