@@ -220,6 +220,9 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         }
 
         for (ApplicationUserDTO user : users) {
+            if (user.user().isValueDetached()) {
+                Persistence.service().retrieve(user.user());
+            }
             switch (user.userType().getValue()) {
             case Applicant:
                 ApplicationManager.inviteUser(entity, user.user(), user.person(), VistaTenantBehavior.ProspectiveApplicant);

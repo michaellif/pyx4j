@@ -216,6 +216,12 @@ public class ApplicationManager {
             ma.applications().add(application);
             Persistence.service().persist(ma);
         }
+        if (application.user().isValueDetached()) {
+            Persistence.service().retrieve(application.user());
+        }
+        if (application.lease().isValueDetached()) {
+            Persistence.service().retrieve(application.lease());
+        }
 
         switch (behaviour) {
         case ProspectiveApplicant:

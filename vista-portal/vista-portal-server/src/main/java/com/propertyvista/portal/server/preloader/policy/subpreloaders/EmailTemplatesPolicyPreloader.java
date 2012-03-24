@@ -133,7 +133,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(appT.applicationUrl()) + "<br/><br/>" +
 
                 "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
-                EmailTemplateManager.getVarname(bldT.mainOffice().phone()) +
+                EmailTemplateManager.getVarname(bldT.mainOffice().phone()) + ". " +
                 "Please have your Application Reference Number available.<br/><br/>" +
                 
                 "Sincerely,<br/><br/>" +
@@ -165,7 +165,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(appT.applicationUrl()) + "<br/><br/>" +
 
                 "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
-                EmailTemplateManager.getVarname(bldT.mainOffice().phone()) +
+                EmailTemplateManager.getVarname(bldT.mainOffice().phone()) + ". " +
                 "Please have your Application Reference Number available.<br/><br/>" +
 
                 "Sincerely,<br/><br/>" +
@@ -197,7 +197,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(appT.applicationUrl()) + "<br/><br/>" +
 
                 "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
-                EmailTemplateManager.getVarname(bldT.mainOffice().phone()) +
+                EmailTemplateManager.getVarname(bldT.mainOffice().phone()) + ". " +
                 "Please have your Application Reference Number available.<br/><br/>" +
 
                 "Sincerely,<br/><br/>" +
