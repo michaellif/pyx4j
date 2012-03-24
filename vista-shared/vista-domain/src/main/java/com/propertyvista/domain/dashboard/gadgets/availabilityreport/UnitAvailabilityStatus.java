@@ -123,7 +123,7 @@ public interface UnitAvailabilityStatus extends IEntity {
     IPrimitive<LogicalDate> rentEndDay();
 
     /**
-     * Applicable for 'Vacant', must be the same as {@link AptUnit#availableForRent()} but stored here for efficiency. used to calculate days vacant
+     * Applicable for 'Vacant', must be the same as {@link AptUnit#_availableForRent()} but stored here for efficiency. used to calculate days vacant
      */
     @Format("MM/dd/yyyy")
     @Caption(name = "Vacant Since")

@@ -44,7 +44,7 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
                 new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
                 new MemberColumnDescriptor.Builder(proto().financial()._unitRent()).build(),
                 new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
-                new MemberColumnDescriptor.Builder(proto().availableForRent()).build()
+                new MemberColumnDescriptor.Builder(proto()._availableForRent()).build()
        );//@formatter:on
 
     }

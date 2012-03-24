@@ -136,12 +136,12 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             Persistence.service().persist(generator.createPaymentMethods(tenant));
 
             AptUnit unit = aptUnitSource.next();
-            if (unit.availableForRent().isNull()) {
+            if (unit._availableForRent().isNull()) {
                 continue;
             }
             LeaseLifecycleSim leaseSim = new LeaseLifecycleSim();
             LogicalDate now = new LogicalDate();
-            LogicalDate simStart = new LogicalDate(Math.max(unit.availableForRent().getValue().getTime(), new LogicalDate(2008 - 1900, 1, 1).getTime()));
+            LogicalDate simStart = new LogicalDate(Math.max(unit._availableForRent().getValue().getTime(), new LogicalDate(2008 - 1900, 1, 1).getTime()));
             LogicalDate eventDate = add(simStart, random(MIN_AVAILABLE, MAX_AVAILABLE));
             LogicalDate leaseFrom = add(eventDate, random(MIN_RESERVE_TIME, MAX_RESERVE_TIME));
             LogicalDate expectedMoveIn = leaseFrom;

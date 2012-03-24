@@ -45,18 +45,6 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     @Indexed(group = { "b,11", "f" })
     Floorplan floorplan();
 
-    /**
-     * Denormalized field used for search, derived from @see AptUnitOccupancy
-     * TODO should be calculated during Entity save
-     * 
-     * @deprecated remove deprecated once it is calculated and filled properly.
-     */
-    @Deprecated
-    @Indexed
-    @Format("MM/dd/yyyy")
-    @Caption(name = "Availability")
-    IPrimitive<LogicalDate> availableForRent();
-
     @ToString
     @EmbeddedEntity
     @Caption(name = "Information")
@@ -87,4 +75,14 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<MockupTenant> _MockupTenant();
+
+    // ----------------------------------------------------
+    // internals:
+    /**
+     * Denormalized field used for search, managed by @see AptUnitOccupancyManagerImpl
+     */
+    @Indexed
+    @Format("MM/dd/yyyy")
+    @Caption(name = "Availability")
+    IPrimitive<LogicalDate> _availableForRent();
 }

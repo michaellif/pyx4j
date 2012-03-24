@@ -113,7 +113,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             }
         }
 
-        get(proto().availableForRent()).setVisible(!getValue().availableForRent().isNull());
+        get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
     }
 
     @Override
@@ -134,9 +134,9 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
         main.getFlexCellFormatter().setRowSpan(row, 0, 3);
         row += 2;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().availableForRent()), 9).build());
-        get(proto().availableForRent()).inheritViewable(false);
-        get(proto().availableForRent()).setViewable(true);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._availableForRent()), 9).build());
+        get(proto()._availableForRent()).inheritViewable(false);
+        get(proto()._availableForRent()).setViewable(true);
 
         main.setBR(++row, 0, 0);
         if (isEditable()) {

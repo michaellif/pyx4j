@@ -503,7 +503,7 @@ public class AptUnitOccupancyManagerImpl implements AptUnitOccupancyManager {
 
     private void updateUnitAvailableFrom(LogicalDate newAvaialbleFrom) {
         Persistence.service().retrieve(unit);
-        unit.availableForRent().setValue(newAvaialbleFrom);
+        unit._availableForRent().setValue(newAvaialbleFrom);
         Persistence.secureSave(unit);
     }
 

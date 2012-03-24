@@ -123,11 +123,11 @@ public class PTGenerator {
 
         createTenantList(user, summary.tenants());
 
-        if (selectedUnit.availableForRent().isNull()) {
+        if (selectedUnit._availableForRent().isNull()) {
             return null;
         }
 
-        LogicalDate effectiveAvailableForRent = new LogicalDate(Math.max(selectedUnit.availableForRent().getValue().getTime(),
+        LogicalDate effectiveAvailableForRent = new LogicalDate(Math.max(selectedUnit._availableForRent().getValue().getTime(),
                 RandomUtil.randomLogicalDate(2012, 2012).getTime()));
         LogicalDate createdDate = new LogicalDate(effectiveAvailableForRent.getTime() + Math.abs(rnd.nextLong()) % MAX_CREATE_WAIT);
 

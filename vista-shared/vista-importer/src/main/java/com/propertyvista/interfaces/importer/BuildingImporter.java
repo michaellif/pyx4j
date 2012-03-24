@@ -169,12 +169,12 @@ public class BuildingImporter extends ImportPersister {
                         i._AptUnitOccupancySegment().add(occupancySegment);
                         occupancySegment.unit().set(i);
 
-                        if (i.availableForRent().isNull()) {
+                        if (i._availableForRent().isNull()) {
                             occupancySegment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
                             occupancySegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
                             occupancySegment.status().setValue(AptUnitOccupancySegment.Status.offMarket);
                         } else {
-                            occupancySegment.dateFrom().setValue(i.availableForRent().getValue());
+                            occupancySegment.dateFrom().setValue(i._availableForRent().getValue());
                             occupancySegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
                             occupancySegment.status().setValue(AptUnitOccupancySegment.Status.available);
                         }

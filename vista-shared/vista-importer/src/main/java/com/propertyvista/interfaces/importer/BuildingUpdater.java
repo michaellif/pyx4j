@@ -103,8 +103,8 @@ public class BuildingUpdater extends ImportPersister {
                 }
 
                 // Update
-                if (!unit.availableForRent().equals(aptUnitIO.availableForRent())) {
-                    unit.availableForRent().setValue(aptUnitIO.availableForRent().getValue());
+                if (!unit._availableForRent().equals(aptUnitIO.availableForRent())) {
+                    unit._availableForRent().setValue(aptUnitIO.availableForRent().getValue());
                     Persistence.service().persist(unit);
                     counters.units += 1;
                     counters.buildings = 1;
@@ -246,8 +246,8 @@ public class BuildingUpdater extends ImportPersister {
 
             // Temporary Hack for null values
             if (aptUnitIO.containsMemberValue(aptUnitIO.availableForRent().getFieldName()) && aptUnitIO.availableForRent().isNull()) {
-                if (!unit.availableForRent().isNull()) {
-                    unit.availableForRent().setValue(null);
+                if (!unit._availableForRent().isNull()) {
+                    unit._availableForRent().setValue(null);
                     unitUpdated = true;
                 }
             }

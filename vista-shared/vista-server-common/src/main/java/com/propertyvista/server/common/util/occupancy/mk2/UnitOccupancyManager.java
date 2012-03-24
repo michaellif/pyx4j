@@ -484,13 +484,13 @@ public class UnitOccupancyManager implements IUnitOccupancyManager {
 
     private void updateUnitAvailableFrom(Key unitId, LogicalDate newAvaialbleFrom) {
         AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId);
-        unit.availableForRent().setValue(newAvaialbleFrom);
+        unit._availableForRent().setValue(newAvaialbleFrom);
         Persistence.secureSave(unit);
     }
 
     private void clearUnitAvailableFrom(Key unitId) {
         AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId);
-        unit.availableForRent().setValue(null);
+        unit._availableForRent().setValue(null);
         Persistence.secureSave(unit);
     }
 }

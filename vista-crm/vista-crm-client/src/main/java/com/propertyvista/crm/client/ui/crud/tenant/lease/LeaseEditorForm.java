@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -160,7 +161,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         @Override
                         protected void setFilters(List<DataTableFilterData> filters) {
                             if (!getValue().leaseFrom().isNull() && !getValue().leaseTo().isNull() && filters != null) {
-                                filters.add(new DataTableFilterData(proto().availableForRent().getPath(), Operators.lessThan, getValue().leaseFrom().getValue()));
+                                // filter out already leased units (null) and not available by date:
+                                filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Operators.isNot, (Serializable) null));
+                                filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Operators.lessThan, getValue().leaseFrom()
+                                        .getValue()));
                             }
                             super.setFilters(filters);
                         };

@@ -496,7 +496,7 @@ public class BuildingsGenerator {
         occupancySegment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
         occupancySegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
         occupancySegment.status().setValue(AptUnitOccupancySegment.Status.available);
-        unit.availableForRent().setValue(occupancySegment.dateFrom().getValue());
+        unit._availableForRent().setValue(occupancySegment.dateFrom().getValue());
         occupancySegment.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
         unit._AptUnitOccupancySegment().add(occupancySegment);
 

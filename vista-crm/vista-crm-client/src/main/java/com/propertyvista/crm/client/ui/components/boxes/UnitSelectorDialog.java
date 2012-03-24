@@ -100,7 +100,7 @@ public abstract class UnitSelectorDialog extends EntitySelectorDialog<AptUnit> {
                 new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
                 new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan")).build(),
                 new MemberColumnDescriptor.Builder(proto().floorplan().marketingName(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().availableForRent()).build()
+                new MemberColumnDescriptor.Builder(proto()._availableForRent()).build()
                 ); //@formatter:on
     }
 
