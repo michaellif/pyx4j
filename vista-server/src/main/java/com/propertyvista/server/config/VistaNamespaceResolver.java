@@ -24,6 +24,7 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.DemoData;
@@ -56,7 +57,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         // Prod: Get the 3rd part of URL.
         // www.ABC.propertyvista.com 
 
-        String host = httprequest.getHeader("x-forwarded-host");
+        String host = ServletUtils.getForwardedHost(httprequest);
         if (host == null) {
             host = httprequest.getServerName();
             if (httprequest.getLocalAddr().equals(host)) {
