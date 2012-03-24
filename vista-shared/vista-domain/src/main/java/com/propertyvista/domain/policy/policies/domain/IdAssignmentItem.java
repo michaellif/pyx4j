@@ -44,7 +44,7 @@ public interface IdAssignmentItem extends IEntity {
     }
 
     @I18n
-    public enum IdType {
+    public enum IdAssignmentType {
 
         userEditable,
 
@@ -64,6 +64,6 @@ public interface IdAssignmentItem extends IEntity {
     IPrimitive<IdTarget> target();
 
     @MemberColumn(name = "tp")
-    IPrimitive<IdType> type();
+    IPrimitive<IdAssignmentType> type();
 
 }
