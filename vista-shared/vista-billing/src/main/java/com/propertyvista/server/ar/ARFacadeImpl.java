@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.ar;
 
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
 public class ARFacadeImpl implements ARFacade {
@@ -25,6 +26,11 @@ public class ARFacadeImpl implements ARFacade {
     @Override
     public void rejectPayment(PaymentRecord paymentRecord) {
         PaymentManager.rejectPayment(paymentRecord);
+    }
+
+    @Override
+    public void postImmediateAdjustment(LeaseAdjustment adjustment) {
+
     }
 
 }

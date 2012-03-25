@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.ar;
 
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
 public interface ARFacade {
@@ -20,5 +21,7 @@ public interface ARFacade {
     void postPayment(PaymentRecord payment);
 
     void rejectPayment(PaymentRecord payment);
+
+    void postImmediateAdjustment(LeaseAdjustment adjustment);
 
 }

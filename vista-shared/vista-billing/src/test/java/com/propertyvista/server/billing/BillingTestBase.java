@@ -46,9 +46,12 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ActionType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.domain.tenant.lease.PaymentRecord;
 import com.propertyvista.server.ar.ARFacade;
 import com.propertyvista.server.billing.preload.BuildingDataModel;
+import com.propertyvista.server.billing.preload.LeaseAdjustmentReasonDataModel;
 import com.propertyvista.server.billing.preload.LeaseDataModel;
 import com.propertyvista.server.billing.preload.LocationsDataModel;
 import com.propertyvista.server.billing.preload.ProductItemTypesDataModel;
@@ -60,6 +63,8 @@ import com.propertyvista.server.billing.print.BillPrint;
 abstract class BillingTestBase extends VistaDBTestBase {
 
     protected LeaseDataModel leaseDataModel;
+
+    protected LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel;
 
     @Override
     protected void setUp() throws Exception {
@@ -88,6 +93,9 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
         ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel();
         productItemTypesDataModel.generate(true);
+
+        leaseAdjustmentReasonDataModel = new LeaseAdjustmentReasonDataModel();
+        leaseAdjustmentReasonDataModel.generate(true);
 
         BuildingDataModel buildingDataModel = new BuildingDataModel(productItemTypesDataModel);
         buildingDataModel.generate(true);
@@ -256,6 +264,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
     private BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ActionType actionType,
             LogicalDate effectiveDate, LogicalDate expirationDate) {
+
         Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
         BillableItem actualBillableItem = findBillableItem(billableItemId, lease);
 
@@ -273,6 +282,36 @@ abstract class BillingTestBase extends VistaDBTestBase {
         adjustment.description().setValue(actionType.name());
 
         actualBillableItem.adjustments().add(adjustment);
+
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.service().persist(lease);
+        Persistence.service().commit();
+
+        return adjustment;
+    }
+
+    protected LeaseAdjustment addGoodWillAdjustment(String amount, String effectiveDate, boolean immediate) {
+        return addLeaseAdjustment(amount, leaseAdjustmentReasonDataModel.getReason(LeaseAdjustmentReasonDataModel.Reason.goodWill),
+                BillingTestUtils.getDate(effectiveDate), immediate);
+    }
+
+    private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason, LogicalDate effectiveDate, boolean immediate) {
+
+        Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
+
+        LeaseAdjustment adjustment = EntityFactory.create(LeaseAdjustment.class);
+        adjustment.effectiveDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));
+        if (amount == null) {
+            adjustment.amount().setValue(null);
+        } else {
+            adjustment.amount().setValue(new BigDecimal(amount));
+        }
+        adjustment.actionType().setValue(immediate ? LeaseAdjustment.ActionType.immediate : LeaseAdjustment.ActionType.pending);
+        adjustment.effectiveDate().setValue(effectiveDate);
+        adjustment.description().setValue(reason.name().getValue());
+        adjustment.reason().setValue(reason.getValue());
+
+        lease.version().leaseProducts().adjustments().add(adjustment);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(lease);

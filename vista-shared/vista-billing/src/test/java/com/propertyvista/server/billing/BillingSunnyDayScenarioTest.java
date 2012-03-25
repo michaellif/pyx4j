@@ -126,6 +126,8 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         setSysDate("18-May-2011");
 
+        addGoodWillAdjustment("120.00", "18-May-2011", true);
+
         bill = runBilling(true, true);
 
         // @formatter:off
