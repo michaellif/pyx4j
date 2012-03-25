@@ -231,7 +231,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                     ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
                     dboMc.setAttachLevel(AttachLevel.Attached);
                     dboMc.clear();
-                    for (IEntity dtoMi : dboMc) {
+                    for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
                         ((ICollection<IEntity, ?>) dboM).add(dtoMi);
                     }
                 } else if (dtoM.getAttachLevel() == AttachLevel.IdOnly) {
