@@ -122,8 +122,9 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         locales.setVisible(false);
 
         languageMenu = new MenuBar();
-        languageMenu.setAutoOpen(true);
-        languageMenu.setAnimationEnabled(true);
+        languageMenu.setAutoOpen(false);
+        languageMenu.setAnimationEnabled(false);
+        languageMenu.setFocusOnHoverEnabled(true);
         languages = new MenuBar(true);
         MenuItem item = new MenuItem(ClentNavigUtils.getCurrentLocale().toString(), languages);
         item.getElement().getStyle().setProperty("background", "transparent");
