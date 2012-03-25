@@ -87,6 +87,7 @@
                             <extra>${project.build.directory}/gwt-extra</extra>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
+                            <strict>strict</strict>
                             <compileReport>${gwtCompileReport}</compileReport>
                             <!-- disableCastChecking>true</disableCastChecking -->
                             <!-- disableClassMetadata>true</disableClassMetadata -->
