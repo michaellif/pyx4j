@@ -98,7 +98,7 @@ public class SchedulerHelper {
             quartzProperties.put(delegateProperty, OracleDelegate.class.getName());
             break;
         default:
-            throw new Error("Unsupporte databaseType " + rdbConfiguration.databaseType());
+            throw new Error("Unsupported databaseType " + rdbConfiguration.databaseType());
         }
 
         // Lets quartz manage its connections pool for now.
@@ -123,7 +123,7 @@ public class SchedulerHelper {
 
     public static synchronized void init() {
         if (instance != null) {
-            throw new Error("quartz alredy initialized");
+            throw new Error("quartz already initialized");
         }
         try {
             if (true || ServerSideConfiguration.instance().isDevelopmentBehavior()) {
