@@ -82,8 +82,14 @@ public class MessageTemplates {
     }
 
     public static void createApplicationApprovedEmail(MailMessage email, TenantInLease tenantInLease) {
-        EmailTemplateType type = EmailTemplateType.ApplicationApproved;
+        createApplicationApprovedDeclinedEmail(email, tenantInLease, EmailTemplateType.ApplicationApproved);
+    }
 
+    public static void createApplicationDeclinedEmail(MailMessage email, TenantInLease tenantInLease) {
+        createApplicationApprovedDeclinedEmail(email, tenantInLease, EmailTemplateType.ApplicationDeclined);
+    }
+
+    private static void createApplicationApprovedDeclinedEmail(MailMessage email, TenantInLease tenantInLease, EmailTemplateType type) {
         // get building policy node
         Persistence.service().retrieve(tenantInLease.leaseV());
         Persistence.service().retrieve(tenantInLease.leaseV().holder());
