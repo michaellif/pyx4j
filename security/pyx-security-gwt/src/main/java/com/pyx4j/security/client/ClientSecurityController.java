@@ -49,11 +49,11 @@ public class ClientSecurityController extends SecurityController {
     // Allow everything from Permission point of view
     private static class AclImpl implements Acl {
 
-        private Set<Behavior> behaviours = Collections.emptySet();
+        private Set<Behavior> behaviors = Collections.emptySet();
 
         @Override
         public boolean checkBehavior(Behavior behavior) {
-            return behaviours.contains(behavior);
+            return behaviors.contains(behavior);
         }
 
         @Override
@@ -63,12 +63,12 @@ public class ClientSecurityController extends SecurityController {
 
         @Override
         public Set<Behavior> getBehaviours() {
-            return behaviours;
+            return behaviors;
         }
 
         @Override
         public int hashCode() {
-            return behaviours.hashCode();
+            return behaviors.hashCode();
         }
 
         @Override
@@ -119,18 +119,17 @@ public class ClientSecurityController extends SecurityController {
     }
 
     @Override
-    public Acl authenticate(Set<Behavior> behaviours) {
-        if (behaviours == null) {
-            behaviours = Collections.emptySet();
+    public Acl authenticate(Set<Behavior> behaviors) {
+        if (behaviors == null) {
+            behaviors = Collections.emptySet();
         } else {
-            behaviours = Collections.unmodifiableSet(behaviours);
+            behaviors = Collections.unmodifiableSet(behaviors);
         }
-        if (!EqualsHelper.equals(acl.behaviours, behaviours)) {
-            log.debug("Client behaviours changed {} -> {}", acl.behaviours, behaviours);
+        if (!EqualsHelper.equals(acl.behaviors, behaviors)) {
+            log.debug("Client behaviors changed {} -> {}", acl.behaviors, behaviors);
+            acl.behaviors = behaviors;
+            ClientEventBus.fireEvent(new SecurityControllerEvent(acl.behaviors));
         }
-        //TODO do not fire change event all the time for now.  Problem in login places
-        acl.behaviours = behaviours;
-        ClientEventBus.fireEvent(new SecurityControllerEvent(acl.behaviours));
 
         if (!initialized) {
             initialized = true;
