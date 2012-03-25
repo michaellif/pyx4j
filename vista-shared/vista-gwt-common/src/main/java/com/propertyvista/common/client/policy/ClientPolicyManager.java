@@ -28,6 +28,7 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.portal.rpc.PolicyDataSystemNotification;
@@ -65,7 +66,18 @@ public class ClientPolicyManager {
         }
     }
 
+    private static OrganizationPoliciesNode organizationPoliciesNode;
+
     private static final Map<PolicyFindKey, Policy> cache = new HashMap<PolicyFindKey, Policy>();
+
+    public static OrganizationPoliciesNode getOrganizationPoliciesNode() {
+        // This is done for cache to Work on the client. cache needs  Node Pk.
+        if (organizationPoliciesNode == null) {
+            return EntityFactory.create(OrganizationPoliciesNode.class);
+        } else {
+            return organizationPoliciesNode;
+        }
+    }
 
     @SuppressWarnings("unchecked")
     public static <POLICY extends Policy> void obtainEffectivePolicy(final PolicyNode node, final Class<POLICY> policyClass,
@@ -80,7 +92,10 @@ public class ClientPolicyManager {
         srv.obtainEffectivePolicy(new DefaultAsyncCallback<Policy>() {
             @Override
             public void onSuccess(Policy result) {
-                cache.put(new PolicyFindKey(node, policyClass), result);
+                if ((organizationPoliciesNode == null) && (result.node() instanceof OrganizationPoliciesNode)) {
+                    organizationPoliciesNode = (OrganizationPoliciesNode) result.node();
+                }
+                cache.put(new PolicyFindKey(result.node(), policyClass), result);
                 callback.onSuccess((POLICY) result);
             }
         }, (PolicyNode) node.createIdentityStub(), EntityFactory.getEntityPrototype(policyClass));
@@ -100,6 +115,9 @@ public class ClientPolicyManager {
             public void onSystemNotificationReceived(SystemNotificationEvent event) {
                 if (event.getSystemNotification() instanceof PolicyDataSystemNotification) {
                     PolicyDataSystemNotification data = (PolicyDataSystemNotification) event.getSystemNotification();
+                    if ((organizationPoliciesNode == null) && (data.node instanceof OrganizationPoliciesNode)) {
+                        organizationPoliciesNode = (OrganizationPoliciesNode) data.node;
+                    }
                     cache.put(new PolicyFindKey(data.node, data.policyClass.getValueClass()), data.policy);
                 }
             }
@@ -108,5 +126,6 @@ public class ClientPolicyManager {
 
     protected static void invalidate() {
         cache.clear();
+        organizationPoliciesNode = null;
     }
 }
