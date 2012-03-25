@@ -43,10 +43,8 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     public void listMetadata(AsyncCallback<Vector<DashboardMetadata>> callback) {
 
         // Load shared dashboards:
-        CrmUser anyUser = EntityFactory.create(CrmUser.class);
-        //anyUser.setPrimaryKey(ISharedUserEntity.DORMANT_KEY);
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-        //criteria.add(PropertyCriterion.eq(criteria.proto().user(), anyUser));
+        criteria.add(PropertyCriterion.eq(criteria.proto().isShared(), true));
         addTypeCriteria(criteria);
         Vector<DashboardMetadata> vdm = Persistence.secureQuery(criteria);
 
@@ -64,14 +62,15 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     @Override
     public void retrieveMetadata(AsyncCallback<DashboardMetadata> callback, Key entityId) {
         DashboardMetadata dm;
-        if (entityId.asLong() == -1) {
+        if (entityId == null) {
+            dm = null;
+        } else if (entityId.asLong() == -1) {
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.system));
             dm = Persistence.secureRetrieve(criteria);
         } else {
             dm = Persistence.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
         }
-
         callback.onSuccess(dm);
     }
 
