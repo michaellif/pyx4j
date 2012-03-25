@@ -23,7 +23,9 @@ package com.pyx4j.tester.server;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ClientSystemInfo;
+import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.server.AuthenticationServiceImpl;
@@ -37,5 +39,10 @@ public class TesterAuthenticationServiceImpl extends AuthenticationServiceImpl i
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, AuthenticationRequest request) {
         Lifecycle.beginSession(new UserVisit(new Key("t" + System.currentTimeMillis()), null), null);
         callback.onSuccess(createAuthenticationResponse(null));
+    }
+
+    @Override
+    public void obtainRecaptchaPublicKey(AsyncCallback<String> callback) {
+        callback.onSuccess(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
     }
 }

@@ -34,6 +34,8 @@ public interface AuthenticationService extends IService {
 
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, AuthenticationRequest request);
 
+    public void obtainRecaptchaPublicKey(AsyncCallback<String> callback);
+
     public void logout(AsyncCallback<AuthenticationResponse> callback);
 
     /**

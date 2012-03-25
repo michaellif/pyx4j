@@ -31,11 +31,13 @@ import com.google.apphosting.api.ApiProxy.CapabilityDisabledException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.examples.domain.User;
 import com.pyx4j.examples.domain.UserCredential;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -106,6 +108,11 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServiceImp
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(userCredential.behavior().getValue());
         Lifecycle.beginSession(new UserVisit(user.getPrimaryKey(), user.name().getValue()), behaviors);
+    }
+
+    @Override
+    public void obtainRecaptchaPublicKey(AsyncCallback<String> callback) {
+        callback.onSuccess(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
     }
 
 }
