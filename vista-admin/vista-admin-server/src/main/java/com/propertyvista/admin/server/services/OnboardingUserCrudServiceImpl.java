@@ -37,6 +37,16 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
     }
 
     @Override
+    protected void retrievedForList(OnboardingUserCredential entity) {
+        Persistence.service().retrieve(entity.user());
+    }
+
+    @Override
+    protected void retrievedSingle(OnboardingUserCredential entity, RetrieveTraget retrieveTraget) {
+        Persistence.service().retrieve(entity.user());
+    }
+
+    @Override
     protected void persist(OnboardingUserCredential dbo, OnboardingUserDTO dto) {
         dbo.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
         Persistence.service().merge(dbo.user());
