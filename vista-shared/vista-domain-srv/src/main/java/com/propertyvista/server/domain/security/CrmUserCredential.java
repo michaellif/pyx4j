@@ -14,9 +14,7 @@
 package com.propertyvista.server.domain.security;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,12 +28,6 @@ import com.propertyvista.domain.security.CrmUser;
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = CrmUser.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface CrmUserCredential extends AbstractUserCredential<CrmUser> {
-
-    @Override
-    @Detached
-    @MemberColumn(name = "usr")
-    @ReadOnly
-    CrmUser user();
 
     IPrimitive<Boolean> accessAllBuildings();
 

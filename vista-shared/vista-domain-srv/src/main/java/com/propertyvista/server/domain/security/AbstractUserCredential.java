@@ -18,6 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -32,6 +33,7 @@ public interface AbstractUserCredential<E extends AbstractUser> extends IEntity 
 
     @Detached
     @MemberColumn(name = "usr")
+    @ReadOnly
     E user();
 
     IPrimitive<Boolean> enabled();

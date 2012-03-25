@@ -13,8 +13,6 @@
  */
 package com.propertyvista.server.domain.security;
 
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,11 +25,6 @@ import com.propertyvista.domain.security.VistaOnboardingBehavior;
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = OnboardingUser.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface OnboardingUserCredential extends AbstractUserCredential<OnboardingUser> {
-
-    @Override
-    @MemberColumn(name = "usr")
-    @ReadOnly
-    OnboardingUser user();
 
     IPrimitive<VistaOnboardingBehavior> behavior();
 

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.server.domain.security;
 
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.i18n.annotations.I18n;
@@ -25,10 +23,5 @@ import com.propertyvista.domain.security.AdminUser;
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = AdminUser.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AdminUserCredential extends AbstractUserCredential<AdminUser> {
-
-    @Override
-    @MemberColumn(name = "usr")
-    @ReadOnly
-    AdminUser user();
 
 }
