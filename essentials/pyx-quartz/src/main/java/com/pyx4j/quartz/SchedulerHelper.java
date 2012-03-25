@@ -126,7 +126,7 @@ public class SchedulerHelper {
             throw new Error("quartz alredy initialized");
         }
         try {
-            if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+            if (true || ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                 createQuartzTables();
             }
             instance = new SchedulerHelper();
