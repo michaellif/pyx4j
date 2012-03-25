@@ -195,16 +195,17 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
                 EntityQueryCriteria<PersonScreening> criteriaPS = EntityQueryCriteria.create(PersonScreening.class);
                 criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.tenant()));
                 PersonScreening tenantScreenings = Persistence.service().retrieve(criteriaPS);
+                if (tenantScreenings != null) {
+                    Persistence.service().retrieve(tenantScreenings.guarantors());
+                    for (PersonGuarantor pg : tenantScreenings.guarantors()) {
+                        ApplicationUserDTO guarantor = EntityFactory.create(ApplicationUserDTO.class);
 
-                Persistence.service().retrieve(tenantScreenings.guarantors());
-                for (PersonGuarantor pg : tenantScreenings.guarantors()) {
-                    ApplicationUserDTO guarantor = EntityFactory.create(ApplicationUserDTO.class);
+                        guarantor.person().set(pg.guarantor().person());
+                        guarantor.user().set(pg.guarantor());
+                        guarantor.userType().setValue(ApplicationUser.Guarantor);
 
-                    guarantor.person().set(pg.guarantor().person());
-                    guarantor.user().set(pg.guarantor());
-                    guarantor.userType().setValue(ApplicationUser.Guarantor);
-
-                    users.add(guarantor);
+                        users.add(guarantor);
+                    }
                 }
             }
         }

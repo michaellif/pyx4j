@@ -36,9 +36,9 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new LocationPreloader());
         add(new ProductCatalogPreloader());
         add(new CrmRolesPreloader());
-
+        add(new PreloadPolicies(production));
         if (production) {
-            //DEMO add(new ProdSitePreloader());
+            //DEMO add(new ProdSitePreloader());            
         } else {
 
             // TODO - these two should be moved to production preload when structure has been agreed!..
@@ -61,7 +61,6 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             add(new PreloadTenants());
 
             add(new DevelopmentSecurityPreloader());
-            add(new PreloadPolicies());
         }
 
         //DEMO Different data for different PMC

@@ -100,7 +100,9 @@ public class AccessKey {
         expire.add(Calendar.DATE, keyExpireDays);
         credential.accessKeyExpire().setValue(expire.getTime());
         Persistence.service().persist(credential);
-
+        if (user.isValueDetached()) {
+            Persistence.service().retrieve(user);
+        }
         return compressToken(user.email().getValue(), credential.accessKey().getValue());
     }
 }

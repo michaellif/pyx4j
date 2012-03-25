@@ -70,11 +70,7 @@ public class MessageTemplates {
 
     public static EmailTemplate getEmailTemplate(EmailTemplateType type, PolicyNode policyNode) {
         EmailTemplatesPolicy policy = PolicyManager.obtainEffectivePolicy(policyNode, EmailTemplatesPolicy.class).duplicate();
-        if (policy == null) {
-            return null;
-        } else {
-            return fetchEmailTemplate(type, policy);
-        }
+        return fetchEmailTemplate(type, policy);
     }
 
     private static EmailTemplate fetchEmailTemplate(EmailTemplateType type, EmailTemplatesPolicy policy) {

@@ -39,6 +39,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.rpc.PolicyDataSystemNotification;
+import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 
 public class PolicyManager {
 
@@ -118,6 +119,15 @@ public class PolicyManager {
 
         } while (currentNode != null);
 
+        if (policy == null) {
+            String nodeStringView = null;
+            if (node.isValueDetached()) {
+                nodeStringView = ((PolicyNode) Persistence.secureRetrieve(node.getInstanceValueClass(), node.getPrimaryKey())).getStringView();
+            } else {
+                nodeStringView = node.getStringView();
+            }
+            throw new PolicyNotFoundException(policyClass, nodeStringView);
+        }
         return policy;
     }
 
