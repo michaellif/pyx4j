@@ -28,7 +28,6 @@ import com.pyx4j.log4gwt.shared.Level;
 import com.pyx4j.site.client.AppPlaceDispatcher;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.shared.meta.SiteMap;
-import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.GlassPanel;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -58,8 +57,6 @@ public abstract class VistaSite extends AppSite {
             ClientLogger.addAppender(new RPCAppender(Level.WARN));
         }
         RootPanel.get().add(GlassPanel.instance());
-        CaptchaComposite.setPublicKey("6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth");
-
     }
 
     public static VistaSite instance() {

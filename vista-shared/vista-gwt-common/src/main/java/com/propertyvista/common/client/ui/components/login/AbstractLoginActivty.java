@@ -19,7 +19,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -27,6 +26,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.CaptchaComposite;
 
 public abstract class AbstractLoginActivty extends AbstractActivity implements LoginView.Presenter {
 
@@ -64,13 +64,30 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof ChallengeVerificationRequired) {
-                    loginView.enableHumanVerification();
+                    enableHumanVerification();
+                } else {
+                    super.onFailure(caught);
                 }
-                throw new UnrecoverableClientError(caught);
             }
 
         };
         ClientContext.authenticate(authService, request, callback);
+    }
+
+    protected void enableHumanVerification() {
+        if (CaptchaComposite.isPublicKeySet()) {
+            loginView.enableHumanVerification();
+        } else {
+            AsyncCallback<String> callback = new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    CaptchaComposite.setPublicKey(result);
+                    loginView.enableHumanVerification();
+                }
+
+            };
+            authService.obtainRecaptchaPublicKey(callback);
+        }
     }
 
     @Override

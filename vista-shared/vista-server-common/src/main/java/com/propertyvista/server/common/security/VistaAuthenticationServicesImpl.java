@@ -25,11 +25,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
@@ -72,6 +74,11 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     protected abstract Behavior getPasswordChangeRequiredBehavior();
 
     protected abstract void addBehaviors(E userCredential, Set<Behavior> behaviors);
+
+    @Override
+    public void obtainRecaptchaPublicKey(AsyncCallback<String> callback) {
+        callback.onSuccess(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
+    }
 
     @Override
     @IgnoreSessionToken

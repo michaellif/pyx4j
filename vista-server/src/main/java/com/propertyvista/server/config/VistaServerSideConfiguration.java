@@ -39,10 +39,6 @@ import com.propertyvista.server.security.VistaAclRevalidator;
 
 public class VistaServerSideConfiguration extends AbstractVistaServerSideConfiguration {
 
-    static final String recaptchaPrivateKey = "6LfVZMESAAAAANrD2Ln5t4yWg3czLMBjQRuKosGx";
-
-    static final String recaptchaPublicKey = "6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth";
-
     @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         if ("vista-star".equals(contextName)) {
@@ -195,12 +191,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getReCaptchaPrivateKey() {
-        return recaptchaPrivateKey;
+        return RecaptchaConfig.getReCaptchaPrivateKey();
     }
 
     @Override
     public String getReCaptchaPublicKey() {
-        return recaptchaPublicKey;
+        return RecaptchaConfig.getReCaptchaPublicKey();
     }
 
 }
