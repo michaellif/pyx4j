@@ -26,6 +26,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class AbstractPasswordResetRequestActivity extends AbstractActivity implements PasswordResetRequestView.Presenter {
@@ -73,7 +74,7 @@ public class AbstractPasswordResetRequestActivity extends AbstractActivity imple
 
             @Override
             public void onFailure(Throwable caught) {
-                view.createNewCaptchaChallenge();
+                createNewCaptchaChallenge();
                 view.displayPasswordResetFailedMessage();
             }
         };
@@ -90,5 +91,21 @@ public class AbstractPasswordResetRequestActivity extends AbstractActivity imple
     protected void onPasswordResetRequestSuccess() {
         MessageDialog.info(i18n.tr("A link to the password reset page was sent to your email"));
         AppSite.getPlaceController().goTo(loginPlace);
+    }
+
+    @Override
+    public void createNewCaptchaChallenge() {
+        if (CaptchaComposite.isPublicKeySet()) {
+            view.createNewCaptchaChallenge();
+            view.displayPasswordResetFailedMessage();
+        } else {
+            authService.obtainRecaptchaPublicKey(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    CaptchaComposite.setPublicKey(result);
+                    view.createNewCaptchaChallenge();
+                }
+            });
+        }
     }
 }

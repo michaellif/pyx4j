@@ -22,6 +22,8 @@ public interface PasswordResetRequestView extends IsWidget {
     interface Presenter {
 
         void requestPasswordReset(PasswordRetrievalRequest value);
+
+        void createNewCaptchaChallenge();
     }
 
     void setPresenter(Presenter presenter);

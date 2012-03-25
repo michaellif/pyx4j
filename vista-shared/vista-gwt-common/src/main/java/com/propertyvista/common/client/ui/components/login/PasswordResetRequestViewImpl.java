@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-
 public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordResetRequestView {
 
     private Presenter presenter;
@@ -45,8 +44,7 @@ public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordR
         this.presenter = presenter;
         form.populateNew();
         form.displayResetPasswordMessage(false);
-        createNewCaptchaChallenge();
-
+        this.presenter.createNewCaptchaChallenge();
     }
 
     @Override
