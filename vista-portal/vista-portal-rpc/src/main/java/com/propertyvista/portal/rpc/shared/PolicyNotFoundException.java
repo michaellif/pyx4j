@@ -13,14 +13,19 @@
  */
 package com.propertyvista.portal.rpc.shared;
 
+import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.policy.framework.Policy;
 
 public class PolicyNotFoundException extends UserRuntimeException {
 
+    private static final long serialVersionUID = 1L;
 
-    public <T extends Policy> PolicyNotFoundException(Class<T> policyClass, String nodeStringView) {
-        super("Policy " + policyClass.getSimpleName() + " was not found for node " + nodeStringView);
+    private static final I18n i18n = I18n.get(PolicyNotFoundException.class);
+
+    public PolicyNotFoundException(Class<? extends Policy> policyClass, String nodeStringView) {
+        super(i18n.tr("Policy '{0}' was not found for node '{1}'", GWTJava5Helper.getSimpleName(policyClass), nodeStringView));
     }
 }
