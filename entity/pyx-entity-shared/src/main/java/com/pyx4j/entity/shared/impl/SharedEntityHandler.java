@@ -217,7 +217,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
                 Map<String, Object> value = (Map<String, Object>) ownerValue.get(getFieldName());
                 if (assertDetached && (value != null) && value.containsKey(DETACHED_ATTR)) {
                     //log.error("Access to detached entity {}", exceptionInfo(v), new Throwable());
-                    throw new RuntimeException("Access to detached entity " + exceptionInfo(value));
+                    throw new RuntimeException("Access to detached " + value.get(DETACHED_ATTR) + " entity " + exceptionInfo(value));
                 }
                 return value;
             }
@@ -532,6 +532,17 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         } else {
             ensureValue(false).put(DETACHED_ATTR, level);
         }
+    }
+
+    @Override
+    public void copyStringView(IEntity target) {
+        Map<String, Object> targetValue = ((SharedEntityHandler) target).ensureValue(false);
+        targetValue.clear();
+        if (this.getPrimaryKey() != null) {
+            targetValue.put(IEntity.PRIMARY_KEY, this.getPrimaryKey());
+        }
+        targetValue.put(TO_STRING_ATTR, this.getStringView());
+        targetValue.put(DETACHED_ATTR, AttachLevel.ToStringMembers);
     }
 
     @Override

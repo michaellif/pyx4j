@@ -49,10 +49,7 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
     /**
      * Used to retrieve bound detached members
      * To make it work magically we have implemented retriveDetachedMember
-     * 
-     * @deprecated this would be moved to binder
      */
-    @Deprecated
     protected void retrievedForList(E entity) {
     }
 

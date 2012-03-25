@@ -194,6 +194,8 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                 } else if (dboM.getAttachLevel() == AttachLevel.IdOnly) {
                     ((IEntity) dtoM).setPrimaryKey(((IEntity) dboM).getPrimaryKey());
                     dtoM.setAttachLevel(AttachLevel.IdOnly);
+                } else if (dboM.getAttachLevel() == AttachLevel.ToStringMembers) {
+                    ((IEntity) dboM).copyStringView((IEntity) dtoM);
                 } else {
                     dtoM.setValue(dboM.getValue());
                 }
@@ -237,6 +239,8 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                 } else if (dtoM.getAttachLevel() == AttachLevel.IdOnly) {
                     ((IEntity) dboM).setPrimaryKey(((IEntity) dtoM).getPrimaryKey());
                     dboM.setAttachLevel(AttachLevel.IdOnly);
+                } else if (dtoM.getAttachLevel() == AttachLevel.ToStringMembers) {
+                    ((IEntity) dtoM).copyStringView((IEntity) dboM);
                 } else {
                     dboM.setValue(dtoM.getValue());
                 }

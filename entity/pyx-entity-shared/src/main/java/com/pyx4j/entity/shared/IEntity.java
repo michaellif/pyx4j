@@ -164,6 +164,8 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
      */
     public <T extends IEntity> T duplicate(Class<T> entityClass);
 
+    public void copyStringView(IEntity target);
+
     /**
      * Detach IEntity from its parent but keep the same shared value object.
      * TODO rename. Subject related convert to root entity.
