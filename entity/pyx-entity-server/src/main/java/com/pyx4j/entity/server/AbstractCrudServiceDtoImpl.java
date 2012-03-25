@@ -39,6 +39,15 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
     }
 
     /**
+     * Used to retrieve bound detached members before they are copied to DTO
+     * TODO To make it work magically we have implemented retriveDetachedMember
+     * 
+     * retrieveTraget when called for save operations
+     */
+    protected void retrievedSingle(E entity, RetrieveTraget retrieveTraget) {
+    }
+
+    /**
      * This method called for single entity returned to the GWT client. As opposite to entries in list.
      * This is empty callback function that don't need to be called from implementation.
      */
@@ -60,6 +69,9 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
     @Override
     public void retrieve(AsyncCallback<DTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
         E entity = retrieve(entityId, retrieveTraget);
+        if (entity != null) {
+            retrievedSingle(entity, retrieveTraget);
+        }
         DTO dto = createDTO(entity);
         enhanceRetrieved(entity, dto);
         callback.onSuccess(dto);
@@ -86,6 +98,7 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
     @Override
     public void save(AsyncCallback<DTO> callback, DTO dto) {
         E entity = retrieveForSave(dto);
+        retrievedSingle(entity, null);
         copyDTOtoDBO(dto, entity);
         persist(entity, dto);
         Persistence.service().commit();

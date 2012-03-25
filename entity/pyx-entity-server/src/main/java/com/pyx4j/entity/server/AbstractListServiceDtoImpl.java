@@ -47,8 +47,8 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
     }
 
     /**
-     * Used to retrieve bound detached members
-     * To make it work magically we have implemented retriveDetachedMember
+     * Used to retrieve bound detached members before they are copied to DTO
+     * TODO To make it work magically we have implemented retriveDetachedMember
      */
     protected void retrievedForList(E entity) {
     }
