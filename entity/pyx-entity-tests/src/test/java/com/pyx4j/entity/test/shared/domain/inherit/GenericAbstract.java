@@ -20,10 +20,12 @@
  */
 package com.pyx4j.entity.test.shared.domain.inherit;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
 @Transient
+@AbstractEntity(generateMetadata = false)
 public interface GenericAbstract<E extends GenericBase> extends IEntity {
 
     E abstractMember();
