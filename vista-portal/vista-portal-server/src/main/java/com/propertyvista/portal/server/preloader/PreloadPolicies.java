@@ -14,11 +14,11 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.DepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.IdAssignmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseTermsPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MiscPolicyPreloader;
@@ -28,20 +28,32 @@ import com.propertyvista.portal.server.preloader.policy.util.SimplePoliciesPrelo
 
 public class PreloadPolicies extends SimplePoliciesPreloader {
 
-    @SuppressWarnings("unchecked")
-    public PreloadPolicies() {
-        super(Arrays.asList(//@formatter:off
-                (Class<? extends AbstractPolicyPreloader<?>>[])
-                new Class<?>[] {
-                        MiscPolicyPreloader.class,
-                        ApplicationDocumentationPolicyPreloader.class,
-                        LeaseTermsPolicyPreloader.class,
-                        EmailTemplatesPolicyPreloader.class,
-                        ProductTaxPolicyPreloader.class,
-                        DepositPolicyPreloader.class,
-                        LeaseBillingPolicyPreloader.class,
-                        IdAssignmentPolicyPreloader.class
-                }
-        ));//@formatter:on
+    private static final List<Class<? extends AbstractPolicyPreloader<?>>> PRODUCTION = Arrays.asList(//@formatter:off
+            (Class<? extends AbstractPolicyPreloader<?>>[])
+            new Class<?>[] {
+                    MiscPolicyPreloader.class,
+                    ApplicationDocumentationPolicyPreloader.class,
+                    LeaseTermsPolicyPreloader.class,
+                    EmailTemplatesPolicyPreloader.class,
+                    DepositPolicyPreloader.class,
+                    LeaseBillingPolicyPreloader.class
+            }
+    ); //@formatter:on
+
+    private static final List<Class<? extends AbstractPolicyPreloader<?>>> DEVELOPMENT = Arrays.asList(//@formatter:off
+            (Class<? extends AbstractPolicyPreloader<?>>[])
+            new Class<?>[] {
+                    MiscPolicyPreloader.class,
+                    ApplicationDocumentationPolicyPreloader.class,
+                    LeaseTermsPolicyPreloader.class,
+                    EmailTemplatesPolicyPreloader.class,
+                    ProductTaxPolicyPreloader.class,
+                    DepositPolicyPreloader.class,
+                    LeaseBillingPolicyPreloader.class
+            }
+    ); //@formatter:on
+
+    public PreloadPolicies(boolean isProduction) {
+        super(isProduction ? PRODUCTION : DEVELOPMENT);
     }
 }
