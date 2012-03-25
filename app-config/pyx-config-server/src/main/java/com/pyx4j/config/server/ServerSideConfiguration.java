@@ -206,7 +206,8 @@ public class ServerSideConfiguration {
         }
         StackTraceElement[] ste = new Throwable().getStackTrace();
         String firstRunnableClass = (ste[ste.length - 1]).getClassName();
-        return firstRunnableClass.startsWith("org.eclipse.jdt") || firstRunnableClass.startsWith("org.eclipse.jetty");
+        return firstRunnableClass.startsWith("org.eclipse.jdt") || firstRunnableClass.startsWith("org.eclipse.jetty")
+                || firstRunnableClass.contains(".server.jetty.");
     }
 
     public static boolean isStartedUnderJvmDebugMode() {

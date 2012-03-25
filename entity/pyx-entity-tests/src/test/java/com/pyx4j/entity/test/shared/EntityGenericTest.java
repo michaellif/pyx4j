@@ -21,8 +21,12 @@
 package com.pyx4j.entity.test.shared;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.test.shared.domain.inherit.GenericAbstract;
+import com.pyx4j.entity.test.shared.domain.inherit.GenericAbstractImplementation;
+import com.pyx4j.entity.test.shared.domain.inherit.GenericBaseImplementation;
 import com.pyx4j.entity.test.shared.domain.parametrized.ConcreteParametrizedEntity;
 import com.pyx4j.entity.test.shared.domain.parametrized.DetailParameter;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
@@ -63,6 +67,19 @@ public class EntityGenericTest extends InitializerTestBase {
 
     }
 
+    public void testGenericAbstractOverride() {
+        GenericAbstractImplementation explicitVar = EntityFactory.create(GenericAbstractImplementation.class);
+
+        assertEquals("explicit.super.valueClass", GenericBaseImplementation.class, explicitVar.abstractMemeber().getValueClass());
+        assertEquals("explicit.overriden.valueClass", GenericBaseImplementation.class, explicitVar.abstractMemeber4Override().getValueClass());
+
+        GenericAbstract<GenericBaseImplementation> abstactVar = explicitVar;
+        assertEquals("abstact.super.valueClass", GenericBaseImplementation.class, abstactVar.abstractMemeber().getValueClass());
+
+        //TODO Fix
+        //assertEquals("abstact.overriden.valueClass", GenericBaseImplementation.class, abstactVar.abstractMemeber4Override().getValueClass());
+    }
+
     public void testVersionedEntityManipulations() {
         EntityMeta itemAMeta = EntityFactory.getEntityMeta(ItemA.class);
 
@@ -83,11 +100,9 @@ public class EntityGenericTest extends InitializerTestBase {
         itemA1.version().testId().setValue("1");
         itemA1.version().name().setValue("2");
 
-        //IVersionInfo<ItemAVersion> vi = itemA1.versionsInfo().$();
-        // Will not work
-        //vi.version().name().setValue("3");
-
-        //vi.version().set(itemA1.version());
+        IVersionData<ItemA> vi = itemA1.versions().$();
+        // Will work
+        vi.createdByUser().setValue("3");
 
     }
 

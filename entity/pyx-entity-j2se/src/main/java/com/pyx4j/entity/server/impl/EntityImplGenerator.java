@@ -51,6 +51,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.config.server.ClassFinder;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
@@ -396,6 +397,12 @@ public class EntityImplGenerator {
             getEntityMetaMethod.setBody("{ if (entityMeta == null) { entityMeta = super.getEntityMeta(); } return entityMeta; }");
             implClass.addMethod(getEntityMetaMethod);
 
+            if (ServerSideConfiguration.isStartedUnderEclipse()) {
+                try {
+                    implClass.writeFile("target/entity-gen-classes");
+                } catch (IOException e) {
+                }
+            }
             return implClass;
         } catch (CannotCompileException e) {
             log.error("Impl " + interfaceName + " compile error", e);
