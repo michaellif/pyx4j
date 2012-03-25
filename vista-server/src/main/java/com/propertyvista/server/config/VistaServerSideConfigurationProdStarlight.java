@@ -33,11 +33,6 @@ public class VistaServerSideConfigurationProdStarlight extends VistaServerSideCo
     }
 
     @Override
-    public boolean isDevelopmentBehavior() {
-        return true;
-    }
-
-    @Override
     public boolean openIdrequired() {
         return true;
     }
