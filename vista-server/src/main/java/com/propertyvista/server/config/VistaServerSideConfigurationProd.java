@@ -47,12 +47,12 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
 
     @Override
     public String getDefaultBaseURLvistaCrm() {
-        return "https://" + NamespaceManager.getNamespace() + ".propertyvista.com";
+        return "https://" + NamespaceManager.getNamespace() + ".propertyvista.com/";
     }
 
     @Override
     public String getDefaultBaseURLresidentPortal(boolean secure) {
-        String url = NamespaceManager.getNamespace() + ".residentportalsite.com";
+        String url = NamespaceManager.getNamespace() + ".residentportalsite.com/";
         if (secure) {
             return "https://" + url;
         } else {
@@ -62,7 +62,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
 
     @Override
     public String getDefaultBaseURLprospectPortal() {
-        return "https://" + NamespaceManager.getNamespace() + ".prospectportalsite.com";
+        return "https://" + NamespaceManager.getNamespace() + ".prospectportalsite.com/";
     }
 
     @Override
