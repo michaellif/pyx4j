@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IEntity;
 @Transient
 public interface GenericAbstract<E extends GenericBase> extends IEntity {
 
-    E abstractMemeber();
+    E abstractMember();
 
-    E abstractMemeber4Override();
+    E abstractMember4Override();
 }

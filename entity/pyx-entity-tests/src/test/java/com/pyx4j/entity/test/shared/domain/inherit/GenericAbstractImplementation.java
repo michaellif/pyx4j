@@ -26,6 +26,6 @@ import com.pyx4j.entity.annotations.Transient;
 public interface GenericAbstractImplementation extends GenericAbstract<GenericBaseImplementation> {
 
     @Override
-    GenericBaseImplementation abstractMemeber4Override();
+    GenericBaseImplementation abstractMember4Override();
 
 }

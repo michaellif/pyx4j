@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -70,14 +72,22 @@ public class EntityGenericTest extends InitializerTestBase {
     public void testGenericAbstractOverride() {
         GenericAbstractImplementation explicitVar = EntityFactory.create(GenericAbstractImplementation.class);
 
-        assertEquals("explicit.super.valueClass", GenericBaseImplementation.class, explicitVar.abstractMemeber().getValueClass());
-        assertEquals("explicit.overriden.valueClass", GenericBaseImplementation.class, explicitVar.abstractMemeber4Override().getValueClass());
+        assertEquals("explicit.super.valueClass", GenericBaseImplementation.class, explicitVar.abstractMember().getValueClass());
+        assertEquals("explicit.overriden.valueClass", GenericBaseImplementation.class, explicitVar.abstractMember4Override().getValueClass());
 
         GenericAbstract<GenericBaseImplementation> abstactVar = explicitVar;
-        assertEquals("abstact.super.valueClass", GenericBaseImplementation.class, abstactVar.abstractMemeber().getValueClass());
+        assertEquals("abstact.super.valueClass", GenericBaseImplementation.class, abstactVar.abstractMember().getValueClass());
 
-        //TODO Fix
-        //assertEquals("abstact.overriden.valueClass", GenericBaseImplementation.class, abstactVar.abstractMemeber4Override().getValueClass());
+        if (GWT.isClient()) {
+            assertEquals("abstact.overriden.valueClass", GenericBaseImplementation.class, abstactVar.abstractMember4Override().getValueClass());
+        } else {
+            try {
+                abstactVar.abstractMember4Override();
+                fail("Javassist now supports generic methods");
+            } catch (Throwable e) {
+
+            }
+        }
     }
 
     public void testVersionedEntityManipulations() {
