@@ -29,6 +29,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -38,9 +41,11 @@ import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Type;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationDocumentUploadDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
@@ -66,23 +71,41 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
             @Override
             public IsWidget createContent() {
                 FlowPanel content = new FlowPanel();
-                content.add(new DecoratorBuilder(inject(proto().identificationDocument(), new CEntityComboBox<IdentificationDocument>(
-                        IdentificationDocument.class))).componentWidth(15).labelWidth(10).build());
-                content.add(new DecoratorBuilder(inject(proto().details())).componentWidth(15).labelWidth(10).build());
-                CEntityComboBox<IdentificationDocument> idCombo = (CEntityComboBox<IdentificationDocument>) get(proto().identificationDocument());
-                idCombo.setOptionsDataSource(new EntityDataSource<IdentificationDocument>() {
+                content.add(new DecoratorBuilder(inject(proto().identificationDocument(), new CEntityComboBox<IdentificationDocumentType>(
+                        IdentificationDocumentType.class))).componentWidth(15).labelWidth(10).build());
+                CEntityComboBox<IdentificationDocumentType> idCombo = (CEntityComboBox<IdentificationDocumentType>) get(proto().identificationDocument());
+                idCombo.setOptionsDataSource(new EntityDataSource<IdentificationDocumentType>() {
                     @Override
-                    public void obtain(EntityQueryCriteria<IdentificationDocument> criteria,
-                            final AsyncCallback<EntitySearchResult<IdentificationDocument>> handlingCallback) {
+                    public void obtain(EntityQueryCriteria<IdentificationDocumentType> criteria,
+                            final AsyncCallback<EntitySearchResult<IdentificationDocumentType>> handlingCallback) {
                         ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), ApplicationDocumentationPolicy.class,
                                 new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
                                     @Override
                                     public void onSuccess(ApplicationDocumentationPolicy result) {
-                                        EntitySearchResult<IdentificationDocument> allowedIds = new EntitySearchResult<IdentificationDocument>();
+                                        EntitySearchResult<IdentificationDocumentType> allowedIds = new EntitySearchResult<IdentificationDocumentType>();
                                         allowedIds.getData().addAll(result.allowedIDs());
                                         handlingCallback.onSuccess(allowedIds);
                                     }
                                 });
+                    }
+                });
+
+                content.add(new DecoratorBuilder(inject(proto().details())).componentWidth(15).labelWidth(10).build());
+                get(proto().details()).addValueValidator(new EditableValueValidator<String>() {
+
+                    private final EditableValueValidator<String> sinValidator = new CanadianSinValidator();
+
+                    @Override
+                    public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+                        if (value != null) {
+                            if (getValue().identificationDocument().type().getValue() == Type.canadianSIN) {
+                                return sinValidator.isValid(component, value);
+                            } else {
+                                return null;
+                            }
+                        } else {
+                            return null;
+                        }
                     }
                 });
                 return content;
@@ -147,7 +170,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
             return false;
         } else {
             if (documentUploadForm.getValue().details().isNull()) {
-                MessageDialog.error(i18n.tr("Validation Error"), i18n.tr("Document name is required"));
+                MessageDialog.error(i18n.tr("Validation Error"), documentUploadForm.getValidationMessage());
             }
             return false;
         }

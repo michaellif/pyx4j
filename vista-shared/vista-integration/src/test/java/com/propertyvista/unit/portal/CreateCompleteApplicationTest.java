@@ -192,12 +192,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         setValueOnForm(tenant.person().homePhone());
         setValueOnForm(tenant.person().mobilePhone());
         setValueOnForm(tenant.person().workPhone());
-        setValueOnForm(tenant.driversLicenseState());
-        setValueOnForm(tenant.driversLicense());
-        setValueOnForm(tenant.notCanadianCitizen());
-        if (tenant.notCanadianCitizen().getValue() != Boolean.TRUE) {
-            setValueOnForm(tenant.secureIdentifier());
-        }
+        // TODO  set some ids
 
         enterAddressForm(tenant.currentAddress().getPath(), detach(tenant.currentAddress()));
         if (BusinessRules.infoPageNeedPreviousAddress(tenant.currentAddress().moveInDate().getValue())) {

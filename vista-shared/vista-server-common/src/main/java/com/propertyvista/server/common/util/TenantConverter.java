@@ -73,10 +73,6 @@ public class TenantConverter {
 
         @Override
         protected void bind() {
-            bind(dtoProto.driversLicense(), dboProto.driversLicense());
-            bind(dtoProto.driversLicenseState(), dboProto.driversLicenseState());
-            bind(dtoProto.secureIdentifier(), dboProto.secureIdentifier());
-            bind(dtoProto.notCanadianCitizen(), dboProto.notCanadianCitizen());
             bind(dtoProto.currentAddress(), dboProto.currentAddress());
             bind(dtoProto.previousAddress(), dboProto.previousAddress());
             bind(dtoProto.documents(), dboProto.documents());

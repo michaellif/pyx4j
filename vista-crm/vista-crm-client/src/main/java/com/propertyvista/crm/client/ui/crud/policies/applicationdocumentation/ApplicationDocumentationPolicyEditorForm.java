@@ -28,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 
 public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<ApplicationDocumentationPolicyDTO> {
 
@@ -78,10 +78,10 @@ public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelB
         });
     }
 
-    private static class IdentificationDocumentFolder extends VistaTableFolder<IdentificationDocument> {
+    private static class IdentificationDocumentFolder extends VistaTableFolder<IdentificationDocumentType> {
 
         public IdentificationDocumentFolder() {
-            super(IdentificationDocument.class);
+            super(IdentificationDocumentType.class);
         }
 
         @Override

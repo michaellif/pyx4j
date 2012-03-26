@@ -25,6 +25,8 @@ import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
@@ -56,6 +58,7 @@ import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantService;
+import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
@@ -79,8 +82,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired, new IServiceExecutePermission(PtPasswordResetService.class));
         grant(VistaBasicBehavior.TenantPortalPasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));
-        grant(VistaBasicBehavior.TenantPortal, new IServiceExecutePermission(TenantPasswordChangeUserService.class));
 
+        grant(VistaBasicBehavior.TenantPortal, new IServiceExecutePermission(TenantPasswordChangeUserService.class));
+        grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(PolicyRetrieveService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 
@@ -103,6 +107,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         InstanceAccess applicationEntityAccess = new ApplicationEntityInstanceAccess();
 
+        grant(VistaTenantBehavior.Prospective, new EntityPermission(OrganizationPoliciesNode.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.Prospective, new EntityPermission(IdentificationDocumentType.class, EntityPermission.READ));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(ApplicationDocument.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(ApplicationDocumentBlob.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(TenantInLease.class, applicationEntityAccess, CRUD));

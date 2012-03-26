@@ -14,7 +14,9 @@
 package com.propertyvista.common.client.ui.components;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
@@ -40,12 +42,17 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 
 public class ApplicationDocumentUploaderFolder extends VistaTableFolder<ApplicationDocument> {
 
@@ -53,8 +60,40 @@ public class ApplicationDocumentUploaderFolder extends VistaTableFolder<Applicat
 
     private Key tenantId;
 
+    private Integer numOfRequiredDocuments = new Integer(1);
+
     public ApplicationDocumentUploaderFolder() {
+        this(false);
+    }
+
+    public ApplicationDocumentUploaderFolder(boolean validateNumOfDocuments) {
         super(ApplicationDocument.class);
+        if (validateNumOfDocuments) {
+            this.addValueValidator(new EditableValueValidator<IList<ApplicationDocument>>() {
+                @Override
+                public ValidationFailure isValid(CComponent<IList<ApplicationDocument>, ?> component, IList<ApplicationDocument> value) {
+                    if (value != null) {
+                        Set<Key> usedDocuments = new HashSet<Key>();
+                        for (ApplicationDocument doc : value) {
+                            usedDocuments.add(doc.getPrimaryKey());
+                        }
+                        int numOfRemainingDocs = numOfRequiredDocuments - usedDocuments.size();
+                        if (numOfRemainingDocs > 0) {
+                            return new ValidationFailure(i18n.tr("{0} more kinds of documents are required", numOfRemainingDocs));
+                        }
+                    }
+                    return null;
+                }
+            });
+        }
+        ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), ApplicationDocumentationPolicy.class,
+                new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
+
+                    @Override
+                    public void onSuccess(ApplicationDocumentationPolicy result) {
+                        numOfRequiredDocuments = result.numberOfRequiredIDs().getValue();
+                    }
+                });
     }
 
     private static final List<EntityFolderColumnDescriptor> COLUMNS;
@@ -117,7 +156,10 @@ public class ApplicationDocumentUploaderFolder extends VistaTableFolder<Applicat
                 comp.setViewable(true);
                 return comp;
             } else {
-                return super.createCell(column);
+                CComponent<?, ?> comp = super.createCell(column);
+                comp.inheritViewable(false);
+                comp.setViewable(true);
+                return comp;
             }
         }
     }

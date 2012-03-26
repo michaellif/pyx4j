@@ -17,8 +17,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -40,7 +38,6 @@ import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
@@ -109,23 +106,6 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
     @JoinTable(value = PersonGuarantor.class, cascade = false)
     @OrderBy(PersonGuarantor.OrderInGuarantee.class)
     IList<PersonGuarantor> guarantors();
-
-    //=============== Security Info =============//
-
-    @Deprecated
-    IPrimitive<String> driversLicense();
-
-    @Deprecated
-    @Caption(name = "Province/State", description = "Province/State, In Which The License Has Been Issued")
-    @Editor(type = EditorType.combo)
-    Province driversLicenseState();
-
-    @Deprecated
-    @Caption(name = "SIN")
-    IPrimitive<String> secureIdentifier();
-
-    @Caption(name = "Not resident of Canada")
-    IPrimitive<Boolean> notCanadianCitizen();
 
     //=============== Approval =============//
 

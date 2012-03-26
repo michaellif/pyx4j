@@ -27,9 +27,6 @@ public class PersonScreeningLister extends ListerBase<PersonScreening> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().createDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().driversLicense()).build(),
-            new MemberColumnDescriptor.Builder(proto().secureIdentifier()).build(),
-            new MemberColumnDescriptor.Builder(proto().notCanadianCitizen()).build(),
     
             new MemberColumnDescriptor.Builder(proto().equifaxApproval().percenrtageApproved()).build(),
             new MemberColumnDescriptor.Builder(proto().equifaxApproval().suggestedDecision()).build()

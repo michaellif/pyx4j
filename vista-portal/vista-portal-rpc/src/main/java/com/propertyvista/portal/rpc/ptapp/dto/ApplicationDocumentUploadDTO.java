@@ -19,7 +19,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 
 @Transient
 public interface ApplicationDocumentUploadDTO extends IEntity {
@@ -27,7 +27,7 @@ public interface ApplicationDocumentUploadDTO extends IEntity {
     IPrimitive<Key> tenantInLeaseId();
 
     @NotNull
-    IdentificationDocument identificationDocument();
+    IdentificationDocumentType identificationDocument();
 
     @NotNull
     IPrimitive<String> details();

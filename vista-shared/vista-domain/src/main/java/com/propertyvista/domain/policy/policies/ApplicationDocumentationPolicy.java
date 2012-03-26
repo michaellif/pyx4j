@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.Policy;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 
 @DiscriminatorValue("ApplicationDocumentationPolicy")
 public interface ApplicationDocumentationPolicy extends Policy {
@@ -33,5 +33,5 @@ public interface ApplicationDocumentationPolicy extends Policy {
     @Caption(description = "IDs/Documentations that accepted as valid IDs")
     @Owned
     @NotNull
-    IList<IdentificationDocument> allowedIDs();
+    IList<IdentificationDocumentType> allowedIDs();
 }

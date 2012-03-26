@@ -132,12 +132,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(tenant.person().homePhone());
         assertValueOnForm(tenant.person().mobilePhone());
         assertValueOnForm(tenant.person().workPhone());
-        assertValueOnForm(tenant.driversLicenseState());
-        assertValueOnForm(tenant.driversLicense());
-        assertValueOnForm(tenant.notCanadianCitizen());
-        if (tenant.notCanadianCitizen().getValue() != Boolean.TRUE) {
-            assertValueOnForm(tenant.secureIdentifier());
-        }
+        // TODO assert ids on form 
 
         assertAddressForm(tenant.currentAddress().getPath(), detach(tenant.currentAddress()));
         if (BusinessRules.infoPageNeedPreviousAddress(tenant.currentAddress().moveInDate().getValue())) {

@@ -429,16 +429,9 @@ public class PTGenerator {
 
         String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";
 
-        screening.driversLicense().setValue(driversLicense);
-        screening.driversLicenseState().set(RandomUtil.random(SharedData.getProvinces()));
+        // TODO preload documents here
 
-        screening.notCanadianCitizen().setValue(RandomUtil.randomBoolean());
-        if (screening.notCanadianCitizen().isBooleanTrue()) {
-            String fileName = "doc-security" + RandomUtil.randomInt(3) + ".jpg";
-            screening.documents().add(createApplicationDocument(application, fileName));
-        } else {
-            screening.secureIdentifier().setValue("649 951 282");
-        }
+//            screening.secureIdentifier().setValue("649 951 282");
 
         PriorAddress currentAddress = createAddress();
         currentAddress.moveOutDate().setValue(RandomUtil.randomLogicalDate(2013, 2014)); // this has to be in the future

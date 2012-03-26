@@ -184,7 +184,6 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notCanadianCitizen()), 3).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder())).build());
 
         return new CrmScrollPanel(main);

@@ -42,7 +42,6 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
-import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
@@ -108,35 +107,12 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 25).build());
 
-        main.setH1(++row, 0, 1, i18n.tr("Secure Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().driversLicense()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().driversLicenseState()), 17).build());
+        main.setH1(++row, 0, 1, i18n.tr("Identification Documents"));
 
-        final CComponent<?, ?> sin = inject(proto().secureIdentifier());
-        main.setWidget(++row, 0, new DecoratorBuilder(sin, 7).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notCanadianCitizen()), 3).build());
-
-        main.setWidget(
-                ++row,
-                0,
-                new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder())).customLabel(
-                        i18n.tr("Please Attach proof Of Citizenship")).build());
+        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder(true)));
         fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
         fileUpload.asWidget().setWidth("40em");
-        fileUpload.setVisible(false); // show it in case on not a Canadian citizen!..
-
-        get(proto().notCanadianCitizen()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<Boolean> event) {
-                if (event.getValue()) {
-                    sin.setValue(null);
-                }
-                sin.setEnabled(!event.getValue());
-                fileUpload.setVisible(event.getValue());
-            }
-        });
 
         main.setH1(++row, 0, 1, proto().currentAddress().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().currentAddress(), new PriorAddressEditor()));
@@ -229,8 +205,6 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         // ------------------------------------------------------------------------------------------------
 
-        get(proto().secureIdentifier()).addValueValidator(new CanadianSinValidator());
-
         if (!SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
             get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
@@ -257,8 +231,6 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         enablePreviousAddress();
 
-        get(proto().secureIdentifier()).setEnabled(!getValue().notCanadianCitizen().isBooleanTrue());
-        fileUpload.setVisible(getValue().notCanadianCitizen().isBooleanTrue());
         if (getValue() != null) {
             fileUpload.setTenantID(((IEntity) getValue()).getPrimaryKey());
         }

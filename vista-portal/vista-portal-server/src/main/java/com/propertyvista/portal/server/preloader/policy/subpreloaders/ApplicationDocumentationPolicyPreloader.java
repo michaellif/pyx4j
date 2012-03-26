@@ -17,8 +17,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocument.Type;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Type;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPreloader<ApplicationDocumentationPolicy> {
@@ -34,17 +34,17 @@ public class ApplicationDocumentationPolicyPreloader extends AbstractPolicyPrelo
         ApplicationDocumentationPolicy policy = EntityFactory.create(ApplicationDocumentationPolicy.class);
         policy.numberOfRequiredIDs().setValue(2);
 
-        IdentificationDocument id = EntityFactory.create(IdentificationDocument.class);
+        IdentificationDocumentType id = EntityFactory.create(IdentificationDocumentType.class);
         id.name().setValue(i18n.tr("Passport"));
         id.type().setValue(Type.passport);
         policy.allowedIDs().add(id);
 
-        id = EntityFactory.create(IdentificationDocument.class);
+        id = EntityFactory.create(IdentificationDocumentType.class);
         id.name().setValue(i18n.tr("Citizenship Card"));
         id.type().setValue(Type.citizenship);
         policy.allowedIDs().add(id);
 
-        id = EntityFactory.create(IdentificationDocument.class);
+        id = EntityFactory.create(IdentificationDocumentType.class);
         id.name().setValue(i18n.tr("Driver License"));
         id.type().setValue(Type.license);
         policy.allowedIDs().add(id);

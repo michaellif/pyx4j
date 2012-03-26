@@ -30,13 +30,15 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.ref.Province;
 
 @ToStringFormat("{0}")
-public interface IdentificationDocument extends IEntity {
+public interface IdentificationDocumentType extends IEntity {
 
     @I18n
     @XmlType(name = "IdentificationDocumentType")
     public enum Type {
 
         passport,
+
+        canadianSIN,
 
         citizenship,
 
