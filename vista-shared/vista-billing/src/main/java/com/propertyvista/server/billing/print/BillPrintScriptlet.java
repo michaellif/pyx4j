@@ -28,6 +28,7 @@ import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.server.billing.BillingUtils;
 
 public class BillPrintScriptlet extends JRDefaultScriptlet {
@@ -90,10 +91,26 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         return BillingUtils.getLineItemsForType(lineItems, InvoicePayment.class);
     }
 
-    public List<InvoiceLineItem> getLeaseAdjustment(IList<InvoiceLineItem> lineItems) {
+    public List<InvoiceLineItem> getPendingLeaseAdjustment(IList<InvoiceLineItem> lineItems) {
+        return getLeaseAdjustment(lineItems, LeaseAdjustment.ExecutionType.pending);
+    }
+
+    public List<InvoiceLineItem> getImmediateLeaseAdjustment(IList<InvoiceLineItem> lineItems) {
+        return getLeaseAdjustment(lineItems, LeaseAdjustment.ExecutionType.immediate);
+    }
+
+    private List<InvoiceLineItem> getLeaseAdjustment(IList<InvoiceLineItem> lineItems, LeaseAdjustment.ExecutionType type) {
         List<InvoiceLineItem> adjustments = new ArrayList<InvoiceLineItem>();
-        adjustments.addAll(BillingUtils.getLineItemsForType(lineItems, InvoiceAccountCharge.class));
-        adjustments.addAll(BillingUtils.getLineItemsForType(lineItems, InvoiceAccountCredit.class));
+        for (InvoiceAccountCharge charge : BillingUtils.getLineItemsForType(lineItems, InvoiceAccountCharge.class)) {
+            if (type.equals(charge.adjustment().executionType().getValue())) {
+                adjustments.add(charge);
+            }
+        }
+        for (InvoiceAccountCredit credit : BillingUtils.getLineItemsForType(lineItems, InvoiceAccountCredit.class)) {
+            if (type.equals(credit.adjustment().executionType().getValue())) {
+                adjustments.add(credit);
+            }
+        }
         return adjustments;
     }
 

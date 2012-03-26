@@ -139,6 +139,8 @@ class Billing {
 
         Persistence.service().retrieve(billingAccount.lease());
 
+        Persistence.service().retrieve(billingAccount.adjustments());
+
         Bill bill = EntityFactory.create(Bill.class);
         try {
             Persistence.service().startTransaction();

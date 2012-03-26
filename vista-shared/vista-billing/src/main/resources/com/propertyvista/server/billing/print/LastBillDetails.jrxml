@@ -24,6 +24,10 @@
 		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getPayments($F{lineItems})]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
+	<variable name="leaseAdjustments" class="java.util.List">
+		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getImmediateLeaseAdjustment($F{lineItems})]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -104,7 +108,7 @@
 		<band height="24">
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{billPayments})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{leaseAdjustments})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.LineItem")]]></subreportExpression>
 			</subreport>
 		</band>

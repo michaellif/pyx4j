@@ -32,7 +32,7 @@ public class LeaseAdjustmentProcessor {
     }
 
     void createPendingLeaseAdjustments() {
-        for (LeaseAdjustment adjustment : billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().adjustments()) {
+        for (LeaseAdjustment adjustment : billing.getNextPeriodBill().billingAccount().adjustments()) {
             if (LeaseAdjustment.ExecutionType.pending.equals(adjustment.executionType().getValue())) {
                 // Find if adjustment effective date failes on current or next billing period 
                 DateRange overlap = DateUtils.getOverlappingRange(new DateRange(billing.getCurrentPeriodBill().billingPeriodStartDate().getValue(), billing
@@ -66,15 +66,22 @@ public class LeaseAdjustmentProcessor {
     }
 
     void attachImmediateLeaseAdjustments() {
-        for (InvoiceAccountCredit adjustment : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(),
+        for (InvoiceAccountCredit credit : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(),
                 InvoiceAccountCredit.class)) {
-            attachImmediateLeaseAdjustment(adjustment);
+            attachImmediateCredit(credit);
+        }
+        for (InvoiceAccountCharge charge : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(),
+                InvoiceAccountCharge.class)) {
+            attachImmediateCharge(charge);
         }
     }
 
-    private void attachImmediateLeaseAdjustment(InvoiceAccountCredit adjustment) {
-        // TODO Auto-generated method stub
+    private void attachImmediateCredit(InvoiceAccountCredit credit) {
+        addCredit(credit);
+    }
 
+    private void attachImmediateCharge(InvoiceAccountCharge charge) {
+        addCharge(charge);
     }
 
     private void createPendingCharge(LeaseAdjustment adjustment) {

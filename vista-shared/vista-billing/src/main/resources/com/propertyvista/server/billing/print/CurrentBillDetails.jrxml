@@ -36,8 +36,8 @@
 		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getPayments($F{lineItems})]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
-	<variable name="leaseAdjustment" class="java.util.List">
-		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getLeaseAdjustment($F{lineItems})]]></variableExpression>
+	<variable name="leaseAdjustments" class="java.util.List">
+		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getPendingLeaseAdjustment($F{lineItems})]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
 	<background>
@@ -195,7 +195,7 @@
 		<band height="23">
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{leaseAdjustment})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{leaseAdjustments})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.billing.print.LineItem")]]></subreportExpression>
 			</subreport>
 		</band>

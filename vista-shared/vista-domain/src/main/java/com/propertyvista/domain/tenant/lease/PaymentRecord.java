@@ -85,6 +85,12 @@ public interface PaymentRecord extends IEntity {
     @ToString
     IPrimitive<Key> id();
 
+    @Owner
+    @ReadOnly
+    @Detached
+    @JoinColumn
+    BillingAccount billingAccount();
+
     IPrimitive<LogicalDate> receivedDate();
 
     /**
@@ -106,12 +112,6 @@ public interface PaymentRecord extends IEntity {
     IPrimitive<Type> type();
 
     IPrimitive<PaymentStatus> paymentStatus();
-
-    @Owner
-    @ReadOnly
-    @Detached
-    @JoinColumn
-    BillingAccount billingAccount();
 
     // internals:
     interface OrderId extends ColumnId {

@@ -27,6 +27,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -37,7 +38,6 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseProducts;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
@@ -132,7 +132,7 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         }
 
         // Lease Financial Adjustments:
-        updateAdjustments(lease.version().leaseProducts());
+        updateAdjustments(lease.billingAccount());
     }
 
     private void updateAdjustments(BillableItem item) {
@@ -148,8 +148,8 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         }
     }
 
-    private void updateAdjustments(LeaseProducts leaseProducts) {
-        for (LeaseAdjustment adj : leaseProducts.adjustments()) {
+    private void updateAdjustments(BillingAccount billingAccount) {
+        for (LeaseAdjustment adj : billingAccount.adjustments()) {
             // set creator:
             if (adj.createdWhen().isNull()) {
                 adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());

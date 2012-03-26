@@ -144,10 +144,10 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("0.00").
         taxes("134.20").
-        totalDueAmount("1132.50");
+        totalDueAmount("1002.50");
         // @formatter:on
 
-        receiveAndPostPayment("19-May-2011", "1132.50");
+        receiveAndPostPayment("19-May-2011", "1002.50");
 
         //==================== RUN 5 ======================//
 
@@ -166,15 +166,15 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("1132.50").
+        paymentReceivedAmount("1002.50").
         serviceCharge("930.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("0.00").
         taxes("134.20").
-        totalDueAmount("1222.50");
+        totalDueAmount("1182.50");
         // @formatter:on
 
-        receiveAndPostPayment("19-Jun-2011", "1222.50");
+        receiveAndPostPayment("19-Jun-2011", "1182.50");
 
         //==================== RUN 6 ======================//
 
@@ -190,7 +190,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("01-Aug-2011").
         billingPeriodEndDate("03-Aug-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("1222.50").
+        paymentReceivedAmount("1182.50").
         serviceCharge("90.03").
         recurringFeatureCharges("18.19").
         oneTimeFeatureCharges("0.00").

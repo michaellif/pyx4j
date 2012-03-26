@@ -20,17 +20,17 @@ public class ARFacadeImpl implements ARFacade {
 
     @Override
     public void postPayment(PaymentRecord paymentRecord) {
-        PaymentManager.postPayment(paymentRecord);
+        PaymentProcessor.postPayment(paymentRecord);
     }
 
     @Override
     public void rejectPayment(PaymentRecord paymentRecord) {
-        PaymentManager.rejectPayment(paymentRecord);
+        PaymentProcessor.rejectPayment(paymentRecord);
     }
 
     @Override
     public void postImmediateAdjustment(LeaseAdjustment adjustment) {
-//TODO
+        LeaseAdjustmentProcessor.postImmediateAdjustment(adjustment);
     }
 
 }

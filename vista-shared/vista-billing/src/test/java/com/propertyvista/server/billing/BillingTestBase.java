@@ -43,8 +43,8 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
@@ -312,12 +312,15 @@ abstract class BillingTestBase extends VistaDBTestBase {
         adjustment.description().setValue(reason.name().getValue());
         adjustment.reason().setValue(reason.getValue());
 
-        lease.version().leaseProducts().adjustments().add(adjustment);
+        lease.billingAccount().adjustments().add(adjustment);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(lease);
         Persistence.service().commit();
 
+        if (immediate) {
+            ServerSideFactory.create(ARFacade.class).postImmediateAdjustment(adjustment);
+        }
         return adjustment;
     }
 

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.financial;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
@@ -30,6 +31,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
 public interface BillingAccount extends IEntity {
@@ -75,6 +77,12 @@ public interface BillingAccount extends IEntity {
     @OrderBy(PaymentRecord.OrderId.class)
     @Detached(level = AttachLevel.Detached)
     IList<PaymentRecord> payments();
+
+    @Owned
+    @OrderBy(LeaseAdjustment.OrderId.class)
+    @Caption(name = "Lease Adjustments")
+    @Detached()
+    IList<LeaseAdjustment> adjustments();
 
     IPrimitive<ProrationMethod> prorationMethod();
 
