@@ -100,7 +100,9 @@ public class EmailTemplateRootObjectLoader {
             t.address().setValue(bld.info().address().getStringView());
             // set contact info
             for (PropertyContact cont : bld.contacts().propertyContacts()) {
-                if (cont.type().getValue().equals(PropertyContact.PropertyContactType.administrator)) {
+                if (cont.type().isNull()) {
+                    continue;
+                } else if (cont.type().getValue().equals(PropertyContact.PropertyContactType.administrator)) {
                     t.administrator().name().set(cont.name());
                     t.administrator().phone().set(cont.phone());
                     t.administrator().email().set(cont.email());
