@@ -15,16 +15,23 @@ package com.propertyvista.server.ar;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
 public class PaymentManager {
 
+    private static final I18n i18n = I18n.get(PaymentManager.class);
+
     static void postPayment(PaymentRecord paymentRecord) {
         InvoicePayment invoicePayment = EntityFactory.create(InvoicePayment.class);
         invoicePayment.paymentRecord().set(paymentRecord);
         invoicePayment.amount().setValue(paymentRecord.amount().getValue());
+
+        invoicePayment.description().setValue(i18n.tr("Payment Received - Thank You"));
+        invoicePayment.fromDate().setValue(paymentRecord.receivedDate().getValue());
+
         Persistence.service().persist(invoicePayment);
 
         Persistence.service().retrieve(paymentRecord.billingAccount());

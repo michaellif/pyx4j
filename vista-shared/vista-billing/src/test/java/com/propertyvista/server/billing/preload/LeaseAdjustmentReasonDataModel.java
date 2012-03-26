@@ -23,7 +23,18 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 public class LeaseAdjustmentReasonDataModel {
 
     public enum Reason {
-        goodWill;
+        goodWill("Good Will");
+
+        private String description;
+
+        private Reason(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
     }
 
     public final HashMap<Reason, LeaseAdjustmentReason> reasons;
@@ -45,7 +56,7 @@ public class LeaseAdjustmentReasonDataModel {
 
     private void generateReason(Reason reason) {
         LeaseAdjustmentReason adjustmentReason = EntityFactory.create(LeaseAdjustmentReason.class);
-        adjustmentReason.name().setValue(reason.name());
+        adjustmentReason.name().setValue(reason.getDescription());
         adjustmentReason.precalculatedTax().setValue(true);
         reasons.put(reason, adjustmentReason);
     }

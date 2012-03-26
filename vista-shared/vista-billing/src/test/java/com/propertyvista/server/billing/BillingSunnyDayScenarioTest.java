@@ -216,6 +216,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
         // @formatter:on
+
     }
 
 }

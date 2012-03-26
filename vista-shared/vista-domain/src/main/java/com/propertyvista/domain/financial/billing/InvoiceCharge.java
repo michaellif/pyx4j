@@ -14,25 +14,11 @@ package com.propertyvista.domain.financial.billing;
  * @version $Id$
  */
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
 
 @Inheritance
 @AbstractEntity
 public interface InvoiceCharge extends InvoiceDebit {
 
-    @Owned
-    IList<InvoiceChargeTax> taxes();
-
-    @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> taxTotal();
 }

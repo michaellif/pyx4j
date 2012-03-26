@@ -21,11 +21,11 @@
 				<textFieldExpression><![CDATA[$F{chargeSubLineItem}.amount().getValue()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<reportElement x="16" y="0" width="84" height="20"/>
+				<textElement verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDay($F{fromDate})+" - "+$P{REPORT_SCRIPTLET}.formatDay($F{toDate})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDays($F{fromDate}, $F{toDate})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="111" y="0" width="163" height="20"/>

@@ -14,15 +14,23 @@ package com.propertyvista.domain.financial.billing;
  * @version $Id$
  */
 
+import java.math.BigDecimal;
+
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.BillingAccount;
@@ -48,4 +56,23 @@ public interface InvoiceLineItem extends IEntity {
 
     @OrderColumn(OrderId.class)
     IPrimitive<Integer> orderId();
+
+    IPrimitive<String> description();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> fromDate();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> toDate();
+
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> amount();
+
+    @Owned
+    IList<InvoiceChargeTax> taxes();
+
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> taxTotal();
 }

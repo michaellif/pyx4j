@@ -23,6 +23,8 @@ import net.sf.jasperreports.engine.JRScriptletException;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
+import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
@@ -35,9 +37,20 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         return formatter.format(date);
     }
 
-    public String formatDay(LogicalDate date) throws JRScriptletException {
+    public String formatDays(LogicalDate fromDate, LogicalDate toDate) throws JRScriptletException {
         SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
-        return formatter.format(date);
+        if (fromDate != null) {
+            if (toDate != null) {
+                if (fromDate.equals(toDate)) {
+                    return formatter.format(fromDate);
+                } else {
+                    return formatter.format(fromDate) + " - " + formatter.format(toDate);
+                }
+            } else {
+                return formatter.format(fromDate);
+            }
+        }
+        return "";
     }
 
     public List<InvoiceProductCharge> getServiceCharges(IList<InvoiceLineItem> lineItems) {
@@ -75,6 +88,13 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
 
     public List<InvoicePayment> getPayments(IList<InvoiceLineItem> lineItems) {
         return BillingUtils.getLineItemsForType(lineItems, InvoicePayment.class);
+    }
+
+    public List<InvoiceLineItem> getLeaseAdjustment(IList<InvoiceLineItem> lineItems) {
+        List<InvoiceLineItem> adjustments = new ArrayList<InvoiceLineItem>();
+        adjustments.addAll(BillingUtils.getLineItemsForType(lineItems, InvoiceAccountCharge.class));
+        adjustments.addAll(BillingUtils.getLineItemsForType(lineItems, InvoiceAccountCredit.class));
+        return adjustments;
     }
 
 }

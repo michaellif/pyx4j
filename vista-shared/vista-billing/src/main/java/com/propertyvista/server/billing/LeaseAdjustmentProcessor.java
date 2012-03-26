@@ -83,6 +83,8 @@ public class LeaseAdjustmentProcessor {
         charge.billingAccount().set(billing.getNextPeriodBill().billingAccount());
         charge.bill().set(billing.getNextPeriodBill());
         charge.adjustment().set(adjustment);
+        charge.fromDate().setValue(adjustment.effectiveDate().getValue());
+        charge.description().setValue(adjustment.reason().name().getValue());
 
         calculateTax(charge);
 
@@ -99,6 +101,8 @@ public class LeaseAdjustmentProcessor {
         credit.bill().set(billing.getNextPeriodBill());
         credit.amount().setValue(adjustment.amount().getValue().negate());
         credit.adjustment().set(adjustment);
+        credit.fromDate().setValue(adjustment.effectiveDate().getValue());
+        credit.description().setValue(adjustment.reason().name().getValue());
 
         Persistence.service().persist(credit);
 
@@ -107,8 +111,7 @@ public class LeaseAdjustmentProcessor {
     }
 
     private void addCharge(InvoiceAccountCharge charge) {
-        billing.getNextPeriodBill().totalAdjustments()
-                .setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(charge.totalBeforeTax().getValue()));
+        billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(charge.amount().getValue()));
         billing.getNextPeriodBill().lineItems().add(charge);
         billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(charge.taxTotal().getValue()));
     }
@@ -119,10 +122,9 @@ public class LeaseAdjustmentProcessor {
     }
 
     private void calculateTax(InvoiceAccountCharge charge) {
-        if (!charge.totalBeforeTax().isNull()) {
+        if (!charge.amount().isNull()) {
             charge.taxes().addAll(
-                    TaxUtils.calculateTaxes(charge.totalBeforeTax().getValue(), charge.adjustment().reason(), billing.getNextPeriodBill().billingRun()
-                            .building()));
+                    TaxUtils.calculateTaxes(charge.amount().getValue(), charge.adjustment().reason(), billing.getNextPeriodBill().billingRun().building()));
         }
         charge.taxTotal().setValue(new BigDecimal(0));
         for (InvoiceChargeTax chargeTax : charge.taxes()) {

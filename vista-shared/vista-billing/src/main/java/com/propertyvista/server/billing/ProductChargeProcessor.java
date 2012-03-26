@@ -99,7 +99,7 @@ public class ProductChargeProcessor {
         if (revisedCharge != null && originalCharge == null) {
             addCharge(revisedCharge);
         } else if (revisedCharge != null && originalCharge != null) {
-            if (!revisedCharge.totalBeforeTax().getValue().equals(originalCharge.totalBeforeTax().getValue())) {
+            if (!revisedCharge.amount().getValue().equals(originalCharge.amount().getValue())) {
                 //TODO   billing.getBillEntryAdjustmentProcessor().createBillEntryAdjustment(originalCharge, revisedCharge);
             }
         }
@@ -181,14 +181,14 @@ public class ProductChargeProcessor {
         createAdjustmentSubLineItems(charge, billableItem);
         createConcessionSubLineItems(charge, billableItem);
 
-        charge.totalBeforeTax().setValue(charge.chargeSubLineItem().amount().getValue());
+        charge.amount().setValue(charge.chargeSubLineItem().amount().getValue());
 
         for (InvoiceAdjustmentSubLineItem subLineItem : charge.adjustmentSubLineItems()) {
-            charge.totalBeforeTax().setValue(charge.totalBeforeTax().getValue().add(subLineItem.amount().getValue()));
+            charge.amount().setValue(charge.amount().getValue().add(subLineItem.amount().getValue()));
         }
 
         for (InvoiceConcessionSubLineItem subLineItem : charge.concessionSubLineItems()) {
-            charge.totalBeforeTax().setValue(charge.totalBeforeTax().getValue().add(subLineItem.amount().getValue()));
+            charge.amount().setValue(charge.amount().getValue().add(subLineItem.amount().getValue()));
         }
 
         calculateTax(charge);
@@ -272,9 +272,9 @@ public class ProductChargeProcessor {
     }
 
     private void calculateTax(InvoiceProductCharge charge) {
-        if (!charge.totalBeforeTax().isNull()) {
+        if (!charge.amount().isNull()) {
             charge.taxes().addAll(
-                    TaxUtils.calculateTaxes(charge.totalBeforeTax().getValue(), charge.chargeSubLineItem().billableItem().item().type(), billing
+                    TaxUtils.calculateTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().type(), billing
                             .getNextPeriodBill().billingRun().building()));
         }
         charge.taxTotal().setValue(new BigDecimal(0));
@@ -288,13 +288,13 @@ public class ProductChargeProcessor {
             return;
         }
         if (BillingUtils.isService(charge.chargeSubLineItem().billableItem().item().product())) { //Service
-            billing.getNextPeriodBill().serviceCharge().setValue(charge.totalBeforeTax().getValue());
+            billing.getNextPeriodBill().serviceCharge().setValue(charge.amount().getValue());
         } else if (BillingUtils.isRecurringFeature(charge.chargeSubLineItem().billableItem().item().product())) { //Recurring Feature
             billing.getNextPeriodBill().recurringFeatureCharges()
-                    .setValue(billing.getNextPeriodBill().recurringFeatureCharges().getValue().add(charge.totalBeforeTax().getValue()));
+                    .setValue(billing.getNextPeriodBill().recurringFeatureCharges().getValue().add(charge.amount().getValue()));
         } else {
             billing.getNextPeriodBill().oneTimeFeatureCharges()
-                    .setValue(billing.getNextPeriodBill().oneTimeFeatureCharges().getValue().add(charge.totalBeforeTax().getValue()));
+                    .setValue(billing.getNextPeriodBill().oneTimeFeatureCharges().getValue().add(charge.amount().getValue()));
         }
         billing.getNextPeriodBill().lineItems().add(charge);
         billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(charge.taxTotal().getValue()));
