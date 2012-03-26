@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import java.util.Date;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
@@ -21,6 +23,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -43,6 +46,9 @@ public interface Roof extends LicensedWarrantedMaintained, Notes, BuildingElemen
     @Editor(type = EditorType.yearpicker)
     @Format("yyyy")
     IPrimitive<LogicalDate> year();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     // ----------------------------------------------------
     // parent <-> child relationship:

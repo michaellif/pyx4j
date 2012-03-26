@@ -13,11 +13,14 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -48,4 +51,7 @@ public interface Complex extends PolicyNode {
     @JoinTable(value = Building.class, cascade = false)
     @OrderBy(Building.OrderInComplexId.class)
     IList<Building> buildings();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 }

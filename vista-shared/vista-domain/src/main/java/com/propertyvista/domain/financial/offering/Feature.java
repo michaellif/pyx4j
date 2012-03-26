@@ -13,10 +13,13 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -64,6 +67,9 @@ public interface Feature extends Product, IVersionedEntity<FeatureV> {
             return I18nEnum.toString(this);
         }
     }
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     @ToStringFormat("{0}, {1}")
     @DiscriminatorValue("feature")

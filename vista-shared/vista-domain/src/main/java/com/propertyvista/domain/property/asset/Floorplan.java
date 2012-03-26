@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
@@ -23,6 +25,7 @@ import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -75,6 +78,9 @@ public interface Floorplan extends PolicyNode {
     @Owned
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     FloorplanCounters counters();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     // ----------------------------------------------------
     // parent <-> child relationship:

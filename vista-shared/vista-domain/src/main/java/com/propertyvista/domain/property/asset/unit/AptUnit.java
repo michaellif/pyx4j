@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
+import java.util.Date;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -23,6 +25,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -61,6 +64,9 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     @Detached
     @Owned
     Marketing marketing();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     // ----------------------------------------------------
     // parent <-> child relationship:

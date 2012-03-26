@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
@@ -25,6 +27,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -114,6 +117,9 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
 
     @OrderColumn
     IPrimitive<Integer> orderInCatalog();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
 // ----------------------------------------------
 

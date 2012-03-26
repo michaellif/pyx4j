@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
@@ -27,6 +29,7 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -115,6 +118,9 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = CrmUserBuildings.class, cascade = false)
     ISet<CrmUser> userAccess();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     @Owned
     @Detached

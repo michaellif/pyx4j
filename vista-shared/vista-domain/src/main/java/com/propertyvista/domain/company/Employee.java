@@ -13,11 +13,14 @@
  */
 package com.propertyvista.domain.company;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -36,6 +39,9 @@ public interface Employee extends Person {
     @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     @NotNull
     @ReadOnly

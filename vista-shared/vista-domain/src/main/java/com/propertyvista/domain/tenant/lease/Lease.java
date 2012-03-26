@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
@@ -180,6 +182,9 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createDate();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();

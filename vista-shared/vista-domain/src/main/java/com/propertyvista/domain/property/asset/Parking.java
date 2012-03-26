@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
@@ -22,6 +24,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -82,6 +85,9 @@ public interface Parking extends BuildingElement {
 
     @Editor(type = EditorType.label)
     IPrimitive<Integer> narrowSpaces();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     // ----------------------------------------------------
     // parent <-> child relationship:

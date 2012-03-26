@@ -13,12 +13,15 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -50,6 +53,9 @@ public interface LockerArea extends BuildingElement {
 
     @Editor(type = EditorType.label)
     IPrimitive<Integer> smallLockers();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     // ----------------------------------------------------
     // parent <-> child relationship:

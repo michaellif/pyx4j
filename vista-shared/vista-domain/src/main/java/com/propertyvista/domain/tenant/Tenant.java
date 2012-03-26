@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
@@ -23,6 +25,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -69,6 +72,9 @@ public interface Tenant extends IEntity, PersonScreeningHolder, TenantUserHolder
 //    @Detached
     @Length(3)
     IList<EmergencyContact> emergencyContacts();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     /**
      * This used to enforce Data access

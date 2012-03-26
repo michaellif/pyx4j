@@ -13,9 +13,15 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Elevator extends Equipment, BookingSchedule {
 
     IPrimitive<Boolean> isForMoveInOut();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 }
