@@ -61,6 +61,8 @@ public class ApplicationDocumentUploaderFolder extends VistaTableFolder<Applicat
     static {
         ApplicationDocument proto = EntityFactory.getEntityPrototype(ApplicationDocument.class);
         COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.identificationDocument().name(), "15em"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.details(), "15em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileName(), "25em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileSize(), "5em"));
     }

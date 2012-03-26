@@ -39,7 +39,6 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
-import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
@@ -118,8 +117,6 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
             }
         }
 
-        get(proto().secureIdentifier()).setEnabled(!getValue().notCanadianCitizen().isBooleanTrue());
-        fileUpload.setVisible(isEditable() && getValue().notCanadianCitizen().isBooleanTrue());
         if (getValue() != null) {
             fileUpload.setTenantID(((IEntity) getValue()).getPrimaryKey());
         }
@@ -181,35 +178,15 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
 
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
-
-        // ------------------------------------------------------------------------------------------------
-
-        get(proto().secureIdentifier()).addValueValidator(new CanadianSinValidator());
     }
 
     private Widget createSecureInformationTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().driversLicense()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().driversLicenseState()), 20).build());
-        final CComponent<?, ?> sin = inject(proto().secureIdentifier());
-        main.setWidget(++row, 0, new DecoratorBuilder(sin, 7).build());
-
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notCanadianCitizen()), 3).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder())).build());
 
-        get(proto().notCanadianCitizen()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<Boolean> event) {
-                if (event.getValue()) {
-                    sin.setValue(null);
-                }
-                sin.setEnabled(!event.getValue());
-                fileUpload.setVisible(event.getValue());
-            }
-        });
         return new CrmScrollPanel(main);
     }
 

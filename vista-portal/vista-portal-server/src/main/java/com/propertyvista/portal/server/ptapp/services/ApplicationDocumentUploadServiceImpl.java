@@ -88,6 +88,10 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
         newDocument.fileSize().setValue(response.fileSize);
         newDocument.timestamp().setValue(response.timestamp);
         newDocument.contentMimeType().setValue(response.fileContentType);
+
+        newDocument.identificationDocument().set(dto.identificationDocument());
+        newDocument.details().setValue(dto.details().getValue());
+
         Persistence.service().persist(newDocument);
         Persistence.service().commit();
 

@@ -40,7 +40,6 @@ import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
@@ -112,9 +111,6 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
     IList<PersonGuarantor> guarantors();
 
     //=============== Security Info =============//
-
-    @NotNull
-    IList<IdentificationDocument> identificationDocuments();
 
     @Deprecated
     IPrimitive<String> driversLicense();

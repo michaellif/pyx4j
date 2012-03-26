@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.File;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
 
 public interface ApplicationDocument extends File {
 
@@ -42,4 +43,14 @@ public interface ApplicationDocument extends File {
 
     @OrderColumn(OrderColumnId.class)
     IPrimitive<Integer> orderInOwner();
+
+    /**
+     * @return User defined type of the document
+     */
+    IdentificationDocument identificationDocument();
+
+    /**
+     * @return data relevant to the selected identification document, i.e. Driver's License number, Passport number, SIN etc.
+     */
+    IPrimitive<String> details();
 }

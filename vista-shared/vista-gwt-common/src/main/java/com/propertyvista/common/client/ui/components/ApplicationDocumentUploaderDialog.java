@@ -14,20 +14,33 @@
 package com.propertyvista.common.client.ui.components;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.client.EntityDataSource;
+import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationDocumentUploadDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
@@ -40,9 +53,45 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
 
     private final Dialog dialog;
 
+    private CEntityDecoratableEditor<ApplicationDocumentUploadDTO> documentUploadForm;
+
     @SuppressWarnings("unchecked")
     public ApplicationDocumentUploaderDialog(String title, final Key tenantId) {
         dialog = new Dialog(title, this, null);
+
+        ApplicationDocumentUploadDTO dto = EntityFactory.create(ApplicationDocumentUploadDTO.class);
+        dto.tenantInLeaseId().setValue(tenantId);
+
+        documentUploadForm = new CEntityDecoratableEditor<ApplicationDocumentUploadDTO>(ApplicationDocumentUploadDTO.class) {
+            @Override
+            public IsWidget createContent() {
+                FlowPanel content = new FlowPanel();
+                content.add(new DecoratorBuilder(inject(proto().identificationDocument(), new CEntityComboBox<IdentificationDocument>(
+                        IdentificationDocument.class))).componentWidth(15).labelWidth(10).build());
+                content.add(new DecoratorBuilder(inject(proto().details())).componentWidth(15).labelWidth(10).build());
+                CEntityComboBox<IdentificationDocument> idCombo = (CEntityComboBox<IdentificationDocument>) get(proto().identificationDocument());
+                idCombo.setOptionsDataSource(new EntityDataSource<IdentificationDocument>() {
+                    @Override
+                    public void obtain(EntityQueryCriteria<IdentificationDocument> criteria,
+                            final AsyncCallback<EntitySearchResult<IdentificationDocument>> handlingCallback) {
+                        ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), ApplicationDocumentationPolicy.class,
+                                new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
+                                    @Override
+                                    public void onSuccess(ApplicationDocumentationPolicy result) {
+                                        EntitySearchResult<IdentificationDocument> allowedIds = new EntitySearchResult<IdentificationDocument>();
+                                        allowedIds.getData().addAll(result.allowedIDs());
+                                        handlingCallback.onSuccess(allowedIds);
+                                    }
+                                });
+                    }
+                });
+                return content;
+            }
+        };
+        documentUploadForm.asWidget().setSize("400px", "100%");
+        documentUploadForm.initContent();
+        documentUploadForm.setMandatory(true);
+        documentUploadForm.populate(dto);
 
         uploadPanel = new UploadPanel<ApplicationDocumentUploadDTO, ApplicationDocument>(
                 (UploadService<ApplicationDocumentUploadDTO, ApplicationDocument>) GWT.create(ApplicationDocumentUploadService.class)) {
@@ -67,20 +116,22 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
 
             @Override
             protected ApplicationDocumentUploadDTO getUploadData() {
-                ApplicationDocumentUploadDTO dto = EntityFactory.create(ApplicationDocumentUploadDTO.class);
-                dto.tenantInLeaseId().setValue(tenantId);
-                return dto;
+                return documentUploadForm.getValue();
             }
 
         };
         uploadPanel.setSupportedExtensions(ApplicationDocumentUploadService.supportedFormats);
         uploadPanel.setServletPath(GWT.getModuleBaseURL() + DeploymentConsts.uploadServletMapping);
-        uploadPanel.setSize("400px", "60px");
-        uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
-        uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
+        uploadPanel.setSize("400px", "100%");
 
-        dialog.setBody(uploadPanel);
-        dialog.setPixelSize(460, 150);
+        VerticalPanel dialogBody = new VerticalPanel();
+        dialogBody.setSize("400px", "100%");
+        dialogBody.add(documentUploadForm);
+        dialogBody.add(uploadPanel);
+        dialogBody.setCellHorizontalAlignment(uploadPanel, HasHorizontalAlignment.ALIGN_CENTER);
+
+        dialog.setBody(dialogBody);
+        dialog.setPixelSize(460, 200);
     }
 
     public void show() {
@@ -91,8 +142,15 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
 
     @Override
     public boolean onClickOk() {
-        uploadPanel.uploadSubmit();
-        return false;
+        if (documentUploadForm.isValid()) {
+            uploadPanel.uploadSubmit();
+            return false;
+        } else {
+            if (documentUploadForm.getValue().details().isNull()) {
+                MessageDialog.error(i18n.tr("Validation Error"), i18n.tr("Document name is required"));
+            }
+            return false;
+        }
     }
 
     @Override
