@@ -82,7 +82,7 @@ public class ClientPolicyManager {
     @SuppressWarnings("unchecked")
     public static <POLICY extends Policy> void obtainEffectivePolicy(final PolicyNode node, final Class<POLICY> policyClass,
             final AsyncCallback<POLICY> callback) {
-        Policy policy = null;//cache.get(new PolicyFindKey(node, policyClass));
+        Policy policy = cache.get(new PolicyFindKey(node, policyClass));
         if (policy != null) {
             callback.onSuccess((POLICY) policy);
             return;
