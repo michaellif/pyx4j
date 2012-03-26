@@ -19,6 +19,7 @@ import com.google.gwt.place.shared.Place;
 
 import com.propertyvista.admin.client.activity.login.LoginActivity;
 import com.propertyvista.admin.client.activity.login.LoginWithTokenActivity;
+import com.propertyvista.admin.client.activity.security.PasswordResetRequesetActivity;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class LoginActivityMapper implements ActivityMapper {
@@ -32,7 +33,10 @@ public class LoginActivityMapper implements ActivityMapper {
             return new LoginActivity(place);
         } else if (place instanceof AdminSiteMap.LoginWithToken) {
             return new LoginWithTokenActivity(place);
+        } else if (place instanceof AdminSiteMap.PasswordResetRequest) {
+            return new PasswordResetRequesetActivity(place);
         }
+
         return null;
     }
 }

@@ -38,7 +38,7 @@ public class AdminSiteMap implements SiteMap {
     }
 
     @PlaceProperties(caption = "Password Reset Request")
-    public static class PasswordResetRequest extends AppPlace {
+    public static class PasswordResetRequest extends AppPlace implements PublicPlace {
 
     }
 
