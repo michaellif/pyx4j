@@ -24,4 +24,9 @@ public class SiteImageResourceCrudServiceImpl extends AbstractCrudServiceImpl<Si
         super(SiteImageResource.class);
     }
 
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
 }

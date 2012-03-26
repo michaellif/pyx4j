@@ -23,4 +23,9 @@ public class ParkingSpotCrudServiceImpl extends AbstractCrudServiceImpl<ParkingS
     public ParkingSpotCrudServiceImpl() {
         super(ParkingSpot.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

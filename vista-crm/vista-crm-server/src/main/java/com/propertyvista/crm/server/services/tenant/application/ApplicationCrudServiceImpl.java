@@ -27,6 +27,6 @@ public class ApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<Appli
 
     @Override
     protected void bind() {
-        bind(Application.class, dtoProto, dboProto);
+        bindCompleateDBO();
     }
 }

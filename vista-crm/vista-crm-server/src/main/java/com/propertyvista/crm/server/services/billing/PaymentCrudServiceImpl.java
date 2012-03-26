@@ -23,4 +23,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceImpl<PaymentRecor
     public PaymentCrudServiceImpl() {
         super(PaymentRecord.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

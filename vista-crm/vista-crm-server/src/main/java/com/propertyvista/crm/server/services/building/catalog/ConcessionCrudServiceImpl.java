@@ -23,4 +23,9 @@ public class ConcessionCrudServiceImpl extends AbstractVersionedCrudServiceImpl<
     public ConcessionCrudServiceImpl() {
         super(Concession.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

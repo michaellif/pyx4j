@@ -23,4 +23,9 @@ public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Tenant>
     public SelectTenantListServiceImpl() {
         super(Tenant.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

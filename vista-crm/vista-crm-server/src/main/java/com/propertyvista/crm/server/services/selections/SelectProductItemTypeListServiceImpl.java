@@ -23,4 +23,9 @@ public class SelectProductItemTypeListServiceImpl extends AbstractListServiceImp
     public SelectProductItemTypeListServiceImpl() {
         super(ProductItemType.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

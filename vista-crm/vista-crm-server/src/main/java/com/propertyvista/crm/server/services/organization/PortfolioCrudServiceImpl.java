@@ -32,9 +32,14 @@ public class PortfolioCrudServiceImpl extends AbstractCrudServiceImpl<Portfolio>
     }
 
     @Override
-    protected void persist(Portfolio entity) {
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
+    protected void persist(Portfolio entity, Portfolio dto) {
         validate(entity);
-        super.persist(entity);
+        super.persist(entity, dto);
     }
 
     private void validate(Portfolio portfolio) {

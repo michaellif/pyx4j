@@ -49,18 +49,23 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    protected void enhanceRetrieved(Lead entity) {
-        if (!entity.floorplan().isNull()) {
-            Persistence.service().retrieve(entity.floorplan().building());
-            entity.building().set(entity.floorplan().building());
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(Lead entity, Lead dto) {
+        if (!dto.floorplan().isNull()) {
+            Persistence.service().retrieve(dto.floorplan().building());
+            entity.building().set(dto.floorplan().building());
         }
     }
 
     @Override
-    protected void enhanceListRetrieved(Lead entity) {
-        enhanceRetrieved(entity);
+    protected void enhanceListRetrieved(Lead entity, Lead dto) {
+        enhanceRetrieved(entity, dto);
         // just clear unnecessary data before serialization: 
-        entity.comments().setValue(null);
+        dto.comments().setValue(null);
     }
 
     @Override

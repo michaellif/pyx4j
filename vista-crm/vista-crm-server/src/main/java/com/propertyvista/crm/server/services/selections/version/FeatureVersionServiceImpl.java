@@ -21,4 +21,9 @@ public class FeatureVersionServiceImpl extends AbstractVistaVersionDataListServi
     public FeatureVersionServiceImpl() {
         super(Feature.FeatureV.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

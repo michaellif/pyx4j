@@ -31,17 +31,22 @@ public class FeatureCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Fea
     }
 
     @Override
-    protected void enhanceRetrieved(Feature entity) {
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(Feature entity, Feature dto) {
         // Load detached data:
 
         /*
          * catalog retrieving is necessary for building element filtering by catalog().building() in @link FeatureItemEditor
          */
-        Persistence.service().retrieve(entity.catalog());
+        Persistence.service().retrieve(dto.catalog());
 
-        Persistence.service().retrieve(entity.version().items());
+        Persistence.service().retrieve(dto.version().items());
         // next level:
-        for (ProductItem item : entity.version().items()) {
+        for (ProductItem item : dto.version().items()) {
             Persistence.service().retrieve(item.element());
         }
     }

@@ -32,9 +32,14 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
     }
 
     @Override
-    protected void enhanceRetrieved(PageDescriptor entity) {
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(PageDescriptor entity, PageDescriptor dto) {
         // load content caption:
-        for (PageContent content : entity.content()) {
+        for (PageContent content : dto.content()) {
 
             // TODO VladS remove this hack!
             content.descriptor().set(entity);
@@ -49,7 +54,7 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
     }
 
     @Override
-    protected void persist(PageDescriptor dbo) {
+    protected void persist(PageDescriptor dbo, PageDescriptor dto) {
         // update caption:
         dbo.caption().clear();
         for (PageContent content : dbo.content()) {
@@ -74,7 +79,7 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
             }
             dbo.orderInDescriptor().setValue(maxOrder);
         }
-        super.persist(dbo);
+        super.persist(dbo, dto);
 
         // set update flag
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);

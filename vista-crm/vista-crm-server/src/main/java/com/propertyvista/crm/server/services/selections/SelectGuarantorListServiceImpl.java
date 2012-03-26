@@ -23,4 +23,9 @@ public class SelectGuarantorListServiceImpl extends AbstractListServiceImpl<Guar
     public SelectGuarantorListServiceImpl() {
         super(Guarantor.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

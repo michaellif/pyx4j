@@ -15,7 +15,6 @@ package com.propertyvista.portal.server.portal.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -34,30 +33,28 @@ public class TenantPaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<
     }
 
     @Override
-    protected void enhanceListRetrieved(PaymentMethod entity) {
-        entity.creditCard().number().setValue("XXXX XXX XXXX " + entity.creditCard().numberRefference().getValue());
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceListRetrieved(PaymentMethod entity, PaymentMethod dto) {
+        dto.creditCard().number().setValue("XXXX XXX XXXX " + entity.creditCard().numberRefference().getValue());
 
     }
 
     @Override
-    protected void enhanceRetrieved(PaymentMethod entity) {
-        entity.creditCard().number().setValue("XXXX XXX XXXX " + entity.creditCard().numberRefference().getValue());
+    protected void enhanceRetrieved(PaymentMethod entity, PaymentMethod dto) {
+        dto.creditCard().number().setValue("XXXX XXX XXXX " + entity.creditCard().numberRefference().getValue());
     }
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<PaymentMethod>> callback, EntityListCriteria<PaymentMethod> criteria) {
-        criteria = EntityListCriteria.create(PaymentMethod.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), TenantAppContext.getCurrentUserTenant()));
-        EntitySearchResult<PaymentMethod> result = new EntitySearchResult<PaymentMethod>();
-        for (PaymentMethod entity : Persistence.service().query(criteria)) {
-            enhanceListRetrieved(entity);
-            result.add(entity);
-        }
-        callback.onSuccess(result);
+    protected void enhanceListCriteria(EntityListCriteria<PaymentMethod> dbCriteria, EntityListCriteria<PaymentMethod> dtoCriteria) {
+        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().tenant(), TenantAppContext.getCurrentUserTenant()));
     }
 
     @Override
-    protected void persist(PaymentMethod entity) {
+    protected void persist(PaymentMethod entity, PaymentMethod dto) {
         entity.tenant().set(TenantAppContext.getCurrentUserTenant());
         String ccn = entity.creditCard().number().getValue().trim();
         entity.creditCard().numberRefference().setValue(ccn.substring(ccn.length() - 4));

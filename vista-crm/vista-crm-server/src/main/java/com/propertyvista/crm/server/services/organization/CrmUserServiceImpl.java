@@ -36,7 +36,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
 
     @Override
     protected void bind() {
-        bind(Employee.class, dtoProto, dboProto);
+        bindCompleateDBO();
     }
 
     @Override

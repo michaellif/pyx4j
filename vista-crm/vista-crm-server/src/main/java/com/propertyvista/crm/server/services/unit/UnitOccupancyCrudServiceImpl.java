@@ -30,18 +30,23 @@ public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUni
     }
 
     @Override
-    protected void enhanceRetrieved(AptUnitOccupancySegment entity) {
-        if (entity.dateFrom().getValue().equals(AptUnitOccupancyManagerHelper.MIN_DATE)) {
-            entity.dateFrom().setValue(null);
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(AptUnitOccupancySegment entity, AptUnitOccupancySegment dto) {
+        if (dto.dateFrom().getValue().equals(AptUnitOccupancyManagerHelper.MIN_DATE)) {
+            dto.dateFrom().setValue(null);
         }
-        if (entity.dateTo().getValue().equals(AptUnitOccupancyManagerHelper.MAX_DATE)) {
-            entity.dateTo().setValue(null);
+        if (dto.dateTo().getValue().equals(AptUnitOccupancyManagerHelper.MAX_DATE)) {
+            dto.dateTo().setValue(null);
         }
     }
 
     @Override
-    protected void enhanceListRetrieved(AptUnitOccupancySegment entity) {
-        super.enhanceRetrieved(entity);
+    protected void enhanceListRetrieved(AptUnitOccupancySegment entity, AptUnitOccupancySegment dto) {
+        super.enhanceRetrieved(entity, dto);
     }
 
     @Override

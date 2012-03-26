@@ -21,4 +21,9 @@ public class ConcessionVersionServiceImpl extends AbstractVistaVersionDataListSe
     public ConcessionVersionServiceImpl() {
         super(Concession.ConcessionV.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

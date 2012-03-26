@@ -30,6 +30,11 @@ public class ServiceItemTypeCrudServiceImpl extends AbstractCrudServiceImpl<Prod
     }
 
     @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
     public void list(AsyncCallback<EntitySearchResult<ProductItemType>> callback, EntityListCriteria<ProductItemType> criteria) {
         criteria.add(PropertyCriterion.eq(criteria.proto().type(), ProductItemType.Type.service));
         super.list(callback, criteria);

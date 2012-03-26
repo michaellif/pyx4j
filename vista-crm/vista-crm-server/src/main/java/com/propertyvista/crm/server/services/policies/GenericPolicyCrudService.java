@@ -37,10 +37,9 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void bind() {
-        bind((Class<POLICY>) dboProto.getObjectClass(), dtoProto, dboProto);
+        bindCompleateDBO();
     }
 
     @Override

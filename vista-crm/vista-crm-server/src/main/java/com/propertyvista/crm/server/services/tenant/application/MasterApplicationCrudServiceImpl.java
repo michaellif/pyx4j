@@ -60,7 +60,7 @@ public class MasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl
 
     @Override
     protected void bind() {
-        bind(MasterApplication.class, dtoProto, dboProto);
+        bindCompleateDBO();
     }
 
     @Override

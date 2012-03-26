@@ -54,7 +54,7 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
 
     @Override
     protected void bind() {
-        bind(Lease.class, dtoProto, dboProto);
+        bindCompleateDBO();
     }
 
     @Override

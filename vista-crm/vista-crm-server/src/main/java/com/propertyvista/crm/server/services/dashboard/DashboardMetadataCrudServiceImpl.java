@@ -27,6 +27,11 @@ public class DashboardMetadataCrudServiceImpl extends AbstractMetadataCrudServic
     }
 
     @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
     void addTypeCriteria(EntityListCriteria<DashboardMetadata> criteria) {
         criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.NOT_EQUAL, DashboardMetadata.LayoutType.Report));
     }

@@ -23,4 +23,9 @@ public class SelectGlCodeListServiceImpl extends AbstractListServiceImpl<GlCode>
     public SelectGlCodeListServiceImpl() {
         super(GlCode.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

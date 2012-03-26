@@ -23,4 +23,9 @@ public class SelectBuildingListServiceImpl extends AbstractListServiceImpl<Build
     public SelectBuildingListServiceImpl() {
         super(Building.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

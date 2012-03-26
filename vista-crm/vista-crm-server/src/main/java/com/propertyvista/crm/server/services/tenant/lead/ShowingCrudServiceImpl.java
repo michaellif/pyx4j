@@ -31,16 +31,21 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceImpl<Showing> imp
     }
 
     @Override
-    protected void enhanceRetrieved(Showing entity) {
-        if (!entity.unit().isNull()) {
-            Persistence.service().retrieve(entity.unit().belongsTo(), AttachLevel.ToStringMembers);
-            entity.building().set(entity.unit().belongsTo());
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(Showing entity, Showing dto) {
+        if (!dto.unit().isNull()) {
+            Persistence.service().retrieve(dto.unit().belongsTo(), AttachLevel.ToStringMembers);
+            dto.building().set(dto.unit().belongsTo());
         }
     }
 
     @Override
-    protected void enhanceListRetrieved(Showing entity) {
-        enhanceRetrieved(entity);
+    protected void enhanceListRetrieved(Showing entity, Showing dto) {
+        enhanceRetrieved(entity, dto);
     }
 
     @Override

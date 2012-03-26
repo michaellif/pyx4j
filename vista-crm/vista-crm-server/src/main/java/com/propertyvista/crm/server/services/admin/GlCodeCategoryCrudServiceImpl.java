@@ -22,17 +22,23 @@ import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryCrudServiceImpl extends AbstractCrudServiceImpl<GlCodeCategory> implements GlCodeCategoryCrudService {
 
+    public GlCodeCategoryCrudServiceImpl() {
+        super(GlCodeCategory.class);
+    }
+
     @Override
-    protected void enhanceRetrieved(GlCodeCategory entity) {
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
+    protected void retrievedSingle(GlCodeCategory entity, RetrieveTraget retrieveTraget) {
         Persistence.service().retrieveMember(entity.glCodes());
     }
 
     @Override
-    protected void enhanceListRetrieved(GlCodeCategory entity) {
+    protected void retrievedForList(GlCodeCategory entity) {
         Persistence.service().retrieveMember(entity.glCodes(), AttachLevel.ToStringMembers);
     }
 
-    public GlCodeCategoryCrudServiceImpl() {
-        super(GlCodeCategory.class);
-    }
 }

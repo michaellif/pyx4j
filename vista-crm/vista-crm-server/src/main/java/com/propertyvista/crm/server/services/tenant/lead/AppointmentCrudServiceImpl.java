@@ -23,4 +23,9 @@ public class AppointmentCrudServiceImpl extends AbstractCrudServiceImpl<Appointm
     public AppointmentCrudServiceImpl() {
         super(Appointment.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

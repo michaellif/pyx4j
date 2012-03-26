@@ -28,7 +28,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
 
     @Override
     protected void bind() {
-        bind(MaintenanceRequest.class, dtoProto, dboProto);
+        bindCompleateDBO();
     }
 
     @Override

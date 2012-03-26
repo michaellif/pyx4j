@@ -28,17 +28,22 @@ public class PersonScreeningCrudServiceImpl extends AbstractCrudServiceImpl<Pers
     }
 
     @Override
-    protected void enhanceRetrieved(PersonScreening entity) {
-        // load detached entities:
-        Persistence.service().retrieve(entity.documents());
-        Persistence.service().retrieve(entity.incomes());
-        Persistence.service().retrieve(entity.assets());
-        Persistence.service().retrieve(entity.guarantors());
+    protected void bind() {
+        bindCompleateDBO();
     }
 
     @Override
-    protected void persist(PersonScreening dbo) {
-        super.persist(dbo);
+    protected void enhanceRetrieved(PersonScreening entity, PersonScreening dto) {
+        // load detached entities:
+        Persistence.service().retrieve(dto.documents());
+        Persistence.service().retrieve(dto.incomes());
+        Persistence.service().retrieve(dto.assets());
+        Persistence.service().retrieve(dto.guarantors());
+    }
+
+    @Override
+    protected void persist(PersonScreening dbo, PersonScreening dto) {
+        super.persist(dbo, dto);
 
         int no = 0;
         for (ApplicationDocument applicationDocument : dbo.documents()) {

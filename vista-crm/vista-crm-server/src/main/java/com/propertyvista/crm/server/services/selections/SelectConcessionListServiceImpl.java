@@ -23,4 +23,9 @@ public class SelectConcessionListServiceImpl extends AbstractListServiceImpl<Con
     public SelectConcessionListServiceImpl() {
         super(Concession.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

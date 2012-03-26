@@ -23,4 +23,9 @@ public class LeaseAdjustmentReasonCrudServiceImpl extends AbstractCrudServiceImp
     public LeaseAdjustmentReasonCrudServiceImpl() {
         super(LeaseAdjustmentReason.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

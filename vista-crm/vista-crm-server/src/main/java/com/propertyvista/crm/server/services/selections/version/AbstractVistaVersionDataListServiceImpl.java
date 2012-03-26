@@ -28,11 +28,11 @@ public abstract class AbstractVistaVersionDataListServiceImpl<E extends IVersion
     }
 
     @Override
-    protected void enhanceListRetrieved(E entity) {
+    protected void enhanceListRetrieved(E entity, E dto) {
         if (!entity.createdByUserKey().isNull()) {
             CrmUser user = Persistence.service().retrieve(CrmUser.class, entity.createdByUserKey().getValue());
             if (user != null) {
-                entity.createdByUser().setValue(user.getStringView());
+                dto.createdByUser().setValue(user.getStringView());
             }
         }
     }

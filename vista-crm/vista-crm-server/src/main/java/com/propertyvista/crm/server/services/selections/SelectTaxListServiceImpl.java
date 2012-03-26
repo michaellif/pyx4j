@@ -23,4 +23,9 @@ public class SelectTaxListServiceImpl extends AbstractListServiceImpl<Tax> imple
     public SelectTaxListServiceImpl() {
         super(Tax.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

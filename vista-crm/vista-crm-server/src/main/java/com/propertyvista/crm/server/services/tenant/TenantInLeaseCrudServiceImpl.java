@@ -29,7 +29,7 @@ public class TenantInLeaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Ten
 
     @Override
     protected void bind() {
-        bind(TenantInLease.class, dtoProto, dboProto);
+        bindCompleateDBO();
     }
 
     @Override

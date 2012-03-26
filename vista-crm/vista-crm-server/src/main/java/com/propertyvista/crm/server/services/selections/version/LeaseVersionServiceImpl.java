@@ -22,4 +22,8 @@ public class LeaseVersionServiceImpl extends AbstractVistaVersionDataListService
         super(Lease.LeaseV.class);
     }
 
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

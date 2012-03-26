@@ -23,4 +23,9 @@ public class TaxCrudServiceImpl extends AbstractCrudServiceImpl<Tax> implements 
     public TaxCrudServiceImpl() {
         super(Tax.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

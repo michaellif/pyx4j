@@ -31,13 +31,18 @@ public class BillCrudServiceImpl extends AbstractCrudServiceImpl<Bill> implement
     }
 
     @Override
-    protected void enhanceRetrieved(Bill entity) {
-        // load detached entities:
-        Persistence.service().retrieve(entity.lineItems());
+    protected void bind() {
+        bindCompleateDBO();
     }
 
     @Override
-    protected void persist(Bill entity) {
+    protected void enhanceRetrieved(Bill entity, Bill dto) {
+        // load detached entities:
+        Persistence.service().retrieve(dto.lineItems());
+    }
+
+    @Override
+    protected void persist(Bill entity, Bill dto) {
         throw new IllegalArgumentException();
     }
 

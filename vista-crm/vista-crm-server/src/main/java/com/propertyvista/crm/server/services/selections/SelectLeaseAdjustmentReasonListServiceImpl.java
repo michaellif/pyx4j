@@ -24,4 +24,9 @@ public class SelectLeaseAdjustmentReasonListServiceImpl extends AbstractListServ
     public SelectLeaseAdjustmentReasonListServiceImpl() {
         super(LeaseAdjustmentReason.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

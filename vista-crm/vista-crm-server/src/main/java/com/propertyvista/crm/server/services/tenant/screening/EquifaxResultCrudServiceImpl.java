@@ -23,4 +23,9 @@ public class EquifaxResultCrudServiceImpl extends AbstractCrudServiceImpl<Equifa
     public EquifaxResultCrudServiceImpl() {
         super(EquifaxResult.class);
     }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

@@ -27,6 +27,6 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
 
     @Override
     protected void bind() {
-        bind(Guarantor.class, dtoProto, dboProto);
+        bindCompleateDBO();
     }
 }

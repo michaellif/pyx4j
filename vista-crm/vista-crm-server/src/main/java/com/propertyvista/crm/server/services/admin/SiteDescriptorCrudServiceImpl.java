@@ -40,7 +40,7 @@ public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Si
 
     @Override
     protected void bind() {
-        bind(SiteDescriptor.class, dtoProto, dboProto);
+        bindCompleateDBO();
     }
 
     @Override

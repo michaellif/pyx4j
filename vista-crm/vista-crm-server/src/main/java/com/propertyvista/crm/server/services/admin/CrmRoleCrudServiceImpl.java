@@ -26,16 +26,21 @@ public class CrmRoleCrudServiceImpl extends AbstractCrudServiceImpl<CrmRole> imp
     }
 
     @Override
-    protected void persist(CrmRole entity) {
-        entity.behaviors().clear();
-        VistaCrmBehaviorDTOCoverter.toDBO(entity.permissions(), entity.behaviors());
-        super.persist(entity);
+    protected void bind() {
+        bindCompleateDBO();
     }
 
     @Override
-    protected void enhanceRetrieved(CrmRole entity) {
-        entity.permissions().clear();
-        entity.permissions().addAll(VistaCrmBehaviorDTOCoverter.toDTO(entity.behaviors()));
+    protected void persist(CrmRole entity, CrmRole dto) {
+        entity.behaviors().clear();
+        VistaCrmBehaviorDTOCoverter.toDBO(entity.permissions(), entity.behaviors());
+        super.persist(entity, null);
+    }
+
+    @Override
+    protected void enhanceRetrieved(CrmRole entity, CrmRole dto) {
+        dto.permissions().clear();
+        dto.permissions().addAll(VistaCrmBehaviorDTOCoverter.toDTO(entity.behaviors()));
     }
 
 }

@@ -26,9 +26,14 @@ public class SelectUnitListServiceImpl extends AbstractListServiceImpl<AptUnit> 
     }
 
     @Override
-    protected void enhanceListRetrieved(AptUnit entity) {
-        Persistence.service().retrieve(entity.belongsTo());
-        Persistence.service().retrieve(entity.floorplan());
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceListRetrieved(AptUnit entity, AptUnit dto) {
+        Persistence.service().retrieve(dto.belongsTo());
+        Persistence.service().retrieve(dto.floorplan());
         // TODO actually just this is necessary, but it' doesn't implemented still:
         //Persistence.service().retrieve(entity.floorplan().name());
         //Persistence.service().retrieve(entity.floorplan().marketingName());

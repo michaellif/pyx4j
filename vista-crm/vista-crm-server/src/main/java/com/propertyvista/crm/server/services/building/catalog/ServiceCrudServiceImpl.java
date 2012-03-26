@@ -32,7 +32,12 @@ public class ServiceCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Ser
     }
 
     @Override
-    protected void enhanceRetrieved(Service entity) {
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(Service dbo, Service dto) {
         // Load detached data:
 
         /*
@@ -40,17 +45,17 @@ public class ServiceCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Ser
          * (lister filtering by catalog().building() in @link ServiceItemFolder.AddItem())
          * and building element filtering in ServiceItemEditor
          */
-        Persistence.service().retrieve(entity.catalog());
+        Persistence.service().retrieve(dto.catalog());
 
-        Persistence.service().retrieve(entity.version().items());
-        Persistence.service().retrieve(entity.version().features());
-        Persistence.service().retrieve(entity.version().concessions());
+        Persistence.service().retrieve(dto.version().items());
+        Persistence.service().retrieve(dto.version().features());
+        Persistence.service().retrieve(dto.version().concessions());
 
         // next level:
-        for (ProductItem item : entity.version().items()) {
+        for (ProductItem item : dto.version().items()) {
             Persistence.service().retrieve(item.element());
         }
-        for (Feature feature : entity.version().features()) {
+        for (Feature feature : dto.version().features()) {
             Persistence.service().retrieve(feature.version().items());
             // next level:
             for (ProductItem item : feature.version().items()) {
