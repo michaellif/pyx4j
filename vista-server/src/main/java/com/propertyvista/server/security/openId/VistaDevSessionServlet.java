@@ -51,14 +51,14 @@ public class VistaDevSessionServlet extends HttpServlet {
         response.setDateHeader("Expires", 0); //prevents caching at the proxy server
         response.setDateHeader("X-StatusDate", System.currentTimeMillis());
 
-        DevSession devSession = DevSession.getSession();
-        if (!devSession.isAlive()) {
-            devSession = DevSession.beginSession();
-        }
-        devSession.setAttribute(OpenIdFilter.ACCESS_GRANTED_ATTRIBUTE, Boolean.TRUE);
-        devSession.setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, "tester-a@" + OpenIdServlet.DOMAIN);
-
         if (ApplicationMode.isDevelopment()) {
+            DevSession devSession = DevSession.getSession();
+            if (!devSession.isAlive()) {
+                devSession = DevSession.beginSession();
+            }
+            devSession.setAttribute(OpenIdFilter.ACCESS_GRANTED_ATTRIBUTE, Boolean.TRUE);
+            devSession.setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, "tester-a@" + OpenIdServlet.DOMAIN);
+
             String tp = request.getParameter("long");
             if (CommonsStringUtils.isStringSet(tp)) {
                 openStart = System.currentTimeMillis();
@@ -75,16 +75,17 @@ public class VistaDevSessionServlet extends HttpServlet {
                     }, 2000, 2000);
                 }
             }
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println("<html>");
+            out.println("<head><title>Dev System</title></head>");
+            out.println("<body>");
+            out.println("<span>OK</span><p/>");
+            out.println("<span>" + new Date().toString() + "</span><p/>");
+            out.println("</body>");
+            out.println("</html>");
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
-
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("<html>");
-        out.println("<head><title>Dev System</title></head>");
-        out.println("<body>");
-        out.println("<span>OK</span><p/>");
-        out.println("<span>" + new Date().toString() + "</span><p/>");
-        out.println("</body>");
-        out.println("</html>");
     }
 }
