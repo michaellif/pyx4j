@@ -139,10 +139,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         // tweak property code editing UI:
         if (isEditable()) {
-            get(proto().propertyCode()).setViewable(true);
+            get(proto().propertyCode()).setViewable(false);
             ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
                     new DefaultAsyncCallback<IdAssignmentPolicy>() {
-
                         @Override
                         public void onSuccess(IdAssignmentPolicy result) {
                             IdAssignmentItem targetItem = null;
@@ -157,10 +156,10 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                                 switch (targetItem.type().getValue()) {
                                 case generatedAlphaNumeric:
                                 case generatedNumber:
-                                    get(proto().propertyCode()).setViewable(false);
+                                    get(proto().propertyCode()).setViewable(true);
                                     break;
                                 case userEditable:
-                                    get(proto().propertyCode()).setViewable(true);
+                                    get(proto().propertyCode()).setViewable(false);
                                     break;
                                 case userCreated:
                                     get(proto().propertyCode()).setViewable(getValue().getPrimaryKey() != null);
