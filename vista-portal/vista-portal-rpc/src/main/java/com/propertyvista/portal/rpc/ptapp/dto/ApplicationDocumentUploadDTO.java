@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -23,8 +22,6 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 
 @Transient
 public interface ApplicationDocumentUploadDTO extends IEntity {
-
-    IPrimitive<Key> tenantInLeaseId();
 
     @NotNull
     IdentificationDocumentType identificationDocument();

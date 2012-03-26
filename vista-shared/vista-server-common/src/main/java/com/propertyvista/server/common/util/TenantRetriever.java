@@ -120,6 +120,10 @@ public class TenantRetriever {
     }
 
     public void saveScreening() {
+        for (ApplicationDocument doc : tenantScreening.documents()) {
+            doc.owner().set(tenantScreening);
+        }
+
         Persistence.service().merge(tenantScreening);
 
         // save detached entities:

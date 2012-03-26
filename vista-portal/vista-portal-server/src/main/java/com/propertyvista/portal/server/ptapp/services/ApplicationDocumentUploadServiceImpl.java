@@ -16,10 +16,15 @@ package com.propertyvista.portal.server.ptapp.services;
 import java.util.Collection;
 
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -42,6 +47,8 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
         ApplicationDocumentUploadService {
 
     private static final I18n i18n = I18n.get(ApplicationDocumentUploadServiceImpl.class);
+
+    private static final Logger log = LoggerFactory.getLogger(ApplicationDocumentUploadServiceImpl.class);
 
     @Override
     public long getMaxSize() {
@@ -66,12 +73,18 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
         ApplicationDocumentUploadDTO dto = process.getData();
 
         if (SecurityController.checkBehavior(VistaTenantBehavior.Prospective)) {
-            TenantInLease tenantInLease = Persistence.service().retrieve(TenantInLease.class, dto.tenantInLeaseId().getValue());
+            // allow a user to mess only with its own application
+            // (actually it doesn't matter because once uploaded a document is not bound to application but to user)            
+            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().tenant().user(), PtAppContext.getCurrentUser()));
+            TenantInLease tenantInLease = Persistence.service().retrieve(criteria);
             if (tenantInLease == null) {
-                throw new Error("Unknown tenantInLease: " + dto.tenantInLeaseId().getValue());
+                throw new Error("TenantInLease corresponding to current user was not found");
             }
             if (!EqualsHelper.equals(tenantInLease.application().getPrimaryKey(), PtAppContext.getCurrentUserApplicationPrimaryKey())) {
-                throw new Error("Wrong ApplicationId: " + tenantInLease.application().getPrimaryKey());
+                log.warn(SimpleMessageFormat.format("Pt App user {0} have tried to access application number {1} that does not belong to him", PtAppContext
+                        .getCurrentUser().getPrimaryKey(), PtAppContext.getCurrentUserApplicationPrimaryKey()));
+                throw new Error("Wrong application: " + tenantInLease.application().getPrimaryKey());
             }
         } else {
             SecurityController.assertBehavior(VistaCrmBehavior.Tenants);

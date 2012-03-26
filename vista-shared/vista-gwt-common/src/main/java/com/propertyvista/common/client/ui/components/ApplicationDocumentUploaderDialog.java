@@ -24,7 +24,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.EntityDataSource;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
@@ -61,11 +60,8 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
     private CEntityDecoratableEditor<ApplicationDocumentUploadDTO> documentUploadForm;
 
     @SuppressWarnings("unchecked")
-    public ApplicationDocumentUploaderDialog(String title, final Key tenantId) {
+    public ApplicationDocumentUploaderDialog(String title, final Key applicationId) {
         dialog = new Dialog(title, this, null);
-
-        ApplicationDocumentUploadDTO dto = EntityFactory.create(ApplicationDocumentUploadDTO.class);
-        dto.tenantInLeaseId().setValue(tenantId);
 
         documentUploadForm = new CEntityDecoratableEditor<ApplicationDocumentUploadDTO>(ApplicationDocumentUploadDTO.class) {
             @Override
@@ -114,7 +110,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
         documentUploadForm.asWidget().setSize("400px", "100%");
         documentUploadForm.initContent();
         documentUploadForm.setMandatory(true);
-        documentUploadForm.populate(dto);
+        documentUploadForm.populateNew();
 
         uploadPanel = new UploadPanel<ApplicationDocumentUploadDTO, ApplicationDocument>(
                 (UploadService<ApplicationDocumentUploadDTO, ApplicationDocument>) GWT.create(ApplicationDocumentUploadService.class)) {
