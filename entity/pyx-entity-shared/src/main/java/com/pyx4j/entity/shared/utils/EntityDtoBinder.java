@@ -99,6 +99,11 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         bindingByDTOMemberPath.put(b.dtoMemberPath, b);
     }
 
+    @SuppressWarnings("unchecked")
+    protected final void bindCompleateDBO() {
+        bind((Class<IEntity>) dboProto.getValueClass(), dtoProto, dboProto);
+    }
+
     protected final <TYPE> void bind(IObject<TYPE> dtoMember, IObject<TYPE> dboMember) {
         addBinding(new Binding(dtoMember, dboMember, null));
     }

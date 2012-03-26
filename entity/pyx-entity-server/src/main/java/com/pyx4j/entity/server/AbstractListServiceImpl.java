@@ -20,54 +20,13 @@
  */
 package com.pyx4j.entity.server;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.security.shared.SecurityController;
 
-public abstract class AbstractListServiceImpl<E extends IEntity> implements AbstractListService<E> {
-
-    protected Class<E> entityClass;
+public abstract class AbstractListServiceImpl<E extends IEntity> extends AbstractListServiceDtoImpl<E, E> implements AbstractListService<E> {
 
     public AbstractListServiceImpl(Class<E> entityClass) {
-        this.entityClass = entityClass;
+        super(entityClass, entityClass);
     }
 
-    /**
-     * This method called for every entity returned to the GWT client for listing. As opposite to single entity in retrieve/save operations.
-     * This function is empty no need to call when you override this method
-     */
-    protected void enhanceListRetrieved(E entity) {
-    }
-
-    protected void delete(E actualEntity) {
-        Persistence.service().delete(actualEntity);
-    }
-
-    @Override
-    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        SecurityController.assertPermission(new EntityPermission(entityClass, EntityPermission.DELETE));
-        E actualEntity = Persistence.service().retrieve(entityClass, entityId);
-        SecurityController.assertPermission(EntityPermission.permissionDelete(actualEntity));
-        delete(actualEntity);
-        Persistence.service().commit();
-        callback.onSuccess(true);
-    }
-
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<E>> callback, EntityListCriteria<E> criteria) {
-        if (!criteria.getEntityClass().equals(entityClass)) {
-            throw new Error("Service " + this.getClass().getName() + " declaration error. " + entityClass + "!=" + criteria.getEntityClass());
-        }
-        EntitySearchResult<E> result = Persistence.secureQuery(criteria);
-        for (E entity : result.getData()) {
-            enhanceListRetrieved(entity);
-        }
-        callback.onSuccess(result);
-    }
 }

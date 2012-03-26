@@ -81,7 +81,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
     public void approveFinal(AsyncCallback<VoidSerializable> callback, Key entityId) {
         E entity = Persistence.secureRetrieve(entityClass, entityId.asDraftKey());
         entity.saveAction().setValue(SaveAction.saveAsFinal);
-        persist(entity);
+        persist(entity, null);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

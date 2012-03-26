@@ -47,6 +47,13 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
     }
 
     /**
+     * This method called for every entity returned to the GWT client for listing. As opposite to single entity in retrieve/save operations.
+     * This function is empty no need to call when you override this method
+     */
+    protected void enhanceListRetrieved(E entity, DTO dto) {
+    }
+
+    /**
      * Used to retrieve bound detached members before they are copied to DTO
      * TODO To make it work magically we have implemented retriveDetachedMember
      */
@@ -56,9 +63,6 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
     @Override
     protected boolean retriveDetachedMember(IEntity dboMemeber) {
         return Persistence.service().retrieve(dboMemeber);
-    }
-
-    protected void enhanceListRetrieved(E entity, DTO dto) {
     }
 
     protected Path convertPropertyDTOPathToDBOPath(String path, E dboProto, DTO dtoProto) {

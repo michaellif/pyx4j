@@ -20,63 +20,13 @@
  */
 package com.pyx4j.entity.server;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
-public abstract class AbstractCrudServiceImpl<E extends IEntity> extends AbstractListServiceImpl<E> implements AbstractCrudService<E> {
-
-    private static final I18n i18n = I18n.get(AbstractCrudServiceImpl.class);
+public abstract class AbstractCrudServiceImpl<E extends IEntity> extends AbstractCrudServiceDtoImpl<E, E> implements AbstractCrudService<E> {
 
     public AbstractCrudServiceImpl(Class<E> entityClass) {
-        super(entityClass);
-    }
-
-    /**
-     * This method called for single entity returned to the GWT client. As opposite to entries in list.
-     * This is empty callback function that don't need to be called from implementation.
-     */
-    protected void enhanceRetrieved(E entity) {
-    }
-
-    protected E retrieve(Key entityId, RetrieveTraget retrieveTraget) {
-        E entity = Persistence.secureRetrieve(entityClass, entityId);
-        if (entity == null) {
-            throw new UnRecoverableRuntimeException(i18n.tr("{0} not found", EntityFactory.getEntityMeta(entityClass).getCaption()));
-        }
-        return entity;
-    }
-
-    protected void persist(E entity) {
-        Persistence.secureSave(entity);
-    }
-
-    @Override
-    public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveTraget retrieveTraget) {
-        E entity = retrieve(entityId, retrieveTraget);
-        enhanceRetrieved(entity);
-        callback.onSuccess(entity);
-    }
-
-    @Override
-    public void create(AsyncCallback<E> callback, E entity) {
-        persist(entity);
-        Persistence.service().commit();
-        enhanceRetrieved(entity);
-        callback.onSuccess(entity);
-    }
-
-    @Override
-    public void save(AsyncCallback<E> callback, E entity) {
-        persist(entity);
-        Persistence.service().commit();
-        enhanceRetrieved(entity);
-        callback.onSuccess(entity);
+        super(entityClass, entityClass);
     }
 
 }
