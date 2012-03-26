@@ -19,12 +19,12 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.crm.server.util.TransientListHelpers;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.News;
@@ -32,10 +32,15 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<SiteDescriptor, SiteDescriptorDTO> implements SiteDescriptorCrudService {
+public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteDescriptor, SiteDescriptorDTO> implements SiteDescriptorCrudService {
 
     public SiteDescriptorCrudServiceImpl() {
         super(SiteDescriptor.class, SiteDescriptorDTO.class);
+    }
+
+    @Override
+    protected void bind() {
+        bind(SiteDescriptor.class, dtoProto, dboProto);
     }
 
     @Override
@@ -53,7 +58,7 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<Sit
     }
 
     @Override
-    protected void persistDBO(SiteDescriptor dbo, SiteDescriptorDTO in) {
+    protected void persist(SiteDescriptor dbo, SiteDescriptorDTO in) {
         // save transient data:
         TransientListHelpers.save(in.news(), News.class);
         TransientListHelpers.save(in.testimonials(), Testimonial.class);
@@ -62,20 +67,19 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<Sit
         TransientListHelpers.save(in.locales(), AvailableLocale.class);
 
         dbo._updateFlag().updated().setValue(new Date());
-        super.persistDBO(dbo, in);
+        super.persist(dbo, in);
     }
 
     @Override
-    protected void enhanceDTO(SiteDescriptor in, SiteDescriptorDTO dto, boolean fromList) {
-        if (!fromList) {
-            // load transient data:
-            dto.news().addAll(Persistence.service().query(EntityQueryCriteria.create(News.class)));
-            dto.testimonials().addAll(Persistence.service().query(EntityQueryCriteria.create(Testimonial.class)));
-            {
-                EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
-                criteria.asc(criteria.proto().displayOrder().getPath().toString());
-                dto.locales().addAll(Persistence.service().query(criteria));
-            }
+    protected void enhanceRetrieved(SiteDescriptor in, SiteDescriptorDTO dto) {
+        // load transient data:
+        dto.news().addAll(Persistence.service().query(EntityQueryCriteria.create(News.class)));
+        dto.testimonials().addAll(Persistence.service().query(EntityQueryCriteria.create(Testimonial.class)));
+        {
+            EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
+            criteria.asc(criteria.proto().displayOrder().getPath().toString());
+            dto.locales().addAll(Persistence.service().query(criteria));
         }
     }
+
 }
