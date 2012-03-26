@@ -19,9 +19,8 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.policy.framework.Policy;
 
+@SuppressWarnings("serial")
 public class PolicyNotFoundException extends UserRuntimeException {
-
-    private static final long serialVersionUID = 1L;
 
     private static final I18n i18n = I18n.get(PolicyNotFoundException.class);
 
@@ -29,6 +28,6 @@ public class PolicyNotFoundException extends UserRuntimeException {
     }
 
     public PolicyNotFoundException(Class<? extends Policy> policyClass, String nodeStringView) {
-        super(i18n.tr("Policy '{0}' was not found for node '{1}'", GWTJava5Helper.getSimpleName(policyClass), nodeStringView));
+        super(i18n.tr("Policy ''{0}'' was not found for node ''{1}''", GWTJava5Helper.getSimpleName(policyClass), nodeStringView));
     }
 }
