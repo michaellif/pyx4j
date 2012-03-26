@@ -19,6 +19,7 @@ import java.util.List;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.DepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.IdAssignmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseTermsPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MiscPolicyPreloader;
@@ -36,7 +37,8 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
                     LeaseTermsPolicyPreloader.class,
                     EmailTemplatesPolicyPreloader.class,
                     DepositPolicyPreloader.class,
-                    LeaseBillingPolicyPreloader.class
+                    LeaseBillingPolicyPreloader.class,
+                    IdAssignmentPolicyPreloader.class
             }
     ); //@formatter:on
 
@@ -49,7 +51,8 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
                     EmailTemplatesPolicyPreloader.class,
                     ProductTaxPolicyPreloader.class,
                     DepositPolicyPreloader.class,
-                    LeaseBillingPolicyPreloader.class
+                    LeaseBillingPolicyPreloader.class,
+                    IdAssignmentPolicyPreloader.class
             }
     ); //@formatter:on
 
