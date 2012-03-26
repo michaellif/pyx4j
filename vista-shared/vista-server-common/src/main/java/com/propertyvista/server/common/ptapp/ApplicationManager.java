@@ -116,6 +116,22 @@ public class ApplicationManager {
         }
     }
 
+    public static void sendApproveDeclineApplicationEmail(Lease lease, boolean isApproved) {
+        Persistence.service().retrieve(lease.version().tenants());
+        for (TenantInLease tenantInLease : lease.version().tenants()) {
+            Application test = tenantInLease.application();
+            if (test.getValue() == null) { //co-applicants have no dedicated application
+                return;
+            }
+            Persistence.service().retrieve(tenantInLease.tenant().user());
+            TenantUser user = tenantInLease.tenant().user();
+            MailMessage m = new MailMessage();
+            m.setTo(user.email().getValue());
+            m.setSender(MessageTemplates.getSender());
+            sendApproveDeclineEmail(user, tenantInLease, isApproved);
+        }
+    }
+
     public static void makeApplicationCompleted(Application application) {
         application.status().setValue(MasterApplication.Status.Submitted);
         Persistence.service().persist(application);
@@ -377,6 +393,28 @@ public class ApplicationManager {
         m.setSender(MessageTemplates.getSender());
         // set email subject and body from the template
         MessageTemplates.createMasterApplicationInvitationEmail(m, user, emailTemplateType, lease, token);
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
+    }
+
+    private static void sendApproveDeclineEmail(TenantUser user, TenantInLease tenantInLease, boolean isApproved) {
+        // Create Token and other stuff
+//        String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
+//        if (token == null) {
+//            throw new UserRuntimeException("Invalid user account");
+//        }
+
+        MailMessage m = new MailMessage();
+        m.setTo(user.email().getValue());
+        m.setSender(MessageTemplates.getSender());
+        // set email subject and body from the template
+        if (isApproved) {
+            MessageTemplates.createApplicationApprovedEmail(m, tenantInLease);
+        } else {
+            MessageTemplates.createApplicationDeclinedEmail(m, tenantInLease);
+        }
+
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }

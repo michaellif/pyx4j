@@ -111,6 +111,29 @@ public class MessageTemplates {
         email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
     }
 
+    public static void createMasterApplicationInvitationEmail(MailMessage email, TenantUser tenantUser, EmailTemplateType emailType, Lease lease, String token) {
+        // get building policy node
+        Persistence.service().retrieve(lease.unit());
+        Persistence.service().retrieve(lease.unit().belongsTo());
+        Building building = lease.unit().belongsTo();
+        if (building == null || building.isNull()) {
+            throw new Error("No building node found");
+        }
+        EmailTemplate emailTemplate = getEmailTemplate(emailType, building);
+        // create required data context
+        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+        context.user().set(tenantUser);
+        context.lease().set(lease);
+        context.accessToken().setValue(token);
+        // load data objects for template variable lookup
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(emailType)) {
+            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+        }
+        email.setSubject(emailTemplate.subject().getValue());
+        email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
+    }
+
     public static void createPasswordResetEmail(MailMessage email, VistaBasicBehavior application, AbstractUser user, String token) {
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         context.accessToken().setValue(token);
@@ -151,29 +174,6 @@ public class MessageTemplates {
         EmailTemplate emailTemplate = getEmailTemplate(templateType, policyNode);
         ArrayList<IEntity> data = new ArrayList<IEntity>();
         for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(templateType)) {
-            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
-        }
-        email.setSubject(emailTemplate.subject().getValue());
-        email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
-    }
-
-    public static void createMasterApplicationInvitationEmail(MailMessage email, TenantUser tenantUser, EmailTemplateType emailType, Lease lease, String token) {
-        // get building policy node
-        Persistence.service().retrieve(lease.unit());
-        Persistence.service().retrieve(lease.unit().belongsTo());
-        Building building = lease.unit().belongsTo();
-        if (building == null || building.isNull()) {
-            throw new Error("No building node found");
-        }
-        EmailTemplate emailTemplate = getEmailTemplate(emailType, building);
-        // create required data context
-        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
-        context.user().set(tenantUser);
-        context.lease().set(lease);
-        context.accessToken().setValue(token);
-        // load data objects for template variable lookup
-        ArrayList<IEntity> data = new ArrayList<IEntity>();
-        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(emailType)) {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
         email.setSubject(emailTemplate.subject().getValue());

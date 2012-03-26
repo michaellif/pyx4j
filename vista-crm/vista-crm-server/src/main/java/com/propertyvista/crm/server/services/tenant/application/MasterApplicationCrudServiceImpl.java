@@ -39,6 +39,7 @@ import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.ApplicationUserDTO.ApplicationUser;
@@ -109,10 +110,12 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
 
         switch (actionDTO.status().getValue()) {
         case Approved:
-            new LeaseManager().approveApplication(dbo.lease().getPrimaryKey());
+            Lease approvedLease = new LeaseManager().approveApplication(dbo.lease().getPrimaryKey());
+            ApplicationManager.sendApproveDeclineApplicationEmail(approvedLease, true);
             break;
         case Declined:
-            new LeaseManager().declineApplication(dbo.lease().getPrimaryKey());
+            Lease declinedLease = new LeaseManager().declineApplication(dbo.lease().getPrimaryKey());
+            ApplicationManager.sendApproveDeclineApplicationEmail(declinedLease, false);
             break;
         case Cancelled:
             new LeaseManager().cancelApplication(dbo.lease().getPrimaryKey());
