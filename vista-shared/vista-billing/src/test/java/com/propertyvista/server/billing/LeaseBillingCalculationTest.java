@@ -17,4 +17,8 @@ import junit.framework.TestCase;
 
 public class LeaseBillingCalculationTest extends TestCase {
 
+    // TODO test somthing
+    public void testNothing() {
+
+    }
 }
