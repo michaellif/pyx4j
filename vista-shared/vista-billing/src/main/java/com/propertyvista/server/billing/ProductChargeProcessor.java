@@ -51,6 +51,8 @@ public class ProductChargeProcessor {
 
         if (!Bill.BillType.Final.equals(billing.getNextPeriodBill().billType().getValue())) {
             createChargeForNextPeriod(billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().serviceItem());
+
+            //TODO add revised charges
         }
 
         for (BillableItem billableItem : billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().featureItems()) {
@@ -274,8 +276,8 @@ public class ProductChargeProcessor {
     private void calculateTax(InvoiceProductCharge charge) {
         if (!charge.amount().isNull()) {
             charge.taxes().addAll(
-                    TaxUtils.calculateTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().type(), billing
-                            .getNextPeriodBill().billingRun().building()));
+                    TaxUtils.calculateTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().type(), billing.getNextPeriodBill()
+                            .billingRun().building()));
         }
         charge.taxTotal().setValue(new BigDecimal(0));
         for (InvoiceChargeTax chargeTax : charge.taxes()) {
