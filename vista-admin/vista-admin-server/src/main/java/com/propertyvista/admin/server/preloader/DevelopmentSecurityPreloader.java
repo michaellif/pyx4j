@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader;
+package com.propertyvista.admin.server.preloader;
 
 import java.util.List;
 import java.util.Locale;

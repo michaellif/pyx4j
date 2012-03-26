@@ -17,8 +17,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.dev.DevSession;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.SystemConfig;
+import com.propertyvista.server.domain.admin.Pmc;
 import com.propertyvista.server.domain.dev.DevelopmentUser;
 
 public class DevelopmentSecurity {
@@ -55,11 +57,17 @@ public class DevelopmentSecurity {
     }
 
     public static DevelopmentUser findDevelopmentUser() {
-        DevelopmentUser developmentUser = findByHost();
-        if (developmentUser != null) {
-            return developmentUser;
+        final String requestNamespace = NamespaceManager.getNamespace();
+        try {
+            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            DevelopmentUser developmentUser = findByHost();
+            if (developmentUser != null) {
+                return developmentUser;
+            }
+            return findByOpenId();
+        } finally {
+            NamespaceManager.setNamespace(requestNamespace);
         }
-        return findByOpenId();
     }
 
     private static DevelopmentUser findByHost() {

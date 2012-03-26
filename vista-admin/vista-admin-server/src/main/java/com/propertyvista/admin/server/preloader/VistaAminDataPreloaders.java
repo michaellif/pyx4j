@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.server.preloader;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
 public class VistaAminDataPreloaders extends DataPreloaderCollection {
@@ -20,6 +21,9 @@ public class VistaAminDataPreloaders extends DataPreloaderCollection {
     public VistaAminDataPreloaders() {
         add(new AminUsersPreloader());
         add(new OnboardingUserPreloader());
+        if (ApplicationMode.isDevelopment()) {
+            add(new DevelopmentSecurityPreloader());
+        }
     }
 
 }
