@@ -165,9 +165,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
             uploadPanel.uploadSubmit();
             return false;
         } else {
-            if (documentUploadForm.getValue().details().isNull()) {
-                MessageDialog.error(i18n.tr("Validation Error"), documentUploadForm.getValidationMessage());
-            }
+            MessageDialog.error(i18n.tr("Validation Error"), documentUploadForm.getValidationResults().getMessagesText(true));
             return false;
         }
     }
