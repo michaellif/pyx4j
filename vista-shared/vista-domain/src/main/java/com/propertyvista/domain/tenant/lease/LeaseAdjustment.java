@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.GeneratedValue;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
@@ -41,6 +42,16 @@ public interface LeaseAdjustment extends IEntity {
     @I18n
     @XmlType(name = "LeaseAdjustmentActionType")
     enum ActionType {
+        charge, credit;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @I18n
+    enum ExecutionType {
         pending, immediate;
 
         @Override
@@ -49,8 +60,14 @@ public interface LeaseAdjustment extends IEntity {
         }
     }
 
+    @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
+    IPrimitive<String> uid();
+
     @NotNull
     IPrimitive<ActionType> actionType();
+
+    @NotNull
+    IPrimitive<ExecutionType> executionType();
 
     @NotNull
     @ToString(index = 0)

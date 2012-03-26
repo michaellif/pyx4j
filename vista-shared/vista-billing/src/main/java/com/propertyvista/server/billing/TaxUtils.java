@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
@@ -42,9 +41,9 @@ public class TaxUtils {
         return calculateTaxes(baseAmount, taxes);
     }
 
-    public static Collection<? extends InvoiceChargeTax> calculateTaxes(BigDecimal value, LeaseAdjustmentReason reason, Building building) {
-        // TODO Auto-generated method stub
-        return null;
+    public static Collection<? extends InvoiceChargeTax> calculateTaxes(BigDecimal baseAmount, LeaseAdjustmentReason reason, Building building) {
+        List<Tax> taxes = retrieveTaxesForAdjustmentReason(reason, building);
+        return calculateTaxes(baseAmount, taxes);
     }
 
     static List<InvoiceChargeTax> calculateTaxes(final BigDecimal baseAmount, List<Tax> taxes) {
@@ -86,6 +85,12 @@ public class TaxUtils {
             productTaxPolicyItem = Persistence.service().retrieve(criteria);
         }
 
-        return productTaxPolicyItem == null ? new LinkedList<Tax>() : productTaxPolicyItem.taxes();
+        return productTaxPolicyItem == null ? new ArrayList<Tax>() : productTaxPolicyItem.taxes();
     }
+
+    private static List<Tax> retrieveTaxesForAdjustmentReason(LeaseAdjustmentReason reason, Building building) {
+//TODO
+        return new ArrayList<Tax>();
+    }
+
 }

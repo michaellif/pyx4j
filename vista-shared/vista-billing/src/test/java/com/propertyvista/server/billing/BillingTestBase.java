@@ -43,7 +43,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ActionType;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -250,19 +250,19 @@ abstract class BillingTestBase extends VistaDBTestBase {
         return null;
     }
 
-    protected BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ActionType termType) {
+    protected BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ExecutionType termType) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         return addBillableItemAdjustment(billableItemId, value, adjustmentType, termType, lease.leaseFrom().getValue(), lease.leaseTo().getValue());
 
     }
 
-    protected BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ActionType termType,
+    protected BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ExecutionType termType,
             String effectiveDate, String expirationDate) {
         return addBillableItemAdjustment(billableItemId, value, adjustmentType, termType, BillingTestUtils.getDate(effectiveDate),
                 BillingTestUtils.getDate(expirationDate));
     }
 
-    private BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ActionType actionType,
+    private BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ExecutionType executionType,
             LogicalDate effectiveDate, LogicalDate expirationDate) {
 
         Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
@@ -276,10 +276,10 @@ abstract class BillingTestBase extends VistaDBTestBase {
             adjustment.value().setValue(new BigDecimal(value));
         }
         adjustment.adjustmentType().setValue(adjustmentType);
-        adjustment.actionType().setValue(actionType);
+        adjustment.executionType().setValue(executionType);
         adjustment.effectiveDate().setValue(effectiveDate);
         adjustment.expirationDate().setValue(expirationDate);
-        adjustment.description().setValue(actionType.name());
+        adjustment.description().setValue(executionType.name());
 
         actualBillableItem.adjustments().add(adjustment);
 
@@ -301,12 +301,13 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
         LeaseAdjustment adjustment = EntityFactory.create(LeaseAdjustment.class);
         adjustment.effectiveDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));
-        if (amount == null) {
-            adjustment.amount().setValue(null);
-        } else {
-            adjustment.amount().setValue(new BigDecimal(amount));
+        adjustment.amount().setValue(new BigDecimal(amount));
+        adjustment.executionType().setValue(immediate ? LeaseAdjustment.ExecutionType.immediate : LeaseAdjustment.ExecutionType.pending);
+        if (adjustment.amount().getValue().compareTo(new BigDecimal("0")) > 0) {
+            adjustment.actionType().setValue(LeaseAdjustment.ActionType.credit);
+        } else if (adjustment.amount().getValue().compareTo(new BigDecimal("0")) < 0) {
+            adjustment.actionType().setValue(LeaseAdjustment.ActionType.charge);
         }
-        adjustment.actionType().setValue(immediate ? LeaseAdjustment.ActionType.immediate : LeaseAdjustment.ActionType.pending);
         adjustment.effectiveDate().setValue(effectiveDate);
         adjustment.description().setValue(reason.name().getValue());
         adjustment.reason().setValue(reason.getValue());
@@ -354,11 +355,11 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
     private BillableItem findBillableItem(String billableItemId, Lease lease) {
         BillableItem billableItem = null;
-        if (lease.version().leaseProducts().serviceItem().originalId().getValue().equals(billableItemId)) {
+        if (lease.version().leaseProducts().serviceItem().uid().getValue().equals(billableItemId)) {
             billableItem = lease.version().leaseProducts().serviceItem();
         } else {
             for (BillableItem item : lease.version().leaseProducts().featureItems()) {
-                if (item.originalId().getValue().equals(billableItemId)) {
+                if (item.uid().getValue().equals(billableItemId)) {
                     billableItem = item;
                     break;
                 }

@@ -192,7 +192,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             columns.add(new EntityFolderColumnDescriptor(proto().adjustmentType(), "8em"));
             columns.add(new EntityFolderColumnDescriptor(proto().chargeType(), "9em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().actionType(), "8em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().executionType(), "8em"));
             columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
             columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
             columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "9em"));

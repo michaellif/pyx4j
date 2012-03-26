@@ -34,7 +34,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 public interface BillableItem extends IEntity {
 
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
-    IPrimitive<String> originalId();
+    IPrimitive<String> uid();
 
     @ToString(index = 0)
     @Caption(name = "Product Item")

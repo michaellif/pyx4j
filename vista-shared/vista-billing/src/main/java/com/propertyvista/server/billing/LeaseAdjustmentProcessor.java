@@ -13,9 +13,14 @@
  */
 package com.propertyvista.server.billing;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
+import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class LeaseAdjustmentProcessor {
@@ -27,9 +32,35 @@ public class LeaseAdjustmentProcessor {
     }
 
     void createPendingLeaseAdjustments() {
-        for (LeaseAdjustment item : billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().adjustments()) {
-            if (LeaseAdjustment.ActionType.pending.equals(item.actionType().getValue())) {
-                createPendingLeaseAdjustment(item);
+        for (LeaseAdjustment adjustment : billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().adjustments()) {
+            if (LeaseAdjustment.ExecutionType.pending.equals(adjustment.executionType().getValue())) {
+                // Find if adjustment effective date failes on current or next billing period 
+                DateRange overlap = DateUtils.getOverlappingRange(new DateRange(billing.getCurrentPeriodBill().billingPeriodStartDate().getValue(), billing
+                        .getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(adjustment.effectiveDate().getValue(), adjustment
+                        .effectiveDate().getValue()));
+                if (overlap != null) {
+                    //Check if that adjustment is already presented in previous bill
+                    boolean attachedToPreviousBill = false;
+                    if (LeaseAdjustment.ActionType.charge.equals(adjustment.actionType().getValue())) {
+                        for (InvoiceAccountCharge charge : BillingUtils.getLineItemsForType(billing.getCurrentPeriodBill(), InvoiceAccountCharge.class)) {
+                            if (charge.adjustment().uid().equals(adjustment.uid())) {
+                                attachedToPreviousBill = true;
+                            }
+                        }
+                        if (!attachedToPreviousBill) {
+                            createPendingCharge(adjustment);
+                        }
+                    } else if (LeaseAdjustment.ActionType.credit.equals(adjustment.actionType().getValue())) {
+                        for (InvoiceAccountCredit credit : BillingUtils.getLineItemsForType(billing.getCurrentPeriodBill(), InvoiceAccountCredit.class)) {
+                            if (credit.adjustment().uid().equals(adjustment.uid())) {
+                                attachedToPreviousBill = true;
+                            }
+                        }
+                        if (!attachedToPreviousBill) {
+                            createPendingCredit(adjustment);
+                        }
+                    }
+                }
             }
         }
     }
@@ -41,42 +72,62 @@ public class LeaseAdjustmentProcessor {
         }
     }
 
-    private void createPendingLeaseAdjustment(LeaseAdjustment item) {
-        if (!isLeaseAdjustmentApplicable(item)) {
-            return;
-        }
-
-        InvoiceAccountCredit adjustment = EntityFactory.create(InvoiceAccountCredit.class);
-        adjustment.bill().set(billing.getNextPeriodBill());
-
-        billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(item.amount().getValue()));
-
-//        if (!adjustment.amount().isNull()) {
-//            adjustment.taxes().addAll(
-//                    TaxUtils.calculateTaxes(adjustment.amount().getValue(), item.reason(), billing.getNextPeriodBill().billingRun().building()));
-//        }
-//        adjustment.taxTotal().setValue(new BigDecimal(0));
-//        for (InvoiceChargeTax chargeTax : adjustment.taxes()) {
-//            adjustment.taxTotal().setValue(adjustment.taxTotal().getValue().add(chargeTax.amount().getValue()));
-//        }
-
-        addLeaseAdjustment(adjustment);
-    }
-
-    private void addLeaseAdjustment(InvoiceAccountCredit item) {
-        billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(item.amount().getValue()));
-        billing.getNextPeriodBill().lineItems().add(item);
-//        billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(item.taxTotal().getValue()));
-    }
-
     private void attachImmediateLeaseAdjustment(InvoiceAccountCredit adjustment) {
         // TODO Auto-generated method stub
 
     }
 
-    private boolean isLeaseAdjustmentApplicable(LeaseAdjustment item) {
-        // TODO Implement
-        return true;
+    private void createPendingCharge(LeaseAdjustment adjustment) {
+        InvoiceAccountCharge charge = EntityFactory.create(InvoiceAccountCharge.class);
+
+        charge.billingAccount().set(billing.getNextPeriodBill().billingAccount());
+        charge.bill().set(billing.getNextPeriodBill());
+        charge.adjustment().set(adjustment);
+
+        calculateTax(charge);
+
+        Persistence.service().persist(charge);
+
+        addCharge(charge);
+
+    }
+
+    private void createPendingCredit(LeaseAdjustment adjustment) {
+        InvoiceAccountCredit credit = EntityFactory.create(InvoiceAccountCredit.class);
+
+        credit.billingAccount().set(billing.getNextPeriodBill().billingAccount());
+        credit.bill().set(billing.getNextPeriodBill());
+        credit.amount().setValue(adjustment.amount().getValue().negate());
+        credit.adjustment().set(adjustment);
+
+        Persistence.service().persist(credit);
+
+        addCredit(credit);
+
+    }
+
+    private void addCharge(InvoiceAccountCharge charge) {
+        billing.getNextPeriodBill().totalAdjustments()
+                .setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(charge.totalBeforeTax().getValue()));
+        billing.getNextPeriodBill().lineItems().add(charge);
+        billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(charge.taxTotal().getValue()));
+    }
+
+    private void addCredit(InvoiceAccountCredit credit) {
+        billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(credit.amount().getValue()));
+        billing.getNextPeriodBill().lineItems().add(credit);
+    }
+
+    private void calculateTax(InvoiceAccountCharge charge) {
+        if (!charge.totalBeforeTax().isNull()) {
+            charge.taxes().addAll(
+                    TaxUtils.calculateTaxes(charge.totalBeforeTax().getValue(), charge.adjustment().reason(), billing.getNextPeriodBill().billingRun()
+                            .building()));
+        }
+        charge.taxTotal().setValue(new BigDecimal(0));
+        for (InvoiceChargeTax chargeTax : charge.taxes()) {
+            charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
+        }
     }
 
 }

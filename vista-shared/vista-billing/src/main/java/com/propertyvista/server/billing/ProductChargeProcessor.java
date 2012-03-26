@@ -23,8 +23,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.billing.InvoiceAdjustmentSubLineItem;
+import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.billing.InvoiceConcessionSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -76,7 +76,7 @@ public class ProductChargeProcessor {
     }
 
     private boolean sameBillableItem(BillableItem billableItem1, BillableItem billableItem2) {
-        return billableItem1.originalId().equals(billableItem2.originalId());
+        return billableItem1.uid().equals(billableItem2.uid());
     }
 
     private void reviseChargeForCurrentPeriod(BillableItem billableItem) {

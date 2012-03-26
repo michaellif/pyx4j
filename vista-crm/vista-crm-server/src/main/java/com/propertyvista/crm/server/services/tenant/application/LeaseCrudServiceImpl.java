@@ -34,7 +34,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ActionType;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseProducts;
@@ -142,7 +142,7 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
                 adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
             }
             // set adjustment expiration date:
-            if (ActionType.oneTime == adj.actionType().getValue()) {
+            if (ExecutionType.oneTime == adj.executionType().getValue()) {
                 adj.expirationDate().setValue(item.effectiveDate().getValue());
             }
         }

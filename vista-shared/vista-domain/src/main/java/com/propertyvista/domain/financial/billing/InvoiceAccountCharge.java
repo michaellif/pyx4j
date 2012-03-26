@@ -1,4 +1,5 @@
 package com.propertyvista.domain.financial.billing;
+
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
@@ -13,8 +14,9 @@ package com.propertyvista.domain.financial.billing;
  * @version $Id$
  */
 
-
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 /**
  * Account Charge - total charge for a Lease Adjustment
@@ -23,4 +25,5 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 @DiscriminatorValue("AccountCharge")
 public interface InvoiceAccountCharge extends InvoiceCharge {
 
+    LeaseAdjustment adjustment();
 }

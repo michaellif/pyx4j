@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.GeneratedValue;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -67,8 +68,8 @@ public interface BillableItemAdjustment extends IEntity {
      * 
      */
     @I18n
-    @XmlType(name = "BillableItemAdjustmentActionType")
-    enum ActionType {
+    @XmlType(name = "BillableItemAdjustmentExecutionType")
+    enum ExecutionType {
         postLease, inLease, oneTime;
 
         @Override
@@ -76,6 +77,9 @@ public interface BillableItemAdjustment extends IEntity {
             return I18nEnum.toString(this);
         }
     }
+
+    @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
+    IPrimitive<String> uid();
 
     @Caption(name = "Last Updated")
     @Timestamp
@@ -102,7 +106,7 @@ public interface BillableItemAdjustment extends IEntity {
     IPrimitive<ChargeType> chargeType();
 
     @NotNull
-    IPrimitive<ActionType> actionType();
+    IPrimitive<ExecutionType> executionType();
 
     IPrimitive<String> description();
 

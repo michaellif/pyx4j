@@ -7,30 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 16, 2012
+ * Created on Feb 29, 2012
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.server.ar;
 
-import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
-public class ARFacadeImpl implements ARFacade {
+public class ARException extends UserRuntimeException {
 
-    @Override
-    public void postPayment(PaymentRecord paymentRecord) {
-        PaymentManager.postPayment(paymentRecord);
+    private static final long serialVersionUID = 1L;
+
+    public ARException() {
     }
 
-    @Override
-    public void rejectPayment(PaymentRecord paymentRecord) {
-        PaymentManager.rejectPayment(paymentRecord);
-    }
-
-    @Override
-    public void postImmediateAdjustment(LeaseAdjustment adjustment) {
-//TODO
+    public ARException(String message) {
+        super(message);
     }
 
 }

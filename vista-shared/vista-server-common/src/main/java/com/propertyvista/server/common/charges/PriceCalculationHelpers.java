@@ -34,13 +34,13 @@ public class PriceCalculationHelpers {
 
     public static BigDecimal calculateBillableItemAdjustments(BigDecimal startPrice, BillableItemAdjustment adjustment) {
         // preconditions:
-        if (adjustment.isNull() || adjustment.adjustmentType().isNull() || adjustment.actionType().isNull()) {
+        if (adjustment.isNull() || adjustment.adjustmentType().isNull() || adjustment.executionType().isNull()) {
             return startPrice; // not fully filled adjustment!.. 
         }
 
         // Calculate adjustments:
         BigDecimal adjustedPrice = startPrice;
-        if (adjustment.actionType().getValue().equals(BillableItemAdjustment.ActionType.inLease)) {
+        if (adjustment.executionType().getValue().equals(BillableItemAdjustment.ExecutionType.inLease)) {
             if (adjustment.value().isNull()) {
                 return startPrice; // value is necessary on this stage!..
             }

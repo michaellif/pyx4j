@@ -22,8 +22,8 @@ package com.propertyvista.server.billing;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ActionType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingSunnyDayScenarioTest extends BillingTestBase {
@@ -33,16 +33,16 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1);
 
         BillableItem parking1 = addParking();
-        addBillableItemAdjustment(parking1.originalId().getValue(), "-10", AdjustmentType.monetary, ActionType.inLease);
+        addBillableItemAdjustment(parking1.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
 
         BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011");
-        addBillableItemAdjustment(parking2.originalId().getValue(), "-10", AdjustmentType.monetary, ActionType.inLease);
+        addBillableItemAdjustment(parking2.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
 
         BillableItem locker1 = addLocker();
-        addBillableItemAdjustment(locker1.originalId().getValue(), "-0.2", AdjustmentType.percentage, ActionType.inLease);
+        addBillableItemAdjustment(locker1.uid().getValue(), "-0.2", AdjustmentType.percentage, ExecutionType.inLease);
 
         BillableItem pet1 = addPet();
-        addBillableItemAdjustment(pet1.originalId().getValue(), "-1", AdjustmentType.percentage, ActionType.inLease);
+        addBillableItemAdjustment(pet1.uid().getValue(), "-1", AdjustmentType.percentage, ExecutionType.inLease);
 
         //==================== RUN 1 ======================//
 
@@ -126,7 +126,8 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
         setSysDate("18-May-2011");
 
-        addGoodWillAdjustment("120.00", "18-May-2011", true);
+        addGoodWillAdjustment("120.00", "18-May-2011", false);
+        addGoodWillAdjustment("130.00", "18-May-2011", true);
 
         bill = runBilling(true, true);
 
@@ -143,14 +144,17 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("0.00").
         taxes("134.20").
-        totalDueAmount("1252.50");
+        totalDueAmount("1132.50");
         // @formatter:on
 
-        receiveAndPostPayment("19-May-2011", "1252.50");
+        receiveAndPostPayment("19-May-2011", "1132.50");
 
         //==================== RUN 5 ======================//
 
         setSysDate("18-Jun-2011");
+
+        addGoodWillAdjustment("30.00", "1-Jul-2011", false);
+        addGoodWillAdjustment("40.00", "1-Jul-2011", true);
 
         bill = runBilling(true, true);
 
@@ -162,15 +166,15 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("1252.50").
+        paymentReceivedAmount("1132.50").
         serviceCharge("930.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("0.00").
         taxes("134.20").
-        totalDueAmount("1252.50");
+        totalDueAmount("1222.50");
         // @formatter:on
 
-        receiveAndPostPayment("19-Jun-2011", "1252.50");
+        receiveAndPostPayment("19-Jun-2011", "1222.50");
 
         //==================== RUN 6 ======================//
 
@@ -186,7 +190,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("01-Aug-2011").
         billingPeriodEndDate("03-Aug-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("1252.50").
+        paymentReceivedAmount("1222.50").
         serviceCharge("90.03").
         recurringFeatureCharges("18.19").
         oneTimeFeatureCharges("0.00").
