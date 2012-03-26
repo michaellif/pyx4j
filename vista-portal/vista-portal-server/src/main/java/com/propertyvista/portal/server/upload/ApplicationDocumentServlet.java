@@ -27,13 +27,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 @SuppressWarnings("serial")
@@ -52,31 +48,10 @@ public class ApplicationDocumentServlet extends HttpServlet {
         }
 
         //TODO deserialize key
-        ApplicationDocument doc = Persistence.service().retrieve(ApplicationDocument.class, new Key(id));
+        ApplicationDocument doc = Persistence.secureRetrieve(ApplicationDocument.class, new Key(id));
         if (doc == null) {
             log.debug("no such document {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        if (SecurityController.checkAnyBehavior(VistaTenantBehavior.Prospective, VistaTenantBehavior.ProspectiveSubmitted)) {
-            // assert access to the document
-            if (false) {
-                log.debug("no access to document {} {}", id, filename);
-                if (ApplicationMode.isDevelopment()) {
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                } else {
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                }
-                return;
-            }
-        } else if (!SecurityController.checkBehavior(VistaCrmBehavior.Tenants)) {
-            log.debug("no access to document {} {}", id, filename);
-            if (ApplicationMode.isDevelopment()) {
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            } else {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            }
             return;
         }
 

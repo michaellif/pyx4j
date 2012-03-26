@@ -23,9 +23,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.File;
+import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 
-public interface ApplicationDocument extends File {
+public interface ApplicationDocument extends File, IUserEntity {
 
     @Override
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

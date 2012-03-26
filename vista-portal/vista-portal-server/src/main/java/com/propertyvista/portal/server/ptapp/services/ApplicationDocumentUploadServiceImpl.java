@@ -19,12 +19,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -37,7 +33,6 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationDocumentUploadDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -72,20 +67,10 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
 
         ApplicationDocumentUploadDTO dto = process.getData();
 
+        ApplicationDocument newDocument = EntityFactory.create(ApplicationDocument.class);
+
         if (SecurityController.checkBehavior(VistaTenantBehavior.Prospective)) {
-            // allow a user to mess only with its own application
-            // (actually it doesn't matter because once uploaded a document is not bound to application but to user)            
-            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().tenant().user(), PtAppContext.getCurrentUser()));
-            TenantInLease tenantInLease = Persistence.service().retrieve(criteria);
-            if (tenantInLease == null) {
-                throw new Error("TenantInLease corresponding to current user was not found");
-            }
-            if (!EqualsHelper.equals(tenantInLease.application().getPrimaryKey(), PtAppContext.getCurrentUserApplicationPrimaryKey())) {
-                log.warn(SimpleMessageFormat.format("Pt App user {0} have tried to access application number {1} that does not belong to him", PtAppContext
-                        .getCurrentUser().getPrimaryKey(), PtAppContext.getCurrentUserApplicationPrimaryKey()));
-                throw new Error("Wrong application: " + tenantInLease.application().getPrimaryKey());
-            }
+            newDocument.user().set(PtAppContext.getCurrentUser());
         } else {
             SecurityController.assertBehavior(VistaCrmBehavior.Tenants);
         }
@@ -94,9 +79,8 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
         applicationDocumentData.data().setValue(data.data);
         applicationDocumentData.contentType().setValue(response.fileContentType);
 
-        Persistence.secureSave(applicationDocumentData);
+        Persistence.service().persist(applicationDocumentData);
 
-        ApplicationDocument newDocument = EntityFactory.create(ApplicationDocument.class);
         newDocument.blobKey().setValue(applicationDocumentData.id().getValue());
         newDocument.fileName().setValue(response.fileName);
         newDocument.fileSize().setValue(response.fileSize);
