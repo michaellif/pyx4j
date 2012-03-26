@@ -53,7 +53,7 @@ public interface IdAssignmentItem extends IEntity {
 
         generatedNumber,
 
-        generatedAlphabetical;
+        generatedAlphaNumeric;
 
         @Override
         public String toString() {

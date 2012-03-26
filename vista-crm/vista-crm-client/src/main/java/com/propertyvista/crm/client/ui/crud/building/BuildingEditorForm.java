@@ -34,8 +34,10 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
@@ -48,6 +50,10 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsEditorForm;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
@@ -166,6 +172,27 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Building Summary"));
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 12).build());
+
+        ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
+                new DefaultAsyncCallback<IdAssignmentPolicy>() {
+
+                    @Override
+                    public void onSuccess(IdAssignmentPolicy result) {
+                        IdAssignmentItem targetItem = null;
+                        for (IdAssignmentItem item : result.itmes()) {
+                            if (item.target().getValue() == IdTarget.propertyCode) {
+                                targetItem = item;
+
+                                break;
+                            }
+                        }
+
+                        if (targetItem != null) {
+                            get(proto().propertyCode()).setViewable(targetItem.type().getValue() != IdAssignmentType.userEditable);
+                        }
+                    }
+                });
+
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().info().shape()), 7).build());
 
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().info().name()), 15).build());

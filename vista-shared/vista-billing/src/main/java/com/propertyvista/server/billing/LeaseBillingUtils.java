@@ -19,9 +19,9 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.server.common.policy.PolicyManager;
 
-public class LatePaymentUtils {
+public class LeaseBillingUtils {
 
-    public static BigDecimal latePayment(BigDecimal amount, BigDecimal monthlyRent, Building building) {
+    public static BigDecimal calculateLatePayment(BigDecimal amount, BigDecimal monthlyRent, Building building) {
         LeaseBillingPolicy leaseBillingPolicy = PolicyManager.obtainEffectivePolicy(building, LeaseBillingPolicy.class);
 
         return calculateFee(leaseBillingPolicy, amount, monthlyRent);

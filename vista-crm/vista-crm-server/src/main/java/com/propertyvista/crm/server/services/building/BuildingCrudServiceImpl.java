@@ -23,12 +23,14 @@ import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.crm.server.util.IdAssignmentSequenceUtil;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
@@ -116,7 +118,10 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             }
         }
 
-        boolean isCreate = dbo.id().isNull();
+        if (dbo.id().isNull() && IdAssignmentSequenceUtil.needsGeneratedId(IdTarget.propertyCode)) {
+            dbo.propertyCode().setValue(IdAssignmentSequenceUtil.getId(IdTarget.propertyCode));
+        }
+
         Persistence.service().merge(dbo);
         PublicDataUpdater.updateIndexData(dbo);
     }
