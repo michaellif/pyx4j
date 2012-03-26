@@ -52,7 +52,6 @@ import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsEd
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
@@ -135,6 +134,45 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        // tweak property code editing UI:
+        if (isEditable()) {
+            get(proto().propertyCode()).setViewable(true);
+            ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
+                    new DefaultAsyncCallback<IdAssignmentPolicy>() {
+
+                        @Override
+                        public void onSuccess(IdAssignmentPolicy result) {
+                            IdAssignmentItem targetItem = null;
+                            for (IdAssignmentItem item : result.itmes()) {
+                                if (item.target().getValue() == IdTarget.propertyCode) {
+                                    targetItem = item;
+                                    break;
+                                }
+                            }
+
+                            if (targetItem != null) {
+                                switch (targetItem.type().getValue()) {
+                                case generatedAlphaNumeric:
+                                case generatedNumber:
+                                    get(proto().propertyCode()).setViewable(false);
+                                    break;
+                                case userEditable:
+                                    get(proto().propertyCode()).setViewable(true);
+                                    break;
+                                case userCreated:
+                                    get(proto().propertyCode()).setViewable(getValue().getPrimaryKey() != null);
+                                    break;
+                                }
+                            }
+                        }
+                    });
+        }
+    }
+
+    @Override
     public void addValidations() {
         new PastDateValidation(get(proto().info().structureBuildYear()));
         new PastDateValidation(get(proto().financial().dateAcquired()));
@@ -172,27 +210,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Building Summary"));
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 12).build());
-
-        ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
-                new DefaultAsyncCallback<IdAssignmentPolicy>() {
-
-                    @Override
-                    public void onSuccess(IdAssignmentPolicy result) {
-                        IdAssignmentItem targetItem = null;
-                        for (IdAssignmentItem item : result.itmes()) {
-                            if (item.target().getValue() == IdTarget.propertyCode) {
-                                targetItem = item;
-
-                                break;
-                            }
-                        }
-
-                        if (targetItem != null) {
-                            get(proto().propertyCode()).setViewable(targetItem.type().getValue() != IdAssignmentType.userEditable);
-                        }
-                    }
-                });
-
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().info().shape()), 7).build());
 
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().info().name()), 15).build());
