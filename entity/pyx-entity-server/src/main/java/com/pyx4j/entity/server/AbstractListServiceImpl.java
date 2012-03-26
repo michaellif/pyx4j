@@ -55,6 +55,7 @@ public abstract class AbstractListServiceImpl<E extends IEntity> implements Abst
         E actualEntity = Persistence.service().retrieve(entityClass, entityId);
         SecurityController.assertPermission(EntityPermission.permissionDelete(actualEntity));
         delete(actualEntity);
+        Persistence.service().commit();
         callback.onSuccess(true);
     }
 

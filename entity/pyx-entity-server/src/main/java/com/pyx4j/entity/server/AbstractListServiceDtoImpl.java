@@ -130,6 +130,7 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
         E actualEntity = Persistence.service().retrieve(entityClass, entityId);
         SecurityController.assertPermission(EntityPermission.permissionDelete(actualEntity));
         delete(actualEntity);
+        Persistence.service().commit();
         callback.onSuccess(true);
     }
 
