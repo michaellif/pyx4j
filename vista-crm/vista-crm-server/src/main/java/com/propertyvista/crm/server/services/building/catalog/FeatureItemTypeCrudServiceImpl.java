@@ -16,14 +16,14 @@ package com.propertyvista.crm.server.services.building.catalog;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureItemTypeCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class FeatureItemTypeCrudServiceImpl extends GenericCrudServiceImpl<ProductItemType> implements FeatureItemTypeCrudService {
+public class FeatureItemTypeCrudServiceImpl extends AbstractCrudServiceImpl<ProductItemType> implements FeatureItemTypeCrudService {
 
     public FeatureItemTypeCrudServiceImpl() {
         super(ProductItemType.class);

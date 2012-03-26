@@ -13,14 +13,20 @@
  */
 package com.propertyvista.crm.server.services.building;
 
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+
 import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.dto.ParkingDTO;
 
-public class ParkingCrudServiceImpl extends GenericCrudServiceDtoImpl<Parking, ParkingDTO> implements ParkingCrudService {
+public class ParkingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Parking, ParkingDTO> implements ParkingCrudService {
 
     public ParkingCrudServiceImpl() {
         super(Parking.class, ParkingDTO.class);
+    }
+
+    @Override
+    protected void bind() {
+        bind(Parking.class, dtoProto, dboProto);
     }
 }

@@ -27,17 +27,10 @@ public class ProductTaxPolicyCrudServiceImpl extends GenericPolicyCrudService<Pr
     }
 
     @Override
-    protected void enhanceDTO(ProductTaxPolicy in, ProductTaxPolicyDTO dto, boolean fromList) {
-        super.enhanceDTO(in, dto, fromList);
-
-        if (!fromList) {
-            Persistence.service().retrieveMember(in.policyItems());
-            dto.policyItems().set(in.policyItems());
-        }
+    protected void enhanceRetrieved(ProductTaxPolicy in, ProductTaxPolicyDTO dto) {
+        super.enhanceRetrieved(in, dto);
+        Persistence.service().retrieveMember(in.policyItems());
+        dto.policyItems().set(in.policyItems());
     }
 
-    @Override
-    protected void persistDBO(ProductTaxPolicy dbo, ProductTaxPolicyDTO in) {
-        super.persistDBO(dbo, in);
-    }
 }

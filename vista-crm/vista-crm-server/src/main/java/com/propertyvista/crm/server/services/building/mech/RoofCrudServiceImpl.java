@@ -13,14 +13,20 @@
  */
 package com.propertyvista.crm.server.services.building.mech;
 
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.dto.RoofDTO;
 
-public class RoofCrudServiceImpl extends GenericCrudServiceDtoImpl<Roof, RoofDTO> implements RoofCrudService {
+public class RoofCrudServiceImpl extends AbstractCrudServiceDtoImpl<Roof, RoofDTO> implements RoofCrudService {
 
     public RoofCrudServiceImpl() {
         super(Roof.class, RoofDTO.class);
+    }
+
+    @Override
+    protected void bind() {
+        bind(Roof.class, dtoProto, dboProto);
     }
 }

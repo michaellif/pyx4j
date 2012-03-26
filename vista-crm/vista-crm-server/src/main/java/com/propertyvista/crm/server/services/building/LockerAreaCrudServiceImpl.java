@@ -13,14 +13,20 @@
  */
 package com.propertyvista.crm.server.services.building;
 
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+
 import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.dto.LockerAreaDTO;
 
-public class LockerAreaCrudServiceImpl extends GenericCrudServiceDtoImpl<LockerArea, LockerAreaDTO> implements LockerAreaCrudService {
+public class LockerAreaCrudServiceImpl extends AbstractCrudServiceDtoImpl<LockerArea, LockerAreaDTO> implements LockerAreaCrudService {
 
     public LockerAreaCrudServiceImpl() {
         super(LockerArea.class, LockerAreaDTO.class);
+    }
+
+    @Override
+    protected void bind() {
+        bind(LockerArea.class, dtoProto, dboProto);
     }
 }

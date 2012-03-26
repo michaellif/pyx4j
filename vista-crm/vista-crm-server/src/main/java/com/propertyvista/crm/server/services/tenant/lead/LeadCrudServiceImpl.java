@@ -22,6 +22,7 @@ import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -30,7 +31,6 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.tenant.lead.LeadCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
@@ -42,23 +42,25 @@ import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.LeaseManager;
 
-public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements LeadCrudService {
+public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implements LeadCrudService {
 
     public LeadCrudServiceImpl() {
         super(Lead.class);
     }
 
     @Override
-    protected void enhanceRetrieved(Lead entity, boolean fromList) {
+    protected void enhanceRetrieved(Lead entity) {
         if (!entity.floorplan().isNull()) {
             Persistence.service().retrieve(entity.floorplan().building());
             entity.building().set(entity.floorplan().building());
         }
+    }
 
-        if (fromList) {
-            // just clear unnecessary data before serialization: 
-            entity.comments().setValue(null);
-        }
+    @Override
+    protected void enhanceListRetrieved(Lead entity) {
+        enhanceRetrieved(entity);
+        // just clear unnecessary data before serialization: 
+        entity.comments().setValue(null);
     }
 
     @Override
@@ -87,7 +89,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
 
     @Override
     public void convertToLease(AsyncCallback<Lease> callback, Key leadId, Key unitId) {
-        Lead lead = Persistence.service().retrieve(dboClass, leadId);
+        Lead lead = Persistence.service().retrieve(entityClass, leadId);
         if (!lead.lease().isNull()) {
             callback.onFailure(new UserRuntimeException("The Lead is converted to Lease already!"));
         } else {
@@ -140,7 +142,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
 
     @Override
     public void close(AsyncCallback<Serializable> callback, Key leadId) {
-        Lead lead = Persistence.service().retrieve(dboClass, leadId);
+        Lead lead = Persistence.service().retrieve(entityClass, leadId);
         lead.status().setValue(Status.closed);
         Persistence.secureSave(lead);
         Persistence.service().commit();

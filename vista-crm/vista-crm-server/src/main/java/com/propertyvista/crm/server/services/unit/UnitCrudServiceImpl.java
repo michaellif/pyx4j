@@ -18,14 +18,13 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -39,7 +38,7 @@ import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
-public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
+public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
     private static final Vector<Service.Type> SERVICES_PROVIDED_BY_UNIT = new Vector<Service.Type>(Arrays.asList(Service.Type.residentialUnit,
             Service.Type.residentialShortTermUnit, Service.Type.commercialUnit));
@@ -49,37 +48,51 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
     }
 
     @Override
-    protected void enhanceDTO(AptUnit in, AptUnitDTO dto, boolean fromList) {
+    protected void bind() {
+        bind(AptUnit.class, dtoProto, dboProto);
+        bind(dtoProto.buildingCode(), dboProto.belongsTo().propertyCode());
+    }
+
+    @Override
+    protected void enhanceRetrieved(AptUnit in, AptUnitDTO dto) {
         //TODO: calculate value here:
         dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.belongsTo().getPrimaryKey()).propertyCode());
 
-        if (!fromList) {
-            // load detached entities:
-            if (!dto.marketing().isValueDetached()) { // This is not called for now cince file is detached in annotation. see comments on this filed
-                Persistence.service().retrieve(dto.marketing().adBlurbs());
-            }
-
-            Persistence.service().retrieve(dto.floorplan());
-            Persistence.service().retrieve(dto.belongsTo());
-
-            // retrieve market rent prices
-            retrieveServicePrices(dto);
-
-        } else {
-            // load detached entities (temporary):
-            Persistence.service().retrieve(dto.floorplan());
-            // TODO actually just this is necessary, but it' doesn't implemented still:
-            //Persistence.service().retrieve(dto.floorplan().name());
-            //Persistence.service().retrieve(dto.floorplan().marketingName());
-
-            // just clear unnecessary data before serialization: 
-            if (!dto.marketing().isValueDetached()) {
-                dto.marketing().description().setValue(null);
-            }
-            dto.info().economicStatusDescription().setValue(null);
-
+        // load detached entities:
+        if (!dto.marketing().isValueDetached()) { // This is not called for now cince file is detached in annotation. see comments on this filed
+            Persistence.service().retrieve(dto.marketing().adBlurbs());
         }
 
+        Persistence.service().retrieve(dto.floorplan());
+        Persistence.service().retrieve(dto.belongsTo());
+
+        // retrieve market rent prices
+        retrieveServicePrices(dto);
+
+        tmp_PopulateFinancial(in, dto);
+    }
+
+    @Override
+    protected void enhanceListRetrieved(AptUnit in, AptUnitDTO dto) {
+        //TODO: calculate value here:
+        dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.belongsTo().getPrimaryKey()).propertyCode());
+
+        // load detached entities (temporary):
+        Persistence.service().retrieve(dto.floorplan());
+        // TODO actually just this is necessary, but it' doesn't implemented still:
+        //Persistence.service().retrieve(dto.floorplan().name());
+        //Persistence.service().retrieve(dto.floorplan().marketingName());
+
+        // just clear unnecessary data before serialization: 
+        if (!dto.marketing().isValueDetached()) {
+            dto.marketing().description().setValue(null);
+        }
+        dto.info().economicStatusDescription().setValue(null);
+
+        tmp_PopulateFinancial(in, dto);
+    }
+
+    protected void tmp_PopulateFinancial(AptUnit in, AptUnitDTO dto) {
         // Fill Unit financial data (transient):  
         dto.financial()._unitRent().setValue(null);
         dto.financial()._marketRent().setValue(null);
@@ -101,7 +114,7 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
     }
 
     @Override
-    protected void persistDBO(AptUnit dbo, AptUnitDTO in) {
+    protected void persist(AptUnit dbo, AptUnitDTO in) {
         boolean isNewUnit = dbo.id().isNull();
 
         if (isNewUnit) {
@@ -113,18 +126,9 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
             dbo._AptUnitOccupancySegment().add(vacant);
 
         }
-        super.persistDBO(dbo, in);
+        super.persist(dbo, in);
         if (isNewUnit) {
             new AptUnitOccupancyManagerImpl(dbo).scopeAvailable();
-        }
-    }
-
-    @Override
-    protected String convertPropertyDTOPathToDBO(String path, AptUnit dboProto, AptUnitDTO dtoProto) {
-        if (path.equals(dtoProto.buildingCode().getPath().toString())) {
-            return dboProto.belongsTo().propertyCode().getPath().toString();
-        } else {
-            return dboProto.getObjectClass().getSimpleName() + path.substring(path.indexOf(Path.PATH_SEPARATOR));
         }
     }
 
@@ -145,8 +149,6 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
                     dto.servicePrices().add(serviceDTO);
                 }
             }
-
         }
-
     }
 }

@@ -28,17 +28,10 @@ public class LeaseAdjustmentPolicyCrudServiceImpl extends GenericPolicyCrudServi
     }
 
     @Override
-    protected void enhanceDTO(LeaseAdjustmentPolicy in, LeaseAdjustmentPolicyDTO dto, boolean fromList) {
-        super.enhanceDTO(in, dto, fromList);
-
-        if (!fromList) {
-            Persistence.service().retrieveMember(in.policyItems());
-            dto.policyItems().set(in.policyItems());
-        }
+    protected void enhanceRetrieved(LeaseAdjustmentPolicy in, LeaseAdjustmentPolicyDTO dto) {
+        super.enhanceRetrieved(in, dto);
+        Persistence.service().retrieveMember(in.policyItems());
+        dto.policyItems().set(in.policyItems());
     }
 
-    @Override
-    protected void persistDBO(LeaseAdjustmentPolicy dbo, LeaseAdjustmentPolicyDTO in) {
-        super.persistDBO(dbo, in);
-    }
 }

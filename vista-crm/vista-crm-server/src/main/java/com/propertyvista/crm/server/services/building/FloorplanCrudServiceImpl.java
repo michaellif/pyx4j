@@ -16,34 +16,36 @@ package com.propertyvista.crm.server.services.building;
 import java.util.List;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.FloorplanDTO;
 
-public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorplan, FloorplanDTO> implements FloorplanCrudService {
+public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorplan, FloorplanDTO> implements FloorplanCrudService {
 
     public FloorplanCrudServiceImpl() {
         super(Floorplan.class, FloorplanDTO.class);
     }
 
     @Override
-    protected void enhanceDTO(Floorplan in, FloorplanDTO dto, boolean fromList) {
-
-        if (!fromList) {
-            Persistence.service().retrieveMember(in.amenities());
-            dto.amenities().set(in.amenities());
-            Persistence.service().retrieve(dto.media());
-        }
+    protected void bind() {
+        bind(Floorplan.class, dtoProto, dboProto);
     }
 
     @Override
-    protected void persistDBO(Floorplan dbo, FloorplanDTO in) {
+    protected void enhanceRetrieved(Floorplan in, FloorplanDTO dto) {
+        Persistence.service().retrieveMember(in.amenities());
+        dto.amenities().set(in.amenities());
+        Persistence.service().retrieve(dto.media());
+    }
+
+    @Override
+    protected void persist(Floorplan dbo, FloorplanDTO in) {
         boolean isCreate = dbo.id().isNull();
 
         if (dbo.counters().id().isNull()) {

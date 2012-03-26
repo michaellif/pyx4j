@@ -13,47 +13,45 @@
  */
 package com.propertyvista.crm.server.services.policies;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 
-public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO extends POLICY> extends GenericCrudServiceDtoImpl<POLICY, POLICY_DTO> {
+public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO extends POLICY> extends AbstractCrudServiceDtoImpl<POLICY, POLICY_DTO> {
 
     private final static I18n i18n = I18n.get(GenericPolicyCrudService.class);
 
     public GenericPolicyCrudService(Class<POLICY> dboClass, Class<POLICY_DTO> dtoClass) {
         super(dboClass, dtoClass);
-
         // TODO check how multiple parametrized inheritance may be acheived (i need "POLICY_DTO extends POLICY & PolicyDTOBase (maybe PolicyDTOBase should extend Policy") 
         if (!PolicyDTOBase.class.isAssignableFrom(dtoClass)) {
             throw new Error("POLICY_DTO must extends PolicyDTOBase");
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    protected void enhanceDTO(POLICY in, POLICY_DTO dto, boolean fromList) {
-        super.enhanceDTO(in, dto, fromList);
-
-        if (fromList) {
-            PolicyNode castedNode = ((PolicyDTOBase) dto).node().cast();
-            ((PolicyDTOBase) dto).nodeType().setValue(castedNode.getEntityMeta().getCaption());
-            ((PolicyDTOBase) dto).nodeRepresentation().setValue(castedNode.getStringView());
-        }
+    protected void bind() {
+        bind((Class<POLICY>) dboProto.getObjectClass(), dtoProto, dboProto);
     }
 
     @Override
-    protected void persistDBO(POLICY dbo, POLICY_DTO in) {
+    protected void enhanceListRetrieved(POLICY in, POLICY_DTO dto) {
+        PolicyNode castedNode = ((PolicyDTOBase) dto).node().cast();
+        ((PolicyDTOBase) dto).nodeType().setValue(castedNode.getEntityMeta().getCaption());
+        ((PolicyDTOBase) dto).nodeRepresentation().setValue(castedNode.getStringView());
+    }
+
+    @Override
+    protected void persist(POLICY dbo, POLICY_DTO in) {
         PolicyNode node = ((PolicyDTOBase) in).node().cast();
 
         if (node.getInstanceValueClass().equals(OrganizationPoliciesNode.class)) {
@@ -80,12 +78,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
             }
 
         }
-        super.persistDBO(dbo, in);
+        super.persist(dbo, in);
     }
 
-    @Override
-    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        super.delete(callback, entityId);
-        Persistence.service().commit();
-    }
 }

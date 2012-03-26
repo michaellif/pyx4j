@@ -13,14 +13,20 @@
  */
 package com.propertyvista.crm.server.services.tenant.application;
 
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+
 import com.propertyvista.crm.rpc.services.tenant.application.ApplicationCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.ApplicationDTO;
 
-public class ApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<Application, ApplicationDTO> implements ApplicationCrudService {
+public class ApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<Application, ApplicationDTO> implements ApplicationCrudService {
 
     public ApplicationCrudServiceImpl() {
         super(Application.class, ApplicationDTO.class);
+    }
+
+    @Override
+    protected void bind() {
+        bind(Application.class, dtoProto, dboProto);
     }
 }

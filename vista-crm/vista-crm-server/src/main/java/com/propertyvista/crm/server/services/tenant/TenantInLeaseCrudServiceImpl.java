@@ -13,23 +13,27 @@
  */
 package com.propertyvista.crm.server.services.tenant;
 
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.tenant.TenantInLeaseCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
-public class TenantInLeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<TenantInLease, TenantInLeaseDTO> implements TenantInLeaseCrudService {
+public class TenantInLeaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<TenantInLease, TenantInLeaseDTO> implements TenantInLeaseCrudService {
 
     public TenantInLeaseCrudServiceImpl() {
         super(TenantInLease.class, TenantInLeaseDTO.class);
     }
 
     @Override
-    protected void enhanceDTO(TenantInLease in, TenantInLeaseDTO dto, boolean fromList) {
+    protected void bind() {
+        bind(TenantInLease.class, dtoProto, dboProto);
+    }
 
+    @Override
+    protected void enhanceListRetrieved(TenantInLease in, TenantInLeaseDTO dto) {
         TenantInLeaseRetriever tr = new TenantInLeaseRetriever(in.getPrimaryKey(), true);
         if (!tr.tenantScreening.isEmpty()) {
             if (!tr.tenantScreening.incomes().isEmpty()) {
@@ -37,7 +41,6 @@ public class TenantInLeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Tena
             }
             dto.equifaxApproval().set(tr.tenantScreening.equifaxApproval());
         }
-
         Persistence.service().retrieve(dto.application());
     }
 }

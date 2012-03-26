@@ -17,26 +17,31 @@ import javax.naming.OperationNotSupportedException;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 
-public class UnitOccupancyCrudServiceImpl extends GenericCrudServiceImpl<AptUnitOccupancySegment> implements UnitOccupancyCrudService {
+public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUnitOccupancySegment> implements UnitOccupancyCrudService {
 
     public UnitOccupancyCrudServiceImpl() {
         super(AptUnitOccupancySegment.class);
     }
 
     @Override
-    protected void enhanceRetrieved(AptUnitOccupancySegment entity, boolean fromList) {
-        super.enhanceRetrieved(entity, fromList);
+    protected void enhanceRetrieved(AptUnitOccupancySegment entity) {
         if (entity.dateFrom().getValue().equals(AptUnitOccupancyManagerHelper.MIN_DATE)) {
             entity.dateFrom().setValue(null);
         }
         if (entity.dateTo().getValue().equals(AptUnitOccupancyManagerHelper.MAX_DATE)) {
             entity.dateTo().setValue(null);
         }
+    }
+
+    @Override
+    protected void enhanceListRetrieved(AptUnitOccupancySegment entity) {
+        super.enhanceRetrieved(entity);
     }
 
     @Override

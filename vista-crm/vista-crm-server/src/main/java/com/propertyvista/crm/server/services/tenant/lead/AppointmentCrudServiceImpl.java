@@ -13,11 +13,12 @@
  */
 package com.propertyvista.crm.server.services.tenant.lead;
 
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+
 import com.propertyvista.crm.rpc.services.tenant.lead.AppointmentCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
-public class AppointmentCrudServiceImpl extends GenericCrudServiceImpl<Appointment> implements AppointmentCrudService {
+public class AppointmentCrudServiceImpl extends AbstractCrudServiceImpl<Appointment> implements AppointmentCrudService {
 
     public AppointmentCrudServiceImpl() {
         super(Appointment.class);

@@ -33,12 +33,12 @@ public class BackgroundCheckPolicyCrudServiceImpl extends GenericPolicyCrudServi
     }
 
     @Override
-    protected void persistDBO(BackgroundCheckPolicy dbo, BackgroundCheckPolicyDTO in) {
+    protected void persist(BackgroundCheckPolicy dbo, BackgroundCheckPolicyDTO in) {
         //The order of indexes is significant
         dbo.strategyNumber().setValue(
                 bjcc[in.bankruptcy().getValue().ordinal()][in.judgment().getValue().ordinal()][in.collection().getValue().ordinal()][in.chargeOff().getValue()
                         .ordinal()]);
 
-        super.persistDBO(dbo, in);
+        super.persist(dbo, in);
     }
 }

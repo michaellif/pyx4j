@@ -13,14 +13,20 @@
  */
 package com.propertyvista.crm.server.services.tenant.screening;
 
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+
 import com.propertyvista.crm.rpc.services.tenant.screening.GuarantorCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.dto.GuarantorDTO;
 
-public class GuarantorCrudServiceImpl extends GenericCrudServiceDtoImpl<Guarantor, GuarantorDTO> implements GuarantorCrudService {
+public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarantor, GuarantorDTO> implements GuarantorCrudService {
 
     public GuarantorCrudServiceImpl() {
         super(Guarantor.class, GuarantorDTO.class);
+    }
+
+    @Override
+    protected void bind() {
+        bind(Guarantor.class, dtoProto, dboProto);
     }
 }

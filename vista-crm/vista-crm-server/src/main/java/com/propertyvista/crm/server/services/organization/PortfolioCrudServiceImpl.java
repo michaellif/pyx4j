@@ -15,15 +15,15 @@ package com.propertyvista.crm.server.services.organization;
 
 import java.util.HashSet;
 
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class PortfolioCrudServiceImpl extends GenericCrudServiceImpl<Portfolio> implements PortfolioCrudService {
+public class PortfolioCrudServiceImpl extends AbstractCrudServiceImpl<Portfolio> implements PortfolioCrudService {
 
     private static final I18n i18n = I18n.get(PortfolioCrudServiceImpl.class);
 
@@ -32,9 +32,9 @@ public class PortfolioCrudServiceImpl extends GenericCrudServiceImpl<Portfolio> 
     }
 
     @Override
-    protected void enhanceSave(Portfolio entity) {
+    protected void persist(Portfolio entity) {
         validate(entity);
-        super.enhanceSave(entity);
+        super.persist(entity);
     }
 
     private void validate(Portfolio portfolio) {

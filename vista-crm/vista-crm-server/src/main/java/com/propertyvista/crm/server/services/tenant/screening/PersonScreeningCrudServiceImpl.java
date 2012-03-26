@@ -13,34 +13,32 @@
  */
 package com.propertyvista.crm.server.services.tenant.screening;
 
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.tenant.screening.PersonScreeningCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 
-public class PersonScreeningCrudServiceImpl extends GenericCrudServiceImpl<PersonScreening> implements PersonScreeningCrudService {
+public class PersonScreeningCrudServiceImpl extends AbstractCrudServiceImpl<PersonScreening> implements PersonScreeningCrudService {
 
     public PersonScreeningCrudServiceImpl() {
         super(PersonScreening.class);
     }
 
     @Override
-    protected void enhanceRetrieved(PersonScreening entity, boolean fromList) {
-        if (!fromList) {
-            // load detached entities:
-            Persistence.service().retrieve(entity.documents());
-            Persistence.service().retrieve(entity.incomes());
-            Persistence.service().retrieve(entity.assets());
-            Persistence.service().retrieve(entity.guarantors());
-        }
+    protected void enhanceRetrieved(PersonScreening entity) {
+        // load detached entities:
+        Persistence.service().retrieve(entity.documents());
+        Persistence.service().retrieve(entity.incomes());
+        Persistence.service().retrieve(entity.assets());
+        Persistence.service().retrieve(entity.guarantors());
     }
 
     @Override
-    protected void persistDBO(PersonScreening dbo) {
-        super.persistDBO(dbo);
+    protected void persist(PersonScreening dbo) {
+        super.persist(dbo);
 
         int no = 0;
         for (ApplicationDocument applicationDocument : dbo.documents()) {

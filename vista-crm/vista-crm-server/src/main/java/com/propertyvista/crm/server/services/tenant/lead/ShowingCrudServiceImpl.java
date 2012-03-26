@@ -16,25 +16,31 @@ package com.propertyvista.crm.server.services.tenant.lead;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.crm.rpc.services.tenant.lead.ShowingCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
 
-public class ShowingCrudServiceImpl extends GenericCrudServiceImpl<Showing> implements ShowingCrudService {
+public class ShowingCrudServiceImpl extends AbstractCrudServiceImpl<Showing> implements ShowingCrudService {
 
     public ShowingCrudServiceImpl() {
         super(Showing.class);
     }
 
     @Override
-    protected void enhanceRetrieved(Showing entity, boolean fromList) {
+    protected void enhanceRetrieved(Showing entity) {
         if (!entity.unit().isNull()) {
-            Persistence.service().retrieve(entity.unit().belongsTo());
+            Persistence.service().retrieve(entity.unit().belongsTo(), AttachLevel.ToStringMembers);
             entity.building().set(entity.unit().belongsTo());
         }
+    }
+
+    @Override
+    protected void enhanceListRetrieved(Showing entity) {
+        enhanceRetrieved(entity);
     }
 
     @Override

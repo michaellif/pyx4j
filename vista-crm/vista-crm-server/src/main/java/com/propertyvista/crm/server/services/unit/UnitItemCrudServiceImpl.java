@@ -13,11 +13,12 @@
  */
 package com.propertyvista.crm.server.services.unit;
 
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
-public class UnitItemCrudServiceImpl extends GenericCrudServiceImpl<AptUnitItem> implements UnitItemCrudService {
+public class UnitItemCrudServiceImpl extends AbstractCrudServiceImpl<AptUnitItem> implements UnitItemCrudService {
 
     public UnitItemCrudServiceImpl() {
         super(AptUnitItem.class);

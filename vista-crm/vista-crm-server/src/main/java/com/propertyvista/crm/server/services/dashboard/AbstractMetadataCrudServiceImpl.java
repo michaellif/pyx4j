@@ -16,16 +16,16 @@ package com.propertyvista.crm.server.services.dashboard;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.server.common.security.VistaContext;
 
-abstract class AbstractMetadataCrudServiceImpl extends GenericCrudServiceImpl<DashboardMetadata> implements AbstractMetadataCrudService {
+abstract class AbstractMetadataCrudServiceImpl extends AbstractCrudServiceImpl<DashboardMetadata> implements AbstractMetadataCrudService {
 
     protected AbstractMetadataCrudServiceImpl() {
         super(DashboardMetadata.class);

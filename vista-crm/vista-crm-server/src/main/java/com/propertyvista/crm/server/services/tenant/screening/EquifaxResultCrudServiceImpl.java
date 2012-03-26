@@ -13,11 +13,12 @@
  */
 package com.propertyvista.crm.server.services.tenant.screening;
 
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+
 import com.propertyvista.crm.rpc.services.tenant.screening.EquifaxResultCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.misc.EquifaxResult;
 
-public class EquifaxResultCrudServiceImpl extends GenericCrudServiceImpl<EquifaxResult> implements EquifaxResultCrudService {
+public class EquifaxResultCrudServiceImpl extends AbstractCrudServiceImpl<EquifaxResult> implements EquifaxResultCrudService {
 
     public EquifaxResultCrudServiceImpl() {
         super(EquifaxResult.class);

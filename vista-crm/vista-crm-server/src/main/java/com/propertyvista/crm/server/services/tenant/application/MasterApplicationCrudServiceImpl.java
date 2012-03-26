@@ -21,6 +21,7 @@ import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -30,8 +31,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.tenant.application.MasterApplicationCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.crm.server.util.GenericConverter;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.PersonGuarantor;
@@ -52,7 +51,7 @@ import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
-public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<MasterApplication, MasterApplicationDTO> implements
+public class MasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<MasterApplication, MasterApplicationDTO> implements
         MasterApplicationCrudService {
 
     public MasterApplicationCrudServiceImpl() {
@@ -60,8 +59,12 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
     }
 
     @Override
-    protected void enhanceDTO(MasterApplication in, MasterApplicationDTO dto, boolean fromList) {
-        super.enhanceDTO(in, dto, fromList);
+    protected void bind() {
+        bind(MasterApplication.class, dtoProto, dboProto);
+    }
+
+    @Override
+    protected void enhanceListRetrieved(MasterApplication in, MasterApplicationDTO dto) {
 
         Persistence.service().retrieve(dto.lease());
         Persistence.service().retrieve(dto.lease().unit());
@@ -88,14 +91,16 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
             dto.tenantFinancials().add(tf);
         }
 
-        if (!fromList) {
-            dto.masterApplicationStatus().set(ApplicationManager.calculateStatus(in));
-        }
-
         calculatePrices(in, dto);
 
         // TODO: currently - just some mockup stuff:
         dto.deposit().setValue(new BigDecimal(100 + RandomUtil.randomDouble(1000)));
+    }
+
+    @Override
+    protected void enhanceRetrieved(MasterApplication in, MasterApplicationDTO dto) {
+        enhanceListRetrieved(in, dto);
+        dto.masterApplicationStatus().set(ApplicationManager.calculateStatus(in));
     }
 
     @Override
@@ -121,12 +126,11 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
             new LeaseManager().cancelApplication(dbo.lease().getPrimaryKey());
             break;
         }
-        // lease and Application changes upon approval in LeaseManager
-        dbo = Persistence.service().retrieve(dboClass, actionDTO.getPrimaryKey());
-        MasterApplicationDTO dto2 = GenericConverter.convertDBO2DTO(dbo, dtoClass);
-        enhanceDTO(dbo, dto2, false);
         Persistence.service().commit();
-        callback.onSuccess(dto2);
+
+        // return data for view
+        retrieve(callback, actionDTO.getPrimaryKey(), RetrieveTraget.View);
+        Persistence.service().commit();
     }
 
     // internal helpers:

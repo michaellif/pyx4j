@@ -13,11 +13,12 @@
  */
 package com.propertyvista.crm.server.services.building;
 
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+
 import com.propertyvista.crm.rpc.services.building.LockerCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.Locker;
 
-public class LockerCrudServiceImpl extends GenericCrudServiceImpl<Locker> implements LockerCrudService {
+public class LockerCrudServiceImpl extends AbstractCrudServiceImpl<Locker> implements LockerCrudService {
 
     public LockerCrudServiceImpl() {
         super(Locker.class);

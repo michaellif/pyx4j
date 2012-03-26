@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import com.pyx4j.rpc.shared.UserRuntimeException;
+
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
@@ -25,12 +27,12 @@ public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<Le
     }
 
     @Override
-    protected void persistDBO(LeaseTermsPolicy dbo, LeaseTermsPolicyDTO in) {
+    protected void persist(LeaseTermsPolicy dbo, LeaseTermsPolicyDTO in) {
         StringBuffer errors = new StringBuffer();
         if (!isValid(in, errors)) {
-            throw new Error(errors.toString());
+            throw new UserRuntimeException(errors.toString());
         }
-        super.persistDBO(dbo, in);
+        super.persist(dbo, in);
     }
 
     private static boolean isValid(LeaseTermsPolicyDTO in, StringBuffer errors) {

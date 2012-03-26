@@ -13,14 +13,20 @@
  */
 package com.propertyvista.crm.server.services.building.mech;
 
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.dto.ElevatorDTO;
 
-public class ElevatorCrudServiceImpl extends GenericCrudServiceDtoImpl<Elevator, ElevatorDTO> implements ElevatorCrudService {
+public class ElevatorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Elevator, ElevatorDTO> implements ElevatorCrudService {
 
     public ElevatorCrudServiceImpl() {
         super(Elevator.class, ElevatorDTO.class);
+    }
+
+    @Override
+    protected void bind() {
+        bind(Elevator.class, dtoProto, dboProto);
     }
 }

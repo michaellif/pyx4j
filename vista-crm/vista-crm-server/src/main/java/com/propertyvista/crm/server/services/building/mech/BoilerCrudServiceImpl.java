@@ -13,14 +13,20 @@
  */
 package com.propertyvista.crm.server.services.building.mech;
 
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.dto.BoilerDTO;
 
-public class BoilerCrudServiceImpl extends GenericCrudServiceDtoImpl<Boiler, BoilerDTO> implements BoilerCrudService {
+public class BoilerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Boiler, BoilerDTO> implements BoilerCrudService {
 
     public BoilerCrudServiceImpl() {
         super(Boiler.class, BoilerDTO.class);
+    }
+
+    @Override
+    protected void bind() {
+        bind(Boiler.class, dtoProto, dboProto);
     }
 }
