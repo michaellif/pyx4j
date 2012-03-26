@@ -81,7 +81,11 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
 
     @Override
     public AttachLevel getAttachLevel() {
-        return AttachLevel.Attached;
+        if (getOwner().isValueDetached()) {
+            return AttachLevel.Detached;
+        } else {
+            return AttachLevel.Attached;
+        }
     }
 
     @Override

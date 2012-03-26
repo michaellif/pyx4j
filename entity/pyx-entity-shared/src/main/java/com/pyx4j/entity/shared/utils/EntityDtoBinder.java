@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 
 /**
@@ -179,7 +180,9 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
             }
 
             if (dboM.getAttachLevel() == AttachLevel.Detached) {
-                dtoM.setAttachLevel(AttachLevel.Detached);
+                if (!(dtoM instanceof IPrimitive<?>)) {
+                    dtoM.setAttachLevel(AttachLevel.Detached);
+                }
             } else if (b.binder == null) {
                 if (dboM instanceof ICollection) {
                     ((ICollection<IEntity, ?>) dtoM).clear();
