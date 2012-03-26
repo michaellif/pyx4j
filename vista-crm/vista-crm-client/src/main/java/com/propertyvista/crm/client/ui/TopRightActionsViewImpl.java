@@ -127,12 +127,8 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         languageMenu.setFocusOnHoverEnabled(true);
         languages = new MenuBar(true);
         MenuItem item = new MenuItem(ClentNavigUtils.getCurrentLocale().toString(), languages);
-        item.getElement().getStyle().setProperty("background", "transparent");
-        item.getElement().getStyle().setProperty("color", "#E5F0E1");
-        item.getElement().getStyle().setProperty("padding", "0");
         languageMenu.addItem(item);
         languageMenu.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
-        languageMenu.asWidget().getElement().getStyle().setProperty("background", "transparent");
 
 //        alert = new Image(CrmImages.INSTANCE.alert());
 //        alert.addClickHandler(new ClickHandler() {
@@ -245,10 +241,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 }
             };
             MenuItem item = new MenuItem(compiledLocale.getNativeDisplayName(), changeLanguage);
-            item.getElement().getStyle().setProperty("background", "transparent");
             languages.addItem(item);
         }
-//        languages.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
-        languages.asWidget().getElement().getStyle().setBackgroundColor("white");
     }
 }

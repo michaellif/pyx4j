@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -161,39 +161,45 @@ public class VistaTheme extends Theme {
 
     protected void initMenuBarStyles() {
         Style style = new Style(".gwt-MenuBar");
-        style.addProperty("cursor", "default");
+        style.addProperty("cursor", "pointer");
         style.addProperty("color", ThemeColors.foreground, 0.2);
         addStyle(style);
 
         style = new Style(".gwt-MenuItem");
-        style.addProperty("cursor", "default");
-        style.addProperty("color", ThemeColors.foreground, 0.9);
+        style.addProperty("cursor", "pointer");
+//        style.addProperty("color", ThemeColors.foreground, 0.9);
         style.addProperty("background-color", ThemeColors.foreground, 0.2);
+        style.addProperty("background", "transparent");
+        style.addProperty("color", "#E5F0E1");
+        style.addProperty("border", "0");
         addStyle(style);
 
         style = new Style(".gwt-MenuItem-selected");
         style.addProperty("background", ThemeColors.foreground, 0.8);
-        style.addProperty("color", ThemeColors.foreground, 0.2);
+        style.addProperty("cursor", "pointer");
+        style.addProperty("text-decoration", "underline");
+        style.addProperty("background", "transparent");
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical");
         style.addProperty("margin-top", "0px");
         style.addProperty("margin-left", "0px");
-        style.addProperty("background", ThemeColors.foreground);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.2);
+        style.addProperty("background", "#FFFFFF");
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
         style.addProperty("padding", "4px 14px 4px 1px");
+        style.addProperty("color", "#666666");
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-horizontal");
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-horizontal .gwt-MenuItem");
-        style.addProperty("padding", "0px 10px");
         style.addProperty("vertical-align", "bottom");
+        style.addProperty("background", "transparent");
         addStyle(style);
     }
 
@@ -361,7 +367,7 @@ public class VistaTheme extends Theme {
         style.addProperty("border", "1px outset #3090C7");
         addStyle(style);
 
-        // The next is added and is not in default GWT code. 
+        // The next is added and is not in default GWT code.
         style = new Style(gwtButton + ":focus");
         style.addProperty("border", "1px outset #3090C7");
         addStyle(style);
