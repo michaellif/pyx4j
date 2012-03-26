@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -34,6 +35,7 @@ import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationDocumentUploadDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<ApplicationDocumentUploadDTO, ApplicationDocument> implements
@@ -63,15 +65,14 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
 
         ApplicationDocumentUploadDTO dto = process.getData();
 
-        TenantInLease tenant = Persistence.service().retrieve(TenantInLease.class, dto.tenantInLeaseId().getValue());
-        if (tenant == null) {
-            throw new Error("Unknown tenantId: " + dto.tenantInLeaseId().getValue());
-        }
         if (SecurityController.checkBehavior(VistaTenantBehavior.Prospective)) {
-            //TODO
-//            if (!EqualsHelper.equals(tenant.application().getPrimaryKey(), PtAppContext.getCurrentUserApplicationPrimaryKey())) {
-//                throw new Error("Wrong ApplicationId: " + tenant.application().getPrimaryKey());
-//            }
+            TenantInLease tenantInLease = Persistence.service().retrieve(TenantInLease.class, dto.tenantInLeaseId().getValue());
+            if (tenantInLease == null) {
+                throw new Error("Unknown tenantInLease: " + dto.tenantInLeaseId().getValue());
+            }
+            if (!EqualsHelper.equals(tenantInLease.application().getPrimaryKey(), PtAppContext.getCurrentUserApplicationPrimaryKey())) {
+                throw new Error("Wrong ApplicationId: " + tenantInLease.application().getPrimaryKey());
+            }
         } else {
             SecurityController.assertBehavior(VistaCrmBehavior.Tenants);
         }

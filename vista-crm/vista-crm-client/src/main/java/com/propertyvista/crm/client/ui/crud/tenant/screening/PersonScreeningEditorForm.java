@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityEditor;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -79,7 +78,7 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.add(createSecureInformationTab(), i18n.tr("Secure Information"));
+        tabPanel.add(createIdentificationDocumentsTab(), i18n.tr("Identification Documents"));
         tabPanel.add(createAddressesTab(), i18n.tr("Addresses"));
         tabPanel.add(createlegalQuestionsTab(), proto().legalQuestions().getMeta().getCaption());
         tabPanel.add(createIncomesTab(), i18n.tr("Incomes"));
@@ -115,10 +114,6 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
             if (tabPanel.getWidgetIndex(guarantorsTabWidget) >= 0) {
                 tabPanel.remove(guarantorsTabWidget);
             }
-        }
-
-        if (getValue() != null) {
-            fileUpload.setTenantID(((IEntity) getValue()).getPrimaryKey());
         }
     }
 
@@ -180,11 +175,11 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
     }
 
-    private Widget createSecureInformationTab() {
+    private Widget createIdentificationDocumentsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder())).build());
+        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder()));
 
         return new CrmScrollPanel(main);
     }
