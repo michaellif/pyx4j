@@ -85,7 +85,7 @@ public class VistaDevSessionServlet extends HttpServlet {
             out.println("</body>");
             out.println("</html>");
         } else {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 }

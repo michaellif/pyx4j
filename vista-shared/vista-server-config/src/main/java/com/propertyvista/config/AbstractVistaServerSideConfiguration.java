@@ -17,6 +17,8 @@ import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 
 public abstract class AbstractVistaServerSideConfiguration extends EssentialsServerSideConfiguration {
 
+    public abstract boolean openDBReset();
+
     public abstract boolean openIdrequired();
 
     public abstract String getDefaultBaseURLresidentPortal(boolean secure);

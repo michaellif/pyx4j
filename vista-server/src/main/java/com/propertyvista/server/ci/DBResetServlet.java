@@ -46,14 +46,16 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.quartz.SchedulerHelper;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
-import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.server.domain.admin.Pmc;
 
@@ -115,17 +117,18 @@ public class DBResetServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         log.debug("DBReset requested");
         synchronized (DBResetServlet.class) {
-            log.debug("DBReset started");
             long start = System.currentTimeMillis();
             StringBuilder buf = new StringBuilder();
             String contentType = "text/plain";
             try {
-                VistaServerSideConfiguration conf = (VistaServerSideConfiguration) ServerSideConfiguration.instance();
+                AbstractVistaServerSideConfiguration conf = (AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance();
                 if (!conf.openDBReset()) {
-                    if (!DevelopmentSecurity.isDevelopmentAccessGranted()) {
-                        throw new Error("permission denied");
+                    if (!SecurityController.checkBehavior(VistaBasicBehavior.Admin)) {
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                        return;
                     }
                 }
+                log.debug("DBReset started");
                 ResetType type = null;
                 String tp = req.getParameter("type");
                 if (CommonsStringUtils.isStringSet(tp)) {

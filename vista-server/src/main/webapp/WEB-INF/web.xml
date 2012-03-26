@@ -189,6 +189,11 @@
 
     <servlet-mapping>
         <servlet-name>DebugServlet</servlet-name>
+        <url-pattern>/admin/debug/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>DebugServlet</servlet-name>
         <url-pattern>/crm/debug/*</url-pattern>
     </servlet-mapping>
 
@@ -212,6 +217,11 @@
         <url-pattern>/o/db-reset</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>DBResetServlet</servlet-name>
+        <url-pattern>/admin/db-reset</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>VistaDevSessionServlet</servlet-name>
         <servlet-class>com.propertyvista.server.security.openId.VistaDevSessionServlet</servlet-class>
@@ -254,11 +264,6 @@
 
     <servlet-mapping>
         <servlet-name>RemoteServiceServlet</servlet-name>
-        <url-pattern>/tester/srv/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>RemoteServiceServlet</servlet-name>
         <url-pattern>/admin/srv/*</url-pattern>
     </servlet-mapping>
 
@@ -267,6 +272,7 @@
         <url-pattern>/crm/srv/*</url-pattern>
     </servlet-mapping>
 
+<!-- 
     <servlet>
         <servlet-name>RemoteJ2SEServiceServlet</servlet-name>
         <servlet-class>com.pyx4j.rpc.server.RemoteJ2SEServiceServlet</servlet-class>
@@ -276,7 +282,7 @@
         <servlet-name>RemoteJ2SEServiceServlet</servlet-name>
         <url-pattern>/internal/j2sesrv/*</url-pattern>
     </servlet-mapping>
-
+-->
     <servlet>
         <servlet-name>DownloadServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.download.DownloadServlet</servlet-class>
@@ -439,6 +445,7 @@
         <url-pattern>/_aj/*</url-pattern>
     </servlet-mapping>
 
+<!-- 
     <servlet>
         <servlet-name>JerseyRESTService</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -458,7 +465,7 @@
         <servlet-name>JerseyRESTService</servlet-name>
         <url-pattern>/public/rest/*</url-pattern>
     </servlet-mapping>   
-    
+-->    
     <servlet>
         <servlet-name>OnboardingSchemaServlet</servlet-name>
         <servlet-class>com.propertyvista.admin.server.onboarding.OnboardingSchemaServlet</servlet-class>

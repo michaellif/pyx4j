@@ -32,8 +32,8 @@ import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.server.contexts.AntiDoS;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
-import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 public class OpenIdFilter implements Filter {
 
@@ -47,7 +47,7 @@ public class OpenIdFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        enabled = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdrequired();
+        enabled = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdrequired();
     }
 
     @Override
