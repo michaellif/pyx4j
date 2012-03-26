@@ -24,21 +24,6 @@ public class VistaServerSideConfigurationProdMain extends VistaServerSideConfigu
     }
 
     @Override
-    public boolean isDevelopmentBehavior() {
-        return true;
-    }
-
-    @Override
-    public boolean openIdrequired() {
-        return true;
-    }
-
-    @Override
-    public boolean openDBReset() {
-        return false;
-    }
-
-    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista Support\" <support.www22@birchwoodsoftwaregroup.com>";
     }

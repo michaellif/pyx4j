@@ -24,16 +24,6 @@ public class VistaServerSideConfigurationProdPangroup extends VistaServerSideCon
     }
 
     @Override
-    public boolean openIdrequired() {
-        return true;
-    }
-
-    @Override
-    public boolean openDBReset() {
-        return false;
-    }
-
-    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista Support\" <support.www22@birchwoodsoftwaregroup.com>";
     }

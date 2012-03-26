@@ -46,6 +46,11 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     }
 
     @Override
+    public boolean openIdrequired() {
+        return false;
+    }
+
+    @Override
     public String getDefaultBaseURLvistaCrm() {
         return "https://" + NamespaceManager.getNamespace() + ".propertyvista.com/";
     }
