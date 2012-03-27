@@ -72,7 +72,11 @@ public class EmailTemplateRootObjectLoader {
             AbstractUser user = context.user();
             String token = context.accessToken().getValue();
             t.requestorName().set(user.name());
-            t.passwordResetUrl().setValue(getPortalAccessUrl(token));
+            if (context.prospective().isBooleanTrue()) {
+                t.passwordResetUrl().setValue(getPtappAccessUrl(token));
+            } else {
+                t.passwordResetUrl().setValue(getPortalAccessUrl(token));
+            }
         } else if (tObj instanceof PasswordRequestCrmT) {
             PasswordRequestCrmT t = (PasswordRequestCrmT) tObj;
             if (context.user().isNull() || context.accessToken().isNull()) {

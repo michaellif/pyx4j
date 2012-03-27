@@ -153,6 +153,7 @@ public class MessageTemplates {
                 templateType = EmailTemplateType.PasswordRetrievalCrm;
                 break;
             case ProspectiveApp:
+                context.prospective().setValue(Boolean.TRUE);
             case TenantPortal:
                 templateType = EmailTemplateType.PasswordRetrievalTenant;
                 // get building policy node form the first available TenantInLease entry

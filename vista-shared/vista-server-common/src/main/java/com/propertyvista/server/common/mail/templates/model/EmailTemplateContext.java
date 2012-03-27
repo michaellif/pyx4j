@@ -32,5 +32,7 @@ public interface EmailTemplateContext extends IEntity {
 
     Lease lease();
 
+    IPrimitive<Boolean> prospective();
+
     TenantInLease tenantInLease();
 }
