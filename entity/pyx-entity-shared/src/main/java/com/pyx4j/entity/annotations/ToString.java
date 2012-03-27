@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ToString {
 
@@ -33,4 +33,6 @@ public @interface ToString {
      * (Optional) For DefaultFormater the order members in the IEntity.toString.
      */
     int index() default 0;
+
+    boolean sortable() default true;
 }

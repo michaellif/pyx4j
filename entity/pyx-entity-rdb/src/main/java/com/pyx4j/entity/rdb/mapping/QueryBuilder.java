@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -309,6 +310,10 @@ public class QueryBuilder<T extends IEntity> {
         EntityMeta entityMeta = EntityFactory.getEntityMeta(targetEntityClass);
         for (String sortMemberName : entityMeta.getToStringMemberNames()) {
             MemberMeta memberMeta = entityMeta.getMemberMeta(sortMemberName);
+            ToString memberColumn = memberMeta.getAnnotation(ToString.class);
+            if ((memberColumn != null) && (memberColumn.sortable() == false)) {
+                continue;
+            }
             ObjectClassType type = memberMeta.getObjectClassType();
             if ((type == ObjectClassType.Entity) || (type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
                 @SuppressWarnings("unchecked")
