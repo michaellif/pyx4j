@@ -33,6 +33,7 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.sort.SortSortable;
 import com.pyx4j.geo.GeoBox;
 import com.pyx4j.geo.GeoCircle;
 import com.pyx4j.geo.GeoPoint;
@@ -174,5 +175,117 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
 
         List<Address> far = srv.query(criteria);
         Assert.assertEquals("result set size", 2, far.size());
+    }
+
+    public void testSortByToString() {
+        String testId = uniqueString();
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.sortByOwned().name().setValue("B");
+            item.sortByOwned().amount().setValue("1");
+            srv.persist(item);
+        }
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.sortByOwned().name().setValue("A");
+            item.sortByOwned().amount().setValue("2");
+            srv.persist(item);
+        }
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.sortByOwned().name().setValue("A");
+            item.sortByOwned().amount().setValue("1");
+            srv.persist(item);
+        }
+
+        // Explicit sort
+        {
+            EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.asc(criteria.proto().sortByOwned().name());
+            criteria.asc(criteria.proto().sortByOwned().amount());
+
+            List<SortSortable> r = srv.query(criteria);
+            Assert.assertEquals("result set size", 3, r.size());
+            Assert.assertEquals("sort Ok", "A", r.get(0).sortByOwned().name().getValue());
+            Assert.assertEquals("sort Ok", "2", r.get(1).sortByOwned().amount().getValue());
+        }
+
+        // Created sort by ToString members
+        {
+            EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.asc(criteria.proto().sortByOwned());
+
+            List<SortSortable> r = srv.query(criteria);
+            Assert.assertEquals("result set size", 3, r.size());
+
+            Assert.assertEquals("sort Ok", "A", r.get(0).sortByOwned().name().getValue());
+            Assert.assertEquals("sort Ok", "1", r.get(0).sortByOwned().amount().getValue());
+
+            Assert.assertEquals("sort Ok", "A", r.get(1).sortByOwned().name().getValue());
+            Assert.assertEquals("sort Ok", "2", r.get(1).sortByOwned().amount().getValue());
+
+            Assert.assertEquals("sort Ok", "B", r.get(2).sortByOwned().name().getValue());
+        }
+    }
+
+    public void testSortByEmbeddedToString() {
+        String testId = uniqueString();
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.sortByEmbedded().name().setValue("B");
+            item.sortByEmbedded().amount().setValue("1");
+            srv.persist(item);
+        }
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.sortByEmbedded().name().setValue("A");
+            item.sortByEmbedded().amount().setValue("2");
+            srv.persist(item);
+        }
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.sortByEmbedded().name().setValue("A");
+            item.sortByEmbedded().amount().setValue("1");
+            srv.persist(item);
+        }
+
+        // Explicit sort
+        {
+            EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.asc(criteria.proto().sortByEmbedded().name());
+            criteria.asc(criteria.proto().sortByEmbedded().amount());
+
+            List<SortSortable> r = srv.query(criteria);
+            Assert.assertEquals("result set size", 3, r.size());
+            Assert.assertEquals("sort Ok", "A", r.get(0).sortByEmbedded().name().getValue());
+            Assert.assertEquals("sort Ok", "2", r.get(1).sortByEmbedded().amount().getValue());
+        }
+
+        // Created sort by ToString members
+        {
+            EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.asc(criteria.proto().sortByEmbedded());
+
+            List<SortSortable> r = srv.query(criteria);
+            Assert.assertEquals("result set size", 3, r.size());
+
+            Assert.assertEquals("sort Ok", "A", r.get(0).sortByEmbedded().name().getValue());
+            Assert.assertEquals("sort Ok", "1", r.get(0).sortByEmbedded().amount().getValue());
+
+            Assert.assertEquals("sort Ok", "A", r.get(1).sortByEmbedded().name().getValue());
+            Assert.assertEquals("sort Ok", "2", r.get(1).sortByEmbedded().amount().getValue());
+
+            Assert.assertEquals("sort Ok", "B", r.get(2).sortByEmbedded().name().getValue());
+        }
     }
 }

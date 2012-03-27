@@ -22,6 +22,7 @@ package com.pyx4j.entity.rdb.mapping;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
@@ -36,13 +37,18 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 public class QueryBuilder<T extends IEntity> {
@@ -111,7 +117,7 @@ public class QueryBuilder<T extends IEntity> {
             log.debug("sort by {}", criteria.getSorts());
             sortsSql.append(" ORDER BY ");
             boolean firstOrderBy = true;
-            for (EntityQueryCriteria.Sort sort : criteria.getSorts()) {
+            for (EntityQueryCriteria.Sort sort : expandToStringMembers(criteria.getSorts())) {
                 if (firstOrderBy) {
                     firstOrderBy = false;
                 } else {
@@ -274,6 +280,38 @@ public class QueryBuilder<T extends IEntity> {
 
             bindParams.add(bindHolder);
         }
+    }
+
+    private List<Sort> expandToStringMembers(List<Sort> sorts) {
+        List<Sort> result = new ArrayList<Sort>();
+        for (Sort sort : sorts) {
+            MemberMeta memberMeta = queryJoin.operationsMeta.entityMeta().getMemberMeta(new Path(sort.getPropertyPath()));
+            if (memberMeta.isEntity()) {
+                @SuppressWarnings("unchecked")
+                Class<? extends IEntity> targetEntityClass = (Class<? extends IEntity>) memberMeta.getValueClass();
+                result.addAll(expandToStringMembers(sort.getPropertyPath(), targetEntityClass, sort.isDescending()));
+            } else {
+                result.add(sort);
+            }
+
+        }
+        return result;
+    }
+
+    private List<Sort> expandToStringMembers(String propertyPath, Class<? extends IEntity> targetEntityClass, boolean descending) {
+        List<Sort> result = new ArrayList<Sort>();
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(targetEntityClass);
+        for (String sortMemberName : entityMeta.getToStringMemberNames()) {
+            MemberMeta memberMeta = entityMeta.getMemberMeta(sortMemberName);
+            if (memberMeta.isEntity()) {
+                @SuppressWarnings("unchecked")
+                Class<? extends IEntity> childEntityClass = (Class<? extends IEntity>) memberMeta.getObjectClass();
+                result.addAll(expandToStringMembers(propertyPath + sortMemberName + Path.PATH_SEPARATOR, childEntityClass, descending));
+            } else {
+                result.add(new Sort(propertyPath + sortMemberName + Path.PATH_SEPARATOR, descending));
+            }
+        }
+        return result;
     }
 
     boolean addDistinct() {
