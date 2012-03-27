@@ -18,6 +18,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -36,25 +37,27 @@ public interface BuildingViewerView extends IViewerView<BuildingDTO> {
 
         DashboardView.Presenter getDashboardPresenter();
 
-        IListerView.Presenter getFloorplanPresenter();
+        IListerView.Presenter<FloorplanDTO> getFloorplanPresenter();
 
-        IListerView.Presenter getUnitPresenter();
+        IListerView.Presenter<AptUnitDTO> getUnitPresenter();
 
-        IListerView.Presenter getElevatorPresenter();
+        IListerView.Presenter<ElevatorDTO> getElevatorPresenter();
 
-        IListerView.Presenter getBoilerPresenter();
+        IListerView.Presenter<BoilerDTO> getBoilerPresenter();
 
-        IListerView.Presenter getRoofPresenter();
+        IListerView.Presenter<RoofDTO> getRoofPresenter();
 
-        IListerView.Presenter getParkingPresenter();
+        IListerView.Presenter<ParkingDTO> getParkingPresenter();
 
-        IListerView.Presenter getLockerAreaPresenter();
+        IListerView.Presenter<LockerAreaDTO> getLockerAreaPresenter();
 
-        IListerView.Presenter getServicePresenter();
+        IListerView.Presenter<Service> getServicePresenter();
 
-        IListerView.Presenter getFeaturePresenter();
+        IListerView.Presenter<Feature> getFeaturePresenter();
 
-        IListerView.Presenter getConcessionPresenter();
+        IListerView.Presenter<Concession> getConcessionPresenter();
+
+        IListerView.Presenter<BillingRun> getBillingRunPresenter();
 
         void runBill();
     }
@@ -81,4 +84,5 @@ public interface BuildingViewerView extends IViewerView<BuildingDTO> {
 
     IListerView<Concession> getConcessionListerView();
 
+    IListerView<BillingRun> getBillingRunListerView();
 }

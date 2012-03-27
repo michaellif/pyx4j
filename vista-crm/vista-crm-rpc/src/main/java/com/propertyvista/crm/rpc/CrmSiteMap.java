@@ -237,6 +237,11 @@ public class CrmSiteMap implements SiteMap {
     }
 
     public static class Finance extends AppPlace {
+
+        @PlaceProperties(caption = "BillingRun")
+        @NavigationItem(navigLabel = "BillingRuns")
+        public static class BillingRun extends CrudAppPlace {
+        }
     }
 
     public static class Organization extends AppPlace {

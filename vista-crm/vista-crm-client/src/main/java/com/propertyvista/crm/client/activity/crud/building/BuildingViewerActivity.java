@@ -22,7 +22,6 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.crm.client.activity.ListerActivityFactory;
@@ -31,6 +30,7 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.rpc.services.billing.BillingRunCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
@@ -42,6 +42,7 @@ import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
+import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -60,25 +61,27 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     private final DashboardView.Presenter dashboardPresenter;
 
-    private final IListerView.Presenter<?> floorplanLister;
+    private final Presenter<FloorplanDTO> floorplanLister;
 
-    private final IListerView.Presenter<?> unitLister;
+    private final Presenter<AptUnitDTO> unitLister;
 
-    private final IListerView.Presenter<?> elevatorLister;
+    private final Presenter<ElevatorDTO> elevatorLister;
 
-    private final IListerView.Presenter<?> boilerLister;
+    private final Presenter<BoilerDTO> boilerLister;
 
-    private final IListerView.Presenter<?> roofLister;
+    private final Presenter<RoofDTO> roofLister;
 
-    private final IListerView.Presenter<?> parkingLister;
+    private final Presenter<ParkingDTO> parkingLister;
 
-    private final IListerView.Presenter<?> lockerAreaLister;
+    private final Presenter<LockerAreaDTO> lockerAreaLister;
 
-    private final IListerView.Presenter<?> serviceLister;
+    private final Presenter<Service> serviceLister;
 
-    private final IListerView.Presenter<?> featureLister;
+    private final Presenter<Feature> featureLister;
 
-    private final IListerView.Presenter<?> concessionLister;
+    private final Presenter<Concession> concessionLister;
+
+    private final Presenter<BillingRun> billingRunLister;
 
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(Place place) {
@@ -114,6 +117,8 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         concessionLister = ListerActivityFactory.create(place, ((BuildingViewerView) view).getConcessionListerView(),
                 (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class, VistaCrmBehavior.ProductCatalog);
 
+        billingRunLister = ListerActivityFactory.create(place, ((BuildingViewerView) view).getBillingRunListerView(),
+                (AbstractCrudService<BillingRun>) GWT.create(BillingRunCrudService.class), BillingRun.class, VistaCrmBehavior.PropertyManagement);
     }
 
     @Override
@@ -127,53 +132,58 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     }
 
     @Override
-    public Presenter<?> getFloorplanPresenter() {
+    public Presenter<FloorplanDTO> getFloorplanPresenter() {
         return floorplanLister;
     }
 
     @Override
-    public Presenter<?> getUnitPresenter() {
+    public Presenter<AptUnitDTO> getUnitPresenter() {
         return unitLister;
     }
 
     @Override
-    public Presenter<?> getElevatorPresenter() {
+    public Presenter<ElevatorDTO> getElevatorPresenter() {
         return elevatorLister;
     }
 
     @Override
-    public Presenter<?> getBoilerPresenter() {
+    public Presenter<BoilerDTO> getBoilerPresenter() {
         return boilerLister;
     }
 
     @Override
-    public Presenter<?> getRoofPresenter() {
+    public Presenter<RoofDTO> getRoofPresenter() {
         return roofLister;
     }
 
     @Override
-    public Presenter<?> getParkingPresenter() {
+    public Presenter<ParkingDTO> getParkingPresenter() {
         return parkingLister;
     }
 
     @Override
-    public Presenter<?> getLockerAreaPresenter() {
+    public Presenter<LockerAreaDTO> getLockerAreaPresenter() {
         return lockerAreaLister;
     }
 
     @Override
-    public Presenter<?> getServicePresenter() {
+    public Presenter<Service> getServicePresenter() {
         return serviceLister;
     }
 
     @Override
-    public Presenter<?> getFeaturePresenter() {
+    public Presenter<Feature> getFeaturePresenter() {
         return featureLister;
     }
 
     @Override
-    public Presenter<?> getConcessionPresenter() {
+    public Presenter<Concession> getConcessionPresenter() {
         return concessionLister;
+    }
+
+    @Override
+    public Presenter<BillingRun> getBillingRunPresenter() {
+        return billingRunLister;
     }
 
     @Override
