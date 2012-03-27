@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
@@ -58,6 +59,10 @@ public interface Tenant extends IEntity, PersonScreeningHolder, TenantUserHolder
             return I18nEnum.toString(this);
         }
     }
+
+    @NotNull
+    @ReadOnly
+    IPrimitive<String> tenantID();
 
     @NotNull
     @MemberColumn(name = "tenantType")
