@@ -14,8 +14,8 @@
 package com.propertyvista.crm.client.activity.crud.tenant.lease;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -179,7 +179,7 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
 
     @Override
     public void sendMail(List<TenantInLease> tenants, EmailTemplateType emailType) {
-        List<TenantUser> users = new LinkedList<TenantUser>();
+        Vector<TenantUser> users = new Vector<TenantUser>();
         for (TenantInLease til : tenants) {
             users.add(til.tenant().user());
         }

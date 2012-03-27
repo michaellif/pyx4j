@@ -14,7 +14,7 @@
 package com.propertyvista.crm.rpc.services.tenant.application;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -47,5 +47,5 @@ public interface LeaseCrudService extends AbstractVersionedCrudService<LeaseDTO>
 
     void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId);
 
-    void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, List<TenantUser> users, EmailTemplateType emailType);
+    void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<TenantUser> users, EmailTemplateType emailType);
 }

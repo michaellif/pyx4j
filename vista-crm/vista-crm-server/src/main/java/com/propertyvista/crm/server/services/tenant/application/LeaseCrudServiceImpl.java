@@ -14,7 +14,7 @@
 package com.propertyvista.crm.server.services.tenant.application;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -268,7 +268,7 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
     }
 
     @Override
-    public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, List<TenantUser> users, EmailTemplateType emailType) {
+    public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<TenantUser> users, EmailTemplateType emailType) {
         // TODO Auto-generated method stub
     }
 }
