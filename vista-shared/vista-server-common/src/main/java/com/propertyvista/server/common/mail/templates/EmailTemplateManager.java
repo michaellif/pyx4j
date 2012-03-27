@@ -69,6 +69,11 @@ public class EmailTemplateManager {
             values.add(EntityFactory.create(ApplicationT.class));
             values.add(EntityFactory.create(BuildingT.class));
             break;
+        case TenantInvitation:
+            values.add(EntityFactory.create(PasswordRequestT.class));
+            values.add(EntityFactory.create(LeaseT.class));
+            values.add(EntityFactory.create(BuildingT.class));
+            break;
         default:
             throw new Error("Unknown EmailTemplateType: " + template.name());
         }

@@ -53,20 +53,15 @@ public abstract class AbstractPolicyPreloader<P extends Policy> extends Abstract
     @Override
     public String create() {
         StringBuilder log = new StringBuilder();
-        try {
-            if (topNode == null) {
-                throw new Error("top node was not set");
-            }
-            Policy policy = createPolicy(log);
-            policy.node().set(topNode);
-            Persistence.service().merge(policy);
-        } catch (Throwable e) {
-            // We need this policyClass for hack
-            String policyName = policyClass.equals(Policy.class) ? "" : " " + policyClass.getSimpleName();
-            return "ERROR:" + policyName + " could not be preloaded due to '" + topNode.getStringView() + "' due to: " + e.getMessage();
+        if (topNode == null) {
+            throw new Error("top node was not set");
         }
+        Policy policy = createPolicy(log);
+        policy.node().set(topNode);
+        Persistence.service().merge(policy);
+
         String policyCreationLog = log.toString();
-        return policyClass.getSimpleName() + " was successfuly assigned to '" + topNode.getStringView() + "'"
+        return policyClass.getSimpleName() + " was successfully assigned to '" + topNode.getStringView() + "'"
                 + ("".equals(policyCreationLog) ? "" : ": " + policyCreationLog);
     }
 

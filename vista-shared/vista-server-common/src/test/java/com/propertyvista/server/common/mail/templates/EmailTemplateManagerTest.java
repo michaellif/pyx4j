@@ -498,6 +498,9 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         EmailTemplatesPolicy policy = EntityFactory.create(EmailTemplatesPolicy.class);
         for (EmailTemplateType type : EmailTemplateType.values()) {
+            if (type == EmailTemplateType.TenantInvitation) {
+                continue;
+            }
             EmailTemplate template = EntityFactory.create(EmailTemplate.class);
             template.type().setValue(type);
             template.subject().setValue(type.toString());

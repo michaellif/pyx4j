@@ -31,7 +31,9 @@ public enum EmailTemplateType {
 
     ApplicationApproved,
 
-    ApplicationDeclined;
+    ApplicationDeclined,
+
+    TenantInvitation;
 
     @Override
     public String toString() {

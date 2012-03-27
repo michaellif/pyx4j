@@ -59,6 +59,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         policy.templates().add(defaultEmailTemplateApplicationCreatedGuarantor());
         policy.templates().add(defaultEmailTemplateApplicationApproved());
         policy.templates().add(defaultEmailTemplateApplicationDeclined());
+        policy.templates().add(defaultEmailTemplateTenantInvitation());
 
         return policy;
     }
@@ -68,8 +69,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
             String html = IOUtils.getTextResource("email/template-basic.html");
             return html.replace("{MESSAGE}", text);
         } catch (IOException e) {
-            log.error("template error", e);
-            return text;
+            throw new Error("template error", e);
         }
     }
 
@@ -279,6 +279,52 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
                 EmailTemplateManager.getVarname(bldT.propertyName()) + "<br/>" +
                 EmailTemplateManager.getVarname(bldT.administrator().name()) + "<br/>"
+        )));//@formatter:on
+        return template;
+    }
+
+    private EmailTemplate defaultEmailTemplateTenantInvitation() {
+        EmailTemplateType type = EmailTemplateType.TenantInvitation;
+
+        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+        LeaseT leaseT = EmailTemplateManager.getProto(type, LeaseT.class);
+        PasswordRequestT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestT.class);
+
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.type().setValue(type);
+        template.subject().setValue(i18n.tr("Visit our new site"));
+        template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
+                "<h3>Welcome {0} to your old home!</h3><br/><br/>" +                        
+
+                "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n" +
+                "    <a style=\"color:#929733\" href=\"{1}\">Change Your Password</a>" +
+                
+                "As per our information, your lease start date is on {2}, {3}<br/></br>" +
+
+                "We are excited to have you live with us. Please maintain your username and password that you have used for the application process. " +
+                "This username and password will stay with you throughout your tenancy and will give you access to our Online Tenant Portal. " +
+                "You can access the Portal at anytime by going to our website {4} " +
+                "and clicking under residents. " +
+                "Alternatively you can reach the site directly by going to {5}.<br/><br/>" +
+
+                "A member of our team will be in touch with you shortly to make move-in arrangements.<br/><br/>" +
+
+                "In the meantime, should you have any concerns or questions, please do not hesistate to contact us directly.<br/><br/>" +
+                        
+                "Sincerely,<br/><br/>" +
+                        
+                "{6}<br/>" +
+                "{7}<br/>",
+                
+                EmailTemplateManager.getVarname(pwdReqT.requestorName()),
+                EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl()),
+                EmailTemplateManager.getVarname(leaseT.startDateWeekday()),
+                EmailTemplateManager.getVarname(leaseT.startDate()),
+                EmailTemplateManager.getVarname(portalT.portalHomeUrl()),
+                EmailTemplateManager.getVarname(portalT.tenantHomeUrl()),
+                EmailTemplateManager.getVarname(bldT.propertyName()) ,
+                EmailTemplateManager.getVarname(bldT.administrator().name())
         )));//@formatter:on
         return template;
     }
