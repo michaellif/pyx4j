@@ -268,7 +268,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "We do encourage you to add more information to your application that could assist us in re-assessing this application.<br/>" +
                 "Typically, additional Proof of Income or Guarantor(s)can change the application decision and allow us to re-evaluate the entire application.<br/>" +
                 "We welcome you to access the application again utilizing the username and password you have previously created at " +
-                EmailTemplateManager.getVarname(portalT.ptappHomeUrl()) + " " +
+                EmailTemplateManager.getVarname(portalT.prospectPortalomeUrl()) + " " +
                 "to add more information.<br/>" +
                 "Should you wish the cancel the application procedure at this time completely, no further actions are required.<br/><br/>" +
 

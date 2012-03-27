@@ -21,6 +21,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface LeaseT extends IEntity {
+
     IPrimitive<String> applicant();
 
     IPrimitive<String> startDate();

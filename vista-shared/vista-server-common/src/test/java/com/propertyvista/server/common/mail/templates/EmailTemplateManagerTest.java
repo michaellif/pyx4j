@@ -358,7 +358,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 String[] args = {
                     EmailTemplateManager.getVarname(appT.applicant()),
                     EmailTemplateManager.getVarname(appT.refNumber()),
-                    EmailTemplateManager.getVarname(portalT.ptappHomeUrl()),
+                    EmailTemplateManager.getVarname(portalT.prospectPortalomeUrl()),
                     EmailTemplateManager.getVarname(bldT.propertyName()),
                     EmailTemplateManager.getVarname(bldT.administrator().name())
                 };

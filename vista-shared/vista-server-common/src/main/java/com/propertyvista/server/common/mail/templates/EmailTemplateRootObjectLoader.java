@@ -27,6 +27,7 @@ import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -52,7 +53,17 @@ public class EmailTemplateRootObjectLoader {
             PortalLinksT t = (PortalLinksT) tObj;
             t.portalHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, false));
             t.tenantHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL);
-            t.ptappHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true));
+            t.prospectPortalomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true));
+
+            // TODO use SiteThemeServicesImpl.getSiteDescriptorFromCache()
+            // TODO use proper locale
+            SiteDescriptor siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
+            if (!siteDescriptor.siteTitles().isEmpty()) {
+                t.copyright().set(siteDescriptor.siteTitles().get(0).copyright());
+                t.companyName().set(siteDescriptor.siteTitles().get(0).residentPortalTitle());
+            }
+            t.logoUrl().setValue(t.portalHomeUrl().getValue() + "/logo.png/vista.siteimgrc");
+
         } else if (tObj instanceof PasswordRequestT) {
             PasswordRequestT t = (PasswordRequestT) tObj;
             if (context.user().isNull() || context.accessToken().isNull()) {

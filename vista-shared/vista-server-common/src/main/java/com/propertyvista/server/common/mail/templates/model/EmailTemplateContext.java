@@ -25,6 +25,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface EmailTemplateContext extends IEntity {
+
     IPrimitive<String> accessToken();
 
     AbstractUser user();
