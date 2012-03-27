@@ -16,13 +16,11 @@ package com.propertyvista.portal.rpc.ptapp.services;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 
-import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.portal.rpc.ptapp.dto.ApplicationDocumentUploadDTO;
-
-public interface ApplicationDocumentUploadService extends UploadService<ApplicationDocumentUploadDTO, ApplicationDocument> {
+public interface ApplicationDocumentUploadService extends UploadService<IEntity, IEntity> {
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.TIF, DownloadFormat.BMP, DownloadFormat.PDF);

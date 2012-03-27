@@ -15,10 +15,13 @@ package com.propertyvista.domain.media;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -36,7 +39,8 @@ public interface ApplicationDocument extends File, IUserEntity {
 
     @Owner
     @JoinColumn
-    //TODO @ReadOnly  assign once only  
+    @Detached
+    @ReadOnly
     ApplicationDocumentHolder owner();
 
     interface OrderColumnId extends ColumnId {
@@ -47,12 +51,14 @@ public interface ApplicationDocument extends File, IUserEntity {
     IPrimitive<Integer> orderInOwner();
 
     /**
-     * @return User defined type of the document
+     * @return User defined type of the identification document: not relevant in case of employment documents
      */
-    IdentificationDocumentType identificationDocument();
+    @NotNull
+    IdentificationDocumentType idType();
 
     /**
-     * @return data relevant to the selected identification document, i.e. Driver's License number, Passport number, SIN etc.
+     * @return data relevant to the selected identification document, i.e. Driver's License number, Passport number, SIN etc. or descripton
      */
+    @NotNull
     IPrimitive<String> details();
 }

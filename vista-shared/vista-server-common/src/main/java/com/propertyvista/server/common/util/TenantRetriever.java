@@ -18,15 +18,19 @@ import java.util.List;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
+import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.PersonScreeningHolder;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.server.common.security.VistaContext;
 
 public class TenantRetriever {
 
@@ -120,9 +124,21 @@ public class TenantRetriever {
     }
 
     public void saveScreening() {
-        for (ApplicationDocument doc : tenantScreening.documents()) {
-            doc.owner().set(tenantScreening);
-        }
+        final Key userKey = VistaContext.getCurrentUserPrimaryKey();
+
+        EntityGraph.applyRecursivelyAllObjects(tenantScreening, new EntityGraph.ApplyMethod() {
+
+            @Override
+            public boolean apply(IEntity entity) {
+                if (entity instanceof IUserEntity) {
+                    IUserEntity userEntity = ((IUserEntity) entity);
+                    if (userEntity.user().getPrimaryKey() == null) {
+                        userEntity.user().setPrimaryKey(userKey);
+                    }
+                }
+                return false;
+            }
+        });
 
         Persistence.service().merge(tenantScreening);
 

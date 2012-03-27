@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -38,6 +37,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentUploaderFolder;
+import com.propertyvista.common.client.ui.components.IdUploaderFolder;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
@@ -109,7 +109,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         main.setH1(++row, 0, 1, i18n.tr("Identification Documents"));
 
-        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder(true)));
+        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new IdUploaderFolder(true)));
         fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
         fileUpload.asWidget().setWidth("40em");
@@ -230,10 +230,6 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         super.onPopulate();
 
         enablePreviousAddress();
-
-        if (getValue() != null) {
-            fileUpload.setTenantID(((IEntity) getValue()).getPrimaryKey());
-        }
     }
 
     private void StartEndDateWithinMonth(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2, final String message) {

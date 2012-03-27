@@ -19,13 +19,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityEditor;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentUploaderFolder;
+import com.propertyvista.common.client.ui.components.ProofOfEmploymentUploaderFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
@@ -75,7 +75,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         main.setWidget(++row, 0, inject(proto().studentIncome(), createStudentIncomeEditor()));
         main.setWidget(++row, 0, inject(proto().socialServices(), createSocialServicesEditor()));
         main.setWidget(++row, 0, inject(proto().otherIncomeInformation(), createOtherIncomeInfoEditor()));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder())).build());
 
         return main;
     }
@@ -84,7 +84,6 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
     protected void onPopulate() {
         super.onPopulate();
         setVisibility(getValue().incomeSource().getValue());
-        fileUpload.setTenantID(((IEntity) (getValue().getParent().getParent())).getPrimaryKey());
     }
 
     @SuppressWarnings("unchecked")

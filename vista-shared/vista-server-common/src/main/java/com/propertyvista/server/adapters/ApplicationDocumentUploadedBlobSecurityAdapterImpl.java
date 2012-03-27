@@ -18,12 +18,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.server.domain.ApplicationDocumentBlob;
 import com.propertyvista.shared.adapters.ApplicationDocumentUploadedBlobSecurityAdapter;
 
 public class ApplicationDocumentUploadedBlobSecurityAdapterImpl implements ApplicationDocumentUploadedBlobSecurityAdapter {
@@ -47,8 +45,8 @@ public class ApplicationDocumentUploadedBlobSecurityAdapterImpl implements Appli
         if (userUploadeKeys == null) {
             return false;
         }
-        if (userUploadeKeys.contains(valueNew)) {
-            Persistence.service().delete(ApplicationDocumentBlob.class, (Key) valueOrig);
+        Key blobKeyNew = ((Key) valueNew);
+        if (blobKeyNew != null & userUploadeKeys.contains(blobKeyNew)) {
             return true;
         } else {
             return false;

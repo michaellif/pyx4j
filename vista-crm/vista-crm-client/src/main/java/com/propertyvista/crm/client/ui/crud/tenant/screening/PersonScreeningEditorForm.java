@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentUploaderFolder;
+import com.propertyvista.common.client.ui.components.IdUploaderFolder;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
@@ -179,7 +180,7 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder()));
+        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new IdUploaderFolder()));
 
         return new CrmScrollPanel(main);
     }

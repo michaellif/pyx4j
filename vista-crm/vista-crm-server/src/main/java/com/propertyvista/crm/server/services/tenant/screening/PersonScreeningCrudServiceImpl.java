@@ -17,9 +17,7 @@ import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.tenant.screening.PersonScreeningCrudService;
-import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.income.PersonalIncome;
 
 public class PersonScreeningCrudServiceImpl extends AbstractCrudServiceImpl<PersonScreening> implements PersonScreeningCrudService {
 
@@ -43,20 +41,7 @@ public class PersonScreeningCrudServiceImpl extends AbstractCrudServiceImpl<Pers
 
     @Override
     protected void persist(PersonScreening dbo, PersonScreening dto) {
+        // TODO set user id for all IUserEntity in dbo graph        
         super.persist(dbo, dto);
-
-        int no = 0;
-        for (ApplicationDocument applicationDocument : dbo.documents()) {
-            applicationDocument.owner().set(dbo);
-            applicationDocument.orderInOwner().setValue(no++);
-            Persistence.service().merge(applicationDocument);
-        }
-        for (PersonalIncome income : dbo.incomes()) {
-            no = 0;
-            for (ApplicationDocument applicationDocument : income.documents()) {
-                applicationDocument.orderInOwner().setValue(no++);
-                Persistence.service().merge(applicationDocument);
-            }
-        }
     }
 }

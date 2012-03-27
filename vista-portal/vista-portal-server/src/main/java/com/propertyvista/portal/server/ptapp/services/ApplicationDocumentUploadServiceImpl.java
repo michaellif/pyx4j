@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -28,19 +29,12 @@ import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.portal.rpc.ptapp.dto.ApplicationDocumentUploadDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
-import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.adapters.ApplicationDocumentUploadedBlobSecurityAdapterImpl;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
-public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<ApplicationDocumentUploadDTO, ApplicationDocument> implements
-        ApplicationDocumentUploadService {
+public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<IEntity, IEntity> implements ApplicationDocumentUploadService {
 
     private static final I18n i18n = I18n.get(ApplicationDocumentUploadServiceImpl.class);
 
@@ -62,42 +56,19 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(UploadData data, UploadDeferredProcess<ApplicationDocumentUploadDTO, ApplicationDocument> process,
-            UploadResponse<ApplicationDocument> response) {
+    public ProcessingStatus onUploadRecived(UploadData data, UploadDeferredProcess<IEntity, IEntity> process, UploadResponse<IEntity> response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
-
-        ApplicationDocumentUploadDTO dto = process.getData();
-
-        ApplicationDocument newDocument = EntityFactory.create(ApplicationDocument.class);
-
-        if (SecurityController.checkBehavior(VistaTenantBehavior.Prospective)) {
-            newDocument.user().set(PtAppContext.getCurrentUser());
-        } else {
-            SecurityController.assertBehavior(VistaCrmBehavior.Tenants);
-        }
 
         ApplicationDocumentBlob applicationDocumentData = EntityFactory.create(ApplicationDocumentBlob.class);
         applicationDocumentData.data().setValue(data.data);
         applicationDocumentData.contentType().setValue(response.fileContentType);
 
         Persistence.service().persist(applicationDocumentData);
+        response.uploadKey = applicationDocumentData.getPrimaryKey();
 
         ApplicationDocumentUploadedBlobSecurityAdapterImpl.blobUploaded(applicationDocumentData.getPrimaryKey());
 
-        newDocument.blobKey().setValue(applicationDocumentData.id().getValue());
-        newDocument.fileName().setValue(response.fileName);
-        newDocument.fileSize().setValue(response.fileSize);
-        newDocument.timestamp().setValue(response.timestamp);
-        newDocument.contentMimeType().setValue(response.fileContentType);
-
-        newDocument.identificationDocument().set(dto.identificationDocument());
-        newDocument.details().setValue(dto.details().getValue());
-
-        Persistence.service().persist(newDocument);
         Persistence.service().commit();
-
-        response.data = newDocument;
-
         return ProcessingStatus.completed;
     }
 

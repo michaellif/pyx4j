@@ -30,7 +30,6 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -44,7 +43,7 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.misc.EquifaxApproval;
 
 @DiscriminatorValue("PersonScreening")
-public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
+public interface PersonScreening extends ApplicationDocumentHolder {
 
     @Owner
     @NotNull
