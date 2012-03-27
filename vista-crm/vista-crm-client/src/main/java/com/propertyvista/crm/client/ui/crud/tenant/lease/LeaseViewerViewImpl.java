@@ -13,16 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -32,6 +35,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -39,11 +43,13 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.version.LeaseVersionService;
+import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.domain.tenant.lease.PaymentRecord;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
@@ -53,6 +59,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     private final IListerView<Bill> billLister;
 
     private final IListerView<PaymentRecord> paymentLister;
+
+    private final Button sendMail;
 
     private final Button onlineApplication;
 
@@ -78,6 +86,20 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         setForm(new LeaseEditorForm(true));
 
         // Add actions:
+        sendMail = new Button(i18n.tr("Send Mail..."), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                new SendMailBox(form.getValue().version().tenants()) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((LeaseViewerView.Presenter) presenter).sendMail(getSelectedItems(), getEmailType());
+                        return true;
+                    }
+                }.show();
+            }
+        });
+        addToolbarItem(sendMail.asWidget());
+
         onlineApplication = new Button(i18n.tr("Start Online Application"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -87,7 +109,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         addToolbarItem(onlineApplication.asWidget());
 
         runBill = new Button(i18n.tr("Run Bill"), new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
                 ((LeaseViewerView.Presenter) presenter).startBilling();
@@ -255,28 +276,52 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         }
     }
 
-    private abstract class ApplicationBox extends OkCancelDialog {
+    private abstract class SendMailBox extends SelectDialog<TenantInLease> {
 
-        private final CCheckBox invite = new CCheckBox();
+        private CComboBox<EmailTemplateType> emailType;
 
-        public ApplicationBox() {
-            super(i18n.tr("Please select"));
-            invite.setValue(true);
-            setBody(createBody());
+        public SendMailBox(List<TenantInLease> tenants) {
+            super(i18n.tr("Send Mail"), true, tenants, new SelectDialog.Formatter<TenantInLease>() {
+                @Override
+                public String format(TenantInLease entity) {
+                    return entity.tenant().person().name().getStringView();
+                }
+            });
+
+            getOkButton().setText(i18n.tr("Send"));
         }
 
-        protected Widget createBody() {
-            getOkButton().setEnabled(true);
-
-            HorizontalPanel content = new HorizontalPanel();
-            content.add(new Label(i18n.tr("Invite Applicant") + ": "));
-            content.add(invite.asWidget());
-            content.setSpacing(4);
-            return content;
+        @Override
+        protected Widget initBody(boolean isMultiselectAllowed, List<TenantInLease> data) {
+            VerticalPanel body = new VerticalPanel();
+            body.add(new HTML(i18n.tr("Select Tenants:")));
+            body.add(super.initBody(isMultiselectAllowed, data));
+            body.add(new HTML(i18n.tr("Email Type:")));
+            body.add(initEmailTypes());
+            body.setWidth("100%");
+            body.setSpacing(3);
+            return body;
         }
 
-        protected boolean isInvite() {
-            return invite.getValue();
+        private Widget initEmailTypes() {
+            emailType = new CComboBox<EmailTemplateType>();
+            emailType.setOptions(Arrays.asList(EmailTemplateType.TenantInvitation));
+            emailType.setValue(EmailTemplateType.TenantInvitation, false);
+            return emailType.asWidget();
+        }
+
+        protected EmailTemplateType getEmailType() {
+            return emailType.getValue();
+        }
+
+        @Override
+        public String defineWidth() {
+            return "350px";
+        }
+
+        @Override
+        public String defineHeight() {
+            return "100px";
         }
     }
 }

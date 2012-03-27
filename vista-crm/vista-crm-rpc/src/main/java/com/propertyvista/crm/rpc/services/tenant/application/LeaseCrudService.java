@@ -14,6 +14,7 @@
 package com.propertyvista.crm.rpc.services.tenant.application;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -22,7 +23,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -43,4 +46,6 @@ public interface LeaseCrudService extends AbstractVersionedCrudService<LeaseDTO>
     void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut);
 
     void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId);
+
+    void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, List<TenantUser> users, EmailTemplateType emailType);
 }

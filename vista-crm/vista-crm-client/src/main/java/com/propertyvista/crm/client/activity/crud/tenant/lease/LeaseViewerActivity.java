@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.activity.crud.tenant.lease;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -40,7 +41,10 @@ import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
+import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.PaymentRecord;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -93,8 +97,8 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
 
     protected void populatePayments(LeaseDTO result) {
         List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
-        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(PaymentRecord.class).billingAccount().id().getPath(), Operators.is, result
-                .billingAccount().getPrimaryKey()));
+        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(PaymentRecord.class).billingAccount().id().getPath(), Operators.is,
+                result.billingAccount().getPrimaryKey()));
         paymentLister.setPreDefinedFilters(preDefinedFilters);
         paymentLister.setParent(result.billingAccount().getPrimaryKey());
         paymentLister.populate();
@@ -171,5 +175,19 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
                 populate();
             }
         }, entityId);
+    }
+
+    @Override
+    public void sendMail(List<TenantInLease> tenants, EmailTemplateType emailType) {
+        List<TenantUser> users = new LinkedList<TenantUser>();
+        for (TenantInLease til : tenants) {
+            users.add(til.tenant().user());
+        }
+        ((LeaseCrudService) service).sendMail(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, entityId, users, emailType);
     }
 }

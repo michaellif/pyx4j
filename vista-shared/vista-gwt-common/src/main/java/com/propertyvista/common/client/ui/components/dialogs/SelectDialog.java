@@ -103,7 +103,7 @@ public abstract class SelectDialog<E extends IEntity> extends OkCancelDialog {
         return "40em";
     }
 
-    private Widget initBody(boolean isMultiselectAllowed, List<E> data) {
+    protected Widget initBody(boolean isMultiselectAllowed, List<E> data) {
 
         List<HasCell<E, ?>> cells = new ArrayList<HasCell<E, ?>>(2);
         if (isMultiselectAllowed) {

@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.tenant.application;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -28,12 +29,14 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.crm.server.util.IdAssignmentSequenceUtil;
+import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
@@ -262,5 +265,10 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         new LeaseManager().cancelEvict(entityId);
         Persistence.service().commit();
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, List<TenantUser> users, EmailTemplateType emailType) {
+        // TODO Auto-generated method stub
     }
 }
