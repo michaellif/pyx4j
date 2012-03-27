@@ -15,6 +15,7 @@ package com.propertyvista.domain.person;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -56,6 +57,7 @@ public interface Person extends IEntity {
     @Editor(type = EditorType.phone)
     IPrimitive<String> workPhone();
 
+    @Caption(name = "E-Mail")
     @Editor(type = EditorType.email)
     IPrimitive<String> email();
 
