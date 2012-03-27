@@ -16,21 +16,22 @@ package com.propertyvista.domain.media;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.shared.adapters.ApplicationDocumentUploadedBlobSecurityAdapter;
 
 public interface ApplicationDocument extends File, IUserEntity {
 
     @Override
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-    @ReadOnly
+    @MemberColumn(modificationAdapters = { ApplicationDocumentUploadedBlobSecurityAdapter.class })
     IPrimitive<Key> blobKey();
 
     @Owner

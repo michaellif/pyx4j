@@ -36,6 +36,7 @@ import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationDocumentUploadDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.server.adapters.ApplicationDocumentUploadedBlobSecurityAdapterImpl;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<ApplicationDocumentUploadDTO, ApplicationDocument> implements
@@ -80,6 +81,8 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
         applicationDocumentData.contentType().setValue(response.fileContentType);
 
         Persistence.service().persist(applicationDocumentData);
+
+        ApplicationDocumentUploadedBlobSecurityAdapterImpl.blobUploaded(applicationDocumentData.getPrimaryKey());
 
         newDocument.blobKey().setValue(applicationDocumentData.id().getValue());
         newDocument.fileName().setValue(response.fileName);
