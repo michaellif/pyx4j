@@ -21,6 +21,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PasswordRequestCrmT extends IEntity {
+
     IPrimitive<String> requestorName();
 
     IPrimitive<String> passwordResetUrl();

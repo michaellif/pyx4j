@@ -15,7 +15,6 @@ package com.propertyvista.server.common.mail.templates;
 
 import java.text.SimpleDateFormat;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -27,6 +26,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -40,6 +40,7 @@ import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
 import com.propertyvista.server.common.mail.templates.model.PasswordRequestT;
 import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
 import com.propertyvista.server.common.mail.templates.model.TenantT;
+import com.propertyvista.server.common.util.VistaDeployment;
 
 public class EmailTemplateRootObjectLoader {
 
@@ -49,10 +50,9 @@ public class EmailTemplateRootObjectLoader {
         }
         if (tObj instanceof PortalLinksT) {
             PortalLinksT t = (PortalLinksT) tObj;
-            String portalBaseUrl = ServerSideConfiguration.instance().getMainApplicationURL();
-            t.portalHomeUrl().setValue(portalBaseUrl + DeploymentConsts.PORTAL_URL);
-            t.tenantHomeUrl().setValue(portalBaseUrl + DeploymentConsts.TENANT_URL);
-            t.ptappHomeUrl().setValue(portalBaseUrl + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, null));
+            t.portalHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, false));
+            t.tenantHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL);
+            t.ptappHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true));
         } else if (tObj instanceof PasswordRequestT) {
             PasswordRequestT t = (PasswordRequestT) tObj;
             if (context.user().isNull() || context.accessToken().isNull()) {
@@ -157,20 +157,20 @@ public class EmailTemplateRootObjectLoader {
     }
 
     private static String getCrmAccessUrl(String token) {
-        return ServerSideConfiguration.instance().getMainApplicationURL()
-                + AppPlaceInfo.absoluteUrl(DeploymentConsts.CRM_URL, CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true), CrmSiteMap.LoginWithToken.class,
+                AuthenticationService.AUTH_TOKEN_ARG, token);
 
     }
 
     private static String getPtappAccessUrl(String token) {
-        return ServerSideConfiguration.instance().getMainApplicationURL()
-                + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), PtSiteMap.LoginWithToken.class,
+                AuthenticationService.AUTH_TOKEN_ARG, token);
 
     }
 
     private static String getPortalAccessUrl(String token) {
-        return ServerSideConfiguration.instance().getMainApplicationURL() + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
-                + token;
+        return VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL + '?'
+                + AuthenticationService.AUTH_TOKEN_ARG + '=' + token;
     }
 
     private static Application getApplication(TenantInLease tenantInLease) {

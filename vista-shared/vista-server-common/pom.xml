@@ -43,6 +43,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-admin-rpc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-site-shared</artifactId>
         </dependency>

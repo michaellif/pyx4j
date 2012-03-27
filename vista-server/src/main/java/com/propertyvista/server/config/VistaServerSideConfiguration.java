@@ -106,7 +106,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLvistaAdmin() {
-        return getMainApplicationURL() + DeploymentConsts.ADMIN_URL;
+        return getApplicationDeploymentProtocol() + "://" + "internal" + getApplicationURLNamespace() + DeploymentConsts.ADMIN_URL;
     }
 
     @Override
@@ -180,6 +180,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         return true;
     }
 
+    @Override
     public boolean openDBReset() {
         return true;
     }

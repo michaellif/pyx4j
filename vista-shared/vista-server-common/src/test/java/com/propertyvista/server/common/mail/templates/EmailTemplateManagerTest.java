@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
@@ -58,6 +57,7 @@ import com.propertyvista.server.common.mail.templates.model.LeaseT;
 import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
 import com.propertyvista.server.common.mail.templates.model.PasswordRequestT;
 import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
+import com.propertyvista.server.common.util.VistaDeployment;
 
 public class EmailTemplateManagerTest extends VistaDBTestBase {
 
@@ -97,14 +97,12 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     public void setUp() throws Exception {
         super.setUp();
 
-        // main app url
-        System.setProperty("com.pyx4j.appUrl", "http://www.propertyvista.com/");
+        portalHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, false);
+        tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL;
+        ptappHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true);
 
-        ptappHomeUrl = ServerSideConfiguration.instance().getMainApplicationURL() + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, null);
-        portalHomeUrl = ServerSideConfiguration.instance().getMainApplicationURL() + DeploymentConsts.PORTAL_URL;
-        tenantHomeUrl = ServerSideConfiguration.instance().getMainApplicationURL() + DeploymentConsts.TENANT_URL;
-        appUrl = ServerSideConfiguration.instance().getMainApplicationURL()
-                + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+        appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), PtSiteMap.LoginWithToken.class,
+                AuthenticationService.AUTH_TOKEN_ARG, token);
     }
 
     public void testTemplates() {
@@ -233,8 +231,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     crmUser.name().getValue(),
-                    ServerSideConfiguration.instance().getMainApplicationURL()
-                    + AppPlaceInfo.absoluteUrl(DeploymentConsts.CRM_URL, CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, 
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true), CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, 
                     token)
                 };
                 fmtArgs = args;
@@ -251,7 +248,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     mainAplt.tenant().user().name().getValue(),
-                    ServerSideConfiguration.instance().getMainApplicationURL() + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
+                    VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
                     + token
                 };
                 fmtArgs = args;

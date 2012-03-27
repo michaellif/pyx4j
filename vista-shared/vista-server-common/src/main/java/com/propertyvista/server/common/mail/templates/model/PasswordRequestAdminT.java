@@ -20,11 +20,9 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PortalLinksT extends IEntity {
+public interface PasswordRequestAdminT extends IEntity {
 
-    IPrimitive<String> portalHomeUrl();
+    IPrimitive<String> requestorName();
 
-    IPrimitive<String> tenantHomeUrl();
-
-    IPrimitive<String> ptappHomeUrl();
+    IPrimitive<String> passwordResetUrl();
 }

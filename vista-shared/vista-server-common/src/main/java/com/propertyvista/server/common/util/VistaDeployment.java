@@ -64,17 +64,19 @@ public class VistaDeployment {
             throw new IllegalArgumentException();
         }
         Pmc pmc = getCurrentPmc();
-        for (PmcDnsName alias : pmc.dnsNameAliases()) {
-            if (alias.target().getValue() == target) {
-                if (secure && !alias.httpsEnabled().isBooleanTrue()) {
-                    // Fallback to default
-                    continue;
+        if (pmc != null) {
+            for (PmcDnsName alias : pmc.dnsNameAliases()) {
+                if (alias.target().getValue() == target) {
+                    if (secure && !alias.httpsEnabled().isBooleanTrue()) {
+                        // Fallback to default
+                        continue;
+                    }
+                    String protocol = "http://";
+                    if (secure) {
+                        protocol = "https://";
+                    }
+                    return protocol + alias.dnsName().getValue();
                 }
-                String protocol = "http://";
-                if (secure) {
-                    protocol = "https://";
-                }
-                return protocol + alias.dnsName().getValue();
             }
         }
         switch (target) {

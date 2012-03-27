@@ -20,12 +20,13 @@ import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.AbstractAntiBot;
-import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.essentials.server.ReCaptchaAntiBot;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.security.shared.AclCreator;
 
-public class VistaTestsServerSideConfiguration extends EssentialsServerSideConfiguration {
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+
+public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideConfiguration {
 
     static {
         LoggerConfig.setContextName("tests");
@@ -88,5 +89,45 @@ public class VistaTestsServerSideConfiguration extends EssentialsServerSideConfi
         } catch (Throwable e) {
             throw new RuntimeException("Can't create " + SERVER_SIDE_TESTS_ACL_CREATOR, e);
         }
+    }
+
+    @Override
+    public boolean openDBReset() {
+        return true;
+    }
+
+    @Override
+    public boolean openIdrequired() {
+        return false;
+    }
+
+    @Override
+    public String getMainApplicationURL() {
+        return "http://www.propertyvista.com/";
+    }
+
+    @Override
+    public String getDefaultBaseURLresidentPortal(boolean secure) {
+        String url = getMainApplicationURL() + "r";
+        if (secure) {
+            return url;
+        } else {
+            return url.replace("https://", "http://");
+        }
+    }
+
+    @Override
+    public String getDefaultBaseURLvistaCrm() {
+        return getMainApplicationURL() + "c";
+    }
+
+    @Override
+    public String getDefaultBaseURLprospectPortal() {
+        return getMainApplicationURL() + "p";
+    }
+
+    @Override
+    public String getDefaultBaseURLvistaAdmin() {
+        return getMainApplicationURL() + "a";
     }
 }

@@ -31,7 +31,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -43,18 +43,18 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.rpc.DeploymentConsts;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.common.mail.templates.EmailTemplateManager;
 import com.propertyvista.server.common.mail.templates.EmailTemplateRootObjectLoader;
 import com.propertyvista.server.common.mail.templates.model.EmailTemplateContext;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestAdminT;
 import com.propertyvista.server.common.policy.PolicyManager;
+import com.propertyvista.server.common.util.VistaDeployment;
 
 public class MessageTemplates {
 
-    private static final I18n i18n = I18n.get(MessageTemplates.class);
+    private final static I18n i18n = I18n.get(MessageTemplates.class);
 
-    private static final Logger log = LoggerFactory.getLogger(MessageTemplates.class);
+    private final static Logger log = LoggerFactory.getLogger(MessageTemplates.class);
 
     public static String getSender() {
         return ServerSideConfiguration.instance().getApplicationEmailSender();
@@ -139,89 +139,81 @@ public class MessageTemplates {
         context.accessToken().setValue(token);
         context.user().set(user);
 
-        // get company policy node
-        EntityQueryCriteria<OrganizationPoliciesNode> nodeCrit = EntityQueryCriteria.create(OrganizationPoliciesNode.class);
-        PolicyNode policyNode = Persistence.service().retrieve(nodeCrit);
-
-        EmailTemplateType templateType = null;
-
-        switch (application) {
-        case CRM:
-            templateType = EmailTemplateType.PasswordRetrievalCrm;
-            break;
-        case ProspectiveApp:
-        case TenantPortal:
-            templateType = EmailTemplateType.PasswordRetrievalTenant;
-            // get building policy node form the first available TenantInLease entry
-            EntityQueryCriteria<TenantInLease> tilCrit = EntityQueryCriteria.create(TenantInLease.class);
-            tilCrit.add(PropertyCriterion.eq(tilCrit.proto().tenant().user(), user));
-            TenantInLease til = Persistence.service().retrieve(tilCrit);
-            if (til != null) {
-                Persistence.service().retrieve(til.leaseV());
-                Persistence.service().retrieve(til.leaseV().holder());
-                Persistence.service().retrieve(til.leaseV().holder().unit());
-                Persistence.service().retrieve(til.leaseV().holder().unit().belongsTo());
-                Building bldNode = til.leaseV().holder().unit().belongsTo();
-                if (bldNode != null && !bldNode.isNull()) {
-                    policyNode = bldNode;
-                }
-            }
-            break;
-        default:
-            throw new Error("Not implemented behavior");
-        }
-
-        EmailTemplate emailTemplate = getEmailTemplate(templateType, policyNode);
         ArrayList<IEntity> data = new ArrayList<IEntity>();
-        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(templateType)) {
-            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+        EmailTemplate emailTemplate = null;
+        if (application != VistaBasicBehavior.Admin) {
+            // get company policy node
+            EntityQueryCriteria<OrganizationPoliciesNode> nodeCrit = EntityQueryCriteria.create(OrganizationPoliciesNode.class);
+            PolicyNode policyNode = Persistence.service().retrieve(nodeCrit);
+
+            EmailTemplateType templateType = null;
+
+            switch (application) {
+            case CRM:
+                templateType = EmailTemplateType.PasswordRetrievalCrm;
+                break;
+            case ProspectiveApp:
+            case TenantPortal:
+                templateType = EmailTemplateType.PasswordRetrievalTenant;
+                // get building policy node form the first available TenantInLease entry
+                EntityQueryCriteria<TenantInLease> tilCrit = EntityQueryCriteria.create(TenantInLease.class);
+                tilCrit.add(PropertyCriterion.eq(tilCrit.proto().tenant().user(), user));
+                TenantInLease til = Persistence.service().retrieve(tilCrit);
+                if (til != null) {
+                    Persistence.service().retrieve(til.leaseV());
+                    Persistence.service().retrieve(til.leaseV().holder());
+                    Persistence.service().retrieve(til.leaseV().holder().unit());
+                    Persistence.service().retrieve(til.leaseV().holder().unit().belongsTo());
+                    Building bldNode = til.leaseV().holder().unit().belongsTo();
+                    if (bldNode != null && !bldNode.isNull()) {
+                        policyNode = bldNode;
+                    }
+                }
+                break;
+            default:
+                throw new Error("Not implemented behavior");
+            }
+
+            emailTemplate = getEmailTemplate(templateType, policyNode);
+            for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(templateType)) {
+                data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+            }
+        } else {
+            // Admin template
+            emailTemplate = emailTemplatePasswordRetrievalAdmin();
+            PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
+            pwdReqT.requestorName().set(user.name());
+            pwdReqT.passwordResetUrl().setValue(
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Admin, true), AdminSiteMap.LoginWithToken.class,
+                            AuthenticationService.AUTH_TOKEN_ARG, token));
+            data.add(pwdReqT);
         }
         email.setSubject(emailTemplate.subject().getValue());
         email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
     }
 
-    @Deprecated
-    public static String createPasswordResetEmail(VistaBasicBehavior application, String name, String token) {
-        String url;
-        switch (application) {
-        case CRM:
-            url = ServerSideConfiguration.instance().getMainApplicationURL()
-                    + AppPlaceInfo.absoluteUrl(DeploymentConsts.CRM_URL, CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
-            break;
-        case ProspectiveApp:
-            url = ServerSideConfiguration.instance().getMainApplicationURL()
-                    + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
-            break;
-        case TenantPortal:
-            url = ServerSideConfiguration.instance().getMainApplicationURL() + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
-                    + token;
-            break;
-        default:
-            throw new Error("TODO");
-        }
-
-        return wrapHtml(i18n.tr("Dear {0},<br/>\n"
-                + "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n"
-                + "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n"
-                + "    <a style=\"color:#929733\" href=\"{1}\">Change Your Password</a>", name, url));
-    }
-
-    @Deprecated
-    public static String createMasterApplicationInvitationEmail(String name, String token) {
-        String url = ServerSideConfiguration.instance().getMainApplicationURL()
-                + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
-
-        return wrapHtml(i18n.tr("Dear {0},<br/>\n" + "This email was sent to you in response to your request to apply for Property Vista apartments.<br/>\n"
-                + "Click the link below to go to the Property Vista site:<br/>\n" + "    <a style=\"color:#929733\" href=\"{1}\">Application</a>", name, url));
-    }
-
-    public static String wrapHtml(String text) {
+    private static String wrapAdminHtml(String text) {
         try {
-            String html = IOUtils.getTextResource("email/template-basic.html");
+            String html = IOUtils.getTextResource("email/template-admin.html");
             return html.replace("{MESSAGE}", text);
         } catch (IOException e) {
             log.error("template error", e);
             return text;
         }
+    }
+
+    private static EmailTemplate emailTemplatePasswordRetrievalAdmin() {
+        PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("New Password Retrieval"));
+        template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
+                "Dear {0},<br/>\n" +
+                "This email was sent to you in response to your request to modify your Property Vista Support Administration account password.<br/>\n" +
+                "Click the link below to go to the Property Vista Administration site and create new password for your account:<br/>\n" +
+                "    <a href=\"{1}\">Change Your Password</a>",
+                EmailTemplateManager.getVarname(pwdReqT.requestorName()),
+                EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl())
+        )));//@formatter:on
+        return template;
     }
 }
