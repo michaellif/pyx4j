@@ -33,16 +33,16 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         setLeaseConditions("23-Mar-2011", "3-Aug-2011", 1);
 
         BillableItem parking1 = addParking();
-        addBillableItemAdjustment(parking1.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
+        addFeatureAdjustment(parking1.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
 
         BillableItem parking2 = addParking("23-Apr-2011", null);
-        addBillableItemAdjustment(parking2.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
+        addFeatureAdjustment(parking2.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
 
         BillableItem locker1 = addLocker();
-        addBillableItemAdjustment(locker1.uid().getValue(), "-0.2", AdjustmentType.percentage, ExecutionType.inLease);
+        addFeatureAdjustment(locker1.uid().getValue(), "-0.2", AdjustmentType.percentage, ExecutionType.inLease);
 
         BillableItem pet1 = addPet();
-        addBillableItemAdjustment(pet1.uid().getValue(), "-1", AdjustmentType.percentage, ExecutionType.inLease);
+        addFeatureAdjustment(pet1.uid().getValue(), "-1", AdjustmentType.percentage, ExecutionType.inLease);
 
         //==================== RUN 1 ======================//
 

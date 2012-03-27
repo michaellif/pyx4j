@@ -31,18 +31,19 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
     public void testSequentialBillingRun() {
         preloadData();
         setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1);
+        addServiceAdjustment("-25", AdjustmentType.monetary, ExecutionType.inLease);
 
         BillableItem parking1 = addParking();
-        addBillableItemAdjustment(parking1.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
+        addFeatureAdjustment(parking1.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
 
         BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011");
-        addBillableItemAdjustment(parking2.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
+        addFeatureAdjustment(parking2.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
 
         BillableItem locker1 = addLocker();
-        addBillableItemAdjustment(locker1.uid().getValue(), "-0.2", AdjustmentType.percentage, ExecutionType.inLease);
+        addFeatureAdjustment(locker1.uid().getValue(), "-0.2", AdjustmentType.percentage, ExecutionType.inLease);
 
         BillableItem pet1 = addPet();
-        addBillableItemAdjustment(pet1.uid().getValue(), "-1", AdjustmentType.percentage, ExecutionType.inLease);
+        addFeatureAdjustment(pet1.uid().getValue(), "-1", AdjustmentType.percentage, ExecutionType.inLease);
 
         //==================== RUN 1 ======================//
 
@@ -60,14 +61,14 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodEndDate("31-Mar-2011").
         numOfProductCharges(4).
         paymentReceivedAmount("0.00").
-        serviceCharge("270.09").
+        serviceCharge("262.83").
         recurringFeatureCharges("34.26").
         oneTimeFeatureCharges("0.00").
-        taxes("36.52").
-        totalDueAmount("340.87");
+        taxes("35.65").
+        totalDueAmount("332.74");
         // @formatter:on
 
-        receiveAndPostPayment("19-Mar-2011", "340.87");
+        receiveAndPostPayment("19-Mar-2011", "332.74");
 
         //==================== RUN 2 ======================//
 
@@ -84,17 +85,16 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("340.87").
-        serviceCharge("930.30").
+        paymentReceivedAmount("332.74").
+        serviceCharge("905.30").
         recurringFeatureCharges("136.67").
         oneTimeFeatureCharges("0.00").
-        taxes("128.04").
-        totalDueAmount("1195.01");
+        taxes("125.04").
+        totalDueAmount("1167.01");
         // @formatter:on
 
-        receiveAndPostPayment("19-Mar-2011", "995.01");
+        receiveAndPostPayment("19-Mar-2011", "1067.01");
         receiveAndPostPayment("20-Mar-2011", "100.00");
-        receiveAndPostPayment("21-Mar-2011", "100.00");
 
         //==================== RUN 3 ======================//
 
@@ -112,15 +112,15 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(6).
-        paymentReceivedAmount("1195.01").
-        serviceCharge("930.30").
+        paymentReceivedAmount("1167.01").
+        serviceCharge("905.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("100.00").
-        taxes("146.20").
-        totalDueAmount("1364.50");
+        taxes("143.20").
+        totalDueAmount("1336.50");
         // @formatter:on
 
-        receiveAndPostPayment("19-Apr-2011", "1364.50");
+        receiveAndPostPayment("19-Apr-2011", "1336.50");
 
         //==================== RUN 4 ======================//
 
@@ -139,15 +139,15 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("1364.50").
-        serviceCharge("930.30").
+        paymentReceivedAmount("1336.50").
+        serviceCharge("905.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("0.00").
-        taxes("134.20").
-        totalDueAmount("1002.50");
+        taxes("131.20").
+        totalDueAmount("974.50");
         // @formatter:on
 
-        receiveAndPostPayment("19-May-2011", "1002.50");
+        receiveAndPostPayment("19-May-2011", "974.50");
 
         //==================== RUN 5 ======================//
 
@@ -166,15 +166,15 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("1002.50").
-        serviceCharge("930.30").
+        paymentReceivedAmount("974.50").
+        serviceCharge("905.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("0.00").
-        taxes("134.20").
-        totalDueAmount("1182.50");
+        taxes("131.20").
+        totalDueAmount("1154.50");
         // @formatter:on
 
-        receiveAndPostPayment("19-Jun-2011", "1182.50");
+        receiveAndPostPayment("19-Jun-2011", "1154.50");
 
         //==================== RUN 6 ======================//
 
@@ -190,15 +190,15 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("01-Aug-2011").
         billingPeriodEndDate("03-Aug-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("1182.50").
-        serviceCharge("90.03").
+        paymentReceivedAmount("1154.50").
+        serviceCharge("87.61").
         recurringFeatureCharges("18.19").
         oneTimeFeatureCharges("0.00").
-        taxes("12.98").
-        totalDueAmount("121.20");
+        taxes("12.69").
+        totalDueAmount("118.49");
         // @formatter:on
 
-        receiveAndPostPayment("19-Jul-2011", "121.20");
+        receiveAndPostPayment("19-Jul-2011", "118.49");
 
         //==================== RUN final ======================//
 

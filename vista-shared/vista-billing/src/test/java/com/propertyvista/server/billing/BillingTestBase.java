@@ -250,13 +250,19 @@ abstract class BillingTestBase extends VistaDBTestBase {
         return null;
     }
 
-    protected BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ExecutionType termType) {
+    protected BillableItemAdjustment addServiceAdjustment(String value, AdjustmentType adjustmentType, ExecutionType termType) {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
+        return addBillableItemAdjustment(lease.version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType, termType, lease.leaseFrom()
+                .getValue(), lease.leaseTo().getValue());
+    }
+
+    protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ExecutionType termType) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         return addBillableItemAdjustment(billableItemId, value, adjustmentType, termType, lease.leaseFrom().getValue(), lease.leaseTo().getValue());
 
     }
 
-    protected BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ExecutionType termType,
+    protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ExecutionType termType,
             String effectiveDate, String expirationDate) {
         return addBillableItemAdjustment(billableItemId, value, adjustmentType, termType, BillingTestUtils.getDate(effectiveDate),
                 BillingTestUtils.getDate(expirationDate));

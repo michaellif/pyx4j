@@ -50,23 +50,25 @@ public class ProductChargeProcessor {
     void createCharges() {
 
         if (!Bill.BillType.Final.equals(billing.getNextPeriodBill().billType().getValue())) {
-            createChargeForNextPeriod(billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().serviceItem());
-
-            //TODO add revised charges
+            createCharge(billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().serviceItem());
         }
 
         for (BillableItem billableItem : billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().featureItems()) {
             if (billableItem.isNull()) {
                 throw new BillingException("Service Item is mandatory in lease");
             }
-            Persistence.service().retrieve(billableItem.item().product());
-
-            createChargeForNextPeriod(billableItem);
-
-            reviseChargeForCurrentPeriod(billableItem);
-
-            reviseChargeForPreviousPeriod(billableItem);
+            createCharge(billableItem);
         }
+    }
+
+    private void createCharge(BillableItem billableItem) {
+        Persistence.service().retrieve(billableItem.item().product());
+
+        createChargeForNextPeriod(billableItem);
+
+        reviseChargeForCurrentPeriod(billableItem);
+
+        reviseChargeForPreviousPeriod(billableItem);
     }
 
     private void createChargeForNextPeriod(BillableItem billableItem) {
