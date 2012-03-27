@@ -41,20 +41,6 @@ public interface BuildingAmenity extends Amenity {
     @XmlType(name = "BuildingAmenityType")
     public enum Type {
 
-        garage,
-
-        fitnessCentre,
-
-        fitness,
-
-        elevator,
-
-        parking,
-
-        coveredParking,
-
-        pool,
-
         availability24Hours,
 
         basketballCourt,
@@ -69,9 +55,19 @@ public interface BuildingAmenity extends Amenity {
 
         concierge,
 
+        coveredParking,
+
         doorAttendant,
 
+        elevator,
+
+        fitness,
+
+        fitnessCentre,
+
         freeWeights,
+
+        garage,
 
         gate,
 
@@ -101,7 +97,11 @@ public interface BuildingAmenity extends Amenity {
 
         packageReceiving,
 
+        parking,
+
         playGround,
+
+        pool,
 
         racquetball,
 
