@@ -58,7 +58,7 @@ public class EmailTemplateRootObjectLoader {
             // TODO use SiteThemeServicesImpl.getSiteDescriptorFromCache()
             // TODO use proper locale
             SiteDescriptor siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
-            if (!siteDescriptor.siteTitles().isEmpty()) {
+            if (siteDescriptor != null && !siteDescriptor.siteTitles().isEmpty()) {
                 t.copyright().set(siteDescriptor.siteTitles().get(0).copyright());
                 t.companyName().set(siteDescriptor.siteTitles().get(0).residentPortalTitle());
             }
