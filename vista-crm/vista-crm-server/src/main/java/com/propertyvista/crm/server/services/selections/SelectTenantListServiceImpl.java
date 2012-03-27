@@ -26,6 +26,7 @@ public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Tenant>
 
     @Override
     protected void bind() {
+        bind(dtoProto.id(), dboProto.id());
         bindCompleateDBO();
     }
 }
