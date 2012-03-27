@@ -30,12 +30,14 @@ public class TenantLister extends ListerBase<TenantDTO> {
 
         setColumnDescriptors(//@formatter:off
                 new Builder(proto().id(), false).build(),
-                new Builder(proto().person().name()).sortable(false).build(),
+                new Builder(proto().person().name()).searchable(false).build(),
+                new Builder(proto().person().name().firstName(), false).build(),
+                new Builder(proto().person().name().lastName(), false).build(),
                 new Builder(proto().person().sex()).build(),
                 new Builder(proto().person().birthDate()).build(),
-                new Builder(proto().person().homePhone()).sortable(false).build(),
-                new Builder(proto().person().mobilePhone(), false).sortable(false).build(),
-                new Builder(proto().person().workPhone(), false).sortable(false).build(),
+                new Builder(proto().person().homePhone()).build(),
+                new Builder(proto().person().mobilePhone(), false).build(),
+                new Builder(proto().person().workPhone(), false).build(),
                 new Builder(proto().person().email()).title("E-mail address").build(),
                 new Builder(proto().lease()).sortable(false).build()
             ); // @formatter:on

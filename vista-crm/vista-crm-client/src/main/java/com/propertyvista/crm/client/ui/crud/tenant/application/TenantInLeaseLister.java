@@ -27,7 +27,7 @@ public class TenantInLeaseLister extends ListerBase<TenantInLeaseDTO> {
 
         setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().tenant().id(), true).build(),
 
-        new MemberColumnDescriptor.Builder(proto().tenant().person().name(), true).sortable(!VistaTODO.entityAsStringQueryCriteria).build(),
+        new MemberColumnDescriptor.Builder(proto().tenant().person().name(), true).searchable(false).build(),
 
         new MemberColumnDescriptor.Builder(proto().tenant().person().sex(), true).build(),
 
