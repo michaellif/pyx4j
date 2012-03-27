@@ -40,6 +40,7 @@ import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -285,8 +286,13 @@ public class QueryBuilder<T extends IEntity> {
     private List<Sort> expandToStringMembers(List<Sort> sorts) {
         List<Sort> result = new ArrayList<Sort>();
         for (Sort sort : sorts) {
-            MemberMeta memberMeta = queryJoin.operationsMeta.entityMeta().getMemberMeta(new Path(sort.getPropertyPath()));
-            if (memberMeta.isEntity()) {
+            String pathFragmet = sort.getPropertyPath();
+            if (pathFragmet.startsWith(Path.COLLECTION_SEPARATOR)) {
+                pathFragmet = pathFragmet.substring(Path.COLLECTION_SEPARATOR.length() + 1);
+            }
+            MemberMeta memberMeta = queryJoin.operationsMeta.entityMeta().getMemberMeta(new Path(pathFragmet));
+            ObjectClassType type = memberMeta.getObjectClassType();
+            if ((type == ObjectClassType.Entity) || (type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
                 @SuppressWarnings("unchecked")
                 Class<? extends IEntity> targetEntityClass = (Class<? extends IEntity>) memberMeta.getValueClass();
                 result.addAll(expandToStringMembers(sort.getPropertyPath(), targetEntityClass, sort.isDescending()));
@@ -303,9 +309,10 @@ public class QueryBuilder<T extends IEntity> {
         EntityMeta entityMeta = EntityFactory.getEntityMeta(targetEntityClass);
         for (String sortMemberName : entityMeta.getToStringMemberNames()) {
             MemberMeta memberMeta = entityMeta.getMemberMeta(sortMemberName);
-            if (memberMeta.isEntity()) {
+            ObjectClassType type = memberMeta.getObjectClassType();
+            if ((type == ObjectClassType.Entity) || (type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
                 @SuppressWarnings("unchecked")
-                Class<? extends IEntity> childEntityClass = (Class<? extends IEntity>) memberMeta.getObjectClass();
+                Class<? extends IEntity> childEntityClass = (Class<? extends IEntity>) memberMeta.getValueClass();
                 result.addAll(expandToStringMembers(propertyPath + sortMemberName + Path.PATH_SEPARATOR, childEntityClass, descending));
             } else {
                 result.add(new Sort(propertyPath + sortMemberName + Path.PATH_SEPARATOR, descending));

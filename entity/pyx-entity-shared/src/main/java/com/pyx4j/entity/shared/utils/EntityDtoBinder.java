@@ -95,7 +95,9 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
     protected abstract void bind();
 
     private void addBinding(Binding b) {
-        binding.add(b);
+        if (!b.dboMemberPath.isUndefinedCollectionPath() && !b.dtoMemberPath.isUndefinedCollectionPath()) {
+            binding.add(b);
+        }
         bindingByDTOMemberPath.put(b.dtoMemberPath, b);
     }
 

@@ -33,6 +33,7 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.sort.SortBy;
 import com.pyx4j.entity.test.shared.domain.sort.SortSortable;
 import com.pyx4j.geo.GeoBox;
 import com.pyx4j.geo.GeoCircle;
@@ -286,6 +287,68 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("sort Ok", "2", r.get(1).sortByEmbedded().amount().getValue());
 
             Assert.assertEquals("sort Ok", "B", r.get(2).sortByEmbedded().name().getValue());
+        }
+    }
+
+    public void testSortByCollectionValueToString() {
+        String testId = uniqueString();
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            SortBy member = item.sortByCollectionMember().$();
+            member.name().setValue("B");
+            member.amount().setValue("1");
+            item.sortByCollectionMember().add(member);
+            srv.persist(item);
+        }
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            SortBy member = item.sortByCollectionMember().$();
+            member.name().setValue("A");
+            member.amount().setValue("2");
+            item.sortByCollectionMember().add(member);
+            srv.persist(item);
+        }
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            SortBy member = item.sortByCollectionMember().$();
+            member.name().setValue("A");
+            member.amount().setValue("1");
+            item.sortByCollectionMember().add(member);
+            srv.persist(item);
+        }
+
+        // Explicit sort
+        if (false) {
+            EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.asc(criteria.proto().sortByCollectionMember().$().name());
+            criteria.asc(criteria.proto().sortByCollectionMember().$().amount());
+
+            List<SortSortable> r = srv.query(criteria);
+            Assert.assertEquals("result set size", 3, r.size());
+            Assert.assertEquals("sort Ok", "A", r.get(0).sortByCollectionMember().iterator().next().name().getValue());
+            Assert.assertEquals("sort Ok", "2", r.get(1).sortByCollectionMember().iterator().next().amount().getValue());
+        }
+
+        // Created sort by ToString members
+        {
+            EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.asc(criteria.proto().sortByCollectionMember().$());
+
+            List<SortSortable> r = srv.query(criteria);
+            Assert.assertEquals("result set size", 3, r.size());
+
+            Assert.assertEquals("sort Ok", "A", r.get(0).sortByCollectionMember().iterator().next().name().getValue());
+            Assert.assertEquals("sort Ok", "1", r.get(0).sortByCollectionMember().iterator().next().amount().getValue());
+
+            Assert.assertEquals("sort Ok", "A", r.get(1).sortByCollectionMember().iterator().next().name().getValue());
+            Assert.assertEquals("sort Ok", "2", r.get(1).sortByCollectionMember().iterator().next().amount().getValue());
+
+            Assert.assertEquals("sort Ok", "B", r.get(2).sortByCollectionMember().iterator().next().name().getValue());
         }
     }
 }

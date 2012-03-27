@@ -82,6 +82,18 @@ public class Path implements Serializable, IDebugId {
         pathMembers = Collections.unmodifiableList(members);
     }
 
+    public boolean isUndefinedCollectionPath() {
+        getPathMembers();
+        int p = 0;
+        for (String pm : pathMembers) {
+            if (pm.equals(COLLECTION_SEPARATOR)) {
+                return p < pathMembers.size() - 1;
+            }
+            p++;
+        }
+        return false;
+    }
+
     private void parsPath() {
         int rootIdx = path.indexOf(PATH_SEPARATOR);
         if (rootIdx < 1) {

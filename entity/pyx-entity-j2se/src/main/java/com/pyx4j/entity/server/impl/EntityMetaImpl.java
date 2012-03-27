@@ -182,11 +182,9 @@ public class EntityMetaImpl implements EntityMeta {
     @SuppressWarnings("unchecked")
     @Override
     public MemberMeta getMemberMeta(Path path) {
-        //assertPath(path);
         EntityMeta em = this;
         MemberMeta mm = null;
         for (String memberName : path.getPathMembers()) {
-            //TODO ICollection support
             if (mm != null) {
                 Class<?> valueClass = mm.getValueClass();
                 if (!(IEntity.class.isAssignableFrom(valueClass))) {
@@ -195,7 +193,11 @@ public class EntityMetaImpl implements EntityMeta {
                     em = EntityFactory.getEntityMeta((Class<? extends IEntity>) valueClass);
                 }
             }
-            mm = em.getMemberMeta(memberName);
+            if (memberName.equals(Path.COLLECTION_SEPARATOR)) {
+                continue;
+            } else {
+                mm = em.getMemberMeta(memberName);
+            }
         }
         return mm;
     }
