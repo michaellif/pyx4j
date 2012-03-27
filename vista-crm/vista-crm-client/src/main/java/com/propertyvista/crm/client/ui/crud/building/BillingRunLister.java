@@ -22,8 +22,7 @@ import com.propertyvista.domain.financial.billing.BillingRun;
 public class BillingRunLister extends ListerBase<BillingRun> {
 
     public BillingRunLister() {
-        super(BillingRun.class, CrmSiteMap.Finance.BillingRun.class, false, true);
-        getDataTablePanel().setFilteringEnabled(false);
+        super(BillingRun.class, CrmSiteMap.Finance.BillingRun.class, false, false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().billingCycle()).build(),
