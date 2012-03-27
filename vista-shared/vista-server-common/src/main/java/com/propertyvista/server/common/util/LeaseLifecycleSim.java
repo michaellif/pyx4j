@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
-import com.propertyvista.server.billing.BillingFacade;
+import com.propertyvista.server.accounting.billing.BillingFacade;
 import com.propertyvista.server.common.util.LeaseManager.TimeContextProvider;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;

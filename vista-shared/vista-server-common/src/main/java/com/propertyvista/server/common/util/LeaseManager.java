@@ -35,7 +35,7 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
-import com.propertyvista.server.billing.BillingFacade;
+import com.propertyvista.server.accounting.billing.BillingFacade;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;

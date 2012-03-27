@@ -22,7 +22,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.server.billing.BillingFacade;
+import com.propertyvista.server.accounting.billing.BillingFacade;
 
 public class BillCrudServiceImpl extends AbstractCrudServiceImpl<Bill> implements BillCrudService {
 

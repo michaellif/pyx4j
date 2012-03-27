@@ -19,7 +19,7 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.billing.BillingFacade;
+import com.propertyvista.server.accounting.billing.BillingFacade;
 
 class BillLeaseDeferredProcess implements IDeferredProcess {
 
