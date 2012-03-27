@@ -32,14 +32,19 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
+import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.lead.Lead;
 
@@ -98,6 +103,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leadID()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseType()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveInDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTerm()), 9).build());
@@ -149,6 +155,41 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         get(proto().createDate()).setViewable(true);
 
         return new CrmScrollPanel(main);
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        get(proto().leadID()).setViewable(false);
+        ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
+                new DefaultAsyncCallback<IdAssignmentPolicy>() {
+                    @Override
+                    public void onSuccess(IdAssignmentPolicy result) {
+                        IdAssignmentItem targetItem = null;
+                        for (IdAssignmentItem item : result.itmes()) {
+                            if (item.target().getValue() == IdTarget.lead) {
+                                targetItem = item;
+                                break;
+                            }
+                        }
+
+                        if (targetItem != null) {
+                            switch (targetItem.type().getValue()) {
+                            case generatedAlphaNumeric:
+                            case generatedNumber:
+                                get(proto().leadID()).setViewable(true);
+                                break;
+                            case userEditable:
+                                get(proto().leadID()).setViewable(false);
+                                break;
+                            case userCreated:
+                                get(proto().leadID()).setViewable(getValue().getPrimaryKey() != null);
+                                break;
+                            }
+                        }
+                    }
+                });
     }
 
     private Widget createAppointmentsTab() {

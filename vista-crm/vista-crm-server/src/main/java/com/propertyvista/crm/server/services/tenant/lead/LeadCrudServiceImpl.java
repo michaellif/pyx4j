@@ -31,6 +31,8 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.tenant.lead.LeadCrudService;
+import com.propertyvista.crm.server.util.IdAssignmentSequenceUtil;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
@@ -152,5 +154,14 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
         Persistence.secureSave(lead);
         Persistence.service().commit();
         callback.onSuccess(null);
+    }
+
+    @Override
+    protected void persist(Lead dbo, Lead in) {
+        if (dbo.id().isNull() && IdAssignmentSequenceUtil.needsGeneratedId(IdTarget.lead)) {
+            dbo.leadID().setValue(IdAssignmentSequenceUtil.getId(IdTarget.lead));
+        }
+
+        super.persist(dbo, in);
     }
 }
