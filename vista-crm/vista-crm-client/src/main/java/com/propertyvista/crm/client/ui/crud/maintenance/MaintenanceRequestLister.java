@@ -35,7 +35,7 @@ public class MaintenanceRequestLister extends ListerBase<MaintenanceRequestDTO> 
                 new MemberColumnDescriptor.Builder(proto().status()).build(),
                 new MemberColumnDescriptor.Builder(proto().updated()).build(),
                 new MemberColumnDescriptor.Builder(proto().surveyResponse().rating()).build(),
-                new MemberColumnDescriptor.Builder(proto().surveyResponse().description(), false).build()
+                new MemberColumnDescriptor.Builder(proto().surveyResponse().description(), false).columnTitle(proto().surveyResponse().getMeta().getCaption()).build()
             ); // @formatter:on
     }
 }
