@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.server.accaunting;
+package com.propertyvista.server.accounting;
 
 import java.math.BigDecimal;
 

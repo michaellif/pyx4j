@@ -14,7 +14,7 @@
 package com.propertyvista.server.accounting.billing;
 
 import com.propertyvista.domain.financial.billing.InvoicePayment;
-import com.propertyvista.server.accaunting.AbstractPaymentProcessor;
+import com.propertyvista.server.accounting.AbstractPaymentProcessor;
 
 public class BillingPaymentProcessor extends AbstractPaymentProcessor {
 

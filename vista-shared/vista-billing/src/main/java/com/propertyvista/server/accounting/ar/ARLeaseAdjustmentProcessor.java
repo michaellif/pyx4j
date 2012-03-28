@@ -17,7 +17,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.server.accaunting.AbstractLeaseAdjustmentProcessor;
+import com.propertyvista.server.accounting.AbstractLeaseAdjustmentProcessor;
 
 public class ARLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProcessor {
 
