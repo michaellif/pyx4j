@@ -53,6 +53,12 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         page, filterData, sortingData
     };
 
+    public static int PAGESIZE_SMALL = 10;
+
+    public static int PAGESIZE_MEDIUM = 25;
+
+    public static int PAGESIZE_LARGE = 50;
+
     private final DataTablePanel<E> dataTablePanel;
 
     private ListerDataSource<E> dataSource;
@@ -118,9 +124,9 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
 
         showColumnSelector(true);
 
-        dataTablePanel.setPageSizeOptions(Arrays.asList(new Integer[] { 10, 25, 50 }));
+        dataTablePanel.setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM, PAGESIZE_LARGE }));
 
-        dataTablePanel.setPageSize(ApplicationMode.isDevelopment() ? 10 : 30);
+        dataTablePanel.setPageSize(ApplicationMode.isDevelopment() ? PAGESIZE_SMALL : PAGESIZE_MEDIUM);
         dataTablePanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ListerListPanel.name());
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
