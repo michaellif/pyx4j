@@ -22,6 +22,8 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -43,12 +45,18 @@ public class ApplicationDocumentFileUploaderFolder extends VistaTableFolder<Appl
     static {
         ApplicationDocumentFile proto = EntityFactory.getEntityPrototype(ApplicationDocumentFile.class);
         COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileName(), "20em"));
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileSize(), "5em"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileName(), "30em"));
     }
 
     public ApplicationDocumentFileUploaderFolder() {
         super(ApplicationDocumentFile.class);
+    }
+
+    @Override
+    protected IFolderDecorator<ApplicationDocumentFile> createDecorator() {
+        TableFolderDecorator<ApplicationDocumentFile> folderDecorator = (TableFolderDecorator<ApplicationDocumentFile>) super.createDecorator();
+        folderDecorator.setShowHeader(false);
+        return folderDecorator;
     }
 
     @Override
