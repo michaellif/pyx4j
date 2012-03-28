@@ -77,6 +77,8 @@ public class QueryBuilder<T extends IEntity> {
 
     QueryJoinBuilder queryJoin;
 
+    private boolean sortAddDistinct = false;
+
     public QueryBuilder(PersistenceContext persistenceContext, Mappings mappings, String alias, EntityOperationsMeta operationsMeta,
             EntityQueryCriteria<T> criteria) {
         this.dialect = persistenceContext.getDialect();
@@ -287,25 +289,31 @@ public class QueryBuilder<T extends IEntity> {
     private List<Sort> expandToStringMembers(List<Sort> sorts) {
         List<Sort> result = new ArrayList<Sort>();
         for (Sort sort : sorts) {
-            String pathFragmet = sort.getPropertyPath();
-            if (pathFragmet.startsWith(Path.COLLECTION_SEPARATOR)) {
-                pathFragmet = pathFragmet.substring(Path.COLLECTION_SEPARATOR.length() + 1);
-            }
-            MemberMeta memberMeta = queryJoin.operationsMeta.entityMeta().getMemberMeta(new Path(pathFragmet));
+            Path path = new Path(sort.getPropertyPath());
+            MemberMeta memberMeta = queryJoin.operationsMeta.entityMeta().getMemberMeta(path);
             ObjectClassType type = memberMeta.getObjectClassType();
             if ((type == ObjectClassType.Entity) || (type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
                 @SuppressWarnings("unchecked")
                 Class<? extends IEntity> targetEntityClass = (Class<? extends IEntity>) memberMeta.getValueClass();
-                result.addAll(expandToStringMembers(sort.getPropertyPath(), targetEntityClass, sort.isDescending()));
+                List<Sort> expanded = expandEntityToStringMembers(sort.getPropertyPath(), targetEntityClass, sort.isDescending());
+                if (expanded.size() > 0) {
+                    result.addAll(expanded);
+                } else {
+                    result.add(sort);
+                }
             } else {
                 result.add(sort);
+            }
+
+            if (path.isUndefinedCollectionPath() || (sort.getPropertyPath().endsWith(Path.COLLECTION_SEPARATOR + Path.PATH_SEPARATOR))) {
+                sortAddDistinct = true;
             }
 
         }
         return result;
     }
 
-    private List<Sort> expandToStringMembers(String propertyPath, Class<? extends IEntity> targetEntityClass, boolean descending) {
+    private List<Sort> expandEntityToStringMembers(String propertyPath, Class<? extends IEntity> targetEntityClass, boolean descending) {
         List<Sort> result = new ArrayList<Sort>();
         EntityMeta entityMeta = EntityFactory.getEntityMeta(targetEntityClass);
         for (String sortMemberName : entityMeta.getToStringMemberNames()) {
@@ -318,7 +326,7 @@ public class QueryBuilder<T extends IEntity> {
             if ((type == ObjectClassType.Entity) || (type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
                 @SuppressWarnings("unchecked")
                 Class<? extends IEntity> childEntityClass = (Class<? extends IEntity>) memberMeta.getValueClass();
-                result.addAll(expandToStringMembers(propertyPath + sortMemberName + Path.PATH_SEPARATOR, childEntityClass, descending));
+                result.addAll(expandEntityToStringMembers(propertyPath + sortMemberName + Path.PATH_SEPARATOR, childEntityClass, descending));
             } else {
                 result.add(new Sort(propertyPath + sortMemberName + Path.PATH_SEPARATOR, descending));
             }
@@ -327,7 +335,7 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     boolean addDistinct() {
-        return queryJoin.addDistinct;
+        return queryJoin.addDistinct || sortAddDistinct;
     }
 
     String getSQL(String mainTableSqlName) {

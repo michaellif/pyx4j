@@ -295,6 +295,7 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
         {
             SortSortable item = EntityFactory.create(SortSortable.class);
             item.testId().setValue(testId);
+            item.name().setValue("B3");
             SortBy member = item.sortByCollectionMember().$();
             member.name().setValue("B");
             member.amount().setValue("1");
@@ -304,6 +305,7 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
         {
             SortSortable item = EntityFactory.create(SortSortable.class);
             item.testId().setValue(testId);
+            item.name().setValue("B2");
             SortBy member = item.sortByCollectionMember().$();
             member.name().setValue("A");
             member.amount().setValue("2");
@@ -313,10 +315,19 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
         {
             SortSortable item = EntityFactory.create(SortSortable.class);
             item.testId().setValue(testId);
-            SortBy member = item.sortByCollectionMember().$();
-            member.name().setValue("A");
-            member.amount().setValue("1");
-            item.sortByCollectionMember().add(member);
+            item.name().setValue("B1");
+            {
+                SortBy member = item.sortByCollectionMember().$();
+                member.name().setValue("A");
+                member.amount().setValue("1");
+                item.sortByCollectionMember().add(member);
+            }
+            {
+                SortBy member = item.sortByCollectionMember().$();
+                member.name().setValue("A");
+                member.amount().setValue("1");
+                item.sortByCollectionMember().add(member);
+            }
             srv.persist(item);
         }
 

@@ -255,6 +255,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
     @Override
     public EntityQueryCriteria<E> iclone() {
         EntityQueryCriteria<E> c = create(getEntityClass());
+        c.setVersionedCriteria(getVersionedCriteria());
         if (this.getSorts() != null) {
             for (Sort s : this.getSorts()) {
                 c.sort(s);

@@ -894,7 +894,9 @@ public class TableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
+            EntityQueryCriteria<T> criteriaNoSorts = criteria.iclone();
+            criteriaNoSorts.setSorts(null);
+            QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteriaNoSorts);
             stmt = persistenceContext.getConnection().prepareStatement("SELECT " + dialect.sqlFunction(func, args) + " FROM " + qb.getSQL(tableName));
             // Just in case, used for pooled connections 
             stmt.setMaxRows(1);
