@@ -49,7 +49,6 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         initButtonrStyles("." + StyleName.Footer);
 
         Style style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Toolbar);
-        style.addProperty("padding", "6px");
         addStyle(style);
 
         style = new Style(".", StyleName.Footer, " .", DefaultWidgetsTheme.StyleName.Toolbar);
