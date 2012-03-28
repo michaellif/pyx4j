@@ -14,10 +14,14 @@
 package com.propertyvista.crm.client.ui.crud.policies.misc;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.Range;
 
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -49,6 +53,16 @@ public class MiscPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<MiscP
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsPerBedRoom())).labelWidth(20).componentWidth(3).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsOver18areApplicants())).labelWidth(20).componentWidth(3).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().oneMonthDeposit())).labelWidth(20).componentWidth(3).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearRangeStart())).labelWidth(20).componentWidth(5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearRangeFutureSpan())).labelWidth(20).componentWidth(3).build());
+
+        // components tune up:
+        CComponent<?, ?> comp = get(proto().yearRangeStart());
+        if (comp instanceof CMonthYearPicker) {
+            int rangeStart = 1500;
+            ((CMonthYearPicker) comp).setYearRange(new Range(rangeStart, (1900 - rangeStart) + new Date().getYear() + 1));
+        }
+
         return content;
     }
 }

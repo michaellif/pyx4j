@@ -54,6 +54,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsEditorForm;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
+import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.PropertyContact;
@@ -175,12 +176,19 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                         }
                     });
 
-            // set build year date picker range: 
-            CComponent<?, ?> comp = get(proto().info().structureBuildYear());
-            if (comp instanceof CMonthYearPicker) {
-                int rangeStart = 1800;
-                ((CMonthYearPicker) comp).setYearRange(new Range(rangeStart, (1900 - rangeStart) + new Date().getYear() + 5));
-            }
+            ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), MiscPolicy.class,
+                    new DefaultAsyncCallback<MiscPolicy>() {
+                        @Override
+                        public void onSuccess(MiscPolicy result) {
+                            // set build year date picker range: 
+                            CComponent<?, ?> comp = get(proto().info().structureBuildYear());
+                            if (comp instanceof CMonthYearPicker) {
+                                int rangeStart = 1900 + result.yearRangeStart().getValue().getYear();
+                                ((CMonthYearPicker) comp).setYearRange(new Range(rangeStart, (1900 + new Date().getYear())
+                                        + result.yearRangeFutureSpan().getValue() - rangeStart));
+                            }
+                        }
+                    });
         }
     }
 

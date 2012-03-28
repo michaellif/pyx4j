@@ -13,8 +13,12 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.UnitPolicy;
@@ -22,7 +26,7 @@ import com.propertyvista.domain.policy.framework.UnitPolicy;
 @DiscriminatorValue("MiscPolicy")
 public interface MiscPolicy extends UnitPolicy {
 
-    @Caption(name = "Occupants over 18 are Applicants", description = "Some landlords force all occupants over 18 to be on LEASE and therefore anyone OVER 18 MUST be Applicant//Co-Applicant and cannot be Dependent")
+    @Caption(name = "Occupants over 18 are Applicants", description = "Some landlords force all occupants over 18 to be on LEASE and therefore anyone OVER 18 MUST be Applicant/Co-Applicant and cannot be Dependent")
     IPrimitive<Boolean> occupantsOver18areApplicants();
 
     @Caption(name = "Occupants per Bedroom", description = "Number of Occupants (N) per Bedroom in formula: Bedrooms x N = OccupantsPerUnit")
@@ -36,4 +40,12 @@ public interface MiscPolicy extends UnitPolicy {
 
     @Caption(description = "Maximum allowed pets quantity")
     IPrimitive<Integer> maxPets();
+
+    @Format("yyyy")
+    @Editor(type = EditorType.yearpicker)
+    @Caption(description = "Building history start year")
+    IPrimitive<LogicalDate> yearRangeStart();
+
+    @Caption(description = "Building history future span")
+    IPrimitive<Integer> yearRangeFutureSpan();
 }

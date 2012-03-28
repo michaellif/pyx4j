@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.policy.policies.MiscPolicy;
@@ -30,6 +31,10 @@ public class MiscPolicyPreloader extends AbstractPolicyPreloader<MiscPolicy> {
 
     private static final boolean OCCUPANTS_OVER_18_ARE_APPLICANTS = false;
 
+    private static final LogicalDate YEAR_RANGE_START = new LogicalDate(1800 - 1900, 1, 1);
+
+    private static final int YEAR_RANGE_SPAN = 5;
+
     public MiscPolicyPreloader() {
         super(MiscPolicy.class);
     }
@@ -43,10 +48,11 @@ public class MiscPolicyPreloader extends AbstractPolicyPreloader<MiscPolicy> {
         misc.oneMonthDeposit().setValue(ONE_MONTH_DEPOSIT);
         misc.maxParkingSpots().setValue(MAX_PARKING_SPOTS);
         misc.maxPets().setValue(MAX_PETS);
+        misc.yearRangeStart().setValue(YEAR_RANGE_START);
+        misc.yearRangeFutureSpan().setValue(YEAR_RANGE_SPAN);
 
         log.append(misc.getStringView());
 
         return misc;
     }
-
 }
