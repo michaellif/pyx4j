@@ -66,14 +66,6 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
     public void setNavigationFolders(List<NavigFolder> folders) {
         this.clear();
         for (NavigFolder folder : folders) {
-            ScrollPanel scroll = new ScrollPanel();
-
-            SimplePanel searchcontainer = new SimplePanel();
-            searchcontainer.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchBar);
-            searchcontainer.setHeight("2em");
-            searchcontainer.setWidth("100%");
-            searchcontainer.add(search);
-
             FlowPanel list = new FlowPanel() {
                 @Override
                 public void insert(Widget w, int beforeIndex) {
@@ -90,6 +82,12 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
                 }
             };
 
+// TODO: hided in 1st version (till real implementation)            
+            SimplePanel searchcontainer = new SimplePanel();
+//            searchcontainer.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchBar);
+//            searchcontainer.setHeight("2em");
+//            searchcontainer.setWidth("100%");
+//            searchcontainer.add(search);
             list.add(searchcontainer);
 
             switch (folder.getType()) {
@@ -102,6 +100,7 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
                 }
             }
 
+            ScrollPanel scroll = new ScrollPanel();
             scroll.setWidget(list);
             add(scroll, folder.getTitle(), 3);
         }
