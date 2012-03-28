@@ -1035,17 +1035,23 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             Mappings.assertPersistableEntity(entity.getEntityMeta());
             return null;
         }
-        T cachedEntity = (T) CacheService.entityCache().get(entity.getEntityMeta().getEntityClass(), entity.getPrimaryKey());
-        if (cachedEntity != null) {
-            entity.set(cachedEntity);
-            return cachedEntity;
+
+        // TODO Cache different AttachLevels
+        if (attachLevel == AttachLevel.Attached) {
+            T cachedEntity = (T) CacheService.entityCache().get(entity.getEntityMeta().getEntityClass(), entity.getPrimaryKey());
+            if (cachedEntity != null) {
+                entity.set(cachedEntity);
+                return cachedEntity;
+            }
         }
 
         TableModel tm = tableModel(entity.getEntityMeta());
         if (tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), entity)) {
             entity = cascadeRetrieveMembers(tm, entity, attachLevel);
             entity.setAttachLevel(attachLevel);
-            CacheService.entityCache().put(entity);
+            if (attachLevel == AttachLevel.Attached) {
+                CacheService.entityCache().put(entity);
+            }
             return entity;
         } else {
             return null;
