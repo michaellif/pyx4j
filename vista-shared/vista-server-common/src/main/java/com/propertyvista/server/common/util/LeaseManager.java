@@ -41,6 +41,7 @@ import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImp
 import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManager;
 import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManagerImpl;
 import com.propertyvista.server.financial.billing.BillingFacade;
+import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
 public class LeaseManager {
 
@@ -138,6 +139,8 @@ public class LeaseManager {
                 occupancyManager(lease.unit().getPrimaryKey()).reserve(lease);
             }
         }
+
+        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
 
         return lease;
     }

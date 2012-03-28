@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -31,12 +32,11 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.AptUnitServicePriceDTO;
-import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
+import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
 public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
@@ -69,7 +69,8 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         // retrieve market rent prices
         retrieveServicePrices(dto);
 
-        tmp_PopulateFinancial(in, dto);
+        dto.financial()._unitRent().setValue(ServerSideFactory.create(ProductCatalogFacade.class).getUnitRentPrice(in));
+        dto.financial()._marketRent().setValue(ServerSideFactory.create(ProductCatalogFacade.class).getUnitMarketPrice(in));
     }
 
     @Override
@@ -89,28 +90,8 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         }
         dto.info().economicStatusDescription().setValue(null);
 
-        tmp_PopulateFinancial(in, dto);
-    }
-
-    protected void tmp_PopulateFinancial(AptUnit in, AptUnitDTO dto) {
-        // Fill Unit financial data (transient):  
-        dto.financial()._unitRent().setValue(null);
-        dto.financial()._marketRent().setValue(null);
-
-        EntityQueryCriteria<ProductItem> serviceItemCriteria = new EntityQueryCriteria<ProductItem>(ProductItem.class);
-        serviceItemCriteria.add(PropertyCriterion.eq(serviceItemCriteria.proto().element(), in));
-        ProductItem item = Persistence.service().retrieve(serviceItemCriteria);
-        if (item != null) {
-            dto.financial()._marketRent().setValue(item.price().getValue());
-        }
-
-        EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
-        leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit(), in));
-        Lease lease = Persistence.service().retrieve(leaseCriteria);
-        if (lease != null && !lease.version().leaseProducts().isNull() && !lease.version().leaseProducts().serviceItem().isNull()) {
-            PriceCalculationHelpers.calculateChargeItemAdjustments(lease.version().leaseProducts().serviceItem());
-            dto.financial()._unitRent().setValue(lease.version().leaseProducts().serviceItem()._currentPrice().getValue());
-        }
+        dto.financial()._unitRent().setValue(ServerSideFactory.create(ProductCatalogFacade.class).getUnitRentPrice(in));
+        dto.financial()._marketRent().setValue(ServerSideFactory.create(ProductCatalogFacade.class).getUnitMarketPrice(in));
     }
 
     @Override
