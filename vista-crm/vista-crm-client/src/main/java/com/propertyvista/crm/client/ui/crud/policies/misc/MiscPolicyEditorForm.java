@@ -51,8 +51,14 @@ public class MiscPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<MiscP
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxParkingSpots())).labelWidth(20).componentWidth(3).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxPets())).labelWidth(20).componentWidth(3).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsPerBedRoom())).labelWidth(20).componentWidth(3).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsOver18areApplicants())).labelWidth(20).componentWidth(3).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().oneMonthDeposit())).labelWidth(20).componentWidth(3).build());
+
+        content.setBR(++row, 0, 1);
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsOver18areApplicants())).labelWidth(20).componentWidth(2).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().oneMonthDeposit())).labelWidth(20).componentWidth(2).build());
+
+        content.setBR(++row, 0, 1);
+
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearRangeStart())).labelWidth(20).componentWidth(5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearRangeFutureSpan())).labelWidth(20).componentWidth(3).build());
 
