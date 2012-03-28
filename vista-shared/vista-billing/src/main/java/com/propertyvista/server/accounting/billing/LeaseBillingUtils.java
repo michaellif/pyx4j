@@ -21,14 +21,17 @@ import com.propertyvista.server.common.policy.PolicyManager;
 
 public class LeaseBillingUtils {
 
-    public static BigDecimal calculateLatePayment(BigDecimal amount, BigDecimal monthlyRent, Building building) {
+    public static BigDecimal calculateLatePaymentFee(BigDecimal amount, BigDecimal monthlyRent, Building building) {
         LeaseBillingPolicy leaseBillingPolicy = PolicyManager.obtainEffectivePolicy(building, LeaseBillingPolicy.class);
 
-        return calculateFee(leaseBillingPolicy, amount, monthlyRent);
+        return calculateLatePaymentFee(leaseBillingPolicy, amount, monthlyRent);
     }
 
-    private static BigDecimal calculateFee(LeaseBillingPolicy policy, BigDecimal amount, BigDecimal monthlyRent) {
-        BigDecimal fee = new BigDecimal(0.0);
+    public static BigDecimal calculateLatePaymentFee(LeaseBillingPolicy policy, BigDecimal amount, BigDecimal monthlyRent) {
+        BigDecimal fee = new BigDecimal("0.00");
+
+        if (amount.compareTo(fee) == 0)
+            return fee;
 
         switch (policy.lateFee().baseFeeType().getValue()) {
         case FlatAmount:
