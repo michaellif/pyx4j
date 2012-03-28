@@ -169,6 +169,7 @@ public class DBResetServlet extends HttpServlet {
                                 SchedulerHelper.dbReset();
                                 Thread.sleep(150);
                                 SchedulerHelper.init();
+                                RDBUtils.initAllEntityTables();
                                 CacheService.resetAll();
                                 NamespaceManager.setNamespace(Pmc.adminNamespace);
                                 try {
