@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.financial;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -41,6 +42,7 @@ public interface GlCodeCategory extends IEntity {
     IPrimitive<String> description();
 
     @Owned
+    @Caption(name = "GL Codes")
     @OrderBy(GlCode.OrderId.class)
     @Detached(level = AttachLevel.Detached)
     IList<GlCode> glCodes();
