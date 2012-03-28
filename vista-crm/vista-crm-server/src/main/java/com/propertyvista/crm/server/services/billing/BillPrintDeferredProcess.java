@@ -24,7 +24,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.server.accounting.billing.print.BillPrint;
+import com.propertyvista.server.financial.billing.print.BillPrint;
 
 public class BillPrintDeferredProcess implements IDeferredProcess {
 
