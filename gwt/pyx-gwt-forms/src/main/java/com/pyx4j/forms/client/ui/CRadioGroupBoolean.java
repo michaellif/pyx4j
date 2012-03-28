@@ -37,7 +37,7 @@ public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
             @Override
             public String format(Boolean value) {
                 if (value == null) {
-                    return null;
+                    return "";
                 } else if (value) {
                     return i18n.tr("Yes");
                 } else {
