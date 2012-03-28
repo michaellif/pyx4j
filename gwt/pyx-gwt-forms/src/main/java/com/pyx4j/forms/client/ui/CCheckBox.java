@@ -20,7 +20,13 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.i18n.shared.I18n;
+
 public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
+
+    private static final I18n i18n = I18n.get(CRadioGroupBoolean.class);
+
+    private IFormat<Boolean> format;
 
     private Alignment alignment = Alignment.left;
 
@@ -35,6 +41,29 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
     public CCheckBox(String title) {
         super(title);
         populate(false);
+        setFormat(new IFormat<Boolean>() {
+            @Override
+            public String format(Boolean value) {
+                if (value == null || !value) {
+                    return i18n.tr("No");
+                } else {
+                    return i18n.tr("Yes");
+                }
+            }
+
+            @Override
+            public Boolean parse(String string) {
+                return null;
+            }
+        });
+    }
+
+    public IFormat<Boolean> getFormat() {
+        return format;
+    }
+
+    public void setFormat(IFormat<Boolean> format) {
+        this.format = format;
     }
 
     @Override
@@ -52,4 +81,5 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
     public Alignment getAlignmet() {
         return alignment;
     }
+
 }

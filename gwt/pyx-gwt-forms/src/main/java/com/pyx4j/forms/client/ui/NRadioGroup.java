@@ -33,6 +33,21 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
     }
 
     @Override
+    protected RadioGroup<E> createEditor() {
+        return new RadioGroup<E>(getCComponent().getLayout(), getCComponent().getOptions()) {
+            @Override
+            protected String format(E value) {
+                return getCComponent().getFormat().format(value);
+            };
+        };
+    }
+
+    @Override
+    protected HTML createViewer() {
+        return new HTML();
+    }
+
+    @Override
     protected void onEditorCreate() {
         super.onEditorCreate();
         getEditor().addValueChangeHandler(new ValueChangeHandler<E>() {
@@ -60,21 +75,6 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
         }
-    }
-
-    @Override
-    protected RadioGroup<E> createEditor() {
-        return new RadioGroup<E>(getCComponent().getLayout(), getCComponent().getOptions()) {
-            @Override
-            protected String format(E value) {
-                return getCComponent().getFormat().format(value);
-            };
-        };
-    }
-
-    @Override
-    protected HTML createViewer() {
-        return new HTML();
     }
 
 }

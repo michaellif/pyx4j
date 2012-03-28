@@ -58,9 +58,8 @@ public class NCheckBox extends NFocusComponent<Boolean, CheckBox, CCheckBox, HTM
 
     @Override
     public void setNativeValue(Boolean value) {
-        boolean newValue = value == null ? false : value;
         if (isViewable()) {
-            getViewer().setHTML(newValue + "");
+            getViewer().setHTML(getCComponent().getFormat().format(value));
         } else {
             getEditor().setValue(value);
         }
