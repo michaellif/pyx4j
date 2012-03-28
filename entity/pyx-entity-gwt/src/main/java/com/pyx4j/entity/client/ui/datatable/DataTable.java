@@ -533,11 +533,13 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
             FlowPanel panel = new FlowPanel();
             for (ColumnDescriptor column : model.getColumnDescriptors()) {
-                CheckBox columnCheck = new CheckBox(column.getColumnTitle());
-                columnCheck.setValue(column.isVisible());
-                columnChecksList.add(columnCheck);
-                panel.add(columnCheck);
-                panel.add(new HTML());
+                if (!column.isSearchableOnly()) {
+                    CheckBox columnCheck = new CheckBox(column.getColumnTitle());
+                    columnCheck.setValue(column.isVisible());
+                    columnChecksList.add(columnCheck);
+                    panel.add(columnCheck);
+                    panel.add(new HTML());
+                }
             }
 
             ScrollPanel scroll = new ScrollPanel(panel);
@@ -551,14 +553,16 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         @Override
         public boolean onClickOk() {
             boolean hasChanged = false;
-            for (int i = 0; i < model.getColumnDescriptors().size(); ++i) {
-                boolean isVisible = model.getColumnDescriptor(i).isVisible();
-                boolean requestedVisible = columnChecksList.get(i).getValue();
-                if (isVisible != requestedVisible) {
-                    model.getColumnDescriptor(i).setVisible(requestedVisible);
-                    hasChanged = true;
+            int checksListIdx = 0;
+            for (ColumnDescriptor column : model.getColumnDescriptors()) {
+                if (!column.isSearchableOnly()) {
+                    boolean requestedVisible = columnChecksList.get(checksListIdx).getValue();
+                    if (column.isVisible() != requestedVisible) {
+                        column.setVisible(requestedVisible);
+                        hasChanged = true;
+                    }
+                    checksListIdx++;
                 }
-
             }
 
             if (hasChanged) {

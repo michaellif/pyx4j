@@ -68,6 +68,10 @@ public class ColumnDescriptor {
         builder.sortable = sortable;
     }
 
+    public boolean isSearchableOnly() {
+        return builder.searchableOnly;
+    }
+
     public String getColumnTitle() {
         return builder.columnTitle;
     }
@@ -142,6 +146,8 @@ public class ColumnDescriptor {
 
         private boolean searchable = true;
 
+        private boolean searchableOnly = false;
+
         private String width;
 
         private boolean wordWrap = true;
@@ -178,6 +184,13 @@ public class ColumnDescriptor {
 
         public Builder searchable(boolean searchable) {
             this.searchable = searchable;
+            return this;
+        }
+
+        public Builder searchableOnly() {
+            this.searchable = true;
+            this.searchableOnly = true;
+            this.visible = false;
             return this;
         }
 
