@@ -73,7 +73,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
         Thread t = new DeferredProcessorThread("Import", process, new Runnable() {
             @Override
             public void run() {
-                Persistence.service().startTransaction();
+                Persistence.service().startBackgroundProcessTransaction();
                 boolean ok = false;
                 try {
                     runImport(data, process, response);

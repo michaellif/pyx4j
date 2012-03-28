@@ -64,7 +64,15 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     public void create(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
         editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         super.create(callback, editableEntity);
-        PmcCreator.preloadPmc(editableEntity);
+
+        try {
+            Persistence.service().startBackgroundProcessTransaction();
+            PmcCreator.preloadPmc(editableEntity);
+            Persistence.service().commit();
+        } finally {
+            Persistence.service().endTransaction();
+        }
+
     }
 
     @Override
