@@ -96,6 +96,7 @@ public class DefaultCCOmponentsTheme extends Theme {
         style.addProperty("background", "transparent");
         style.addProperty("border", "none");
         style.addProperty("padding", "0");
+        style.addProperty("height", "19px");
         addStyle(style);
 
     }
