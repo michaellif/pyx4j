@@ -43,8 +43,6 @@ public class ProrationUtils {
         int monthTo = calendarTo.get(Calendar.MONTH);
         int dayOfMonthTo = calendarTo.get(Calendar.DAY_OF_MONTH);
 
-        int between = daysBetween(from, to);
-
         if (((monthTo - monthFrom == 0) && (dayOfMonthFrom <= dayOfMonthTo)) || ((monthTo - monthFrom == 1) && (dayOfMonthFrom > dayOfMonthTo))) {
             BigDecimal proration = null;
             switch (method) {

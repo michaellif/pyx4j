@@ -17,6 +17,7 @@ import junit.framework.AssertionFailedError;
 
 public class Tester {
 
+    @SuppressWarnings("unused")
     protected static void assertEquals(String message, Object expected, Object actual) {
         if ((expected == null) && (actual == null)) {
             return;

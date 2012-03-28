@@ -22,8 +22,8 @@ package com.propertyvista.server.financial.billing;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingFeatureEagerScenarioTest extends BillingTestBase {
@@ -88,7 +88,7 @@ public class BillingFeatureEagerScenarioTest extends BillingTestBase {
         //==================== RUN 3 ======================//
 
         setSysDate("18-Apr-2011");
-        BillableItem pet2 = addPet("10-Apr-2011", null);
+        addPet("10-Apr-2011", null);
         changeBillableItem(parking1.uid().getValue(), null, "20-May-2011");
 
         bill = runBilling(true, true);

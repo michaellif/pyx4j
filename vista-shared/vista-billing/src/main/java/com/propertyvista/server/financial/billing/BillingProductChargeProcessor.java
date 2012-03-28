@@ -15,9 +15,6 @@ package com.propertyvista.server.financial.billing;
 
 import java.math.BigDecimal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
@@ -33,8 +30,6 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 public class BillingProductChargeProcessor {
 
     private static final I18n i18n = I18n.get(BillingProductChargeProcessor.class);
-
-    private final static Logger log = LoggerFactory.getLogger(BillingProductChargeProcessor.class);
 
     private final Billing billing;
 
