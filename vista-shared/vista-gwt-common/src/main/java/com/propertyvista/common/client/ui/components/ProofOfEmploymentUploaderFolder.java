@@ -13,29 +13,52 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 
-public class ProofOfEmploymentUploaderFolder extends ApplicationDocumentUploaderFolder {
+public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmploymentDocument> {
 
-    private static final List<EntityFolderColumnDescriptor> PERSONAL_INCOME_COLUMNS;
+    private final static I18n i18n = I18n.get(ProofOfEmploymentUploaderFolder.class);
 
-    static {
-        ApplicationDocument proto = EntityFactory.getEntityPrototype(ApplicationDocument.class);
-        PERSONAL_INCOME_COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
-        PERSONAL_INCOME_COLUMNS.add(new EntityFolderColumnDescriptor(proto.details(), "15em"));
-        PERSONAL_INCOME_COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileName(), "25em"));
-        PERSONAL_INCOME_COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileSize(), "5em"));
+    public ProofOfEmploymentUploaderFolder() {
+        super(ProofOfEmploymentDocument.class);
+        asWidget().setSize("35em", "100%");
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        return PERSONAL_INCOME_COLUMNS;
+    public CComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof ProofOfEmploymentDocument) {
+            return new ProofOfEmploymentDocumentEditor();
+        } else {
+            return super.create(member);
+        }
     }
 
+    private class ProofOfEmploymentDocumentEditor extends CEntityDecoratableEditor<ProofOfEmploymentDocument> {
+
+        public ProofOfEmploymentDocumentEditor() {
+            super(ProofOfEmploymentDocument.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel content = new FormFlexPanel();
+            content.setSize("100%", "100%");
+            int row = -1;
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).labelWidth(8).componentWidth(20).build());
+            content.setH3(++row, 0, 1, i18n.tr("Files"));
+            content.setWidget(++row, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
+
+            return content;
+        }
+
+    }
 }

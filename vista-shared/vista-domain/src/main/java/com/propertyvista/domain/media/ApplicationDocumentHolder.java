@@ -26,6 +26,6 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface ApplicationDocumentHolder extends IEntity {
 
     @Owned
-    IList<ApplicationDocument> documents();
+    IList<ApplicationDocumentFile> documents();
 
 }

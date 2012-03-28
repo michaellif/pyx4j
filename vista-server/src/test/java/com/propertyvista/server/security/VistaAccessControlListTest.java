@@ -36,7 +36,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.IBoundToApplication;
-import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -158,7 +158,7 @@ public class VistaAccessControlListTest {
     public void publicApplicationEntityInstanceAccess() {
         TestLifecycle.beginRequest();
 
-        assertEntityPermission(false, ApplicationDocument.class, null);
+        assertEntityPermission(false, ApplicationDocumentFile.class, null);
         assertEntityPermission(false, TenantInLeaseListDTO.class, null);
         assertEntityPermission(false, TenantInLease.class, null);
         assertEntityPermission(false, PetsDTO.class, null);
@@ -178,7 +178,7 @@ public class VistaAccessControlListTest {
         application.setPrimaryKey(new Key(-251));
         PtAppContext.setCurrentUserApplication(application);
 
-        assertEntityPermission(true, ApplicationDocument.class, application);
+        assertEntityPermission(true, ApplicationDocumentFile.class, application);
         assertEntityPermission(true, TenantInLeaseListDTO.class, application);
         assertEntityPermission(true, TenantInLease.class, application);
         assertEntityPermission(true, PetsDTO.class, application);
@@ -189,7 +189,7 @@ public class VistaAccessControlListTest {
 
         Application application2 = EntityFactory.create(Application.class);
         application2.setPrimaryKey(new Key(-252));
-        assertEntityPermission(false, ApplicationDocument.class, application2);
+        assertEntityPermission(false, ApplicationDocumentFile.class, application2);
         assertEntityPermission(false, TenantInLeaseListDTO.class, application2);
         assertEntityPermission(false, TenantInLease.class, application2);
         assertEntityPermission(false, PetsDTO.class, application2);

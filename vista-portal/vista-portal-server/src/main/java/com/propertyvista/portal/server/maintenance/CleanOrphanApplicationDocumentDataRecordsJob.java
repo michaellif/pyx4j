@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
-import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
@@ -58,9 +58,9 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
 
         int deleted = 0;
         for (Key dataKey : dataKeys) {
-            EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
+            EntityQueryCriteria<ApplicationDocumentFile> criteria = EntityQueryCriteria.create(ApplicationDocumentFile.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().blobKey(), dataKey));
-            ApplicationDocument doc = Persistence.service().retrieve(criteria);
+            ApplicationDocumentFile doc = Persistence.service().retrieve(criteria);
             if (doc == null) {
                 log.debug("CleanOrphanApplicationDocumentDataRecordsJob: Found orphan ApplicationDocumentData record - deleting. id={}", dataKey);
                 Persistence.service().delete(ApplicationDocumentBlob.class, dataKey);

@@ -36,7 +36,6 @@ import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.common.client.ui.components.ApplicationDocumentUploaderFolder;
 import com.propertyvista.common.client.ui.components.IdUploaderFolder;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
@@ -58,9 +57,9 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
     private final FormFlexPanel previousAddress;
 
-    private ApplicationDocumentUploaderFolder fileUpload;
-
     private boolean ptAppMode = false;
+
+    private IdUploaderFolder fileUpload;
 
     public InfoViewForm() {
         super(TenantInfoDTO.class, new VistaEditorsComponentFactory());
@@ -109,7 +108,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         main.setH1(++row, 0, 1, i18n.tr("Identification Documents"));
 
-        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new IdUploaderFolder(true)));
+        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new IdUploaderFolder()));
         fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
         fileUpload.asWidget().setWidth("40em");

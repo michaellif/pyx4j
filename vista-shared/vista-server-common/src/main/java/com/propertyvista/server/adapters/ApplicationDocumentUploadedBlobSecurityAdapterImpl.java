@@ -21,7 +21,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.shared.adapters.ApplicationDocumentUploadedBlobSecurityAdapter;
 
 public class ApplicationDocumentUploadedBlobSecurityAdapterImpl implements ApplicationDocumentUploadedBlobSecurityAdapter {
@@ -39,7 +39,7 @@ public class ApplicationDocumentUploadedBlobSecurityAdapterImpl implements Appli
     }
 
     @Override
-    public boolean allowModifications(ApplicationDocument entity, MemberMeta meta, Object valueOrig, Object valueNew) {
+    public boolean allowModifications(ApplicationDocumentFile entity, MemberMeta meta, Object valueOrig, Object valueNew) {
         @SuppressWarnings("unchecked")
         Set<Key> userUploadeKeys = (Set<Key>) Context.getVisit().getAttribute(LIST_SESSION_ATTRIBUTE);
         if (userUploadeKeys == null) {

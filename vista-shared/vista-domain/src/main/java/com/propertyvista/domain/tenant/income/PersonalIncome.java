@@ -15,7 +15,6 @@ package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -23,11 +22,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.domain.media.ApplicationDocumentHolder;
+import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 
 @DiscriminatorValue("PersonalIncome")
-public interface PersonalIncome extends IEntity, ApplicationDocumentHolder {
+public interface PersonalIncome extends IEntity {
 
     @ToString
     @NotNull
@@ -60,10 +58,8 @@ public interface PersonalIncome extends IEntity, ApplicationDocumentHolder {
     @Owned
     IncomeInfoStudentIncome studentIncome();
 
-    @Override
     @Owned
     @Caption(name = "Proof Of Employment")
-    @OrderBy(ApplicationDocument.OrderColumnId.class)
-    IList<ApplicationDocument> documents();
+    IList<ProofOfEmploymentDocument> documents();
 
 }

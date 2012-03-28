@@ -30,20 +30,20 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.domain.media.ApplicationDocumentHolder;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.misc.EquifaxApproval;
 
 @DiscriminatorValue("PersonScreening")
-public interface PersonScreening extends ApplicationDocumentHolder {
+public interface PersonScreening extends IEntity {
 
     @Owner
     @NotNull
@@ -74,12 +74,10 @@ public interface PersonScreening extends ApplicationDocumentHolder {
     @Caption(name = "General Questions")
     LegalQuestions legalQuestions();
 
-    @Override
     @Owned
     @Detached
     @Caption(name = "Identification Documents")
-    @OrderBy(ApplicationDocument.OrderColumnId.class)
-    IList<ApplicationDocument> documents();
+    IList<IdentificationDocument> documents();
 
     //=============== Financial =============//
 

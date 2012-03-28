@@ -32,7 +32,7 @@ public class PersonScreeningCrudServiceImpl extends AbstractCrudServiceImpl<Pers
 
     @Override
     protected void enhanceRetrieved(PersonScreening entity, PersonScreening dto) {
-        // load detached entities:
+        // load detached entities:        
         Persistence.service().retrieve(dto.documents());
         Persistence.service().retrieve(dto.incomes());
         Persistence.service().retrieve(dto.assets());

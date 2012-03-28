@@ -46,7 +46,8 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.TenantUser;
@@ -214,16 +215,16 @@ public class PTGenerator {
         return selfEmpl;
     }
 
-    public ApplicationDocument createApplicationDocument(Application application, String fileName) {
+    public ApplicationDocumentFile createDocumentPage(Application application, String fileName) {
         if (IOUtils.getResource("pt-docs/" + fileName, PTGenerator.class) == null) {
             throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
         }
-        ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
+        ApplicationDocumentFile applicationDocument = EntityFactory.create(ApplicationDocumentFile.class);
         applicationDocument.fileName().setValue(fileName);
         return applicationDocument;
     }
 
-    public void attachDocumentData(ApplicationDocument applicationDocument) {
+    public void attachDocumentData(ApplicationDocumentFile applicationDocument) {
         String fileName = applicationDocument.fileName().getValue();
         ApplicationDocumentBlob applicationDocumentData;
         try {
@@ -466,12 +467,11 @@ public class PTGenerator {
 
             income.incomeSource().setValue(IncomeSource.fulltime);
             income.employer().set(createEmployer());
-            //            income. monthlyAmount().setValue(DomainUtil.createMoney(300d + RandomUtil.randomInt(4000)).getValue());
 
-            //income.active().setValue(RandomUtil.randomBoolean());
-
-            ApplicationDocument applicationDocument = createApplicationDocument(application, "doc-income" + RandomUtil.randomInt(3) + ".jpg");
-            income.documents().add(applicationDocument);
+            ProofOfEmploymentDocument proofOfEmploymentDocument = EntityFactory.create(ProofOfEmploymentDocument.class);
+            proofOfEmploymentDocument.description().setValue("proof of employment document " + RandomUtil.randomLetters(10));
+            proofOfEmploymentDocument.documentPages().add(createDocumentPage(application, "doc-income" + RandomUtil.randomInt(3) + ".jpg"));
+            income.documents().add(proofOfEmploymentDocument);
 
             screening.incomes().add(income);
         }

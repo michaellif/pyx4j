@@ -13,22 +13,21 @@
  */
 package com.propertyvista.domain.media;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.OrderBy;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.IUserEntity;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 
-@Inheritance
-@AbstractEntity
-public interface ApplicationDocument extends IUserEntity {
+@DiscriminatorValue("IdentificationDocument")
+public interface IdentificationDocument extends ApplicationDocument {
 
-    @Owned
-    @Caption(name = "Files")
-    @OrderBy(value = ApplicationDocumentFile.OrderColumnId.class)
-    IList<ApplicationDocumentFile> documentPages();
+    @NotNull
+    IdentificationDocumentType idType();
+
+    @NotNull
+    IPrimitive<String> idNumber();
+
+    IPrimitive<String> notes();
 
 }

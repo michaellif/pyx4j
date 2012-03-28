@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
 
 /**
  * This class in created because we don't have instance of IList by itself
@@ -27,6 +27,6 @@ import com.propertyvista.domain.media.ApplicationDocument;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ApplicationDocumentsList extends IEntity {
 
-    IList<ApplicationDocument> documents();
+    IList<ApplicationDocumentFile> documents();
 
 }

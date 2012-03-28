@@ -24,18 +24,24 @@ import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.TenantUser;
@@ -118,6 +124,24 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             Persistence.service().persist(tenantSummary.tenant());
             summary.lease().version().tenants().add(tenantSummary.tenantInLease());
 
+            // set owner of the documents
+            final Key userKey = tenantSummary.tenant().user().getPrimaryKey();
+            if (userKey != null) {
+                EntityGraph.applyRecursivelyAllObjects(tenantSummary, new EntityGraph.ApplyMethod() {
+
+                    @Override
+                    public boolean apply(IEntity entity) {
+                        if (entity instanceof IUserEntity) {
+                            IUserEntity userEntity = ((IUserEntity) entity);
+                            if (userEntity.user().getPrimaryKey() == null) {
+                                userEntity.user().setPrimaryKey(userKey);
+                            }
+                        }
+                        return false;
+                    }
+                });
+            }
+
             Persistence.service().persist(tenantSummary.tenantScreening());
             for (PersonGuarantor pg : tenantSummary.tenantScreening().guarantors()) {
                 // TODO remove this set, it should be automatic
@@ -127,18 +151,16 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             Persistence.service().persist(tenantSummary.tenantScreening().guarantors());
             Persistence.service().persist(tenantSummary.guarantorScreening());
 
-            int no = 0;
-            for (ApplicationDocument applicationDocument : tenantSummary.tenantScreening().documents()) {
-                generator.attachDocumentData(applicationDocument);
-                applicationDocument.orderInOwner().setValue(no++);
-                Persistence.service().persist(applicationDocument);
+            for (IdentificationDocument id : tenantSummary.tenantScreening().documents()) {
+                for (ApplicationDocumentFile page : id.documentPages()) {
+                    generator.attachDocumentData(page);
+                }
             }
             for (PersonalIncome income : tenantSummary.tenantScreening().incomes()) {
-                no = 0;
-                for (ApplicationDocument applicationDocument : income.documents()) {
-                    generator.attachDocumentData(applicationDocument);
-                    applicationDocument.orderInOwner().setValue(no++);
-                    Persistence.service().persist(applicationDocument);
+                for (ProofOfEmploymentDocument doc : income.documents()) {
+                    for (ApplicationDocumentFile page : doc.documentPages()) {
+                        generator.attachDocumentData(page);
+                    }
                 }
             }
 

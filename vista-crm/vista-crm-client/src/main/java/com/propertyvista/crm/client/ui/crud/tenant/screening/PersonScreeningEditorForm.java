@@ -33,7 +33,6 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.ApplicationDocumentUploaderFolder;
 import com.propertyvista.common.client.ui.components.IdUploaderFolder;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
@@ -56,8 +55,6 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
-    private ApplicationDocumentUploaderFolder fileUpload;
-
     private Widget guarantorsTabWidget;
 
     private final FormFlexPanel previousAddress = new FormFlexPanel() {
@@ -67,6 +64,8 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
             super.setVisible(visible);
         }
     };
+
+    private IdUploaderFolder fileUpload;
 
     public PersonScreeningEditorForm() {
         this(false);

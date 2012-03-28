@@ -29,7 +29,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 @SuppressWarnings("serial")
@@ -48,7 +48,7 @@ public class ApplicationDocumentServlet extends HttpServlet {
         }
 
         //TODO deserialize key
-        ApplicationDocument doc = Persistence.secureRetrieve(ApplicationDocument.class, new Key(id));
+        ApplicationDocumentFile doc = Persistence.secureRetrieve(ApplicationDocumentFile.class, new Key(id));
         if (doc == null) {
             log.debug("no such document {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);

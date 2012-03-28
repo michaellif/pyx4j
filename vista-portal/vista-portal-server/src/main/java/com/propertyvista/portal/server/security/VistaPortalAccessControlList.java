@@ -24,7 +24,9 @@ import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
-import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.ref.City;
@@ -108,7 +110,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaTenantBehavior.Prospective, new EntityPermission(OrganizationPoliciesNode.class, EntityPermission.READ));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(IdentificationDocumentType.class, EntityPermission.READ));
-        grant(VistaTenantBehavior.Prospective, new EntityPermission(ApplicationDocument.class, new UserEntityInstanceAccess(), CRUD));
+        grant(VistaTenantBehavior.Prospective, new EntityPermission(ApplicationDocumentFile.class, new UserEntityInstanceAccess(), CRUD));
+        grant(VistaTenantBehavior.Prospective, new EntityPermission(IdentificationDocument.class, new UserEntityInstanceAccess(), CRUD));
+        grant(VistaTenantBehavior.Prospective, new EntityPermission(ProofOfEmploymentDocument.class, new UserEntityInstanceAccess(), CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(TenantInLease.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(Summary.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(Charges.class, applicationEntityAccess, CRUD));
@@ -121,7 +125,12 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         // Submitted prospective:
         grant(VistaTenantBehavior.ProspectiveSubmitted, new EntityPermission(OrganizationPoliciesNode.class, EntityPermission.READ));
         grant(VistaTenantBehavior.ProspectiveSubmitted, new EntityPermission(IdentificationDocumentType.class, EntityPermission.READ));
-        grant(VistaTenantBehavior.ProspectiveSubmitted, new EntityPermission(ApplicationDocument.class, new UserEntityInstanceAccess(), CRUD));
+        grant(VistaTenantBehavior.ProspectiveSubmitted, new EntityPermission(ApplicationDocumentFile.class, new UserEntityInstanceAccess(),
+                EntityPermission.READ));
+        grant(VistaTenantBehavior.ProspectiveSubmitted, new EntityPermission(IdentificationDocument.class, new UserEntityInstanceAccess(),
+                EntityPermission.READ));
+        grant(VistaTenantBehavior.ProspectiveSubmitted, new EntityPermission(ProofOfEmploymentDocument.class, new UserEntityInstanceAccess(),
+                EntityPermission.READ));
         grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(SummaryService.class));

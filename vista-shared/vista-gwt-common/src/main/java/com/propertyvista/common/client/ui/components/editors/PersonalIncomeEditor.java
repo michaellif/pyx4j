@@ -24,7 +24,6 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.ApplicationDocumentUploaderFolder;
 import com.propertyvista.common.client.ui.components.ProofOfEmploymentUploaderFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
@@ -43,7 +42,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
 
     private static final I18n i18n = I18n.get(PersonalIncomeEditor.class);
 
-    private ApplicationDocumentUploaderFolder fileUpload;
+    private ProofOfEmploymentUploaderFolder fileUpload;
 
     public PersonalIncomeEditor() {
         super(PersonalIncome.class);
@@ -52,7 +51,6 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
-
         int row = -1;
         if (isEditable()) {
             @SuppressWarnings("unchecked")
@@ -75,7 +73,8 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         main.setWidget(++row, 0, inject(proto().studentIncome(), createStudentIncomeEditor()));
         main.setWidget(++row, 0, inject(proto().socialServices(), createSocialServicesEditor()));
         main.setWidget(++row, 0, inject(proto().otherIncomeInformation(), createOtherIncomeInfoEditor()));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder())).componentWidth(30)
+                .build());
 
         return main;
     }

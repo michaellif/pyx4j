@@ -13,78 +13,51 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 
-public class IdUploaderFolder extends ApplicationDocumentUploaderFolder {
+public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
 
     private final static I18n i18n = I18n.get(IdUploaderFolder.class);
 
-    private static final List<EntityFolderColumnDescriptor> ID_UPLOADER_COLUMNS;
-
-    static {
-        ApplicationDocument proto = EntityFactory.getEntityPrototype(ApplicationDocument.class);
-        ID_UPLOADER_COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
-        ID_UPLOADER_COLUMNS.add(new EntityFolderColumnDescriptor(proto.idType(), "15em"));
-        ID_UPLOADER_COLUMNS.add(new EntityFolderColumnDescriptor(proto.details(), "15em"));
-        ID_UPLOADER_COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileName(), "25em"));
-        ID_UPLOADER_COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileSize(), "5em"));
-    }
-
     protected ApplicationDocumentationPolicy documentationPolicy = null;
 
-    @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        return ID_UPLOADER_COLUMNS;
-    }
-
-    public IdUploaderFolder(boolean enforceDocumentsPolicy) {
-        super();
-        if (enforceDocumentsPolicy) {
-            this.addValueValidator(new EditableValueValidator<IList<ApplicationDocument>>() {
-                @Override
-                public ValidationFailure isValid(CComponent<IList<ApplicationDocument>, ?> component, IList<ApplicationDocument> value) {
-                    if (value != null) {
-                        if (documentationPolicy != null) {
-                            Set<Key> usedDocuments = new HashSet<Key>();
-                            for (ApplicationDocument doc : value) {
-                                if (!doc.blobKey().isNull()) {
-                                    usedDocuments.add(doc.blobKey().getValue());
-                                }
-                            }
-                            int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - usedDocuments.size();
-                            if (numOfRemainingDocs > 0) {
-                                return new ValidationFailure(i18n.tr("{0} more kinds of documents are required", numOfRemainingDocs));
-                            }
-                        } else {
-                            return new ValidationFailure(i18n.tr("Validation Policy Not Available"));
-                        }
-                    }
-                    return null;
-                }
-            });
-        }
-
-    }
-
     public IdUploaderFolder() {
-        this(false);
+        super(IdentificationDocument.class);
+        addValueValidator(new EditableValueValidator<IList<IdentificationDocument>>() {
+            @Override
+            public ValidationFailure isValid(CComponent<IList<IdentificationDocument>, ?> component, IList<IdentificationDocument> value) {
+                if (value != null) {
+                    if (documentationPolicy != null) {
+                        int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
+                        if (numOfRemainingDocs > 0) {
+                            return new ValidationFailure(i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                        }
+                    } else {
+                        return new ValidationFailure(i18n.tr("Validation Policy Not Available"));
+                    }
+                }
+                return null;
+            }
+        });
+        asWidget().setSize("100%", "100%");
     }
 
     @Override
@@ -97,6 +70,49 @@ public class IdUploaderFolder extends ApplicationDocumentUploaderFolder {
                         IdUploaderFolder.super.onPopulate();
                     }
                 });
+    }
+
+    @Override
+    public CComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof IdentificationDocument) {
+            return new IdentificationDocumentEditor();
+        } else {
+            return super.create(member);
+        }
+    }
+
+    private class IdentificationDocumentEditor extends CEntityDecoratableEditor<IdentificationDocument> {
+
+        public IdentificationDocumentEditor() {
+            super(IdentificationDocument.class);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel content = new FormFlexPanel();
+            content.setSize("100%", "100%");
+            int row = -1;
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().idType(), new CEntityComboBox(IdentificationDocumentType.class))).labelWidth(8)
+                    .build());
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().idNumber())).labelWidth(8).build());
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes())).labelWidth(8).build());
+            ApplicationDocumentFileUploaderFolder docPagesFolder = new ApplicationDocumentFileUploaderFolder();
+            docPagesFolder.addValueValidator(new EditableValueValidator<IList<ApplicationDocumentFile>>() {
+
+                @Override
+                public ValidationFailure isValid(CComponent<IList<ApplicationDocumentFile>, ?> component, IList<ApplicationDocumentFile> value) {
+                    if (value != null && value.size() < 1) {
+                        return new ValidationFailure(i18n.tr("at least one document file is required"));
+                    } else {
+                        return null;
+                    }
+                }
+            });
+            content.setH3(++row, 0, 1, i18n.tr("Files"));
+            content.setWidget(++row, 0, inject(proto().documentPages(), docPagesFolder));
+            return content;
+        }
     }
 
 }

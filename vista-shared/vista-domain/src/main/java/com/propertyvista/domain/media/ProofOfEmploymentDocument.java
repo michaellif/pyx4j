@@ -7,16 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-03-27
- * @author vlads
+ * Created on Mar 28, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.shared.adapters;
+package com.propertyvista.domain.media;
 
-import com.pyx4j.entity.adapters.MemberModificationAdapter;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.media.ApplicationDocumentFile;
+@DiscriminatorValue("ProofOfEmploymentDocument")
+public interface ProofOfEmploymentDocument extends ApplicationDocument {
 
-public interface ApplicationDocumentUploadedBlobSecurityAdapter extends MemberModificationAdapter<ApplicationDocumentFile> {
-
+    @NotNull
+    IPrimitive<String> description();
 }

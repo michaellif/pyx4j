@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.domain.IUserEntity;
-import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
@@ -124,8 +123,8 @@ public class TenantRetriever {
     }
 
     public void saveScreening() {
+        // set owner of the documents (and other IUserEntities)
         final Key userKey = VistaContext.getCurrentUserPrimaryKey();
-
         EntityGraph.applyRecursivelyAllObjects(tenantScreening, new EntityGraph.ApplyMethod() {
 
             @Override
@@ -144,12 +143,7 @@ public class TenantRetriever {
 
         // save detached entities:
         if (!financial) {
-            int no = 0;
-            for (ApplicationDocument applicationDocument : tenantScreening.documents()) {
-                applicationDocument.orderInOwner().setValue(no++);
-                //TODO assert Documents Id
-                Persistence.service().merge(applicationDocument);
-            }
+            Persistence.service().merge(tenantScreening.documents());
         }
 
         if (financial) {
