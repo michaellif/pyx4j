@@ -211,9 +211,9 @@ public interface BuildingInfo extends IEntity {
 
     IPrimitive<StructureType> structureType();
 
+    @NotNull
     @Format("yyyy")
     @Editor(type = EditorType.yearpicker)
-    @NotNull
     IPrimitive<LogicalDate> structureBuildYear();
 
     IPrimitive<ConstructionType> constructionType();

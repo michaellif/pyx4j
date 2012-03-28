@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -25,11 +26,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
@@ -171,12 +174,18 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                             }
                         }
                     });
+
+            // set build year date picker range: 
+            CComponent<?, ?> comp = get(proto().info().structureBuildYear());
+            if (comp instanceof CMonthYearPicker) {
+                int rangeStart = 1800;
+                ((CMonthYearPicker) comp).setYearRange(new Range(rangeStart, (1900 - rangeStart) + new Date().getYear() + 5));
+            }
         }
     }
 
     @Override
     public void addValidations() {
-        new PastDateValidation(get(proto().info().structureBuildYear()));
         new PastDateValidation(get(proto().financial().dateAcquired()));
         new PastDateValidation(get(proto().financial().lastAppraisalDate()));
 
