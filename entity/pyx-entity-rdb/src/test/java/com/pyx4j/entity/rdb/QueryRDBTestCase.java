@@ -332,7 +332,7 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
         }
 
         // Explicit sort
-        if (false) {
+        {
             EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             criteria.asc(criteria.proto().sortByCollectionMember().$().name());
