@@ -52,12 +52,12 @@ public class BillingLifecycle {
             throw new BillingException("Can't run billing on Account with non-confirmed bills");
         }
 
-        BillingRun billingRun = createBillingRun(lease.billingAccount());
+        BillingRun billingRun = createBillingRun(lease);
         Persistence.service().retrieve(lease.unit());
         billingRun.building().set(lease.unit().belongsTo());
         Persistence.service().persist(billingRun);
 
-        Bill previousBill = BillingLifecycle.getLatestConfirmedBill(billingAccount);
+        Bill previousBill = BillingLifecycle.getLatestConfirmedBill(lease);
         if (previousBill != null && Bill.BillType.Final.equals(previousBill.billType().getValue())) {
             throw new BillingException("Final bill has been issued");
         }
@@ -136,8 +136,9 @@ public class BillingLifecycle {
         }
     }
 
-    static BillingRun createBillingRun(BillingAccount billingAccount) {
-        Bill previousBill = getLatestConfirmedBill(billingAccount);
+    static BillingRun createBillingRun(Lease lease) {
+        Bill previousBill = getLatestConfirmedBill(lease);
+        BillingAccount billingAccount = lease.billingAccount();
         if (previousBill == null) {
             return BillingCycleManger.createFirstBillingRun(billingAccount.billingCycle(), billingAccount.lease().leaseFrom().getValue(), !billingAccount
                     .billingPeriodStartDate().isNull());
@@ -166,17 +167,17 @@ public class BillingLifecycle {
 
     }
 
-    static Bill getLatestConfirmedBill(BillingAccount billingAccount) {
+    static Bill getLatestConfirmedBill(Lease lease) {
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), lease.billingAccount()));
         criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), BillStatus.Confirmed));
         criteria.desc(criteria.proto().billSequenceNumber());
         return Persistence.service().retrieve(criteria);
     }
 
-    static Bill getLatestBill(BillingAccount billingAccount) {
+    static Bill getLatestBill(Lease lease) {
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), lease.billingAccount()));
         criteria.desc(criteria.proto().billSequenceNumber());
         return Persistence.service().retrieve(criteria);
     }

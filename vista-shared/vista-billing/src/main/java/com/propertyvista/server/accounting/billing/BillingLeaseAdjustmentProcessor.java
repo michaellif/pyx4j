@@ -13,21 +13,18 @@
  */
 package com.propertyvista.server.accounting.billing;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
-import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.server.accaunting.AbstractLeaseAdjustmentProcessor;
 
-public class LeaseAdjustmentProcessor {
+public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProcessor {
 
     private final Billing billing;
 
-    LeaseAdjustmentProcessor(Billing billing) {
+    BillingLeaseAdjustmentProcessor(Billing billing) {
         this.billing = billing;
     }
 
@@ -85,36 +82,17 @@ public class LeaseAdjustmentProcessor {
     }
 
     private void createPendingCharge(LeaseAdjustment adjustment) {
-        InvoiceAccountCharge charge = EntityFactory.create(InvoiceAccountCharge.class);
-
-        charge.billingAccount().set(billing.getNextPeriodBill().billingAccount());
+        InvoiceAccountCharge charge = createCharge(adjustment);
         charge.bill().set(billing.getNextPeriodBill());
-        charge.adjustment().set(adjustment);
-        charge.fromDate().setValue(adjustment.effectiveDate().getValue());
-        charge.description().setValue(adjustment.reason().name().getValue());
-
-        calculateTax(charge);
-
         Persistence.service().persist(charge);
-
         addCharge(charge);
-
     }
 
     private void createPendingCredit(LeaseAdjustment adjustment) {
-        InvoiceAccountCredit credit = EntityFactory.create(InvoiceAccountCredit.class);
-
-        credit.billingAccount().set(billing.getNextPeriodBill().billingAccount());
+        InvoiceAccountCredit credit = createCredit(adjustment);
         credit.bill().set(billing.getNextPeriodBill());
-        credit.amount().setValue(adjustment.amount().getValue().negate());
-        credit.adjustment().set(adjustment);
-        credit.fromDate().setValue(adjustment.effectiveDate().getValue());
-        credit.description().setValue(adjustment.reason().name().getValue());
-
         Persistence.service().persist(credit);
-
         addCredit(credit);
-
     }
 
     private void addCharge(InvoiceAccountCharge charge) {
@@ -126,17 +104,6 @@ public class LeaseAdjustmentProcessor {
     private void addCredit(InvoiceAccountCredit credit) {
         billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(credit.amount().getValue()));
         billing.getNextPeriodBill().lineItems().add(credit);
-    }
-
-    private void calculateTax(InvoiceAccountCharge charge) {
-        if (!charge.amount().isNull()) {
-            charge.taxes().addAll(
-                    TaxUtils.calculateTaxes(charge.amount().getValue(), charge.adjustment().reason(), billing.getNextPeriodBill().billingRun().building()));
-        }
-        charge.taxTotal().setValue(new BigDecimal(0));
-        for (InvoiceChargeTax chargeTax : charge.taxes()) {
-            charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
-        }
     }
 
 }

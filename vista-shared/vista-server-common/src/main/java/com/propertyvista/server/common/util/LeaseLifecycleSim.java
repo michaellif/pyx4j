@@ -83,7 +83,7 @@ public class LeaseLifecycleSim {
         // confirm latest bill before activation :
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
-        billing.confirmBill(billing.getLatestBill(lease.billingAccount()));
+        billing.confirmBill(billing.getLatestBill(lease));
 
         return leaseManager(eventDate).activate(leaseId);
     }

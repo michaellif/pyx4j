@@ -14,12 +14,13 @@
 package com.propertyvista.server.accounting.billing;
 
 import com.propertyvista.domain.financial.billing.InvoicePayment;
+import com.propertyvista.server.accaunting.AbstractPaymentProcessor;
 
-public class PaymentProcessor {
+public class BillingPaymentProcessor extends AbstractPaymentProcessor {
 
     private final Billing billing;
 
-    PaymentProcessor(Billing billing) {
+    BillingPaymentProcessor(Billing billing) {
         this.billing = billing;
     }
 

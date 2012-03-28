@@ -279,7 +279,7 @@ public class LeaseManager {
     public Lease activate(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         // set lease status to active ONLY if first (latest till now) bill is confirmed: 
-        if (ServerSideFactory.create(BillingFacade.class).getLatestBill(lease.billingAccount()).billStatus().getValue() == Bill.BillStatus.Confirmed) {
+        if (ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() == Bill.BillStatus.Confirmed) {
             lease.version().status().setValue(Status.Active);
 
             lease.saveAction().setValue(SaveAction.saveAsFinal);

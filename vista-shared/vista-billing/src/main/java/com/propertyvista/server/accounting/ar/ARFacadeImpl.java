@@ -15,23 +15,22 @@ package com.propertyvista.server.accounting.ar;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.PaymentRecord;
-import com.propertyvista.server.accounting.ar.ARFacade;
 
 public class ARFacadeImpl implements ARFacade {
 
     @Override
     public void postPayment(PaymentRecord paymentRecord) {
-        PaymentProcessor.postPayment(paymentRecord);
+        new ARPaymentProcessor().postPayment(paymentRecord);
     }
 
     @Override
     public void rejectPayment(PaymentRecord paymentRecord) {
-        PaymentProcessor.rejectPayment(paymentRecord);
+        new ARPaymentProcessor().rejectPayment(paymentRecord);
     }
 
     @Override
     public void postImmediateAdjustment(LeaseAdjustment adjustment) {
-        LeaseAdjustmentProcessor.postImmediateAdjustment(adjustment);
+        new ARLeaseAdjustmentProcessor().postImmediateAdjustment(adjustment);
     }
 
 }

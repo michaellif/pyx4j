@@ -43,11 +43,11 @@ class Billing {
 
     private Bill previousPeriodBill;
 
-    private final PaymentProcessor paymentProcessor;
+    private final BillingPaymentProcessor paymentProcessor;
 
-    private final LeaseAdjustmentProcessor leaseAdjustmentProcessor;
+    private final BillingLeaseAdjustmentProcessor leaseAdjustmentProcessor;
 
-    private final ProductChargeProcessor productChargeProcessor;
+    private final BillingProductChargeProcessor productChargeProcessor;
 
     private Billing(Bill bill) {
         this.nextPeriodBill = bill;
@@ -60,11 +60,11 @@ class Billing {
             Persistence.service().retrieve(previousPeriodBill.lineItems());
         }
 
-        productChargeProcessor = new ProductChargeProcessor(this);
+        productChargeProcessor = new BillingProductChargeProcessor(this);
 
-        paymentProcessor = new PaymentProcessor(this);
+        paymentProcessor = new BillingPaymentProcessor(this);
 
-        leaseAdjustmentProcessor = new LeaseAdjustmentProcessor(this);
+        leaseAdjustmentProcessor = new BillingLeaseAdjustmentProcessor(this);
 
     }
 
@@ -93,7 +93,7 @@ class Billing {
     }
 
     private void getPreviousTotals() {
-        Bill lastBill = BillingLifecycle.getLatestConfirmedBill(nextPeriodBill.billingAccount());
+        Bill lastBill = BillingLifecycle.getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
         if (lastBill != null) {
             nextPeriodBill.previousBalanceAmount().setValue(lastBill.totalDueAmount().getValue());
         } else {
@@ -126,11 +126,11 @@ class Billing {
         return previousPeriodBill;
     }
 
-    public PaymentProcessor getPaymentProcessor() {
+    public BillingPaymentProcessor getPaymentProcessor() {
         return paymentProcessor;
     }
 
-    public LeaseAdjustmentProcessor getLeaseAdjustmentProcessor() {
+    public BillingLeaseAdjustmentProcessor getLeaseAdjustmentProcessor() {
         return leaseAdjustmentProcessor;
     }
 
@@ -151,7 +151,7 @@ class Billing {
                 bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
                 bill.billingRun().set(billingRun);
 
-                Bill previousBill = BillingLifecycle.getLatestConfirmedBill(billingAccount);
+                Bill previousBill = BillingLifecycle.getLatestConfirmedBill(billingAccount.lease());
                 bill.previousBill().set(previousBill);
 
                 Persistence.service().persist(bill);

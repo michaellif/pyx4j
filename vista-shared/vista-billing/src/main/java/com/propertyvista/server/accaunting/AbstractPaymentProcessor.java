@@ -7,25 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 15, 2012
- * @author vlads
+ * Created on Mar 24, 2012
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.server.accounting.billing;
+package com.propertyvista.server.accaunting;
 
-import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.BillingRun;
-import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface BillingFacade {
+public class AbstractPaymentProcessor {
 
-    BillingRun runBilling(Lease lease);
-
-    Bill getLatestConfirmedBill(Lease lease);
-
-    Bill getLatestBill(Lease lease);
-
-    void confirmBill(Bill bill);
-
-    void rejectBill(Bill bill);
 }

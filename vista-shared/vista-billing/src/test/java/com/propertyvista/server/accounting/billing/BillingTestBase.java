@@ -50,8 +50,6 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.domain.tenant.lease.PaymentRecord;
 import com.propertyvista.server.accounting.ar.ARFacade;
-import com.propertyvista.server.accounting.billing.BillingFacade;
-import com.propertyvista.server.accounting.billing.BillingLifecycle;
 import com.propertyvista.server.accounting.billing.print.BillPrint;
 import com.propertyvista.server.accounting.preload.BuildingDataModel;
 import com.propertyvista.server.accounting.preload.LeaseAdjustmentReasonDataModel;
@@ -121,7 +119,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         ServerSideFactory.create(BillingFacade.class).runBilling(lease);
 
-        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease.billingAccount());
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
 
         if (confirm) {
             ServerSideFactory.create(BillingFacade.class).confirmBill(bill);

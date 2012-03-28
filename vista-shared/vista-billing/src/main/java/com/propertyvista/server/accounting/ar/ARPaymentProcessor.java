@@ -19,12 +19,13 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.tenant.lease.PaymentRecord;
+import com.propertyvista.server.accaunting.AbstractPaymentProcessor;
 
-public class PaymentProcessor {
+public class ARPaymentProcessor extends AbstractPaymentProcessor {
 
-    private static final I18n i18n = I18n.get(PaymentProcessor.class);
+    private static final I18n i18n = I18n.get(ARPaymentProcessor.class);
 
-    static void postPayment(PaymentRecord paymentRecord) {
+    void postPayment(PaymentRecord paymentRecord) {
         InvoicePayment payment = EntityFactory.create(InvoicePayment.class);
         payment.paymentRecord().set(paymentRecord);
         payment.amount().setValue(paymentRecord.amount().getValue());
@@ -44,7 +45,7 @@ public class PaymentProcessor {
 
     }
 
-    static void rejectPayment(PaymentRecord payment) {
+    void rejectPayment(PaymentRecord payment) {
         payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
         Persistence.service().persist(payment);
         Persistence.service().commit();

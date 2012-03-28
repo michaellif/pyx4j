@@ -30,15 +30,15 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 
-public class ProductChargeProcessor {
+public class BillingProductChargeProcessor {
 
-    private static final I18n i18n = I18n.get(ProductChargeProcessor.class);
+    private static final I18n i18n = I18n.get(BillingProductChargeProcessor.class);
 
-    private final static Logger log = LoggerFactory.getLogger(ProductChargeProcessor.class);
+    private final static Logger log = LoggerFactory.getLogger(BillingProductChargeProcessor.class);
 
     private final Billing billing;
 
-    ProductChargeProcessor(Billing billing) {
+    BillingProductChargeProcessor(Billing billing) {
         this.billing = billing;
 
         billing.getNextPeriodBill().serviceCharge().setValue(new BigDecimal(0));

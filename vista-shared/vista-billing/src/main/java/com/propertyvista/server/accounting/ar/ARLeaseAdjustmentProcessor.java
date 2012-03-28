@@ -14,37 +14,26 @@
 package com.propertyvista.server.accounting.ar;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
-import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.server.accaunting.AbstractLeaseAdjustmentProcessor;
 
-public class LeaseAdjustmentProcessor {
+public class ARLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProcessor {
 
-    static void postImmediateAdjustment(LeaseAdjustment adjustment) {
+    void postImmediateAdjustment(LeaseAdjustment adjustment) {
 
         if (!LeaseAdjustment.ExecutionType.immediate.equals(adjustment.executionType().getValue())) {
             throw new ARException("Not an immediate adjustment");
         } else {
             InvoiceLineItem lineItem = null;
             if (LeaseAdjustment.ActionType.charge.equals(adjustment.actionType().getValue())) {
-                InvoiceAccountCharge charge = EntityFactory.create(InvoiceAccountCharge.class);
-                charge.adjustment().set(adjustment);
-                charge.amount().setValue(adjustment.amount().getValue());
-                lineItem = charge;
+                lineItem = createCharge(adjustment);
             } else if (LeaseAdjustment.ActionType.credit.equals(adjustment.actionType().getValue())) {
-                InvoiceAccountCredit credit = EntityFactory.create(InvoiceAccountCredit.class);
-                credit.adjustment().set(adjustment);
-                credit.amount().setValue(adjustment.amount().getValue().negate());
-                lineItem = credit;
+                lineItem = createCredit(adjustment);
             } else {
                 throw new ARException("ActionType is unknown");
             }
-            lineItem.fromDate().setValue(adjustment.effectiveDate().getValue());
-            lineItem.description().setValue(adjustment.reason().name().getValue());
-
             Persistence.service().persist(lineItem);
 
             Persistence.service().retrieve(adjustment.billingAccount());

@@ -13,11 +13,9 @@
  */
 package com.propertyvista.server.accounting.billing;
 
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.accounting.billing.BillingFacade;
 
 public class BillingFacadeImpl implements BillingFacade {
 
@@ -27,13 +25,13 @@ public class BillingFacadeImpl implements BillingFacade {
     }
 
     @Override
-    public Bill getLatestConfirmedBill(BillingAccount billingAccount) {
-        return BillingLifecycle.getLatestConfirmedBill(billingAccount);
+    public Bill getLatestConfirmedBill(Lease lease) {
+        return BillingLifecycle.getLatestConfirmedBill(lease);
     }
 
     @Override
-    public Bill getLatestBill(BillingAccount billingAccount) {
-        return BillingLifecycle.getLatestBill(billingAccount);
+    public Bill getLatestBill(Lease lease) {
+        return BillingLifecycle.getLatestBill(lease);
     }
 
     @Override
