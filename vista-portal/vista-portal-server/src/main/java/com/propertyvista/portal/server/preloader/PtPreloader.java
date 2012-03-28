@@ -24,18 +24,14 @@ import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.propertvista.generator.util.RandomUtil;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.company.Employee;
@@ -123,24 +119,6 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
         for (TenantSummaryGDO tenantSummary : summary.tenants()) {
             Persistence.service().persist(tenantSummary.tenant());
             summary.lease().version().tenants().add(tenantSummary.tenantInLease());
-
-            // set owner of the documents
-            final Key userKey = tenantSummary.tenant().user().getPrimaryKey();
-            if (userKey != null) {
-                EntityGraph.applyRecursivelyAllObjects(tenantSummary, new EntityGraph.ApplyMethod() {
-
-                    @Override
-                    public boolean apply(IEntity entity) {
-                        if (entity instanceof IUserEntity) {
-                            IUserEntity userEntity = ((IUserEntity) entity);
-                            if (userEntity.user().getPrimaryKey() == null) {
-                                userEntity.user().setPrimaryKey(userKey);
-                            }
-                        }
-                        return false;
-                    }
-                });
-            }
 
             Persistence.service().persist(tenantSummary.tenantScreening());
             for (PersonGuarantor pg : tenantSummary.tenantScreening().guarantors()) {

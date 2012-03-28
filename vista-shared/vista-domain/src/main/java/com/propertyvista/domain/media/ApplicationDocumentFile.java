@@ -25,13 +25,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.File;
-import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.shared.adapters.ApplicationDocumentUploadedBlobSecurityAdapter;
 
-/**
- * This one is same as {@link File} but with ability to enforce security via {@link IUserEntity} interface
- */
-public interface ApplicationDocumentFile extends File, IUserEntity {
+public interface ApplicationDocumentFile extends File {
 
     @Override
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

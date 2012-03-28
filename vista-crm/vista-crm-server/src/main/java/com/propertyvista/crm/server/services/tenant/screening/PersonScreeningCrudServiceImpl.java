@@ -39,9 +39,4 @@ public class PersonScreeningCrudServiceImpl extends AbstractCrudServiceImpl<Pers
         Persistence.service().retrieve(dto.guarantors());
     }
 
-    @Override
-    protected void persist(PersonScreening dbo, PersonScreening dto) {
-        // TODO set user id for all IUserEntity in dbo graph        
-        super.persist(dbo, dto);
-    }
 }

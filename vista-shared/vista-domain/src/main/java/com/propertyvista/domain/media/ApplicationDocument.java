@@ -18,13 +18,12 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-
-import com.propertyvista.domain.IUserEntity;
 
 @Inheritance
 @AbstractEntity
-public interface ApplicationDocument extends IUserEntity {
+public interface ApplicationDocument extends IEntity {
 
     @Owned
     @Caption(name = "Files")
