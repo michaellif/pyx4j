@@ -116,6 +116,8 @@ public class DateUtils extends TimeUtils {
     public static Date detectDateformat(String str) {
         final String[] formats = {
 
+        "yyyy-MM-dd'T'HH:mm:ss",
+
         "yyyy-MM-dd HH:mm:ss.SSS",
 
         "yyyy-MM-dd HH:mm:ss",
