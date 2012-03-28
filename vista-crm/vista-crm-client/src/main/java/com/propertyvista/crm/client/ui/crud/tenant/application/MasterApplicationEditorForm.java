@@ -101,14 +101,15 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate(), new CDateLabel()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
 
-        row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().rentPrice()), 5).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().parkingPrice()), 5).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().otherPrice()), 5).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().deposit()), 5).build());
-
-        main.setBR(++row, 1, 1);
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().discounts()), 5).build());
+// TODO Hide these data for the 1st version!        
+//        row = -1;
+//        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().rentPrice()), 5).build());
+//        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().parkingPrice()), 5).build());
+//        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().otherPrice()), 5).build());
+//        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().deposit()), 5).build());
+//
+//        main.setBR(++row, 1, 1);
+//        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().discounts()), 5).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
