@@ -54,7 +54,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
     private final GroupFocusHandler focusHandlerManager;
 
     public MonthYearPicker() {
-        this(new Range(1900, new Date().getYear() + 7 - 1900), true);
+        this(new Range(1900, new Date().getYear() + 7), true);
     }
 
     public MonthYearPicker(Range yearRange, boolean showYearOnly) {
@@ -84,11 +84,8 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         }
 
         yearSelector = new ListBox();
+        initYearSelector();
         add(yearSelector);
-        yearSelector.addItem("");
-        for (int i = yearRange.getStart() + yearRange.getLength(); i >= yearRange.getStart(); i--) {
-            yearSelector.addItem(String.valueOf(i));
-        }
         if (!showYearOnly) {
             setCellWidth(yearSelector, "50%");
             yearSelector.getElement().getStyle().setMarginLeft(5, Unit.PX);
@@ -107,6 +104,14 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
 
     }
 
+    private void initYearSelector() {
+        yearSelector.clear();
+        yearSelector.addItem("");
+        for (int i = yearRange.getStart() + yearRange.getLength(); i >= yearRange.getStart(); --i) {
+            yearSelector.addItem(String.valueOf(i));
+        }
+    }
+
     public void setDate(Date date) {
         if (date == null) {
             if (!showYearOnly) {
@@ -117,7 +122,12 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
             if (!showYearOnly) {
                 monthSelector.setSelectedIndex(date.getMonth() + 1);
             }
-            yearSelector.setSelectedIndex(yearRange.getStart() + yearRange.getLength() - (1900 + date.getYear()) + 1);
+            int index = yearRange.getStart() + yearRange.getLength() - (1900 + date.getYear()) + 1;
+            if (index > 0) {
+                yearSelector.setSelectedIndex(index);
+            } else {
+                yearSelector.setSelectedIndex(0);
+            }
         }
     }
 
@@ -134,7 +144,10 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
     }
 
     public void setYearRange(Range yearRange) {
+        Date current = getDate();
         this.yearRange = yearRange;
+        initYearSelector();
+        setDate(current);
     }
 
     @Override
