@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.server.productcatalog;
+package com.propertyvista.server.financial.productcatalog;
 
 import java.math.BigDecimal;
 import java.util.List;
