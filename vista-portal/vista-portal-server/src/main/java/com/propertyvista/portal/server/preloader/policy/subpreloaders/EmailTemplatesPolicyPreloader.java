@@ -82,13 +82,12 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("New Password Retrieval"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
-                "Dear " +
-                EmailTemplateManager.getVarname(pwdReqT.requestorName()) + ",<br/>\n" +
+                "Dear {0},<br/>\n" +
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
                 "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n" +
-                "    <a style=\"color:#929733\" href=\"" +
-                EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl()) +
-                "\">Change Your Password</a>"
+                "    <a style=\"color:#929733\" href=\"{1}\">Change Your Password</a>",
+                EmailTemplateManager.getVarname(pwdReqT.requestorName()),
+                EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl())
         )));//@formatter:on
         return template;
     }
@@ -102,13 +101,12 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("New Password Retrieval"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
-                "Dear " +
-                EmailTemplateManager.getVarname(pwdReqT.requestorName()) + ",<br/>\n" +
+                "Dear {0},<br/>\n" +
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
                 "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n" +
-                "    <a style=\"color:#929733\" href=\"" +
-                EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl()) +
-                "\">Change Your Password</a>"
+                "    <a style=\"color:#929733\" href=\"{1}\">Change Your Password</a>",
+                EmailTemplateManager.getVarname(pwdReqT.requestorName()),
+                EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl())
         )));//@formatter:on
         return template;
     }
@@ -123,23 +121,21 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Your Lease Application Created"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
-                "Dear " +
-                EmailTemplateManager.getVarname(appT.applicant()) + ",<br/><br/>" +
-
-                "Your lease application has been created. The Application Reference Number is: " +
-                EmailTemplateManager.getVarname(appT.refNumber()) + "<br/><br/>" +
-
+                "Dear {0},<br/><br/>" +
+                "Your lease application has been created. The Application Reference Number is: {1}<br/><br/>" +
                 "You can now start completing it online by logging to your account using following link: <br/><br/>" +
-                EmailTemplateManager.getVarname(appT.applicationUrl()) + "<br/><br/>" +
-
+                "{2}<br/><br/>" +
                 "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
-                EmailTemplateManager.getVarname(bldT.mainOffice().phone()) + ". " +
-                "Please have your Application Reference Number available.<br/><br/>" +
-                
+                "{3}. Please have your Application Reference Number available.<br/><br/>" +
                 "Sincerely,<br/><br/>" +
-                
-                EmailTemplateManager.getVarname(bldT.propertyName()) + "<br/>" +
-                EmailTemplateManager.getVarname(bldT.administrator().name()) + "<br/>"
+                "{4}<br/>" +
+                "{5}<br/>",
+                EmailTemplateManager.getVarname(appT.applicant()),
+                EmailTemplateManager.getVarname(appT.refNumber()),
+                EmailTemplateManager.getVarname(appT.applicationUrl()),
+                EmailTemplateManager.getVarname(bldT.mainOffice().phone()),
+                EmailTemplateManager.getVarname(bldT.propertyName()),
+                EmailTemplateManager.getVarname(bldT.administrator().name())
         )));//@formatter:on
         return template;
     }
@@ -155,23 +151,21 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Your Lease Application Created"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
-                "Dear " +
-                EmailTemplateManager.getVarname(appT.applicant()) + ",<br/><br/>" +
-
-                "Your lease application has been created. The Application Reference Number is: " +
-                EmailTemplateManager.getVarname(appT.refNumber()) + "<br/><br/>" +
-
+                "Dear {0},<br/><br/>" +
+                "Your lease application has been created. The Application Reference Number is: {1}<br/><br/>" +
                 "You can now start completing it online by logging to your account using following link: <br/><br/>" +
-                EmailTemplateManager.getVarname(appT.applicationUrl()) + "<br/><br/>" +
-
+                "{2}<br/><br/>" +
                 "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
-                EmailTemplateManager.getVarname(bldT.mainOffice().phone()) + ". " +
-                "Please have your Application Reference Number available.<br/><br/>" +
-
+                "{3}. Please have your Application Reference Number available.<br/><br/>" +
                 "Sincerely,<br/><br/>" +
-                
-                EmailTemplateManager.getVarname(bldT.propertyName()) + "<br/>" +
-                EmailTemplateManager.getVarname(bldT.administrator().name()) + "<br/>"
+                "{4}<br/>" +
+                "{5}<br/>",
+                EmailTemplateManager.getVarname(appT.applicant()),
+                EmailTemplateManager.getVarname(appT.refNumber()),
+                EmailTemplateManager.getVarname(appT.applicationUrl()),
+                EmailTemplateManager.getVarname(bldT.mainOffice().phone()),
+                EmailTemplateManager.getVarname(bldT.propertyName()),
+                EmailTemplateManager.getVarname(bldT.administrator().name())
         )));//@formatter:on
         return template;
     }
@@ -187,23 +181,21 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Your Guarantor Application Created"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
-                "Dear " +
-                EmailTemplateManager.getVarname(appT.applicant()) + ",<br/><br/>" +
-
-                "Your guarantor application has been created. The Application Reference Number is: " +
-                EmailTemplateManager.getVarname(appT.refNumber()) + "<br/><br/>" +
-
-                "You can now start completing it online using following link: <br/><br/>" +
-                EmailTemplateManager.getVarname(appT.applicationUrl()) + "<br/><br/>" +
-
+                "Dear {0},<br/><br/>" +
+                "Your guarantor application has been created. The Application Reference Number is: {1}<br/><br/>" +
+                "You can now start completing it online by logging to your account using following link: <br/><br/>" +
+                "{2}<br/><br/>" +
                 "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly at " +
-                EmailTemplateManager.getVarname(bldT.mainOffice().phone()) + ". " +
-                "Please have your Application Reference Number available.<br/><br/>" +
-
+                "{3}. Please have your Application Reference Number available.<br/><br/>" +
                 "Sincerely,<br/><br/>" +
-
-                EmailTemplateManager.getVarname(bldT.propertyName()) + "<br/>" +
-                EmailTemplateManager.getVarname(bldT.administrator().name()) + "<br/>"
+                "{4}<br/>" +
+                "{5}<br/>",
+                EmailTemplateManager.getVarname(appT.applicant()),
+                EmailTemplateManager.getVarname(appT.refNumber()),
+                EmailTemplateManager.getVarname(appT.applicationUrl()),
+                EmailTemplateManager.getVarname(bldT.mainOffice().phone()),
+                EmailTemplateManager.getVarname(bldT.propertyName()),
+                EmailTemplateManager.getVarname(bldT.administrator().name())
         )));//@formatter:on
         return template;
     }
@@ -220,31 +212,25 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Your Application To Lease has been approved"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
-                "<h3>Welcome " +
-                EmailTemplateManager.getVarname(appT.applicant()) + " to your new home!</h3><br/><br/>" +                        
-
-                "Your Application To Lease has been approved!<br/><br/> +" +
-
-                "As per your application, your lease start date is on " +
-                EmailTemplateManager.getVarname(leaseT.startDateWeekday()) + ", " +
-                EmailTemplateManager.getVarname(leaseT.startDate()) + "<br/></br>" +
-
+                "<h3>Welcome {0} to your new home!</h3><br/><br/>" +                        
+                "Your Application To Lease has been approved!<br/><br/>" +
+                "As per your application, your lease start date is on {1}, {2}<br/></br>" +
                 "We are excited to have you live with us. Please maintain your username and password that you have used for the application process. " +
                 "This username and password will stay with you throughout your tenancy and will give you access to our Online Tenant Portal. " +
-                "You can access the Portal at anytime by going to our website " +
-                EmailTemplateManager.getVarname(portalT.portalHomeUrl()) + " " +
-                "and clicking under residents. " +
-                "Alternatively you can reach the site directly by going to " +
-                EmailTemplateManager.getVarname(portalT.tenantHomeUrl()) + ".<br/><br/>" +
-
+                "You can access the Portal at anytime by going to our website {3} " +
+                "and clicking under residents. Alternatively you can reach the site directly by going to {4}<br/><br/>" +
                 "A member of our team will be in touch with you shortly to make move-in arrangements.<br/><br/>" +
-
                 "In the meantime, should you have any concerns or questions, please do not hesistate to contact us directly.<br/><br/>" +
-                        
                 "Sincerely,<br/><br/>" +
-                        
-                EmailTemplateManager.getVarname(bldT.propertyName()) + "<br/>" +
-                EmailTemplateManager.getVarname(bldT.administrator().name()) + "<br/>"
+                "{5}<br/>" +
+                "{6}<br/>",                        
+                EmailTemplateManager.getVarname(appT.applicant()),
+                EmailTemplateManager.getVarname(leaseT.startDateWeekday()),
+                EmailTemplateManager.getVarname(leaseT.startDate()),
+                EmailTemplateManager.getVarname(portalT.portalHomeUrl()),
+                EmailTemplateManager.getVarname(portalT.tenantHomeUrl()),
+                EmailTemplateManager.getVarname(bldT.propertyName()),
+                EmailTemplateManager.getVarname(bldT.administrator().name())
         )));//@formatter:on
         return template;
     }
@@ -260,25 +246,23 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Your Application has been declined"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
-                "Dear "+
-                EmailTemplateManager.getVarname(appT.applicant()) + ",<br/><br/>" +                        
-
+                "Dear {0},<br/><br/>"+
                 "Unfortunately, based on the information provided your application has been DECLINED.<br/><br/>" +
-
                 "We do encourage you to add more information to your application that could assist us in re-assessing this application.<br/>" +
                 "Typically, additional Proof of Income or Guarantor(s)can change the application decision and allow us to re-evaluate the entire application.<br/>" +
-                "We welcome you to access the application again utilizing the username and password you have previously created at " +
-                EmailTemplateManager.getVarname(portalT.prospectPortalomeUrl()) + " " +
+                "We welcome you to access the application again utilizing the username and password you have previously created at {1} " +
                 "to add more information.<br/>" +
                 "Should you wish the cancel the application procedure at this time completely, no further actions are required.<br/><br/>" +
-
-                "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly and reference your Application Reference Number " +
-                EmailTemplateManager.getVarname(appT.refNumber()) + "<br/><br/>" +
-
+                "In the meantime, should you have any concerns or questions, please do not hesitate to contact us directly and reference " +
+                "your Application Reference Number {2}<br/><br/>" +
                 "Sincerely,<br/><br/>" +
-
-                EmailTemplateManager.getVarname(bldT.propertyName()) + "<br/>" +
-                EmailTemplateManager.getVarname(bldT.administrator().name()) + "<br/>"
+                "{3}<br/>" +
+                "{4}<br/>",                        
+                EmailTemplateManager.getVarname(appT.applicant()),          
+                EmailTemplateManager.getVarname(portalT.prospectPortalomeUrl()),
+                EmailTemplateManager.getVarname(appT.refNumber()),
+                EmailTemplateManager.getVarname(bldT.propertyName()),
+                EmailTemplateManager.getVarname(bldT.administrator().name())
         )));//@formatter:on
         return template;
     }
