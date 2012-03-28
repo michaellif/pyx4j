@@ -64,7 +64,12 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
 
     @Override
     protected RadioGroup<E> createEditor() {
-        return new RadioGroup<E>(getCComponent().getLayout(), getCComponent().getOptions());
+        return new RadioGroup<E>(getCComponent().getLayout(), getCComponent().getOptions()) {
+            @Override
+            protected String format(E value) {
+                return getCComponent().getFormat().format(value);
+            };
+        };
     }
 
     @Override
