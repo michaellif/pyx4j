@@ -27,6 +27,7 @@ public class SelectUnitListServiceImpl extends AbstractListServiceImpl<AptUnit> 
 
     @Override
     protected void bind() {
+        bind(dtoProto.id(), dboProto.id());
         bindCompleateDBO();
     }
 

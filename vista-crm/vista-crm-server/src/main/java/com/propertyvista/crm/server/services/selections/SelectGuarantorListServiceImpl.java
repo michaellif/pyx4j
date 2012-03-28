@@ -26,6 +26,7 @@ public class SelectGuarantorListServiceImpl extends AbstractListServiceImpl<Guar
 
     @Override
     protected void bind() {
+        bind(dtoProto.id(), dboProto.id());
         bindCompleateDBO();
     }
 }

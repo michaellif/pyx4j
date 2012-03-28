@@ -26,6 +26,7 @@ public class SelectEmployeeListServiceImpl extends AbstractListServiceImpl<Emplo
 
     @Override
     protected void bind() {
+        bind(dtoProto.id(), dboProto.id());
         bindCompleateDBO();
     }
 
