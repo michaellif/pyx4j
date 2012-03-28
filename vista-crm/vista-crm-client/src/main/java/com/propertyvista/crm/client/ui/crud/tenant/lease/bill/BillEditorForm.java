@@ -40,12 +40,26 @@ public class BillEditorForm extends CrmEntityForm<Bill> {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
-        main.setH1(++row, 0, 2, i18n.tr("Status"));
+        main.setH1(++row, 0, 2, i18n.tr("Info"));
         int row2 = row;
 
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().building()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodStartDate()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodEndDate()), 10).build());
+
+        ++row2;
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().paymentFrequency()), 15).build());
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingPeriodStartDay()), 5).build());
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingRunTargetDay()), 5).build());
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionTargetDate()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionDate()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingCycle().paymentFrequency()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingPeriodStartDay()), 5).build());
+
+        main.setH1(++row, 0, 2, i18n.tr("Status"));
+        row2 = row;
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billSequenceNumber()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billType()), 10).build());
 
         main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billStatus()), 10).build());
         main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 15).build());
@@ -59,6 +73,7 @@ public class BillEditorForm extends CrmEntityForm<Bill> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalAdjustments()), 10).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositPaidAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credits()), 10).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes()), 10).build());

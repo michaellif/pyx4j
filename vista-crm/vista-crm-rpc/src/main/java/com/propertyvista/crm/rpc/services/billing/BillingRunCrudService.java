@@ -29,5 +29,4 @@ public interface BillingRunCrudService extends AbstractCrudService<BillingRun> {
      * Make all Finished bills Rejected
      */
     //void rejectedAllBill(AsyncCallback<VoidSerializable> callback, Key billRunEntityId);
-
 }
