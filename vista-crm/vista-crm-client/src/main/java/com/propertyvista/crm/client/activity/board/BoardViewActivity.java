@@ -110,7 +110,7 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
 
     @Override
     public void save() {
-        getService().saveMetadata(new AsyncCallback<DashboardMetadata>() {
+        getService().saveDashboardMetadata(new AsyncCallback<DashboardMetadata>() {
             @Override
             public void onSuccess(DashboardMetadata result) {
                 onSaveSuccess(result);
@@ -150,7 +150,7 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
 
     @Override
     public void save(final GadgetMetadata gadgetMetadata) {
-        getService().saveSettings(new AsyncCallback<GadgetMetadata>() {
+        getService().saveGadgetMetadata(new AsyncCallback<GadgetMetadata>() {
             @Override
             public void onSuccess(GadgetMetadata result) {
                 gadgetMetadata.set(result);
@@ -166,7 +166,7 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
 
     @Override
     public void retrieve(Key gadgetId, AsyncCallback<GadgetMetadata> callback) {
-        getService().retrieveSettings(callback, gadgetId);
+        getService().retrieveGadgetMetadata(callback, gadgetId);
     }
 
     protected boolean isTypedDashboard() {

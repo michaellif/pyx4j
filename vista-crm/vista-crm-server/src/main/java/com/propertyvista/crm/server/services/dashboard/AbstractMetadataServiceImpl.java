@@ -18,20 +18,15 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataService;
-import com.propertyvista.domain.ISharedUserEntity;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.server.common.security.VistaContext;
 
 abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
@@ -41,22 +36,11 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
     @Override
     public void listMetadata(AsyncCallback<Vector<DashboardMetadata>> callback) {
-
-        // Load shared dashboards:
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().isShared(), true));
-        addTypeCriteria(criteria);
-        Vector<DashboardMetadata> vdm = Persistence.secureQuery(criteria);
-
-        // Load current user's dashboards:
-        CrmUser user = EntityFactory.create(CrmUser.class);
-        user.setPrimaryKey(Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
-        criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
-        addTypeCriteria(criteria);
-        vdm.addAll(Persistence.secureQuery(criteria));
-
-        callback.onSuccess(vdm);
+        criteria.or().left(PropertyCriterion.eq(criteria.proto().user(), CrmAppContext.getCurrentUserPrimaryKey()))
+                .right(PropertyCriterion.eq(criteria.proto().isShared(), true));
+        Vector<DashboardMetadata> dashboardMetadataList = Persistence.secureQuery(criteria);
+        callback.onSuccess(dashboardMetadataList);
     }
 
     @Override
@@ -67,57 +51,37 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         } else if (entityId.asLong() == -1) {
             dm = retrieveDefaultMetadata();
         } else {
-            dm = Persistence.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
+            dm = Persistence.secureRetrieve(DashboardMetadata.class, entityId);
         }
         callback.onSuccess(dm);
     }
 
     @Override
-    public void saveMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata dm) {
-        if (!dm.id().isNull()) {
-            //Assert Permission
-            Persistence.secureRetrieve(DashboardMetadata.class, dm.getPrimaryKey());
+    public void saveDashboardMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata dm) {
+        // this function should not be used to create new dashboards/reports (new dashboards/reports should be created via CRUD service) 
+        if (dm.getPrimaryKey() == null) {
+            throw new Error("trying to save new dashboard metadata");
         }
-
-        if (dm.user().getPrimaryKey() != ISharedUserEntity.DORMANT_KEY) {
-            dm.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
-        }
-
-        for (GadgetMetadata gm : dm.gadgets()) {
-            persistGadgetMetadata(gm);
-        }
-
         Persistence.secureSave(dm);
         Persistence.service().commit();
         callback.onSuccess(dm);
     }
 
     @Override
-    public void retrieveSettings(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId) {
-        GadgetMetadata gm = Persistence.secureRetrieve(EntityCriteriaByPK.create(GadgetMetadata.class, gadgetMetadataId));
-        if (!gm.isNull()) {
-            callback.onSuccess(gm);
-        } else {
-            throw new Error("There is no such gadget! " + gadgetMetadataId.toString());
-        }
+    public void retrieveGadgetMetadata(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId) {
+        throw new Error("Not Implemented"); // actually this method shouldn't exist: must be refactored
     }
 
     @Override
-    public void saveSettings(AsyncCallback<GadgetMetadata> callback, GadgetMetadata gadgetMetadata) {
+    public void saveGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata gadgetMetadata) {
+        // TODO refactor all this crap: make it be called only when owner is set...
         if (gadgetMetadata != null) {
-            persistGadgetMetadata(gadgetMetadata);
+            Persistence.service().persist(gadgetMetadata);
             Persistence.service().commit();
             callback.onSuccess(gadgetMetadata);
         } else {
             throw new Error("Got null instead of gadget metadata");
         }
-    }
-
-    private void persistGadgetMetadata(GadgetMetadata gadgetMetadata) {
-        if (gadgetMetadata.user().getPrimaryKey() != ISharedUserEntity.DORMANT_KEY) {
-            gadgetMetadata.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
-        }
-        Persistence.secureSave(gadgetMetadata);
     }
 
     protected abstract DashboardMetadata retrieveDefaultMetadata();

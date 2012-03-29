@@ -19,8 +19,10 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataCrudService;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.server.common.security.VistaContext;
@@ -36,9 +38,8 @@ abstract class AbstractMetadataCrudServiceImpl extends AbstractCrudServiceImpl<D
     @Override
     public void list(AsyncCallback<EntitySearchResult<DashboardMetadata>> callback, EntityListCriteria<DashboardMetadata> criteria) {
         addTypeCriteria(criteria);
-
-        //TODO add or for public or private user keys?..
-
+        criteria.or().left(PropertyCriterion.eq(criteria.proto().user(), CrmAppContext.getCurrentUserPrimaryKey()))
+                .right(PropertyCriterion.eq(criteria.proto().isShared(), true));
         super.list(callback, criteria);
     }
 
@@ -46,12 +47,10 @@ abstract class AbstractMetadataCrudServiceImpl extends AbstractCrudServiceImpl<D
     public void create(AsyncCallback<DashboardMetadata> callback, DashboardMetadata entity) {
         entity.setPrimaryKey(null);
 
-        // TODO  add proper management of secure adapters
-        if (entity.user().getPrimaryKey() != ISharedUserEntity.DORMANT_KEY) {
-            entity.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
-        }
         if (entity.isShared().isBooleanTrue()) {
             entity.user().setPrimaryKey(ISharedUserEntity.DORMANT_KEY);
+        } else {
+            entity.user().setPrimaryKey(CrmAppContext.getCurrentUserPrimaryKey());
         }
         super.create(callback, entity);
     }

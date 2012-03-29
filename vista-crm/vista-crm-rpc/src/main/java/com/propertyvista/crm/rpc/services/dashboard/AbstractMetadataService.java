@@ -29,10 +29,10 @@ public interface AbstractMetadataService extends IService {
 
     public void retrieveMetadata(AsyncCallback<DashboardMetadata> callback, Key entityId);
 
-    public void saveMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata editableEntity);
+    public void saveDashboardMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata editableEntity);
 
-    public void retrieveSettings(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId);
+    public void retrieveGadgetMetadata(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId);
 
-    public void saveSettings(AsyncCallback<GadgetMetadata> callback, GadgetMetadata gadgetMetadata);
+    public void saveGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata gadgetMetadata);
 
 }
