@@ -31,7 +31,7 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
 
         setColumnDescriptors(new ColumnDescriptor[] {//@formatter:off
 
-                new MemberColumnDescriptor.Builder(proto().applicationID(), true).build(), 
+                new MemberColumnDescriptor.Builder(proto().applicationId(), true).build(), 
                 new MemberColumnDescriptor.Builder(proto().lease().type(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().propertyCode()).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().unit(), true).build(),

@@ -68,7 +68,7 @@ public interface MasterApplication extends IEntity {
     @NotNull
     @ReadOnly
     @ToString
-    IPrimitive<String> applicationID();
+    IPrimitive<String> applicationId();
 
     IPrimitive<Status> status();
 
