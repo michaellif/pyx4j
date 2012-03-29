@@ -28,8 +28,23 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingSunnyDayScenarioTest extends BillingTestBase {
 
-    public void testSequentialBillingRun() {
+    private long startTime;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
         preloadData();
+        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        System.out.println("Execution Time - " + (System.currentTimeMillis() - startTime) + "ms");
+        super.tearDown();
+    }
+
+    public void testSequentialBillingRun() {
+
         setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1);
         addServiceAdjustment("-25", AdjustmentType.monetary, ExecutionType.inLease);
 

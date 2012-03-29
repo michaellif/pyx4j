@@ -56,6 +56,9 @@ public interface BillableItem extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> expirationDate();
 
+    @Owned
+    Deposit deposit();
+
     /**
      * Current price: contractual price value (ProductItem.price + adjustments),
      * should be recalculated (@link

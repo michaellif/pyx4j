@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.services.billing;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord;
 
 public class PaymentCrudServiceImpl extends AbstractCrudServiceImpl<PaymentRecord> implements PaymentCrudService {
 

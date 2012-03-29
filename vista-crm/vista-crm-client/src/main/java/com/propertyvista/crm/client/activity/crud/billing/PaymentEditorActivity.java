@@ -22,7 +22,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord;
 
 public class PaymentEditorActivity extends EditorActivityBase<PaymentRecord> {
 

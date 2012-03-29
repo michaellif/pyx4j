@@ -36,6 +36,7 @@ import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Feature.Type;
@@ -48,7 +49,6 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionTyp
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
 import com.propertyvista.server.financial.ar.ARFacade;
 import com.propertyvista.server.financial.billing.print.BillPrint;
 import com.propertyvista.server.financial.preload.BuildingDataModel;

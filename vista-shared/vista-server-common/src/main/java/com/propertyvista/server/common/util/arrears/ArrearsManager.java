@@ -17,8 +17,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsState;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
 public interface ArrearsManager {
 

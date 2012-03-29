@@ -15,8 +15,6 @@ package com.propertyvista.domain.policy.policies.domain;
 
 import java.math.BigDecimal;
 
-import javax.xml.bind.annotation.XmlType;
-
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -29,39 +27,14 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
+import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
+import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 
 @ToStringFormat("{2}, {1}, {0}, {3}")
 public interface DepositPolicyItem extends IEntity {
-
-    @I18n
-    @XmlType(name = "RepaymentMode")
-    public enum RepaymentMode {
-
-        applyToFirstMonth, applyToLastMonth, returnAtLeaseEnd;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    @I18n
-    @XmlType(name = "ValueType")
-    public enum ValueType {
-        amount,
-
-        percentage;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
 
     @Owner
     @NotNull

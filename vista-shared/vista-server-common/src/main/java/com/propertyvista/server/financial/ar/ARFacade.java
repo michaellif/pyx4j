@@ -13,8 +13,8 @@
  */
 package com.propertyvista.server.financial.ar;
 
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
 public interface ARFacade {
 

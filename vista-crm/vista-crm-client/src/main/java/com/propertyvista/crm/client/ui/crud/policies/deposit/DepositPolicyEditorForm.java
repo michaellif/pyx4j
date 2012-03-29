@@ -33,8 +33,8 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.RepaymentMode;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueType;
+import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
 
 public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<DepositPolicyDTO> {
 
@@ -124,10 +124,10 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
                 content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
                 content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().repaymentMode()), 20).build());
 
-                get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<DepositPolicyItem.ValueType>() {
+                get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<Deposit.ValueType>() {
 
                     @Override
-                    public void onValueChange(ValueChangeEvent<ValueType> event) {
+                    public void onValueChange(ValueChangeEvent<Deposit.ValueType> event) {
                         bindValueEditor(event.getValue(), false);
                     }
                 });
@@ -145,13 +145,13 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
                 bindValueEditor(getValue().valueType().getValue(), true);
             }
 
-            private void bindValueEditor(ValueType valueType, boolean repopulatevalue) {
+            private void bindValueEditor(Deposit.ValueType valueType, boolean repopulatevalue) {
                 CComponent<?, ?> comp = null;
 
-                if (valueType == ValueType.amount) {
+                if (valueType == Deposit.ValueType.amount) {
                     comp = new CMoneyField();
 
-                } else if (valueType == ValueType.percentage) {
+                } else if (valueType == Deposit.ValueType.percentage) {
                     comp = new CPercentageField();
                 }
 

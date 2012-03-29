@@ -16,7 +16,7 @@ package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord;
 
 @DiscriminatorValue("Payment")
 public interface InvoicePayment extends InvoiceCredit {

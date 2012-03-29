@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease.payment;
 
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord;
 
 public interface PaymentListerView extends IListerView<PaymentRecord> {
 

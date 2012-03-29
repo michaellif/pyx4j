@@ -32,7 +32,6 @@ import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
 
 public interface BillingAccount extends IEntity {
 

@@ -20,9 +20,9 @@ import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseViewerView extends IViewerView<LeaseDTO> {

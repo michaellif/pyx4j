@@ -17,8 +17,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
 import com.propertyvista.server.financial.AbstractPaymentProcessor;
 
 public class ARPaymentProcessor extends AbstractPaymentProcessor {

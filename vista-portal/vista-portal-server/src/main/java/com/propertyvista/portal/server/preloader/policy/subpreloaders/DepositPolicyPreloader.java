@@ -26,8 +26,8 @@ import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType.Type;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.RepaymentMode;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueType;
+import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
+import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolicy> {

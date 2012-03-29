@@ -42,10 +42,10 @@ import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.lease.PaymentRecord;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements LeaseViewerView.Presenter {
