@@ -80,7 +80,7 @@ public class TaxUtils {
         ProductTaxPolicyItem productTaxPolicyItem = null;
         {
             EntityQueryCriteria<ProductTaxPolicyItem> criteria = new EntityQueryCriteria<ProductTaxPolicyItem>(ProductTaxPolicyItem.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().taxPolicy(), productTaxPolicy));
+            criteria.add(PropertyCriterion.eq(criteria.proto().policy(), productTaxPolicy));
             criteria.add(PropertyCriterion.eq(criteria.proto().productItemType(), productItemType));
             productTaxPolicyItem = Persistence.service().retrieve(criteria);
         }

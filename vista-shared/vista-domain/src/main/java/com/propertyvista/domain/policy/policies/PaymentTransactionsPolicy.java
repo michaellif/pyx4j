@@ -15,7 +15,6 @@ package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
@@ -31,7 +30,6 @@ public interface PaymentTransactionsPolicy extends BuildingPolicy {
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    @OrderBy(PaymentTransactionAccount.OrderId.class)
     IList<PaymentTransactionAccount> policyItems();
 
 }

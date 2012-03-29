@@ -17,17 +17,24 @@ import java.math.BigDecimal;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.policy.policies.DepositPolicy;
 
 @ToStringFormat("{2}, {1}, {0}, {3}")
 public interface DepositPolicyItem extends IEntity {
@@ -56,6 +63,16 @@ public interface DepositPolicyItem extends IEntity {
             return I18nEnum.toString(this);
         }
     }
+
+    @Owner
+    @NotNull
+    @ReadOnly
+    @Detached(level = AttachLevel.Detached)
+    @JoinColumn
+    DepositPolicy policy();
+
+    @OrderColumn
+    IPrimitive<Integer> orderInPolicy();
 
     @NotNull
     @ToString(index = 0)

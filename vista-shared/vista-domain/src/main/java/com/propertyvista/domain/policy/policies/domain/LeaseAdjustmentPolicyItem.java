@@ -13,14 +13,33 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.tax.Tax;
+import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public interface LeaseAdjustmentPolicyItem extends IEntity {
+
+    @Owner
+    @NotNull
+    @ReadOnly
+    @Detached(level = AttachLevel.Detached)
+    @JoinColumn
+    LeaseAdjustmentPolicy policy();
+
+    @OrderColumn
+    IPrimitive<Integer> orderInPolicy();
 
     @ToString
     LeaseAdjustmentReason leaseAdjustmentReason();

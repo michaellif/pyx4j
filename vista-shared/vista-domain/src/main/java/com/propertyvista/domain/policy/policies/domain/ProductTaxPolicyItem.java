@@ -13,8 +13,8 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
-import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -42,11 +42,9 @@ public interface ProductTaxPolicyItem extends IEntity {
     @NotNull
     @ReadOnly
     @Detached(level = AttachLevel.Detached)
-    ProductTaxPolicy taxPolicy();
+    @JoinColumn
+    ProductTaxPolicy policy();
 
-    interface OrderId extends ColumnId {
-    }
-
-    @OrderColumn(OrderId.class)
-    IPrimitive<Integer> orderInParent();
+    @OrderColumn
+    IPrimitive<Integer> orderInPolicy();
 }
