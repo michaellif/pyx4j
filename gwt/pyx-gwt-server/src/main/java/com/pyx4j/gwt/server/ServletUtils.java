@@ -118,4 +118,22 @@ public class ServletUtils {
             return request.getRemoteAddr();
         }
     }
+
+    public static String getRequestProtocol(HttpServletRequest request) {
+        String forwarded = getForwardedHost(request);
+        if (forwarded != null) {
+            String forwardedProtocol = request.getHeader("x-forwarded-protocol");
+            if (forwardedProtocol == null) {
+                return "http";
+            } else {
+                return forwardedProtocol;
+            }
+        } else {
+            if (request.isSecure()) {
+                return "https";
+            } else {
+                return "http";
+            }
+        }
+    }
 }
