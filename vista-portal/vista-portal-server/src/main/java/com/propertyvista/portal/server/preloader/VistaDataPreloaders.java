@@ -37,15 +37,11 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new ProductCatalogPreloader());
         add(new CrmRolesPreloader());
         add(new PreloadPolicies(production));
+        add(new DashboardPreloader());
+        add(new ReportPreloader());
         if (production) {
             //DEMO add(new ProdSitePreloader());            
         } else {
-
-            // TODO - these two should be moved to production preload when structure has been agreed!..
-            add(new DashboardPreloader());
-            add(new ReportPreloader());
-            // end TODO
-
             add(new RefferenceDataPreloader());
             add(new UserPreloader());
             add(new CampaignPreloader());

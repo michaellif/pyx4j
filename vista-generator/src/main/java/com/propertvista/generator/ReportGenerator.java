@@ -22,6 +22,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class ReportGenerator {
+
     private static final I18n i18n = I18n.get(ReportGenerator.class);
 
     static public DashboardMetadata DefaultSystem1() {
@@ -32,19 +33,6 @@ public class ReportGenerator {
         dmd.name().setValue(i18n.tr("System Report"));
         dmd.description().setValue(i18n.tr("Displays default system data"));
         dmd.layoutType().setValue(LayoutType.Report);
-
-        return dmd;
-    }
-
-    static public DashboardMetadata DefaultSystem2() {
-        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
-        dmd.type().setValue(DashboardType.system);
-        dmd.isShared().setValue(true);
-        dmd.name().setValue(i18n.tr("Demo Report"));
-        dmd.description().setValue(i18n.tr("Displays demo data"));
-        dmd.layoutType().setValue(LayoutType.Report);
-
         return dmd;
     }
 }

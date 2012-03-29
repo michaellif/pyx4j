@@ -39,6 +39,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.or().left(PropertyCriterion.eq(criteria.proto().user(), CrmAppContext.getCurrentUserPrimaryKey()))
                 .right(PropertyCriterion.eq(criteria.proto().isShared(), true));
+        addTypeCriteria(criteria);
         Vector<DashboardMetadata> dashboardMetadataList = Persistence.secureQuery(criteria);
         callback.onSuccess(dashboardMetadataList);
     }

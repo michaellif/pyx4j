@@ -28,9 +28,7 @@ public class ReportPreloader extends AbstractDataPreloader {
 // first demo report:        
         Persistence.service().persist(ReportGenerator.DefaultSystem1());
 // the second one:
-        Persistence.service().persist(ReportGenerator.DefaultSystem2());
-
-        return "Created " + 2 + " demo reports";
+        return "Created " + 1 + " demo reports";
     }
 
     @Override

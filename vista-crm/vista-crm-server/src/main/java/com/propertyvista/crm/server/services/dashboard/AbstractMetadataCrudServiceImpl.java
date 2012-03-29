@@ -37,9 +37,9 @@ abstract class AbstractMetadataCrudServiceImpl extends AbstractCrudServiceImpl<D
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<DashboardMetadata>> callback, EntityListCriteria<DashboardMetadata> criteria) {
-        addTypeCriteria(criteria);
         criteria.or().left(PropertyCriterion.eq(criteria.proto().user(), CrmAppContext.getCurrentUserPrimaryKey()))
                 .right(PropertyCriterion.eq(criteria.proto().isShared(), true));
+        addTypeCriteria(criteria);
         super.list(callback, criteria);
     }
 
