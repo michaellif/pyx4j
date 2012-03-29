@@ -17,36 +17,43 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
+import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
+import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseTermsPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
-public class LeaseTermsPolicyEditorActivity extends EditorActivityBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyEditorView.Presenter {
+public class LeaseTermsPolicyEditorActivity extends PolicyEditorActivityBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
     public LeaseTermsPolicyEditorActivity(Place place) {
-        super(place, PolicyViewFactory.instance(LeaseTermsPolicyEditorView.class), (AbstractCrudService<LeaseTermsPolicyDTO>) GWT
+        super(place, PolicyViewFactory.instance(LeaseTermsPolicyEditorView.class), (AbstractPolicyCrudService<LeaseTermsPolicyDTO>) GWT
                 .create(LeaseTermsPolicyCrudService.class), LeaseTermsPolicyDTO.class);
     }
 
     @Override
-    protected void createNewEntity(AsyncCallback<LeaseTermsPolicyDTO> callback) {
-        try {
-            LeaseTermsPolicyDTO policy = EntityFactory.create(LeaseTermsPolicyDTO.class);
-            policy.tenantSummaryTerms().add(createNewLegalTerms());
-            policy.oneTimePaymentTerms().set(createNewLegalTerms());
-            policy.recurrentPaymentTerms().set(createNewLegalTerms());
-            callback.onSuccess(policy);
-        } catch (Throwable caught) {
-            callback.onFailure(caught);
-        }
+    protected void createNewEntity(final AsyncCallback<LeaseTermsPolicyDTO> callback) {
+        super.createNewEntity(new DefaultAsyncCallback<LeaseTermsPolicyDTO>() {
+
+            @Override
+            public void onSuccess(LeaseTermsPolicyDTO policy) {
+                try {
+                    policy.tenantSummaryTerms().add(createNewLegalTerms());
+                    policy.oneTimePaymentTerms().set(createNewLegalTerms());
+                    policy.recurrentPaymentTerms().set(createNewLegalTerms());
+                    callback.onSuccess(policy);
+                } catch (Throwable caught) {
+                    callback.onFailure(caught);
+                }
+            }
+
+        });
     }
 
     /** Create new empty terms descriptor with a empty content */

@@ -16,20 +16,20 @@ package com.propertyvista.crm.client.activity.policies.applicationdocumentation;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
-
+import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyEdtiorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
+import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.ApplicationDocumentationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
-public class ApplicationDocumentationPolicyEditorActivity extends EditorActivityBase<ApplicationDocumentationPolicyDTO> implements
+public class ApplicationDocumentationPolicyEditorActivity extends PolicyEditorActivityBase<ApplicationDocumentationPolicyDTO> implements
         ApplicationDocumentationPolicyEdtiorView.Presenter {
 
     public ApplicationDocumentationPolicyEditorActivity(Place place) {
-        super(place, PolicyViewFactory.instance(ApplicationDocumentationPolicyEdtiorView.class), (AbstractCrudService<ApplicationDocumentationPolicyDTO>) GWT
-                .create(ApplicationDocumentationPolicyCrudService.class), ApplicationDocumentationPolicyDTO.class);
+        super(place, PolicyViewFactory.instance(ApplicationDocumentationPolicyEdtiorView.class), GWT
+                .<AbstractPolicyCrudService<ApplicationDocumentationPolicyDTO>> create(ApplicationDocumentationPolicyCrudService.class),
+                ApplicationDocumentationPolicyDTO.class);
     }
 
 }

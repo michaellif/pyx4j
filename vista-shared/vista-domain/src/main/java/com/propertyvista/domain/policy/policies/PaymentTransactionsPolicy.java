@@ -19,14 +19,17 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.policy.framework.BuildingPolicy;
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
+import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.PaymentTransactionAccount;
+import com.propertyvista.domain.property.asset.building.Building;
 
 /**
  * Pre-authorized debit transactions and credit card transaction policy
  */
 @DiscriminatorValue("PaymentTransactionsPolicy")
-public interface PaymentTransactionsPolicy extends BuildingPolicy {
+@LowestApplicableNode(value = Building.class)
+public interface PaymentTransactionsPolicy extends Policy {
 
     @Owned
     @Detached(level = AttachLevel.Detached)

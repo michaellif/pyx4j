@@ -13,13 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.policies.policy;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.entity.rpc.AbstractCrudService;
-
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 
-public interface PetPolicyCrudService extends AbstractCrudService<PetPolicyDTO> {
+public interface PetPolicyCrudService extends AbstractPolicyCrudService<PetPolicyDTO> {
 
-    void initNewPolicy(AsyncCallback<PetPolicyDTO> callback);
 }

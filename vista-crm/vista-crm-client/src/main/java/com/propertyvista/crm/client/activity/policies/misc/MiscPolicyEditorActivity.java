@@ -16,22 +16,21 @@ package com.propertyvista.crm.client.activity.policies.misc;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
-
+import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
+import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.MiscPolicyCrudService;
 import com.propertyvista.domain.policy.dto.MiscPolicyDTO;
 
-public class MiscPolicyEditorActivity extends EditorActivityBase<MiscPolicyDTO> {
+public class MiscPolicyEditorActivity extends PolicyEditorActivityBase<MiscPolicyDTO> {
 
     public MiscPolicyEditorActivity(Place place) {
         super(place,
 
         PolicyViewFactory.instance(MiscPolicyEditorView.class),
 
-        GWT.<AbstractCrudService<MiscPolicyDTO>> create(MiscPolicyCrudService.class),
+        GWT.<AbstractPolicyCrudService<MiscPolicyDTO>> create(MiscPolicyCrudService.class),
 
         MiscPolicyDTO.class);
     }

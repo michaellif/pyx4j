@@ -19,11 +19,14 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.policy.framework.BuildingPolicy;
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
+import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("LeaseBillingPolicy")
-public interface LeaseBillingPolicy extends BuildingPolicy {
+@LowestApplicableNode(value = Building.class)
+public interface LeaseBillingPolicy extends Policy {
 
     @NotNull
     IPrimitive<BillingAccount.ProrationMethod> prorationMethod();

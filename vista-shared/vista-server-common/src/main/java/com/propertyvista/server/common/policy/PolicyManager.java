@@ -50,7 +50,8 @@ public class PolicyManager {
      *            not <code>null</code>.
      * @param policyClass
      *            not <code>null</code>.
-     * @return policy at the requested organization policies hierarchy node or <code>null</code>.
+     * @return policy at the requested organization policies hierarchy node or throw {@link PolicyNotFoundException}
+     * @throws {@link PolicyNotFoundException} when policy is not found
      */
     public static <POLICY extends Policy> POLICY obtainEffectivePolicy(PolicyNode node, final Class<POLICY> policyClass) {
         POLICY policy = null;

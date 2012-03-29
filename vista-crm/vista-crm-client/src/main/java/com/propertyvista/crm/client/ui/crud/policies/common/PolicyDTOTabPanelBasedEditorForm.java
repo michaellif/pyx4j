@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.common;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -56,15 +57,18 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
     private CComboBox<NodeType> selectPolicyScopeBox;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
+    // This list MUST be ordered in descending order by the NodeType hierarchy 
     private static final List<NodeType> AVAILABLE_NODE_TYPES = Arrays.asList(//@formatter:off
+            new NodeType.Builder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build(),
+//          new NodeType.Builder(Country.class).build(),
+            new NodeType.Builder(Province.class).build(),
+            new NodeType.Builder(Complex.class).build(),
+            new NodeType.Builder(Building.class).build()
 // reserved for future:
-//                AptUnit.class,
-//                Floorplan.class,
-                new NodeType.Builder(Building.class).build(),
-                new NodeType.Builder(Complex.class).build(),
-                new NodeType.Builder(Province.class).build(),
-//                new NodeType.Builder(Country.class).build(),
-                new NodeType.Builder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build()
+//          Floorplan.class,
+//          AptUnit.class,
+
+
     );//@formatter:on
 
     public PolicyDTOTabPanelBasedEditorForm(Class<POLICY_DTO> policyDTOClass, final boolean viewMode) {
@@ -105,7 +109,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         selectPolicyScopeBox = new CComboBox<NodeType>();
         selectPolicyScopeBox.setEditable(isEditable());
         selectPolicyScopeBox.inheritViewable(false);
-        selectPolicyScopeBox.setOptions(assignable(AVAILABLE_NODE_TYPES));
+        selectPolicyScopeBox.setOptions(AVAILABLE_NODE_TYPES);
         selectPolicyScopeBox.setMandatory(true);
         // add value change handler that resets the node when node type is changed
         selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType>() {
@@ -177,6 +181,8 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
     @Override
     protected void onPopulate() {
         super.onPopulate();
+        selectPolicyScopeBox.setOptions(assignableTypes(AVAILABLE_NODE_TYPES));
+        selectPolicyScopeBox.setEditable(selectPolicyScopeBox.getOptions().size() > 1);
         if (isNewEntity()) {
             get(proto().node()).setValue(EntityFactory.create(OrganizationPoliciesNode.class));
             get(proto().node()).populate(EntityFactory.create(OrganizationPoliciesNode.class));
@@ -185,6 +191,23 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
     private boolean isNewEntity() {
         return getValue().getPrimaryKey() == null;
+    }
+
+    private Collection<NodeType> assignableTypes(List<NodeType> availableNodeTypes) {
+        List<NodeType> assignableTypes = null;
+        if (getValue().lowestNodeType().isNull()) {
+            assignableTypes = availableNodeTypes;
+        } else {
+            String lowestNodeType = getValue().lowestNodeType().getValue();
+            assignableTypes = new ArrayList<PolicyDTOTabPanelBasedEditorForm.NodeType>();
+            for (NodeType t : availableNodeTypes) {
+                assignableTypes.add(t);
+                if (t.getType().getName().equals(lowestNodeType)) {
+                    break;
+                }
+            }
+        }
+        return assignableTypes;
     }
 
     /**
@@ -267,11 +290,6 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
             return content;
         }
 
-    }
-
-    private Collection<NodeType> assignable(List<NodeType> availableNodeTypes) {
-        // TODO implement filtering
-        return availableNodeTypes;
     }
 
     public static class TabDescriptor {

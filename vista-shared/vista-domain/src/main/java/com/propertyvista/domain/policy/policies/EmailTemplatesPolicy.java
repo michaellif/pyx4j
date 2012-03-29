@@ -17,11 +17,14 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.policy.framework.BuildingPolicy;
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
+import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("EmailTemplatesPolicy")
-public interface EmailTemplatesPolicy extends BuildingPolicy {
+@LowestApplicableNode(value = Building.class)
+public interface EmailTemplatesPolicy extends Policy {
 
     @Owned
     IList<EmailTemplate> templates();

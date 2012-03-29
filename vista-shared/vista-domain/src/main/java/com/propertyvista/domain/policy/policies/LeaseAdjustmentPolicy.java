@@ -19,11 +19,14 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.policy.framework.BuildingPolicy;
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
+import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("LeaseAdjustmentPolicy")
-public interface LeaseAdjustmentPolicy extends BuildingPolicy {
+@LowestApplicableNode(value = Building.class)
+public interface LeaseAdjustmentPolicy extends Policy {
 
     @Owned
     @Detached(level = AttachLevel.Detached)

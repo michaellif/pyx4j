@@ -37,10 +37,20 @@ public class PetPolicyCrudServiceImpl extends GenericPolicyCrudService<PetPolicy
     }
 
     @Override
-    public void initNewPolicy(AsyncCallback<PetPolicyDTO> callback) {
-        PetPolicyDTO dto = EntityFactory.create(PetPolicyDTO.class);
-        attachNewPets(dto);
-        callback.onSuccess(dto);
+    public void createNewPolicy(final AsyncCallback<PetPolicyDTO> callback) {
+        super.createNewPolicy(new AsyncCallback<PetPolicyDTO>() {
+
+            @Override
+            public void onFailure(Throwable arg0) {
+                throw new Error(arg0);
+            }
+
+            @Override
+            public void onSuccess(PetPolicyDTO dto) {
+                attachNewPets(dto);
+                callback.onSuccess(dto);
+            }
+        });
     }
 
     @Override

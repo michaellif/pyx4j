@@ -16,10 +16,10 @@ package com.propertyvista.server.common.policy;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.framework.BuildingPolicy;
+import com.propertyvista.domain.policy.framework.Policy;
 
 @DiscriminatorValue("MockupBuildingPolicyB")
-public interface MockupBuildingPolicyB extends BuildingPolicy {
+public interface MockupBuildingPolicyB extends Policy {
 
     IPrimitive<Integer> value();
 

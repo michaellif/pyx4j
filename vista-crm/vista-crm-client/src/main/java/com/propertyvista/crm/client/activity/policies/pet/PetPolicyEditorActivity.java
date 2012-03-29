@@ -15,31 +15,24 @@ package com.propertyvista.crm.client.activity.policies.pet;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
-
+import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
+import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.PetPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 
-public class PetPolicyEditorActivity extends EditorActivityBase<PetPolicyDTO> {
+public class PetPolicyEditorActivity extends PolicyEditorActivityBase<PetPolicyDTO> {
 
     public PetPolicyEditorActivity(Place place) {
         super(place,
 
         PolicyViewFactory.instance(PetPolicyEditorView.class),
 
-        GWT.<AbstractCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class),
+        GWT.<AbstractPolicyCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class),
 
         PetPolicyDTO.class);
 
-    }
-
-    @Override
-    protected void createNewEntity(AsyncCallback<PetPolicyDTO> callback) {
-        ((PetPolicyCrudService) service).initNewPolicy(callback);
     }
 }

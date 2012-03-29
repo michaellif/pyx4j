@@ -13,10 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.policies.policy;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-
 import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 
-public interface LeaseAdjustmentPolicyCrudService extends AbstractCrudService<LeaseAdjustmentPolicyDTO> {
+public interface LeaseAdjustmentPolicyCrudService extends AbstractPolicyCrudService<LeaseAdjustmentPolicyDTO> {
 
 }

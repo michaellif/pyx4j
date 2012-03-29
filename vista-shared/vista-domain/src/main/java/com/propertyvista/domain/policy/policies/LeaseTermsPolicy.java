@@ -17,11 +17,14 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.policy.framework.UnitPolicy;
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
+import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @DiscriminatorValue("LeaseTermsPolicy")
-public interface LeaseTermsPolicy extends UnitPolicy {
+@LowestApplicableNode(value = AptUnit.class)
+public interface LeaseTermsPolicy extends Policy {
 
     @Owned
     IList<LegalTermsDescriptor> tenantSummaryTerms();

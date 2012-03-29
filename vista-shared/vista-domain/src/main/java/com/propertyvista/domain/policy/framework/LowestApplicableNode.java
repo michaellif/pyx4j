@@ -7,20 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 21, 2011
+ * Created on Mar 29, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.policy.framework;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Marker interface for policies that are available at unit/floorplan level.
+ * Can be used to define the lowest node in {@link PolicyNode} hierarchy that a policy annotated by it can be applied to.
  */
-@AbstractEntity
-@Inheritance
-public interface UnitPolicy extends BuildingPolicy {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(value = { ElementType.TYPE })
+@Inherited
+public @interface LowestApplicableNode {
 
+    Class<? extends PolicyNode> value();
 }

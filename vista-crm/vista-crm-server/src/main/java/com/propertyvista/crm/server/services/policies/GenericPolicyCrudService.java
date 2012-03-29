@@ -13,27 +13,36 @@
  */
 package com.propertyvista.crm.server.services.policies;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 
-public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO extends POLICY> extends AbstractCrudServiceDtoImpl<POLICY, POLICY_DTO> {
+public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO extends PolicyDTOBase> extends AbstractCrudServiceDtoImpl<POLICY, POLICY_DTO>
+        implements AbstractPolicyCrudService<POLICY_DTO> {
 
     private final static I18n i18n = I18n.get(GenericPolicyCrudService.class);
 
     public GenericPolicyCrudService(Class<POLICY> dboClass, Class<POLICY_DTO> dtoClass) {
         super(dboClass, dtoClass);
-        // TODO check how multiple parametrized inheritance may be acheived (i need "POLICY_DTO extends POLICY & PolicyDTOBase (maybe PolicyDTOBase should extend Policy") 
-        if (!PolicyDTOBase.class.isAssignableFrom(dtoClass)) {
-            throw new Error("POLICY_DTO must extends PolicyDTOBase");
+    }
+
+    private void setLowestNodeType(POLICY_DTO dto) {
+        LowestApplicableNode lowestNodeType = dboClass.getAnnotation(LowestApplicableNode.class);
+        if (lowestNodeType != null) {
+            dto.lowestNodeType().setValue(lowestNodeType.value().getName());
         }
     }
 
@@ -80,4 +89,10 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
         super.persist(dbo, in);
     }
 
+    @Override
+    public void createNewPolicy(AsyncCallback<POLICY_DTO> callback) {
+        POLICY_DTO policyDTO = EntityFactory.create(dtoClass);
+        setLowestNodeType(policyDTO);
+        callback.onSuccess(policyDTO);
+    }
 }

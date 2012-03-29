@@ -7,20 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 21, 2011
+ * Created on Mar 29, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.framework;
+package com.propertyvista.crm.rpc.services.policies.policy;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-/**
- * Marker interface for policies that can be assigned only to building.
- */
-@Inheritance
-@AbstractEntity
-public interface BuildingPolicy extends Policy {
+import com.pyx4j.entity.rpc.AbstractCrudService;
+
+import com.propertyvista.domain.policy.framework.PolicyDTOBase;
+
+public interface AbstractPolicyCrudService<POLICY_DTO extends PolicyDTOBase> extends AbstractCrudService<POLICY_DTO> {
+
+    void createNewPolicy(AsyncCallback<POLICY_DTO> callback);
 
 }

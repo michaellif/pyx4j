@@ -21,10 +21,13 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.policy.framework.BuildingPolicy;
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
+import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("BackgroundCheckPolicy")
-public interface BackgroundCheckPolicy extends BuildingPolicy {
+@LowestApplicableNode(value = Building.class)
+public interface BackgroundCheckPolicy extends Policy {
 
     @XmlType(name = "BjccEntry")
     public enum BjccEntry {

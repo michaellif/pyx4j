@@ -20,11 +20,14 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.policy.framework.UnitPolicy;
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
+import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.PetConstraints;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @DiscriminatorValue("PetPolicy")
-public interface PetPolicy extends UnitPolicy {
+@LowestApplicableNode(value = AptUnit.class)
+public interface PetPolicy extends Policy {
 
     @MemberColumn(name = "petConstraints")
     @Owned

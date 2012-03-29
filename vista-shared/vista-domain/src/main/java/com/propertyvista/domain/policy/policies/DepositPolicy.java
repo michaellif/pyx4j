@@ -17,11 +17,14 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.policy.framework.BuildingPolicy;
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
+import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("DepositPolicy")
-public interface DepositPolicy extends BuildingPolicy {
+@LowestApplicableNode(value = Building.class)
+public interface DepositPolicy extends Policy {
 
     @Owned
     IList<DepositPolicyItem> policyItems();

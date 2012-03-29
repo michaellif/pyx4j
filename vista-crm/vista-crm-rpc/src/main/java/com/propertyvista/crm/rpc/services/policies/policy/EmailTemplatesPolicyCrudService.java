@@ -13,10 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.policies.policy;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-
 import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 
-public interface EmailTemplatesPolicyCrudService extends AbstractCrudService<EmailTemplatesPolicyDTO> {
+public interface EmailTemplatesPolicyCrudService extends AbstractPolicyCrudService<EmailTemplatesPolicyDTO> {
 
 }

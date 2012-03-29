@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
+import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseBillingPolicyCrudService;
 import com.propertyvista.domain.financial.BillingAccount.ProrationMethod;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 
-public class LeaseBillingPolicyEditorActivity extends EditorActivityBase<LeaseBillingPolicyDTO> {
+public class LeaseBillingPolicyEditorActivity extends PolicyEditorActivityBase<LeaseBillingPolicyDTO> {
 
     public LeaseBillingPolicyEditorActivity(Place place) {
         super(place, PolicyViewFactory.instance(LeaseBillingPolicyEditorView.class), GWT
@@ -34,13 +34,18 @@ public class LeaseBillingPolicyEditorActivity extends EditorActivityBase<LeaseBi
     }
 
     @Override
-    protected void createNewEntity(AsyncCallback<LeaseBillingPolicyDTO> callback) {
-        LeaseBillingPolicyDTO entity = EntityFactory.create(entityClass);
+    protected void createNewEntity(final AsyncCallback<LeaseBillingPolicyDTO> callback) {
+        super.createNewEntity(new DefaultAsyncCallback<LeaseBillingPolicyDTO>() {
 
-        entity.billingPeriodStartDay().setValue(1);
-        entity.useBillingPeriodSartDay().setValue(false);
-        entity.prorationMethod().setValue(ProrationMethod.Standard);
+            @Override
+            public void onSuccess(LeaseBillingPolicyDTO entity) {
+                entity.billingPeriodStartDay().setValue(1);
+                entity.useBillingPeriodSartDay().setValue(false);
+                entity.prorationMethod().setValue(ProrationMethod.Standard);
 
-        callback.onSuccess(entity);
+                callback.onSuccess(entity);
+            }
+        });
+
     }
 }

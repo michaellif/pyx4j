@@ -30,11 +30,6 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
 
         @SuppressWarnings("unchecked")
         Policy policy = PolicyManager.obtainEffectivePolicy(node, (Class<? extends Policy>) policyProto.getInstanceValueClass());
-        if (policy != null) {
-            callback.onSuccess(policy);
-        } else {
-            callback.onFailure(new Error("Unfortunately the requested policy (" + policyProto.getInstanceValueClass().getClass().getName()
-                    + ") was not found in the Default Policy Preset"));
-        }
+        callback.onSuccess(policy);
     }
 }

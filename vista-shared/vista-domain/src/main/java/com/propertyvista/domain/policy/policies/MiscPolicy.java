@@ -21,10 +21,13 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.framework.UnitPolicy;
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
+import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("MiscPolicy")
-public interface MiscPolicy extends UnitPolicy {
+@LowestApplicableNode(value = Building.class)
+public interface MiscPolicy extends Policy {
 
     @Caption(name = "Occupants over 18 are Applicants", description = "Some landlords force all occupants over 18 to be on LEASE and therefore anyone OVER 18 MUST be Applicant/Co-Applicant and cannot be Dependent")
     IPrimitive<Boolean> occupantsOver18areApplicants();
