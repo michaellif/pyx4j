@@ -130,7 +130,7 @@ public class GetSatisfaction {
         feedback_widget_options.container.style = ("top", "0");
 
         $wnd.GSFN.feedback_widget.prototype.local_base_url = "http://support.propertyvista.com";
-        $wnd.GSFN.feedback_widget.prototype.local_ssl_base_url = "https://support.propertyvista.com";
+        $wnd.GSFN.feedback_widget.prototype.local_ssl_base_url = "http://support.propertyvista.com";
 
         var feedback_widget = new $wnd.GSFN.feedback_widget(
                 feedback_widget_options);
