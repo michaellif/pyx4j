@@ -116,6 +116,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         setSysDate("18-Apr-2011");
 
         addBooking("25-Apr-2011");
+        addBooking("5-May-2011");
 
         bill = runBilling(true, true);
 
@@ -126,18 +127,20 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
-        numOfProductCharges(6).
+        numOfProductCharges(7).
         paymentReceivedAmount("1167.01").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
-        oneTimeFeatureCharges("100.00").
-        taxes("143.20").
-        totalDueAmount("1336.50");
+        oneTimeFeatureCharges("200.00").
+        taxes("155.20").
+        totalDueAmount("1448.50");
         // @formatter:on
 
-        receiveAndPostPayment("19-Apr-2011", "1336.50");
+        receiveAndPostPayment("19-Apr-2011", "1448.50");
 
         //==================== RUN 4 ======================//
+
+        addBooking("28-Apr-2011");
 
         setSysDate("18-May-2011");
 
@@ -153,16 +156,16 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
-        numOfProductCharges(5).
-        paymentReceivedAmount("1336.50").
+        numOfProductCharges(6).
+        paymentReceivedAmount("1448.50").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
-        oneTimeFeatureCharges("0.00").
-        taxes("131.20").
-        totalDueAmount("974.50");
+        oneTimeFeatureCharges("100.00").
+        taxes("143.20").
+        totalDueAmount("1086.50");
         // @formatter:on
 
-        receiveAndPostPayment("19-May-2011", "974.50");
+        receiveAndPostPayment("19-May-2011", "1086.50");
 
         //==================== RUN 5 ======================//
 
@@ -181,7 +184,7 @@ public class BillingSunnyDayScenarioTest extends BillingTestBase {
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("974.50").
+        paymentReceivedAmount("1086.50").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("0.00").
