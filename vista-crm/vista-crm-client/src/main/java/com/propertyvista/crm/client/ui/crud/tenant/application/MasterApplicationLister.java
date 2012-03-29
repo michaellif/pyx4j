@@ -29,7 +29,9 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
     public MasterApplicationLister() {
         super(MasterApplicationDTO.class, CrmSiteMap.Tenants.MasterApplication.class, false, false);
 
-        setColumnDescriptors(new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto().id(), true).build(),
+        setColumnDescriptors(new ColumnDescriptor[] {//@formatter:off
+
+                new MemberColumnDescriptor.Builder(proto().applicationID(), true).build(), 
                 new MemberColumnDescriptor.Builder(proto().lease().type(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().propertyCode()).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().unit(), true).build(),
@@ -59,6 +61,7 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
                 new MemberColumnDescriptor.Builder(proto().equifaxApproval().suggestedDecision(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().decidedBy(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().decisionDate(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().decisionReason(), false).build() });
+                new MemberColumnDescriptor.Builder(proto().decisionReason(), false).build()
+                }); //@formatter:on
     }
 }

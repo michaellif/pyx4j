@@ -15,15 +15,15 @@ package com.propertyvista.domain.tenant.ptapp;
 
 import javax.xml.bind.annotation.XmlType;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Versioned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -65,10 +65,10 @@ public interface MasterApplication extends IEntity {
         }
     }
 
-    @Override
-    @Indexed
+    @NotNull
+    @ReadOnly
     @ToString
-    IPrimitive<Key> id();
+    IPrimitive<String> applicationID();
 
     IPrimitive<Status> status();
 
