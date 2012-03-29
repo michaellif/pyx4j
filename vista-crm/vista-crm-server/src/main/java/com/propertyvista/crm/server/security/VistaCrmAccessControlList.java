@@ -22,6 +22,7 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
+import com.propertyvista.crm.rpc.services.FeedbackService;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
@@ -119,6 +120,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(new IServiceExecutePermission(CrmAuthenticationService.class));
         grant(VistaBasicBehavior.CRMPasswordChangeRequired, new IServiceExecutePermission(CrmPasswordResetService.class));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FeedbackService.class));
 
 // - Dashboard:
         InstanceAccess sharedUserEntityAccess = new SharedUserEntityInstanceAccess();

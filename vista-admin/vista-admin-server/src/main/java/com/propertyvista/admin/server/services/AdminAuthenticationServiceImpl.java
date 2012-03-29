@@ -17,13 +17,13 @@ import java.util.Set;
 
 import com.pyx4j.security.shared.Behavior;
 
-import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.AdminUserCredential;
 
-public class AdminAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<AdminUser, AdminUserCredential> implements CrmAuthenticationService {
+public class AdminAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<AdminUser, AdminUserCredential> implements AdminAuthenticationService {
 
     public AdminAuthenticationServiceImpl() {
         super(AdminUser.class, AdminUserCredential.class);

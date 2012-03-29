@@ -30,6 +30,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -142,27 +143,8 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     }
 
     @Override
-    public native void getSatisfaction()
-    /*-{
-		//		$wnd.getSatisfaction();
-		var feedback_widget_options = {};
-		feedback_widget_options.display = "overlay";
-		feedback_widget_options.company = "property_vista";
-		feedback_widget_options.placement = "hidden";
-		feedback_widget_options.color = "#222";
-		feedback_widget_options.style = "question";
-		feedback_widget_options.container = "feedback_widget_container";
-		//feedback_widget_options.product = "property_vista_crm";
-		feedback_widget_options.limit = "3";
-		feedback_widget_options.container.style = ("top", "0");
-
-		$wnd.GSFN.feedback_widget.prototype.local_base_url = "http://support.propertyvista.com";
-		$wnd.GSFN.feedback_widget.prototype.local_ssl_base_url = "https://support.propertyvista.com";
-
-		var feedback_widget = new $wnd.GSFN.feedback_widget(
-				feedback_widget_options);
-
-		feedback_widget.show();
-    }-*/;
+    public void getSatisfaction() {
+        GetSatisfaction.open();
+    };
 
 }
