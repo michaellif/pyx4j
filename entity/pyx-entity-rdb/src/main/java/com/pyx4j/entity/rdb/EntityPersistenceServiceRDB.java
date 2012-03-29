@@ -704,7 +704,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 updated = true;
                 if (memberMeta.getAnnotation(ReadOnly.class) != null) {
                     log.error("Changing readonly property [{}] -> [{}]", lastValue, value);
-                    throw new Error("Changing readonly property " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                    throw new Error("Changing readonly property '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
                 }
                 MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
                 if (memberColumn != null && memberColumn.modificationAdapters() != null) {
@@ -713,7 +713,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                         if (!adapter.allowModifications(entity, memberMeta, lastValue, value)) {
                             log.error("Forbiden change [{}] -> [{}]", lastValue, value);
-                            throw new Error("Forbiden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                            throw new Error("Forbiden change '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
                         }
                     }
                 }
@@ -723,7 +723,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                         if (!adapter.allowModifications(entity, memberMeta, lastValue, value)) {
                             log.error("Forbiden change [{}] -> [{}]", lastValue, value);
-                            throw new Error("Forbiden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                            throw new Error("Forbiden change '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
                         }
                     }
                 }
@@ -758,7 +758,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private boolean retrieveAndApplyModifications(TableModel tm, IEntity baseEntity, IEntity entity) {
         if (!tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), baseEntity)) {
             if (tm.getPrimaryKeyStrategy() != Table.PrimaryKeyStrategy.ASSIGNED) {
-                throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
+                throw new RuntimeException("Entity '" + tm.entityMeta().getCaption() + "' " + entity.getPrimaryKey() + " NotFound");
             } else {
                 return true;
             }
