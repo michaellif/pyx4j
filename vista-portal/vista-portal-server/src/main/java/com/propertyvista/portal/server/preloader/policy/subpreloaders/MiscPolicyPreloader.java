@@ -25,9 +25,9 @@ public class MiscPolicyPreloader extends AbstractPolicyPreloader<MiscPolicy> {
 
     private static final int MAX_PETS = 4;
 
-    private static final int MAX_PARKING_SPOTS = 3;
+    private static final int MAX_LOCKERS = 2;
 
-    private static final boolean ONE_MONTH_DEPOSIT = false;
+    private static final int MAX_PARKING_SPOTS = 3;
 
     private static final boolean OCCUPANTS_OVER_18_ARE_APPLICANTS = false;
 
@@ -45,8 +45,8 @@ public class MiscPolicyPreloader extends AbstractPolicyPreloader<MiscPolicy> {
 
         misc.occupantsOver18areApplicants().setValue(OCCUPANTS_OVER_18_ARE_APPLICANTS);
         misc.occupantsPerBedRoom().setValue(OCCUPANTS_PER_BEDROOM);
-        misc.oneMonthDeposit().setValue(ONE_MONTH_DEPOSIT);
         misc.maxParkingSpots().setValue(MAX_PARKING_SPOTS);
+        misc.maxLockers().setValue(MAX_LOCKERS);
         misc.maxPets().setValue(MAX_PETS);
         misc.yearRangeStart().setValue(YEAR_RANGE_START);
         misc.yearRangeFutureSpan().setValue(YEAR_RANGE_SPAN);

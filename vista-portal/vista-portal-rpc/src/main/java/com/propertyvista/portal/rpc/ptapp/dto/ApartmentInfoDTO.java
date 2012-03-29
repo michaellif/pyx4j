@@ -107,5 +107,8 @@ public interface ApartmentInfoDTO extends IEntity {
     IPrimitive<Integer> maxParkingSpots();
 
     @Deprecated
+    IPrimitive<Integer> maxLockers();
+
+    @Deprecated
     IPrimitive<Integer> maxPets();
 }

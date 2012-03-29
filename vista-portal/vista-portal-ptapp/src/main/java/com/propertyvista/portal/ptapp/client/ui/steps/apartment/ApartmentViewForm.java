@@ -64,6 +64,8 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
 
     private FeatureExFolder petFolder;
 
+    private FeatureFolder lockerFolder;
+
     private FeatureExFolder parkingFolder;
 
     public ApartmentViewForm() {
@@ -152,7 +154,7 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         main.setWidget(++row, 0, parkingPanel);
 
         storagePanel.setH2(0, 0, 1, i18n.tr("Storage"));
-        storagePanel.setWidget(1, 0, inject(proto().agreedStorage(), new FeatureFolder(Feature.Type.locker, this, modifiable)));
+        storagePanel.setWidget(1, 0, inject(proto().agreedStorage(), lockerFolder = new FeatureFolder(Feature.Type.locker, this, modifiable)));
         main.setWidget(++row, 0, storagePanel);
 
         otherPanel.setH2(0, 0, 1, i18n.tr("Other"));
@@ -188,11 +190,11 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         //parkingFolder.setMaxCount(getValue().maxParkingSpots().getValue());
 
         ClientPolicyManager.obtainEffectivePolicy(getValue().unit(), MiscPolicy.class, new DefaultAsyncCallback<MiscPolicy>() {
-
             @Override
             public void onSuccess(MiscPolicy result) {
                 petFolder.setMaxCount(result.maxPets().getValue());
                 parkingFolder.setMaxCount(result.maxParkingSpots().getValue());
+                lockerFolder.setMaxCount(result.maxParkingSpots().getValue());
             }
         });
 

@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offering.ProductItemType;
-import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
@@ -39,7 +38,6 @@ import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceIm
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.portal.server.ptapp.util.ChargesServerCalculation;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
-import com.propertyvista.server.common.policy.PolicyManager;
 
 public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements ChargesService {
 
@@ -83,11 +81,6 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.version().tenants());
         }
 
-        MiscPolicy miscPolicy = PolicyManager.obtainEffectivePolicy(lease.unit(), MiscPolicy.class);
-        if (miscPolicy == null) {
-            throw new Error("There is no MiscPolicy for the Unit!?.");
-        }
-
         BillableItem serviceItem = lease.version().leaseProducts().serviceItem();
         if (serviceItem != null && !serviceItem.isNull()) {
             charges.monthlyCharges().charges().clear();
@@ -98,13 +91,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
 
             // create/update deposits:
             charges.applicationCharges().charges().clear();
-
-            if (miscPolicy.oneMonthDeposit().isBooleanTrue()) {
-                charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem._currentPrice().getValue()));
-            } else {
-                charges.applicationCharges().charges()
-                        .add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem._currentPrice().getValue().multiply(new BigDecimal(2))));
-            }
+            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem._currentPrice().getValue()));
 
             // TODO: find where get/put this info (application/equifax check fee)!
             charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.oneTimePayment, new BigDecimal("24.99"))); // get value from policy ! 

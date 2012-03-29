@@ -31,15 +31,14 @@ public class MiscPolicyListerViewImpl extends CrmListerViewImplBase<MiscPolicyDT
 
         public MiscPolicyLister() {
             super(MiscPolicyDTO.class, CrmSiteMap.Settings.Policies.Misc.class);
-            setColumnDescriptors(
-
-            new MemberColumnDescriptor.Builder(proto().occupantsOver18areApplicants()).build(),
-
-            new MemberColumnDescriptor.Builder(proto().occupantsPerBedRoom()).build(),
-
-            new MemberColumnDescriptor.Builder(proto().oneMonthDeposit()).build());
+            setColumnDescriptors( // @formatter:off
+                    new MemberColumnDescriptor.Builder(proto().occupantsOver18areApplicants()).build(), 
+                    new MemberColumnDescriptor.Builder(proto().occupantsPerBedRoom()).build(), 
+                    new MemberColumnDescriptor.Builder(proto().maxParkingSpots()).build(),
+                    new MemberColumnDescriptor.Builder(proto().maxLockers()).build(),
+                    new MemberColumnDescriptor.Builder(proto().maxPets()).build()
+            ); // @formatter:on
 
         }
-
     }
 }

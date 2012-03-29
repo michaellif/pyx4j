@@ -35,11 +35,11 @@ public interface MiscPolicy extends Policy {
     @Caption(name = "Occupants per Bedroom", description = "Number of Occupants (N) per Bedroom in formula: Bedrooms x N = OccupantsPerUnit")
     IPrimitive<Double> occupantsPerBedRoom();
 
-    @Caption(description = "Initial payment includes one or two-month deposit (two month default)")
-    IPrimitive<Boolean> oneMonthDeposit();
-
-    @Caption(description = "Maximum allowed parking spots quantity")
+    @Caption(description = "Maximum allowed parking spots")
     IPrimitive<Integer> maxParkingSpots();
+
+    @Caption(description = "Maximum allowed lockers")
+    IPrimitive<Integer> maxLockers();
 
     @Caption(description = "Maximum allowed pets quantity")
     IPrimitive<Integer> maxPets();

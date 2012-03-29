@@ -39,6 +39,8 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
 
     private final ApartmentViewForm apartmentViewForm;
 
+    private int maxCount;
+
     public FeatureFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
         super(BillableItem.class, modifiable);
 
@@ -50,6 +52,14 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
     protected IFolderDecorator<BillableItem> createDecorator() {
         IFolderDecorator<BillableItem> decor = super.createDecorator();
         return decor;
+    }
+
+    protected int getMaxCount() {
+        return maxCount;
+    };
+
+    protected void setMaxCount(int maxCount) {
+        this.maxCount = maxCount;
     }
 
     @Override
@@ -65,19 +75,25 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
     @Override
     protected void addItem() {
         if (apartmentViewForm != null) {
-            new SelectFeatureBox(type, apartmentViewForm.getValue()) {
-                @Override
-                public boolean onClickOk() {
-                    for (ProductItem item : getSelectedItems()) {
-                        BillableItem newItem = EntityFactory.create(BillableItem.class);
-                        newItem.item().set(item);
-                        newItem._currentPrice().setValue(item.price().getValue());
-                        newItem.effectiveDate().setValue(new LogicalDate());
-                        addItem(newItem);
+            if (getValue().size() < getMaxCount()) {
+                new SelectFeatureBox(type, apartmentViewForm.getValue()) {
+                    @Override
+                    public boolean onClickOk() {
+                        for (ProductItem item : getSelectedItems()) {
+                            if (getValue().size() < getMaxCount()) {
+                                BillableItem newItem = EntityFactory.create(BillableItem.class);
+                                newItem.item().set(item);
+                                newItem._currentPrice().setValue(item.price().getValue());
+                                newItem.effectiveDate().setValue(new LogicalDate());
+                                addItem(newItem);
+                            }
+                        }
+                        return true;
                     }
-                    return true;
-                }
-            }.show();
+                }.show();
+            } else {
+                MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You cannot add more than {0} items here!", getMaxCount()));
+            }
         }
     }
 
