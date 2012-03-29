@@ -1,3 +1,5 @@
+package com.propertyvista.domain.financial.billing;
+
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
@@ -7,13 +9,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 24, 2012
+ * Created on Mar 20, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.server.financial;
 
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-public class AbstractPaymentProcessor {
+import com.propertyvista.domain.tenant.lease.Deposit;
+
+@DiscriminatorValue("Deposit")
+public interface InvoiceDeposit extends InvoiceCredit {
+
+    Deposit deposit();
 
 }

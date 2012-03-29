@@ -19,9 +19,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
-import com.propertyvista.server.financial.AbstractPaymentProcessor;
 
-public class ARPaymentProcessor extends AbstractPaymentProcessor {
+public class ARPaymentProcessor {
 
     private static final I18n i18n = I18n.get(ARPaymentProcessor.class);
 
