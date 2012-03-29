@@ -77,7 +77,7 @@ public class OpenIdFilter implements Filter {
                         devSession = DevSession.beginSession();
                     }
                     if (devSession.getAttribute(REQUESTED_URL_ATTRIBUTE) == null) {
-                        if (!receivingURL.endsWith("gif") && !receivingURL.endsWith("png")) {
+                        if (!receivingURL.endsWith("gif") && !receivingURL.endsWith("png") && !receivingURL.contains("/o/openid/")) {
                             devSession.setAttribute(REQUESTED_URL_ATTRIBUTE, receivingURL);
                         }
                     }
