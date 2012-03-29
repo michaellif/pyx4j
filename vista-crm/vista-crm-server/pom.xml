@@ -171,7 +171,7 @@
         </dependency>
 
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -183,5 +183,44 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>full</id>
+
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>jasperreports-maven-plugin</artifactId>
+                        <version>1.0-beta-2</version>
+                        <configuration>
+                           <!--compiler>com.amdocs.entree.reports.JRJavacCompiler</compiler-->
+                           <sourceDirectory>${basedir}/src/main/resources/reports</sourceDirectory>
+                           <outputDirectory>${project.build.directory}/classes/reports</outputDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>compile-reports</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>net.sf.jasperreports</groupId>
+                                <artifactId>jasperreports</artifactId>
+                                <version>${jasperreportsVersion}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+
+                </plugins>
+            </build>
+
+        </profile>
+    </profiles>
 
 </project>
