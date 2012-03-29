@@ -66,7 +66,7 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
     }
 
     protected Path convertPropertyDTOPathToDBOPath(String path, E dboProto, DTO dtoProto) {
-        throw new Error("Unsupported Sort property " + path);
+        throw new Error("Unsupported query property path " + path);
     }
 
     protected void enhanceListCriteria(EntityListCriteria<E> dbCriteria, EntityListCriteria<DTO> dtoCriteria) {
