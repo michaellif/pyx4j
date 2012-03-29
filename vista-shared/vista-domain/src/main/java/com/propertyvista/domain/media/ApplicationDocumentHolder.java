@@ -23,9 +23,9 @@ import com.pyx4j.i18n.annotations.I18n;
 @AbstractEntity
 @Inheritance
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface ApplicationDocumentHolder extends IEntity {
+public interface ApplicationDocumentHolder<E extends ApplicationDocument> extends IEntity {
 
     @Owned
-    IList<ApplicationDocumentFile> documents();
+    IList<E> documents();
 
 }

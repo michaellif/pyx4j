@@ -13,19 +13,31 @@
  */
 package com.propertyvista.domain.tenant.income;
 
-import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.media.ProofOfEmploymentDocument;
+import com.propertyvista.domain.tenant.PersonScreening;
 
 @DiscriminatorValue("PersonalIncome")
-public interface PersonalIncome extends IEntity {
+public interface PersonalIncome extends IEntity, ApplicationDocumentHolder<ProofOfEmploymentDocument> {
+
+    @Owner
+    @NotNull
+    @ReadOnly
+    @Detached
+    @JoinColumn
+    PersonScreening owner();
 
     @ToString
     @NotNull
@@ -58,8 +70,6 @@ public interface PersonalIncome extends IEntity {
     @Owned
     IncomeInfoStudentIncome studentIncome();
 
-    @Owned
-    @Caption(name = "Proof Of Employment")
-    IList<ProofOfEmploymentDocument> documents();
-
+    @OrderColumn
+    IPrimitive<Integer> orderInOwner();
 }

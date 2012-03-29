@@ -15,19 +15,31 @@ package com.propertyvista.domain.media;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Inheritance
-@AbstractEntity
+@AbstractEntity(generateMetadata = false)
 public interface ApplicationDocument extends IEntity {
+
+    @Owner
+    @Detached
+    @ReadOnly
+    @JoinColumn
+    ApplicationDocumentHolder<?> owner();
 
     @Owned
     @Caption(name = "Files")
-    @OrderBy(value = ApplicationDocumentFile.OrderColumnId.class)
     IList<ApplicationDocumentFile> documentPages();
 
+    @OrderColumn
+    IPrimitive<Integer> orderInOwner();
 }

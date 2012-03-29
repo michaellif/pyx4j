@@ -14,7 +14,6 @@
 package com.propertyvista.domain.media;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -40,11 +39,7 @@ public interface ApplicationDocumentFile extends File {
     @ReadOnly
     ApplicationDocument owner();
 
-    interface OrderColumnId extends ColumnId {
-
-    }
-
-    @OrderColumn(OrderColumnId.class)
+    @OrderColumn
     IPrimitive<Integer> orderInOwner();
 
 }

@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
@@ -43,7 +44,7 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.misc.EquifaxApproval;
 
 @DiscriminatorValue("PersonScreening")
-public interface PersonScreening extends IEntity {
+public interface PersonScreening extends IEntity, ApplicationDocumentHolder<IdentificationDocument> {
 
     @Owner
     @NotNull
@@ -73,11 +74,6 @@ public interface PersonScreening extends IEntity {
     @Owned
     @Caption(name = "General Questions")
     LegalQuestions legalQuestions();
-
-    @Owned
-    @Detached
-    @Caption(name = "Identification Documents")
-    IList<IdentificationDocument> documents();
 
     //=============== Financial =============//
 
