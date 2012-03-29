@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -44,6 +45,7 @@ import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.LeaseManager;
+import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
 public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
 
@@ -112,7 +114,15 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
             item.orderInLease().setValue(no++);
             Persistence.service().merge(item);
         }
+    }
 
+    @Override
+    public void approveFinal(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        super.approveFinal(callback, entityId);
+
+        // update unit rent price here:
+        Lease entity = Persistence.secureRetrieve(entityClass, entityId);
+        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(entity);
     }
 
     private void updateAdjustments(Lease lease) {

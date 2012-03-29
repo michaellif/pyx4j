@@ -145,9 +145,6 @@ public class LeaseManager {
             }
         }
 
-        // update unit rent price here:
-        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
-
         return lease;
     }
 
@@ -240,6 +237,8 @@ public class LeaseManager {
         updateApplicationReferencesToFinalVersionOfLase(lease);
 
         occupancyManager(lease.unit().getPrimaryKey()).approveLease();
+
+        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
 
         ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         return lease;
