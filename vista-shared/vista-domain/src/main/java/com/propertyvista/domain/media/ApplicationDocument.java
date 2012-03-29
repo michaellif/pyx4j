@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.media;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Inheritance;
@@ -27,7 +26,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Inheritance
-@AbstractEntity(generateMetadata = false)
 public interface ApplicationDocument extends IEntity {
 
     @Owner
