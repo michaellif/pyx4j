@@ -43,7 +43,6 @@ import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.BillDTO;
@@ -90,7 +89,7 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
 
     protected void populateBills(LeaseDTO result) {
         List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
-        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Bill.class).billingAccount().id().getPath(), Operators.is, result
+        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(BillDTO.class).billingAccount().id().getPath(), Operators.is, result
                 .billingAccount().getPrimaryKey()));
         billLister.setPreDefinedFilters(preDefinedFilters);
         billLister.populate();
