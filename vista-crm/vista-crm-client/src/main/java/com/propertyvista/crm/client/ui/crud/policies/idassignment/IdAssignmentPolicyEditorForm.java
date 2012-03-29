@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -32,6 +33,8 @@ import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBas
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxFolder;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 
 public class IdAssignmentPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<IdAssignmentPolicyDTO> {
 
@@ -100,7 +103,19 @@ public class IdAssignmentPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
                 if (column.getObject() == proto().target()) {
                     return inject(column.getObject(), new CLabel());
                 }
+
                 return super.createCell(column);
+            }
+
+            @Override
+            protected void onPopulate() {
+                super.onPopulate();
+
+                if (getValue().target().getValue() == IdTarget.application) {
+                    CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());
+                    combo.getOptions().clear();
+                    combo.setOptions(Arrays.asList(IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
+                }
             }
         }
 
