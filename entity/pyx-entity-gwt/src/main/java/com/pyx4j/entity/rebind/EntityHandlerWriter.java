@@ -29,6 +29,8 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JParameterizedType;
+import com.google.gwt.core.ext.typeinfo.JTypeParameter;
+import com.google.gwt.dev.javac.typemodel.JGenericType;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
@@ -62,7 +64,25 @@ public class EntityHandlerWriter {
 
         String packageName = interfaceType.getPackage().getName();
         String simpleName = implClassName(interfaceType.getName());
-        ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
+
+        String fullClassName = simpleName;
+
+        JGenericType genericType = (JGenericType) interfaceType.isGenericType();
+        if (genericType != null) {
+            fullClassName += "<";
+            boolean first = true;
+            for (JTypeParameter typeParams : genericType.getTypeParameters()) {
+                if (!first) {
+                    fullClassName += ", ";
+                } else {
+                    first = false;
+                }
+                fullClassName += typeParams.getQualifiedSourceName();
+            }
+            fullClassName += ">";
+        }
+
+        ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, fullClassName);
 
         composer.addImport(interfaceType.getQualifiedSourceName());
         composer.addImport(IObject.class.getName());
@@ -89,7 +109,7 @@ public class EntityHandlerWriter {
             throws UnableToCompleteException {
         writer.indent();
 
-        //Static for optimisation
+        //Static for optimization
         if (cacheEntityMeta) {
             writer.println();
             writer.println("private static EntityMeta entityMeta;");
@@ -171,16 +191,16 @@ public class EntityHandlerWriter {
                     valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
                 } else if (type.isAssignableTo(contextHelper.iPrimitiveSetInterfaceType)) {
                     writer.println("::lazyCreateMemberIPrimitiveSet(Ljava/lang/String;Ljava/lang/Class;)(memberName");
-                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getErasedType().getQualifiedSourceName();
                 } else if (type.isAssignableTo(contextHelper.iSetInterfaceType)) {
                     writer.println("::lazyCreateMemberISet(Ljava/lang/String;Ljava/lang/Class;)(memberName");
-                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getErasedType().getQualifiedSourceName();
                 } else if (type.isAssignableTo(contextHelper.iListInterfaceType)) {
                     writer.println("::lazyCreateMemberIList(Ljava/lang/String;Ljava/lang/Class;)(memberName");
-                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getErasedType().getQualifiedSourceName();
                 } else if (type.isAssignableTo(contextHelper.iEnentityInterfaceType)) {
                     writer.println("::lazyCreateMemberIEntity(Ljava/lang/String;Ljava/lang/Class;)(memberName");
-                    valueClass = type.getQualifiedSourceName();
+                    valueClass = type.getErasedType().getQualifiedSourceName();
                 } else {
                     logger.log(TreeLogger.Type.ERROR, "Unknown member type '" + type.getQualifiedSourceName() + "' of method '" + method.getName()
                             + "' in interface '" + interfaceType.getQualifiedSourceName() + "'");
@@ -238,31 +258,31 @@ public class EntityHandlerWriter {
                                     + "'");
                     throw new UnableToCompleteException();
                 }
-                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getErasedType().getQualifiedSourceName();
                 writer.println("return lazyCreateMemberIPrimitive(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(contextHelper.iPrimitiveSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType in interface '"
                             + interfaceType.getQualifiedSourceName() + "'");
                 }
-                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getErasedType().getQualifiedSourceName();
                 writer.println("return lazyCreateMemberIPrimitiveSet(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(contextHelper.iSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType in interface '"
                             + interfaceType.getQualifiedSourceName() + "'");
                 }
-                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getErasedType().getQualifiedSourceName();
                 writer.println("return lazyCreateMemberISet(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(contextHelper.iListInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType in interface '"
                             + interfaceType.getQualifiedSourceName() + "'");
                 }
-                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getErasedType().getQualifiedSourceName();
                 writer.println("return lazyCreateMemberIList(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(contextHelper.iEnentityInterfaceType)) {
-                writer.println("return lazyCreateMemberIEntity(\"" + method.getName() + "\", " + type.getQualifiedSourceName() + ".class);");
+                writer.println("return lazyCreateMemberIEntity(\"" + method.getName() + "\", " + type.getErasedType().getQualifiedSourceName() + ".class);");
             } else {
                 logger.log(TreeLogger.Type.ERROR, "Unknown member type '" + type.getQualifiedSourceName() + "' of method '" + method.getName()
                         + "' in interface '" + interfaceType.getQualifiedSourceName() + "'");

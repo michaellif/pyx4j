@@ -329,7 +329,7 @@ public class EntityMetaWriter {
                             + interfaceType.getQualifiedSourceName() + "'");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
-                data.valueClassSourceName = valueClass.getQualifiedSourceName();
+                data.valueClassSourceName = valueClass.getErasedType().getQualifiedSourceName();
                 data.objectClassType = ObjectClassType.EntitySet;
             } else if (type.isAssignableTo(contextHelper.iListInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
@@ -338,12 +338,12 @@ public class EntityMetaWriter {
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
 
-                data.valueClassSourceName = valueClass.getQualifiedSourceName();
+                data.valueClassSourceName = valueClass.getErasedType().getQualifiedSourceName();
                 data.objectClassType = ObjectClassType.EntityList;
             } else if (type.isAssignableTo(contextHelper.iEnentityInterfaceType)) {
                 valueClass = type;
 
-                data.valueClassSourceName = valueClass.getQualifiedSourceName();
+                data.valueClassSourceName = valueClass.getErasedType().getQualifiedSourceName();
                 data.objectClassType = ObjectClassType.Entity;
             } else {
                 logger.log(TreeLogger.Type.ERROR, "Unknown member type '" + type.getQualifiedSourceName() + "' of method '" + method.getName()
