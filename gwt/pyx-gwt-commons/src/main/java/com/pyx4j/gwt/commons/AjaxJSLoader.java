@@ -31,6 +31,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ScriptElement;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class AjaxJSLoader {
 
@@ -50,7 +51,7 @@ public class AjaxJSLoader {
 
         boolean loaded = false;
 
-        Vector<Runnable> queuedLoads = new Vector<Runnable>();
+        Vector<AsyncCallback<Void>> queuedLoads = new Vector<AsyncCallback<Void>>();
 
         void load(final String apiUrl, final IsJSLoaded isJSLoaded) {
             injectJS(apiUrl);
@@ -70,6 +71,10 @@ public class AjaxJSLoader {
                             loadTimer = null;
                             // probably working OffLine 
                             log.error("load timeout for {}", apiUrl);
+                            for (AsyncCallback<Void> action : queuedLoads) {
+                                action.onFailure(new Error("Request timeout"));
+                            }
+                            queuedLoads.clear();
                         }
                     }
                 }
@@ -78,8 +83,8 @@ public class AjaxJSLoader {
         }
 
         private void fireQueuedActions() {
-            for (Runnable action : queuedLoads) {
-                action.run();
+            for (AsyncCallback<Void> action : queuedLoads) {
+                action.onSuccess(null);
             }
             queuedLoads.clear();
         }
@@ -114,7 +119,7 @@ public class AjaxJSLoader {
      * @param isJSLoaded
      * @param onLoad
      */
-    public static synchronized void load(final String apiUrl, IsJSLoaded isJSLoaded, Runnable onLoad) {
+    public static synchronized void load(final String apiUrl, IsJSLoaded isJSLoaded, AsyncCallback<Void> onLoad) {
         ApiInstance instance = apis.get(apiUrl);
         if (instance == null) {
             instance = new ApiInstance();
@@ -122,7 +127,7 @@ public class AjaxJSLoader {
             instance.queuedLoads.add(onLoad);
             instance.load(apiUrl, isJSLoaded);
         } else if (instance.loaded) {
-            onLoad.run();
+            onLoad.onSuccess(null);
         } else if (instance.timeout != 0) {
             instance.queuedLoads.add(onLoad);
         }

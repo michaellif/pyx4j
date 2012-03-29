@@ -25,6 +25,7 @@ import java.util.Map;
 import pl.rmalinowski.gwt2swf.client.ui.SWFWidget;
 
 import com.pyx4j.gwt.commons.AjaxJSLoader;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 public class ExtSWFWidget extends SWFWidget {
 
@@ -43,10 +44,10 @@ public class ExtSWFWidget extends SWFWidget {
             public native boolean isLoaded()
             /*-{ return typeof $wnd.swfobject != "undefined"; }-*/;
 
-        }, new Runnable() {
+        }, new DefaultAsyncCallback<Void>() {
 
             @Override
-            public void run() {
+            public void onSuccess(Void result) {
                 ExtSWFWidget.super.injectSWF(swf, id, w, h, ver, flashvars, params, attributes);
             }
 

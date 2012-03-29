@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * Injects Google Analytics Tracker code
@@ -83,12 +84,16 @@ public class GoogleAnalytics {
                         public native boolean isLoaded()
                         /*-{ return typeof $wnd._gat != "undefined"; }-*/;
 
-                    }, new Runnable() {
+                    }, new AsyncCallback<Void>() {
 
                         @Override
-                        public void run() {
+                        public void onSuccess(Void result) {
                             isLoaded = true;
                             trackDeferred(actionName);
+                        }
+
+                        @Override
+                        public void onFailure(Throwable caught) {
                         }
                     });
 
