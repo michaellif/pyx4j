@@ -79,7 +79,6 @@ import com.propertyvista.crm.client.activity.crud.organisation.EmployeeViewerAct
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioEditorActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioListerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.PolicyManagementActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.PageEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.PageViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteActivity;
@@ -628,8 +627,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Settings.Policy) {
-                    activity = new PolicyManagementActivity(place);
                 } else if (place instanceof CrmSiteMap.Settings.ProductDictionary) {
                     activity = new ProductDictionaryViewActivity(place);
                 } else if (place instanceof CrmSiteMap.Settings.ServiceItemType) {

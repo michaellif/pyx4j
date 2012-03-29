@@ -375,11 +375,6 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
-        @PlaceProperties(caption = "Policy Management")
-        @NavigationItem(navigLabel = "Policy Management")
-        public static class Policy extends AppPlace {
-        }
-
         @PlaceProperties(caption = "User Role")
         @NavigationItem(navigLabel = "User Roles")
         public static class UserRole extends CrudAppPlace {
