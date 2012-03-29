@@ -18,12 +18,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.dto.BillDTO;
 
-public interface BillCrudService extends AbstractCrudService<Bill> {
+public interface BillCrudService extends AbstractCrudService<BillDTO> {
 
-    void confirm(AsyncCallback<Bill> callback, Key entityId);
+    void confirm(AsyncCallback<BillDTO> callback, Key entityId);
 
-    void reject(AsyncCallback<Bill> callback, Key entityId, String reason);
+    void reject(AsyncCallback<BillDTO> callback, Key entityId, String reason);
 
 }

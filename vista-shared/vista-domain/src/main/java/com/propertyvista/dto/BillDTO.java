@@ -7,24 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-29
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.lease.bill;
+package com.propertyvista.dto;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.dto.BillDTO;
+import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface BillViewerView extends IViewerView<BillDTO> {
+@Transient
+public interface BillDTO extends Bill {
 
-    interface Presenter extends IViewerView.Presenter {
-
-        void confirm();
-
-        void reject(String reason);
-
-        void print();
-    }
+    Lease lease();
 }

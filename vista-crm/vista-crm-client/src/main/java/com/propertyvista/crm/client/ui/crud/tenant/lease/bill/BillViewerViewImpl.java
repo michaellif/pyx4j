@@ -26,10 +26,10 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
+import com.propertyvista.dto.BillDTO;
 
-public class BillViewerViewImpl extends CrmViewerViewImplBase<Bill> implements BillViewerView {
+public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDTO> implements BillViewerView {
 
     private final static I18n i18n = I18n.get(BillViewerViewImpl.class);
 
@@ -84,7 +84,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<Bill> implements B
     }
 
     @Override
-    public void populate(Bill value) {
+    public void populate(BillDTO value) {
         approveAction.setVisible(value.billStatus().getValue() == BillStatus.Finished);
         declineAction.setVisible(value.billStatus().getValue() == BillStatus.Finished);
         super.populate(value);

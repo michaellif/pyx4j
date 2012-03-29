@@ -46,13 +46,14 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements LeaseViewerView.Presenter {
 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
 
-    private final IListerView.Presenter<Bill> billLister;
+    private final IListerView.Presenter<BillDTO> billLister;
 
     private final IListerView.Presenter<PaymentRecord> paymentLister;
 
@@ -62,15 +63,15 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     public LeaseViewerActivity(Place place) {
         super(place, TenantViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
 
-        billLister = new ListerActivityBase<Bill>(place, ((LeaseViewerView) view).getBillListerView(),
-                (AbstractCrudService<Bill>) GWT.create(BillCrudService.class), Bill.class);
+        billLister = new ListerActivityBase<BillDTO>(place, ((LeaseViewerView) view).getBillListerView(),
+                (AbstractCrudService<BillDTO>) GWT.create(BillCrudService.class), BillDTO.class);
 
         paymentLister = new ListerActivityBase<PaymentRecord>(place, ((LeaseViewerView) view).getPaymentListerView(),
                 (AbstractCrudService<PaymentRecord>) GWT.create(PaymentCrudService.class), PaymentRecord.class);
     }
 
     @Override
-    public Presenter<Bill> getBillListerPresenter() {
+    public Presenter<BillDTO> getBillListerPresenter() {
         return billLister;
     }
 

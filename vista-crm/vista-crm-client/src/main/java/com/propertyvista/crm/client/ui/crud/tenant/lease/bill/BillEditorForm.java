@@ -20,10 +20,10 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
+import com.propertyvista.dto.BillDTO;
 
-public class BillEditorForm extends CrmEntityForm<Bill> {
+public class BillEditorForm extends CrmEntityForm<BillDTO> {
 
     private static final I18n i18n = I18n.get(BillEditorForm.class);
 
@@ -32,7 +32,7 @@ public class BillEditorForm extends CrmEntityForm<Bill> {
     }
 
     public BillEditorForm(boolean viewMode) {
-        super(Bill.class, viewMode);
+        super(BillDTO.class, viewMode);
     }
 
     @Override
@@ -42,6 +42,8 @@ public class BillEditorForm extends CrmEntityForm<Bill> {
 
         main.setH1(++row, 0, 2, i18n.tr("Info"));
         int row2 = row;
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().lease().unit()), 20).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().building()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodStartDate()), 10).build());

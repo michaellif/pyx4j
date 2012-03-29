@@ -17,17 +17,18 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.dto.BillDTO;
 import com.propertyvista.server.financial.billing.BillingFacade;
 
-public class BillCrudServiceImpl extends AbstractCrudServiceImpl<Bill> implements BillCrudService {
+public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDTO> implements BillCrudService {
 
     public BillCrudServiceImpl() {
-        super(Bill.class);
+        super(Bill.class, BillDTO.class);
     }
 
     @Override
@@ -36,35 +37,36 @@ public class BillCrudServiceImpl extends AbstractCrudServiceImpl<Bill> implement
     }
 
     @Override
-    protected void enhanceRetrieved(Bill entity, Bill dto) {
+    protected void enhanceRetrieved(Bill entity, BillDTO dto) {
         // load detached entities:
         Persistence.service().retrieve(dto.lineItems());
+        Persistence.service().retrieve(dto.billingAccount());
     }
 
     @Override
-    protected void persist(Bill entity, Bill dto) {
+    protected void persist(Bill entity, BillDTO dto) {
         throw new IllegalArgumentException();
     }
 
     @Override
-    public void confirm(AsyncCallback<Bill> callback, Key entityId) {
+    public void confirm(AsyncCallback<BillDTO> callback, Key entityId) {
         Bill bill = Persistence.service().retrieve(Bill.class, entityId);
         if (bill != null) {
             ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
             Persistence.service().commit();
-            callback.onSuccess(bill);
+            callback.onSuccess(createDTO(bill));
         } else {
             throw new IllegalArgumentException();
         }
     }
 
     @Override
-    public void reject(AsyncCallback<Bill> callback, Key entityId, String reason) {
+    public void reject(AsyncCallback<BillDTO> callback, Key entityId, String reason) {
         Bill bill = Persistence.service().retrieve(Bill.class, entityId);
         if (bill != null) {
             ServerSideFactory.create(BillingFacade.class).rejectBill(bill);
             Persistence.service().commit();
-            callback.onSuccess(bill);
+            callback.onSuccess(createDTO(bill));
         } else {
             throw new IllegalArgumentException();
         }

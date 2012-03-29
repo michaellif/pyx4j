@@ -17,12 +17,12 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.dto.BillDTO;
 
-public class BillLister extends ListerBase<Bill> {
+public class BillLister extends ListerBase<BillDTO> {
 
     public BillLister() {
-        super(Bill.class, CrmSiteMap.Tenants.Bill.class, false, false);
+        super(BillDTO.class, CrmSiteMap.Tenants.Bill.class, false, false);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off

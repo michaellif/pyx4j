@@ -45,18 +45,18 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.version.LeaseVersionService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
 
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
 
-    private final IListerView<Bill> billLister;
+    private final IListerView<BillDTO> billLister;
 
     private final IListerView<PaymentRecord> paymentLister;
 
@@ -78,7 +78,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         super(CrmSiteMap.Tenants.Lease.class);
         enableVersioning(Lease.LeaseV.class, GWT.<LeaseVersionService> create(LeaseVersionService.class));
 
-        billLister = new ListerInternalViewImplBase<Bill>(new BillLister());
+        billLister = new ListerInternalViewImplBase<BillDTO>(new BillLister());
 
         paymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentLister());
 
@@ -190,7 +190,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     }
 
     @Override
-    public IListerView<Bill> getBillListerView() {
+    public IListerView<BillDTO> getBillListerView() {
         return billLister;
     }
 
