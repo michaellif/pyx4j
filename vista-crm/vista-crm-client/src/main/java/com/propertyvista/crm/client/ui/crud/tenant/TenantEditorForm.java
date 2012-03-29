@@ -118,7 +118,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
         // form the hole combined content:
         row = -1;
-        detailsContent.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantID()), 20).build());
+        detailsContent.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantId()), 20).build());
         detailsContent.setWidget(++row, 0, person);
         detailsContent.setWidget(++row, 0, company);
         detailsContent.setBR(++row, 0, 1);
@@ -192,7 +192,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
         get(proto().lease()).setVisible(!getValue().lease().isNull());
 
-        get(proto().tenantID()).setViewable(false);
+        get(proto().tenantId()).setViewable(false);
         ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
                 new DefaultAsyncCallback<IdAssignmentPolicy>() {
                     @Override
@@ -209,13 +209,13 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
                             switch (targetItem.type().getValue()) {
                             case generatedAlphaNumeric:
                             case generatedNumber:
-                                get(proto().tenantID()).setViewable(true);
+                                get(proto().tenantId()).setViewable(true);
                                 break;
                             case userEditable:
-                                get(proto().tenantID()).setViewable(false);
+                                get(proto().tenantId()).setViewable(false);
                                 break;
-                            case userCreated:
-                                get(proto().tenantID()).setViewable(getValue().getPrimaryKey() != null);
+                            case userAssigned:
+                                get(proto().tenantId()).setViewable(getValue().getPrimaryKey() != null);
                                 break;
                             }
                         }

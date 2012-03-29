@@ -62,7 +62,7 @@ public interface Tenant extends IEntity, PersonScreeningHolder, TenantUserHolder
 
     @NotNull
     @ReadOnly
-    IPrimitive<String> tenantID();
+    IPrimitive<String> tenantId();
 
     @NotNull
     @MemberColumn(name = "tenantType")

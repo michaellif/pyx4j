@@ -34,6 +34,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.TenantUserHolder;
 import com.propertyvista.domain.security.VistaTenantBehavior;
@@ -53,6 +54,7 @@ import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
+import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
 import com.propertyvista.server.domain.security.TenantUserCredential;
 
 public class ApplicationManager {
@@ -68,6 +70,8 @@ public class ApplicationManager {
         MasterApplication mapp = EntityFactory.create(MasterApplication.class);
         mapp.lease().set(lease);
         mapp.status().setValue(MasterApplication.Status.Created);
+
+        mapp.applicationId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.application));
         Persistence.service().persist(mapp);
 
         Persistence.service().retrieve(lease.version().tenants());

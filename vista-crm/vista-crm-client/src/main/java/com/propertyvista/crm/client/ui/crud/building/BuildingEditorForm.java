@@ -168,7 +168,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                                 case userEditable:
                                     get(proto().propertyCode()).setViewable(false);
                                     break;
-                                case userCreated:
+                                case userAssigned:
                                     get(proto().propertyCode()).setViewable(getValue().getPrimaryKey() != null);
                                     break;
                                 }

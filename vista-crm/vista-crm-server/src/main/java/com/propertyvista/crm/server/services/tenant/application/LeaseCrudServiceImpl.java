@@ -26,12 +26,10 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.crm.server.util.IdAssignmentSequenceUtil;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.TenantUser;
@@ -105,10 +103,6 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         }
 
         updateAdjustments(dbo);
-
-        if (dbo.id().isNull() && IdAssignmentSequenceUtil.needsGeneratedId(IdTarget.lease)) {
-            dbo.leaseID().setValue(IdAssignmentSequenceUtil.getId(IdTarget.lease));
-        }
 
         new LeaseManager().save(dbo);
 

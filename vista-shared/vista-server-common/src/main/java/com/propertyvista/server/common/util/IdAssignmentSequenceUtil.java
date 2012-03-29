@@ -11,7 +11,7 @@
  * @author igor
  * @version $Id$
  */
-package com.propertyvista.crm.server.util;
+package com.propertyvista.server.common.util;
 
 import java.security.InvalidParameterException;
 

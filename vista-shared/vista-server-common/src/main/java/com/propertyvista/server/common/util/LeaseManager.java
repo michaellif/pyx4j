@@ -27,6 +27,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -74,7 +75,7 @@ public class LeaseManager {
     public Lease create(String leaseId, Service.Type type, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo) {
         Lease lease = EntityFactory.create(Lease.class);
 
-        lease.leaseID().setValue(leaseId);
+        lease.leaseId().setValue(leaseId);
         lease.type().setValue(type);
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         lease.unit().set(unit);
@@ -116,6 +117,10 @@ public class LeaseManager {
                 doUnreserve = oldLease.unit().getPrimaryKey() != null;
                 doReserve = lease.unit().getPrimaryKey() != null;
             }
+        }
+
+        if (lease.id().isNull() && IdAssignmentSequenceUtil.needsGeneratedId(IdTarget.lease)) {
+            lease.leaseId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.lease));
         }
 
         Persistence.secureSave(lease);

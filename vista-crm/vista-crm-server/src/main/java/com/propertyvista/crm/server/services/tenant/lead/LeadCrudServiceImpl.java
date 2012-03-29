@@ -31,7 +31,6 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.tenant.lead.LeadCrudService;
-import com.propertyvista.crm.server.util.IdAssignmentSequenceUtil;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -42,6 +41,7 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
 import com.propertyvista.server.common.util.LeaseManager;
 
 public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implements LeadCrudService {
@@ -159,7 +159,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     @Override
     protected void persist(Lead dbo, Lead in) {
         if (dbo.id().isNull() && IdAssignmentSequenceUtil.needsGeneratedId(IdTarget.lead)) {
-            dbo.leadID().setValue(IdAssignmentSequenceUtil.getId(IdTarget.lead));
+            dbo.leadId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.lead));
         }
 
         super.persist(dbo, in);

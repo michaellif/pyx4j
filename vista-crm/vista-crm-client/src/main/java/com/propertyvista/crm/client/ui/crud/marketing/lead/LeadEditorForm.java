@@ -103,7 +103,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leadID()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leadId()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseType()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveInDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTerm()), 9).build());
@@ -161,7 +161,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
     protected void onPopulate() {
         super.onPopulate();
 
-        get(proto().leadID()).setViewable(false);
+        get(proto().leadId()).setViewable(false);
         ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
                 new DefaultAsyncCallback<IdAssignmentPolicy>() {
                     @Override
@@ -178,13 +178,13 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
                             switch (targetItem.type().getValue()) {
                             case generatedAlphaNumeric:
                             case generatedNumber:
-                                get(proto().leadID()).setViewable(true);
+                                get(proto().leadId()).setViewable(true);
                                 break;
                             case userEditable:
-                                get(proto().leadID()).setViewable(false);
+                                get(proto().leadId()).setViewable(false);
                                 break;
-                            case userCreated:
-                                get(proto().leadID()).setViewable(getValue().getPrimaryKey() != null);
+                            case userAssigned:
+                                get(proto().leadId()).setViewable(getValue().getPrimaryKey() != null);
                                 break;
                             }
                         }

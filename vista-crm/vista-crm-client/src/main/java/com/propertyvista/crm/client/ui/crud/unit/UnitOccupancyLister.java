@@ -29,7 +29,7 @@ public class UnitOccupancyLister extends ListerBase<AptUnitOccupancySegment> {
             new MemberColumnDescriptor.Builder(proto().dateTo()).build(),
             new MemberColumnDescriptor.Builder(proto().status()).build(),
             new MemberColumnDescriptor.Builder(proto().offMarket()).build(),
-            new MemberColumnDescriptor.Builder(proto().lease().leaseID()).build(),
+            new MemberColumnDescriptor.Builder(proto().lease().leaseId()).build(),
             new MemberColumnDescriptor.Builder(proto().lease().leaseFrom()).build(),
             new MemberColumnDescriptor.Builder(proto().lease().leaseTo()).build()
         );//@formatter:on

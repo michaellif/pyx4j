@@ -109,7 +109,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         if (isEditable()) {
             boolean isLeaseSigned = !getValue().approvalDate().isNull();
 
-            get(proto().leaseID()).setViewable(false);
+            get(proto().leaseId()).setViewable(false);
             ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
                     new DefaultAsyncCallback<IdAssignmentPolicy>() {
                         @Override
@@ -126,13 +126,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                 switch (targetItem.type().getValue()) {
                                 case generatedAlphaNumeric:
                                 case generatedNumber:
-                                    get(proto().leaseID()).setViewable(true);
+                                    get(proto().leaseId()).setViewable(true);
                                     break;
                                 case userEditable:
-                                    get(proto().leaseID()).setViewable(false);
+                                    get(proto().leaseId()).setViewable(false);
                                     break;
-                                case userCreated:
-                                    get(proto().leaseID()).setViewable(getValue().getPrimaryKey() != null);
+                                case userAssigned:
+                                    get(proto().leaseId()).setViewable(getValue().getPrimaryKey() != null);
                                     break;
                                 }
                             }
@@ -151,7 +151,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseID()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().status(), new CEnumLabel())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().completion(), new CEnumLabel())).build());

@@ -23,7 +23,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
-import com.propertyvista.crm.server.util.IdAssignmentSequenceUtil;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
@@ -35,6 +34,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
+import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
 
 public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building, BuildingDTO> implements BuildingCrudService {
 

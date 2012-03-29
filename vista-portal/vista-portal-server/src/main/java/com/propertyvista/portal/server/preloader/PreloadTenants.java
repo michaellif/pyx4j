@@ -36,6 +36,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -48,6 +49,7 @@ import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
+import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
 import com.propertyvista.server.common.util.LeaseLifecycleSim;
 
 public class PreloadTenants extends BaseVistaDevDataPreloader {
@@ -251,6 +253,8 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             CmpanyVendorPersistHelper.persistCompany(tenant.company());
             break;
         }
+
+        tenant.tenantId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.tenant));
         Persistence.service().persist(tenant);
     }
 

@@ -56,7 +56,7 @@ public interface IdAssignmentItem extends IEntity {
 
         userEditable,
 
-        userCreated,
+        userAssigned,
 
         generatedNumber,
 

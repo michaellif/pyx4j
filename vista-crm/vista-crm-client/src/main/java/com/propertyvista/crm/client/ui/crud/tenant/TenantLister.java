@@ -29,7 +29,7 @@ public class TenantLister extends ListerBase<TenantDTO> {
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type()));
 
         setColumnDescriptors(//@formatter:off
-                new Builder(proto().tenantID(), false).build(),
+                new Builder(proto().tenantId(), false).build(),
                 new Builder(proto().person().name()).searchable(false).build(),
                 new Builder(proto().person().name().firstName(), false).build(),
                 new Builder(proto().person().name().lastName(), false).build(),
@@ -40,7 +40,7 @@ public class TenantLister extends ListerBase<TenantDTO> {
                 new Builder(proto().person().workPhone(), false).build(),
                 new Builder(proto().person().email()).build(),
                 new Builder(proto().lease()).searchable(false).build(),
-                new Builder(proto().lease().leaseID()).searchableOnly().build()
+                new Builder(proto().lease().leaseId()).searchableOnly().build()
             ); // @formatter:on
     }
 }

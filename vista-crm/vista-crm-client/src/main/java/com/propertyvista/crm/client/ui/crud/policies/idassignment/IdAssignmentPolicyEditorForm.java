@@ -72,6 +72,7 @@ public class IdAssignmentPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
             super(IdAssignmentItem.class, modifyable);
             setAddable(false);
             setRemovable(false);
+            setOrderable(false);
         }
 
         @Override

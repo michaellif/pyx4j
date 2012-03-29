@@ -118,7 +118,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
 
         final Lease lease = EntityFactory.create(Lease.class);
         lease.version().status().setValue(Lease.Status.Active);
-        lease.leaseID().setValue("lease: " + dateFrom + " " + dateTo);
+        lease.leaseId().setValue("lease: " + dateFrom + " " + dateTo);
         lease.unit().set(unit);
         lease.type().setValue(Service.Type.residentialUnit);
         lease.createDate().setValue(asDate(dateFrom));

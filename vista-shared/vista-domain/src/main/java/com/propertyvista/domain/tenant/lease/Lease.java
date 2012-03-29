@@ -145,7 +145,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @NotNull
     @ReadOnly
     @ToString(index = 0)
-    IPrimitive<String> leaseID();
+    IPrimitive<String> leaseId();
 
     @NotNull
     @ReadOnly

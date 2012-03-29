@@ -29,7 +29,7 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
         setColumnDescriptors(//@formatter:off
             new Builder(proto().unit().belongsTo().propertyCode()).build(),
             new Builder(proto().unit()).build(),
-            new Builder(proto().leaseID()).build(),
+            new Builder(proto().leaseId()).build(),
             new Builder(proto().type()).build(),
             new Builder(proto().version().status()).build(),
             new Builder(proto().version().completion()).build(),

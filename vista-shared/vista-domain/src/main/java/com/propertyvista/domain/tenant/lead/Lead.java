@@ -104,7 +104,7 @@ public interface Lead extends IEntity {
     @NotNull
     @ReadOnly
     @ToString(index = 0)
-    IPrimitive<String> leadID();
+    IPrimitive<String> leadId();
 
     @NotNull
     @ToString(index = 1)

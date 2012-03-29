@@ -40,7 +40,7 @@ public class IdAssignmentPolicyPreloader extends AbstractPolicyPreloader<IdAssig
             item = EntityFactory.create(IdAssignmentItem.class);
 
             item.target().setValue(target);
-            item.type().setValue(IdAssignmentType.generatedNumber);
+            item.type().setValue(target == IdTarget.propertyCode ? IdAssignmentType.userAssigned : IdAssignmentType.generatedNumber);
 
             policy.itmes().add(item);
 
