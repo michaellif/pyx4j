@@ -14,6 +14,7 @@
 package com.propertyvista.domain.property.asset.building;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
@@ -23,6 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.property.PropertyContact;
 
+@EmbeddedEntity
 public interface BuildingContactInfo extends IEntity {
 
     @Length(100)

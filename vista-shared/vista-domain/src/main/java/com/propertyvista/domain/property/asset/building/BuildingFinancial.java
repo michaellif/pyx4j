@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -25,6 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.Currency;
 
+@EmbeddedEntity
 public interface BuildingFinancial extends IEntity {
 
     @NotNull

@@ -57,7 +57,7 @@ public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
             BigDecimal currentPrice = getUnitMarketPrice(unit);
             if ((origPrice != null && !origPrice.equals(currentPrice)) || (origPrice == null && currentPrice != null)) {
                 unit.financial()._marketRent().setValue(currentPrice);
-                Persistence.service().persist(unit.financial());
+                Persistence.service().merge(unit);
                 Persistence.service().commit();
             }
         }
@@ -76,7 +76,7 @@ public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
 
         if ((origPrice != null && !origPrice.equals(currentPrice)) || (origPrice == null && currentPrice != null)) {
             lease.unit().financial()._unitRent().setValue(currentPrice);
-            Persistence.service().persist(lease.unit().financial());
+            Persistence.service().merge(lease.unit());
             Persistence.service().commit();
         }
     }

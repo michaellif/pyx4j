@@ -60,9 +60,9 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     // VladS: This is not used, remains just in case. @Detached and  @Owned added to change the way we retrieve it,
     // By removing it improved portal performance by 15% in profiler. This should not affect the real life application.
     // Check perfomace metrics before enabling it again!
-    @Deprecated
-    @Detached
     @Owned
+    @Detached
+    @Deprecated
     Marketing marketing();
 
     @Timestamp

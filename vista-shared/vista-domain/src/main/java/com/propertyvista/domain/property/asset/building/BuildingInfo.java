@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -32,6 +33,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressStructured;
 
+@EmbeddedEntity
 @ToStringFormat("{0}, {1}")
 public interface BuildingInfo extends IEntity {
 
