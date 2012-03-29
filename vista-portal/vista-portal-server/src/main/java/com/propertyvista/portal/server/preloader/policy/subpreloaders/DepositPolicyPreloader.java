@@ -16,14 +16,17 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.propertvista.generator.util.RandomUtil;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
-import com.propertyvista.domain.financial.offering.ProductItemType.Type;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
@@ -42,32 +45,53 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
     protected DepositPolicy createPolicy(StringBuilder log) {
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
-        DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
-        item.description().setValue(i18n.tr("Security Depisit"));
-        item.value().setValue(new BigDecimal(500.00));
-        item.repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
-        item.valueType().setValue(ValueType.amount);
+        EntityQueryCriteria<ProductItemType> srvType = EntityQueryCriteria.create(ProductItemType.class);
+        srvType.add(PropertyCriterion.eq(srvType.proto().type(), ProductItemType.Type.service));
+        srvType.add(new OrCriterion(PropertyCriterion.eq(srvType.proto().serviceType(), Service.Type.commercialUnit), new OrCriterion(PropertyCriterion.eq(
+                srvType.proto().serviceType(), Service.Type.residentialUnit), PropertyCriterion.eq(srvType.proto().serviceType(),
+                Service.Type.residentialShortTermUnit))));
+        List<ProductItemType> services = Persistence.service().query(srvType);
+        for (ProductItemType pit : services) {
 
-        policy.policyItems().add(item);
+            DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
+            item.description().setValue(i18n.tr("Security Deposit"));
+            item.value().setValue(new BigDecimal(RandomUtil.randomDouble(500.0)));
+            item.repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
+            item.valueType().setValue(ValueType.amount);
+            item.appliedTo().set(pit);
 
-        item = EntityFactory.create(DepositPolicyItem.class);
+            policy.policyItems().add(item);
+        }
 
         EntityQueryCriteria<ProductItemType> pitc = EntityQueryCriteria.create(ProductItemType.class);
-        List<ProductItemType> list = Persistence.service().query(pitc);
+        pitc.add(PropertyCriterion.eq(pitc.proto().type(), ProductItemType.Type.feature));
+        List<ProductItemType> features = Persistence.service().query(pitc);
+        for (ProductItemType pit : features) {
+            if (RandomUtil.randomBoolean()) {
+                switch (pit.featureType().getValue()) {
+                case parking:
+                    DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
 
-        for (ProductItemType pit : list) {
-            if (pit.type().getValue() == Type.feature && pit.featureType().getValue() == Feature.Type.parking) { // do not process all items...
-                item = EntityFactory.create(DepositPolicyItem.class);
+                    item.description().setValue(i18n.tr("First Month Parking"));
+                    item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
+                    item.repaymentMode().setValue(RepaymentMode.applyToFirstMonth);
+                    item.valueType().setValue(ValueType.percentage);
+                    item.appliedTo().set(pit);
 
-                item.description().setValue(i18n.tr("First Month Parking"));
-                item.value().setValue(new BigDecimal(0.1));
-                item.repaymentMode().setValue(RepaymentMode.applyToFirstMonth);
-                item.valueType().setValue(ValueType.percentage);
-                item.appliedTo().set(pit);
+                    policy.policyItems().add(item);
+                    break;
+                case locker:
+                    item = EntityFactory.create(DepositPolicyItem.class);
 
-                policy.policyItems().add(item);
+                    item.description().setValue(i18n.tr("Last Month Locker"));
+                    item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
+                    item.repaymentMode().setValue(RepaymentMode.applyToLastMonth);
+                    item.valueType().setValue(ValueType.percentage);
+                    item.appliedTo().set(pit);
 
-                break;
+                    policy.policyItems().add(item);
+                    break;
+                }
             }
         }
 

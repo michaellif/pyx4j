@@ -239,17 +239,19 @@ public class ProductCatalogGenerator {
         item.version().type().setValue(RandomUtil.random(Concession.Type.values(), "Concession.Type", Concession.Type.values().length));
 
         if (item.version().type().getValue() == Concession.Type.percentageOff) {
-            item.version().value().setValue(new BigDecimal(RandomUtil.randomInt(10) / 10));
-            item.version().description().setValue(i18n.tr("Special Promotion Applies, {0}% Off The Value Of The Service", item.version().value().getValue()));
-        } else if (item.version().type().getValue() == Concession.Type.monetaryOff) {
-            item.version().value().setValue(new BigDecimal(50d + RandomUtil.randomInt(50)));
-            item.version().description().setValue(i18n.tr("Special Promotion Applies, ${0} Off The Value Of The Service", item.version().value().getValue()));
-        } else if (item.version().type().getValue() == Concession.Type.promotionalItem) {
-            item.version().value().setValue(new BigDecimal(100d + RandomUtil.randomInt(100)));
+            item.version().value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
             item.version().description()
-                    .setValue(i18n.tr("Special Promotion Applies, ${0} In Promotional Items Or Services", item.version().value().getValue()));
+                    .setValue(i18n.tr("Special Promotion Applies, {0}% Off The Value Of The Service", item.version().value().getValue().floatValue() * 100));
+        } else if (item.version().type().getValue() == Concession.Type.monetaryOff) {
+            item.version().value().setValue(new BigDecimal(50d + RandomUtil.randomDouble(50)));
+            item.version().description()
+                    .setValue(i18n.tr("Special Promotion Applies, ${0} Off The Value Of The Service", item.version().value().getValue().floatValue()));
+        } else if (item.version().type().getValue() == Concession.Type.promotionalItem) {
+            item.version().value().setValue(new BigDecimal(100d + RandomUtil.randomDouble(100)));
+            item.version().description()
+                    .setValue(i18n.tr("Special Promotion Applies, ${0} In Promotional Items Or Services", item.version().value().getValue().floatValue()));
         } else if (item.version().type().getValue() == Concession.Type.free) {
-            item.version().value().setValue(new BigDecimal(200d + RandomUtil.randomInt(100)));
+            item.version().value().setValue(new BigDecimal(200d + RandomUtil.randomDouble(100)));
             item.version().description().setValue(i18n.tr("Special Promotion Applies, Everything Completely Free"));
         }
 
