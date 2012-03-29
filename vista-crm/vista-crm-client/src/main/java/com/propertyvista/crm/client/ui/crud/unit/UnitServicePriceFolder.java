@@ -20,6 +20,8 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
@@ -34,15 +36,24 @@ import com.propertyvista.dto.AptUnitServicePriceDTO;
 public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePriceDTO> {
 
     public UnitServicePriceFolder() {
-        super(AptUnitServicePriceDTO.class);
+        super(AptUnitServicePriceDTO.class, false);
     }
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().type(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().type(), "18em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().price(), "7em"));
         return columns;
+    }
+
+    @Override
+    protected IFolderDecorator<AptUnitServicePriceDTO> createDecorator() {
+        IFolderDecorator<AptUnitServicePriceDTO> decor = super.createDecorator();
+        if (decor instanceof TableFolderDecorator) {
+            ((TableFolderDecorator<AptUnitServicePriceDTO>) decor).setShowHeader(false);
+        }
+        return decor;
     }
 
     @Override
@@ -63,7 +74,6 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             CComponent<?, ?> comp;
             if (column.getObject() == proto().type()) {
-
                 if (isEditable()) {
                     comp = inject(proto().type(), new CLabel());
                 } else {
@@ -76,8 +86,6 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
                         }
                     }));
                 }
-            } else if (column.getObject() == proto().price()) {
-                comp = inject(proto().price());
             } else {
                 comp = super.createCell(column);
             }

@@ -15,6 +15,9 @@ package com.propertyvista.dto;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,6 +29,7 @@ public interface AptUnitServicePriceDTO extends IEntity {
 
     IPrimitive<Service.Type> type();
 
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> price();
-
 }

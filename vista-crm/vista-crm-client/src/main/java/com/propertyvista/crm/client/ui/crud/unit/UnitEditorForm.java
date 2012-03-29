@@ -19,6 +19,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -29,6 +30,7 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -114,6 +116,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         }
 
         get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
+        get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
     }
 
     @Override
@@ -127,40 +130,36 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private Widget createGeneralTab() {
-        FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatus()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
-        main.getFlexCellFormatter().setRowSpan(row, 0, 3);
-        row += 2;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._availableForRent()), 9).build());
-        get(proto()._availableForRent()).inheritViewable(false);
-        get(proto()._availableForRent()).setViewable(true);
-
-        main.setBR(++row, 0, 0);
+        FormFlexPanel left = new FormFlexPanel();
         if (isEditable()) {
-            main.setWidget(++row, 0, buildingPlace = new SimplePanel());
+            left.setWidget(++row, 0, buildingPlace = new SimplePanel());
         } else {
-            main.setWidget(++row, 0,
+            left.setWidget(++row, 0,
                     new DecoratorBuilder(inject(proto().belongsTo(), new CEntityCrudHyperlink<Building>(MainActivityMapper.getCrudAppPlace(Building.class))),
                             20).build());
         }
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatus()), 20).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
+
+        left.setBR(++row, 0, 1);
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._availableForRent(), new CDateLabel()), 9).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._unitRent(), new CNumberLabel()), 10).build());
+//        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent(), new CNumberLabel()), 10).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maketPrices(), new UnitServicePriceFolder())).build());
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().floor()), 5).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().number()), 5).build());
+        FormFlexPanel right = new FormFlexPanel();
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().floor()), 5).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().number()), 5).build());
 
-        // shift one column left because economicStatusDescription field RowSpan:
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info()._bedrooms(), new CNumberLabel()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info()._bathrooms(), new CNumberLabel()), 5).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info()._bedrooms(), new CNumberLabel()), 5).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info()._bathrooms(), new CNumberLabel()), 5).build());
 
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().area()), 8).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial()._unitRent(), new CNumberLabel()), 10).build());
-        //main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial()._marketRent(), new CNumberLabel()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().servicePrices(), new UnitServicePriceFolder())).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().area()), 8).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
 
         // restrict floorplan combo here to any free :
         CComponent<Floorplan, ?> comp = get(proto().floorplan());
@@ -183,9 +182,13 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             });
         }
 
+        // form main panel from those two:
+        FormFlexPanel main = new FormFlexPanel();
+        main.setWidget(0, 0, left);
+        main.setWidget(0, 1, right);
         main.getColumnFormatter().setWidth(0, "40%");
         main.getColumnFormatter().setWidth(1, "60%");
-
+        main.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
         return new CrmScrollPanel(main);
     }
 

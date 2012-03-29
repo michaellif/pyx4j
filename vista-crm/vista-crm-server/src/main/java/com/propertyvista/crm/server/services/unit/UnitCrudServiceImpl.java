@@ -127,7 +127,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
                     serviceDTO.id().setValue(service.id().getValue());
                     serviceDTO.type().setValue(service.version().type().getValue());
                     serviceDTO.price().setValue(item.price().getValue());
-                    dto.servicePrices().add(serviceDTO);
+                    dto.maketPrices().add(serviceDTO);
                 }
             }
         }

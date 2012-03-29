@@ -51,10 +51,10 @@ public interface ProductItem extends IEntity {
     @MemberColumn(name = "itemType")
     ProductItemType type();
 
+    @NotNull
     @ToString(index = 1)
     @Format("#0.00")
     @Editor(type = EditorType.money)
-    @NotNull
     IPrimitive<BigDecimal> price();
 
     @Length(250)
