@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.policies.common;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,7 +105,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         selectPolicyScopeBox = new CComboBox<NodeType>();
         selectPolicyScopeBox.setEditable(isEditable());
         selectPolicyScopeBox.inheritViewable(false);
-        selectPolicyScopeBox.setOptions(AVAILABLE_NODE_TYPES);
+        selectPolicyScopeBox.setOptions(assignable(AVAILABLE_NODE_TYPES));
         selectPolicyScopeBox.setMandatory(true);
         // add value change handler that resets the node when node type is changed
         selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType>() {
@@ -266,6 +267,11 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
             return content;
         }
 
+    }
+
+    private Collection<NodeType> assignable(List<NodeType> availableNodeTypes) {
+        // TODO implement filtering
+        return availableNodeTypes;
     }
 
     public static class TabDescriptor {

@@ -25,4 +25,9 @@ public abstract interface PolicyDTOBase extends Policy {
 
     @Caption(name = "Applied To")
     IPrimitive<String> nodeRepresentation();
+
+    /**
+     * Defines the lowest node type that this policy can be applied to.
+     */
+    IPrimitive<String> lowestNodeType();
 }

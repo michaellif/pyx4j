@@ -16,7 +16,6 @@ package com.propertyvista.server.common.policy;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,12 +25,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.policy.framework.BuildingPolicy;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
-import com.propertyvista.domain.policy.framework.PolicyAtNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
-import com.propertyvista.domain.policy.framework.UnitPolicy;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -47,47 +43,6 @@ public class PolicyManager {
     @SuppressWarnings("unchecked")
     private static final List<Class<? extends PolicyNode>> HIERARCHY = Arrays.asList(AptUnit.class, Floorplan.class, Building.class, Complex.class,
             Province.class, Country.class, OrganizationPoliciesNode.class);
-
-    /**
-     * @param node
-     * @return the list of effective policies, i.e. policies that are active at the specified node
-     */
-    @Deprecated
-    public static List<PolicyAtNode> effectivePolicies(PolicyNode node) {
-        if (node == null || node.isNull()) {
-            throw new IllegalArgumentException("node must not be null");
-        }
-        List<PolicyAtNode> effectivePolicies = null;
-
-        Class<? extends PolicyNode> requestedNodeClass = (Class<? extends PolicyNode>) node.getInstanceValueClass();
-        if (node.isEmpty()) {
-            Persistence.service().retrieve(node);
-        }
-        for (Class<? extends PolicyNode> nodeType : HIERARCHY) {
-            if (nodeType.equals(node.getInstanceValueClass())) {
-                effectivePolicies = merge(effectivePolicies, policiesAtNode(node));
-
-                PolicyNode parentNode = parentOf(node);
-                if (parentNode == null) {
-                    throw new Error("Failed to find parent node of " + node.toString());
-                } else {
-                    node = parentNode;
-                }
-            }
-        }
-
-        // Filter all the unwanted policies
-        Iterator<PolicyAtNode> i = effectivePolicies.iterator();
-        while (i.hasNext()) {
-            Class<? extends Policy> policyClass = (Class<? extends Policy>) i.next().policy().getInstanceValueClass();
-            if ((AptUnit.class.equals(requestedNodeClass) | Floorplan.class.equals(requestedNodeClass)) & !UnitPolicy.class.isAssignableFrom(policyClass)) {
-                i.remove();
-            } else if (Building.class.equals(requestedNodeClass) & !BuildingPolicy.class.isAssignableFrom(policyClass)) {
-                i.remove();
-            }
-        }
-        return effectivePolicies;
-    }
 
     /**
      * 
@@ -141,35 +96,6 @@ public class PolicyManager {
         data.node = (PolicyNode) node.createIdentityStub();
         Context.addResponseSystemNotification(data);
     }
-
-    private static List<PolicyAtNode> merge(List<PolicyAtNode> effectivePolicies, List<PolicyAtNode> policies) {
-        if (effectivePolicies == null) {
-            effectivePolicies = new LinkedList<PolicyAtNode>();
-        }
-
-        for (PolicyAtNode policy : policies) {
-            boolean alreadyEffective = false;
-
-            for (PolicyAtNode effectivePolicy : effectivePolicies) {
-                if (effectivePolicy.policy().getInstanceValueClass().equals(policy.getInstanceValueClass())) {
-                    alreadyEffective = true;
-                    break;
-                }
-            }
-            if (!alreadyEffective) {
-                effectivePolicies.add(policy);
-            }
-        }
-
-        return effectivePolicies;
-    }
-
-    private static List<PolicyAtNode> policiesAtNode(PolicyNode node) {
-        EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
-        List<PolicyAtNode> policiesAtNode = Persistence.service().query(criteria);
-        return policiesAtNode;
-    };
 
     // TODO move this method to another class (i.e. something that manages/defines heirarchy)
     public static PolicyNode parentOf(PolicyNode node) {

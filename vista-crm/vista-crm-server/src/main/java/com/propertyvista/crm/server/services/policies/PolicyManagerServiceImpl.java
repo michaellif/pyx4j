@@ -15,22 +15,12 @@ package com.propertyvista.crm.server.services.policies;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
-
 import com.propertyvista.crm.rpc.services.policies.PolicyManagerService;
-import com.propertyvista.domain.policy.framework.EffectivePoliciesDTO;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.server.common.policy.PolicyManager;
 
 public class PolicyManagerServiceImpl implements PolicyManagerService {
-
-    @Override
-    public void effectivePolicies(AsyncCallback<EffectivePoliciesDTO> callback, PolicyNode node) {
-        EffectivePoliciesDTO dto = EntityFactory.create(EffectivePoliciesDTO.class);
-        dto.policies().addAll(PolicyManager.effectivePolicies(node));
-        callback.onSuccess(dto);
-    }
 
     @Override
     public void effectivePolicy(AsyncCallback<Policy> callback, PolicyNode node, Policy policyProto) {

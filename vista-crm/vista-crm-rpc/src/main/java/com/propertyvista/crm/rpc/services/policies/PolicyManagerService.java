@@ -17,13 +17,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.policy.framework.EffectivePoliciesDTO;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 
 public interface PolicyManagerService extends IService {
-
-    void effectivePolicies(AsyncCallback<EffectivePoliciesDTO> callback, PolicyNode node);
 
     void effectivePolicy(AsyncCallback<Policy> callback, PolicyNode node, Policy policyProto);
 }
