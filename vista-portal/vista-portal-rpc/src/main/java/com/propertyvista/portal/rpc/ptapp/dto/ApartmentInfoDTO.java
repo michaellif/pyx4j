@@ -101,14 +101,4 @@ public interface ApartmentInfoDTO extends IEntity {
 
     // Short/Id only version for reference only
     AptUnit unit();
-
-    // limits:
-    @Deprecated
-    IPrimitive<Integer> maxParkingSpots();
-
-    @Deprecated
-    IPrimitive<Integer> maxLockers();
-
-    @Deprecated
-    IPrimitive<Integer> maxPets();
 }
