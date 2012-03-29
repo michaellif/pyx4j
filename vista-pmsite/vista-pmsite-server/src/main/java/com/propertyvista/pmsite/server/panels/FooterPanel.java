@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -28,7 +29,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.domain.ref.City;
-import com.propertyvista.pmsite.server.PMSiteContentManager.SocialSite;
+import com.propertyvista.domain.site.SocialLink.SocialSite;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 
@@ -60,16 +61,22 @@ public class FooterPanel extends Panel {
             }
         });
 
+        WebMarkupContainer footerSocial = new WebMarkupContainer("footer_social");
         final java.util.Map<SocialSite, String> socialLinks = ((PMSiteWebRequest) getRequest()).getContentManager().getSocialLinks();
-        add(new ListView<SocialSite>("footer_social", new ArrayList<SocialSite>(socialLinks.keySet())) {
-            private static final long serialVersionUID = 1L;
+        if (socialLinks != null && socialLinks.size() > 0) {
+            footerSocial.add(new ListView<SocialSite>("social_link", new ArrayList<SocialSite>(socialLinks.keySet())) {
+                private static final long serialVersionUID = 1L;
 
-            @Override
-            protected void populateItem(ListItem<SocialSite> item) {
-                SocialSite site = item.getModelObject();
-                item.add(new ExternalLink("link", socialLinks.get(site)).add(new AttributeAppender("class", " " + site.name())));
-            }
-        });
+                @Override
+                protected void populateItem(ListItem<SocialSite> item) {
+                    SocialSite site = item.getModelObject();
+                    item.add(new ExternalLink("link_url", socialLinks.get(site)).add(new AttributeAppender("class", " " + site.name())));
+                }
+            });
+        } else {
+            footerSocial.setVisible(false);
+        }
+        add(footerSocial);
 
         add(new ListView<NavigationItem>("footer_link", ((PMSiteWebRequest) getRequest()).getContentManager().getFooterNavigItems()) {
             private static final long serialVersionUID = 1L;

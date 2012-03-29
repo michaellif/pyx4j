@@ -47,6 +47,8 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.SiteTitles;
+import com.propertyvista.domain.site.SocialLink;
+import com.propertyvista.domain.site.SocialLink.SocialSite;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
@@ -138,6 +140,31 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 titles.residentPortalPromotions().setValue(li.i18n.tr("Featured Apartments"));
 
                 site.siteTitles().add(titles);
+            }
+        }
+
+        // social links
+        {
+            for (SocialSite soc : SocialSite.values()) {
+                SocialLink link = EntityFactory.create(SocialLink.class);
+                String url = "";
+                switch (soc) {
+                case Facebook:
+                    url = "http://www.facebook.com";
+                    break;
+                case Twitter:
+                    url = "http://www.twitter.com";
+                    break;
+                case Youtube:
+                    url = "http://www.youtube.com";
+                    break;
+                case Flickr:
+                    url = "http://www.flickr.com";
+                    break;
+                }
+                link.socialSite().setValue(soc);
+                link.siteUrl().setValue(url);
+                site.socialLinks().add(link);
             }
         }
 

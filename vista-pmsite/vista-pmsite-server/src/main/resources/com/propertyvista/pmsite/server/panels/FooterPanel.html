@@ -5,19 +5,20 @@
 	<div class="main">
 		<div class="footer_wrap">
 
-
-			<ul class="footer_locations">
-				<label><wicket:i18n>Locations</wicket:i18n></label>
+			<table width="100%"><tr><td align=center>
+			<ul class="footer_locations" style="text-align:left">
+				<div style="text-align:left"><label><wicket:i18n>Locations</wicket:i18n></label></div>
 				<li wicket:id="footer_locations_city">
 					<a wicket:id="link"><span wicket:id="city"></span></a>
 				</li>
 			</ul>
-			<div class="footer_social">
+			</td>
+			<td class="footer_social" wicket:id="footer_social">
 				<label><wicket:i18n>Follow Us</wicket:i18n></label>
-				<span wicket:id="footer_social">
-					<a wicket:id="link" class="iconSocial"/>
+				<span wicket:id="social_link">
+					<a wicket:id="link_url" class="iconSocial"/>
 				</span>
-			</div>
+			</td></tr></table>
 			<div class="footer_links">
 				<span wicket:id="footer_link" class="footer_link">
 					<a wicket:id="link"><span wicket:id="caption"></span></a>

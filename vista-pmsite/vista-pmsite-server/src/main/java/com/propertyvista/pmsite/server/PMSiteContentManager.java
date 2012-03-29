@@ -47,6 +47,8 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptorChanges;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.SiteTitles;
+import com.propertyvista.domain.site.SocialLink;
+import com.propertyvista.domain.site.SocialLink.SocialSite;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
@@ -399,16 +401,11 @@ public class PMSiteContentManager implements Serializable {
         return promo;
     }
 
-    public static enum SocialSite {
-        Facebook, Twitter, Youtube, Flickr
-    }
-
     public Map<SocialSite, String> getSocialLinks() {
         Map<SocialSite, String> socialLinks = new HashMap<SocialSite, String>();
-        socialLinks.put(SocialSite.Facebook, "http://www.facebook.com/pages/Starlight-Apartments/175770575825466");
-        socialLinks.put(SocialSite.Twitter, "http://twitter.com/#!/StarlightApts");
-        socialLinks.put(SocialSite.Youtube, "http://www.youtube.com/user/StarlightApts");
-        socialLinks.put(SocialSite.Flickr, "http://www.flickr.com/StarlightApts");
+        for (SocialLink link : getSiteDescriptor().socialLinks()) {
+            socialLinks.put(link.socialSite().getValue(), link.siteUrl().getValue());
+        }
         return socialLinks;
     }
 

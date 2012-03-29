@@ -84,6 +84,9 @@ public interface SiteDescriptor extends Descriptor {
     IList<PortalImageResource> banner();
 
     @Owned
+    IList<SocialLink> socialLinks();
+
+    @Owned
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     @MemberColumn(name = "updateFlag")
     SiteDescriptorChanges _updateFlag();
