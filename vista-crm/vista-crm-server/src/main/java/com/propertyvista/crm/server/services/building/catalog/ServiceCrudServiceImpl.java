@@ -16,14 +16,17 @@ package com.propertyvista.crm.server.services.building.catalog;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
 public class ServiceCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Service> implements ServiceCrudService {
 
@@ -67,5 +70,14 @@ public class ServiceCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Ser
     @Override
     public void retrieveCatalog(AsyncCallback<ProductCatalog> callback, Key entityId) {
         callback.onSuccess(Persistence.service().retrieve(ProductCatalog.class, entityId));
+    }
+
+    @Override
+    public void approveFinal(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        super.approveFinal(callback, entityId);
+
+        // update unit market prices here:
+        Service entity = Persistence.secureRetrieve(entityClass, entityId);
+        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(entity);
     }
 }

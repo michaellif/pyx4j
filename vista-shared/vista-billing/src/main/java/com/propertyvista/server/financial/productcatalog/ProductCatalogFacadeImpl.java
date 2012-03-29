@@ -15,12 +15,14 @@ package com.propertyvista.server.financial.productcatalog;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Vector;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -31,7 +33,25 @@ public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
     public void updateUnitMarketPrice(Building building) {
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-        List<AptUnit> units = Persistence.service().query(criteria);
+        updateUnitMarketPrice(Persistence.service().query(criteria));
+    }
+
+    @Override
+    public void updateUnitMarketPrice(Service service) {
+        List<AptUnit> units = new Vector<AptUnit>();
+        for (ProductItem item : service.version().items()) {
+            if (item.element() instanceof AptUnit) {
+                units.add((AptUnit) item.element());
+            }
+        }
+
+        if (!units.isEmpty()) {
+            Persistence.service().retrieve(units);
+            updateUnitMarketPrice(units);
+        }
+    }
+
+    private void updateUnitMarketPrice(List<AptUnit> units) {
         for (AptUnit unit : units) {
             BigDecimal origPrice = unit.financial()._marketRent().getValue();
             BigDecimal currentPrice = getUnitMarketPrice(unit);

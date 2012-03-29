@@ -145,6 +145,7 @@ public class LeaseManager {
             }
         }
 
+        // update unit rent price here:
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
 
         return lease;

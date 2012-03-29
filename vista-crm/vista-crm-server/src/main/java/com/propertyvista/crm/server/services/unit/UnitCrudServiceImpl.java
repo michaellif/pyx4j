@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -36,7 +35,6 @@ import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.AptUnitServicePriceDTO;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
-import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
 public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
@@ -68,9 +66,6 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
 
         // retrieve market rent prices
         retrieveServicePrices(dto);
-
-        dto.financial()._unitRent().setValue(ServerSideFactory.create(ProductCatalogFacade.class).getUnitRentPrice(in));
-        dto.financial()._marketRent().setValue(ServerSideFactory.create(ProductCatalogFacade.class).getUnitMarketPrice(in));
     }
 
     @Override
@@ -89,9 +84,6 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
             dto.marketing().description().setValue(null);
         }
         dto.info().economicStatusDescription().setValue(null);
-
-        dto.financial()._unitRent().setValue(ServerSideFactory.create(ProductCatalogFacade.class).getUnitRentPrice(in));
-        dto.financial()._marketRent().setValue(ServerSideFactory.create(ProductCatalogFacade.class).getUnitMarketPrice(in));
     }
 
     @Override
