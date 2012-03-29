@@ -58,8 +58,8 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
     @Override
     public void populate(DashboardMetadata dashboardMetadata) {
         super.populate(dashboardMetadata);
+        header.setCaption(asBoardCaption(dashboardMetadata));
         if (dashboardMetadata != null) {
-            header.setCaption(asBoardCaption(dashboardMetadata));
             boolean isBuildingDashboard = dashboardMetadata.type().getValue() == DashboardType.building;
             this.setWidgetSize(buildingsBar.asWidget(), isBuildingDashboard ? CrmTheme.defaultHeaderHeight : 0.1); // for some reason setVisible() doesn't work here
         }
@@ -98,7 +98,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
      */
     protected String asBoardCaption(DashboardMetadata dashboardMetadata) {
         if (dashboardMetadata == null) {
-            return i18n.tr("No Dashboard");
+            return i18n.tr("Please create a dashboard via Dashboards/Manage Dashboards");
         } else {
             return dashboardMetadata.name().getValue();
         }

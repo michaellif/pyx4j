@@ -58,6 +58,13 @@ public class DashboardMetadataServiceImpl extends AbstractMetadataServiceImpl im
         } finally {
             IOUtils.closeQuietly(bos);
         }
+    }
 
+    @Override
+    protected DashboardMetadata retrieveDefaultMetadata() {
+        EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.system));
+        criteria.add(PropertyCriterion.ne(criteria.proto().layoutType(), DashboardMetadata.LayoutType.Report));
+        return Persistence.secureRetrieve(criteria);
     }
 }

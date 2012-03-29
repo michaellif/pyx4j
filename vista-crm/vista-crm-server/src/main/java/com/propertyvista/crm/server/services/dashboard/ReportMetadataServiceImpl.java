@@ -59,4 +59,12 @@ public class ReportMetadataServiceImpl extends AbstractMetadataServiceImpl imple
             IOUtils.closeQuietly(bos);
         }
     }
+
+    @Override
+    protected DashboardMetadata retrieveDefaultMetadata() {
+        EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.system));
+        criteria.add(PropertyCriterion.eq(criteria.proto().layoutType(), DashboardMetadata.LayoutType.Report));
+        return Persistence.service().retrieve(criteria);
+    }
 }

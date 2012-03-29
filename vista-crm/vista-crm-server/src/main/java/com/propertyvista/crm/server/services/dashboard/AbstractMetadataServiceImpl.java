@@ -65,9 +65,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         if (entityId == null) {
             dm = null;
         } else if (entityId.asLong() == -1) {
-            EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.system));
-            dm = Persistence.secureRetrieve(criteria);
+            dm = retrieveDefaultMetadata();
         } else {
             dm = Persistence.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
         }
@@ -121,4 +119,6 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         }
         Persistence.secureSave(gadgetMetadata);
     }
+
+    protected abstract DashboardMetadata retrieveDefaultMetadata();
 }
