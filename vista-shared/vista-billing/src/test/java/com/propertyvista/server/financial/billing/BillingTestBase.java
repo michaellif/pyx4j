@@ -50,8 +50,6 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.domain.tenant.lease.PaymentRecord;
 import com.propertyvista.server.financial.ar.ARFacade;
-import com.propertyvista.server.financial.billing.BillingFacade;
-import com.propertyvista.server.financial.billing.BillingLifecycle;
 import com.propertyvista.server.financial.billing.print.BillPrint;
 import com.propertyvista.server.financial.preload.BuildingDataModel;
 import com.propertyvista.server.financial.preload.LeaseAdjustmentReasonDataModel;
@@ -73,7 +71,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
         super.setUp();
         Persistence.service().startBackgroundProcessTransaction();
         setSysDate("01-Jan-2000");
-        if (true) {
+        if (false) {
             XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "bill-model.xsd")), true, Bill.class);
             XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "leas-model.xsd")), true, Lease.class);
         }
