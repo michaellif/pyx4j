@@ -21,6 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -98,7 +99,6 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
                 }
             }
             new ProductItemTypeSelectorDialog(alreadySelectedProducts) {
-
                 @Override
                 protected void addItem(DepositPolicyItem newItem) {
                     DepositPolicyItemEditorFolder.this.addItem(newItem);
@@ -109,44 +109,29 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
 
         private static class DepositPolicyItemEditor extends CEntityDecoratableEditor<DepositPolicyItem> {
 
-            private final FormFlexPanel content = new FormFlexPanel();
-
-            private int valueRow;
+            private final SimplePanel valueHolder = new SimplePanel();
 
             public DepositPolicyItemEditor() {
                 super(DepositPolicyItem.class);
             }
 
-//            @Override
-//            public CComponent<?, ?> create(IObject<?> member) {
-//                if (member.getFieldName() == proto().appliedTo().getFieldName()) {
-//                    unbind(proto().appliedTo());
-//                    return inject(proto().appliedTo(), new CLabel());
-//                } else {
-//                    return super.create(member);
-//                }
-//            }
-
             @Override
             public IsWidget createContent() {
-                //FormFlexPanel content = new FormFlexPanel();
-                int row = -1;
+                FormFlexPanel content = new FormFlexPanel();
 
+                int row = -1;
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().appliedTo()), 20).build());
                 get(proto().appliedTo()).inheritViewable(false);
                 get(proto().appliedTo()).setViewable(true);
 
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().valueType()), 10).build());
-                valueRow = ++row;
-
-                content.getFlexCellFormatter().setColSpan(valueRow, 0, 2);
+                content.setWidget(++row, 0, valueHolder);
 
                 row = -1;
                 content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
                 content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().repaymentMode()), 20).build());
 
                 get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<Deposit.ValueType>() {
-
                     @Override
                     public void onValueChange(ValueChangeEvent<Deposit.ValueType> event) {
                         bindValueEditor(event.getValue(), false);
@@ -168,24 +153,25 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
 
             private void bindValueEditor(Deposit.ValueType valueType, boolean repopulatevalue) {
                 CComponent<?, ?> comp = null;
-
-                if (valueType == Deposit.ValueType.amount) {
+                switch (valueType) {
+                case amount:
                     comp = new CMoneyField();
-
-                } else if (valueType == Deposit.ValueType.percentage) {
+                    break;
+                case percentage:
                     comp = new CPercentageField();
+                    break;
                 }
 
+                unbind(proto().value());
+
                 if (comp != null) {
-                    unbind(proto().value());
-                    content.setWidget(valueRow, 0, new DecoratorBuilder(inject(proto().value(), comp), 10).build());
+                    valueHolder.setWidget(new DecoratorBuilder(inject(proto().value(), comp), 6).build());
 
                     if (repopulatevalue) {
                         get(proto().value()).populate(getValue().value().getValue());
                     }
                 }
             }
-
         }
     }
 
