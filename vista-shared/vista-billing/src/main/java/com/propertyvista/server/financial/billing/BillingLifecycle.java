@@ -123,6 +123,8 @@ public class BillingLifecycle {
             bill.billStatus().setValue(billStatus);
             Persistence.service().persist(bill);
 
+            Persistence.service().retrieve(bill.billingAccount());
+
             bill.billingAccount().currentBillingRun().setValue(null);
             bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
 
