@@ -28,6 +28,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -37,6 +38,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 /**
  * This class Injects reCAPTCHA Client API code.
@@ -244,10 +246,15 @@ public class CaptchaComposite extends SimplePanel {
 		return typeof $wnd.Recaptcha != "undefined";
     }-*/;
 
-        }, new Runnable() {
+        }, new AsyncCallback<Void>() {
 
             @Override
-            public void run() {
+            public void onFailure(Throwable caught) {
+                throw new UserRuntimeException(i18n.tr("Captcha Service unavailable"));
+            }
+
+            @Override
+            public void onSuccess(Void result) {
                 assigneRecaptchaId();
                 toAudio.setVisible(true);
                 toText.setVisible(false);
