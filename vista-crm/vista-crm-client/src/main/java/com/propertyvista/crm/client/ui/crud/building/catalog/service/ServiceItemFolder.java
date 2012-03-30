@@ -35,8 +35,8 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
@@ -166,14 +166,16 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                 } else {
                     comp = new CLabel(""); // there is no building element for this item!
                 }
+            } else if (column.getObject() == proto().type()) {
+                comp = inject(column.getObject(), new CEntityComboBox<ServiceItemType>(ServiceItemType.class));
             } else {
                 comp = super.createCell(column);
             }
 
             if (column.getObject() == proto().type()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
-                    final CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) comp;
-                    //TODO - review
+                    final CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
+// TODO : preselect if single option:                    
 //                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().version().type()));
 //                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ProductItemType>>() {
 //                        @Override

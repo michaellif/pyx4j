@@ -37,7 +37,6 @@ import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
@@ -103,6 +102,8 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 } else {
                     comp = new CLabel(""); // there is no building element for this item!
                 }
+            } else if (column.getObject() == proto().type()) {
+                comp = inject(column.getObject(), new CEntityComboBox<FeatureItemType>(FeatureItemType.class));
             } else {
                 comp = super.createCell(column);
             }
@@ -113,7 +114,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                     combo.addValueChangeHandler(new ValueChangeHandler<FeatureItemType>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<FeatureItemType> event) {
-                            for (ProductItemType item : parent.getValue().catalog().includedUtilities()) {
+                            for (FeatureItemType item : parent.getValue().catalog().includedUtilities()) {
                                 if (item.equals(event.getValue())) {
                                     MessageDialog.warn(i18n.tr("Note"), i18n.tr("The Selected Utility Type Is Included In The Price"));
                                 }
@@ -121,6 +122,8 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
                         }
                     });
+
+// TODO : preselect if single option:                    
 //                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ProductItemType>>() {
 //                        @Override
 //                        public void onOptionsChange(OptionsChangeEvent<List<ProductItemType>> event) {
