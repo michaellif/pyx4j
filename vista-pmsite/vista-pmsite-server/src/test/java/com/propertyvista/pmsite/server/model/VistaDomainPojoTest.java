@@ -15,11 +15,15 @@ package com.propertyvista.pmsite.server.model;
 
 import org.junit.Test;
 
+import com.pyx4j.entity.server.ServerEntityFactory;
+
+import com.propertyvista.domain.property.asset.building.Building;
+
 public class VistaDomainPojoTest {
 
     @Test
     public void testVistaDomainPojoCreation() {
-        //ServerEntityFactory.getPojoClass(Building.class);
+        ServerEntityFactory.getPojoClass(Building.class);
     }
 
 }

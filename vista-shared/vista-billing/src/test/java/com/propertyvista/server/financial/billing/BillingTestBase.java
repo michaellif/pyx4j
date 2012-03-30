@@ -32,7 +32,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.essentials.server.dev.DataDump;
-import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
@@ -71,10 +70,6 @@ abstract class BillingTestBase extends VistaDBTestBase {
         super.setUp();
         Persistence.service().startBackgroundProcessTransaction();
         setSysDate("01-Jan-2000");
-        if (false) {
-            XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "bill-model.xsd")), true, Bill.class);
-            XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "leas-model.xsd")), true, Lease.class);
-        }
     }
 
     @Override
