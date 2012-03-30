@@ -31,6 +31,7 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
@@ -112,10 +113,14 @@ public class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandl
             }
         });
 
+        triggerButton.sinkEvents(Event.ONDBLCLICK);
+
         this.addDoubleClickHandler(new DoubleClickHandler() {
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
-                toggleOn(true);
+                if (component.isEditable() && component.isEnabled()) {
+                    toggleOn(true);
+                }
             }
         });
     }

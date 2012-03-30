@@ -152,7 +152,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     public void setEnabled(boolean enabled) {
         Button triggerButton = getTriggerButton();
         if (triggerButton != null) {
-            triggerButton.setEnabled(enabled);
+            triggerButton.setEnabled(isEditable() && enabled);
         }
 
         if (getEditor() != null) {
@@ -178,7 +178,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     public void setEditable(boolean editable) {
         Button triggerButton = getTriggerButton();
         if (triggerButton != null) {
-            triggerButton.setEnabled(editable);
+            triggerButton.setEnabled(isEnabled() && editable);
         }
 
         if (getEditor() != null) {

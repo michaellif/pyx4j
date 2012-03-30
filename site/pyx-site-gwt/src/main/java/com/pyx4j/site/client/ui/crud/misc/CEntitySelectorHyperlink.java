@@ -20,23 +20,11 @@
  */
 package com.pyx4j.site.client.ui.crud.misc;
 
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.INativeTextComponent;
-import com.pyx4j.forms.client.ui.NFocusComponent;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
-import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink.NEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.TextBox;
 
 /**
  * Combo component to use as entity selector. In view mode renders a hyperlink that redirects to the target place
@@ -44,86 +32,13 @@ import com.pyx4j.widgets.client.TextBox;
  * that triggers Entity Selector Dialog (see {@link CEntitySelectorHyperlink#getSelectorDialog()})
  */
 public abstract class CEntitySelectorHyperlink<E extends IEntity> extends CTextFieldBase<E, NEntitySelectorHyperlink<E>> {
-    @Override
-    protected NEntitySelectorHyperlink<E> createWidget() {
-        return new NEntitySelectorHyperlink<E>(this);
-    }
 
     protected abstract AppPlace getTargetPlace();
 
     protected abstract EntitySelectorDialog<E> getSelectorDialog();
 
-    static class NEntitySelectorHyperlink<E extends IEntity> extends NFocusComponent<E, TextBox, CEntitySelectorHyperlink<E>, Anchor> implements
-            INativeTextComponent<E> {
-
-        public NEntitySelectorHyperlink(CEntitySelectorHyperlink<E> cComponent) {
-            super(cComponent, ImageFactory.getImages().comboBoxPicker());
-        }
-
-        @Override
-        public Anchor createViewer() {
-            Anchor anchor = new Anchor("");
-            anchor.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    AppPlace place = getCComponent().getTargetPlace();
-                    if (place != null) {
-                        AppSite.getPlaceController().goTo(place);
-                    }
-                }
-            });
-            return anchor;
-        }
-
-        @Override
-        public void setNativeValue(E value) {
-            String nValue = (value == null ? "" : value.getStringView());
-            if (isViewable()) {
-                getViewer().setText(nValue);
-            } else {
-                getEditor().setText(nValue);
-            }
-        }
-
-        @Override
-        public E getNativeValue() {
-            return getCComponent().getValue();
-        }
-
-        @Override
-        public void setNativeText(String newValue) {
-            // does nothing; use native value setter instead
-        }
-
-        @Override
-        public String getNativeText() {
-            E value = getNativeValue();
-            return (value == null ? "" : value.getStringView());
-        }
-
-        @Override
-        public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-            return getEditor().addChangeHandler(handler);
-        }
-
-        @Override
-        protected TextBox createEditor() {
-            TextBox editor = new TextBox();
-            editor.setEditable(false);
-            return editor;
-        }
-
-        @Override
-        public void setEditable(boolean editable) {
-            Button triggerButton = getTriggerButton();
-            if (triggerButton != null) {
-                triggerButton.setEnabled(editable);
-            }
-        }
-
-        @Override
-        public void onToggle() {
-            getCComponent().getSelectorDialog().show();
-        }
+    @Override
+    protected NEntitySelectorHyperlink<E> createWidget() {
+        return new NEntitySelectorHyperlink<E>(this);
     }
 }

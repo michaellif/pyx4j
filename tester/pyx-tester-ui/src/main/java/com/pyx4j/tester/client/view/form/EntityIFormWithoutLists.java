@@ -43,6 +43,9 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.domain.test.EntityI.Enum1;
 import com.pyx4j.tester.client.domain.test.EntityV;
@@ -129,6 +132,18 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         cmbEntity.setOptions(entityoptions);
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().entityComboBox(), cmbEntity)));
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().entitySelectorBox(), new CEntitySelectorHyperlink<EntityV>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return null;
+            }
+
+            @Override
+            protected EntitySelectorDialog<EntityV> getSelectorDialog() {
+                return null;
+            }
+        })));
 
         CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
         cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));

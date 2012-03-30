@@ -134,4 +134,6 @@ public interface EntityI extends IEntity {
     @Editor(type = EditorType.combo)
     EntityV entityComboBox();
 
+    EntityV entitySelectorBox();
+
 }

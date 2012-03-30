@@ -125,6 +125,7 @@ public class DefaultWidgetsTheme extends Theme {
 
         style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled, " .", StyleName.ButtonText);
         style.addProperty("opacity", "0.4");
+        style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);

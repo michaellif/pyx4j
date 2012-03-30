@@ -71,15 +71,16 @@ public class DefaultCCOmponentsTheme extends Theme {
     }
 
     protected void initListBoxStyle() {
-        Style style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.disabled);
-        style.addProperty("background-color", ThemeColors.foreground, 0.3);
-        addStyle(style);
 
-        style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.readonly);
+        Style style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.readonly);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.1);
         style.addProperty("background-color", ThemeColors.foreground, 0);
+        addStyle(style);
+
+        style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.disabled);
+        style.addProperty("background-color", ThemeColors.foreground, 0.3);
         addStyle(style);
 
         style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.invalid);
