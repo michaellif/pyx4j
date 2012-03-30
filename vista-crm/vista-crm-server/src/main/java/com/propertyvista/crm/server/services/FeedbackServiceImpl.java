@@ -18,10 +18,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.crm.rpc.services.FeedbackService;
@@ -43,7 +45,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         boolean isSecure = "https".equals(ServletUtils.getRequestProtocol(Context.getRequest()));
 
         Visit visit = Context.getVisit();
-        String uid = visit.getUserVisit().getPrincipalPrimaryKey().toString();
+        String uid = ApplicationMode.isDevelopment() ? "$$" : "" + NamespaceManager.getNamespace() + visit.getUserVisit().getPrincipalPrimaryKey().toString();
         String url;
         try {
             url = FastPass.url(vistaGSFNkey, vistaGSFNsecret, visit.getUserVisit().getEmail(), visit.getUserVisit().getName(), uid, isSecure);
