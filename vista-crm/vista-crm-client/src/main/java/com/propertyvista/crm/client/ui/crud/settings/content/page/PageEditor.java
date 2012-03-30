@@ -39,15 +39,8 @@ public interface PageEditor extends IEditorView<PageDescriptor> {
          */
         public static final String URL_PARAM_PAGE_PARENT = "pp";
 
-        public static final String URL_PARAM_PAGE_LOCALE = "pl";
-
         public enum PageParent {
-
-            site,
-
-            page;
-
+            site, page;
         }
-
     }
 }

@@ -15,8 +15,6 @@ package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
@@ -24,7 +22,6 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> implements SiteViewer {
@@ -38,15 +35,10 @@ public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> imp
         addToolbarItem(new Button(i18n.tr("Add Child Page"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new AvailableLocaleSelectorDialog(null, new ValueChangeHandler<AvailableLocale>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
-                        Key valueKey = form.getValue().getPrimaryKey();
-                        if (valueKey != null) { // shouldn't be new unsaved value!..
-                            newChild(valueKey, event.getValue());
-                        }
-                    }
-                }).show();
+                Key valueKey = form.getValue().getPrimaryKey();
+                if (valueKey != null) { // shouldn't be new unsaved value!..
+                    newChild(valueKey);
+                }
             }
         }).asWidget());
     }
@@ -57,7 +49,7 @@ public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> imp
     }
 
     @Override
-    public void newChild(Key parentid, AvailableLocale locale) {
-        ((SiteViewer.Presenter) getPresenter()).editNew(parentid, locale);
+    public void newChild(Key parentid) {
+        ((SiteViewer.Presenter) getPresenter()).editNew(parentid);
     }
 }

@@ -14,6 +14,8 @@
 package com.propertyvista.crm.client.activity.crud.settings.content;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -23,19 +25,18 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.site.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 import com.propertyvista.domain.site.SiteDescriptor;
-import com.propertyvista.shared.CompiledLocale;
 
 public class PageEditorActivity extends EditorActivityBase<PageDescriptor> implements PageEditor.Presenter {
 
     private PageParent pageParentArg = null;
-
-    private CompiledLocale locale = null;
 
     @SuppressWarnings("unchecked")
     public PageEditorActivity(Place place) {
@@ -46,20 +47,16 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
         if (val != null) {
             pageParentArg = PageParent.valueOf(val);
         }
-        val = ((CrudAppPlace) place).getFirstArg(PageEditor.Presenter.URL_PARAM_PAGE_LOCALE);
-        if (val != null) {
-            locale = CompiledLocale.valueOf(val);
-        }
     }
 
     @Override
-    protected void createNewEntity(AsyncCallback<PageDescriptor> callback) {
+    protected void createNewEntity(final AsyncCallback<PageDescriptor> callback) {
 
         if (pageParentArg == null) {
             throw new Error("Incorrect parentClass argument");
         }
 
-        PageDescriptor entity = EntityFactory.create(PageDescriptor.class);
+        final PageDescriptor entity = EntityFactory.create(PageDescriptor.class);
         entity.type().setValue(Type.staticContent);
 
         switch (pageParentArg) {
@@ -71,13 +68,20 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
             break;
         }
 
-        // add at least one content item:
-        PageContent content = EntityFactory.create(PageContent.class);
-        if (locale != null) {
-            content.locale().lang().setValue(locale);
-        }
-        entity.content().add(content);
-
-        callback.onSuccess(entity);
+        new AvailableLocaleSelectorDialog(null, new ValueChangeHandler<AvailableLocale>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
+                PageContent content = EntityFactory.create(PageContent.class);
+                content.locale().set(event.getValue());
+                entity.content().add(content);
+                callback.onSuccess(entity);
+            }
+        }) {
+            @Override
+            public boolean onClickCancel() {
+                cancel();
+                return true;
+            }
+        }.show();
     }
 }

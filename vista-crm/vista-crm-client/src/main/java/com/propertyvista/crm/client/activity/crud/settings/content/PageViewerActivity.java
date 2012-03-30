@@ -25,7 +25,6 @@ import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
-import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageViewerActivity extends CrmViewerActivity<PageDescriptor> implements PageViewer.Presenter {
@@ -41,10 +40,9 @@ public class PageViewerActivity extends CrmViewerActivity<PageDescriptor> implem
     }
 
     @Override
-    public void editNew(Key parentid, AvailableLocale locale) {
+    public void editNew(Key parentid) {
         AppSite.getPlaceController().goTo(
                 AppSite.getHistoryMapper().createPlace(placeClass).formNewItemPlace(parentid)
-                        .arg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.page.name())
-                        .arg(PageEditor.Presenter.URL_PARAM_PAGE_LOCALE, locale.lang().getValue().name()));
+                        .arg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.page.name()));
     }
 }
