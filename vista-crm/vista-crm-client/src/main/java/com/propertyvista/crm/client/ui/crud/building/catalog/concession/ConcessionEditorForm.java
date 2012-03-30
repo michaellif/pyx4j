@@ -100,7 +100,7 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
         if (comp != null) {
             valueHolder.setWidget(new DecoratorBuilder(inject(proto().version().value(), comp), 6).build());
 
-            if (repopulatevalue) {
+            if (repopulatevalue && valueType != Concession.Type.free) {
                 get(proto().version().value()).populate(getValue().version().value().getValue());
             }
         }
