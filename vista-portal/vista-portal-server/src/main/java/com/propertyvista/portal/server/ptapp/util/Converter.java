@@ -119,6 +119,9 @@ public class Converter {
             criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
             for (AptUnit unit : Persistence.service().query(criteria)) {
                 BigDecimal _prc = unit.financial()._marketRent().getValue();
+                if (_prc == null) {
+                    continue;
+                }
                 if (minPrice == null || minPrice.compareTo(_prc) > 0) {
                     minPrice = _prc;
                 }
@@ -129,8 +132,10 @@ public class Converter {
         }
 
         //TODO should be converted to BigDecimal
-        to.price().min().setValue(minPrice.doubleValue());
-        to.price().max().setValue(maxPrice.doubleValue());
+        if (minPrice != null && maxPrice != null) {
+            to.price().min().setValue(minPrice.doubleValue());
+            to.price().max().setValue(maxPrice.doubleValue());
+        }
 
         if (!from.media().isEmpty()) {
             for (Media media : from.media()) {
