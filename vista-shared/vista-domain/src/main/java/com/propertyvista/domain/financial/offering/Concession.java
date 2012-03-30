@@ -21,7 +21,6 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -128,10 +127,12 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
     @ToStringFormat("{0}, {1}, ${2}")
     public interface ConcessionV extends IVersionData<Concession> {
 
+        @NotNull
         @ToString(index = 0)
         @MemberColumn(name = "concessionType")
         IPrimitive<Type> type();
 
+        @NotNull
         @ToString(index = 1)
         IPrimitive<Term> term();
 
@@ -150,6 +151,7 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
         @MemberColumn(name = "val")
         IPrimitive<BigDecimal> value();
 
+        @NotNull
         @MemberColumn(name = "cond")
         IPrimitive<Condition> condition();
 
@@ -164,6 +166,7 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
 
 // ----------------------------------------------
 
+        @NotNull
         IPrimitive<Status> status();
 
         IPrimitive<String> approvedBy();

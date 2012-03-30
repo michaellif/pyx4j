@@ -76,23 +76,27 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
     protected void onPopulate() {
         super.onPopulate();
 
-        bindValueEditor(getValue().version().type().getValue(), true);
+        if (getValue() != null) {
+            bindValueEditor(getValue().version().type().getValue(), true);
+        }
     }
 
     private void bindValueEditor(Concession.Type valueType, boolean repopulatevalue) {
         CComponent<?, ?> comp = null;
-        switch (valueType) {
-        case monetaryOff:
-        case promotionalItem:
-            comp = new CMoneyField();
-            break;
-        case percentageOff:
-            comp = new CPercentageField();
-            break;
-        case free:
-            comp = new CTextField();
-            comp.setEnabled(false);
-            break;
+        if (valueType != null) {
+            switch (valueType) {
+            case monetaryOff:
+            case promotionalItem:
+                comp = new CMoneyField();
+                break;
+            case percentageOff:
+                comp = new CPercentageField();
+                break;
+            case free:
+                comp = new CTextField();
+                comp.setEnabled(false);
+                break;
+            }
         }
 
         unbind(proto().version().value());
