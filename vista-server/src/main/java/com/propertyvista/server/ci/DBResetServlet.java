@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
@@ -185,7 +186,7 @@ public class DBResetServlet extends HttpServlet {
                             case allAddMockup:
                             case allMini:
                                 for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
-                                    preloadPmc(req, buf, demoPmc.name(), type);
+                                    preloadPmc(req, buf, prodPmcNameCorrections(demoPmc.name()), type);
                                 }
                                 break;
                             case addPmcMockup:
@@ -243,6 +244,14 @@ public class DBResetServlet extends HttpServlet {
             } finally {
                 IOUtils.closeQuietly(output);
             }
+        }
+    }
+
+    private String prodPmcNameCorrections(String name) {
+        if (ApplicationMode.isDevelopment()) {
+            return name;
+        } else {
+            return "test-" + name;
         }
     }
 
