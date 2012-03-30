@@ -15,14 +15,17 @@ package com.propertyvista.crm.client.activity.crud.building.catalog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
 import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Concession.Status;
 
 public class ConcessionEditorActivity extends EditorActivityBase<Concession> {
 
@@ -30,5 +33,14 @@ public class ConcessionEditorActivity extends EditorActivityBase<Concession> {
     public ConcessionEditorActivity(Place place) {
         super(place, UnitViewFactory.instance(ConcessionEditorView.class), (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class),
                 Concession.class);
+    }
+
+    @Override
+    protected void createNewEntity(AsyncCallback<Concession> callback) {
+        Concession entity = EntityFactory.create(entityClass);
+
+        entity.version().status().setValue(Status.draft);
+
+        callback.onSuccess(entity);
     }
 }
