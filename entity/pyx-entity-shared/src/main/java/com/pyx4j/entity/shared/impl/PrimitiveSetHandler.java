@@ -77,7 +77,11 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
 
     @Override
     public AttachLevel getAttachLevel() {
-        return AttachLevel.Attached;
+        if (getOwner().isValueDetached()) {
+            return AttachLevel.Detached;
+        } else {
+            return AttachLevel.Attached;
+        }
     }
 
     @Override
