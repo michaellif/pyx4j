@@ -16,7 +16,6 @@ package com.propertyvista.common.client.policy;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -70,6 +69,8 @@ public class ClientPolicyManager {
 
     private static final Map<PolicyFindKey, Policy> cache = new HashMap<PolicyFindKey, Policy>();
 
+    private static PolicyRetrieveService policyRetrieveService;
+
     public static OrganizationPoliciesNode getOrganizationPoliciesNode() {
         // This is done for cache to Work on the client. cache needs  Node Pk.
         if (organizationPoliciesNode == null) {
@@ -88,8 +89,7 @@ public class ClientPolicyManager {
             return;
         }
 
-        PolicyRetrieveService srv = GWT.create(PolicyRetrieveService.class);
-        srv.obtainEffectivePolicy(new DefaultAsyncCallback<Policy>() {
+        policyRetrieveService.obtainEffectivePolicy(new DefaultAsyncCallback<Policy>() {
             @Override
             public void onSuccess(Policy result) {
                 if ((organizationPoliciesNode == null) && (result.node() instanceof OrganizationPoliciesNode)) {
@@ -101,7 +101,8 @@ public class ClientPolicyManager {
         }, (PolicyNode) node.createIdentityStub(), EntityFactory.getEntityPrototype(policyClass));
     }
 
-    public static void initialize() {
+    public static void initialize(PolicyRetrieveService policyRetrieveService) {
+        ClientPolicyManager.policyRetrieveService = policyRetrieveService;
 
         ClientSecurityController.addSecurityControllerHandler(new SecurityControllerHandler() {
             @Override

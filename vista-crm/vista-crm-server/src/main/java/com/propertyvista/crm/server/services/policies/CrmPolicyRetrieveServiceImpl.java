@@ -7,21 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-03-06
- * @author vlads
+ * Created on Dec 16, 2011
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared.services;
+package com.propertyvista.crm.server.services.policies;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
+import com.propertyvista.server.common.policy.PolicyRetrieveServiceImpl;
 
-import com.pyx4j.rpc.shared.IService;
-
-import com.propertyvista.domain.policy.framework.Policy;
-import com.propertyvista.domain.policy.framework.PolicyNode;
-
-public interface PolicyRetrieveService extends IService {
-
-    public void obtainEffectivePolicy(AsyncCallback<Policy> callback, PolicyNode node, Policy policyClass);
+public class CrmPolicyRetrieveServiceImpl extends PolicyRetrieveServiceImpl implements CrmPolicyRetrieveService {
 
 }

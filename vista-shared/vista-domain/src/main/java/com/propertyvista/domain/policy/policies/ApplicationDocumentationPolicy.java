@@ -24,7 +24,7 @@ import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 
 @DiscriminatorValue("ApplicationDocumentationPolicy")
-public interface ApplicationDocumentationPolicy extends Policy {
+public interface ApplicationDocumentationPolicy extends Policy, TenantsAccessiblePolicy {
 
     @Caption(description = "The number of the IDs that is required for an application")
     @NotNull

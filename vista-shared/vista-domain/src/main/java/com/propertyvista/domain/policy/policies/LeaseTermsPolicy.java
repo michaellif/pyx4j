@@ -24,7 +24,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @DiscriminatorValue("LeaseTermsPolicy")
 @LowestApplicableNode(value = AptUnit.class)
-public interface LeaseTermsPolicy extends Policy {
+public interface LeaseTermsPolicy extends Policy, TenantsAccessiblePolicy {
 
     @Owned
     IList<LegalTermsDescriptor> tenantSummaryTerms();

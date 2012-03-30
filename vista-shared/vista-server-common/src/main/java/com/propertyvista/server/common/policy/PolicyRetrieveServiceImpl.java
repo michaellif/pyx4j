@@ -11,23 +11,23 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.shared.services;
+package com.propertyvista.server.common.policy;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
-import com.propertyvista.server.common.policy.PolicyManager;
 
-public class PolicyRetrieveServiceImpl implements PolicyRetrieveService {
+public abstract class PolicyRetrieveServiceImpl implements PolicyRetrieveService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void obtainEffectivePolicy(AsyncCallback<Policy> callback, PolicyNode node, IEntity policyClass) {
-        callback.onSuccess(PolicyManager.obtainEffectivePolicy(node, (Class<Policy>) policyClass.getValueClass()));
+    public void obtainEffectivePolicy(AsyncCallback<Policy> callback, PolicyNode node, Policy policyProto) {
+        if (policyProto == null) {
+            throw new Error("A policy prototype was not provided");
+        }
+        callback.onSuccess(PolicyManager.obtainEffectivePolicy(node, (Class<Policy>) policyProto.getValueClass()));
     }
 
 }

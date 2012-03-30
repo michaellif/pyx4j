@@ -27,7 +27,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @DiscriminatorValue("PetPolicy")
 @LowestApplicableNode(value = AptUnit.class)
-public interface PetPolicy extends Policy {
+public interface PetPolicy extends Policy, TenantsAccessiblePolicy {
 
     @MemberColumn(name = "petConstraints")
     @Owned

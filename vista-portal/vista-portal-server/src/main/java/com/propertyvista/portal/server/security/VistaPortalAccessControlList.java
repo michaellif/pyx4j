@@ -50,6 +50,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.services.PtPasswordResetService;
+import com.propertyvista.portal.rpc.ptapp.services.PtPolicyRetrieveService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.ChargesService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.PaymentService;
@@ -57,7 +58,6 @@ import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantService;
-import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 
 public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
@@ -82,7 +82,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.TenantPortalPasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));
 
         grant(VistaBasicBehavior.TenantPortal, new IServiceExecutePermission(TenantPasswordChangeUserService.class));
-        grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(PolicyRetrieveService.class));
+        grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(PtPolicyRetrieveService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 
@@ -118,6 +118,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         // Submitted prospective:
         grant(VistaTenantBehavior.ProspectiveSubmitted, new EntityPermission(OrganizationPoliciesNode.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(PtPolicyRetrieveService.class));
         grant(VistaTenantBehavior.ProspectiveSubmitted, new EntityPermission(IdentificationDocumentType.class, EntityPermission.READ));
         grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ApplicationStatusService.class));

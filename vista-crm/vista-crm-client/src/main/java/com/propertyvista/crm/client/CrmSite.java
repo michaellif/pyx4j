@@ -42,10 +42,12 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.CrmPanel;
 import com.propertyvista.crm.client.ui.LogoViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
+import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 
 public class CrmSite extends VistaSite {
 
@@ -76,7 +78,7 @@ public class CrmSite extends VistaSite {
         });
 
         initSiteTheme();
-        ClientPolicyManager.initialize();
+        ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(CrmPolicyRetrieveService.class));
     }
 
     @Override

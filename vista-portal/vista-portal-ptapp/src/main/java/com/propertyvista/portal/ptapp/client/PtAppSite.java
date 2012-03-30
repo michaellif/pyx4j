@@ -46,6 +46,8 @@ import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
+import com.propertyvista.portal.rpc.ptapp.services.PtPolicyRetrieveService;
+import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 
 public class PtAppSite extends VistaSite {
 
@@ -86,7 +88,7 @@ public class PtAppSite extends VistaSite {
             }
         });
 
-        ClientPolicyManager.initialize();
+        ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(PtPolicyRetrieveService.class));
         wizardManager = new PtAppWizardManager();
 
         SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);

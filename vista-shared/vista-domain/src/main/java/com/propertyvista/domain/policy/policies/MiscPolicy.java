@@ -27,7 +27,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("MiscPolicy")
 @LowestApplicableNode(value = Building.class)
-public interface MiscPolicy extends Policy {
+public interface MiscPolicy extends Policy, TenantsAccessiblePolicy {
 
     @Caption(name = "Occupants over 18 are Applicants", description = "Some landlords force all occupants over 18 to be on LEASE and therefore anyone OVER 18 MUST be Applicant/Co-Applicant and cannot be Dependent")
     IPrimitive<Boolean> occupantsOver18areApplicants();
