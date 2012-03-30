@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -181,7 +182,11 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         onlineApplication.setVisible(status == Status.Created);
 
-        runBill.setVisible(status == Status.Active);
+        if (ApplicationMode.isDevelopment()) {
+            runBill.setVisible(status == Status.Active);
+        } else {
+            runBill.setVisible(false); // close for production!..
+        }
 
         notice.setVisible(status == Status.Active && completion == null);
         cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);

@@ -36,7 +36,10 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -66,7 +69,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
-    private Widget detailsTab, unitSelector, serviceSelector;
+    private Widget serviceSelector;
 
     public LeaseEditorForm() {
         this(false);
@@ -79,7 +82,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.add(detailsTab = createDetailsTab(), i18n.tr("Details"));
+        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
         tabPanel.add(createServiceAgreementTab(), i18n.tr("Charges"));
         tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
@@ -142,7 +145,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             get(proto().leaseFrom()).setViewable(isLeaseSigned);
             get(proto().leaseTo()).setViewable(isLeaseSigned);
 
-            unitSelector.setVisible(!isLeaseSigned);
+            get(proto().unit()).setEditable(!isLeaseSigned);
             serviceSelector.setVisible(!isLeaseSigned);
         }
     }
@@ -184,45 +187,43 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setBR(++row, 0, 1);
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding(), new CEntityLabel<Building>()), 20).build());
-
-            HorizontalPanel unitPanel = new HorizontalPanel();
-            unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel<AptUnit>()), 20).build());
-            unitPanel.add(unitSelector = new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    new UnitSelectorDialog() {
-                        @Override
-                        protected void setFilters(List<DataTableFilterData> filters) {
-                            if (!getValue().leaseFrom().isNull() && !getValue().leaseTo().isNull() && filters != null) {
-                                // filter out already leased units (null) and not available by date:
-                                filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Operators.isNot, (Serializable) null));
-                                filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Operators.lessThan, getValue().leaseFrom()
-                                        .getValue()));
-                            }
-                            super.setFilters(filters);
-                        };
-
-                        @Override
-                        public boolean onClickOk() {
-                            if (!getSelectedItems().isEmpty()) {
-                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
-                            }
-                            return !getSelectedItems().isEmpty();
-                        }
-                    }.show();
-                }
-            }));
-            main.setWidget(++row, 0, unitPanel);
         } else {
             main.setWidget(
                     ++row,
                     0,
                     new DecoratorBuilder(inject(proto().selectedBuilding(),
                             new CEntityCrudHyperlink<Building>(MainActivityMapper.getCrudAppPlace(Building.class))), 20).build());
-            main.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(AptUnit.class))), 20)
-                            .build());
         }
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return MainActivityMapper.getCrudAppPlace(AptUnit.class).formViewerPlace(getValue().getPrimaryKey());
+            }
+
+            @Override
+            protected EntitySelectorDialog<AptUnit> getSelectorDialog() {
+                return new UnitSelectorDialog() {
+                    @Override
+                    protected void setFilters(List<DataTableFilterData> filters) {
+                        LeaseDTO currentValue = LeaseEditorForm.this.getValue();
+                        if (!currentValue.leaseFrom().isNull() && !currentValue.leaseTo().isNull() && filters != null) {
+                            // filter out already leased units (null) and not available by date:
+                            filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Operators.isNot, (Serializable) null));
+                            filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Operators.lessThan, currentValue.leaseFrom().getValue()));
+                        }
+                        super.setFilters(filters);
+                    };
+
+                    @Override
+                    public boolean onClickOk() {
+                        if (!getSelectedItems().isEmpty()) {
+                            ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
+                        }
+                        return !getSelectedItems().isEmpty();
+                    }
+                };
+            }
+        }), 20).build());
 
         // Move dates:
         main.setBR(++row, 0, 1);
