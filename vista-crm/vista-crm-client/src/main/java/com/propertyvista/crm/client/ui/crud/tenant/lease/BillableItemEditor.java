@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -33,7 +32,6 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -70,11 +68,9 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type().name(), new CLabel())).customLabel("").useLabelSemicolon(false).build());
-        get(proto().item().type().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type())).build());
+        get(proto().item().type()).setViewable(true);
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().item().price()), 6).build());
-        get(proto().item().price()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         get(proto().item().price()).setViewable(true);
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());
