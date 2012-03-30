@@ -32,11 +32,13 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
 
 public class TenantsGenerator {
 
@@ -99,6 +101,7 @@ public class TenantsGenerator {
 
     public Lead createLead() {
         Lead item = EntityFactory.create(Lead.class);
+        item.leadId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.lead));
         item.createDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
         item.status().setValue(Lead.Status.active);
 
