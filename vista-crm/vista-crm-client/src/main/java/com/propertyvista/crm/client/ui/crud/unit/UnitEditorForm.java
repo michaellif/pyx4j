@@ -162,6 +162,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
 
         // tweak UI:
+        get(proto()._availableForRent()).setViewable(true);
         get(proto().financial()._unitRent()).setViewable(true);
 //        get(proto().financial()._marketRent()).setViewable(true);
         get(proto().info()._bedrooms()).setViewable(true);
