@@ -46,6 +46,7 @@ import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadEditorForm extends CrmEntityForm<Lead> {
@@ -109,8 +110,8 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTerm()), 9).build());
 
         if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel()), 20).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new CEntityLabel()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new CEntityLabel<Floorplan>()), 20).build());
 
             AnchorButton select = new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override

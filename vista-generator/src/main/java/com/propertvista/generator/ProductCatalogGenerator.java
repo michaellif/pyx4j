@@ -344,7 +344,6 @@ public class ProductCatalogGenerator {
         serviceItems.add(createBuildingElementServices(catalog, unit, Type.commercialUnit, price));
 
         return serviceItems;
-
     }
 
     public ProductItem createBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, Service.Type type, BigDecimal price) {

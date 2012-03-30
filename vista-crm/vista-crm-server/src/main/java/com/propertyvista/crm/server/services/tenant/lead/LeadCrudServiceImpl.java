@@ -57,9 +57,9 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
 
     @Override
     protected void enhanceRetrieved(Lead entity, Lead dto) {
-        if (!dto.floorplan().isNull()) {
-            Persistence.service().retrieve(dto.floorplan().building());
-            entity.building().set(dto.floorplan().building());
+        if (!entity.floorplan().isNull()) {
+            Persistence.service().retrieve(entity.floorplan().building());
+            dto.building().set(entity.floorplan().building());
         }
     }
 
