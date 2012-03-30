@@ -291,9 +291,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "going to {4} and clicking on Residents menu tab. You will be redirected to Online Tenant Portal immediately. " +
                 "Or, alternatively, you can reach that page directly by going to {5}.<br/><br/>" +
 
-                "A member of our team will be in touch with you shortly to make move-in arrangements.<br/><br/>" +
-
-                "In the meantime, should you have any concerns or questions, please do not hesistate to contact us directly.<br/><br/>" +
+                "Should you have any concerns or questions, please do not hesistate to contact us directly.<br/><br/>" +
                         
                 "Sincerely,<br/><br/>" +
                         
