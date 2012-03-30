@@ -19,8 +19,6 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -34,11 +32,13 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
-import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
@@ -111,12 +111,15 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
 
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new CEntityLabel<Floorplan>()), 20).build());
-
-            AnchorButton select = new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new CEntitySelectorHyperlink<Floorplan>() {
                 @Override
-                public void onClick(ClickEvent event) {
-                    new FloorplanSelectorDialogDialog() {
+                protected AppPlace getTargetPlace() {
+                    return MainActivityMapper.getCrudAppPlace(Floorplan.class).formViewerPlace(getValue().getPrimaryKey());
+                }
+
+                @Override
+                protected EntitySelectorDialog<Floorplan> getSelectorDialog() {
+                    return new FloorplanSelectorDialogDialog() {
                         @Override
                         public boolean onClickOk() {
                             if (!getSelectedItems().isEmpty()) {
@@ -126,17 +129,15 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
                                 return false;
                             }
                         }
-                    }.show();
+                    };
                 }
-            });
-            select.asWidget().getElement().getStyle().setMarginLeft(15, Unit.EM);
-            main.setWidget(++row, 0, select);
+            }), 20).build());
+
         } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building()), 20).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
         }
 
-        main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().agent()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
