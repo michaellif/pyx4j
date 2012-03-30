@@ -336,17 +336,22 @@ public class ApplicationManager {
         progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
         progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
 // TODO : Charges and Payment steps are closed (removed) so far...        
-//        progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
+        if (false) {
+            progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
+        }
         progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
-//        switch (behaviour) {
-//        case ProspectiveApplicant:
-//            progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-//        case ProspectiveCoApplicant:
-//            if (isTenantInSplitCharge(application, tenant)) {
-//                progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-//            }
-//            break;
-//        }
+// TODO : Charges and Payment steps are closed (removed) so far...        
+        if (false) {
+            switch (behaviour) {
+            case ProspectiveApplicant:
+                progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
+            case ProspectiveCoApplicant:
+                if (isTenantInSplitCharge(application, tenant)) {
+                    progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
+                }
+                break;
+            }
+        }
         progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
         return progress;
     }

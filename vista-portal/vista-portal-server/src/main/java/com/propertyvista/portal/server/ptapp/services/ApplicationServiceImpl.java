@@ -22,7 +22,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
@@ -32,7 +31,6 @@ import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
@@ -178,24 +176,9 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
     }
 
     private void onStepCompleted(Application application, ApplicationWizardStep currentStep) {
-        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant)) {
-            if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Payment.class))) {
-                ApplicationManager.makeApplicationCompleted(application);
-            }
-        } else if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveCoApplicant)) {
-            if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Payment.class))) {
-                if (ApplicationManager.isTenantInSplitCharge(application, PtAppContext.getCurrentUserTenant())) {
-                    ApplicationManager.makeApplicationCompleted(application);
-                }
-            } else if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Summary.class))) {
-                if (!ApplicationManager.isTenantInSplitCharge(application, PtAppContext.getCurrentUserTenant())) {
-                    ApplicationManager.makeApplicationCompleted(application);
-                }
-            }
-        } else if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
-            if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Summary.class))) {
-                ApplicationManager.makeApplicationCompleted(application);
-            }
+        boolean isEndOfTheWizard = (application.steps().indexOf(currentStep) + 1 == application.steps().size() - 1);
+        if (isEndOfTheWizard) {
+            ApplicationManager.makeApplicationCompleted(application);
         }
     }
 
