@@ -121,7 +121,9 @@ public class DomainFactory {
 
         retVal.money().setValue(moneyvalues[pos]);
 
-        retVal.percent().setValue(percentvalues[pos]);
+        retVal.percent1().setValue(percentvalues[pos]);
+
+        retVal.percent2().setValue(percentvalues[pos]);
 
         retVal.booleanRadioGroupHorizontal().setValue(boolradiovalues[pos]);
         retVal.booleanRadioGroupVertical().setValue(boolradiovalues[pos]);

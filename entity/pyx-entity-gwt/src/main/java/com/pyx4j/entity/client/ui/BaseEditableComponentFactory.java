@@ -108,8 +108,13 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                 }
                 return comp;
             }
-            case percentage:
-                return new CPercentageField();
+            case percentage: {
+                CPercentageField comp = new CPercentageField();
+                if (mm.getFormat() != null) {
+                    comp.setPercentageFormat(mm.getFormat());
+                }
+                return comp;
+            }
             case money:
                 return new CMoneyField();
             case email:

@@ -35,7 +35,7 @@ public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDec
 
     public CPercentageField() {
         super();
-        setFormat(new MoneyFormat());
+        setFormat(new PercentageFormat("#.#"));
         addValueValidator(new TextBoxParserValidator<BigDecimal>());
     }
 
@@ -45,12 +45,16 @@ public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDec
 
     }
 
-    class MoneyFormat implements IFormat<BigDecimal> {
+    public void setPercentageFormat(String pattern) {
+        setFormat(new PercentageFormat(pattern));
+    }
+
+    class PercentageFormat implements IFormat<BigDecimal> {
 
         private final NumberFormat nf;
 
-        MoneyFormat() {
-            nf = NumberFormat.getPercentFormat();
+        PercentageFormat(String pattern) {
+            nf = NumberFormat.getFormat(pattern);
         }
 
         @Override
@@ -58,7 +62,7 @@ public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDec
             if (value == null) {
                 return "";
             } else {
-                return nf.format(value);
+                return nf.format(value.multiply(new BigDecimal("100"))) + "%";
             }
         }
 

@@ -92,7 +92,9 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().money())));
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().percent())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().percent1())));
+
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().percent2())));
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().booleanRadioGroupHorizontal())));
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().enumRadioGroupHorizontal())));

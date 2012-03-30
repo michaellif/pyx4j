@@ -28,6 +28,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -89,7 +90,11 @@ public interface EntityI extends IEntity {
     IPrimitive<BigDecimal> money();
 
     @Editor(type = EditorType.percentage)
-    IPrimitive<BigDecimal> percent();
+    IPrimitive<BigDecimal> percent1();
+
+    @Editor(type = EditorType.percentage)
+    @Format("#")
+    IPrimitive<BigDecimal> percent2();
 
     @Owned
     IList<EntityII> entityIIList();
