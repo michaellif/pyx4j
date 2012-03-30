@@ -780,7 +780,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @Override
     @SuppressWarnings("unchecked")
     public <T extends IEntity> T detach() {
-        IEntity entity = EntityFactory.create((Class<IEntity>) getObjectClass());
+        IEntity entity = EntityFactory.create((Class<IEntity>) getInstanceValueClass());
         entity.setValue(getValue());
         return (T) entity;
     }
@@ -788,7 +788,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @Override
     @SuppressWarnings("unchecked")
     public <T extends IEntity> T createIdentityStub() {
-        IEntity entity = EntityFactory.create((Class<IEntity>) getObjectClass());
+        IEntity entity = EntityFactory.create((Class<IEntity>) getInstanceValueClass());
         entity.setPrimaryKey(this.getPrimaryKey());
         entity.setValueDetached();
         return (T) entity;
