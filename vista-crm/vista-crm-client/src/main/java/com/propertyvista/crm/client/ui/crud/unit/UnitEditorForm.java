@@ -30,8 +30,6 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
@@ -145,21 +143,29 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
 
         left.setBR(++row, 0, 1);
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._availableForRent(), new CDateLabel()), 9).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._unitRent(), new CNumberLabel()), 10).build());
-//        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent(), new CNumberLabel()), 10).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maketPrices(), new UnitServicePriceFolder())).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._availableForRent()), 9).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
+//        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
+
+        left.setH3(++row, 0, 1, proto().maketPrices().getMeta().getCaption());
+        left.setWidget(++row, 0, inject(proto().maketPrices(), new UnitServicePriceFolder()));
 
         row = -1;
         FormFlexPanel right = new FormFlexPanel();
         right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().floor()), 5).build());
         right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().number()), 5).build());
 
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info()._bedrooms(), new CNumberLabel()), 5).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info()._bathrooms(), new CNumberLabel()), 5).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info()._bedrooms()), 5).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info()._bathrooms()), 5).build());
 
         right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().area()), 8).build());
         right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
+
+        // tweak UI:
+        get(proto().financial()._unitRent()).setViewable(true);
+//        get(proto().financial()._marketRent()).setViewable(true);
+        get(proto().info()._bedrooms()).setViewable(true);
+        get(proto().info()._bathrooms()).setViewable(true);
 
         // restrict floorplan combo here to any free :
         CComponent<Floorplan, ?> comp = get(proto().floorplan());
