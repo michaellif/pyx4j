@@ -19,7 +19,6 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertvista.generator.LeaseHelper;
 import com.propertvista.generator.TenantsGenerator;
 import com.propertvista.generator.util.RandomUtil;
 
@@ -49,8 +48,8 @@ import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
+import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSim;
 import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
-import com.propertyvista.server.common.util.LeaseLifecycleSim;
 
 public class PreloadTenants extends BaseVistaDevDataPreloader {
 
@@ -149,7 +148,6 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             LogicalDate expectedMoveIn = leaseFrom;
             LogicalDate leaseTo = add(leaseFrom, random(MIN_LEASE_TERM, MAX_LEASE_TERM));
             Lease lease = leaseSim.newLease(eventDate, RandomUtil.randomLetters(8), unit, leaseFrom, leaseTo, expectedMoveIn, PaymentFrequency.Monthly, tenant);
-            LeaseHelper.updateLease(lease);
             Persistence.service().merge(lease);
 
             do {

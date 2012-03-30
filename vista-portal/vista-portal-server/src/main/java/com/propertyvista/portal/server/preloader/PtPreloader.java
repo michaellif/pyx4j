@@ -18,7 +18,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertvista.generator.LeaseHelper;
 import com.propertvista.generator.PTGenerator;
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
@@ -55,7 +54,7 @@ import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
-import com.propertyvista.server.common.util.LeaseLifecycleSim;
+import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSim;
 import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
@@ -113,7 +112,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
     }
 
     private void persistFullApplication(ApplicationSummaryGDO summary, PTGenerator generator, int cnt) {
-        LeaseHelper.updateLease(summary.lease());
+        LeaseLifecycleSim.updateLease(summary.lease());
         Double overalPercentageApproval = 0.0, maxPercentageApproval = 0.0;
 
         for (TenantSummaryGDO tenantSummary : summary.tenants()) {

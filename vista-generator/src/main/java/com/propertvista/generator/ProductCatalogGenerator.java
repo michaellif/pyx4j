@@ -334,20 +334,22 @@ public class ProductCatalogGenerator {
     }
 
     public List<ProductItem> createAptUnitServices(ProductCatalog catalog, AptUnit unit) {
-//        Service.Type type = RandomUtil.random(EnumSet.of(Type.residentialUnit, Type.residentialShortTermUnit, Type.commercialUnit));
-        Service.Type type = Type.residentialUnit;
-        List<ProductItem> serviceItems = createBuildingElementServices(catalog, unit, type);
-        serviceItems.get(0).price().setValue(createUnitMarketRent(unit));
-        unit.financial()._marketRent().set(serviceItems.get(0).price());
+        List<ProductItem> serviceItems = new ArrayList<ProductItem>();
+
+        BigDecimal price = createUnitMarketRent(unit);
+//      Service.Type type = RandomUtil.random(EnumSet.of(Type.residentialUnit, Type.residentialShortTermUnit, Type.commercialUnit));
+
+        serviceItems.add(createBuildingElementServices(catalog, unit, Type.residentialUnit, price));
+        serviceItems.add(createBuildingElementServices(catalog, unit, Type.residentialShortTermUnit, price));
+        serviceItems.add(createBuildingElementServices(catalog, unit, Type.commercialUnit, price));
+
         return serviceItems;
 
     }
 
-    public List<ProductItem> createBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, Service.Type type) {
+    public ProductItem createBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, Service.Type type, BigDecimal price) {
         Service service = getService(catalog, type);
         List<ProductItemType> allowedItemTypes = getServiceItemTypes(catalog, type);
-
-        List<ProductItem> items = new ArrayList<ProductItem>();
 
         ProductItem item = EntityFactory.create(ProductItem.class);
         ProductItemType selectedItem = RandomUtil.random(allowedItemTypes);
@@ -357,13 +359,12 @@ public class ProductCatalogGenerator {
         item.type().serviceType().setValue(selectedItem.serviceType().getValue());
 
         // This value may not be used in all cases and overridden later in generator
-        item.price().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
+        item.price().setValue(price);
         item.description().setValue(type.toString() + " description");
         item.element().set(buildingElement);
 
         service.version().items().add(item);
-        items.add(item);
 
-        return items;
+        return item;
     }
 }
