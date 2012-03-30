@@ -39,7 +39,7 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
 
     private final ApartmentViewForm apartmentViewForm;
 
-    private int maxCount;
+    private int maxCount = -1;
 
     public FeatureFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
         super(BillableItem.class, modifiable);
@@ -74,7 +74,7 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
 
     @Override
     protected void addItem() {
-        if (apartmentViewForm != null) {
+        if (apartmentViewForm != null && getMaxCount() >= 0) {
             if (getValue().size() < getMaxCount()) {
                 new SelectFeatureBox(type, apartmentViewForm.getValue()) {
                     @Override
