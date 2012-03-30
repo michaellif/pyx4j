@@ -18,11 +18,15 @@ import java.util.Arrays;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RadioChoice;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -37,9 +41,11 @@ import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
@@ -61,17 +67,21 @@ public class InquiryPanel extends Panel {
 
         final Building bld = (fp == null ? building : fp.building());
         Lead lead = EntityFactory.create(Lead.class);
-        final CompoundIEntityModel<Lead> model = new CompoundIEntityModel<Lead>(lead);
+        final CompoundIEntityModel<Lead> leadModel = new CompoundIEntityModel<Lead>(lead);
+        Guest guest = EntityFactory.create(Guest.class);
+        final CompoundIEntityModel<Guest> guestModel = new CompoundIEntityModel<Guest>(guest);
 
-        final StatelessForm<IPojo<Lead>> form = new StatelessForm<IPojo<Lead>>("inquiryForm", model) {
+        final StatelessForm<IPojo<Lead>> form = new StatelessForm<IPojo<Lead>>("inquiryForm", leadModel) {
             private static final long serialVersionUID = 1L;
 
             @SuppressWarnings("unchecked")
             @Override
             public void onSubmit() {
                 // update model
-                Lead lead = model.getObject().getEntityValue();
+                Lead lead = leadModel.getObject().getEntityValue();
                 lead.status().setValue(Lead.Status.active);
+                // add guest
+                lead.guests().add(guestModel.getObject().getEntityValue());
                 // floorplan
                 FormComponent<Long> fpList = (FormComponent<Long>) get("floorPlanList");
                 Long fpId = fpList.getModelObject();
@@ -93,37 +103,35 @@ public class InquiryPanel extends Panel {
 
         // add form input fields
         // name
+        form.add(new WicketUtils.DropDownList<Name.Prefix>("namePrefix", guestModel.bind(guest.person().name().namePrefix()), Arrays.asList(Name.Prefix
+                .values()), true, false));
+        String label;
+        label = i18n.tr("First Name");
+        form.add(new Label("firstNameLabel", label));
+        form.add(new RequiredTextField<String>("firstName", guestModel.bind(guest.person().name().firstName())).setLabel(new Model<String>(label)));
+        form.add(new FormErrorPanel("firstNameError", "firstName"));
+        label = i18n.tr("Last Name");
+        form.add(new Label("lastNameLabel", label));
+        form.add(new RequiredTextField<String>("lastName", guestModel.bind(guest.person().name().lastName())).setLabel(new Model<String>(label)));
+        form.add(new FormErrorPanel("lastNameError", "lastName"));
+        // phone
+        label = i18n.tr("Work Phone");
+        form.add(new Label("workPhoneLabel", label));
+        TextField<String> workPhone = new TextField<String>("workPhone", guestModel.bind(guest.person().workPhone()));
+        form.add(workPhone.setLabel(new Model<String>(label)));
+        form.add(new FormErrorPanel("workPhoneError", "workPhone"));
+        label = i18n.tr("Cell Phone");
+        form.add(new Label("cellPhoneLabel", label));
+        TextField<String> cellPhone = new TextField<String>("cellPhone", guestModel.bind(guest.person().mobilePhone()));
+        form.add(cellPhone.setLabel(new Model<String>(guest.person().mobilePhone().getMeta().getCaption())));
+        form.add(new FormErrorPanel("cellPhoneError", "cellPhone"));
+        // email
+        label = i18n.tr("Email Address");
+        form.add(new Label("emailLabel", label));
+        EmailTextField email = new EmailTextField("email", guestModel.bind(guest.person().email()));
+        form.add(email.setLabel(new Model<String>(label)));
+        form.add(new FormErrorPanel("emailError", "email", "inquiryForm"));
 
-//TODO Stas: there is list of Guests in Lead now ;)          
-//        form.add(new WicketUtils.DropDownList<Name.Prefix>("namePrefix", model.bind(lead.person().name().namePrefix()), Arrays.asList(Name.Prefix.values()),
-//                true, false));
-//
-//        String label;
-//        label = i18n.tr("First Name");
-//        form.add(new Label("firstNameLabel", label));
-//        form.add(new RequiredTextField<String>("firstName", model.bind(lead.person().name().firstName())).setLabel(new Model<String>(label)));
-//        form.add(new FormErrorPanel("firstNameError", "firstName"));
-//        label = i18n.tr("Last Name");
-//        form.add(new Label("lastNameLabel", label));
-//        form.add(new RequiredTextField<String>("lastName", model.bind(lead.person().name().lastName())).setLabel(new Model<String>(label)));
-//        form.add(new FormErrorPanel("lastNameError", "lastName"));
-//        // phone
-//        label = i18n.tr("Work Phone");
-//        form.add(new Label("workPhoneLabel", label));
-//        TextField<String> workPhone = new TextField<String>("workPhone", model.bind(lead.person().workPhone()));
-//        form.add(workPhone.setLabel(new Model<String>(label)));
-//        form.add(new FormErrorPanel("workPhoneError", "workPhone"));
-//        label = i18n.tr("Cell Phone");
-//        form.add(new Label("cellPhoneLabel", label));
-//        TextField<String> cellPhone = new TextField<String>("cellPhone", model.bind(lead.person().mobilePhone()));
-//        form.add(cellPhone.setLabel(new Model<String>(lead.person().mobilePhone().getMeta().getCaption())));
-//        form.add(new FormErrorPanel("cellPhoneError", "cellPhone"));
-//        // email
-//        label = i18n.tr("Email Address");
-//        form.add(new Label("emailLabel", label));
-//        EmailTextField email = new EmailTextField("email", model.bind(lead.person().email()));
-//        form.add(email.setLabel(new Model<String>(label)));
-//        form.add(new FormErrorPanel("emailError", "email", "inquiryForm"));
         // floorplan selector
         Long curFp = null;
         if (fp != null) {
@@ -144,26 +152,26 @@ public class InquiryPanel extends Panel {
         }
         form.add(radioGroup.setEscapeModelStrings(false));
         // lease term
-        form.add(new RadioChoice<Lead.LeaseTerm>("leaseTerm", model.bind(lead.leaseTerm()), Arrays.asList(Lead.LeaseTerm.values())));
+        form.add(new RadioChoice<Lead.LeaseTerm>("leaseTerm", leadModel.bind(lead.leaseTerm()), Arrays.asList(Lead.LeaseTerm.values())));
         // moving date
-        form.add(new DateInput("movingDate", model.bind(lead.moveInDate())));
+        form.add(new DateInput("movingDate", leadModel.bind(lead.moveInDate())));
         // apmnt date / time
-        form.add(new DateInput("appointmentDate1", model.bind(lead.appointmentDate1())));
-        form.add(new RadioChoice<Lead.DayPart>("appointmentTime1", model.bind(lead.appointmentTime1()), Arrays.asList(Lead.DayPart.values())));
-        form.add(new DateInput("appointmentDate2", model.bind(lead.appointmentDate2())));
-        form.add(new RadioChoice<Lead.DayPart>("appointmentTime2", model.bind(lead.appointmentTime2()), Arrays.asList(Lead.DayPart.values())));
+        form.add(new DateInput("appointmentDate1", leadModel.bind(lead.appointmentDate1())));
+        form.add(new RadioChoice<Lead.DayPart>("appointmentTime1", leadModel.bind(lead.appointmentTime1()), Arrays.asList(Lead.DayPart.values())));
+        form.add(new DateInput("appointmentDate2", leadModel.bind(lead.appointmentDate2())));
+        form.add(new RadioChoice<Lead.DayPart>("appointmentTime2", leadModel.bind(lead.appointmentTime2()), Arrays.asList(Lead.DayPart.values())));
         // ref source
-        form.add(new WicketUtils.DropDownList<Lead.RefSource>("refSource", model.bind(lead.refSource()), Arrays.asList(Lead.RefSource.values()), true, false));
+        form.add(new WicketUtils.DropDownList<Lead.RefSource>("refSource", leadModel.bind(lead.refSource()), Arrays.asList(Lead.RefSource.values()), true,
+                false));
         // comments
-        form.add(new TextArea<String>("comments", model.bind(lead.comments())));
+        form.add(new TextArea<String>("comments", leadModel.bind(lead.comments())));
         // captcha
 //        form.add(new Image("captchaImg", new CaptchaImageResource("1234", 40, 8)));
 //        form.add(new TextField<String>("captchaText", new Model<String>()).add(AttributeModifier.replace("size", "6")));
 
         form.add(new Button("inquirySubmit").add(AttributeModifier.replace("value", i18n.tr("Submit"))));
         // make sure that either workPhone, cellPhone or email is provided
-//TODO Stas: there is list of Guests in Lead now ;)          
-//        form.add(new WicketUtils.OneRequiredFormValidator(workPhone, cellPhone, email));
+        form.add(new WicketUtils.OneRequiredFormValidator(workPhone, cellPhone, email));
 
         add(form);
     }
