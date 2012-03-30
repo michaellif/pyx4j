@@ -29,11 +29,12 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.Service.Type;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
@@ -47,11 +48,11 @@ public class ProductCatalogGenerator {
         this.serviceItemTypes = serviceItemTypes;
     }
 
-    private List<ProductItemType> getServiceItemTypes() {
+    private List<ServiceItemType> getServiceItemTypes() {
         return this.serviceItemTypes.serviceItemTypes;
     }
 
-    private List<ProductItemType> getFeatureItemTypes() {
+    private List<FeatureItemType> getFeatureItemTypes() {
         return this.serviceItemTypes.featureItemTypes;
     }
 
@@ -127,11 +128,9 @@ public class ProductCatalogGenerator {
 
     private List<ProductItem> createServiceItems(Service.Type type) {
 
-        List<ProductItemType> allowedItemTypes = new ArrayList<ProductItemType>();
-        for (ProductItemType itemType : getServiceItemTypes()) {
-            if (type.equals(itemType.serviceType().getValue())) {
-                allowedItemTypes.add(itemType);
-            }
+        List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
+        for (ServiceItemType itemType : getServiceItemTypes()) {
+            allowedItemTypes.add(itemType);
         }
 
         int count = 0;
@@ -152,11 +151,11 @@ public class ProductCatalogGenerator {
         if (!allowedItemTypes.isEmpty()) {
             for (int i = 0; i < count; ++i) {
                 ProductItem item = EntityFactory.create(ProductItem.class);
-                ProductItemType selectedItem = RandomUtil.random(allowedItemTypes);
+                ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
 
                 item.type().set(selectedItem);
                 item.type().name().setValue(selectedItem.getStringView());
-                item.type().serviceType().setValue(selectedItem.serviceType().getValue());
+                item.type().<ServiceItemType> cast().serviceType().setValue(selectedItem.serviceType().getValue());
 
                 item.price().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
                 item.description().setValue(type.toString() + " description");
@@ -186,11 +185,9 @@ public class ProductCatalogGenerator {
     }
 
     private List<ProductItem> createFeatureItems(Feature.Type type) {
-        List<ProductItemType> allowedItemTypes = new ArrayList<ProductItemType>();
-        for (ProductItemType itemType : getFeatureItemTypes()) {
-            if (type.equals(itemType.featureType().getValue())) {
-                allowedItemTypes.add(itemType);
-            }
+        List<FeatureItemType> allowedItemTypes = new ArrayList<FeatureItemType>();
+        for (FeatureItemType itemType : getFeatureItemTypes()) {
+            allowedItemTypes.add(itemType);
         }
 
         int count = Math.min(3, allowedItemTypes.size());
@@ -269,15 +266,15 @@ public class ProductCatalogGenerator {
         return item;
     }
 
-    public List<ProductItemType> createIncludedUtilities() {
-        List<ProductItemType> allowedItemTypes = new ArrayList<ProductItemType>();
-        for (ProductItemType itemType : getFeatureItemTypes()) {
+    public List<FeatureItemType> createIncludedUtilities() {
+        List<FeatureItemType> allowedItemTypes = new ArrayList<FeatureItemType>();
+        for (FeatureItemType itemType : getFeatureItemTypes()) {
             if (Feature.Type.utility.equals(itemType.featureType().getValue())) {
                 allowedItemTypes.add(itemType);
             }
         }
 
-        List<ProductItemType> items = new ArrayList<ProductItemType>();
+        List<FeatureItemType> items = new ArrayList<FeatureItemType>();
         if (!allowedItemTypes.isEmpty()) {
             int maxItems = Math.min(DataGenerator.randomInt(allowedItemTypes.size()) + 1, allowedItemTypes.size());
             for (int i = 0; i < maxItems; ++i) {
@@ -288,15 +285,15 @@ public class ProductCatalogGenerator {
         return items;
     }
 
-    public List<ProductItemType> createExcludedUtilities(List<ProductItemType> includedOnes) {
-        List<ProductItemType> allowedItemTypes = new ArrayList<ProductItemType>();
-        for (ProductItemType itemType : getFeatureItemTypes()) {
+    public List<FeatureItemType> createExcludedUtilities(List<FeatureItemType> includedOnes) {
+        List<FeatureItemType> allowedItemTypes = new ArrayList<FeatureItemType>();
+        for (FeatureItemType itemType : getFeatureItemTypes()) {
             if (Feature.Type.utility.equals(itemType.featureType().getValue()) && !includedOnes.contains(itemType)) {
                 allowedItemTypes.add(itemType);
             }
         }
 
-        List<ProductItemType> items = new ArrayList<ProductItemType>();
+        List<FeatureItemType> items = new ArrayList<FeatureItemType>();
         if (!allowedItemTypes.isEmpty()) {
             int maxItems = Math.min(DataGenerator.randomInt(allowedItemTypes.size()) + 1, allowedItemTypes.size());
             for (int i = 0; i < maxItems; ++i) {
@@ -316,9 +313,9 @@ public class ProductCatalogGenerator {
         throw new Error("Service of type " + type + " not found");
     }
 
-    private List<ProductItemType> getServiceItemTypes(ProductCatalog catalog, Service.Type type) {
-        List<ProductItemType> allowedItemTypes = new ArrayList<ProductItemType>();
-        for (ProductItemType itemType : getServiceItemTypes()) {
+    private List<ServiceItemType> getServiceItemTypes(ProductCatalog catalog, Service.Type type) {
+        List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
+        for (ServiceItemType itemType : getServiceItemTypes()) {
             if (type.equals(itemType.serviceType().getValue())) {
                 allowedItemTypes.add(itemType);
             }
@@ -348,14 +345,14 @@ public class ProductCatalogGenerator {
 
     public ProductItem createBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, Service.Type type, BigDecimal price) {
         Service service = getService(catalog, type);
-        List<ProductItemType> allowedItemTypes = getServiceItemTypes(catalog, type);
+        List<ServiceItemType> allowedItemTypes = getServiceItemTypes(catalog, type);
 
         ProductItem item = EntityFactory.create(ProductItem.class);
-        ProductItemType selectedItem = RandomUtil.random(allowedItemTypes);
+        ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
 
         item.type().set(selectedItem);
         item.type().name().setValue(selectedItem.getStringView());
-        item.type().serviceType().setValue(selectedItem.serviceType().getValue());
+        item.type().<ServiceItemType> cast().serviceType().setValue(selectedItem.serviceType().getValue());
 
         // This value may not be used in all cases and overridden later in generator
         item.price().setValue(price);

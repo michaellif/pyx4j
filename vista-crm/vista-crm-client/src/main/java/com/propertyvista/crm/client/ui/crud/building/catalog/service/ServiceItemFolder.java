@@ -173,7 +173,8 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             if (column.getObject() == proto().type()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
                     final CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().version().type()));
+                    //TODO - review
+//                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().version().type()));
 //                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ProductItemType>>() {
 //                        @Override
 //                        public void onOptionsChange(OptionsChangeEvent<List<ProductItemType>> event) {

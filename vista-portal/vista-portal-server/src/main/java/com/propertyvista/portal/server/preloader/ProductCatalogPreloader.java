@@ -32,8 +32,9 @@ import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
@@ -67,7 +68,7 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(ProductItemType.class, Service.class, Feature.class, Concession.class);
+            return deleteAll(ServiceItemType.class, FeatureItemType.class, Service.class, Feature.class, Concession.class);
         } else {
             return "This is production";
         }

@@ -18,13 +18,13 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.GeoLocation;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 public interface BuildingDTO extends Building {
 
-    IList<ProductItemType> availableUtilities();
+    IList<FeatureItemType> availableUtilities();
 
     @EmbeddedEntity
     GeoLocation geoLocation();

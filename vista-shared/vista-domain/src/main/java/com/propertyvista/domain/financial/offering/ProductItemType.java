@@ -13,44 +13,23 @@
  */
 package com.propertyvista.domain.financial.offering;
 
-import javax.xml.bind.annotation.XmlType;
-
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.GlCode;
 
+@Inheritance
+@AbstractEntity
 public interface ProductItemType extends IEntity {
-
-    @I18n
-    @XmlType(name = "ProductItemTypeType")
-    public enum Type {
-
-        service, feature;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    @NotNull
-    @MemberColumn(name = "itemType")
-    IPrimitive<Type> type();
 
     @ToString
     @Length(50)
     IPrimitive<String> name();
-
-    IPrimitive<Service.Type> serviceType();
-
-    IPrimitive<Feature.Type> featureType();
 
     GlCode glCode();
 

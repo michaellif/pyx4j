@@ -13,20 +13,15 @@
  */
 package com.propertyvista.crm.server.services.building.catalog;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceItemTypeCrudService;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-public class ServiceItemTypeCrudServiceImpl extends AbstractCrudServiceImpl<ProductItemType> implements ServiceItemTypeCrudService {
+public class ServiceItemTypeCrudServiceImpl extends AbstractCrudServiceImpl<ServiceItemType> implements ServiceItemTypeCrudService {
 
     public ServiceItemTypeCrudServiceImpl() {
-        super(ProductItemType.class);
+        super(ServiceItemType.class);
     }
 
     @Override
@@ -34,9 +29,4 @@ public class ServiceItemTypeCrudServiceImpl extends AbstractCrudServiceImpl<Prod
         bindCompleateDBO();
     }
 
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<ProductItemType>> callback, EntityListCriteria<ProductItemType> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().type(), ProductItemType.Type.service));
-        super.list(callback, criteria);
-    }
 }

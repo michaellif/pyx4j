@@ -26,9 +26,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
@@ -62,8 +62,8 @@ public class ApartmentServiceImpl implements ApartmentService {
         Lease lease = PtAppContext.getCurrentUserLease();
         for (Iterator<BillableItem> iter = lease.version().leaseProducts().featureItems().iterator(); iter.hasNext();) {
             BillableItem item = iter.next();
-            if (item.item().type().type().getValue().equals(ProductItemType.Type.feature)) {
-                switch (item.item().type().featureType().getValue()) {
+            if (item.item().type().isInstanceOf(FeatureItemType.class)) {
+                switch (item.item().type().<FeatureItemType> cast().featureType().getValue()) {
                 case utility:
                     break;
                 case pet:
@@ -233,9 +233,9 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         // fill agreed items:
         for (BillableItem item : lease.version().leaseProducts().featureItems()) {
-            if (item.item().type().type().getValue().equals(ProductItemType.Type.feature)) {
+            if (item.item().type().isInstanceOf(FeatureItemType.class)) {
                 PriceCalculationHelpers.calculateChargeItemAdjustments(item);
-                switch (item.item().type().featureType().getValue()) {
+                switch (item.item().type().<FeatureItemType> cast().featureType().getValue()) {
                 case utility:
                     entity.agreedUtilities().add(item);
                     break;
@@ -259,7 +259,7 @@ public class ApartmentServiceImpl implements ApartmentService {
             if (service.version().type().equals(lease.type())) {
                 for (Feature feature : service.version().features()) {
                     for (ProductItem item : feature.version().items()) {
-                        switch (item.type().featureType().getValue()) {
+                        switch (item.type().<FeatureItemType> cast().featureType().getValue()) {
                         case utility:
                             if (!entity.includedUtilities().contains(item.type()) && !entity.externalUtilities().contains(item.type())) {
                                 entity.availableUtilities().add(item);

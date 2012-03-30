@@ -24,6 +24,8 @@ import com.propertyvista.domain.financial.billing.InvoiceAdjustmentSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.billing.InvoiceConcessionSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.server.financial.AbstractProcessor;
@@ -248,7 +250,13 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
             adjustment.amount().setValue(amount.multiply(proration));
         }
 
-        adjustment.description().setValue(billableItemAdjustment.billableItem().item().type().featureType().getStringView() + " " + i18n.tr("Adjustment"));
+        if (billableItemAdjustment.billableItem().item().type().isInstanceOf(FeatureItemType.class)) {
+            adjustment.description().setValue(
+                    billableItemAdjustment.billableItem().item().type().<FeatureItemType> cast().featureType().getStringView() + " " + i18n.tr("Adjustment"));
+        } else if (billableItemAdjustment.billableItem().item().type().isInstanceOf(ServiceItemType.class)) {
+            adjustment.description().setValue(
+                    billableItemAdjustment.billableItem().item().type().<ServiceItemType> cast().serviceType().getStringView() + " " + i18n.tr("Adjustment"));
+        }
 
         adjustment.billableItemAdjustment().set(billableItemAdjustment);
 

@@ -25,7 +25,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.charges.ChargeLine;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
@@ -98,10 +98,10 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
 
             // fill agreed items:
             for (BillableItem item : lease.version().leaseProducts().featureItems()) {
-                if (item.item().type().type().getValue().equals(ProductItemType.Type.feature)) {
+                if (item.item().type().isInstanceOf(FeatureItemType.class)) {
                     PriceCalculationHelpers.calculateChargeItemAdjustments(item);
 
-                    switch (item.item().type().featureType().getValue()) {
+                    switch (item.item().type().<FeatureItemType> cast().featureType().getValue()) {
                     case utility:
                     case pet:
                     case parking:

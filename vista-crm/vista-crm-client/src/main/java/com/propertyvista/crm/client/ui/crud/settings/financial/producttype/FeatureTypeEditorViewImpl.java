@@ -7,20 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 
-public class ServiceTypeListerViewImpl extends CrmListerViewImplBase<ProductItemType> implements ServiceTypeListerView {
+public class FeatureTypeEditorViewImpl extends CrmEditorViewImplBase<FeatureItemType> implements FeatureTypeEditorView {
 
-    public ServiceTypeListerViewImpl() {
-        super(CrmSiteMap.Settings.ProductDictionary.class);
-        setLister(new ServiceTypeLister());
+    public FeatureTypeEditorViewImpl() {
+        super(CrmSiteMap.Settings.FeatureItemType.class, new FeatureTypeEditorForm());
     }
+
 }

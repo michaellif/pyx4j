@@ -22,14 +22,15 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class FeatureTypeLister extends ListerBase<ProductItemType> {
+public class FeatureTypeLister extends ListerBase<FeatureItemType> {
 
     private static final I18n i18n = I18n.get(FeatureTypeLister.class);
 
     public FeatureTypeLister() {
-        super(ProductItemType.class, CrmSiteMap.Settings.FeatureItemType.class, false, true);
+        super(FeatureItemType.class, CrmSiteMap.Settings.FeatureItemType.class, false, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

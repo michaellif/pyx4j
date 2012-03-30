@@ -20,18 +20,20 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class ProductItemTypesDataModel {
 
-    public final List<ProductItemType> serviceItemTypes;
+    public final List<ServiceItemType> serviceItemTypes;
 
-    public final List<ProductItemType> featureItemTypes;
+    public final List<FeatureItemType> featureItemTypes;
 
     public ProductItemTypesDataModel() {
-        serviceItemTypes = new ArrayList<ProductItemType>();
-        featureItemTypes = new ArrayList<ProductItemType>();
+        serviceItemTypes = new ArrayList<ServiceItemType>();
+        featureItemTypes = new ArrayList<FeatureItemType>();
     }
 
     public void generate(boolean persist) {
@@ -70,17 +72,15 @@ public class ProductItemTypesDataModel {
     }
 
     private void generateChargeItemType(String name, Service.Type serviceType) {
-        ProductItemType type = EntityFactory.create(ProductItemType.class);
+        ServiceItemType type = EntityFactory.create(ServiceItemType.class);
         type.name().setValue(name);
-        type.type().setValue(ProductItemType.Type.service);
         type.serviceType().setValue(serviceType);
         serviceItemTypes.add(type);
     }
 
     private void generateChargeItemType(String name, Feature.Type featureType) {
-        ProductItemType type = EntityFactory.create(ProductItemType.class);
+        FeatureItemType type = EntityFactory.create(FeatureItemType.class);
         type.name().setValue(name);
-        type.type().setValue(ProductItemType.Type.feature);
         type.featureType().setValue(featureType);
         featureItemTypes.add(type);
     }
@@ -92,11 +92,11 @@ public class ProductItemTypesDataModel {
         return productItemTypes;
     }
 
-    public List<ProductItemType> getServiceItemTypes() {
+    public List<ServiceItemType> getServiceItemTypes() {
         return serviceItemTypes;
     }
 
-    public List<ProductItemType> getFeatureItemTypes() {
+    public List<FeatureItemType> getFeatureItemTypes() {
         return featureItemTypes;
     }
 

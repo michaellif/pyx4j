@@ -7,16 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on Mar 30, 2012
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
+package com.propertyvista.domain.financial.offering;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.ProductItemType;
+@DiscriminatorValue("feature")
+public interface FeatureItemType extends ProductItemType {
 
-public interface ServiceTypeListerView extends IListerView<ProductItemType> {
-
+    IPrimitive<Feature.Type> featureType();
 }

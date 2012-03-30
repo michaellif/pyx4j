@@ -11,11 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.building.catalog;
+package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 
-public interface ServiceItemTypeCrudService extends AbstractCrudService<ServiceItemType> {
+public interface FeatureTypeViewerView extends IViewerView<FeatureItemType> {
+
 }

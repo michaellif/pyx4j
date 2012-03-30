@@ -79,6 +79,9 @@ public class VistaDBReset {
 
             log.info("Preload time: " + TimeUtils.secSince(start));
             log.info("Total time: " + TimeUtils.secSince(totalStart));
+
+        } catch (Throwable t) {
+            log.error("", t);
         } finally {
             Persistence.service().endTransaction();
         }

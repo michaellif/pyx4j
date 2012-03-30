@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
@@ -76,9 +77,8 @@ class FeatureExEditor extends CEntityDecoratableEditor<BillableItem> {
             BillableItemExtraData extraData = getValue().extraData();
 
             // add extraData editor if necessary:
-            switch (getValue().item().type().type().getValue()) {
-            case feature:
-                switch (getValue().item().type().featureType().getValue()) {
+            if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
+                switch (getValue().item().type().<FeatureItemType> cast().featureType().getValue()) {
                 case parking:
                     editor = new VehicleDataEditor();
                     if (extraData.isNull()) {
@@ -92,7 +92,6 @@ class FeatureExEditor extends CEntityDecoratableEditor<BillableItem> {
                     }
                     break;
                 }
-                break;
             }
 
             if (editor != null) {

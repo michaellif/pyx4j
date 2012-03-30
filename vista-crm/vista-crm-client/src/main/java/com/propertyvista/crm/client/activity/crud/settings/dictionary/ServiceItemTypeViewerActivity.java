@@ -22,13 +22,13 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ServiceTypeViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceItemTypeCrudService;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-public class ServiceItemTypeViewerActivity extends CrmViewerActivity<ProductItemType> {
+public class ServiceItemTypeViewerActivity extends CrmViewerActivity<ServiceItemType> {
 
     @SuppressWarnings("unchecked")
     public ServiceItemTypeViewerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(ServiceTypeViewerView.class), (AbstractCrudService<ProductItemType>) GWT
+        super(place, SettingsViewFactory.instance(ServiceTypeViewerView.class), (AbstractCrudService<ServiceItemType>) GWT
                 .create(ServiceItemTypeCrudService.class));
     }
 }

@@ -25,8 +25,9 @@ import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
@@ -45,13 +46,12 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
     protected DepositPolicy createPolicy(StringBuilder log) {
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
-        EntityQueryCriteria<ProductItemType> srvType = EntityQueryCriteria.create(ProductItemType.class);
-        srvType.add(PropertyCriterion.eq(srvType.proto().type(), ProductItemType.Type.service));
+        EntityQueryCriteria<ServiceItemType> srvType = EntityQueryCriteria.create(ServiceItemType.class);
         srvType.add(new OrCriterion(PropertyCriterion.eq(srvType.proto().serviceType(), Service.Type.commercialUnit), new OrCriterion(PropertyCriterion.eq(
                 srvType.proto().serviceType(), Service.Type.residentialUnit), PropertyCriterion.eq(srvType.proto().serviceType(),
                 Service.Type.residentialShortTermUnit))));
-        List<ProductItemType> services = Persistence.service().query(srvType);
-        for (ProductItemType pit : services) {
+        List<ServiceItemType> services = Persistence.service().query(srvType);
+        for (ServiceItemType pit : services) {
 
             DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
             item.description().setValue(i18n.tr("Security Deposit"));
@@ -63,10 +63,9 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
             policy.policyItems().add(item);
         }
 
-        EntityQueryCriteria<ProductItemType> pitc = EntityQueryCriteria.create(ProductItemType.class);
-        pitc.add(PropertyCriterion.eq(pitc.proto().type(), ProductItemType.Type.feature));
-        List<ProductItemType> features = Persistence.service().query(pitc);
-        for (ProductItemType pit : features) {
+        EntityQueryCriteria<FeatureItemType> pitc = EntityQueryCriteria.create(FeatureItemType.class);
+        List<FeatureItemType> features = Persistence.service().query(pitc);
+        for (FeatureItemType pit : features) {
             if (RandomUtil.randomBoolean()) {
                 switch (pit.featureType().getValue()) {
                 case parking:

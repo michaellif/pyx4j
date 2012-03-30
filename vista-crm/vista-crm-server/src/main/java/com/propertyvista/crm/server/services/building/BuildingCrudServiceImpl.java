@@ -28,7 +28,7 @@ import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
@@ -68,9 +68,9 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             }
         }
 
-        EntityQueryCriteria<ProductItemType> serviceItemCriteria = EntityQueryCriteria.create(ProductItemType.class);
-        serviceItemCriteria.add(PropertyCriterion.in(serviceItemCriteria.proto().featureType(), Feature.Type.addOn, Feature.Type.utility));
-        dto.availableUtilities().addAll(Persistence.service().query(serviceItemCriteria));
+        EntityQueryCriteria<FeatureItemType> featureItemCriteria = EntityQueryCriteria.create(FeatureItemType.class);
+        featureItemCriteria.add(PropertyCriterion.in(featureItemCriteria.proto().featureType(), Feature.Type.addOn, Feature.Type.utility));
+        dto.availableUtilities().addAll(Persistence.service().query(featureItemCriteria));
 
         // Geotagging:
         dto.geoLocation().set(EntityFactory.create(GeoLocation.class));

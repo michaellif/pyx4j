@@ -16,12 +16,13 @@ package com.propertvista.generator.gdo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class ProductItemTypesGDO {
 
-    public final List<ProductItemType> serviceItemTypes = new ArrayList<ProductItemType>();
+    public final List<ServiceItemType> serviceItemTypes = new ArrayList<ServiceItemType>();
 
-    public final List<ProductItemType> featureItemTypes = new ArrayList<ProductItemType>();
+    public final List<FeatureItemType> featureItemTypes = new ArrayList<FeatureItemType>();
 
 }

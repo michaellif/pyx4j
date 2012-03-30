@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.crm.rpc.services.policies.policy.PetPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 import com.propertyvista.domain.policy.policies.PetPolicy;
@@ -60,9 +61,9 @@ public class PetPolicyCrudServiceImpl extends GenericPolicyCrudService<PetPolicy
     }
 
     private void attachNewPets(PetPolicyDTO policyDTO) {
-        EntityQueryCriteria<ProductItemType> criteria = new EntityQueryCriteria<ProductItemType>(ProductItemType.class);
+        EntityQueryCriteria<FeatureItemType> criteria = new EntityQueryCriteria<FeatureItemType>(FeatureItemType.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().featureType(), Feature.Type.pet));
-        List<ProductItemType> availablePets = Persistence.service().query(criteria);
+        List<FeatureItemType> availablePets = Persistence.service().query(criteria);
 
         for (ProductItemType availablePet : availablePets) {
             if (isNewPet(availablePet, policyDTO)) {

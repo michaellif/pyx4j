@@ -146,7 +146,6 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
             @Override
             protected List<ColumnDescriptor> defineColumnDescriptors() {
                 return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().type()).build(),
                     new MemberColumnDescriptor.Builder(proto().name()).build(),
                     new MemberColumnDescriptor.Builder(proto().glCode()).build()
                 );//@formatter:on

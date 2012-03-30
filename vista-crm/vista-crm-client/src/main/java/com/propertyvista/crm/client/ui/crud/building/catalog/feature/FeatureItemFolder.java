@@ -35,6 +35,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
@@ -108,11 +109,10 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
             if (column.getObject() == proto().type()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
-                    final CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().featureType(), parent.getValue().version().type()));
-                    combo.addValueChangeHandler(new ValueChangeHandler<ProductItemType>() {
+                    final CEntityComboBox<FeatureItemType> combo = (CEntityComboBox<FeatureItemType>) comp;
+                    combo.addValueChangeHandler(new ValueChangeHandler<FeatureItemType>() {
                         @Override
-                        public void onValueChange(ValueChangeEvent<ProductItemType> event) {
+                        public void onValueChange(ValueChangeEvent<FeatureItemType> event) {
                             for (ProductItemType item : parent.getValue().catalog().includedUtilities()) {
                                 if (item.equals(event.getValue())) {
                                     MessageDialog.warn(i18n.tr("Note"), i18n.tr("The Selected Utility Type Is Included In The Price"));

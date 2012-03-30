@@ -22,8 +22,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class ProductItemTypesGenerator {
 
@@ -65,18 +66,17 @@ public class ProductItemTypesGenerator {
         createChargeItemType("Booking", Feature.Type.booking);
     }
 
-    public List<ProductItemType> getServiceItemTypes() {
+    public List<ServiceItemType> getServiceItemTypes() {
         return gdo.serviceItemTypes;
     }
 
-    public List<ProductItemType> getFeatureItemTypes() {
+    public List<FeatureItemType> getFeatureItemTypes() {
         return gdo.featureItemTypes;
     }
 
     private void createChargeItemType(String name, Service.Type serviceType) {
-        ProductItemType type = EntityFactory.create(ProductItemType.class);
+        ServiceItemType type = EntityFactory.create(ServiceItemType.class);
         type.name().setValue(name);
-        type.type().setValue(ProductItemType.Type.service);
         type.serviceType().setValue(serviceType);
         type.glCode().set(RandomUtil.random(glCodes));
 
@@ -84,9 +84,8 @@ public class ProductItemTypesGenerator {
     }
 
     private void createChargeItemType(String name, Feature.Type featureType) {
-        ProductItemType type = EntityFactory.create(ProductItemType.class);
+        FeatureItemType type = EntityFactory.create(FeatureItemType.class);
         type.name().setValue(name);
-        type.type().setValue(ProductItemType.Type.feature);
         type.featureType().setValue(featureType);
         type.glCode().set(RandomUtil.random(glCodes));
 

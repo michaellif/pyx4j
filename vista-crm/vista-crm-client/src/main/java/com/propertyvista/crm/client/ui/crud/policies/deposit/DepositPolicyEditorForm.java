@@ -207,7 +207,6 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().type()).build(),
                     new MemberColumnDescriptor.Builder(proto().name()).build()
             );//@formatter:on
         }

@@ -41,6 +41,8 @@ import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
@@ -100,25 +102,22 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         super.onPopulate();
 
         if (!getValue().item().isEmpty()) {
-            switch (getValue().item().type().type().getValue()) {
-            case feature:
+            if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
                 // show effective dates:
                 get(proto().effectiveDate()).setVisible(true);
                 get(proto().expirationDate()).setVisible(true);
 
-                if (getValue().item().type().featureType().getValue() == Feature.Type.utility) {
+                if (getValue().item().type().<FeatureItemType> cast().featureType().getValue() == Feature.Type.utility) {
                     // correct folder item:
                     if (getParent() instanceof CEntityFolderItem) {
                         CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
                         item.setRemovable(false);
                     }
                 }
-                break;
-            case service:
+            } else if (getValue().item().type().isInstanceOf(ServiceItemType.class)) {
                 // hide effective dates:
                 get(proto().effectiveDate()).setVisible(false);
                 get(proto().expirationDate()).setVisible(false);
-                break;
             }
 
             if (isViewable()) {
@@ -131,9 +130,8 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             BillableItemExtraData extraData = getValue().extraData();
 
             // add extraData editor if necessary:
-            switch (getValue().item().type().type().getValue()) {
-            case feature:
-                switch (getValue().item().type().featureType().getValue()) {
+            if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
+                switch (getValue().item().type().<FeatureItemType> cast().featureType().getValue()) {
                 case parking:
                     editor = new VehicleDataEditor();
                     if (extraData.isNull()) {
@@ -147,7 +145,6 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                     }
                     break;
                 }
-                break;
             }
 
             if (editor != null) {

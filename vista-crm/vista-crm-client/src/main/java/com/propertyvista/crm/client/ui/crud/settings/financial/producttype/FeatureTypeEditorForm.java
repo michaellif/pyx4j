@@ -28,18 +28,18 @@ import com.propertyvista.crm.client.ui.components.boxes.GlCodeSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.GlCode;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 
-public class ServiceTypeEditorForm extends CrmEntityForm<ServiceItemType> {
+public class FeatureTypeEditorForm extends CrmEntityForm<FeatureItemType> {
 
     private Widget glCodeSelector;
 
-    public ServiceTypeEditorForm() {
+    public FeatureTypeEditorForm() {
         this(false);
     }
 
-    public ServiceTypeEditorForm(boolean viewMode) {
-        super(ServiceItemType.class, viewMode);
+    public FeatureTypeEditorForm(boolean viewMode) {
+        super(FeatureItemType.class, viewMode);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ServiceTypeEditorForm extends CrmEntityForm<ServiceItemType> {
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceType()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().featureType()), 25).build());
 
         HorizontalPanel glCodePanel = new HorizontalPanel();
         glCodePanel.add(new DecoratorBuilder(inject(proto().glCode(), new CEntityLabel<GlCode>()), 25).build());
@@ -60,7 +60,7 @@ public class ServiceTypeEditorForm extends CrmEntityForm<ServiceItemType> {
                         @Override
                         public boolean onClickOk() {
                             if (!getSelectedItems().isEmpty()) {
-                                get(ServiceTypeEditorForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
+                                get(FeatureTypeEditorForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
                             }
                             return !getSelectedItems().isEmpty();
                         }

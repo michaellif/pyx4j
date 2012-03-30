@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services.building.catalog;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 
-public interface FeatureItemTypeCrudService extends AbstractCrudService<ProductItemType> {
+public interface FeatureItemTypeCrudService extends AbstractCrudService<FeatureItemType> {
 }

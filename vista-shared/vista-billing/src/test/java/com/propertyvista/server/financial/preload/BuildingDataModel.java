@@ -24,9 +24,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -38,9 +40,9 @@ public class BuildingDataModel {
         available, used
     }
 
-    private Map<Service.Type, List<ProductItemType>> serviceMeta;
+    private Map<Service.Type, List<ServiceItemType>> serviceMeta;
 
-    private Map<Feature.Type, List<ProductItemType>> featureMeta;
+    private Map<Feature.Type, List<FeatureItemType>> featureMeta;
 
     private final ProductItemTypesDataModel productItemTypesDataModel;
 
@@ -93,19 +95,19 @@ public class BuildingDataModel {
     }
 
     private void createServiceMeta() {
-        serviceMeta = new HashMap<Service.Type, List<ProductItemType>>();
-        featureMeta = new HashMap<Feature.Type, List<ProductItemType>>();
+        serviceMeta = new HashMap<Service.Type, List<ServiceItemType>>();
+        featureMeta = new HashMap<Feature.Type, List<FeatureItemType>>();
 
-        for (ProductItemType serviceItemType : productItemTypesDataModel.getServiceItemTypes()) {
+        for (ServiceItemType serviceItemType : productItemTypesDataModel.getServiceItemTypes()) {
             if (!serviceMeta.containsKey(serviceItemType.serviceType().getValue())) {
-                serviceMeta.put(serviceItemType.serviceType().getValue(), new ArrayList<ProductItemType>());
+                serviceMeta.put(serviceItemType.serviceType().getValue(), new ArrayList<ServiceItemType>());
             }
             serviceMeta.get(serviceItemType.serviceType().getValue()).add(serviceItemType);
         }
 
-        for (ProductItemType featureItemType : productItemTypesDataModel.getFeatureItemTypes()) {
+        for (FeatureItemType featureItemType : productItemTypesDataModel.getFeatureItemTypes()) {
             if (!featureMeta.containsKey(featureItemType.featureType().getValue())) {
-                featureMeta.put(featureItemType.featureType().getValue(), new ArrayList<ProductItemType>());
+                featureMeta.put(featureItemType.featureType().getValue(), new ArrayList<FeatureItemType>());
             }
             featureMeta.get(featureItemType.featureType().getValue()).add(featureItemType);
         }

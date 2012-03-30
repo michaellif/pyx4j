@@ -21,6 +21,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
@@ -74,7 +75,7 @@ abstract class SelectFeatureBox extends SelectDialog<ProductItem> {
     private static boolean isCompatible(ProductItem item, Feature.Type type) {
 
         if (type.equals(Feature.Type.addOn)) {
-            switch (item.type().featureType().getValue()) {
+            switch (item.type().<FeatureItemType> cast().featureType().getValue()) {
             case utility:
             case pet:
             case parking:
@@ -85,6 +86,6 @@ abstract class SelectFeatureBox extends SelectDialog<ProductItem> {
                 return true;
             }
         }
-        return (item.type().featureType().getValue().equals(type));
+        return (item.type().<FeatureItemType> cast().featureType().getValue().equals(type));
     }
 }

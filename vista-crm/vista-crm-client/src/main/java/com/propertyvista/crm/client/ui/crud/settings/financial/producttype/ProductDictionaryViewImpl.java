@@ -18,31 +18,33 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class ProductDictionaryViewImpl extends CrmViewerViewImplBase<ProductItemType> implements ProductDictionaryView {
 
-    private final IListerView<ProductItemType> serviceLister;
+    private final IListerView<ServiceItemType> serviceLister;
 
-    private final IListerView<ProductItemType> featureLister;
+    private final IListerView<FeatureItemType> featureLister;
 
     public ProductDictionaryViewImpl() {
         super(CrmSiteMap.Settings.ProductDictionary.class, true);
 
-        serviceLister = new ListerInternalViewImplBase<ProductItemType>(new ServiceTypeLister());
-        featureLister = new ListerInternalViewImplBase<ProductItemType>(new FeatureTypeLister());
+        serviceLister = new ListerInternalViewImplBase<ServiceItemType>(new ServiceTypeLister());
+        featureLister = new ListerInternalViewImplBase<FeatureItemType>(new FeatureTypeLister());
 
         // set main form here: 
         setForm(new ProductDictionaryViewForm());
     }
 
     @Override
-    public IListerView<ProductItemType> getServiceListerView() {
+    public IListerView<ServiceItemType> getServiceListerView() {
         return serviceLister;
     }
 
     @Override
-    public IListerView<ProductItemType> getFeatureListerView() {
+    public IListerView<FeatureItemType> getFeatureListerView() {
         return featureLister;
     }
 }

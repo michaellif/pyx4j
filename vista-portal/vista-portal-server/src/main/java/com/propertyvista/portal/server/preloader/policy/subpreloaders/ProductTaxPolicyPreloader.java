@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
@@ -38,8 +38,8 @@ public class ProductTaxPolicyPreloader extends AbstractPolicyPreloader<ProductTa
     protected ProductTaxPolicy createPolicy(StringBuilder log) {
         ProductTaxPolicy policy = EntityFactory.create(ProductTaxPolicy.class);
 
-        EntityQueryCriteria<ProductItemType> pitc = EntityQueryCriteria.create(ProductItemType.class);
-        for (ProductItemType pit : Persistence.service().query(pitc)) {
+        EntityQueryCriteria<FeatureItemType> pitc = EntityQueryCriteria.create(FeatureItemType.class);
+        for (FeatureItemType pit : Persistence.service().query(pitc)) {
             if (RandomUtil.randomBoolean()) { // do not process all items...
                 ProductTaxPolicyItem item = EntityFactory.create(ProductTaxPolicyItem.class);
                 item.productItemType().set(pit);

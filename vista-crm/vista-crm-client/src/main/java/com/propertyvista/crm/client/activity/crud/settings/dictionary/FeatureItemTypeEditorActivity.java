@@ -16,29 +16,21 @@ package com.propertyvista.crm.client.activity.crud.settings.dictionary;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ServiceTypeEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.FeatureTypeEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureItemTypeCrudService;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 
-public class FeatureItemTypeEditorActivity extends EditorActivityBase<ProductItemType> {
+public class FeatureItemTypeEditorActivity extends EditorActivityBase<FeatureItemType> {
 
     @SuppressWarnings("unchecked")
     public FeatureItemTypeEditorActivity(Place place) {
-        super(place, SettingsViewFactory.instance(ServiceTypeEditorView.class), (AbstractCrudService<ProductItemType>) GWT
-                .create(FeatureItemTypeCrudService.class), ProductItemType.class);
+        super(place, SettingsViewFactory.instance(FeatureTypeEditorView.class), (AbstractCrudService<FeatureItemType>) GWT
+                .create(FeatureItemTypeCrudService.class), FeatureItemType.class);
     }
 
-    @Override
-    protected void createNewEntity(AsyncCallback<ProductItemType> callback) {
-        ProductItemType entity = EntityFactory.create(entityClass);
-        entity.type().setValue(ProductItemType.Type.feature);
-        callback.onSuccess(entity);
-    }
 }

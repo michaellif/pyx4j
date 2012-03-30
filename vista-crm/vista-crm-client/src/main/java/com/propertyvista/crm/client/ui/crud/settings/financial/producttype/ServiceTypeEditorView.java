@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-public interface ServiceTypeEditorView extends IEditorView<ProductItemType> {
+public interface ServiceTypeEditorView extends IEditorView<ServiceItemType> {
 
 }

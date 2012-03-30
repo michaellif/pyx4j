@@ -7,15 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on Mar 30, 2012
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.building.catalog;
+package com.propertyvista.domain.financial.offering;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+@DiscriminatorValue("service")
+public interface ServiceItemType extends ProductItemType {
 
-public interface ServiceItemTypeCrudService extends AbstractCrudService<ServiceItemType> {
+    IPrimitive<Service.Type> serviceType();
 }
