@@ -23,7 +23,7 @@ public class SelectServiceItemLister extends ListerBase<ProductItem> {
     public SelectServiceItemLister() {
         super(ProductItem.class);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
-        getDataTablePanel().setPageSize(5);
+        getDataTablePanel().setPageSize(PAGESIZE_SMALL);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().type()).build(),

@@ -23,7 +23,7 @@ public class SelectedFloorplanLister extends ListerBase<Floorplan> {
     public SelectedFloorplanLister() {
         super(Floorplan.class, null, false, false);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
-        getDataTablePanel().setPageSize(8);
+        getDataTablePanel().setPageSize(PAGESIZE_SMALL);
 
         setColumnDescriptors(//@formatter:off
         new MemberColumnDescriptor.Builder(proto().name()).visible(false).build(),
