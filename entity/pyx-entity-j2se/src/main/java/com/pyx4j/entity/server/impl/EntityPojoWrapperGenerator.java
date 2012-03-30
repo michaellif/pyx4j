@@ -156,11 +156,14 @@ public class EntityPojoWrapperGenerator {
                 }
                 addAnnotationValue(implClass, XmlRootElement.class, "name", name);
             }
+            boolean abstractClass = false;
             if (entityMeta.getAnnotation(AbstractEntity.class) != null) {
                 Map<String, String> pojoNames = createAssignableFromPojo(entityMeta.getEntityClass());
                 if (!pojoNames.isEmpty()) {
                     addAnnotationClassValues(implClass, XmlSeeAlso.class, "value", pojoNames.values());
                 }
+                implClass.setModifiers(implClass.getModifiers() & ~Modifier.ABSTRACT);
+                abstractClass = true;
             }
 
             List<String> xmlMemberNames = new Vector<String>();
@@ -213,7 +216,9 @@ public class EntityPojoWrapperGenerator {
                 String beanMemberName = getBeanName(memberName);
 
                 CtMethod memberGet = new CtMethod(ctValueClass, "get" + beanMemberName, null, implClass);
-                memberGet.setBody(createGetBody(ctValueClass, memberMeta, entityClassName));
+                if (!abstractClass) {
+                    memberGet.setBody(createGetBody(ctValueClass, memberMeta, entityClassName));
+                }
                 implClass.addMethod(memberGet);
 
                 if (memberMeta.getAnnotation(XmlTransient.class) != null) {
@@ -241,7 +246,9 @@ public class EntityPojoWrapperGenerator {
                 }
 
                 CtMethod memberSet = new CtMethod(CtClass.voidType, "set" + beanMemberName, new CtClass[] { ctValueClass }, implClass);
-                memberSet.setBody(createSetBody(memberMeta, entityClassName));
+                if (!abstractClass) {
+                    memberSet.setBody(createSetBody(memberMeta, entityClassName));
+                }
                 implClass.addMethod(memberSet);
             }
             addXmlTypeAnnotationValue(implClass, "name", getXMLName(entityMeta.getEntityClass()), xmlMemberNames);

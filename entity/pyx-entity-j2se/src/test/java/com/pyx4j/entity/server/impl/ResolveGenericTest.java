@@ -1,11 +1,3 @@
-package com.pyx4j.entity.server.impl;
-
-import java.lang.reflect.Method;
-
-import junit.framework.TestCase;
-
-import org.junit.Assert;
-
 /*
  * Pyx4j framework
  * Copyright (C) 2008-2011 pyx4j.com.
@@ -26,6 +18,13 @@ import org.junit.Assert;
  * @author vlads
  * @version $Id$
  */
+package com.pyx4j.entity.server.impl;
+
+import java.lang.reflect.Method;
+
+import junit.framework.TestCase;
+
+import org.junit.Assert;
 
 public class ResolveGenericTest extends TestCase {
 
@@ -53,6 +52,17 @@ public class ResolveGenericTest extends TestCase {
 
         method = interfaceClass.getMethod("getCE", (Class[]) null);
         Assert.assertEquals(Integer.class, EntityImplReflectionHelper.resolveGenericType(method.getGenericReturnType(), interfaceClass));
+    }
+
+    private static interface GN<E extends Number> {
+        E getNumber();
+    }
+
+    public void testGenericTypeMethodReturnType() throws NoSuchMethodException, SecurityException {
+        Class<?> interfaceClass = GN.class;
+
+        Method method = interfaceClass.getMethod("getNumber", (Class[]) null);
+        Assert.assertEquals(Number.class, EntityImplReflectionHelper.resolveGenericType(method.getGenericReturnType(), interfaceClass));
     }
 
     private static interface D1 extends C<Integer> {

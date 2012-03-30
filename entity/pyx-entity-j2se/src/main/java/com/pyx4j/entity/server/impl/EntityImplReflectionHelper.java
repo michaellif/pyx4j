@@ -92,6 +92,13 @@ public class EntityImplReflectionHelper {
                     return resolved;
                 }
             }
+
+            // Not found return Raw Type of generic
+            for (Type boundType : typeVariable.getBounds()) {
+                if (boundType instanceof Class<?>) {
+                    return (Class<?>) boundType;
+                }
+            }
         }
         return null;
     }
