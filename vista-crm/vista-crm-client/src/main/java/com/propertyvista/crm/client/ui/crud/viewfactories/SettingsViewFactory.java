@@ -36,6 +36,10 @@ import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentre
 import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.FeatureTypeEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.FeatureTypeEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.FeatureTypeViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.FeatureTypeViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ProductDictionaryView;
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ProductDictionaryViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ServiceTypeEditorView;
@@ -82,6 +86,11 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new ServiceTypeViewerViewImpl());
             } else if (ServiceTypeEditorView.class.equals(type)) {
                 map.put(type, new ServiceTypeEditorViewImpl());
+
+            } else if (FeatureTypeViewerView.class.equals(type)) {
+                map.put(type, new FeatureTypeViewerViewImpl());
+            } else if (FeatureTypeEditorView.class.equals(type)) {
+                map.put(type, new FeatureTypeEditorViewImpl());
 
             } else if (CrmRoleListerView.class.equals(type)) {
                 map.put(type, new CrmRoleListerViewImpl());
