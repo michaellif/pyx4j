@@ -16,7 +16,7 @@
 	<field name="serviceCharge" class="java.math.BigDecimal"/>
 	<field name="recurringFeatureCharges" class="java.math.BigDecimal"/>
 	<field name="oneTimeFeatureCharges" class="java.math.BigDecimal"/>
-	<field name="depositPaidAmount" class="java.math.BigDecimal"/>
+	<field name="depositAmount" class="java.math.BigDecimal"/>
 	<field name="totalAdjustments" class="java.math.BigDecimal"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
@@ -295,7 +295,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{depositPaidAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{depositAmount}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="320" y="168" width="60" height="1"/>

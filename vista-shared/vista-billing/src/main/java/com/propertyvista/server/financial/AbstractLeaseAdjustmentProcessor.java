@@ -24,7 +24,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.server.financial.billing.TaxUtils;
 
-public class AbstractLeaseAdjustmentProcessor {
+public class AbstractLeaseAdjustmentProcessor extends AbstractProcessor {
 
     protected InvoiceAccountCharge createCharge(LeaseAdjustment adjustment) {
         InvoiceAccountCharge charge = EntityFactory.create(InvoiceAccountCharge.class);

@@ -142,7 +142,7 @@ public interface Bill extends IEntity {
      */
     IPrimitive<BigDecimal> totalAdjustments();
 
-    IPrimitive<BigDecimal> depositPaidAmount();
+    IPrimitive<BigDecimal> depositAmount();
 
     IPrimitive<BigDecimal> credits();
 

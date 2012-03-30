@@ -45,6 +45,8 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
+import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
+import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
@@ -112,6 +114,9 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
     protected Bill runBilling(boolean confirm, boolean printBill) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
+
+        DataDump.dump("leaseT", lease);
+
         ServerSideFactory.create(BillingFacade.class).runBilling(lease);
 
         Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
@@ -193,7 +198,9 @@ abstract class BillingTestBase extends VistaDBTestBase {
     }
 
     protected BillableItem addPet() {
-        return addBillableItem(Type.pet);
+        BillableItem billableItem = addBillableItem(Type.pet);
+        setDeposit(billableItem.uid().getValue(), "200", ValueType.amount, RepaymentMode.returnAtLeaseEnd);
+        return billableItem;
     }
 
     protected BillableItem addBooking(String date) {
@@ -243,6 +250,17 @@ abstract class BillingTestBase extends VistaDBTestBase {
             }
         }
         return null;
+    }
+
+    protected void setDeposit(String billableItemId, String value, ValueType valueType, RepaymentMode repaymentMode) {
+        Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
+        BillableItem billableItem = findBillableItem(billableItemId, lease);
+        billableItem.deposit().depositAmount().setValue(new BigDecimal(value));
+        billableItem.deposit().valueType().setValue(valueType);
+        billableItem.deposit().repaymentMode().setValue(repaymentMode);
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.service().persist(lease);
+        Persistence.service().commit();
     }
 
     protected BillableItemAdjustment addServiceAdjustment(String value, AdjustmentType adjustmentType, ExecutionType termType) {

@@ -45,6 +45,8 @@ class Billing {
 
     private final BillingPaymentProcessor paymentProcessor;
 
+    private final BillingDepositProcessor depositProcessor;
+
     private final BillingLeaseAdjustmentProcessor leaseAdjustmentProcessor;
 
     private final BillingProductChargeProcessor productChargeProcessor;
@@ -62,6 +64,8 @@ class Billing {
 
         productChargeProcessor = new BillingProductChargeProcessor(this);
 
+        depositProcessor = new BillingDepositProcessor(this);
+
         paymentProcessor = new BillingPaymentProcessor(this);
 
         leaseAdjustmentProcessor = new BillingLeaseAdjustmentProcessor(this);
@@ -78,11 +82,12 @@ class Billing {
         nextPeriodBill.immediateAdjustments().setValue(new BigDecimal(0));
         nextPeriodBill.depositRefundAmount().setValue(new BigDecimal(0));
         nextPeriodBill.taxes().setValue(new BigDecimal(0));
-        nextPeriodBill.depositPaidAmount().setValue(new BigDecimal(0));
+        nextPeriodBill.depositAmount().setValue(new BigDecimal(0));
 
         getPreviousTotals();
 
         productChargeProcessor.createCharges();
+        depositProcessor.createDeposits();
         leaseAdjustmentProcessor.createPendingLeaseAdjustments();
         leaseAdjustmentProcessor.attachImmediateLeaseAdjustments();
 
@@ -109,7 +114,7 @@ class Billing {
         nextPeriodBill.currentAmount().setValue(
                 nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.serviceCharge().getValue())
                         .add(nextPeriodBill.recurringFeatureCharges().getValue()).add(nextPeriodBill.oneTimeFeatureCharges().getValue())
-                        .add(nextPeriodBill.totalAdjustments().getValue()).subtract(nextPeriodBill.depositPaidAmount().getValue()));
+                        .add(nextPeriodBill.totalAdjustments().getValue()).add(nextPeriodBill.depositAmount().getValue()));
 
         nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue()));
     }

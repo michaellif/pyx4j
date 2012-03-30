@@ -26,8 +26,9 @@ import com.propertyvista.domain.financial.billing.InvoiceConcessionSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.server.financial.AbstractProcessor;
 
-public class BillingProductChargeProcessor {
+public class BillingProductChargeProcessor extends AbstractProcessor {
 
     private static final I18n i18n = I18n.get(BillingProductChargeProcessor.class);
 
@@ -72,10 +73,6 @@ public class BillingProductChargeProcessor {
             return;
         }
         addCharge(createCharge(billableItem, billing.getNextPeriodBill(), InvoiceProductCharge.Period.next));
-    }
-
-    private boolean sameBillableItem(BillableItem billableItem1, BillableItem billableItem2) {
-        return billableItem1.uid().equals(billableItem2.uid());
     }
 
     private void reviseChargeForCurrentPeriod(BillableItem billableItem) {

@@ -22,7 +22,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -69,7 +68,7 @@ public interface Deposit extends IEntity {
     @Owner
     @ReadOnly
     @Detached
-    @JoinColumn
+    //@JoinColumn
     BillableItem billableItem();
 
     IPrimitive<LogicalDate> depositDate();

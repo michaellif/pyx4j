@@ -20,7 +20,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
-import com.propertyvista.server.financial.billing.BillingUtils;
 
 public class BillTester extends Tester {
 
@@ -112,6 +111,11 @@ public class BillTester extends Tester {
 
     public BillTester paymentReceivedAmount(String value) {
         assertEquals("Payment Received Amount", new BigDecimal(value), bill.paymentReceivedAmount().getValue());
+        return this;
+    }
+
+    public BillTester depositAmount(String value) {
+        assertEquals("Deposit Amount", new BigDecimal(value), bill.depositAmount().getValue());
         return this;
     }
 

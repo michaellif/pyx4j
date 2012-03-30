@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.financial.preload;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -25,6 +26,8 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
+import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
+import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
@@ -44,8 +47,6 @@ public class LeaseDataModel {
 
     }
 
-    Lease lease2;
-
     public void generate(boolean persist) {
 
         serviceItem = buildingDataModel.generateResidentialUnitServiceItem();
@@ -56,6 +57,10 @@ public class LeaseDataModel {
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         lease.version().leaseProducts().serviceItem().item().set(serviceItem);
+
+        lease.version().leaseProducts().serviceItem().deposit().depositAmount().setValue(new BigDecimal("1.0"));
+        lease.version().leaseProducts().serviceItem().deposit().valueType().setValue(ValueType.percentage);
+        lease.version().leaseProducts().serviceItem().deposit().repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
 
         lease.leaseFrom().setValue(new LogicalDate(111, 1, 25));
         lease.approvalDate().setValue(lease.leaseFrom().getValue());
@@ -73,8 +78,6 @@ public class LeaseDataModel {
         if (persist) {
             lease.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.service().persist(lease);
-
-            lease2 = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
         }
     }
 

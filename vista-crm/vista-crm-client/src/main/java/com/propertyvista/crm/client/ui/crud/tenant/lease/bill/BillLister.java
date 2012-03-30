@@ -43,7 +43,7 @@ public class BillLister extends ListerBase<BillDTO> {
             new MemberColumnDescriptor.Builder(proto().immediateAdjustments(),false).build(),
             
             new MemberColumnDescriptor.Builder(proto().totalAdjustments(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().depositPaidAmount(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().depositAmount(),false).build(),
             
             new MemberColumnDescriptor.Builder(proto().pastDueAmount(),false).build(),
             new MemberColumnDescriptor.Builder(proto().serviceCharge(),false).build(),

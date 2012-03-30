@@ -11,19 +11,13 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.server.financial.ar;
+package com.propertyvista.server.financial;
 
-import com.pyx4j.i18n.shared.I18n;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.server.financial.AbstractProcessor;
+public class AbstractProcessor {
 
-public class ARDepositProcessor extends AbstractProcessor {
-
-    private static final I18n i18n = I18n.get(ARDepositProcessor.class);
-
-    void postDepositRefund(Deposit deposit) {
-//TODO
+    protected boolean sameBillableItem(BillableItem billableItem1, BillableItem billableItem2) {
+        return billableItem1.uid().equals(billableItem2.uid());
     }
-
 }

@@ -68,22 +68,6 @@ public class BuildingDataModel {
         return unit;
     }
 
-    public ProductItem generateResidentialUnitServiceItem() {
-        ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.type().set(serviceMeta.get(Service.Type.residentialUnit).get(0));
-        productItem.element().set(generateResidentialUnit());
-        productItem.price().setValue(new BigDecimal("930.30"));
-        productItem.description().setValue(productItem.type().name().getValue());
-
-        standardResidentialService.version().items().add(productItem);
-
-        if (persist) {
-            Persistence.service().persist(standardResidentialService);
-        }
-
-        return productItem;
-    }
-
     public void generate(boolean persist) {
         this.persist = persist;
 
@@ -141,6 +125,22 @@ public class BuildingDataModel {
         standardResidentialService.version().type().setValue(Service.Type.residentialUnit);
         standardResidentialService.version().name().setValue("Standard Residential Unit");
         standardResidentialService.version().description().setValue("Standard Residential Unit Lease for 1 year term");
+    }
+
+    public ProductItem generateResidentialUnitServiceItem() {
+        ProductItem productItem = EntityFactory.create(ProductItem.class);
+        productItem.type().set(serviceMeta.get(Service.Type.residentialUnit).get(0));
+        productItem.element().set(generateResidentialUnit());
+        productItem.price().setValue(new BigDecimal("930.30"));
+        productItem.description().setValue(productItem.type().name().getValue());
+
+        standardResidentialService.version().items().add(productItem);
+
+        if (persist) {
+            Persistence.service().persist(standardResidentialService);
+        }
+
+        return productItem;
     }
 
     private void generateFeatures() {

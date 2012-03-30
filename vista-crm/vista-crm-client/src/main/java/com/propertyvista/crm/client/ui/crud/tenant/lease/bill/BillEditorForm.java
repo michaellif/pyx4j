@@ -74,7 +74,7 @@ public class BillEditorForm extends CrmEntityForm<BillDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().oneTimeFeatureCharges()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalAdjustments()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositPaidAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositAmount()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credits()), 10).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount()), 10).build());
