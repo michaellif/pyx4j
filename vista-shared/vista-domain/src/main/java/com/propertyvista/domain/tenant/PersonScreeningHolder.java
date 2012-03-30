@@ -20,16 +20,16 @@ import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.person.Person;
 
 @AbstractEntity
 @Inheritance
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface PersonScreeningHolder extends IEntity {
+public interface PersonScreeningHolder extends IUserEntity {
 
     @ToString(index = 0)
     @EmbeddedEntity

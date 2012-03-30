@@ -116,7 +116,20 @@ public class IdAssignmentPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
                     CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());
                     combo.getOptions().clear();
                     combo.setOptions(Arrays.asList(IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
+                } else if (getValue().target().getValue() == IdTarget.lease) {
+                    CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());
+                    combo.getOptions().clear();
+                    combo.setOptions(Arrays.asList(IdAssignmentType.userAssigned, IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
+                } else if (getValue().target().getValue() == IdTarget.tenant) {
+                    CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());
+                    combo.getOptions().clear();
+                    combo.setOptions(Arrays.asList(IdAssignmentType.userAssigned, IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
+                } else if (getValue().target().getValue() == IdTarget.lead) {
+                    CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());
+                    combo.getOptions().clear();
+                    combo.setOptions(Arrays.asList(IdAssignmentType.userAssigned, IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
                 }
+
             }
         }
 
