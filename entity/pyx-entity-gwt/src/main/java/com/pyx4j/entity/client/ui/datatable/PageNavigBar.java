@@ -227,6 +227,8 @@ public class PageNavigBar extends Toolbar {
     public void setPageSizeOptions(List<Integer> pageSizeOptions) {
         this.pageSizeOptions = pageSizeOptions;
         pageSizeContentPanel.setVisible(this.pageSizeOptions != null);
+
+        pageSizeSelector.clear();
         if (this.pageSizeOptions != null) {
             for (Integer size : pageSizeOptions) {
                 pageSizeSelector.addItem(String.valueOf(size));

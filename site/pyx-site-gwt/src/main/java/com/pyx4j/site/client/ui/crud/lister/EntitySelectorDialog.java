@@ -170,6 +170,7 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
                 setSelectable(true);
             }
 
+            getDataTablePanel().setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
             getDataTablePanel().setPageSize(PAGESIZE_SMALL);
 
             setColumnDescriptors(EntitySelectorDialog.this.defineColumnDescriptors());
