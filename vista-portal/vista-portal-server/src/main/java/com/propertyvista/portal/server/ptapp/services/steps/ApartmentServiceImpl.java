@@ -164,6 +164,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         aptInfo.leaseFrom().setValue(lease.leaseFrom().getValue());
         aptInfo.leaseTo().setValue(lease.leaseTo().getValue());
         aptInfo.unitRent().setValue(lease.version().leaseProducts().serviceItem().item().price().getValue());
+        aptInfo.unit().set(lease.unit());
 
         return aptInfo;
     }
