@@ -91,7 +91,9 @@ public class UnitDetailsPage extends BasePage {
 
             @Override
             protected void populateItem(ListItem<FloorplanAmenity> item) {
-                item.add(new Label("amenity", item.getModelObject().type().getValue().toString()));
+                FloorplanAmenity am = item.getModelObject();
+                String amType = am.type().isNull() ? "N/A" : am.type().getValue().toString();
+                item.add(new Label("amenity", amType));
             }
         });
         add(new BookmarkablePageLink<Void>("requestApmnt", InquiryPage.class, params).setBody(new Model<String>(i18n.tr("Request Appointment"))));
