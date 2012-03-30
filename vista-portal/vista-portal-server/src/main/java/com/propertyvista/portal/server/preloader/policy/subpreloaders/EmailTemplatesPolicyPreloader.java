@@ -77,6 +77,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplateType type = EmailTemplateType.PasswordRetrievalCrm;
 
         PasswordRequestCrmT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestCrmT.class);
+        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.type().setValue(type);
@@ -84,9 +85,10 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
                 "Dear {0},<br/>\n" +
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
-                "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n" +
-                "    <a style=\"color:#929733\" href=\"{1}\">Change Your Password</a>",
+                "Click the link below to go to the {1} site and create new password for your account:<br/>\n" +
+                "    <a style=\"color:#929733\" href=\"{2}\">Change Your Password</a>",
                 EmailTemplateManager.getVarname(pwdReqT.requestorName()),
+                EmailTemplateManager.getVarname(portalT.companyName()),
                 EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl())
         )));//@formatter:on
         return template;
@@ -96,6 +98,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplateType type = EmailTemplateType.PasswordRetrievalTenant;
 
         PasswordRequestT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestT.class);
+        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.type().setValue(type);
@@ -103,9 +106,10 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
                 "Dear {0},<br/>\n" +
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
-                "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n" +
-                "    <a style=\"color:#929733\" href=\"{1}\">Change Your Password</a>",
+                "Click the link below to go to the {1} site and create new password for your account:<br/>\n" +
+                "    <a style=\"color:#929733\" href=\"{2}\">Change Your Password</a>",
                 EmailTemplateManager.getVarname(pwdReqT.requestorName()),
+                EmailTemplateManager.getVarname(portalT.companyName()),
                 EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl())
         )));//@formatter:on
         return template;
@@ -281,15 +285,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
                 "<h3>Welcome {0}!</h3><br/><br/>" +                        
 
-                "Click the link below to access Property Vista site and create new password for your account:<br/>\n" +
-                "    <a style=\"color:#929733\" href=\"{1}\">Reset Your Password</a>" +
+                "Click the link below to access {1} site and create new password for your account:<br/>\n" +
+                "    <a style=\"color:#929733\" href=\"{2}\">Reset Your Password</a>" +
                 
-                "According to our records, your lease start date is on {2}, {3}<br/></br>" +
+                "According to our records, your lease start date is on {3}, {4}<br/></br>" +
 
                 "We are excited to have you join the Online Tenant Portal that we created just for you! Please keep " +
                 "your username and password as they will be required to access your Portal. You can visit it anytime by " +
-                "going to {4} and clicking on Residents menu tab. You will be redirected to Online Tenant Portal immediately. " +
-                "Or, alternatively, you can reach that page directly by going to {5}.<br/><br/>" +
+                "going to {5} and clicking on Residents menu tab. You will be redirected to Online Tenant Portal immediately. " +
+                "Or, alternatively, you can reach that page directly by going to {6}.<br/><br/>" +
 
                 "Should you have any concerns or questions, please do not hesistate to contact us directly.<br/><br/>" +
                         
@@ -299,6 +303,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "{7}<br/>",
                 
                 EmailTemplateManager.getVarname(pwdReqT.requestorName()),
+                EmailTemplateManager.getVarname(portalT.companyName()),
                 EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl()),
                 EmailTemplateManager.getVarname(leaseT.startDateWeekday()),
                 EmailTemplateManager.getVarname(leaseT.startDate()),
