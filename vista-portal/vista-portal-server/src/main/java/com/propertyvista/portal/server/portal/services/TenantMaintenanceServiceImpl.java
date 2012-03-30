@@ -75,6 +75,7 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
         req.status().setValue(MaintenanceRequestStatus.Submitted);
         req.submitted().setValue(new LogicalDate());
         Persistence.service().persist(req);
+        Persistence.service().commit();
 
         callback.onSuccess(null);
     }
@@ -89,6 +90,7 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
             req.status().setValue(MaintenanceRequestStatus.Cancelled);
             req.updated().setValue(new LogicalDate());
             Persistence.service().merge(req);
+            Persistence.service().commit();
             listOpenIssues(callback);
         } else {
             callback.onFailure(new Throwable("Ticket not found."));
@@ -105,6 +107,7 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
             MaintenanceRequest req = rs.get(0);
             req.surveyResponse().rating().setValue(rate);
             Persistence.service().merge(req);
+            Persistence.service().commit();
             callback.onSuccess(null);
         } else {
             callback.onFailure(new Throwable("Ticket not found."));
