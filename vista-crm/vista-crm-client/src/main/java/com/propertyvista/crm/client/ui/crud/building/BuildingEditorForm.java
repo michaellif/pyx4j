@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.ValidationUtils;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
@@ -132,9 +133,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.add(createContactTab(), i18n.tr("Contacts"));
         tabPanel.add(createNotesAndAttachmentsTab(), i18n.tr("Notes & Attachments"));
 
-        tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getBillingRunListerView().asWidget()),
-                i18n.tr("Billing Runs"));
-        tabPanel.setLastTabDisabled(isEditable());
+        if (ApplicationMode.isDevelopment()) {
+            tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getBillingRunListerView().asWidget()),
+                    i18n.tr("Billing Runs"));
+            tabPanel.setLastTabDisabled(isEditable());
+        }
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;

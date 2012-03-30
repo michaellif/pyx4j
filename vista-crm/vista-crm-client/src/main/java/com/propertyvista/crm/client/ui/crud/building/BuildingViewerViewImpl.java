@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
@@ -107,7 +108,9 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
                 ((BuildingViewerView.Presenter) presenter).runBill();
             }
         });
-        addToolbarItem(runBillAction.asWidget());
+        if (ApplicationMode.isDevelopment()) {
+            addToolbarItem(runBillAction.asWidget());
+        }
     }
 
     @Override
