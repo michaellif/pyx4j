@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -103,7 +102,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         while (i.hasNext()) {
             UnitAvailabilityStatus unitStatus = i.next();
-            if (!unitStatus.vacancyStatus().isNull() & filter.isAcceptable(unitStatus)) {
+            if (filter.isAcceptable(unitStatus)) {
                 ++currentPagePosition;
                 ++totalRows;
                 if (currentPagePosition > pageSize) {
@@ -170,28 +169,28 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             return new StatusFilter() {
                 @Override
                 public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return status.rentedStatus().getValue() != RentedStatus.Rented;
+                    return !status.vacancyStatus().isNull() & status.rentedStatus().getValue() != RentedStatus.Rented;
                 }
             };
         case Notice:
             return new StatusFilter() {
                 @Override
                 public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return status.vacancyStatus().getValue() == Vacancy.Notice;
+                    return !status.vacancyStatus().isNull() & status.vacancyStatus().getValue() == Vacancy.Notice;
                 }
             };
         case Rented:
             return new StatusFilter() {
                 @Override
                 public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return status.rentedStatus().getValue() == RentedStatus.Rented;
+                    return !status.vacancyStatus().isNull() & status.rentedStatus().getValue() == RentedStatus.Rented;
                 }
             };
         case Vacant:
             return new StatusFilter() {
                 @Override
                 public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return status.vacancyStatus().getValue() == Vacancy.Vacant;
+                    return !status.vacancyStatus().isNull() & status.vacancyStatus().getValue() == Vacancy.Vacant;
                 }
             };
         case VacantAndNotice:
@@ -222,7 +221,8 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         }
         criteria.add(PropertyCriterion.le(criteria.proto().statusDate(), toDate));
         // use descending order of the status date in order to select the most recent statuses first
-        criteria.desc(criteria.proto().statusDate().getPath().toString());
+        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusDate().getPath()
+                .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
 
         List<UnitAvailabilityStatus> unitStatuses = Persistence.service().query(criteria);
 
@@ -240,14 +240,11 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         int netExposure = 0;
 
-        // use hash to mark units, since we need only the last date
-        // TODO use proper sorting by unit PK to avoid the usage of hash 
-        HashSet<Key> checkedUnits = new HashSet<Key>(unitStatuses.size());
-
+        Key pervUnitPK = null;
         for (UnitAvailabilityStatus unitStatus : unitStatuses) {
-            if (!checkedUnits.add(unitStatus.unit().getPrimaryKey())) {
-                continue;
-            } else {
+            Key thisUnitPK = unitStatus.unit().getPrimaryKey();
+            if (!thisUnitPK.equals(pervUnitPK)) {
+                pervUnitPK = thisUnitPK;
                 ++total;
 
                 // check that we have vacancy status, and don't waste the cpu cycles if we don't have it
