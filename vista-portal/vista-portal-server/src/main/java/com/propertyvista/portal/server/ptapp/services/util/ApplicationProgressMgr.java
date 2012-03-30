@@ -147,13 +147,14 @@ public class ApplicationProgressMgr extends ApplicationManager {
     }
 
     public static void invalidateChargesStep(Application application) {
-        ApplicationWizardStep chargesStep = findWizardStep(application, PtSiteMap.Charges.class);
-        switch (chargesStep.status().getValue()) {
-        case latest:
-        case complete:
-            chargesStep.status().setValue(ApplicationWizardStep.Status.invalid);
-            Persistence.service().merge(chargesStep);
-        }
+// TODO : Charges and Payment steps are closed (removed) so far...        
+//        ApplicationWizardStep chargesStep = findWizardStep(application, PtSiteMap.Charges.class);
+//        switch (chargesStep.status().getValue()) {
+//        case latest:
+//        case complete:
+//            chargesStep.status().setValue(ApplicationWizardStep.Status.invalid);
+//            Persistence.service().merge(chargesStep);
+//        }
     }
 
     public static void invalidateSummaryStep(Application application) {
