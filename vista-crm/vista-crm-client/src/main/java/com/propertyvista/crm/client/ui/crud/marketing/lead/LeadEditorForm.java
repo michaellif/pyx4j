@@ -108,35 +108,32 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseType()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveInDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTerm()), 9).build());
-
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new CEntitySelectorHyperlink<Floorplan>() {
-                @Override
-                protected AppPlace getTargetPlace() {
-                    return MainActivityMapper.getCrudAppPlace(Floorplan.class).formViewerPlace(getValue().getPrimaryKey());
-                }
-
-                @Override
-                protected EntitySelectorDialog<Floorplan> getSelectorDialog() {
-                    return new FloorplanSelectorDialogDialog() {
-                        @Override
-                        public boolean onClickOk() {
-                            if (!getSelectedItems().isEmpty()) {
-                                ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(getSelectedItems().get(0));
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                    };
-                }
-            }), 20).build());
-
         } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building()), 20).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
         }
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new CEntitySelectorHyperlink<Floorplan>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return MainActivityMapper.getCrudAppPlace(Floorplan.class).formViewerPlace(getValue().getPrimaryKey());
+            }
+
+            @Override
+            protected EntitySelectorDialog<Floorplan> getSelectorDialog() {
+                return new FloorplanSelectorDialogDialog() {
+                    @Override
+                    public boolean onClickOk() {
+                        if (!getSelectedItems().isEmpty()) {
+                            ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(getSelectedItems().get(0));
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                };
+            }
+        }), 20).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().agent()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());

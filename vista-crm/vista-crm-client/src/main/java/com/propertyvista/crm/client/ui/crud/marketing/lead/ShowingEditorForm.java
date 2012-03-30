@@ -13,18 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
-import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -51,36 +50,33 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
         int row = -1;
 
         if (isEditable()) {
-            HorizontalPanel unitPanel1 = new HorizontalPanel();
-            HorizontalPanel unitPanel2 = new HorizontalPanel();
-            unitPanel1.add(new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
-            unitPanel2.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel<AptUnit>()), 20).build());
-            unitPanel2.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    new UnitSelectorDialog() {
-                        @Override
-                        public boolean onClickOk() {
-                            if (!getSelectedItems().isEmpty()) {
-                                ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
-                            }
-                            return !getSelectedItems().isEmpty();
-                        }
-                    }.show();
-                }
-            }));
-            main.setWidget(++row, 0, unitPanel1);
-            main.setWidget(++row, 0, unitPanel2);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
         } else {
             main.setWidget(
                     ++row,
                     0,
                     new DecoratorBuilder(inject(proto().building(), new CEntityCrudHyperlink<Building>(MainActivityMapper.getCrudAppPlace(Building.class))), 20)
                             .build());
-            main.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(AptUnit.class))), 20)
-                            .build());
         }
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return MainActivityMapper.getCrudAppPlace(AptUnit.class).formViewerPlace(getValue().getPrimaryKey());
+            }
+
+            @Override
+            protected EntitySelectorDialog<AptUnit> getSelectorDialog() {
+                return new UnitSelectorDialog() {
+                    @Override
+                    public boolean onClickOk() {
+                        if (!getSelectedItems().isEmpty()) {
+                            ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
+                        }
+                        return !getSelectedItems().isEmpty();
+                    }
+                };
+            }
+        }), 20).build());
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 12).build());
