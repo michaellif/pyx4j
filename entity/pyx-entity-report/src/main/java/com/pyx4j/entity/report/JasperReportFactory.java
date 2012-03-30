@@ -95,15 +95,19 @@ public class JasperReportFactory {
             jasperReport = cashReports.get(reportName);
             if (jasperReport == null) {
                 InputStream compiledStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(getCompiledResourceName(reportName));
-                try {
-                    jasperReport = (JasperReport) JRLoader.loadObject(compiledStream);
-                } catch (JRException e) {
-                    throw new RuntimeException("Report loading " + reportName + " error", e);
-                } finally {
-                    IOUtils.closeQuietly(compiledStream);
+                if (compiledStream == null) {
+                    log.error("compiled report {} not found", getCompiledResourceName(reportName));
+                } else {
+                    try {
+                        jasperReport = (JasperReport) JRLoader.loadObject(compiledStream);
+                    } catch (JRException e) {
+                        throw new RuntimeException("Report loading " + reportName + " error", e);
+                    } finally {
+                        IOUtils.closeQuietly(compiledStream);
+                    }
+                    // Save in cash:
+                    cashReports.put(reportName, jasperReport);
                 }
-                // Save in cash:
-                cashReports.put(reportName, jasperReport);
             }
         }
 
