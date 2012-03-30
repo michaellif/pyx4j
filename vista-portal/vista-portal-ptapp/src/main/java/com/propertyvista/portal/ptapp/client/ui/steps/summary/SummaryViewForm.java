@@ -54,6 +54,7 @@ import com.propertyvista.portal.ptapp.client.ui.components.UtilityFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ConcessionsFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureExFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureFolder;
+import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
@@ -129,7 +130,9 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         main.setWidget(++row, 0, inject(proto().tenantFinancials(), createFinancialView()));
 
 // TODO : Charges and Payment steps are closed (removed) so far...        
-//        main.setWidget(++row, 0, inject(proto().charges(), new ChargesViewForm(true)));
+        if (false) {
+            main.setWidget(++row, 0, inject(proto().charges(), new ChargesViewForm(true)));
+        }
 
         main.setBR(++row, 0, 1);
 
