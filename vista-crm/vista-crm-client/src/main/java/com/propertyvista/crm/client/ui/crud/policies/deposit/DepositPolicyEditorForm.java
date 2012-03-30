@@ -152,6 +152,9 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
             }
 
             private void bindValueEditor(Deposit.ValueType valueType, boolean repopulatevalue) {
+                if (valueType == null)
+                    return; // New item
+
                 CComponent<?, ?> comp = null;
                 switch (valueType) {
                 case amount:
