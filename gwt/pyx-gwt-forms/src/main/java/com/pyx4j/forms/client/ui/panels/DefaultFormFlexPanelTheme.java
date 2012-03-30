@@ -112,15 +112,15 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
 
         style = new Style(".", StyleName.FormFlexPanelH4Label);
         style.addProperty("color", getBackgroundColor(), 0.8);
-        style.addProperty("padding", "4px");
-        style.addProperty("font-size", "1.3em");
+        style.addProperty("padding", "1px");
+        style.addProperty("font-size", "1.0em");
+        style.addProperty("font-style", "italic");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelActionWidget);
         style.addProperty("float", "right");
         style.addProperty("margin-right", "20px");
         addStyle(style);
-
     }
 
     protected abstract ThemeColors getBackgroundColor();
