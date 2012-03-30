@@ -48,6 +48,8 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
 
     private final Class<E> entityClass;
 
+    private boolean needToSaveColumns = false;
+
     public ListerGadgetInstanceBase(GadgetMetadata gmd, Class<E> entityClass, Class<GADGET_TYPE> gadgetTypeClass) {
         super(gmd, gadgetTypeClass);
 
@@ -180,8 +182,9 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
             // we do it here because of two reasons:
             //      1. Preloaded gadgets need this
             //      2. createDefaultSettings() is called from the base class constructor before we can know the default columns, and
-            //         before the dataTablePanel has been initialized.
-            storeDefaultColumnDescriptorsToSettings(getMetadata());
+            //         before the dataTablePanel has been initialized, hence we can't put it into createDefaultSettings();
+            dumpDefaultColumnDescriptorsToSettings();
+            needToSaveColumns = true; // to save it when we get the presenter.
         }
         for (ColumnDescriptorEntity columnDescriptorEntity : getMetadata().columnDescriptors()) {
             columnDescriptors.add(ColumnDescriptorConverter.columnDescriptorFromEntity(entityClass, columnDescriptorEntity));
@@ -197,7 +200,8 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         return settings;
     }
 
-    private void storeDefaultColumnDescriptorsToSettings(GADGET_TYPE settings) {
+    private void dumpDefaultColumnDescriptorsToSettings() {
+        GADGET_TYPE settings = getMetadata();
         for (ColumnDescriptor columnDescriptor : defineColumnDescriptors()) {
             ColumnDescriptorEntity entity = EntityFactory.create(ColumnDescriptorEntity.class);
             settings.columnDescriptors().add(ColumnDescriptorConverter.columnDescriptorToEntity(columnDescriptor, entity));
@@ -290,6 +294,16 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
 
     private void doPopulate() {
         populatePage(getPageNumber());
+    }
+
+    @Override
+    public void setPresenter(IGadgetInstancePresenter presenter) {
+        super.setPresenter(presenter);
+        // this is a hack to save preloaded lister gadgets (that do not have columns in metadata)
+        if (needToSaveColumns) {
+            saveMetadata();
+            needToSaveColumns = false;
+        }
     }
 
 }
