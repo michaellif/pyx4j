@@ -107,19 +107,25 @@ public class AptListPanel extends Panel {
                         Floorplan fp = item.getModelObject();
                         String name = fp.marketingName().getValue();
                         if (name == null) {
-                            name = fp.bedrooms().getValue() + " " + i18n.tr("Bedroom");
+                            name = fp.bedrooms().isNull() ? "" : fp.bedrooms().getValue() + " " + i18n.tr("Bedroom");
                         }
                         item.add(new Label("typeName", name));
 
-                        BigDecimal minPrice = null;
-                        for (AptUnit u : fpUnits.get(fp)) {
-                            BigDecimal _prc = u.financial()._marketRent().getValue();
-                            if (minPrice == null || minPrice.compareTo(_prc) > 0) {
-                                minPrice = _prc;
+                        String info = i18n.tr("No information found");
+                        if (!fp.bathrooms().isNull() && !fp.bathrooms().isNull()) {
+                            BigDecimal minPrice = null;
+                            for (AptUnit u : fpUnits.get(fp)) {
+                                BigDecimal _prc = u.financial()._marketRent().getValue();
+                                if (_prc == null) {
+                                    continue;
+                                }
+                                if (minPrice == null || minPrice.compareTo(_prc) > 0) {
+                                    minPrice = _prc;
+                                }
                             }
+                            info = SimpleMessageFormat.format(i18n.tr("{0} Bed, {1} Bath, {2,choice,null#price not available|!null#from $ {2}}"), fp.bedrooms()
+                                    .getValue(), fp.bathrooms().getValue(), minPrice);
                         }
-                        String info = SimpleMessageFormat.format(i18n.tr("{0} Bed, {1} Bath, {2,choice,null#price not available|!null#from $ {2}}"), fp
-                                .bedrooms().getValue(), fp.bathrooms().getValue(), minPrice);
                         item.add(new Label("typeInfo", info));
                     }
                 });
