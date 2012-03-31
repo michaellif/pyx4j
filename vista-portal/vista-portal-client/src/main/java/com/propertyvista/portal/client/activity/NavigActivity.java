@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
@@ -48,8 +49,10 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         List<AppPlace> items = new ArrayList<AppPlace>();
         items.add(new Residents());
         items.add(new Residents.PersonalInformation());
-        items.add(new Residents.CurrentBill());
-        items.add(new Residents.PaymentMethods());
+        if (!VistaTODO.removedForProduction) {
+            items.add(new Residents.CurrentBill());
+            items.add(new Residents.PaymentMethods());
+        }
         items.add(new Residents.BillingHistory());
         items.add(new Residents.Maintenance());
         view.setNavig(items);
