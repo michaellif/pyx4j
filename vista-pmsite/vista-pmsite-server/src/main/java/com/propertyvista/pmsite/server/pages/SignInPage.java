@@ -44,7 +44,7 @@ public final class SignInPage extends BasePage {
 
         add(new SignInPanel("signInPanel"));
 
-        if (!parameters.get(SigninOnResetParam).isNull()) {
+        if (parameters != null && !parameters.get(SigninOnResetParam).isNull()) {
             info(i18n.tr("A link to the password reset page was sent to your email address"));
         }
     }
