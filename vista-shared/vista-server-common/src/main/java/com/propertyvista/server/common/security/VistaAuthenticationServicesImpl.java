@@ -26,6 +26,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -315,7 +316,11 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             }
             break;
         default:
-            systemWallMessage = new SystemWallMessage("This is development and tests System", true);
+            if (ApplicationMode.isDevelopment()) {
+                systemWallMessage = new SystemWallMessage("This is development and tests System", true);
+            } else {
+                systemWallMessage = new SystemWallMessage(i18n.tr("Repairs in Progress"), true);
+            }
         }
 
         ar.setSystemWallMessage(systemWallMessage);
