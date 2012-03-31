@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.residents.BillingHistoryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillDTO;
@@ -45,26 +46,28 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
         //TODO implement a service call
         BillListDTO billHistory = EntityFactory.create(BillListDTO.class);
 
-        BillDTO bill = EntityFactory.create(BillDTO.class);
-        bill.type().setValue(BillType.Bill);
-        bill.paidOn().setValue(new LogicalDate(new Date()));
-        bill.transactionID().setValue("645436654");
-        bill.total().setValue(new BigDecimal(1490));
-        billHistory.bills().add(bill);
+        if (!VistaTODO.removedForProduction) {
+            BillDTO bill = EntityFactory.create(BillDTO.class);
+            bill.type().setValue(BillType.Bill);
+            bill.paidOn().setValue(new LogicalDate(new Date()));
+            bill.transactionID().setValue("645436654");
+            bill.total().setValue(new BigDecimal(1490));
+            billHistory.bills().add(bill);
 
-        bill = EntityFactory.create(BillDTO.class);
-        bill.type().setValue(BillType.Bill);
-        bill.paidOn().setValue(new LogicalDate(new Date()));
-        bill.transactionID().setValue("10096654");
-        bill.total().setValue(new BigDecimal(1010));
-        billHistory.bills().add(bill);
+            bill = EntityFactory.create(BillDTO.class);
+            bill.type().setValue(BillType.Bill);
+            bill.paidOn().setValue(new LogicalDate(new Date()));
+            bill.transactionID().setValue("10096654");
+            bill.total().setValue(new BigDecimal(1010));
+            billHistory.bills().add(bill);
 
-        bill = EntityFactory.create(BillDTO.class);
-        bill.type().setValue(BillType.Bill);
-        bill.paidOn().setValue(new LogicalDate(new Date()));
-        bill.transactionID().setValue("90056789");
-        bill.total().setValue(new BigDecimal(890));
-        billHistory.bills().add(bill);
+            bill = EntityFactory.create(BillDTO.class);
+            bill.type().setValue(BillType.Bill);
+            bill.paidOn().setValue(new LogicalDate(new Date()));
+            bill.transactionID().setValue("90056789");
+            bill.total().setValue(new BigDecimal(890));
+            billHistory.bills().add(bill);
+        }
 
         view.populate(billHistory);
 
