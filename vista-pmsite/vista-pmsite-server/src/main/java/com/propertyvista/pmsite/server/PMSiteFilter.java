@@ -29,8 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PMSiteFilter extends WicketFilter {
-    
-    sprivate static final Logger log = LoggerFactory.getLogger(PMSiteFilter.class);
+
+    private static final Logger log = LoggerFactory.getLogger(PMSiteFilter.class);
 
     private final String IGNORE_URLS_PARAM = "ignoreUrls";
 
