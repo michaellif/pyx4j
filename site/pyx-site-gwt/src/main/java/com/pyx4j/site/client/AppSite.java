@@ -61,9 +61,12 @@ public abstract class AppSite implements EntryPoint {
 
     private final AppPlaceContorller placeController;
 
+    private final String appId;
+
     public final long applicationStartTime = System.currentTimeMillis();
 
-    public AppSite(Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
+    public AppSite(String appId, Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
+        this.appId = appId;
         ClientEntityFactory.ensureIEntityImplementations();
         instance = this;
         Element head = Document.get().getElementsByTagName("html").getItem(0);
@@ -74,8 +77,8 @@ public abstract class AppSite implements EntryPoint {
         placeController = new AppPlaceContorller(ClientEventBus.instance, dispatcher);
     }
 
-    public AppSite(Class<? extends SiteMap> siteMapClass) {
-        this(siteMapClass, new AppPlaceDispatcher() {
+    public AppSite(String appId, Class<? extends SiteMap> siteMapClass) {
+        this(appId, siteMapClass, new AppPlaceDispatcher() {
 
             @Override
             public void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback) {
@@ -94,6 +97,10 @@ public abstract class AppSite implements EntryPoint {
 
     public static AppSite instance() {
         return instance;
+    }
+
+    public String getAppId() {
+        return appId;
     }
 
     public static AppPlaceHistoryMapper getHistoryMapper() {

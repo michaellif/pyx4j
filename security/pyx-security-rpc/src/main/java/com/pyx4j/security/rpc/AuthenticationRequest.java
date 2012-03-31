@@ -45,7 +45,7 @@ public interface AuthenticationRequest extends IEntity {
     @NotNull
     IPrimitive<String> password();
 
-    @Caption(name = "Remember my ID")
+    @Caption(name = "Remember Me")
     IPrimitive<Boolean> rememberID();
 
     /**

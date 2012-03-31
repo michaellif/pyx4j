@@ -28,7 +28,7 @@ import com.pyx4j.site.client.AppSite;
 public class SiteDemo extends AppSite {
 
     public SiteDemo() {
-        super(null);
+        super("pyx-demo", null);
     }
 
     @Override

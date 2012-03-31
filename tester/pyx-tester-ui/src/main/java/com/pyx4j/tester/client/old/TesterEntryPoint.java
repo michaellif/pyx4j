@@ -79,7 +79,7 @@ public class TesterEntryPoint implements EntryPoint {
     public void onModuleLoad() {
 
         // Hack :)
-        new AppSite(null, null) {
+        new AppSite("tester", null, null) {
             @Override
             public void onSiteLoad() {
             }

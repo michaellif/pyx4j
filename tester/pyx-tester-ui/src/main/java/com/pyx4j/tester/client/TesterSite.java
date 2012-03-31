@@ -43,7 +43,7 @@ public class TesterSite extends AppSite {
     private Message message;
 
     public TesterSite() {
-        super(TesterSiteMap.class);
+        super("test", TesterSiteMap.class);
     }
 
     @Override
