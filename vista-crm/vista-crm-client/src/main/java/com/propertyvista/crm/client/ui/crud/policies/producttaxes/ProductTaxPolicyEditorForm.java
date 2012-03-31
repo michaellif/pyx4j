@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.policies.producttaxes;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Vector;
 
@@ -32,11 +33,15 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.dialogs.SelectTypeDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxFolder;
-import com.propertyvista.crm.rpc.services.selections.SelectProductItemTypeListService;
+import com.propertyvista.crm.rpc.services.selections.SelectFeatureItemTypeListService;
+import com.propertyvista.crm.rpc.services.selections.SelectServiceItemTypeListService;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 
@@ -85,7 +90,32 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
 
         @Override
         protected void addItem() {
-            new ProductSelectorDialog().show();
+            new SelectTypeDialog<ProductItemType.Type>(i18n.tr("Select Product Type"), EnumSet.allOf(ProductItemType.Type.class)) {
+                @Override
+                public boolean onClickOk() {
+                    switch (getSelectedType()) {
+                    case Service:
+                        new ProductSelectorDialog<ServiceItemType>(ServiceItemType.class, getAlreadySelected()).show();
+                        break;
+                    case Feature:
+                        new ProductSelectorDialog<FeatureItemType>(FeatureItemType.class, getAlreadySelected()).show();
+                        break;
+                    default:
+                        throw new Error();
+                    }
+                    return true;
+                }
+
+                @Override
+                public String defineWidth() {
+                    return "200px";
+                }
+
+                @Override
+                public String defineHeight() {
+                    return "100px";
+                }
+            }.show();
         }
 
         // internals:
@@ -121,10 +151,10 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
             return selected;
         }
 
-        private class ProductSelectorDialog extends EntitySelectorDialog<ProductItemType> {
+        private class ProductSelectorDialog<PIT extends ProductItemType> extends EntitySelectorDialog<PIT> {
 
-            public ProductSelectorDialog() {
-                super(ProductItemType.class, true, getAlreadySelected(), i18n.tr("Select Product"));
+            public ProductSelectorDialog(Class<PIT> productClass, List alreadySelectedProducts) {
+                super(productClass, false, alreadySelectedProducts, i18n.tr("Select Product Type"));
                 setWidth("700px");
             }
 
@@ -136,7 +166,7 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
                     for (ProductItemType selected : getSelectedItems()) {
                         ProductTaxPolicyItem item = EntityFactory.create(ProductTaxPolicyItem.class);
                         item.productItemType().set(selected);
-                        addItem(item);
+                        ProductTaxPolicyItemFolder.this.addItem(item);
                     }
 
                     return true;
@@ -152,8 +182,14 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
             }
 
             @Override
-            protected AbstractListService<ProductItemType> getSelectService() {
-                return GWT.<AbstractListService<ProductItemType>> create(SelectProductItemTypeListService.class);
+            protected AbstractListService<PIT> getSelectService() {
+                if (proto() instanceof ServiceItemType) {
+                    return GWT.<AbstractListService<PIT>> create(SelectServiceItemTypeListService.class);
+                } else if (proto() instanceof FeatureItemType) {
+                    return GWT.<AbstractListService<PIT>> create(SelectFeatureItemTypeListService.class);
+                } else {
+                    throw new Error();
+                }
             }
         }
     }

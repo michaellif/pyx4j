@@ -15,13 +15,13 @@ package com.propertyvista.crm.server.services.selections;
 
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 
-import com.propertyvista.crm.rpc.services.selections.SelectProductItemTypeListService;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.crm.rpc.services.selections.SelectFeatureItemTypeListService;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 
-public class SelectProductItemTypeListServiceImpl extends AbstractListServiceImpl<ProductItemType> implements SelectProductItemTypeListService {
+public class SelectFeatureItemTypeListServiceImpl extends AbstractListServiceImpl<FeatureItemType> implements SelectFeatureItemTypeListService {
 
-    public SelectProductItemTypeListServiceImpl() {
-        super(ProductItemType.class);
+    public SelectFeatureItemTypeListServiceImpl() {
+        super(FeatureItemType.class);
     }
 
     @Override

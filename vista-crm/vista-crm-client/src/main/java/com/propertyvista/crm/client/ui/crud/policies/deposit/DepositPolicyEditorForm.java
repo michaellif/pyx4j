@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.policies.deposit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -37,10 +38,14 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.dialogs.SelectTypeDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
-import com.propertyvista.crm.rpc.services.selections.SelectProductItemTypeListService;
+import com.propertyvista.crm.rpc.services.selections.SelectFeatureItemTypeListService;
+import com.propertyvista.crm.rpc.services.selections.SelectServiceItemTypeListService;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -78,7 +83,6 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
 
         public DepositPolicyItemEditorFolder() {
             super(DepositPolicyItem.class);
-
         }
 
         @Override
@@ -88,23 +92,6 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
             } else {
                 return super.create(member);
             }
-        }
-
-        @Override
-        protected void addItem() {
-            List<ProductItemType> alreadySelectedProducts = new ArrayList<ProductItemType>();
-            for (DepositPolicyItem di : getValue()) {
-                if (!di.appliedTo().isNull()) {
-                    alreadySelectedProducts.add(di.appliedTo());
-                }
-            }
-            new ProductItemTypeSelectorDialog(alreadySelectedProducts) {
-                @Override
-                protected void addItem(DepositPolicyItem newItem) {
-                    DepositPolicyItemEditorFolder.this.addItem(newItem);
-                }
-
-            }.show();
         }
 
         private static class DepositPolicyItemEditor extends CEntityDecoratableEditor<DepositPolicyItem> {
@@ -176,45 +163,82 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
                 }
             }
         }
-    }
-
-    private static abstract class ProductItemTypeSelectorDialog extends EntitySelectorDialog<ProductItemType> {
-
-        public ProductItemTypeSelectorDialog(List<ProductItemType> alreadySelectedProducts) {
-            super(ProductItemType.class, false, alreadySelectedProducts, i18n.tr("Select Product Item Type"));
-        }
 
         @Override
-        public boolean onClickOk() {
-            List<ProductItemType> productItemTypes = getSelectedItems();
-
-            if (!productItemTypes.isEmpty()) {
-                for (ProductItemType type : productItemTypes) {
-                    DepositPolicyItem newItem = EntityFactory.create(DepositPolicyItem.class);
-                    newItem.repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
-                    newItem.appliedTo().set(type);
-                    addItem(newItem);
+        protected void addItem() {
+            final List<ProductItemType> alreadySelectedProducts = new ArrayList<ProductItemType>();
+            for (DepositPolicyItem di : getValue()) {
+                if (!di.appliedTo().isNull()) {
+                    alreadySelectedProducts.add(di.appliedTo());
                 }
-                return true;
-            } else {
-                return false;
             }
 
+            new SelectTypeDialog<ProductItemType.Type>(i18n.tr("Select Product Type"), EnumSet.allOf(ProductItemType.Type.class)) {
+                @Override
+                public boolean onClickOk() {
+                    switch (getSelectedType()) {
+                    case Service:
+                        new ProductItemTypeSelectorDialog<ServiceItemType>(ServiceItemType.class, alreadySelectedProducts).show();
+                        break;
+                    case Feature:
+                        new ProductItemTypeSelectorDialog<FeatureItemType>(FeatureItemType.class, alreadySelectedProducts).show();
+                        break;
+                    default:
+                        throw new Error();
+                    }
+                    return true;
+                }
+
+                @Override
+                public String defineWidth() {
+                    return "200px";
+                }
+
+                @Override
+                public String defineHeight() {
+                    return "100px";
+                }
+            }.show();
         }
 
-        protected abstract void addItem(DepositPolicyItem newItem);
+        private class ProductItemTypeSelectorDialog<PIT extends ProductItemType> extends EntitySelectorDialog<PIT> {
 
-        @Override
-        protected List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(//@formatter:off
+            public ProductItemTypeSelectorDialog(Class<PIT> productClass, List alreadySelectedProducts) {
+                super(productClass, false, alreadySelectedProducts, i18n.tr("Select Product Type"));
+            }
+
+            @Override
+            public boolean onClickOk() {
+                if (getSelectedItems().isEmpty()) {
+                    return false;
+                } else {
+                    for (ProductItemType type : getSelectedItems()) {
+                        DepositPolicyItem newItem = EntityFactory.create(DepositPolicyItem.class);
+                        newItem.repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
+                        newItem.appliedTo().set(type);
+                        DepositPolicyItemEditorFolder.this.addItem(newItem);
+                    }
+                    return true;
+                }
+            }
+
+            @Override
+            protected List<ColumnDescriptor> defineColumnDescriptors() {
+                return Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().name()).build()
-            );//@formatter:on
-        }
+                );//@formatter:on
+            }
 
-        @Override
-        protected AbstractListService<ProductItemType> getSelectService() {
-            return GWT.<AbstractListService<ProductItemType>> create(SelectProductItemTypeListService.class);
+            @Override
+            protected AbstractListService<PIT> getSelectService() {
+                if (proto() instanceof ServiceItemType) {
+                    return GWT.<AbstractListService<PIT>> create(SelectServiceItemTypeListService.class);
+                } else if (proto() instanceof FeatureItemType) {
+                    return GWT.<AbstractListService<PIT>> create(SelectFeatureItemTypeListService.class);
+                } else {
+                    throw new Error();
+                }
+            }
         }
-    };
-
+    }
 }

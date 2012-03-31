@@ -17,7 +17,6 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -27,10 +26,13 @@ import com.propertyvista.domain.financial.GlCode;
 @AbstractEntity
 public interface ProductItemType extends IEntity {
 
+    enum Type {
+        Service, Feature
+    }
+
     @ToString
     @Length(50)
     IPrimitive<String> name();
 
     GlCode glCode();
-
 }
