@@ -174,6 +174,12 @@ public class CrmPanel extends LayoutPanel {
                 ((RequiresResize) child).onResize();
             }
         }
+
+        @Override
+        public void setWidget(IsWidget w) {
+            super.setWidget(w);
+            centerAreaContent.setVisible(true);
+        }
     }
 
     class UtilityDisplayPanel extends DisplayPanel {
@@ -199,7 +205,6 @@ public class CrmPanel extends LayoutPanel {
                 }
                 parent.add(this);
             }
-            centerAreaContent.setVisible(true);
         }
 
     }
