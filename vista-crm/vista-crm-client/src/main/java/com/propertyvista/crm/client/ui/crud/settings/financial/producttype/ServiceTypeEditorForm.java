@@ -13,17 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.components.AnchorButton;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.ui.components.boxes.GlCodeSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -31,8 +28,6 @@ import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class ServiceTypeEditorForm extends CrmEntityForm<ServiceItemType> {
-
-    private Widget glCodeSelector;
 
     public ServiceTypeEditorForm() {
         this(false);
@@ -49,37 +44,26 @@ public class ServiceTypeEditorForm extends CrmEntityForm<ServiceItemType> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceType()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return MainActivityMapper.getCrudAppPlace(GlCode.class).formViewerPlace(getValue().glCodeCategory().getPrimaryKey());
+            }
 
-        HorizontalPanel glCodePanel = new HorizontalPanel();
-        glCodePanel.add(new DecoratorBuilder(inject(proto().glCode(), new CEntityLabel<GlCode>()), 25).build());
-        if (isEditable()) {
-            glCodePanel.add(glCodeSelector = new AnchorButton("Select...", new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    new GlCodeSelectorDialog() {
-                        @Override
-                        public boolean onClickOk() {
-                            if (!getSelectedItems().isEmpty()) {
-                                get(ServiceTypeEditorForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
-                            }
-                            return !getSelectedItems().isEmpty();
+            @Override
+            protected EntitySelectorDialog<GlCode> getSelectorDialog() {
+                return new GlCodeSelectorDialog() {
+                    @Override
+                    public boolean onClickOk() {
+                        if (!getSelectedItems().isEmpty()) {
+                            get(ServiceTypeEditorForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
                         }
-                    }.show();
-                }
-            }));
-            glCodeSelector.getElement().getStyle().setMarginLeft(4, Unit.EM);
-        }
-
-        main.setWidget(++row, 0, glCodePanel);
+                        return !getSelectedItems().isEmpty();
+                    }
+                };
+            }
+        }), 25).build());
 
         return new CrmScrollPanel(main);
-    }
-
-    @Override
-    protected void onPopulate() {
-        super.onPopulate();
-        if (glCodeSelector != null) {
-            glCodeSelector.setVisible(isEditable());
-        }
     }
 }
