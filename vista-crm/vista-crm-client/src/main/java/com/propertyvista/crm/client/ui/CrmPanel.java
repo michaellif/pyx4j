@@ -46,6 +46,8 @@ import com.propertyvista.crm.client.mvp.TopRightActionsActivityMapper;
 
 public class CrmPanel extends LayoutPanel {
 
+    private final LayoutPanel centerAreaContent;
+
     public CrmPanel() {
 
         HTML feedbackWidgetContainer = new HTML();
@@ -85,9 +87,10 @@ public class CrmPanel extends LayoutPanel {
          * Since the center area of DockLayoutPanel accepts only one element
          * one more panel needs to be introduced
          */
-        LayoutPanel centerAreaContent = new LayoutPanel();
+        centerAreaContent = new LayoutPanel();
         centerAreaContent.ensureDebugId("just_checking");
         contentPanel.add(centerAreaContent);
+        centerAreaContent.setVisible(false);
 
         //================ Main application area - splitter with navig menu and content =======
 
@@ -173,7 +176,7 @@ public class CrmPanel extends LayoutPanel {
         }
     }
 
-    class UtilityDisplayPanel extends SimplePanel {
+    class UtilityDisplayPanel extends DisplayPanel {
 
         private final LayoutPanel parent;
 
@@ -196,6 +199,7 @@ public class CrmPanel extends LayoutPanel {
                 }
                 parent.add(this);
             }
+            centerAreaContent.setVisible(true);
         }
 
     }
