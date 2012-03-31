@@ -78,7 +78,7 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
             @Override
             public void onSuccess(Boolean result) {
                 if (HTML5Storage.isSupported()) {
-                    if (request.rememberID().getValue()) {
+                    if (request.rememberID().isBooleanTrue()) {
                         HTML5Storage.getLocalStorage().setItem(AbstractLoginActivty.HTML5_KEY, request.email().getValue());
                     } else {
                         HTML5Storage.getLocalStorage().removeItem(AbstractLoginActivty.HTML5_KEY);
