@@ -30,7 +30,7 @@ public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     private static final I18n i18n = I18n.get(CrmSiteAppPlaceDispatcher.class);
 
     @Override
-    protected void obtainDefaulPublicPlacePlace(AsyncCallback<AppPlace> callback) {
+    protected void obtainDefaulPublicPlace(AsyncCallback<AppPlace> callback) {
         callback.onSuccess(new CrmSiteMap.Login());
     }
 

@@ -30,7 +30,7 @@ public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     }
 
     @Override
-    protected void obtainDefaulPublicPlacePlace(AsyncCallback<AppPlace> callback) {
+    protected void obtainDefaulPublicPlace(AsyncCallback<AppPlace> callback) {
         callback.onSuccess(new PtSiteMap.Login());
     }
 
