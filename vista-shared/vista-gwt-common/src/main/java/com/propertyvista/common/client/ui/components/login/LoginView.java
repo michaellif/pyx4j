@@ -16,6 +16,7 @@ package com.propertyvista.common.client.ui.components.login;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.security.rpc.SystemWallMessage;
 
 public interface LoginView extends IsWidget {
 
@@ -34,5 +35,7 @@ public interface LoginView extends IsWidget {
     void enableHumanVerification();
 
     void reset();
+
+    void setWallMessage(SystemWallMessage systemWallMessage);
 
 }

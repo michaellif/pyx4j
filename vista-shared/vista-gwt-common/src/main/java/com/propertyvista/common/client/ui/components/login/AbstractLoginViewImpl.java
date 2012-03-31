@@ -19,6 +19,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.security.rpc.SystemWallMessage;
 
 import com.propertyvista.domain.DemoData;
 
@@ -75,6 +76,11 @@ public abstract class AbstractLoginViewImpl extends FormFlexPanel implements Log
     @Override
     public void reset() {
         form.reset();
+    }
+
+    @Override
+    public void setWallMessage(SystemWallMessage message) {
+        form.setWallMessage(message);
     }
 
     private void submit() {

@@ -37,7 +37,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
-import com.pyx4j.security.server.AuthenticationServiceImpl;
 
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.TenantUser;
@@ -123,7 +122,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         cr.accessKey().setValue(null);
         Persistence.service().persist(cr);
 
-        callback.onSuccess(AuthenticationServiceImpl.createAuthenticationResponse(new PtAuthenticationServiceImpl().beginSession(user, cr)));
+        //callback.onSuccess(AuthenticationServiceImpl.createAuthenticationResponse(new PtAuthenticationServiceImpl().beginSession(user, cr)));
 
     }
 }

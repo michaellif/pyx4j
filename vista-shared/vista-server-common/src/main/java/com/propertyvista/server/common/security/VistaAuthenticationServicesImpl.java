@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -41,9 +42,11 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
+import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
@@ -51,6 +54,7 @@ import com.pyx4j.server.mail.MailMessage;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.server.common.mail.MessageTemplates;
+import com.propertyvista.server.common.util.VistaDeployment;
 import com.propertyvista.server.domain.security.AbstractUserCredential;
 
 public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U>> extends
@@ -287,5 +291,35 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
         log.debug("pwd change token {} is sent to {}", token, user.email().getValue());
         callback.onSuccess(new VoidSerializable());
+    }
+
+    @Override
+    public AuthenticationResponse createAuthenticationResponse(String sessionToken) {
+        AuthenticationResponse ar = super.createAuthenticationResponse(sessionToken);
+
+        String baseUrl = VistaDeployment.getBaseApplicationURL(getApplicationBehavior(), true);
+        String requestUrl = ServletUtils.getActualRequestURL(Context.getRequest(), false);
+
+        SystemWallMessage systemWallMessage = null;
+        switch (VistaDeployment.getSystemIdentification()) {
+        case production:
+            if (!requestUrl.startsWith(baseUrl)) {
+                systemWallMessage = new SystemWallMessage(i18n.tr("Repairs in Progress"), true);
+            }
+            break;
+        case staging:
+            if (requestUrl.startsWith(baseUrl)) {
+                systemWallMessage = new SystemWallMessage(i18n.tr("This is internal staging environment!"), true);
+            } else {
+                systemWallMessage = new SystemWallMessage(i18n.tr("Repairs in Progress"), true);
+            }
+            break;
+        default:
+            systemWallMessage = new SystemWallMessage("This is development and tests System", true);
+        }
+
+        ar.setSystemWallMessage(systemWallMessage);
+
+        return ar;
     }
 }

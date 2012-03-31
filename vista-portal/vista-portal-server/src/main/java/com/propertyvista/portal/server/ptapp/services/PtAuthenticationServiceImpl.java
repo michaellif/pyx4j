@@ -48,7 +48,6 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
     @Override
     protected void addBehaviors(TenantUserCredential userCredential, Set<Behavior> behaviors) {
         behaviors.addAll(userCredential.behaviors());
-
     }
 
     @Override

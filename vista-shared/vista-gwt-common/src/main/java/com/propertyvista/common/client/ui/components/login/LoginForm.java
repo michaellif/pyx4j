@@ -43,6 +43,7 @@ import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.security.rpc.SystemWallMessage;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl.DevLoginData;
@@ -53,6 +54,8 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
     private static final I18n i18n = I18n.get(LoginForm.class);
 
     private final String caption;
+
+    private FlowPanel wallMessagePanel;
 
     private final Command loginCommand;
 
@@ -125,6 +128,9 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
             forgotPassword.setValue(i18n.tr("Reset Password"));
             main.add(forgotPassword);
         }
+
+        wallMessagePanel = new FlowPanel();
+        main.add(wallMessagePanel);
 
         if (ApplicationMode.isDevelopment() & devLoginValues != null) {
             main.add(createDevMessagePanel());
@@ -208,6 +214,21 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
     protected void login() {
         resetDevLoginHistory();
         loginCommand.execute();
+    }
+
+    public void setWallMessage(SystemWallMessage message) {
+        wallMessagePanel.clear();
+        wallMessagePanel.getElement().getStyle().setProperty("textAlign", "center");
+        wallMessagePanel.getElement().getStyle().setMargin(2, Unit.EM);
+
+        if (message != null) {
+            HTML html = new HTML(message.getMessage());
+            wallMessagePanel.add(html);
+
+            if (message.isWarning()) {
+                html.getElement().getStyle().setColor("orange");
+            }
+        }
     }
 
     /**

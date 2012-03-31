@@ -64,6 +64,8 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
         }
         loginView.setPresenter(this);
         panel.setWidget(loginView);
+
+        loginView.setWallMessage(ClientContext.getSystemWallMessage());
     }
 
     @Override
