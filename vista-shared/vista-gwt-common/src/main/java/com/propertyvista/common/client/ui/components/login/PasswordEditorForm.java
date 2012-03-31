@@ -48,8 +48,8 @@ public class PasswordEditorForm extends CEntityDecoratableEditor<PasswordChangeR
     protected void onWidgetCreated() {
         super.onWidgetCreated();
         asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
-        asWidget().getElement().getStyle().setMarginTop(5, Unit.PCT);
-        asWidget().getElement().getStyle().setMarginBottom(5, Unit.PCT);
+        asWidget().getElement().getStyle().setMarginTop(50, Unit.PX);
+        asWidget().getElement().getStyle().setMarginBottom(50, Unit.PX);
 
     }
 
