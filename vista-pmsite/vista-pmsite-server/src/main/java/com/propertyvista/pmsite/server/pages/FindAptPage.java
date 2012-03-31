@@ -17,12 +17,15 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 
 import templates.TemplateResources;
 
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaPanel;
+import com.propertyvista.server.common.util.VistaDeployment;
 
 public class FindAptPage extends BasePage {
 
@@ -52,7 +55,8 @@ public class FindAptPage extends BasePage {
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
         response.renderCSSReference(refCSS);
-        response.renderJavaScriptReference("http://maps.google.com/maps?file=api&v=2&key=AIzaSyAa7EDFOm17VLX7tLJqCZfn2SX8qT5kYcE&sensor=false");
+        response.renderJavaScriptReference(ServletUtils.getRequestProtocol(Context.getRequest()) + "://maps.google.com/maps?file=api&v=2&sensor=false&key="
+                + VistaDeployment.getPortalGoogleAPIKey());
         super.renderHead(response);
 
     }
