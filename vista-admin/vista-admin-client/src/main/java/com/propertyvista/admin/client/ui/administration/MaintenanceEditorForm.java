@@ -13,12 +13,18 @@
  */
 package com.propertyvista.admin.client.ui.administration;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
+import com.propertyvista.portal.rpc.VistaSystemIdentification;
 
 public class MaintenanceEditorForm extends AdminEntityForm<SystemMaintenanceState> {
 
@@ -35,6 +41,7 @@ public class MaintenanceEditorForm extends AdminEntityForm<SystemMaintenanceStat
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systemIdentification()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inEffect()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().externalConnections()), 10).build());
@@ -45,6 +52,12 @@ public class MaintenanceEditorForm extends AdminEntityForm<SystemMaintenanceStat
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().message()), 20).build());
 
         get(proto().inEffect()).setViewable(true);
+
+        Collection<String> opt = new ArrayList<String>();
+        for (VistaSystemIdentification i : EnumSet.allOf(VistaSystemIdentification.class)) {
+            opt.add(i.name());
+        }
+        ((CComboBox<String>) get(proto().systemIdentification())).setOptions(opt);
 
         return main;
     }

@@ -20,6 +20,7 @@ import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.server.common.util.VistaDeployment;
 
 public class VistaServerSideConfigurationProd extends VistaServerSideConfiguration {
 
@@ -52,27 +53,56 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
 
     @Override
     public String getDefaultBaseURLvistaCrm() {
-        return "https://" + NamespaceManager.getNamespace() + ".propertyvista.com/";
+        switch (VistaDeployment.getSystemIdentification()) {
+        case production:
+            return "https://" + NamespaceManager.getNamespace() + ".propertyvista.com/";
+        case staging:
+            return "https://" + NamespaceManager.getNamespace() + ".staging02-crm.birchwoodsoftwaregroup.com/";
+        default:
+            return super.getDefaultBaseURLvistaCrm();
+        }
     }
 
     @Override
     public String getDefaultBaseURLresidentPortal(boolean secure) {
-        String url = NamespaceManager.getNamespace() + ".residentportalsite.com/";
+        String protocol;
         if (secure) {
-            return "https://" + url;
+            protocol = "https://";
         } else {
-            return "http://" + url;
+            protocol = "http://";
+        }
+        switch (VistaDeployment.getSystemIdentification()) {
+        case production:
+            return protocol + NamespaceManager.getNamespace() + ".residentportalsite.com/";
+        case staging:
+            return protocol + NamespaceManager.getNamespace() + ".staging02.birchwoodsoftwaregroup.com/";
+        default:
+            return super.getDefaultBaseURLresidentPortal(secure);
         }
     }
 
     @Override
     public String getDefaultBaseURLprospectPortal() {
-        return "https://" + NamespaceManager.getNamespace() + ".prospectportalsite.com/";
+        switch (VistaDeployment.getSystemIdentification()) {
+        case production:
+            return "https://" + NamespaceManager.getNamespace() + ".prospectportalsite.com/";
+        case staging:
+            return "https://" + NamespaceManager.getNamespace() + ".staging02-ptapp.birchwoodsoftwaregroup.com/";
+        default:
+            return super.getDefaultBaseURLvistaCrm();
+        }
     }
 
     @Override
     public String getDefaultBaseURLvistaAdmin() {
-        return "http://prod02.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
+        switch (VistaDeployment.getSystemIdentification()) {
+        case production:
+            return "http://prod02.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
+        case staging:
+            return "https://staging02.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
+        default:
+            return super.getDefaultBaseURLvistaAdmin();
+        }
     }
 
 }

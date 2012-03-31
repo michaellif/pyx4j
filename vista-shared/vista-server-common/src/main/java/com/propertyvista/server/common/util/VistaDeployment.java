@@ -17,15 +17,25 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.PmcDnsName;
 import com.propertyvista.domain.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.portal.rpc.VistaSystemIdentification;
 import com.propertyvista.server.domain.admin.Pmc;
 
 public class VistaDeployment {
+
+    public static VistaSystemIdentification getSystemIdentification() {
+        String systemIdentification = SystemMaintenance.getSystemMaintenanceInfo().systemIdentification().getValue();
+        if (systemIdentification == null) {
+            return VistaSystemIdentification.development;
+        }
+        return VistaSystemIdentification.valueOf(systemIdentification);
+    }
 
     private static Pmc getCurrentPmc() {
         final String namespace = NamespaceManager.getNamespace();
