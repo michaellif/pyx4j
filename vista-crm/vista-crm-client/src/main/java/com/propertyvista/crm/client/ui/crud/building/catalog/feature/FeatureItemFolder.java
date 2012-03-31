@@ -111,6 +111,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
             if (column.getObject() == proto().type()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
                     final CEntityComboBox<FeatureItemType> combo = (CEntityComboBox<FeatureItemType>) comp;
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().featureType(), parent.getValue().version().type()));
                     combo.addValueChangeHandler(new ValueChangeHandler<FeatureItemType>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<FeatureItemType> event) {
