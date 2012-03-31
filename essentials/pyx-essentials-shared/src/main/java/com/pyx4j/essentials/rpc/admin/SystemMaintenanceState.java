@@ -36,6 +36,10 @@ import com.pyx4j.essentials.rpc.SystemState;
 @Transient
 public interface SystemMaintenanceState extends IEntity {
 
+    @NotNull
+    @Editor(type = Editor.EditorType.combo)
+    IPrimitive<String> systemIdentification();
+
     @ReadOnly
     IPrimitive<Boolean> inEffect();
 
