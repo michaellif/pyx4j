@@ -43,7 +43,6 @@ import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -179,15 +178,11 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
 
     @Override
     public void sendMail(List<TenantInLease> tenants, EmailTemplateType emailType) {
-        Vector<TenantUser> users = new Vector<TenantUser>();
-        for (TenantInLease til : tenants) {
-            users.add(til.tenant().user());
-        }
         ((LeaseCrudService) service).sendMail(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, entityId, users, emailType);
+        }, entityId, new Vector<TenantInLease>(tenants), emailType);
     }
 }

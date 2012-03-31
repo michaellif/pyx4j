@@ -25,7 +25,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -47,5 +47,5 @@ public interface LeaseCrudService extends AbstractVersionedCrudService<LeaseDTO>
 
     void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId);
 
-    void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<TenantUser> users, EmailTemplateType emailType);
+    void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<TenantInLease> tenants, EmailTemplateType emailType);
 }

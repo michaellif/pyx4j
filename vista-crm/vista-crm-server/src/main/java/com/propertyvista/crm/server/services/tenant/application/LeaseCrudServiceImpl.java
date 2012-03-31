@@ -23,7 +23,11 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.server.mail.Mail;
+import com.pyx4j.server.mail.MailDeliveryStatus;
+import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -43,8 +47,11 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
+import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
+import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.util.LeaseManager;
+import com.propertyvista.server.domain.security.TenantUserCredential;
 import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
 public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
@@ -262,7 +269,28 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
     }
 
     @Override
-    public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<TenantUser> users, EmailTemplateType emailType) {
-        // TODO Auto-generated method stub
+    public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<TenantInLease> tenants, EmailTemplateType emailType) {
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, entityId);
+        for (TenantInLease tenant : tenants) {
+            TenantUser user = tenant.tenant().user();
+            if (user.isValueDetached()) {
+                Persistence.service().retrieve(user);
+            }
+            // Create Token and other stuff
+            String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
+            if (token == null) {
+                throw new UserRuntimeException("Invalid user account");
+            }
+
+            MailMessage m = new MailMessage();
+            m.setTo(user.email().getValue());
+            m.setSender(MessageTemplates.getSender());
+            // set email subject and body from the template
+            MessageTemplates.createMasterApplicationInvitationEmail(m, user, emailType, lease, token);
+            if (MailDeliveryStatus.Success != Mail.send(m)) {
+                throw new UserRuntimeException("Mail delivery failed: " + user.email().getValue());
+            }
+        }
+        callback.onSuccess(null);
     }
 }

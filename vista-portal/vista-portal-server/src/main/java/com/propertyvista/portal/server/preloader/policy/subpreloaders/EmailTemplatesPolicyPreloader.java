@@ -147,7 +147,6 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateApplicationCreatedCoApplicant() {
         EmailTemplateType type = EmailTemplateType.ApplicationCreatedCoApplicant;
 
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
@@ -177,7 +176,6 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private EmailTemplate defaultEmailTemplateApplicationCreatedGuarantor() {
         EmailTemplateType type = EmailTemplateType.ApplicationCreatedGuarantor;
 
-        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
@@ -276,7 +274,6 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
         PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
-        LeaseT leaseT = EmailTemplateManager.getProto(type, LeaseT.class);
         PasswordRequestT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
@@ -284,29 +281,21 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.subject().setValue(i18n.tr("Visit our new site"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
                 "<h3>Welcome {0}!</h3><br/><br/>" +                        
-
-                "Click the link below to access {1} site and create new password for your account:<br/>\n" +
-                "    <a style=\"color:#929733\" href=\"{2}\">Reset Your Password</a>" +
-                
-                "According to our records, your lease start date is on {3}, {4}<br/></br>" +
-
-                "We are excited to have you join the Online Tenant Portal that we created just for you! Please keep " +
-                "your username and password as they will be required to access your Portal. You can visit it anytime by " +
-                "going to {5} and clicking on Residents menu tab. You will be redirected to Online Tenant Portal immediately. " +
-                "Or, alternatively, you can reach that page directly by going to {6}.<br/><br/>" +
-
-                "Should you have any concerns or questions, please do not hesistate to contact us directly.<br/><br/>" +
-                        
+                "We are excited to have you join the Online Tenant Portal of {1} that we created just for you! " +
+                "To access the site and create new password for your account please follow the link below:<br/>\n" +
+                "    <a style=\"color:#929733\" href=\"{2}\">Reset Your Password</a><br/>" +
+                "Please keep your username and password as they will be required to access your Portal. " +
+                "You can visit it anytime by going to<br/>" +
+                "{3} and clicking on Residents menu tab. You will be redirected to Online Tenant Portal immediately. " +
+                "Or, alternatively, you can reach that page directly by going to<br/>" +
+                "{4}.<br/><br/>" +
+                "Should you have any concerns or questions, please do not hesitate to contact us directly.<br/><br/>" +
                 "Sincerely,<br/><br/>" +
-                        
-                "{6}<br/>" +
-                "{7}<br/>",
-                
+                "{5}<br/>" +
+                "{6}<br/>",
                 EmailTemplateManager.getVarname(pwdReqT.requestorName()),
                 EmailTemplateManager.getVarname(portalT.companyName()),
                 EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl()),
-                EmailTemplateManager.getVarname(leaseT.startDateWeekday()),
-                EmailTemplateManager.getVarname(leaseT.startDate()),
                 EmailTemplateManager.getVarname(portalT.portalHomeUrl()),
                 EmailTemplateManager.getVarname(portalT.tenantHomeUrl()),
                 EmailTemplateManager.getVarname(bldT.propertyName()) ,

@@ -71,7 +71,6 @@ public class EmailTemplateManager {
             break;
         case TenantInvitation:
             values.add(EntityFactory.create(PasswordRequestT.class));
-            values.add(EntityFactory.create(LeaseT.class));
             values.add(EntityFactory.create(BuildingT.class));
             break;
         default:
