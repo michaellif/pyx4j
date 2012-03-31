@@ -70,7 +70,12 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
     /**
      * Called when application is not authenticated and url points NOWHERE of hidden(authenticated only) place
      */
-    protected abstract void obtainDefaulPublicPlacePlace(AsyncCallback<AppPlace> callback);
+    protected abstract void obtainDefaulPublicPlace(AsyncCallback<AppPlace> callback);
+
+    /**
+     * Fallback place for authenticated application
+     */
+    protected abstract void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback);
 
     protected abstract boolean isApplicationAuthenticated();
 
@@ -78,11 +83,6 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
      * Define security for places. Called before each navigation. If it returns FALSE we will go to DefaultAuthenticatedPlace
      */
     protected abstract void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback);
-
-    /**
-     * Fallback place for authenticated application
-     */
-    protected abstract void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback);
 
     /**
      * This the only customization point, used for places like PasswordChangeRequired e.g. user can only go to one single place.
@@ -113,7 +113,7 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
                 callback.onSuccess(special);
             } else {
                 urlEntryTargetPlace = newPlace;
-                obtainDefaulPublicPlacePlace(callback);
+                obtainDefaulPublicPlace(callback);
             }
         }
     }
