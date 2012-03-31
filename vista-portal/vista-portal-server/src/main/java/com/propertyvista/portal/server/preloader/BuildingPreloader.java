@@ -34,8 +34,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.company.Portfolio;
-import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
@@ -75,9 +73,9 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Amenity.class,
-                    Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, Media.class,
-                    ThumbnailBlob.class, FileBlob.class, Feature.class, PropertyManager.class, ProductCatalog.class);
+            return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Amenity.class, Vendor.class, Elevator.class,
+                    Boiler.class, Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, Media.class, ThumbnailBlob.class,
+                    FileBlob.class, Feature.class, PropertyManager.class, ProductCatalog.class);
         } else {
             return "This is production";
         }
