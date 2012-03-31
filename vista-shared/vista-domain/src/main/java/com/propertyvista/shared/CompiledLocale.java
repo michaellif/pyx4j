@@ -14,7 +14,9 @@
 package com.propertyvista.shared;
 
 import java.io.Serializable;
+import java.util.EnumSet;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -25,17 +27,17 @@ public enum CompiledLocale implements Serializable {
     @Translate(value = "English")
     en("English"),
 
-//    @Translate(value = "English (Canada)")
-//    en_CA("English"),
-//
-//    @Translate(value = "English (US)")
-//    en_US("English"),
+    @Translate(value = "English (Canada)")
+    en_CA("English"),
+
+    @Translate(value = "English (US)")
+    en_US("English"),
 
     @Translate(value = "French")
     fr("Fran\u00e7ais"),
 
-//    @Translate(value = "French (Canada)")
-//    fr_CA("Fran\u00e7ais"),
+    @Translate(value = "French (Canada)")
+    fr_CA("Fran\u00e7ais"),
 
     @Translate(value = "Spanish")
     es("Espa\u00f1ol"),
@@ -53,6 +55,14 @@ public enum CompiledLocale implements Serializable {
 
     CompiledLocale(String nativeDisplayName) {
         this.nativeDisplayName = nativeDisplayName;
+    }
+
+    public static EnumSet<CompiledLocale> getSupportedLocales() {
+        EnumSet<CompiledLocale> l = EnumSet.of(en, fr, es, zh_CN, zh_TW);
+        if (ApplicationMode.isDevelopment()) {
+            l.add(ru);
+        }
+        return l;
     }
 
     @Override

@@ -37,6 +37,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
@@ -45,6 +46,9 @@ import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.shared.CompiledLocale;
 
 class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
+
+    private static final I18n i18n = I18n.get(AvailableLocaleFolder.class);
+
     private final Set<CompiledLocale> usedLocales = new HashSet<CompiledLocale>();
 
     public AvailableLocaleFolder(boolean modifyable) {
@@ -103,6 +107,7 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
     }
 
     abstract class LocaleSelectorDialog extends Dialog implements CancelOption, ClickHandler {
+
         private final String LocaleRadioGroup = "LocaleSelector";
 
         private final VerticalPanel panel = new VerticalPanel();
@@ -111,10 +116,10 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
             super("Select Locale");
             setDialogOptions(this);
 
-            EnumSet<CompiledLocale> availLocales = EnumSet.allOf(CompiledLocale.class);
+            EnumSet<CompiledLocale> availLocales = CompiledLocale.getSupportedLocales();
             availLocales.removeAll(usedLocales);
             if (availLocales.size() == 0) {
-                panel.add(new Label("Sorry, no more items to choose from."));
+                panel.add(new Label(i18n.tr("Sorry, no more items to choose from.")));
             } else {
                 for (CompiledLocale locale : availLocales) {
                     RadioButton radio = new RadioButton(LocaleRadioGroup, locale.toString());

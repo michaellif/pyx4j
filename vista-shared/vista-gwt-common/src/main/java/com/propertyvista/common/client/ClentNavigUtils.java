@@ -36,7 +36,7 @@ public class ClentNavigUtils {
     public static List<CompiledLocale> obtainAvailableLocales() {
         List<CompiledLocale> locales = new ArrayList<CompiledLocale>();
         for (String localeName : LocaleInfo.getAvailableLocaleNames()) {
-            if (localeName.equals("default") | localeName.equals("zh")) {
+            if (localeName.equals("default")) {
                 localeName = "en_US";
             }
             CompiledLocale cl = CompiledLocale.valueOf(localeName);
