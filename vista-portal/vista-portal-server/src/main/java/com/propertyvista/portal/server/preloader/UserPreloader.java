@@ -176,6 +176,8 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             Persistence.service().persist(emp);
             userCount++;
         }
+        PmcCreator.createVistaSupportUsers();
+
         return "Created " + userCount + " Employee/Users";
     }
 

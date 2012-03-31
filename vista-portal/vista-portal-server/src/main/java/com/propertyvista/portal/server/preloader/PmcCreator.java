@@ -44,8 +44,7 @@ public class PmcCreator {
                     .password().getValue(), true, defaultRole);
 
             // Create support account by default
-            UserPreloader.createCrmEmployee("Support", "PropertyVista", "support@propertyvista.com", "Vista2012", false, defaultRole,
-                    CrmRolesPreloader.getSupportRole());
+            createVistaSupportUsers();
 
             if (ApplicationMode.isDevelopment()) {
                 for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
@@ -57,6 +56,11 @@ public class PmcCreator {
         } finally {
             NamespaceManager.setNamespace(namespace);
         }
+    }
+
+    public static void createVistaSupportUsers() {
+        UserPreloader.createCrmEmployee("Support", "PropertyVista", "support@propertyvista.com", "Vista2012", false, CrmRolesPreloader.getDefaultRole(),
+                CrmRolesPreloader.getSupportRole());
     }
 
 }
