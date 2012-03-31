@@ -14,10 +14,12 @@
 package com.propertyvista.domain.dashboard.gadgets.type.demo;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Table;
 
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 @DiscriminatorValue("Gauge")
+@Table(prefix = "demo")
 public interface Gauge extends GadgetMetadata {
 
 }

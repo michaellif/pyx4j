@@ -21,8 +21,10 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 
 public class AddressConverter {
+
+    private static final I18n i18n = I18n.get(AddressConverter.class);
+
     public static class StructuredToSimpleAddressConverter extends EntityDtoBinder<AddressStructured, AddressSimple> {
-        private static final I18n i18n = I18n.get(StructuredToSimpleAddressConverter.class);
 
         public StructuredToSimpleAddressConverter() {
             super(AddressStructured.class, AddressSimple.class);

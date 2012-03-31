@@ -25,17 +25,17 @@ public enum CompiledLocale implements Serializable {
     @Translate(value = "English")
     en("English"),
 
-    @Translate(value = "English (Canada)")
-    en_CA("English"),
-
-    @Translate(value = "English (US)")
-    en_US("English"),
+//    @Translate(value = "English (Canada)")
+//    en_CA("English"),
+//
+//    @Translate(value = "English (US)")
+//    en_US("English"),
 
     @Translate(value = "French")
     fr("Fran\u00e7ais"),
 
-    @Translate(value = "French (Canada)")
-    fr_CA("Fran\u00e7ais"),
+//    @Translate(value = "French (Canada)")
+//    fr_CA("Fran\u00e7ais"),
 
     @Translate(value = "Spanish")
     es("Espa\u00f1ol"),

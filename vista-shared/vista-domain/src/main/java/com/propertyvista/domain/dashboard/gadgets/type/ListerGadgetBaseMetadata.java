@@ -25,6 +25,7 @@ import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 @DiscriminatorValue("ListerGadgetBaseSettings")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface ListerGadgetBaseMetadata extends GadgetMetadata {
+
     IPrimitive<Integer> pageSize();
 
     IPrimitive<Integer> pageNumber();

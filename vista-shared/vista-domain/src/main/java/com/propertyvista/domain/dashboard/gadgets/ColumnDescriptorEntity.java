@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
  * 
  */
 public interface ColumnDescriptorEntity extends IEntity {
+
     /** Determines which property of the embodied member to hold. Supposed to be the same thing as <code>ColumnDescriptor.columnName() </code> */
     IPrimitive<String> propertyPath();
 

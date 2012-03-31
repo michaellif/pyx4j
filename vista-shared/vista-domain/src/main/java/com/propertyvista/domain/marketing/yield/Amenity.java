@@ -13,11 +13,13 @@
  */
 package com.propertyvista.domain.marketing.yield;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@AbstractEntity
 public interface Amenity extends IEntity {
 
     @Length(128)
