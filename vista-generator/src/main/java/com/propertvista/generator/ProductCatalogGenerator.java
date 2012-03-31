@@ -130,7 +130,9 @@ public class ProductCatalogGenerator {
 
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
         for (ServiceItemType itemType : getServiceItemTypes()) {
-            allowedItemTypes.add(itemType);
+            if (type.equals(itemType.serviceType().getValue())) {
+                allowedItemTypes.add(itemType);
+            }
         }
 
         int count = 0;
@@ -187,7 +189,9 @@ public class ProductCatalogGenerator {
     private List<ProductItem> createFeatureItems(Feature.Type type) {
         List<FeatureItemType> allowedItemTypes = new ArrayList<FeatureItemType>();
         for (FeatureItemType itemType : getFeatureItemTypes()) {
-            allowedItemTypes.add(itemType);
+            if (type.equals(itemType.featureType().getValue())) {
+                allowedItemTypes.add(itemType);
+            }
         }
 
         int count = Math.min(3, allowedItemTypes.size());
