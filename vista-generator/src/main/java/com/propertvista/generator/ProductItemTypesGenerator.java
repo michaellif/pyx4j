@@ -16,11 +16,9 @@ package com.propertvista.generator;
 import java.util.List;
 
 import com.propertvista.generator.gdo.ProductItemTypesGDO;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.Service;
@@ -30,40 +28,37 @@ public class ProductItemTypesGenerator {
 
     private final ProductItemTypesGDO gdo;
 
-    private final List<GlCode> glCodes;
-
-    public ProductItemTypesGenerator(List<GlCode> glCodes) {
-        this.glCodes = glCodes;
+    public ProductItemTypesGenerator() {
         gdo = new ProductItemTypesGDO();
 
         // preload types:
-        createChargeItemType("Residential Unit", Service.Type.residentialUnit);
-        createChargeItemType("Commercial Unit", Service.Type.commercialUnit);
-        createChargeItemType("Short Term Residential Unit", Service.Type.residentialShortTermUnit);
-        createChargeItemType("Roof Spot", Service.Type.roof);
-        createChargeItemType("Billboard", Service.Type.sundry);
-        createChargeItemType("Garage", Service.Type.garage);
-        createChargeItemType("Storage", Service.Type.storage);
+        createChargeItemType("Residential Unit", Service.Type.residentialUnit, 5110);
+        createChargeItemType("Commercial Unit", Service.Type.commercialUnit, 5110);
+        createChargeItemType("Short Term Residential Unit", Service.Type.residentialShortTermUnit, 5110);
+        createChargeItemType("Roof Spot", Service.Type.roof, 5110);
+        createChargeItemType("Billboard", Service.Type.sundry, 5110);
+        createChargeItemType("Garage", Service.Type.garage, 5110);
+        createChargeItemType("Storage", Service.Type.storage, 5110);
 
-        createChargeItemType("Regular Parking", Feature.Type.parking);
-        createChargeItemType("Wide Parking", Feature.Type.parking);
-        createChargeItemType("Narrow Parking", Feature.Type.parking);
-        createChargeItemType("Disabled Parking", Feature.Type.parking);
-        createChargeItemType("Cat", Feature.Type.pet);
-        createChargeItemType("Dog", Feature.Type.pet);
-        createChargeItemType("Small Locker", Feature.Type.locker);
-        createChargeItemType("Medium Locker", Feature.Type.locker);
-        createChargeItemType("Large Locker", Feature.Type.locker);
-        createChargeItemType("Fitness", Feature.Type.addOn);
-        createChargeItemType("Pool", Feature.Type.addOn);
-        createChargeItemType("Furnished", Feature.Type.addOn);
-        createChargeItemType("Key", Feature.Type.addOn);
-        createChargeItemType("Access Card", Feature.Type.addOn);
-        createChargeItemType("Cable", Feature.Type.addOn);
-        createChargeItemType("Water", Feature.Type.utility);
-        createChargeItemType("Gas", Feature.Type.utility);
-        createChargeItemType("Hydro", Feature.Type.utility);
-        createChargeItemType("Booking", Feature.Type.booking);
+        createChargeItemType("Regular Parking", Feature.Type.parking, 5110);
+        createChargeItemType("Wide Parking", Feature.Type.parking, 5110);
+        createChargeItemType("Narrow Parking", Feature.Type.parking, 5110);
+        createChargeItemType("Disabled Parking", Feature.Type.parking, 5110);
+        createChargeItemType("Cat", Feature.Type.pet, 5930);
+        createChargeItemType("Dog", Feature.Type.pet, 5930);
+        createChargeItemType("Small Locker", Feature.Type.locker, 5110);
+        createChargeItemType("Medium Locker", Feature.Type.locker, 5110);
+        createChargeItemType("Large Locker", Feature.Type.locker, 5110);
+        createChargeItemType("Fitness", Feature.Type.addOn, 5110);
+        createChargeItemType("Pool", Feature.Type.addOn, 5110);
+        createChargeItemType("Furnished", Feature.Type.addOn, 5110);
+        createChargeItemType("Key", Feature.Type.addOn, 6240);
+        createChargeItemType("Access Card", Feature.Type.addOn, 6240);
+        createChargeItemType("Cable", Feature.Type.addOn, 5110);
+        createChargeItemType("Water", Feature.Type.utility, 6440);
+        createChargeItemType("Gas", Feature.Type.utility, 5997);
+        createChargeItemType("Hydro", Feature.Type.utility, 5998);
+        createChargeItemType("Booking", Feature.Type.booking, 5934);
     }
 
     public List<ServiceItemType> getServiceItemTypes() {
@@ -74,26 +69,22 @@ public class ProductItemTypesGenerator {
         return gdo.featureItemTypes;
     }
 
-    private void createChargeItemType(String name, Service.Type serviceType) {
+    private void createChargeItemType(String name, Service.Type serviceType, int glCode) {
         ServiceItemType type = EntityFactory.create(ServiceItemType.class);
         type.name().setValue(name);
         type.serviceType().setValue(serviceType);
-        type.glCode().set(RandomUtil.random(glCodes));
+        type.glCode().codeId().setValue(glCode);
 
         gdo.serviceItemTypes.add(type);
     }
 
-    private void createChargeItemType(String name, Feature.Type featureType) {
+    private void createChargeItemType(String name, Feature.Type featureType, int glCode) {
         FeatureItemType type = EntityFactory.create(FeatureItemType.class);
         type.name().setValue(name);
         type.featureType().setValue(featureType);
-        type.glCode().set(RandomUtil.random(glCodes));
+        type.glCode().codeId().setValue(glCode);
 
         gdo.featureItemTypes.add(type);
-    }
-
-    public ProductItemTypesGDO getGdo() {
-        return gdo;
     }
 
 }
