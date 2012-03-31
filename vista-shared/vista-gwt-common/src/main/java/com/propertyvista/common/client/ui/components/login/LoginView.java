@@ -21,6 +21,8 @@ public interface LoginView extends IsWidget {
 
     interface Presenter {
 
+        public String getUserId();
+
         void login(AuthenticationRequest value);
 
         void gotoResetPassword();

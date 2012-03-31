@@ -103,6 +103,7 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
         main.add(new LoginPanelWidgetDecorator(inject(proto().email())));
         main.add(new LoginPanelWidgetDecorator(inject(proto().password())));
         main.add(new LoginPanelWidgetDecorator(inject(proto().captcha())));
+        main.add(new LoginPanelWidgetDecorator(inject(proto().rememberID())));
 
         Button loginButton = new Button(i18n.tr("Login"));
         loginButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());

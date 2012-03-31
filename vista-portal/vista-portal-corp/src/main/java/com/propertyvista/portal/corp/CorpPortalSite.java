@@ -21,7 +21,7 @@ import com.propertyvista.portal.rpc.corp.CorpPortalSiteMap;
 public class CorpPortalSite extends VistaSite {
 
     public CorpPortalSite() {
-        super(CorpPortalSiteMap.class);
+        super("vista-corp-portal", CorpPortalSiteMap.class);
     }
 
     @Override

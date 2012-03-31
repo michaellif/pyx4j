@@ -19,6 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -26,15 +27,20 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.webstorage.client.HTML5Storage;
 import com.pyx4j.widgets.client.CaptchaComposite;
 
 public abstract class AbstractLoginActivty extends AbstractActivity implements LoginView.Presenter {
+
+    private static String HTML5_KEY = AppSite.instance().getAppId() + ".userid";
 
     private final AuthenticationService authService;
 
     private final AppPlace passwordResetRequestPlace;
 
     private final LoginView loginView;
+
+    private String userId;
 
     /**
      * @param authService
@@ -45,20 +51,39 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
         this.authService = authService;
         this.passwordResetRequestPlace = passwordResetRequestPlace;
         this.loginView = loginView;
-        this.loginView.setPresenter(this);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+
+        if (HTML5Storage.isSupported()) {
+            String userIdFromStorage = HTML5Storage.getLocalStorage().getItem(AbstractLoginActivty.HTML5_KEY);
+            if (CommonsStringUtils.isStringSet(userIdFromStorage)) {
+                userId = userIdFromStorage;
+            }
+        }
+        loginView.setPresenter(this);
         panel.setWidget(loginView);
     }
 
     @Override
-    public void login(AuthenticationRequest request) {
+    public String getUserId() {
+        return userId;
+    }
+
+    @Override
+    public void login(final AuthenticationRequest request) {
         AsyncCallback<Boolean> callback = new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {
+                if (HTML5Storage.isSupported()) {
+                    if (request.rememberID().getValue()) {
+                        HTML5Storage.getLocalStorage().setItem(AbstractLoginActivty.HTML5_KEY, request.email().getValue());
+                    } else {
+                        HTML5Storage.getLocalStorage().removeItem(AbstractLoginActivty.HTML5_KEY);
+                    }
+                }
             }
 
             @Override

@@ -60,6 +60,11 @@ public abstract class AbstractLoginViewImpl extends FormFlexPanel implements Log
         this.presenter = presenter;
         form.populateNew();
         form.disableCaptcha();
+
+        if (presenter.getUserId() != null) {
+            form.get(form.proto().email()).setValue(presenter.getUserId());
+            form.get(form.proto().rememberID()).setValue(true);
+        }
     }
 
     @Override

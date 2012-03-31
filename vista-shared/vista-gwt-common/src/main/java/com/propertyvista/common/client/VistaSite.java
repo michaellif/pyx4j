@@ -36,12 +36,12 @@ public abstract class VistaSite extends AppSite {
 
     private Message message;
 
-    public VistaSite(Class<? extends SiteMap> siteMapClass) {
-        super(siteMapClass);
+    public VistaSite(String appId, Class<? extends SiteMap> siteMapClass) {
+        super(appId, siteMapClass);
     }
 
-    public VistaSite(Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
-        super(siteMapClass, dispatcher);
+    public VistaSite(String appId, Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
+        super(appId, siteMapClass, dispatcher);
     }
 
     @Override

@@ -54,7 +54,7 @@ public class CrmSite extends VistaSite {
     private static final I18n i18n = I18n.get(CrmSite.class);
 
     public CrmSite() {
-        super(CrmSiteMap.class, new CrmSiteAppPlaceDispatcher());
+        super("vista-crm", CrmSiteMap.class, new CrmSiteAppPlaceDispatcher());
     }
 
     @Override

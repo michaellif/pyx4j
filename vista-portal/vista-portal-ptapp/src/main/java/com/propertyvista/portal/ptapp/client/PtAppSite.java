@@ -56,7 +56,7 @@ public class PtAppSite extends VistaSite {
     private PtAppWizardManager wizardManager;
 
     public PtAppSite() {
-        super(PtSiteMap.class, new PtAppPlaceDispatcher());
+        super("vista-ptapp", PtSiteMap.class, new PtAppPlaceDispatcher());
     }
 
     @Override

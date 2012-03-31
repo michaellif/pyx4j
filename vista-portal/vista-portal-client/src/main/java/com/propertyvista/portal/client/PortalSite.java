@@ -48,7 +48,7 @@ public class PortalSite extends VistaSite {
     public static final String RESIDENT_TEST_INSERTION_ID = "vista.resident.test";
 
     public PortalSite() {
-        super(PortalSiteMap.class);
+        super("vista-portal", PortalSiteMap.class);
     }
 
     @Override
