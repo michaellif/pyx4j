@@ -32,7 +32,7 @@ import com.propertyvista.common.client.VistaSite;
 public class AdminSite extends VistaSite {
 
     public AdminSite() {
-        super(AdminSiteMap.class, new AdminSiteAppPlaceDispatcher());
+        super("vista-admin", AdminSiteMap.class, new AdminSiteAppPlaceDispatcher());
     }
 
     @Override
