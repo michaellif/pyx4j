@@ -37,6 +37,7 @@ import com.pyx4j.essentials.server.xml.XMLEntityConverter;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.log4j.LoggerConfig;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class SystemMaintenance {
 
@@ -214,6 +215,7 @@ public class SystemMaintenance {
             XMLEntityConverter.writeFile(systemMaintenanceState, getStorageFile(), true);
         } catch (Throwable e) {
             log.error("system error", e);
+            throw new UserRuntimeException("Error saving system state " + e.getMessage());
         }
     }
 }
