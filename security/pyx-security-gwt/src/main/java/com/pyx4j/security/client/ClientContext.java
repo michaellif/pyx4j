@@ -50,6 +50,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
+import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.UserVisit;
@@ -102,6 +103,8 @@ public class ClientContext {
 
     private static ClientSystemInfo clientSystemInfo;
 
+    private static SystemWallMessage systemWallMessage;
+
     static {
         RPCManager.addSystemNotificationHandler(new SystemNotificationHandler() {
             @Override
@@ -123,6 +126,8 @@ public class ClientContext {
                         RPCManager.setUserVisitHashCode(null);
                     }
                     ClientEventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
+                } else if (event.getSystemNotification() instanceof SystemWallMessage) {
+                    systemWallMessage = (SystemWallMessage) event.getSystemNotification();
                 }
             }
         });
@@ -192,6 +197,10 @@ public class ClientContext {
         ClientEventBus.fireEvent(new ContextChangeEvent(name, value));
     }
 
+    public static SystemWallMessage getSystemWallMessage() {
+        return systemWallMessage;
+    }
+
     public static HandlerRegistration addContextChangeHandler(ContextChangeHandler handler) {
         return ClientEventBus.addHandler(ContextChangeEvent.TYPE, handler);
     }
@@ -239,6 +248,7 @@ public class ClientContext {
             if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
                 RPCManager.enableAppEngineUsageStats();
             }
+            systemWallMessage = authenticationResponse.getSystemWallMessage();
         } finally {
             authenticationChanging = false;
         }

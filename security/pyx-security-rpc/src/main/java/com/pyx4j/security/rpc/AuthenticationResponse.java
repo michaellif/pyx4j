@@ -48,6 +48,8 @@ public class AuthenticationResponse implements Serializable {
 
     private long servertTime;
 
+    private SystemWallMessage systemWallMessage;
+
     public AuthenticationResponse() {
 
     }
@@ -130,6 +132,14 @@ public class AuthenticationResponse implements Serializable {
 
     public void setServertTime(long servertTime) {
         this.servertTime = servertTime;
+    }
+
+    public SystemWallMessage getSystemWallMessage() {
+        return systemWallMessage;
+    }
+
+    public void setSystemWallMessage(SystemWallMessage systemWallMessage) {
+        this.systemWallMessage = systemWallMessage;
     }
 
 }

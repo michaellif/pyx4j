@@ -99,7 +99,7 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
         callback.onSuccess(ServerSideConfiguration.instance().datastoreReadOnly());
     }
 
-    public static AuthenticationResponse createAuthenticationResponse(String sessionToken) {
+    public AuthenticationResponse createAuthenticationResponse(String sessionToken) {
         AuthenticationResponse ar = new AuthenticationResponse();
         if (Context.getSession() != null) {
             ar.setMaxInactiveInterval(Context.getSession().getMaxInactiveInterval());
