@@ -34,9 +34,9 @@ import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Concession.Status;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -192,7 +192,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
         if (selectedService != null) {
             ProductCatalog catalog = currentValue.selectedBuilding().productCatalog();
-            List<ProductItemType> utilitiesToExclude = new ArrayList<ProductItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
+            List<FeatureItemType> utilitiesToExclude = new ArrayList<FeatureItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
             utilitiesToExclude.addAll(catalog.includedUtilities());
             utilitiesToExclude.addAll(catalog.externalUtilities());
 

@@ -29,29 +29,29 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.dto.BuildingDTO;
 
-class UtilityFolder extends VistaTableFolder<ProductItemType> {
+class UtilityFolder extends VistaTableFolder<FeatureItemType> {
 
     private static final I18n i18n = I18n.get(UtilityFolder.class);
 
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
     static {
-        ProductItemType proto = EntityFactory.getEntityPrototype(ProductItemType.class);
+        FeatureItemType proto = EntityFactory.getEntityPrototype(FeatureItemType.class);
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.name(), "30em"));
     }
 
     private final CEntityEditor<BuildingDTO> building;
 
     public UtilityFolder(CEntityEditor<BuildingDTO> building) {
-        super(ProductItemType.class, building.isEditable());
+        super(FeatureItemType.class, building.isEditable());
         this.building = building;
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ProductItemType) {
+        if (member instanceof FeatureItemType) {
             return new UtilityEditor();
         } else {
             return super.create(member);
@@ -65,10 +65,10 @@ class UtilityFolder extends VistaTableFolder<ProductItemType> {
 
     @Override
     protected void addItem() {
-        new SelectDialog<ProductItemType>(i18n.tr("Select Utilities"), true, getNotSelectedUtilities(building)) {
+        new SelectDialog<FeatureItemType>(i18n.tr("Select Utilities"), true, getNotSelectedUtilities(building)) {
             @Override
             public boolean onClickOk() {
-                for (ProductItemType item : getSelectedItems()) {
+                for (FeatureItemType item : getSelectedItems()) {
                     addItem(item);
                 }
                 return true;
@@ -86,16 +86,16 @@ class UtilityFolder extends VistaTableFolder<ProductItemType> {
         }.show();
     }
 
-    private static List<ProductItemType> getNotSelectedUtilities(CEntityEditor<BuildingDTO> building) {
-        List<ProductItemType> alreadySelected = new ArrayList<ProductItemType>();
-        for (ProductItemType item : building.getValue().productCatalog().includedUtilities()) {
+    private static List<FeatureItemType> getNotSelectedUtilities(CEntityEditor<BuildingDTO> building) {
+        List<FeatureItemType> alreadySelected = new ArrayList<FeatureItemType>();
+        for (FeatureItemType item : building.getValue().productCatalog().includedUtilities()) {
             alreadySelected.add(item);
         }
-        for (ProductItemType item : building.getValue().productCatalog().externalUtilities()) {
+        for (FeatureItemType item : building.getValue().productCatalog().externalUtilities()) {
             alreadySelected.add(item);
         }
-        List<ProductItemType> canBeSelected = new ArrayList<ProductItemType>();
-        for (ProductItemType item : building.getValue().availableUtilities()) {
+        List<FeatureItemType> canBeSelected = new ArrayList<FeatureItemType>();
+        for (FeatureItemType item : building.getValue().availableUtilities()) {
             if (!alreadySelected.contains(item)) {
                 canBeSelected.add(item);
             }
@@ -104,15 +104,15 @@ class UtilityFolder extends VistaTableFolder<ProductItemType> {
     }
 
     @Override
-    protected IFolderDecorator<ProductItemType> createDecorator() {
-        TableFolderDecorator<ProductItemType> decor = (TableFolderDecorator<ProductItemType>) super.createDecorator();
+    protected IFolderDecorator<FeatureItemType> createDecorator() {
+        TableFolderDecorator<FeatureItemType> decor = (TableFolderDecorator<FeatureItemType>) super.createDecorator();
         decor.setShowHeader(false);
         return decor;
     }
 
-    class UtilityEditor extends CEntityFolderRowEditor<ProductItemType> {
+    class UtilityEditor extends CEntityFolderRowEditor<FeatureItemType> {
         public UtilityEditor() {
-            super(ProductItemType.class, UtilityFolder.COLUMNS);
+            super(FeatureItemType.class, UtilityFolder.COLUMNS);
         }
 
         @Override

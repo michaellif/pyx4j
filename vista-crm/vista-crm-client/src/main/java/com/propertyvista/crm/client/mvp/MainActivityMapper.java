@@ -167,6 +167,7 @@ import com.propertyvista.crm.client.activity.report.ReportViewActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
+import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -216,6 +217,9 @@ public class MainActivityMapper implements AppActivityMapper {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.EquifaxResult.class);
         } else if (entityClass.equals(MaintenanceRequest.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.MaintenanceRequest.class);
+
+        } else if (entityClass.equals(GlCode.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.GlCodeCategory.class);
         }
 
         return null;
