@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.AdminUserCredential;
 
@@ -37,6 +38,7 @@ class AminUsersPreloader extends AbstractDataPreloader {
         credential.user().set(user);
         credential.credential().setValue(PasswordEncryptor.encryptPassword(email));
         credential.enabled().setValue(Boolean.TRUE);
+        credential.behaviors().add(VistaAdminBehavior.SystemAdmin);
 
         Persistence.service().persist(credential);
 

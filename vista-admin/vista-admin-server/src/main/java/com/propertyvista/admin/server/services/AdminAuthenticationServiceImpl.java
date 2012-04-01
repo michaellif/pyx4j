@@ -19,6 +19,7 @@ import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.AdminUserCredential;
@@ -41,6 +42,9 @@ public class AdminAuthenticationServiceImpl extends VistaAuthenticationServicesI
 
     @Override
     protected void addBehaviors(AdminUserCredential userCredential, Set<Behavior> behaviors) {
+        behaviors.addAll(userCredential.behaviors());
+        // TODO remove after preload fixed
+        behaviors.add(VistaAdminBehavior.SystemAdmin);
     }
 
 }

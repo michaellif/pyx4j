@@ -15,13 +15,16 @@ package com.propertyvista.server.domain.security;
 
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.VistaAdminBehavior;
 
 @RpcBlacklist
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = AdminUser.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AdminUserCredential extends AbstractUserCredential<AdminUser> {
 
+    IPrimitiveSet<VistaAdminBehavior> behaviors();
 }
