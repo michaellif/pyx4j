@@ -229,6 +229,7 @@ public class CrmTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix, ShortCutsViewImpl.StyleSuffix.Item));
         style.addProperty("margin-left", "0.3em");
         style.addProperty("margin-right", "0.2em");
+        style.addProperty("margin-bottom", "0.3em");
         addStyle(style);
 
         // Search line style
