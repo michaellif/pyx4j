@@ -89,6 +89,14 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     }
 
     @Override
+    public void reset() {
+        if (finalizeButton != null) {
+            finalizeButton.setVisible(false);
+        }
+        super.reset();
+    }
+
+    @Override
     public void populate(E value) {
         super.populate(value);
         String caption = (defaultCaption + " " + value.getStringView());

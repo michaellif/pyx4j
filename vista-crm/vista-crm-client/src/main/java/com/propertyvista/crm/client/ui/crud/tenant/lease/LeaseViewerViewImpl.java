@@ -166,6 +166,17 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     }
 
     @Override
+    public void reset() {
+        notice.setVisible(false);
+        cancelNotice.setVisible(false);
+        evict.setVisible(false);
+        cancelEvict.setVisible(false);
+        onlineApplication.setVisible(false);
+        runBill.setVisible(false);
+        super.reset();
+    }
+
+    @Override
     public void populate(LeaseDTO value) {
         super.populate(value);
 
