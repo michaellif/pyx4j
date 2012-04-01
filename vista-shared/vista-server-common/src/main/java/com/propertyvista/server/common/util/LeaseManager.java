@@ -36,6 +36,7 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
@@ -240,7 +241,9 @@ public class LeaseManager {
 
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
 
-        ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+        if (!VistaTODO.removedForProduction) {
+            ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+        }
         return lease;
     }
 
@@ -287,7 +290,9 @@ public class LeaseManager {
     public Lease activate(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         // set lease status to active ONLY if first (latest till now) bill is confirmed: 
-        if (ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() == Bill.BillStatus.Confirmed) {
+        if (VistaTODO.removedForProduction
+                || ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() == Bill.BillStatus.Confirmed) {
+
             lease.version().status().setValue(Status.Active);
 
             lease.saveAction().setValue(SaveAction.saveAsFinal);
