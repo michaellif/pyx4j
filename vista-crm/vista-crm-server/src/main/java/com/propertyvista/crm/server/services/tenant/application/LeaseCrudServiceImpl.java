@@ -106,6 +106,8 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
 
     @Override
     protected void persist(Lease dbo, LeaseDTO in) {
+        boolean isApproveFinal = dbo.saveAction().getValue() == SaveAction.saveAsFinal;
+
         // save extra data:
         for (BillableItem item : dbo.version().leaseProducts().featureItems()) {
             if (!item.extraData().isNull()) {
@@ -125,7 +127,7 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         }
 
         // update unit rent price here:
-        if (in.saveAction().getValue() == SaveAction.saveAsFinal) {
+        if (isApproveFinal) {
             ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(in);
         }
     }

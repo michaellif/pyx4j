@@ -74,8 +74,9 @@ public class ServiceCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Ser
 
     @Override
     protected void persist(Service entity, Service dto) {
+        boolean isApproveFinal = entity.saveAction().getValue() == SaveAction.saveAsFinal;
         super.persist(entity, dto);
-        if (entity.saveAction().getValue() == SaveAction.saveAsFinal) {
+        if (isApproveFinal) {
             // update unit market prices here:
             ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(entity);
         }
