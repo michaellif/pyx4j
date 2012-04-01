@@ -172,6 +172,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         evict.setVisible(false);
         cancelEvict.setVisible(false);
         onlineApplication.setVisible(false);
+        sendMail.setVisible(false);
         runBill.setVisible(false);
         super.reset();
     }
@@ -181,28 +182,32 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         super.populate(value);
 
         // set buttons state:
-        Status status = value.version().status().getValue();
-        CompletionType completion = value.version().completion().getValue();
+        if (!value.unit().isNull()) {
+            Status status = value.version().status().getValue();
+            CompletionType completion = value.version().completion().getValue();
 
-        // disable editing for completed/closed leases:
-        getEditButton().setVisible(status != Status.Closed);
-        // tweak finalizing availability:
-        if (getFinalizeButton().isVisible()) {
-            getFinalizeButton().setVisible(status == Status.Active || status == Status.Completed);
+            // disable editing for completed/closed leases:
+            getEditButton().setVisible(status != Status.Closed);
+            // tweak finalizing availability:
+            if (getFinalizeButton().isVisible()) {
+                getFinalizeButton().setVisible(status == Status.Active || status == Status.Completed);
+            }
+
+            sendMail.setVisible(!value.unit().isNull());
+
+            onlineApplication.setVisible(status == Status.Created);
+
+            if (ApplicationMode.isDevelopment()) {
+                runBill.setVisible(status == Status.Active);
+            } else {
+                runBill.setVisible(false); // close for production!..
+            }
+
+            notice.setVisible(status == Status.Active && completion == null);
+            cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
+            evict.setVisible(status == Status.Active && completion == null);
+            cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
         }
-
-        onlineApplication.setVisible(status == Status.Created);
-
-        if (ApplicationMode.isDevelopment()) {
-            runBill.setVisible(status == Status.Active);
-        } else {
-            runBill.setVisible(false); // close for production!..
-        }
-
-        notice.setVisible(status == Status.Active && completion == null);
-        cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
-        evict.setVisible(status == Status.Active && completion == null);
-        cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
     }
 
     @Override

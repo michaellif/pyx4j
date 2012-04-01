@@ -226,17 +226,30 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
     }
 
     @Override
+    public void reset() {
+        inviteAction.setVisible(false);
+        checkAction.setVisible(false);
+        approveAction.setVisible(false);
+        moreInfoAction.setVisible(false);
+        declineAction.setVisible(false);
+        cancelAction.setVisible(false);
+        super.reset();
+    }
+
+    @Override
     public void populate(MasterApplicationDTO value) {
         super.populate(value);
 
         // set buttons state:
-        Status status = value.status().getValue();
-        inviteAction.setVisible(status != Status.Declined && status != Status.Cancelled);
-        checkAction.setVisible(status != Status.Declined && status != Status.Cancelled);
-        approveAction.setVisible(status != Status.Approved && status != Status.Declined && status != Status.Cancelled);
-        moreInfoAction.setVisible(status != Status.Declined && status != Status.Cancelled);
-        declineAction.setVisible(status != Status.Approved && status != Status.Declined && status != Status.Cancelled);
-        cancelAction.setVisible(status != Status.Cancelled);
+        if (!value.lease().unit().isNull()) {
+            Status status = value.status().getValue();
+            inviteAction.setVisible(status != Status.Declined && status != Status.Cancelled);
+            checkAction.setVisible(status != Status.Declined && status != Status.Cancelled);
+            approveAction.setVisible(status != Status.Approved && status != Status.Declined && status != Status.Cancelled);
+            moreInfoAction.setVisible(status != Status.Declined && status != Status.Cancelled);
+            declineAction.setVisible(status != Status.Approved && status != Status.Declined && status != Status.Cancelled);
+            cancelAction.setVisible(status != Status.Cancelled);
+        }
     }
 
     @Override
