@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud.lister;
+package com.pyx4j.site.client.ui.dialogs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,9 +37,10 @@ import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+import com.pyx4j.site.client.ui.crud.lister.BasicLister;
+import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 
-public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDialog {
+public abstract class EntitySelectorTableDialog<E extends IEntity> extends AbstractEntitySelectorDialog<E> {
 
     private final Class<E> entityClass;
 
@@ -51,7 +52,7 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
 
     private final List<E> alreadySelected;
 
-    public EntitySelectorDialog(Class<E> entityClass, boolean isMultiselect, List<E> alreadySelected, String caption) {
+    public EntitySelectorTableDialog(Class<E> entityClass, boolean isMultiselect, List<E> alreadySelected, String caption) {
         super(caption);
         this.entityClass = entityClass;
         this.isMultiselect = isMultiselect;
@@ -60,7 +61,7 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
             @Override
             protected void onObtainSuccess() {
                 super.onObtainSuccess();
-                EntitySelectorDialog.super.show();
+                EntitySelectorTableDialog.super.show();
             }
         };
         if (this.isMultiselect) {
@@ -164,7 +165,7 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
 
         public SelectEntityLister(Class<E> clazz) {
             super(clazz);
-            if (EntitySelectorDialog.this.isMultiselect) {
+            if (EntitySelectorTableDialog.this.isMultiselect) {
                 setHasCheckboxColumn(true);
             } else {
                 setSelectable(true);
@@ -173,7 +174,7 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
             getDataTablePanel().setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
             getDataTablePanel().setPageSize(PAGESIZE_SMALL);
 
-            setColumnDescriptors(EntitySelectorDialog.this.defineColumnDescriptors());
+            setColumnDescriptors(EntitySelectorTableDialog.this.defineColumnDescriptors());
         }
 
     }

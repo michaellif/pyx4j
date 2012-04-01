@@ -20,10 +20,9 @@
  */
 package com.pyx4j.site.client.ui.crud.misc;
 
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 /**
@@ -35,7 +34,7 @@ public abstract class CEntitySelectorHyperlink<E extends IEntity> extends CTextF
 
     protected abstract AppPlace getTargetPlace();
 
-    protected abstract EntitySelectorDialog<E> getSelectorDialog();
+    protected abstract AbstractEntitySelectorDialog<E> getSelectorDialog();
 
     @Override
     protected NEntitySelectorHyperlink<E> createWidget() {
