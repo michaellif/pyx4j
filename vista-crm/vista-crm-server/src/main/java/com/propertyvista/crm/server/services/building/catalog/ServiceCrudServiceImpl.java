@@ -19,7 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -73,11 +73,11 @@ public class ServiceCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Ser
     }
 
     @Override
-    public void approveFinal(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        super.approveFinal(callback, entityId);
-
-        // update unit market prices here:
-        Service entity = Persistence.secureRetrieve(entityClass, entityId);
-        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(entity);
+    protected void persist(Service entity, Service dto) {
+        super.persist(entity, dto);
+        if (entity.saveAction().getValue() == SaveAction.saveAsFinal) {
+            // update unit market prices here:
+            ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(entity);
+        }
     }
 }

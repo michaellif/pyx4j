@@ -39,9 +39,10 @@ public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
     @Override
     public void updateUnitMarketPrice(Service service) {
         List<AptUnit> units = new Vector<AptUnit>();
+        Persistence.service().retrieve(service.version().items());
         for (ProductItem item : service.version().items()) {
-            if (item.element() instanceof AptUnit) {
-                units.add((AptUnit) item.element());
+            if (item.element().isInstanceOf(AptUnit.class)) {
+                units.add((AptUnit) item.element().cast());
             }
         }
 
