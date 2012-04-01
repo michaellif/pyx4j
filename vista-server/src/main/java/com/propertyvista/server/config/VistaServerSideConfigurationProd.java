@@ -97,7 +97,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     public String getDefaultBaseURLvistaAdmin() {
         switch (VistaDeployment.getSystemIdentification()) {
         case production:
-            return "http://prod02.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
+            return "https://prod02.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
         case staging:
             return "https://staging02.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
         default:
