@@ -168,6 +168,7 @@ import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -220,6 +221,9 @@ public class MainActivityMapper implements AppActivityMapper {
 
         } else if (entityClass.equals(GlCode.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.GlCodeCategory.class);
+
+        } else if (entityClass.equals(ProductItem.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Service.class);
         }
 
         return null;

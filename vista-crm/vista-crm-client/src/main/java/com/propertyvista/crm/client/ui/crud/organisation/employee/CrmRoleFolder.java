@@ -24,7 +24,7 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -63,7 +63,7 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
         new CrmRoleSelectorDialog().show();
     }
 
-    private class CrmRoleSelectorDialog extends EntitySelectorDialog<CrmRole> {
+    private class CrmRoleSelectorDialog extends EntitySelectorTableDialog<CrmRole> {
 
         public CrmRoleSelectorDialog() {
             super(CrmRole.class, true, getValue(), i18n.tr("Select roles"));

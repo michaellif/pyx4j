@@ -23,9 +23,9 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
-public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends EntitySelectorDialog<V> {
+public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends EntitySelectorTableDialog<V> {
 
     static final I18n i18n = I18n.get(VersionSelectorDialog.class);
 

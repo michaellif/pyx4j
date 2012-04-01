@@ -17,10 +17,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -36,24 +33,20 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
-import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
@@ -68,8 +61,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     private static final I18n i18n = I18n.get(LeaseEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
-
-    private Widget serviceSelector;
 
     public LeaseEditorForm() {
         this(false);
@@ -146,7 +137,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             get(proto().leaseTo()).setViewable(isLeaseSigned);
 
             get(proto().unit()).setEditable(!isLeaseSigned);
-            serviceSelector.setVisible(!isLeaseSigned);
         }
     }
 
@@ -201,7 +191,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected EntitySelectorDialog<AptUnit> getSelectorDialog() {
+            protected EntitySelectorTableDialog<AptUnit> getSelectorDialog() {
                 return new UnitSelectorDialog() {
                     @Override
                     protected void setFilters(List<DataTableFilterData> filters) {
@@ -272,46 +262,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     private Widget createServiceAgreementTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        HorizontalPanel serviceItemPanel = new HorizontalPanel();
-        serviceItemPanel.add(inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this)));
-        if (isEditable()) {
-            serviceItemPanel.add(serviceSelector = new AnchorButton("Select...", new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
-                        MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Unit First"));
-                    } else {
-                        new SelectDialog<ProductItem>(i18n.tr("Service Item Selection"), false, getValue().selectedServiceItems()) {
-                            @Override
-                            public boolean onClickOk() {
-                                List<ProductItem> selectedItems = getSelectedItems();
-                                if (!selectedItems.isEmpty()) {
-                                    ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(selectedItems.get(0));
-                                    return true;
-                                } else {
-                                    return false;
-                                }
-                            }
-
-                            @Override
-                            public String defineHeight() {
-                                return "100px";
-                            };
-
-                            @Override
-                            public String defineWidth() {
-                                return "400px";
-                            }
-                        }.show();
-                    }
-                }
-            }));
-            serviceSelector.getElement().getStyle().setMarginLeft(4, Unit.EM);
-        }
-
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, serviceItemPanel);
+        main.setWidget(++row, 0, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, true)));
 
         main.setH1(++row, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this)));

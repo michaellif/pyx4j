@@ -35,10 +35,10 @@ import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.components.dialogs.SelectTypeDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFeatureItemTypeListService;
@@ -173,7 +173,7 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
                 }
             }
 
-            new SelectTypeDialog<ProductItemType.Type>(i18n.tr("Select Product Type"), EnumSet.allOf(ProductItemType.Type.class)) {
+            new SelectEnumDialog<ProductItemType.Type>(i18n.tr("Select Product Type"), EnumSet.allOf(ProductItemType.Type.class)) {
                 @Override
                 public boolean onClickOk() {
                     switch (getSelectedType()) {
@@ -201,7 +201,7 @@ public class DepositPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<De
             }.show();
         }
 
-        private class ProductItemTypeSelectorDialog<PIT extends ProductItemType> extends EntitySelectorDialog<PIT> {
+        private class ProductItemTypeSelectorDialog<PIT extends ProductItemType> extends EntitySelectorTableDialog<PIT> {
 
             public ProductItemTypeSelectorDialog(Class<PIT> productClass, List alreadySelectedProducts) {
                 super(productClass, false, alreadySelectedProducts, i18n.tr("Select Product Type"));

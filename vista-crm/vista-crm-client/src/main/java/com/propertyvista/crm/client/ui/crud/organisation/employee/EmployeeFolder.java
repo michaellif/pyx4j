@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -113,7 +113,7 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
         new EmployeeSelectorDialog().show();
     }
 
-    private class EmployeeSelectorDialog extends EntitySelectorDialog<Employee> {
+    private class EmployeeSelectorDialog extends EntitySelectorTableDialog<Employee> {
 
         public EmployeeSelectorDialog() {
             super(Employee.class, true, getValue(), i18n.tr("Select Employee"));

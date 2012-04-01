@@ -31,8 +31,8 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -120,7 +120,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
             }
 
             @Override
-            protected EntitySelectorDialog<Floorplan> getSelectorDialog() {
+            protected EntitySelectorTableDialog<Floorplan> getSelectorDialog() {
                 return new FloorplanSelectorDialogDialog() {
                     @Override
                     public boolean onClickOk() {
@@ -198,7 +198,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         return new HTML(); // just stub - not necessary for editing mode!..
     }
 
-    private class FloorplanSelectorDialogDialog extends EntitySelectorDialog<Floorplan> {
+    private class FloorplanSelectorDialogDialog extends EntitySelectorTableDialog<Floorplan> {
 
         public FloorplanSelectorDialogDialog() {
             super(Floorplan.class, false, new ArrayList<Floorplan>(1), i18n.tr("Building/Floorplan Selection"));

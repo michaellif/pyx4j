@@ -23,10 +23,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
@@ -56,7 +56,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                     @Override
                     public void onSuccess(List<AptUnit> result) {
                         int i = result.size();
-                        new SelectDialog<AptUnit>(i18n.tr("Select Unit To Lease"), false, result) {
+                        new EntitySelectorListDialog<AptUnit>(i18n.tr("Select Unit To Lease"), false, result) {
                             @Override
                             public boolean onClickOk() {
                                 ((LeadViewerView.Presenter) presenter).convertToLease(getSelectedItems().get(0).getPrimaryKey());

@@ -19,9 +19,9 @@ import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -59,7 +59,7 @@ class ConcessionFolder extends VistaBoxFolder<Concession> {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
 
-            new SelectDialog<Concession>(i18n.tr("Select Concessions"), true, lease.getValue().selectedConcessions()) {
+            new EntitySelectorListDialog<Concession>(i18n.tr("Select Concessions"), true, lease.getValue().selectedConcessions()) {
                 @Override
                 public boolean onClickOk() {
                     for (Concession item : getSelectedItems()) {

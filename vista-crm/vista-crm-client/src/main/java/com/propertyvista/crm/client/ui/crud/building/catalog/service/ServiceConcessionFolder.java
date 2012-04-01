@@ -27,7 +27,7 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
@@ -67,7 +67,7 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
         new ConcessionSelectorDialog().show();
     }
 
-    private class ConcessionSelectorDialog extends EntitySelectorDialog<Concession> {
+    private class ConcessionSelectorDialog extends EntitySelectorTableDialog<Concession> {
 
         public ConcessionSelectorDialog() {
             super(Concession.class, true, getValue(), i18n.tr("Select Concession"));

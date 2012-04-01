@@ -18,8 +18,8 @@ import java.util.EnumSet;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.common.client.ui.components.dialogs.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Service;
@@ -36,7 +36,7 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Service.Type> callback) {
-        new SelectTypeDialog<Service.Type>(i18n.tr("Select Lease Type"), EnumSet.allOf(Service.Type.class)) {
+        new SelectEnumDialog<Service.Type>(i18n.tr("Select Lease Type"), EnumSet.allOf(Service.Type.class)) {
             @Override
             public boolean onClickOk() {
                 callback.onSuccess(getSelectedType());

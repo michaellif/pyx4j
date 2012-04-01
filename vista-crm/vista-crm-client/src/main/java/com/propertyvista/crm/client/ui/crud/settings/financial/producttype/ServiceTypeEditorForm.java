@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
@@ -51,7 +51,7 @@ public class ServiceTypeEditorForm extends CrmEntityForm<ServiceItemType> {
             }
 
             @Override
-            protected EntitySelectorDialog<GlCode> getSelectorDialog() {
+            protected EntitySelectorTableDialog<GlCode> getSelectorDialog() {
                 return new GlCodeSelectorDialog() {
                     @Override
                     public boolean onClickOk() {

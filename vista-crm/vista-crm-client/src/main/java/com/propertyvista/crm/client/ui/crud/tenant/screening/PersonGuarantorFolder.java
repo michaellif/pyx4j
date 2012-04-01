@@ -29,8 +29,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
@@ -108,7 +108,7 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
         return selected;
     }
 
-    private class TenantSelectorDialog extends EntitySelectorDialog<Guarantor> {
+    private class TenantSelectorDialog extends EntitySelectorTableDialog<Guarantor> {
 
         public TenantSelectorDialog() {
             super(Guarantor.class, true, getAlreadySelected(), i18n.tr("Select Guarantor"));

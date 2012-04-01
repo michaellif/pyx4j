@@ -18,9 +18,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
@@ -65,7 +65,7 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
             }
 
             @Override
-            protected EntitySelectorDialog<AptUnit> getSelectorDialog() {
+            protected EntitySelectorTableDialog<AptUnit> getSelectorDialog() {
                 return new UnitSelectorDialog() {
                     @Override
                     public boolean onClickOk() {

@@ -32,11 +32,11 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -281,12 +281,12 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         }
     }
 
-    private abstract class SendMailBox extends SelectDialog<TenantInLease> {
+    private abstract class SendMailBox extends EntitySelectorListDialog<TenantInLease> {
 
         private CComboBox<EmailTemplateType> emailType;
 
         public SendMailBox(List<TenantInLease> tenants) {
-            super(i18n.tr("Send Mail"), true, tenants, new SelectDialog.Formatter<TenantInLease>() {
+            super(i18n.tr("Send Mail"), true, tenants, new EntitySelectorListDialog.Formatter<TenantInLease>() {
                 @Override
                 public String format(TenantInLease entity) {
                     return entity.tenant().person().name().getStringView();

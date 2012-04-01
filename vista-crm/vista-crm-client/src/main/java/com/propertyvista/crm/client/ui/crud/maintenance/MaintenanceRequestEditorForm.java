@@ -36,8 +36,8 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -162,8 +162,8 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
             }
 
             @Override
-            protected EntitySelectorDialog<Tenant> getSelectorDialog() {
-                return new EntitySelectorDialog<Tenant>(Tenant.class, false, new ArrayList<Tenant>(), "Select Item") {
+            protected EntitySelectorTableDialog<Tenant> getSelectorDialog() {
+                return new EntitySelectorTableDialog<Tenant>(Tenant.class, false, new ArrayList<Tenant>(), "Select Item") {
 
                     @Override
                     public boolean onClickOk() {

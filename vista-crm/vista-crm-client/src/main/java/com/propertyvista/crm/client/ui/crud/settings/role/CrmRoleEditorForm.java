@@ -25,7 +25,7 @@ import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -100,7 +100,7 @@ public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
         }
     }
 
-    private abstract static class CrmBehaviorDTOSelectorDialog extends EntitySelectorDialog<VistaCrmBehaviorDTO> {
+    private abstract static class CrmBehaviorDTOSelectorDialog extends EntitySelectorTableDialog<VistaCrmBehaviorDTO> {
 
         public CrmBehaviorDTOSelectorDialog(List<VistaCrmBehaviorDTO> alreadySelected) {
             super(VistaCrmBehaviorDTO.class, true, alreadySelected, i18n.tr("Select Permissions"));

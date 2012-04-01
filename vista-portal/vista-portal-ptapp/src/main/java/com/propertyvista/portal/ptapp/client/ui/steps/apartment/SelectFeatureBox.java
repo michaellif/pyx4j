@@ -17,15 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
-abstract class SelectFeatureBox extends SelectDialog<ProductItem> {
+abstract class SelectFeatureBox extends EntitySelectorListDialog<ProductItem> {
 
     private static final I18n i18n = I18n.get(OkCancelDialog.class);
 

@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -102,7 +102,7 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
         new PortfolioSelectorDialog(getValue()).show();
     }
 
-    private class PortfolioSelectorDialog extends EntitySelectorDialog<Portfolio> {
+    private class PortfolioSelectorDialog extends EntitySelectorTableDialog<Portfolio> {
 
         public PortfolioSelectorDialog(List<Portfolio> alreadySelected) {
             super(Portfolio.class, true, alreadySelected, i18n.tr("Select Portfolio"));

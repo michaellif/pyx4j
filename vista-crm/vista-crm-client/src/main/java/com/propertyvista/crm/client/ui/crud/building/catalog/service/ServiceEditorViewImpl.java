@@ -18,13 +18,10 @@ import java.util.EnumSet;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.common.client.ui.components.dialogs.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implements ServiceEditorView {
@@ -37,7 +34,7 @@ public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implem
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Service.Type> callback) {
-        new SelectTypeDialog<Service.Type>(i18n.tr("Select Service Type"), EnumSet.allOf(Service.Type.class)) {
+        new SelectEnumDialog<Service.Type>(i18n.tr("Select Service Type"), EnumSet.allOf(Service.Type.class)) {
             @Override
             public boolean onClickOk() {
                 defaultCaption = getSelectedType().toString();

@@ -18,8 +18,8 @@ import java.util.EnumSet;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.common.client.ui.components.dialogs.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -35,7 +35,7 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<DashboardType> callback) {
-        new SelectTypeDialog<DashboardType>(i18n.tr("Select Dashboard Type"), EnumSet.of(DashboardType.system, DashboardType.building)) {
+        new SelectEnumDialog<DashboardType>(i18n.tr("Select Dashboard Type"), EnumSet.of(DashboardType.system, DashboardType.building)) {
             @Override
             public boolean onClickOk() {
                 callback.onSuccess(getSelectedType());

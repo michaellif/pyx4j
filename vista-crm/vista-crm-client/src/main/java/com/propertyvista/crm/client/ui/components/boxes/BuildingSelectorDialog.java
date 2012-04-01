@@ -23,12 +23,12 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public abstract class BuildingSelectorDialog extends EntitySelectorDialog<Building> {
+public abstract class BuildingSelectorDialog extends EntitySelectorTableDialog<Building> {
 
     private final static I18n i18n = I18n.get(BuildingSelectorDialog.class);
 

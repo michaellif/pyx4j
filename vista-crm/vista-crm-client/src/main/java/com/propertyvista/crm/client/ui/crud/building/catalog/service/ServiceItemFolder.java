@@ -28,8 +28,8 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
@@ -72,7 +72,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
 
     @Override
     protected void addItem() {
-        EntitySelectorDialog<?> buildingElementSelectionBox = null;
+        EntitySelectorTableDialog<?> buildingElementSelectionBox = null;
         switch (parent.getValue().version().type().getValue()) {
         case residentialUnit:
         case residentialShortTermUnit:

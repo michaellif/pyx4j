@@ -20,7 +20,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
@@ -31,13 +30,12 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.dto.LeaseDTO;
 
 class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
@@ -45,11 +43,11 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
     private final List<BillableItem> populatedValues = new LinkedList<BillableItem>();
 
-    private final CEntityEditor<LeaseDTO> lease;
+    private final LeaseEditorForm form;
 
-    public BillableItemFolder(boolean modifyable, CEntityEditor<LeaseDTO> lease) {
+    public BillableItemFolder(boolean modifyable, LeaseEditorForm form) {
         super(BillableItem.class, modifyable);
-        this.lease = lease;
+        this.form = form;
     }
 
     @Override
@@ -70,10 +68,10 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
     @Override
     protected void addItem() {
-        if (lease.getValue().version().leaseProducts().serviceItem().isNull()) {
+        if (form.getValue().version().leaseProducts().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
-            new SelectDialog<ProductItem>(i18n.tr("Select Features"), true, lease.getValue().selectedFeatureItems()) {
+            new EntitySelectorListDialog<ProductItem>(i18n.tr("Select Features"), true, form.getValue().selectedFeatureItems()) {
                 @Override
                 public boolean onClickOk() {
                     for (ProductItem item : getSelectedItems()) {
@@ -101,7 +99,7 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
     @Override
     protected void removeItem(CEntityFolderItem<BillableItem> item) {
-        if (!lease.getValue().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
+        if (!form.getValue().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
             item.getValue().expirationDate().setValue(new LogicalDate());
             item.setValue(item.getValue(), false);
             item.setEditable(false);
@@ -118,7 +116,7 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName() == PropertyName.repopulated) {
-                    if (isAddable() && !lease.getValue().approvalDate().isNull()) {
+                    if (isAddable() && !form.getValue().approvalDate().isNull()) {
                         LogicalDate value = item.getValue().expirationDate().getValue();
                         if ((value != null) && !value.after(TimeUtils.today())) {
                             item.setViewable(true);
@@ -142,7 +140,7 @@ class BillableItemFolder extends VistaBoxFolder<BillableItem> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof BillableItem) {
-            return new BillableItemEditor(lease);
+            return new BillableItemEditor(form);
         }
         return super.create(member);
     }

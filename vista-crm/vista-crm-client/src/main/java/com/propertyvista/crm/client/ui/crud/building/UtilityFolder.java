@@ -26,8 +26,8 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 
-import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.dto.BuildingDTO;
@@ -65,7 +65,7 @@ class UtilityFolder extends VistaTableFolder<FeatureItemType> {
 
     @Override
     protected void addItem() {
-        new SelectDialog<FeatureItemType>(i18n.tr("Select Utilities"), true, getNotSelectedUtilities(building)) {
+        new EntitySelectorListDialog<FeatureItemType>(i18n.tr("Select Utilities"), true, getNotSelectedUtilities(building)) {
             @Override
             public boolean onClickOk() {
                 for (FeatureItemType item : getSelectedItems()) {

@@ -18,8 +18,8 @@ import java.util.EnumSet;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.common.client.ui.components.dialogs.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -34,7 +34,7 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Feature.Type> callback) {
-        new SelectTypeDialog<Feature.Type>(i18n.tr("Select Feature Type"), EnumSet.allOf(Feature.Type.class)) {
+        new SelectEnumDialog<Feature.Type>(i18n.tr("Select Feature Type"), EnumSet.allOf(Feature.Type.class)) {
             @Override
             public boolean onClickOk() {
                 defaultCaption = getSelectedType().toString();

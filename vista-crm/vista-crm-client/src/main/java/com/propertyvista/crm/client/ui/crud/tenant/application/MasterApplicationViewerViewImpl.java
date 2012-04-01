@@ -27,10 +27,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
@@ -86,8 +86,8 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                 ((MasterApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
                     @Override
                     public void onSuccess(List<ApplicationUserDTO> result) {
-                        new SelectDialog<ApplicationUserDTO>(i18n.tr("Select Tenants To Send An Invitation To"), true, result,
-                                new SelectDialog.Formatter<ApplicationUserDTO>() {
+                        new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants To Send An Invitation To"), true, result,
+                                new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
                                     @Override
                                     public String format(ApplicationUserDTO enntity) {
                                         return enntity.getStringView();
@@ -119,8 +119,8 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new SelectDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Check"), true, form.getValue().tenantInfo(),
-                        new SelectDialog.Formatter<TenantInfoDTO>() {
+                new EntitySelectorListDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Check"), true, form.getValue().tenantInfo(),
+                        new EntitySelectorListDialog.Formatter<TenantInfoDTO>() {
                             @Override
                             public String format(TenantInfoDTO enntity) {
                                 return enntity.person().name().getStringView();
@@ -165,8 +165,8 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new SelectDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Acqure Info"), true, form.getValue().tenantInfo(),
-                        new SelectDialog.Formatter<TenantInfoDTO>() {
+                new EntitySelectorListDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Acqure Info"), true, form.getValue().tenantInfo(),
+                        new EntitySelectorListDialog.Formatter<TenantInfoDTO>() {
                             @Override
                             public String format(TenantInfoDTO enntity) {
                                 return enntity.person().name().getStringView();
