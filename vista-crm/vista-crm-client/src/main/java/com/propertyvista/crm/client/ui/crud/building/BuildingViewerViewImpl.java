@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
@@ -48,6 +47,7 @@ import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> implements BuildingViewerView {
 
@@ -108,7 +108,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
                 ((BuildingViewerView.Presenter) presenter).runBill();
             }
         });
-        if (ApplicationMode.isDevelopment()) {
+        if (!VistaTODO.removedForProduction) {
             addToolbarItem(runBillAction.asWidget());
         }
     }

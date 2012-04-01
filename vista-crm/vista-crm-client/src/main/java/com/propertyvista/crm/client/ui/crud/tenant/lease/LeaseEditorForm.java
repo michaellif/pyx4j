@@ -55,6 +55,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
@@ -76,10 +77,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
         tabPanel.add(createServiceAgreementTab(), i18n.tr("Charges"));
-        tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
-        tabPanel.setLastTabDisabled(isEditable());
-        tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
-        tabPanel.setLastTabDisabled(isEditable());
+        if (!VistaTODO.removedForProduction) {
+            tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
+            tabPanel.setLastTabDisabled(isEditable());
+            tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
+            tabPanel.setLastTabDisabled(isEditable());
+        }
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
