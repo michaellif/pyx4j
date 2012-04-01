@@ -70,6 +70,7 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
             tenant.person().set(dto);
             tenant.emergencyContacts().set(dto.emergencyContacts());
             Persistence.service().persist(tenant);
+            Persistence.service().commit();
             callback.onSuccess(dto);
         } catch (Exception e) {
             callback.onFailure(new Throwable("Operation failed. No data found."));
