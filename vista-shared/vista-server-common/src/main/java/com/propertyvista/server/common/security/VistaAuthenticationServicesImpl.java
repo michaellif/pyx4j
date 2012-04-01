@@ -48,6 +48,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
@@ -89,7 +90,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     @IgnoreSessionToken
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String sessionToken) {
         if (!SecurityController.checkBehavior(getApplicationBehavior())) {
-            VistaLifecycle.endSession();
+            Lifecycle.endSession();
         }
         super.authenticate(callback, clientSystemInfo, sessionToken);
     }
@@ -101,7 +102,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         // Try to begin Session
         String sessionToken = beginSession(request);
         if (!SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior())) {
-            VistaLifecycle.endSession();
+            Lifecycle.endSession();
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         callback.onSuccess(createAuthenticationResponse(sessionToken));
@@ -155,7 +156,8 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         behaviors.add(getPasswordChangeRequiredBehavior());
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         visit.setEmail(user.email().getValue());
-        callback.onSuccess(createAuthenticationResponse(VistaLifecycle.beginSession(visit, behaviors)));
+        log.info("authenticated {} as {}", user.email().getValue(), behaviors);
+        callback.onSuccess(createAuthenticationResponse(Lifecycle.beginSession(visit, behaviors)));
     }
 
     public String beginSession(AuthenticationRequest request) {
@@ -209,7 +211,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             behaviors.add(getPasswordChangeRequiredBehavior());
             UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
             visit.setEmail(user.email().getValue());
-            return VistaLifecycle.beginSession(visit, behaviors);
+            return Lifecycle.beginSession(visit, behaviors);
         } else {
             return beginSession(user, cr);
         }
@@ -231,27 +233,29 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         // Try to begin Session
         String sessionToken = beginSession(user, credentials);
         if (!SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior())) {
-            VistaLifecycle.endSession();
+            Lifecycle.endSession();
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         return createAuthenticationResponse(sessionToken);
     }
 
-    public String beginSession(AbstractUser user, E userCredential) {
+    protected String beginSession(AbstractUser user, E userCredential) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
-
-        behaviors.add(getApplicationBehavior());
         addBehaviors(userCredential, behaviors);
-
+        if (behaviors.isEmpty()) {
+            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+        behaviors.add(getApplicationBehavior());
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         visit.setEmail(user.email().getValue());
-        return VistaLifecycle.beginSession(visit, behaviors);
+        log.info("authenticated {} as {}", user.email().getValue(), behaviors);
+        return Lifecycle.beginSession(visit, behaviors);
     }
 
     @Override
     @IgnoreSessionToken
     public void logout(AsyncCallback<AuthenticationResponse> callback) {
-        VistaLifecycle.endSession();
+        Lifecycle.endSession();
         callback.onSuccess(createAuthenticationResponse(null));
     }
 

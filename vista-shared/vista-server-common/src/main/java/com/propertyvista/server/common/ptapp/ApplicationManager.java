@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -372,8 +373,19 @@ public class ApplicationManager {
             credential.setPrimaryKey(user.getPrimaryKey());
 
             credential.user().set(user);
-            //TODO use tokens
-            credential.credential().setValue(PasswordEncryptor.encryptPassword(person.email().getValue()));
+            if (ApplicationMode.isDevelopment()) {
+                credential.credential().setValue(PasswordEncryptor.encryptPassword(person.email().getValue()));
+            }
+            credential.enabled().setValue(Boolean.TRUE);
+            credential.behaviors().add(behavior);
+            Persistence.service().persist(credential);
+        } else {
+            TenantUserCredential credential = Persistence.service().retrieve(TenantUserCredential.class, user.getPrimaryKey());
+            credential.setPrimaryKey(user.getPrimaryKey());
+            credential.user().set(user);
+            if (ApplicationMode.isDevelopment()) {
+                credential.credential().setValue(PasswordEncryptor.encryptPassword(person.email().getValue()));
+            }
             credential.enabled().setValue(Boolean.TRUE);
             credential.behaviors().add(behavior);
             Persistence.service().persist(credential);
