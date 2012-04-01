@@ -47,11 +47,19 @@ public class DataTableFilterData {
 //        
         lessThan,
 
-        greaterThan,
+        lessOrEqualThan,
 
         earlierThan,
 
-        laterThan;
+        earlierOrEqualThan,
+
+        greaterThan,
+
+        greaterOrEqualThan,
+
+        laterThan,
+
+        laterOrEqualThan;
 
         @Override
         public String toString() {
@@ -105,13 +113,21 @@ public class DataTableFilterData {
             case like:
                 criterion = new PropertyCriterion(getMemberPath(), Restriction.RDB_LIKE, getValue());
                 break;
-            case laterThan:
+            case lessThan:
+            case earlierThan:
+                criterion = new PropertyCriterion(getMemberPath(), Restriction.LESS_THAN, getValue());
+                break;
+            case lessOrEqualThan:
+            case earlierOrEqualThan:
+                criterion = new PropertyCriterion(getMemberPath(), Restriction.LESS_THAN_OR_EQUAL, getValue());
+                break;
             case greaterThan:
+            case laterThan:
                 criterion = new PropertyCriterion(getMemberPath(), Restriction.GREATER_THAN, getValue());
                 break;
-            case earlierThan:
-            case lessThan:
-                criterion = new PropertyCriterion(getMemberPath(), Restriction.LESS_THAN, getValue());
+            case greaterOrEqualThan:
+            case laterOrEqualThan:
+                criterion = new PropertyCriterion(getMemberPath(), Restriction.GREATER_THAN_OR_EQUAL, getValue());
                 break;
             }
         }
