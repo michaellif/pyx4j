@@ -106,6 +106,7 @@ public class MasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl
     @Override
     public void action(AsyncCallback<MasterApplicationDTO> callback, MasterApplicationActionDTO actionDTO) {
         MasterApplication dbo = Persistence.service().retrieve(dboClass, actionDTO.getPrimaryKey());
+        MasterApplication.Status currentStatus = dbo.status().getValue();
 
         dbo.status().setValue(actionDTO.status().getValue());
         dbo.decidedBy().set(CrmAppContext.getCurrentUserEmployee());
@@ -116,11 +117,15 @@ public class MasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl
         switch (actionDTO.status().getValue()) {
         case Approved:
             Lease approvedLease = new LeaseManager().approveApplication(dbo.lease().getPrimaryKey());
-            ApplicationManager.sendApproveDeclineApplicationEmail(approvedLease, true);
+            if (currentStatus != MasterApplication.Status.Created) {
+                ApplicationManager.sendApproveDeclineApplicationEmail(approvedLease, true);
+            }
             break;
         case Declined:
             Lease declinedLease = new LeaseManager().declineApplication(dbo.lease().getPrimaryKey());
-            ApplicationManager.sendApproveDeclineApplicationEmail(declinedLease, false);
+            if (currentStatus != MasterApplication.Status.Created) {
+                ApplicationManager.sendApproveDeclineApplicationEmail(declinedLease, false);
+            }
             break;
         case Cancelled:
             new LeaseManager().cancelApplication(dbo.lease().getPrimaryKey());
