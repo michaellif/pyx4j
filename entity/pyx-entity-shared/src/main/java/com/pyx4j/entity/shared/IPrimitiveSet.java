@@ -33,4 +33,6 @@ public interface IPrimitiveSet<TYPE> extends IObject<Set<TYPE>>, Set<TYPE> {
     public void setArrayValue(TYPE[] value) throws ClassCastException;
 
     public void setCollectionValue(Collection<TYPE> value) throws ClassCastException;
+
+    public boolean containsAny(TYPE... value);
 }

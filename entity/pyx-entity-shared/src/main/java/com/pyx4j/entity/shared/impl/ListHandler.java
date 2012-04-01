@@ -130,6 +130,19 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     }
 
     @Override
+    public boolean containsAny(TYPE... value) {
+        List<?> cvalue = getValue();
+        if (cvalue != null) {
+            for (TYPE v : value) {
+                if (cvalue.contains(comparableValue(v))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean containsAll(Collection<?> c) {
         // TODO implement this
         throw new UnsupportedOperationException();

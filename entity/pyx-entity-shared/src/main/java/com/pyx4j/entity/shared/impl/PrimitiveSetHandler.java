@@ -168,6 +168,19 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
     }
 
     @Override
+    public boolean containsAny(TYPE... value) {
+        Set<?> cvalue = getValue();
+        if (cvalue != null) {
+            for (TYPE v : value) {
+                if (cvalue.contains(v)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean isEmpty() {
         Set<?> value = getValue();
         if (value != null) {
