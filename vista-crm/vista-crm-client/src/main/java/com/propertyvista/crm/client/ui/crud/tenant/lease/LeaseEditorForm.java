@@ -202,7 +202,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         if (!currentValue.leaseFrom().isNull() && !currentValue.leaseTo().isNull() && filters != null) {
                             // filter out already leased units (null) and not available by date:
                             filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Operators.isNot, (Serializable) null));
-                            filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Operators.lessThan, currentValue.leaseFrom().getValue()));
+                            filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Operators.lessOrEqualThan, currentValue.leaseFrom()
+                                    .getValue()));
                         }
                         super.setFilters(filters);
                     };
