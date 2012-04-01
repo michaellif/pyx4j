@@ -27,6 +27,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -43,6 +44,7 @@ import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;
 public interface AptUnit extends BuildingElement, PolicyNode {
 
     @Detached
+    @NotNull
     @JoinColumn
     @MemberColumn(modificationAdapters = { FloorplanCountersUpdateAdapter.class })
     @Indexed(group = { "b,11", "f" })

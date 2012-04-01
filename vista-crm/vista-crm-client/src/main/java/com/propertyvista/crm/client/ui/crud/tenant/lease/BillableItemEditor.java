@@ -37,6 +37,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
@@ -115,47 +116,21 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                     public String defineWidth() {
                         return "400px";
                     }
+
+                    @Override
+                    public void show() {
+                        if (form.getValue().selectedBuilding() == null || form.getValue().selectedBuilding().isNull()) {
+                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Unit First"));
+                        } else {
+                            super.show();
+                        }
+                    }
                 };
 
             }
         }), 20).build());
 
         get(proto().item()).setViewable(!isService);
-
-//        if (isEditable()) {
-//            serviceItemPanel.add(serviceSelector = new AnchorButton("Select...", new ClickHandler() {
-//                @Override
-//                public void onClick(ClickEvent event) {
-//                    if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
-//                        MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Unit First"));
-//                    } else {
-//                        new SelectDialog<ProductItem>(i18n.tr("Service Item Selection"), false, getValue().selectedServiceItems()) {
-//                            @Override
-//                            public boolean onClickOk() {
-//                                List<ProductItem> selectedItems = getSelectedItems();
-//                                if (!selectedItems.isEmpty()) {
-//                                    ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(selectedItems.get(0));
-//                                    return true;
-//                                } else {
-//                                    return false;
-//                                }
-//                            }
-//
-//                            @Override
-//                            public String defineHeight() {
-//                                return "100px";
-//                            };
-//
-//                            @Override
-//                            public String defineWidth() {
-//                                return "400px";
-//                            }
-//                        }.show();
-//                    }
-//                }
-//            }));
-//            serviceSelector.getElement().getStyle().setMarginLeft(4, Unit.EM);
-//        }
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expirationDate()), 9).build());
