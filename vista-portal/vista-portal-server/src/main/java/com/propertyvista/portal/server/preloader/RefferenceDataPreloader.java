@@ -29,7 +29,7 @@ import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.domain.ref.PhoneProvider;
-import com.propertyvista.portal.server.preloader.ido.IssueClassificationPreload;
+import com.propertyvista.portal.server.preloader.ido.MaintenanceTreeImport;
 
 public class RefferenceDataPreloader extends AbstractDataPreloader {
 
@@ -53,7 +53,7 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
         return null;
     }
 
-    private void normalizePreload(IssueClassificationPreload row) {
+    private void normalizePreload(MaintenanceTreeImport row) {
         if (row.subjectDetails().isNull()) {
             row.subjectDetails().setValue(row.repairSubject().getValue());
         }
@@ -64,11 +64,11 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
     }
 
     private void createIssueClassifications() {
-        List<IssueClassificationPreload> data = EntityCSVReciver.create(IssueClassificationPreload.class).loadFile(
+        List<MaintenanceTreeImport> data = EntityCSVReciver.create(MaintenanceTreeImport.class).loadFile(
                 IOUtils.resourceFileName("maintenance-tree.csv", RefferenceDataPreloader.class));
 
         Map<String, IssueElement> elements = new HashMap<String, IssueElement>();
-        for (IssueClassificationPreload row : data) {
+        for (MaintenanceTreeImport row : data) {
             normalizePreload(row);
             // Find or create Element
             IssueElement element = elements.get(row.type().getValue() + row.rooms().getValue());

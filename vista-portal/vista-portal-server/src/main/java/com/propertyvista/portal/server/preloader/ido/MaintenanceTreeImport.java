@@ -23,7 +23,7 @@ import com.propertyvista.domain.maintenance.IssuePriority;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Transient
-public interface IssueClassificationPreload extends IEntity {
+public interface MaintenanceTreeImport extends IEntity {
 
     IPrimitive<IssueElementType> type();
 

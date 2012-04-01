@@ -39,10 +39,12 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new PreloadPolicies(production));
         add(new DashboardPreloader());
         add(new ReportPreloader());
+        add(new RefferenceDataPreloader());
+
         if (production) {
             //DEMO add(new ProdSitePreloader());            
         } else {
-            add(new RefferenceDataPreloader());
+
             add(new UserPreloader());
             add(new CampaignPreloader());
 
