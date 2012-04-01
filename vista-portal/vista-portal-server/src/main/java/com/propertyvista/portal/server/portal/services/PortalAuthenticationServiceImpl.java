@@ -15,10 +15,13 @@ package com.propertyvista.portal.server.portal.services;
 
 import java.util.Set;
 
+import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.TenantUserCredential;
@@ -41,6 +44,9 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
 
     @Override
     protected void addBehaviors(TenantUserCredential userCredential, Set<Behavior> behaviors) {
+        if (!userCredential.behaviors().containsAny(VistaTenantBehavior.Tenant, VistaTenantBehavior.TenantPrimary, VistaTenantBehavior.TenantSecondary)) {
+            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
         behaviors.addAll(userCredential.behaviors());
     }
 }
