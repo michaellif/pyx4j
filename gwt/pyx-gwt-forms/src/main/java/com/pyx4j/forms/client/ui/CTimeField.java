@@ -58,9 +58,12 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
 
     public static class TimeFormat implements IFormat<Time> {
 
+        private final String timeFormat;
+
         private final DateTimeFormat parser;
 
         public TimeFormat(final String format) {
+            this.timeFormat = format;
             parser = DateTimeFormat.getFormat(format);
         }
 
@@ -80,7 +83,11 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
                 try {
                     return new Time(parser.parseStrict(string).getTime());
                 } catch (IllegalArgumentException e) {
-                    throw new ParseException("Invalid time format. Use 12:00 AM/PM format", 0);
+                    if (timeFormat.equals(defaultTimeFormat)) {
+                        throw new ParseException(i18n.tr("Invalid time format. Use 12:00 AM/PM format"), 0);
+                    } else {
+                        throw new ParseException(i18n.tr("Invalid time format. Use {0} format", timeFormat), 0);
+                    }
                 }
             }
         }

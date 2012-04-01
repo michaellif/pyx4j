@@ -53,6 +53,7 @@ public interface SystemMaintenanceState extends IEntity {
 
     @Editor(type = Editor.EditorType.timepicker)
     @Format("HH:mm")
+    @Caption(watermark = "__:__")
     IPrimitive<Time> startTime();
 
     @Caption(name = "Grace Period (min)")

@@ -145,8 +145,9 @@ public class SystemMaintenance {
         if (!state.startTime().isNull() || !state.startDate().isNull()) {
             Calendar startTime = new GregorianCalendar();
             if (state.startDate().isNull()) {
+                state.startDate().setValue(new LogicalDate());
+            } else {
                 startTime.setTime(DateUtils.dayStart(state.startDate().getValue()));
-                state.startDate().setValue(new LogicalDate(startTime.getTime()));
             }
             if (!state.startTime().isNull()) {
                 startTime.set(Calendar.HOUR_OF_DAY, state.startTime().getValue().getHours());

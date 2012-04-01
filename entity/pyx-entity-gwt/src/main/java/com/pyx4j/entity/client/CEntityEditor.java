@@ -160,9 +160,11 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         if (mm.isValidatorAnnotationPresent(NotNull.class)) {
             component.setMandatory(true);
         }
-        if ((String.class == mm.getValueClass()) && (component instanceof CTextComponent)) {
+        if (component instanceof CTextComponent) {
             ((CTextComponent<?, ?>) component).setMaxLength(mm.getLength());
-            if (mm.getDescription() != null) {
+            if (mm.getWatermark() != null) {
+                ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
+            } else if (mm.getDescription() != null) {
                 ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
             }
         }
