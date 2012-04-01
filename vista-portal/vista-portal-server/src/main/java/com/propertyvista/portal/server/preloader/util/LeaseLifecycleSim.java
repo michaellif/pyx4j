@@ -36,6 +36,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.common.util.LeaseManager.TimeContextProvider;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
@@ -94,10 +95,11 @@ public class LeaseLifecycleSim {
 
     public Lease activate(Key leaseId, LogicalDate eventDate) {
         // confirm latest bill before activation :
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
-        billing.confirmBill(billing.getLatestBill(lease));
-
+        if (!VistaTODO.removedForProduction) {
+            Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
+            BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
+            billing.confirmBill(billing.getLatestBill(lease));
+        }
         return leaseManager(eventDate).activate(leaseId);
     }
 
