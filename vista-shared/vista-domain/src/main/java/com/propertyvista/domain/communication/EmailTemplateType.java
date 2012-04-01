@@ -21,6 +21,8 @@ public enum EmailTemplateType {
 
     PasswordRetrievalCrm,
 
+    PasswordRetrievalProspect,
+
     PasswordRetrievalTenant,
 
     ApplicationCreatedApplicant,

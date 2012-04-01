@@ -22,15 +22,15 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PortalLinksT extends IEntity {
 
-    IPrimitive<String> logoUrl();
+    IPrimitive<String> CompanyLogo();
 
-    IPrimitive<String> companyName();
+    IPrimitive<String> CompanyName();
 
-    IPrimitive<String> portalHomeUrl();
+    IPrimitive<String> PortalHomeUrl();
 
-    IPrimitive<String> tenantHomeUrl();
+    IPrimitive<String> TenantPortalUrl();
 
-    IPrimitive<String> prospectPortalomeUrl();
+    IPrimitive<String> ProspectPortalUrl();
 
-    IPrimitive<String> copyright();
+    IPrimitive<String> CopyrightNotice();
 }

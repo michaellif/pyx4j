@@ -81,15 +81,7 @@ public class MessageTemplates {
         return null;
     }
 
-    public static void createApplicationApprovedEmail(MailMessage email, TenantInLease tenantInLease) {
-        createApplicationApprovedDeclinedEmail(email, tenantInLease, EmailTemplateType.ApplicationApproved);
-    }
-
-    public static void createApplicationDeclinedEmail(MailMessage email, TenantInLease tenantInLease) {
-        createApplicationApprovedDeclinedEmail(email, tenantInLease, EmailTemplateType.ApplicationDeclined);
-    }
-
-    private static void createApplicationApprovedDeclinedEmail(MailMessage email, TenantInLease tenantInLease, EmailTemplateType type) {
+    public static MailMessage createApplicationStatusEmail(TenantInLease tenantInLease, EmailTemplateType type) {
         // get building policy node
         Persistence.service().retrieve(tenantInLease.leaseV());
         Persistence.service().retrieve(tenantInLease.leaseV().holder());
@@ -106,12 +98,22 @@ public class MessageTemplates {
             // ObjectLoader will load required T-Objects using context data
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
+        MailMessage email = new MailMessage();
+        TenantUser user = tenantInLease.tenant().user();
+        if (user.isValueDetached()) {
+            Persistence.service().retrieve(tenantInLease.tenant().user());
+        }
+        email.setTo(user.email().getValue());
+        email.setSender(getSender());
+        // set email subject and body from the template
         email.setSubject(emailTemplate.subject().getValue());
         // parse template and set email body
         email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
+
+        return email;
     }
 
-    public static void createMasterApplicationInvitationEmail(MailMessage email, TenantUser tenantUser, EmailTemplateType emailType, Lease lease, String token) {
+    public static MailMessage createTenantInvitationEmail(TenantUser tenantUser, Lease lease, EmailTemplateType emailType, String token) {
         // get building policy node
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().belongsTo());
@@ -130,11 +132,16 @@ public class MessageTemplates {
         for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(emailType)) {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
+        MailMessage email = new MailMessage();
+        email.setTo(tenantUser.email().getValue());
+        email.setSender(getSender());
+        // set email subject and body from the template
         email.setSubject(emailTemplate.subject().getValue());
         email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
+        return email;
     }
 
-    public static void createPasswordResetEmail(MailMessage email, VistaBasicBehavior application, AbstractUser user, String token) {
+    public static MailMessage createPasswordResetEmail(VistaBasicBehavior application, AbstractUser user, String token) {
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         context.accessToken().setValue(token);
         context.user().set(user);
@@ -153,9 +160,12 @@ public class MessageTemplates {
                 templateType = EmailTemplateType.PasswordRetrievalCrm;
                 break;
             case ProspectiveApp:
-                context.prospective().setValue(Boolean.TRUE);
             case TenantPortal:
-                templateType = EmailTemplateType.PasswordRetrievalTenant;
+                if (application.equals(VistaBasicBehavior.ProspectiveApp)) {
+                    templateType = EmailTemplateType.PasswordRetrievalProspect;
+                } else {
+                    templateType = EmailTemplateType.PasswordRetrievalTenant;
+                }
                 // get building policy node form the first available TenantInLease entry
                 EntityQueryCriteria<TenantInLease> tilCrit = EntityQueryCriteria.create(TenantInLease.class);
                 tilCrit.add(PropertyCriterion.eq(tilCrit.proto().tenant().user(), user));
@@ -183,14 +193,20 @@ public class MessageTemplates {
             // Admin template
             emailTemplate = emailTemplatePasswordRetrievalAdmin();
             PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
-            pwdReqT.requestorName().set(user.name());
-            pwdReqT.passwordResetUrl().setValue(
+            pwdReqT.RequestorName().set(user.name());
+            pwdReqT.PasswordResetUrl().setValue(
                     AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Admin, true), AdminSiteMap.LoginWithToken.class,
                             AuthenticationService.AUTH_TOKEN_ARG, token));
             data.add(pwdReqT);
         }
+        MailMessage email = new MailMessage();
+        email.setTo(user.email().getValue());
+        email.setSender(getSender());
+        // set email subject and body from the template
         email.setSubject(emailTemplate.subject().getValue());
         email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
+
+        return email;
     }
 
     private static String wrapAdminHtml(String text) {
@@ -212,8 +228,8 @@ public class MessageTemplates {
                 "This email was sent to you in response to your request to modify your Property Vista Support Administration account password.<br/>\n" +
                 "Click the link below to go to the Property Vista Administration site and create new password for your account:<br/>\n" +
                 "    <a href=\"{1}\">Change Your Password</a>",
-                EmailTemplateManager.getVarname(pwdReqT.requestorName()),
-                EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl())
+                EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
+                EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
         )));//@formatter:on
         return template;
     }

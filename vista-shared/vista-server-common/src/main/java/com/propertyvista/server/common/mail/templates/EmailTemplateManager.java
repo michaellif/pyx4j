@@ -39,7 +39,8 @@ import com.propertyvista.server.common.mail.templates.model.ApplicationT;
 import com.propertyvista.server.common.mail.templates.model.BuildingT;
 import com.propertyvista.server.common.mail.templates.model.LeaseT;
 import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestProspectT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestTenantT;
 import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
 
 public class EmailTemplateManager {
@@ -54,8 +55,11 @@ public class EmailTemplateManager {
         case PasswordRetrievalCrm:
             values.add(EntityFactory.create(PasswordRequestCrmT.class));
             break;
+        case PasswordRetrievalProspect:
+            values.add(EntityFactory.create(PasswordRequestProspectT.class));
+            break;
         case PasswordRetrievalTenant:
-            values.add(EntityFactory.create(PasswordRequestT.class));
+            values.add(EntityFactory.create(PasswordRequestTenantT.class));
             break;
         case ApplicationApproved:
             values.add(EntityFactory.create(ApplicationT.class));
@@ -70,7 +74,7 @@ public class EmailTemplateManager {
             values.add(EntityFactory.create(BuildingT.class));
             break;
         case TenantInvitation:
-            values.add(EntityFactory.create(PasswordRequestT.class));
+            values.add(EntityFactory.create(PasswordRequestTenantT.class));
             values.add(EntityFactory.create(BuildingT.class));
             break;
         default:

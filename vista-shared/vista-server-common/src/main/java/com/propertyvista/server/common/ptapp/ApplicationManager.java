@@ -128,12 +128,11 @@ public class ApplicationManager {
             if (test.getValue() == null) { //co-applicants have no dedicated application
                 return;
             }
-            Persistence.service().retrieve(tenantInLease.tenant().user());
-            TenantUser user = tenantInLease.tenant().user();
-            MailMessage m = new MailMessage();
-            m.setTo(user.email().getValue());
-            m.setSender(MessageTemplates.getSender());
-            sendApproveDeclineEmail(user, tenantInLease, isApproved);
+            MailMessage m = MessageTemplates.createApplicationStatusEmail(tenantInLease, isApproved ? EmailTemplateType.ApplicationApproved
+                    : EmailTemplateType.ApplicationDeclined);
+            if (MailDeliveryStatus.Success != Mail.send(m)) {
+                throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+            }
         }
     }
 
@@ -408,39 +407,11 @@ public class ApplicationManager {
     }
 
     private static void sendInvitationEmail(TenantUser user, Lease lease, EmailTemplateType emailTemplateType) {
-        // Create Token and other stuff
         String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
         if (token == null) {
             throw new UserRuntimeException("Invalid user account");
         }
-
-        MailMessage m = new MailMessage();
-        m.setTo(user.email().getValue());
-        m.setSender(MessageTemplates.getSender());
-        // set email subject and body from the template
-        MessageTemplates.createMasterApplicationInvitationEmail(m, user, emailTemplateType, lease, token);
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
-    }
-
-    private static void sendApproveDeclineEmail(TenantUser user, TenantInLease tenantInLease, boolean isApproved) {
-        // Create Token and other stuff
-//        String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
-//        if (token == null) {
-//            throw new UserRuntimeException("Invalid user account");
-//        }
-
-        MailMessage m = new MailMessage();
-        m.setTo(user.email().getValue());
-        m.setSender(MessageTemplates.getSender());
-        // set email subject and body from the template
-        if (isApproved) {
-            MessageTemplates.createApplicationApprovedEmail(m, tenantInLease);
-        } else {
-            MessageTemplates.createApplicationDeclinedEmail(m, tenantInLease);
-        }
-
+        MailMessage m = MessageTemplates.createTenantInvitationEmail(user, lease, emailTemplateType, token);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }

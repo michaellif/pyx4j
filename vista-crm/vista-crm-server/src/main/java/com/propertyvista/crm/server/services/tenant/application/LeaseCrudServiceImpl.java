@@ -287,17 +287,11 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
                 break;
             }
 
-            // Create Token and other stuff
             String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
             if (token == null) {
                 throw new UserRuntimeException("Invalid user account");
             }
-
-            MailMessage m = new MailMessage();
-            m.setTo(user.email().getValue());
-            m.setSender(MessageTemplates.getSender());
-            // set email subject and body from the template
-            MessageTemplates.createMasterApplicationInvitationEmail(m, user, emailType, lease, token);
+            MailMessage m = MessageTemplates.createTenantInvitationEmail(user, lease, emailType, token);
             if (MailDeliveryStatus.Success != Mail.send(m)) {
                 throw new UserRuntimeException("Mail delivery failed: " + user.email().getValue());
             }

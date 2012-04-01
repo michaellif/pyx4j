@@ -42,6 +42,8 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -55,7 +57,8 @@ import com.propertyvista.server.common.mail.templates.model.ApplicationT;
 import com.propertyvista.server.common.mail.templates.model.BuildingT;
 import com.propertyvista.server.common.mail.templates.model.LeaseT;
 import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestProspectT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestTenantT;
 import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
 import com.propertyvista.server.common.util.VistaDeployment;
 
@@ -66,6 +69,12 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     private Building building;
 
     private OrganizationPoliciesNode orgNode;
+
+    private SiteDescriptor siteDescriptor;
+
+    private final String copyright = "© Property Vista Software Inc. 2012";
+
+    private final String company = "Property Vista";
 
     private CrmUser crmUser;
 
@@ -112,52 +121,62 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         log.info("STEP 2. Validating generated emails...");
         EmailTemplateType type = EmailTemplateType.ApplicationApproved;
         String expected = getTemplateContent(type, true);
-        MailMessage email = new MailMessage();
-        MessageTemplates.createApplicationApprovedEmail(email, mainAplt);
+        MailMessage email = null;
+        email = MessageTemplates.createApplicationStatusEmail(mainAplt, type);
         String received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
-        type = EmailTemplateType.PasswordRetrievalTenant;
+        type = EmailTemplateType.ApplicationDeclined;
         expected = getTemplateContent(type, true);
-        MessageTemplates.createPasswordResetEmail(email, VistaBasicBehavior.TenantPortal, mainAplt.tenant().user(), token);
+        email = MessageTemplates.createApplicationStatusEmail(mainAplt, type);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
         type = EmailTemplateType.PasswordRetrievalTenant;
         expected = getTemplateContent(type, true);
-        MessageTemplates.createPasswordResetEmail(email, VistaBasicBehavior.ProspectiveApp, mainAplt.tenant().user(), token);
+        email = MessageTemplates.createPasswordResetEmail(VistaBasicBehavior.TenantPortal, mainAplt.tenant().user(), token);
         received = email.getHtmlBody();
+        assertEquals(type.toString(), expected, received);
+        log.info(type.toString() + " content: " + received);
 
-        //TODO Stan fix the result is actually correct.
-        if (false) {
-            assertEquals(type.toString(), expected, received);
-        }
-
+        type = EmailTemplateType.PasswordRetrievalProspect;
+        expected = getTemplateContent(type, true);
+        email = MessageTemplates.createPasswordResetEmail(VistaBasicBehavior.ProspectiveApp, mainAplt.tenant().user(), token);
+        received = email.getHtmlBody();
+        assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
         type = EmailTemplateType.PasswordRetrievalCrm;
         expected = getTemplateContent(type, true);
-        MessageTemplates.createPasswordResetEmail(email, VistaBasicBehavior.CRM, crmUser, token);
+        email = MessageTemplates.createPasswordResetEmail(VistaBasicBehavior.CRM, crmUser, token);
+        received = email.getHtmlBody();
+        assertEquals(type.toString(), expected, received);
+        log.info(type.toString() + " content: " + received);
+
+        type = EmailTemplateType.TenantInvitation;
+        expected = getTemplateContent(type, true);
+        email = MessageTemplates.createTenantInvitationEmail(mainAplt.tenant().user(), lease, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
         type = EmailTemplateType.ApplicationCreatedApplicant;
         expected = getTemplateContent(type, true);
-        MessageTemplates.createMasterApplicationInvitationEmail(email, mainAplt.tenant().user(), type, lease, token);
+        email = MessageTemplates.createTenantInvitationEmail(mainAplt.tenant().user(), lease, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
         type = EmailTemplateType.ApplicationCreatedCoApplicant;
         expected = getTemplateContent(type, true);
-        MessageTemplates.createMasterApplicationInvitationEmail(email, coAplt.tenant().user(), type, lease, token);
+        email = MessageTemplates.createTenantInvitationEmail(coAplt.tenant().user(), lease, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
+        // TODO implement guarantor template test
         type = EmailTemplateType.ApplicationCreatedGuarantor;
     }
 
@@ -165,6 +184,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         String templateFmt = null;
         switch (type) {//@formatter:off
         case PasswordRetrievalCrm:
+        case PasswordRetrievalProspect:
         case PasswordRetrievalTenant:
             templateFmt = "Dear {0},<br/>" +
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>" +
@@ -222,6 +242,21 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 "{3}<br/>" +
                 "{4}<br/>";
             break;
+        case TenantInvitation:
+            templateFmt = "Welcome {0}!<br/><br/>" +                        
+            "We are excited to have you join the Online Tenant Portal of {1} that we created just for you! " +
+            "To access the site and create new password for your account please follow the link below:<br/>\n" +
+            "{2}<br/>" +
+            "Please keep your username and password as they will be required to access your Portal. " +
+            "You can visit it anytime by going to<br/>" +
+            "{3} and clicking on Residents menu tab. You will be redirected to Online Tenant Portal immediately. " +
+            "Or, alternatively, you can reach that page directly by going to<br/>" +
+            "{4}.<br/><br/>" +
+            "Should you have any concerns or questions, please do not hesitate to contact us directly.<br/><br/>" +
+            "Sincerely,<br/><br/>" +
+            "{5}<br/>" +
+            "{6}<br/>";
+            break;
         default:
             throw new Error("Template Type not implemented");
         }//@formatter:on
@@ -243,8 +278,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             } else {
                 PasswordRequestCrmT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestCrmT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(pwdReqT.requestorName()),
-                    EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl())
+                    EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
+                    EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
                 };
                 fmtArgs = args;
             }
@@ -258,10 +293,27 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 };
                 fmtArgs = args;
             } else {
-                PasswordRequestT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestT.class);
+                PasswordRequestTenantT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestTenantT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(pwdReqT.requestorName()),
-                    EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl())
+                    EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
+                    EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
+                };
+                fmtArgs = args;
+            }
+            break;
+        case PasswordRetrievalProspect:
+            if (asString) {
+                String[] args = {
+                    mainAplt.tenant().user().name().getValue(),
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), PtSiteMap.LoginWithToken.class,
+                            AuthenticationService.AUTH_TOKEN_ARG, token)
+                };
+                fmtArgs = args;
+            } else {
+                PasswordRequestProspectT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestProspectT.class);
+                String[] args = {
+                    EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
+                    EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
                 };
                 fmtArgs = args;
             }
@@ -281,12 +333,12 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.applicant()),
-                    EmailTemplateManager.getVarname(appT.refNumber()),
-                    EmailTemplateManager.getVarname(appT.applicationUrl()),
-                    EmailTemplateManager.getVarname(bldT.mainOffice().phone()),
-                    EmailTemplateManager.getVarname(bldT.propertyName()),
-                    EmailTemplateManager.getVarname(bldT.administrator().name())
+                    EmailTemplateManager.getVarname(appT.ApplicantName()),
+                    EmailTemplateManager.getVarname(appT.ReferenceNumber()),
+                    EmailTemplateManager.getVarname(appT.SignUpUrl()),
+                    EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
+                    EmailTemplateManager.getVarname(bldT.PropertyName()),
+                    EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
                 };
                 fmtArgs = args;
             }
@@ -307,12 +359,12 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.applicant()),
-                    EmailTemplateManager.getVarname(appT.refNumber()),
-                    EmailTemplateManager.getVarname(appT.applicationUrl()),
-                    EmailTemplateManager.getVarname(bldT.mainOffice().phone()),
-                    EmailTemplateManager.getVarname(bldT.propertyName()),
-                    EmailTemplateManager.getVarname(bldT.administrator().name())
+                    EmailTemplateManager.getVarname(appT.ApplicantName()),
+                    EmailTemplateManager.getVarname(appT.ReferenceNumber()),
+                    EmailTemplateManager.getVarname(appT.SignUpUrl()),
+                    EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
+                    EmailTemplateManager.getVarname(bldT.PropertyName()),
+                    EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
                 };
                 fmtArgs = args;
             }
@@ -335,13 +387,13 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 LeaseT leaseT = EmailTemplateManager.getProto(type, LeaseT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.applicant()),
-                    EmailTemplateManager.getVarname(leaseT.startDateWeekday()),
-                    EmailTemplateManager.getVarname(leaseT.startDate()),
-                    EmailTemplateManager.getVarname(portalT.portalHomeUrl()),
-                    EmailTemplateManager.getVarname(portalT.tenantHomeUrl()),
-                    EmailTemplateManager.getVarname(bldT.propertyName()),
-                    EmailTemplateManager.getVarname(bldT.administrator().name())
+                    EmailTemplateManager.getVarname(appT.ApplicantName()),
+                    EmailTemplateManager.getVarname(leaseT.StartDateWeekDay()),
+                    EmailTemplateManager.getVarname(leaseT.StartDate()),
+                    EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                    EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
+                    EmailTemplateManager.getVarname(bldT.PropertyName()),
+                    EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
                 };
                 fmtArgs = args;
             }
@@ -361,11 +413,40 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
                 BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
                 String[] args = {
-                    EmailTemplateManager.getVarname(appT.applicant()),
-                    EmailTemplateManager.getVarname(appT.refNumber()),
-                    EmailTemplateManager.getVarname(portalT.prospectPortalomeUrl()),
-                    EmailTemplateManager.getVarname(bldT.propertyName()),
-                    EmailTemplateManager.getVarname(bldT.administrator().name())
+                    EmailTemplateManager.getVarname(appT.ApplicantName()),
+                    EmailTemplateManager.getVarname(appT.ReferenceNumber()),
+                    EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
+                    EmailTemplateManager.getVarname(bldT.PropertyName()),
+                    EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+                };
+                fmtArgs = args;
+            }
+            break;
+        case TenantInvitation:
+            if (asString) {
+                String[] args = {
+                    mainAplt.tenant().user().name().getValue(),
+                    company,
+                    VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
+                    + token,
+                    portalHomeUrl,
+                    tenantHomeUrl,
+                    building.marketing().name().getValue(),
+                    adminName
+                };
+                fmtArgs = args;
+            } else {
+                PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+                PasswordRequestTenantT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestTenantT.class);
+                BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+                String[] args = {
+                        EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
+                        EmailTemplateManager.getVarname(portalT.CompanyName()),
+                        EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl()),
+                        EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                        EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
+                        EmailTemplateManager.getVarname(bldT.PropertyName()) ,
+                        EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
                 };
                 fmtArgs = args;
             }
@@ -382,6 +463,13 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         // policyNodes:unit/floorplan/building/complex/organization
         // emailTemplatesPolicy
 
+        // site descriptor
+        siteDescriptor = EntityFactory.create(SiteDescriptor.class);
+        SiteTitles titles = EntityFactory.create(SiteTitles.class);
+        titles.copyright().setValue(copyright);
+        titles.residentPortalTitle().setValue(company);
+        siteDescriptor.siteTitles().add(titles);
+        Persistence.service().persist(siteDescriptor);
         // crmUser
         crmUser = EntityFactory.create(CrmUser.class);
         crmUser.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
@@ -503,11 +591,6 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         EmailTemplatesPolicy policy = EntityFactory.create(EmailTemplatesPolicy.class);
         for (EmailTemplateType type : EmailTemplateType.values()) {
-
-            //TODO Stan pls implement
-            if (type == EmailTemplateType.TenantInvitation) {
-                continue;
-            }
             EmailTemplate template = EntityFactory.create(EmailTemplate.class);
             template.type().setValue(type);
             template.subject().setValue(type.toString());

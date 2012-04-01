@@ -38,7 +38,8 @@ import com.propertyvista.server.common.mail.templates.model.BuildingT;
 import com.propertyvista.server.common.mail.templates.model.EmailTemplateContext;
 import com.propertyvista.server.common.mail.templates.model.LeaseT;
 import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestProspectT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestTenantT;
 import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
 import com.propertyvista.server.common.mail.templates.model.TenantT;
 import com.propertyvista.server.common.util.VistaDeployment;
@@ -51,32 +52,37 @@ public class EmailTemplateRootObjectLoader {
         }
         if (tObj instanceof PortalLinksT) {
             PortalLinksT t = (PortalLinksT) tObj;
-            t.portalHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, false));
-            t.tenantHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL);
-            t.prospectPortalomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true));
+            t.PortalHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, false));
+            t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL);
+            t.ProspectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true));
 
             // TODO use SiteThemeServicesImpl.getSiteDescriptorFromCache()
             // TODO use proper locale
             SiteDescriptor siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
             if (siteDescriptor != null && !siteDescriptor.siteTitles().isEmpty()) {
-                t.copyright().set(siteDescriptor.siteTitles().get(0).copyright());
-                t.companyName().set(siteDescriptor.siteTitles().get(0).residentPortalTitle());
+                t.CopyrightNotice().set(siteDescriptor.siteTitles().get(0).copyright());
+                t.CompanyName().set(siteDescriptor.siteTitles().get(0).residentPortalTitle());
             }
-            t.logoUrl().setValue(t.portalHomeUrl().getValue() + "/logo.png/vista.siteimgrc");
+            t.CompanyLogo().setValue(t.PortalHomeUrl().getValue() + "/logo.png/vista.siteimgrc");
 
-        } else if (tObj instanceof PasswordRequestT) {
-            PasswordRequestT t = (PasswordRequestT) tObj;
+        } else if (tObj instanceof PasswordRequestTenantT) {
+            PasswordRequestTenantT t = (PasswordRequestTenantT) tObj;
             if (context.user().isNull() || context.accessToken().isNull()) {
                 throw new Error("Both AbstractUser and AccessToken should be provided in context");
             }
             AbstractUser user = context.user();
             String token = context.accessToken().getValue();
-            t.requestorName().set(user.name());
-            if (context.prospective().isBooleanTrue()) {
-                t.passwordResetUrl().setValue(getPtappAccessUrl(token));
-            } else {
-                t.passwordResetUrl().setValue(getPortalAccessUrl(token));
+            t.RequestorName().set(user.name());
+            t.PasswordResetUrl().setValue(getPortalAccessUrl(token));
+        } else if (tObj instanceof PasswordRequestProspectT) {
+            PasswordRequestProspectT t = (PasswordRequestProspectT) tObj;
+            if (context.user().isNull() || context.accessToken().isNull()) {
+                throw new Error("Both AbstractUser and AccessToken should be provided in context");
             }
+            AbstractUser user = context.user();
+            String token = context.accessToken().getValue();
+            t.RequestorName().set(user.name());
+            t.PasswordResetUrl().setValue(getPtappAccessUrl(token));
         } else if (tObj instanceof PasswordRequestCrmT) {
             PasswordRequestCrmT t = (PasswordRequestCrmT) tObj;
             if (context.user().isNull() || context.accessToken().isNull()) {
@@ -84,8 +90,8 @@ public class EmailTemplateRootObjectLoader {
             }
             AbstractUser user = context.user();
             String token = context.accessToken().getValue();
-            t.requestorName().set(user.name());
-            t.passwordResetUrl().setValue(getCrmAccessUrl(token));
+            t.RequestorName().set(user.name());
+            t.PasswordResetUrl().setValue(getCrmAccessUrl(token));
         } else if (tObj instanceof TenantT) {
             TenantT t = (TenantT) tObj;
             TenantInLease tenantInLease = context.tenantInLease();
@@ -95,7 +101,7 @@ public class EmailTemplateRootObjectLoader {
             if (tenantInLease.tenant().user().isValueDetached()) {
                 Persistence.service().retrieve(tenantInLease.tenant().user());
             }
-            t.name().set(tenantInLease.tenant().user().name());
+            t.Name().set(tenantInLease.tenant().user().name());
         } else if (tObj instanceof BuildingT) {
             BuildingT t = (BuildingT) tObj;
             Building bld = null;
@@ -109,26 +115,26 @@ public class EmailTemplateRootObjectLoader {
             if (bld == null) {
                 throw new Error("Either Building or TenantInLease should be provided in context");
             }
-            t.propertyCode().set(bld.propertyCode());
-            t.propertyName().set(bld.marketing().name());
-            t.website().set(bld.contacts().website());
-            t.address().setValue(bld.info().address().getStringView());
+            t.PropertyCode().set(bld.propertyCode());
+            t.PropertyName().set(bld.marketing().name());
+            t.Website().set(bld.contacts().website());
+            t.Address().setValue(bld.info().address().getStringView());
             // set contact info
             for (PropertyContact cont : bld.contacts().propertyContacts()) {
                 if (cont.type().isNull()) {
                     continue;
                 } else if (cont.type().getValue().equals(PropertyContact.PropertyContactType.administrator)) {
-                    t.administrator().name().set(cont.name());
-                    t.administrator().phone().set(cont.phone());
-                    t.administrator().email().set(cont.email());
+                    t.Administrator().ContactName().set(cont.name());
+                    t.Administrator().Phone().set(cont.phone());
+                    t.Administrator().Email().set(cont.email());
                 } else if (cont.type().getValue().equals(PropertyContact.PropertyContactType.superintendent)) {
-                    t.superintendent().name().set(cont.name());
-                    t.superintendent().phone().set(cont.phone());
-                    t.superintendent().email().set(cont.email());
+                    t.Superintendent().ContactName().set(cont.name());
+                    t.Superintendent().Phone().set(cont.phone());
+                    t.Superintendent().Email().set(cont.email());
                 } else if (cont.type().getValue().equals(PropertyContact.PropertyContactType.mainOffice)) {
-                    t.mainOffice().name().set(cont.name());
-                    t.mainOffice().phone().set(cont.phone());
-                    t.mainOffice().email().set(cont.email());
+                    t.MainOffice().ContactName().set(cont.name());
+                    t.MainOffice().Phone().set(cont.phone());
+                    t.MainOffice().Email().set(cont.email());
                 }
             }
         } else if (tObj instanceof ApplicationT) {
@@ -149,10 +155,10 @@ public class EmailTemplateRootObjectLoader {
             if (app == null || user == null) {
                 throw new Error("Either TenantInLease or AbstractUser and Lease should be provided in context");
             }
-            t.applicant().set(user.name());
-            t.refNumber().setValue(app.getPrimaryKey().toString());
+            t.ApplicantName().set(user.name());
+            t.ReferenceNumber().setValue(app.getPrimaryKey().toString());
             if (!context.accessToken().isNull()) {
-                t.applicationUrl().setValue(getPtappAccessUrl(context.accessToken().getValue()));
+                t.SignUpUrl().setValue(getPtappAccessUrl(context.accessToken().getValue()));
             }
         } else if (tObj instanceof LeaseT) {
             LeaseT t = (LeaseT) tObj;
@@ -164,9 +170,9 @@ public class EmailTemplateRootObjectLoader {
             if (tenantInLease.tenant().user().isValueDetached()) {
                 Persistence.service().retrieve(tenantInLease.tenant().user());
             }
-            t.applicant().set(tenantInLease.tenant().user().name());
-            t.startDate().setValue(lease.leaseFrom().getStringView());
-            t.startDateWeekday().setValue(new SimpleDateFormat("EEEE").format(lease.leaseFrom().getValue()));
+            t.ApplicantName().set(tenantInLease.tenant().user().name());
+            t.StartDate().setValue(lease.leaseFrom().getStringView());
+            t.StartDateWeekDay().setValue(new SimpleDateFormat("EEEE").format(lease.leaseFrom().getValue()));
         }
         return tObj;
     }

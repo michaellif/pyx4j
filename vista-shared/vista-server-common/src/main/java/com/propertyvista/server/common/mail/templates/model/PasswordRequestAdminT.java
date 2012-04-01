@@ -22,7 +22,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PasswordRequestAdminT extends IEntity {
 
-    IPrimitive<String> requestorName();
+    IPrimitive<String> RequestorName();
 
-    IPrimitive<String> passwordResetUrl();
+    IPrimitive<String> PasswordResetUrl();
 }

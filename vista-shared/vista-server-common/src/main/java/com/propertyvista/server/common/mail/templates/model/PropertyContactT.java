@@ -22,9 +22,9 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PropertyContactT extends IEntity {
 
-    IPrimitive<String> name();
+    IPrimitive<String> ContactName();
 
-    IPrimitive<String> phone();
+    IPrimitive<String> Phone();
 
-    IPrimitive<String> email();
+    IPrimitive<String> Email();
 }

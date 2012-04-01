@@ -22,17 +22,17 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface BuildingT extends IEntity {
 
-    IPrimitive<String> propertyCode();
+    IPrimitive<String> PropertyCode();
 
-    IPrimitive<String> propertyName();
+    IPrimitive<String> PropertyName();
 
-    IPrimitive<String> website();
+    IPrimitive<String> Website();
 
-    IPrimitive<String> address();
+    IPrimitive<String> Address();
 
-    PropertyContactT mainOffice();
+    PropertyContactT MainOffice();
 
-    PropertyContactT administrator();
+    PropertyContactT Administrator();
 
-    PropertyContactT superintendent();
+    PropertyContactT Superintendent();
 }

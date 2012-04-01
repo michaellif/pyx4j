@@ -14,17 +14,9 @@
 package com.propertyvista.server.common.mail.templates.model;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface LeaseT extends IEntity {
-
-    IPrimitive<String> ApplicantName();
-
-    IPrimitive<String> StartDate();
-
-    IPrimitive<String> StartDateWeekDay();
+public interface PasswordRequestTenantT extends PasswordRequestT {
 }

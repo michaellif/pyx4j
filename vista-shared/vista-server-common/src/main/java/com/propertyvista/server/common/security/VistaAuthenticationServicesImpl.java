@@ -288,15 +288,13 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         U user = users.get(0);
 
         String token = AccessKey.createAccessToken(user, credentialClass, 1);
+        // TODO do we need this commit? AccessKey now has it's own...
         Persistence.service().commit();
         if (token == null) {
             throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }
 
-        MailMessage m = new MailMessage();
-        m.setTo(user.email().getValue());
-        m.setSender(MessageTemplates.getSender());
-        MessageTemplates.createPasswordResetEmail(m, getApplicationBehavior(), user, token);
+        MailMessage m = MessageTemplates.createPasswordResetEmail(getApplicationBehavior(), user, token);
 
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));

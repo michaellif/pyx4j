@@ -22,6 +22,6 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface TenantT extends IEntity {
 
-    IPrimitive<String> name();
+    IPrimitive<String> Name();
 
 }

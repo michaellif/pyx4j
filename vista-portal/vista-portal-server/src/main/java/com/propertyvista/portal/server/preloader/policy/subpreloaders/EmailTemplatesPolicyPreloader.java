@@ -18,6 +18,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
@@ -31,7 +32,8 @@ import com.propertyvista.server.common.mail.templates.model.ApplicationT;
 import com.propertyvista.server.common.mail.templates.model.BuildingT;
 import com.propertyvista.server.common.mail.templates.model.LeaseT;
 import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestProspectT;
+import com.propertyvista.server.common.mail.templates.model.PasswordRequestTenantT;
 import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
 
 public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<EmailTemplatesPolicy> {
@@ -39,6 +41,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
     private final static I18n i18n = I18n.get(EmailTemplatesPolicyPreloader.class);
 
     private final static Logger log = LoggerFactory.getLogger(EmailTemplatesPolicyPreloader.class);
+
+    private static String htmlFmt = null;
 
     public EmailTemplatesPolicyPreloader() {
         super(EmailTemplatesPolicy.class);
@@ -53,6 +57,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplatesPolicy policy = EntityFactory.create(EmailTemplatesPolicy.class);
 
         policy.templates().add(defaultEmailTemplatePasswordRetrievalCrm());
+        policy.templates().add(defaultEmailTemplatePasswordRetrievalProspect());
         policy.templates().add(defaultEmailTemplatePasswordRetrievalTenant());
         policy.templates().add(defaultEmailTemplateApplicationCreatedApplicant());
         policy.templates().add(defaultEmailTemplateApplicationCreatedCoApplicant());
@@ -64,13 +69,21 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         return policy;
     }
 
-    public static String wrapHtml(String text) {
-        try {
-            String html = IOUtils.getTextResource("email/template-basic.html");
-            return html.replace("{MESSAGE}", text);
-        } catch (IOException e) {
-            throw new Error("template error", e);
+    public static String wrapHtml(String text, PortalLinksT portalT) {
+        if (htmlFmt == null) {
+            try {
+                htmlFmt = IOUtils.getTextResource("email/template-basic.html");
+            } catch (IOException e) {
+                throw new Error("Unable to load template html wrapper resource", e);
+            }
         }
+        return SimpleMessageFormat.format(//@formatter:off
+            htmlFmt, text,
+            EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+            EmailTemplateManager.getVarname(portalT.CompanyLogo()),
+            EmailTemplateManager.getVarname(portalT.CompanyName()),
+            EmailTemplateManager.getVarname(portalT.CopyrightNotice())
+        );//@formatter:on
     }
 
     private EmailTemplate defaultEmailTemplatePasswordRetrievalCrm() {
@@ -87,17 +100,17 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
                 "Click the link below to go to the {1} site and create new password for your account:<br/>\n" +
                 "    <a style=\"color:#929733\" href=\"{2}\">Change Your Password</a>",
-                EmailTemplateManager.getVarname(pwdReqT.requestorName()),
-                EmailTemplateManager.getVarname(portalT.companyName()),
-                EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl())
-        )));//@formatter:on
+                EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
+                EmailTemplateManager.getVarname(portalT.CompanyName()),
+                EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
+        ), portalT));//@formatter:on
         return template;
     }
 
     private EmailTemplate defaultEmailTemplatePasswordRetrievalTenant() {
         EmailTemplateType type = EmailTemplateType.PasswordRetrievalTenant;
 
-        PasswordRequestT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestT.class);
+        PasswordRequestTenantT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestTenantT.class);
         PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
@@ -108,16 +121,38 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
                 "Click the link below to go to the {1} site and create new password for your account:<br/>\n" +
                 "    <a style=\"color:#929733\" href=\"{2}\">Change Your Password</a>",
-                EmailTemplateManager.getVarname(pwdReqT.requestorName()),
-                EmailTemplateManager.getVarname(portalT.companyName()),
-                EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl())
-        )));//@formatter:on
+                EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
+                EmailTemplateManager.getVarname(portalT.CompanyName()),
+                EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
+        ), portalT));//@formatter:on
+        return template;
+    }
+
+    private EmailTemplate defaultEmailTemplatePasswordRetrievalProspect() {
+        EmailTemplateType type = EmailTemplateType.PasswordRetrievalProspect;
+
+        PasswordRequestProspectT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestProspectT.class);
+        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.type().setValue(type);
+        template.subject().setValue(i18n.tr("New Password Retrieval"));
+        template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
+                "Dear {0},<br/>\n" +
+                "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
+                "Click the link below to go to the {1} site and create new password for your account:<br/>\n" +
+                "    <a style=\"color:#929733\" href=\"{2}\">Change Your Password</a>",
+                EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
+                EmailTemplateManager.getVarname(portalT.CompanyName()),
+                EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
+        ), portalT));//@formatter:on
         return template;
     }
 
     private EmailTemplate defaultEmailTemplateApplicationCreatedApplicant() {
         EmailTemplateType type = EmailTemplateType.ApplicationCreatedApplicant;
 
+        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
@@ -134,19 +169,20 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/><br/>" +
                 "{4}<br/>" +
                 "{5}<br/>",
-                EmailTemplateManager.getVarname(appT.applicant()),
-                EmailTemplateManager.getVarname(appT.refNumber()),
-                EmailTemplateManager.getVarname(appT.applicationUrl()),
-                EmailTemplateManager.getVarname(bldT.mainOffice().phone()),
-                EmailTemplateManager.getVarname(bldT.propertyName()),
-                EmailTemplateManager.getVarname(bldT.administrator().name())
-        )));//@formatter:on
+                EmailTemplateManager.getVarname(appT.ApplicantName()),
+                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
+                EmailTemplateManager.getVarname(appT.SignUpUrl()),
+                EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
+                EmailTemplateManager.getVarname(bldT.PropertyName()),
+                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+        ), portalT));//@formatter:on
         return template;
     }
 
     private EmailTemplate defaultEmailTemplateApplicationCreatedCoApplicant() {
         EmailTemplateType type = EmailTemplateType.ApplicationCreatedCoApplicant;
 
+        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
@@ -163,19 +199,20 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/><br/>" +
                 "{4}<br/>" +
                 "{5}<br/>",
-                EmailTemplateManager.getVarname(appT.applicant()),
-                EmailTemplateManager.getVarname(appT.refNumber()),
-                EmailTemplateManager.getVarname(appT.applicationUrl()),
-                EmailTemplateManager.getVarname(bldT.mainOffice().phone()),
-                EmailTemplateManager.getVarname(bldT.propertyName()),
-                EmailTemplateManager.getVarname(bldT.administrator().name())
-        )));//@formatter:on
+                EmailTemplateManager.getVarname(appT.ApplicantName()),
+                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
+                EmailTemplateManager.getVarname(appT.SignUpUrl()),
+                EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
+                EmailTemplateManager.getVarname(bldT.PropertyName()),
+                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+        ), portalT));//@formatter:on
         return template;
     }
 
     private EmailTemplate defaultEmailTemplateApplicationCreatedGuarantor() {
         EmailTemplateType type = EmailTemplateType.ApplicationCreatedGuarantor;
 
+        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
@@ -192,13 +229,13 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/><br/>" +
                 "{4}<br/>" +
                 "{5}<br/>",
-                EmailTemplateManager.getVarname(appT.applicant()),
-                EmailTemplateManager.getVarname(appT.refNumber()),
-                EmailTemplateManager.getVarname(appT.applicationUrl()),
-                EmailTemplateManager.getVarname(bldT.mainOffice().phone()),
-                EmailTemplateManager.getVarname(bldT.propertyName()),
-                EmailTemplateManager.getVarname(bldT.administrator().name())
-        )));//@formatter:on
+                EmailTemplateManager.getVarname(appT.ApplicantName()),
+                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
+                EmailTemplateManager.getVarname(appT.SignUpUrl()),
+                EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
+                EmailTemplateManager.getVarname(bldT.PropertyName()),
+                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+        ), portalT));//@formatter:on
         return template;
     }
 
@@ -226,14 +263,14 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/><br/>" +
                 "{5}<br/>" +
                 "{6}<br/>",                        
-                EmailTemplateManager.getVarname(appT.applicant()),
-                EmailTemplateManager.getVarname(leaseT.startDateWeekday()),
-                EmailTemplateManager.getVarname(leaseT.startDate()),
-                EmailTemplateManager.getVarname(portalT.portalHomeUrl()),
-                EmailTemplateManager.getVarname(portalT.tenantHomeUrl()),
-                EmailTemplateManager.getVarname(bldT.propertyName()),
-                EmailTemplateManager.getVarname(bldT.administrator().name())
-        )));//@formatter:on
+                EmailTemplateManager.getVarname(appT.ApplicantName()),
+                EmailTemplateManager.getVarname(leaseT.StartDateWeekDay()),
+                EmailTemplateManager.getVarname(leaseT.StartDate()),
+                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
+                EmailTemplateManager.getVarname(bldT.PropertyName()),
+                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+        ), portalT));//@formatter:on
         return template;
     }
 
@@ -260,12 +297,12 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/><br/>" +
                 "{3}<br/>" +
                 "{4}<br/>",                        
-                EmailTemplateManager.getVarname(appT.applicant()),          
-                EmailTemplateManager.getVarname(portalT.prospectPortalomeUrl()),
-                EmailTemplateManager.getVarname(appT.refNumber()),
-                EmailTemplateManager.getVarname(bldT.propertyName()),
-                EmailTemplateManager.getVarname(bldT.administrator().name())
-        )));//@formatter:on
+                EmailTemplateManager.getVarname(appT.ApplicantName()),          
+                EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
+                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
+                EmailTemplateManager.getVarname(bldT.PropertyName()),
+                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+        ), portalT));//@formatter:on
         return template;
     }
 
@@ -274,7 +311,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
         PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
-        PasswordRequestT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestT.class);
+        PasswordRequestTenantT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestTenantT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.type().setValue(type);
@@ -293,14 +330,14 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Sincerely,<br/><br/>" +
                 "{5}<br/>" +
                 "{6}<br/>",
-                EmailTemplateManager.getVarname(pwdReqT.requestorName()),
-                EmailTemplateManager.getVarname(portalT.companyName()),
-                EmailTemplateManager.getVarname(pwdReqT.passwordResetUrl()),
-                EmailTemplateManager.getVarname(portalT.portalHomeUrl()),
-                EmailTemplateManager.getVarname(portalT.tenantHomeUrl()),
-                EmailTemplateManager.getVarname(bldT.propertyName()) ,
-                EmailTemplateManager.getVarname(bldT.administrator().name())
-        )));//@formatter:on
+                EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
+                EmailTemplateManager.getVarname(portalT.CompanyName()),
+                EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl()),
+                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
+                EmailTemplateManager.getVarname(bldT.PropertyName()) ,
+                EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
+        ), portalT));//@formatter:on
         return template;
     }
 }

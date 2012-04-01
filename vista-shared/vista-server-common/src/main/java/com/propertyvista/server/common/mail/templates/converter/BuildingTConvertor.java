@@ -26,7 +26,7 @@ public class BuildingTConvertor extends EntityDtoBinder<Building, BuildingT> {
 
     @Override
     protected void bind() {
-        bind(dtoProto.propertyCode(), dboProto.propertyCode());
+        bind(dtoProto.PropertyCode(), dboProto.propertyCode());
         //TODO all other
     }
 
