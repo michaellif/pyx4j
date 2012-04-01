@@ -108,12 +108,18 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         callback.onSuccess(createAuthenticationResponse(sessionToken));
     }
 
+    protected boolean honorSystemState() {
+        return true;
+    }
+
     @Override
     public void authenticateWithToken(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String accessToken) {
-        switch (SystemMaintenance.getState()) {
-        case Unavailable:
-        case ReadOnly:
-            throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
+        if (honorSystemState()) {
+            switch (SystemMaintenance.getState()) {
+            case Unavailable:
+            case ReadOnly:
+                throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
+            }
         }
         AccessKey.TokenParser token = new AccessKey.TokenParser(accessToken);
         if (!validEmailAddress(token.email)) {
@@ -161,9 +167,11 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     }
 
     public String beginSession(AuthenticationRequest request) {
-        switch (SystemMaintenance.getState()) {
-        case Unavailable:
-            throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
+        if (honorSystemState()) {
+            switch (SystemMaintenance.getState()) {
+            case Unavailable:
+                throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
+            }
         }
 
         if (CommonsStringUtils.isEmpty(request.email().getValue()) || !validEmailAddress(request.email().getValue())
@@ -325,6 +333,15 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             } else {
                 systemWallMessage = new SystemWallMessage(i18n.tr("Repairs in Progress"), true);
             }
+        }
+        switch (SystemMaintenance.getState()) {
+        case ReadOnly:
+        case Unavailable:
+            if (systemWallMessage == null) {
+                systemWallMessage = new SystemWallMessage();
+            }
+            systemWallMessage.setMessage(CommonsStringUtils.nvl_concat(systemWallMessage.getMessage(), SystemMaintenance.getApplicationMaintenanceMessage(),
+                    ".\n"));
         }
 
         ar.setSystemWallMessage(systemWallMessage);
