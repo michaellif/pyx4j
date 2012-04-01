@@ -23,6 +23,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.mail.Mail;
@@ -122,15 +123,11 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
             item.orderInLease().setValue(no++);
             Persistence.service().merge(item);
         }
-    }
-
-    @Override
-    public void approveFinal(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        super.approveFinal(callback, entityId);
 
         // update unit rent price here:
-        Lease entity = Persistence.secureRetrieve(entityClass, entityId);
-        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(entity);
+        if (in.saveAction().getValue() == SaveAction.saveAsFinal) {
+            ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(in);
+        }
     }
 
     private void updateAdjustments(Lease lease) {
