@@ -321,7 +321,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void mergeReference(MemberMeta meta, IEntity entity) {
+    private boolean mergeReference(MemberMeta meta, IEntity entity) {
         ReferenceAdapter adapter;
         try {
             adapter = meta.getAnnotation(Reference.class).adapter().newInstance();
@@ -333,10 +333,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         TableModel tm = tableModel(EntityFactory.getEntityMeta(entity.getValueClass()));
         List<Key> rs = tm.queryKeys(getPersistenceContext(), adapter.getMergeCriteria(entity), 1);
         if (!rs.isEmpty()) {
-            entity.setPrimaryKey(rs.get(0));
+            Key existingKey = rs.get(0);
+            if (!existingKey.equals(entity.getPrimaryKey())) {
+                entity.setPrimaryKey(existingKey);
+                return true;
+            } else {
+                return false;
+            }
         } else {
             entity = adapter.onEntityCreation(entity);
             persist(tableModel(entity.getEntityMeta()), entity);
+            return true;
         }
     }
 
@@ -712,8 +719,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         @SuppressWarnings("rawtypes")
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                         if (!adapter.allowModifications(entity, memberMeta, lastValue, value)) {
-                            log.error("Forbiden change [{}] -> [{}]", lastValue, value);
-                            throw new Error("Forbiden change '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
+                            log.error("Forbidden change [{}] -> [{}]", lastValue, value);
+                            throw new Error("Forbidden change '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
                         }
                     }
                 }
@@ -722,27 +729,37 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         @SuppressWarnings("rawtypes")
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                         if (!adapter.allowModifications(entity, memberMeta, lastValue, value)) {
-                            log.error("Forbiden change [{}] -> [{}]", lastValue, value);
-                            throw new Error("Forbiden change '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
+                            log.error("Forbidden change [{}] -> [{}]", lastValue, value);
+                            throw new Error("Forbidden change '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
                         }
                     }
                 }
-            } else if (memberMeta.isOwnedRelationships() && ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                // Special case for child collections update. Collection itself is the same and in the same order.
-                ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
-                Iterator<IEntity> iterator = collectionMember.iterator();
-                ICollection<IEntity, ?> baseCollectionMember = (ICollection<IEntity, ?>) member.getMember(baseEntity);
-                Iterator<IEntity> baseIterator = baseCollectionMember.iterator();
-                for (; iterator.hasNext() && baseIterator.hasNext();) {
-                    IEntity childEntity = iterator.next();
-                    if (!childEntity.isValueDetached()) {
+            } else if (memberMeta.isOwnedRelationships()) {
+                if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    // Special case for child collections update. Collection itself is the same and in the same order, since we compared it.
+                    ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                    Iterator<IEntity> iterator = collectionMember.iterator();
+                    ICollection<IEntity, ?> baseCollectionMember = (ICollection<IEntity, ?>) member.getMember(baseEntity);
+                    Iterator<IEntity> baseIterator = baseCollectionMember.iterator();
+                    for (; iterator.hasNext() && baseIterator.hasNext();) {
+                        IEntity childEntity = iterator.next();
+                        if (!childEntity.isValueDetached()) {
+                            childEntity = childEntity.cast();
+                            TableModel childTM = tableModel(childEntity.getEntityMeta());
+                            IEntity childBaseEntity = baseIterator.next();
+                            updated |= retrieveAndApplyModifications(childTM, childBaseEntity, childEntity);
+                        }
+                    }
+                } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    IEntity childEntity = (IEntity) member.getMember(entity);
+                    if (!childEntity.isValueDetached() && ((!childEntity.isNull() || member.isOwnedForceCreation()))) {
                         childEntity = childEntity.cast();
-                        TableModel childTM = tableModel(EntityFactory.getEntityMeta(childEntity.getValueClass()));
-                        IEntity childBaseEntity = baseIterator.next();
-                        updated |= retrieveAndApplyModifications(childTM, childBaseEntity, childEntity);
+                        IEntity baseChildEntity = (IEntity) member.getMember(baseEntity);
+                        baseChildEntity = baseChildEntity.cast();
+                        TableModel childTM = tableModel(childEntity.getEntityMeta());
+                        updated |= retrieveAndApplyModifications(childTM, baseChildEntity, childEntity);
                     }
                 }
-                updated = true;
             }
         }
         if (updated && (adapters != null) && adapters.entityModificationAdapters() != null) {
@@ -826,7 +843,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     IEntity childEntity = iterator.next();
                     if (!childEntity.isValueDetached()) {
                         childEntity = childEntity.cast();
-                        TableModel childTM = tableModel(EntityFactory.getEntityMeta(childEntity.getValueClass()));
+                        TableModel childTM = tableModel(childEntity.getEntityMeta());
                         fireModificationAdapters(childTM, childEntity);
                     }
                 }
@@ -834,7 +851,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
-    private void merge(TableModel tm, IEntity entity) {
+    private boolean merge(TableModel tm, IEntity entity) {
         if (entity.isValueDetached()) {
             throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
         }
@@ -868,6 +885,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     } else if (baseChildEntity.getPrimaryKey() != null) {
                         // Cascade delete
                         cascadeDelete(baseChildEntity.getEntityMeta(), baseChildEntity.getPrimaryKey());
+                        updated = true;
                     }
                 }
             }
@@ -891,13 +909,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         // Cascade delete
                         cascadeRemove.add(baseChildEntity);
                     }
+                    updated = true;
                 }
                 if (!childEntity.isValueDetached() && ((!childEntity.isNull() || member.isOwnedForceCreation()))) {
                     childEntity = childEntity.cast();
-                    merge(tableModel(childEntity.getEntityMeta()), childEntity);
+                    updated |= merge(tableModel(childEntity.getEntityMeta()), childEntity);
                 }
             } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
-                mergeReference(memberMeta, childEntity);
+                updated |= mergeReference(memberMeta, childEntity);
             }
         }
         if (updated) {
@@ -918,6 +937,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             CacheService.entityCache().put(entity);
         }
+        return updated;
     }
 
     private <T extends IEntity> void clearRetrieveValues(T entity) {

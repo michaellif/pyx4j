@@ -88,6 +88,18 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
             Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
         }
 
+        // update only child
+        o.child().name().setValue(uniqueString());
+        srvSave(o, testCaseMethod);
+
+        // Get Parent and see that Child is retrieved, then verify values
+        {
+            UnidirectionalOneToOnePlmParent parent = srv.retrieve(UnidirectionalOneToOnePlmParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
+        }
+
         // Get Child and see that child is retrieved, then verify values
         {
             UnidirectionalOneToOnePlmChild child = srv.retrieve(UnidirectionalOneToOnePlmChildA.class, o.child().getPrimaryKey());

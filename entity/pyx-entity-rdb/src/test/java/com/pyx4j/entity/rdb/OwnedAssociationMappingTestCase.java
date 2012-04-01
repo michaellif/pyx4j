@@ -107,6 +107,18 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
             Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
         }
 
+        // update only child
+        o.child().name().setValue(uniqueString());
+        srvSave(o, testCaseMethod);
+
+        // Get Parent and see that Child is retrieved, then verify values
+        {
+            UnidirectionalOneToOneParent parent = srv.retrieve(UnidirectionalOneToOneParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
+        }
+
         // Get Child and see that child is retrieved, then verify values
         {
             UnidirectionalOneToOneChild child = srv.retrieve(UnidirectionalOneToOneChild.class, o.child().getPrimaryKey());
@@ -213,6 +225,21 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
         // update child and owner
         o.name().setValue(uniqueString());
+        o.child().name().setValue(uniqueString());
+        srvSave(o, testCaseMethod);
+
+        // Get Parent and see that Child is retrieved, then verify values
+        {
+            BidirectionalOneToOneParent parent = srv.retrieve(BidirectionalOneToOneParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
+            Assert.assertEquals("owner in child data retrieved", AttachLevel.Attached, parent.child().parent().getAttachLevel());
+            Assert.assertEquals("owner in child correct data retrieved", o.getPrimaryKey(), parent.child().parent().getPrimaryKey());
+            Assert.assertEquals("owner in child correct data retrieved", o.name(), parent.child().parent().name());
+        }
+
+        // update only child
         o.child().name().setValue(uniqueString());
         srvSave(o, testCaseMethod);
 
@@ -354,6 +381,21 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
 
         // update child and owner
         o.name().setValue(uniqueString());
+        o.child().name().setValue(uniqueString());
+        srvSave(o, testCaseMethod);
+
+        // Get Parent and see that Child is retrieved, then verify values
+        {
+            BidirectionalOneToOneInversedParent parent = srv.retrieve(BidirectionalOneToOneInversedParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.child().getAttachLevel());
+            Assert.assertEquals("correct data retrieved", o.child().name(), parent.child().name());
+            Assert.assertEquals("owner in child data retrieved", AttachLevel.Attached, parent.child().parent().getAttachLevel());
+            Assert.assertEquals("owner in child correct data retrieved", o.getPrimaryKey(), parent.child().parent().getPrimaryKey());
+            Assert.assertEquals("owner in child correct data retrieved", o.name(), parent.child().parent().name());
+        }
+
+        // update only child
         o.child().name().setValue(uniqueString());
         srvSave(o, testCaseMethod);
 

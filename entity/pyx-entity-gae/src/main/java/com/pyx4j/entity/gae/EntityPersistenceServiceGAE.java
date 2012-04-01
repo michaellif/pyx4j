@@ -617,8 +617,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         @SuppressWarnings("rawtypes")
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                         if (!adapter.allowModifications(iEntity, meta, entity.lastValue, value)) {
-                            log.error("Forbiden change [{}] -> [{}]", entity.lastValue, value);
-                            throw new Error("Forbiden change " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
+                            log.error("Forbidden change [{}] -> [{}]", entity.lastValue, value);
+                            throw new Error("Forbidden change " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
                         }
                     }
                 }
@@ -627,8 +627,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         @SuppressWarnings("rawtypes")
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                         if (!adapter.allowModifications(iEntity, meta, entity.lastValue, value)) {
-                            log.error("Forbiden change [{}] -> [{}]", entity.lastValue, value);
-                            throw new Error("Forbiden change " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
+                            log.error("Forbidden change [{}] -> [{}]", entity.lastValue, value);
+                            throw new Error("Forbidden change " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
                         }
                     }
                 }
