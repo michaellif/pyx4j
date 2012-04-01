@@ -752,9 +752,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     }
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     IEntity childEntity = (IEntity) member.getMember(entity);
-                    if (!childEntity.isValueDetached() && ((!childEntity.isNull() || member.isOwnedForceCreation()))) {
+                    IEntity baseChildEntity = (IEntity) member.getMember(baseEntity);
+                    if (!childEntity.isValueDetached() && (!baseChildEntity.isNull())) {
                         childEntity = childEntity.cast();
-                        IEntity baseChildEntity = (IEntity) member.getMember(baseEntity);
                         baseChildEntity = baseChildEntity.cast();
                         TableModel childTM = tableModel(childEntity.getEntityMeta());
                         updated |= retrieveAndApplyModifications(childTM, baseChildEntity, childEntity);
