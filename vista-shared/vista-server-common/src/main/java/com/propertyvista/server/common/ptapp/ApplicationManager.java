@@ -377,6 +377,8 @@ public class ApplicationManager {
                 credential.credential().setValue(PasswordEncryptor.encryptPassword(person.email().getValue()));
             }
             credential.enabled().setValue(Boolean.TRUE);
+            // TODO tenant can be guarantor in other applications.
+            credential.behaviors().clear();
             credential.behaviors().add(behavior);
             Persistence.service().persist(credential);
         } else {
@@ -387,6 +389,8 @@ public class ApplicationManager {
                 credential.credential().setValue(PasswordEncryptor.encryptPassword(person.email().getValue()));
             }
             credential.enabled().setValue(Boolean.TRUE);
+            // TODO tenant can be guarantor in other applications.
+            credential.behaviors().clear();
             credential.behaviors().add(behavior);
             Persistence.service().persist(credential);
         }
