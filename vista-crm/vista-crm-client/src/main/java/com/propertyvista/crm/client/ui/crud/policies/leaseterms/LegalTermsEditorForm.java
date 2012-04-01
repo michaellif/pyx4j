@@ -15,9 +15,11 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
 public class LegalTermsEditorForm extends CEntityDecoratableEditor<LegalTermsDescriptor> {
@@ -34,7 +36,9 @@ public class LegalTermsEditorForm extends CEntityDecoratableEditor<LegalTermsDes
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).labelWidth(10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 60).labelWidth(10).build());
+        CRichTextArea editor = new CRichTextArea();
+        editor.setImageProvider(new SiteImageResourceProvider());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description(), editor), 60).labelWidth(10).build());
         content.setH1(++row, 0, 1, proto().content().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().content(), new LegalTermsContentFolder(this)));
 

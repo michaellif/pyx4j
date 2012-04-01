@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
@@ -27,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
@@ -81,7 +83,9 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
 
             CComponent<?, ?> termsContentComp = null;
             if (isEditable()) {
-                termsContentComp = inject(proto().content());
+                CRichTextArea editor = new CRichTextArea();
+                editor.setImageProvider(new SiteImageResourceProvider());
+                termsContentComp = inject(proto().content(), editor);
             } else {
                 CLabel termsContentLabel = new CLabel();
                 termsContentLabel.setAllowHtml(true);
