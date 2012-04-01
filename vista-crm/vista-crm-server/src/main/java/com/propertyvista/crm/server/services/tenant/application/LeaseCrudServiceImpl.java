@@ -38,6 +38,7 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
@@ -272,10 +273,20 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
     public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<TenantInLease> tenants, EmailTemplateType emailType) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, entityId);
         for (TenantInLease tenant : tenants) {
+            tenant = Persistence.service().retrieve(TenantInLease.class, tenant.getPrimaryKey());
             TenantUser user = tenant.tenant().user();
             if (user.isValueDetached()) {
                 Persistence.service().retrieve(user);
             }
+            switch (tenant.role().getValue()) {
+            case Applicant:
+                ApplicationManager.ensureProspectiveTenantUser(tenant.tenant(), tenant.tenant().person(), VistaTenantBehavior.TenantPrimary);
+                break;
+            case CoApplicant:
+                ApplicationManager.ensureProspectiveTenantUser(tenant.tenant(), tenant.tenant().person(), VistaTenantBehavior.TenantSecondary);
+                break;
+            }
+
             // Create Token and other stuff
             String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
             if (token == null) {

@@ -356,7 +356,7 @@ public class ApplicationManager {
         return progress;
     }
 
-    private static TenantUser ensureProspectiveTenantUser(TenantUserHolder tenant, Person person, VistaTenantBehavior behavior) {
+    public static TenantUser ensureProspectiveTenantUser(TenantUserHolder tenant, Person person, VistaTenantBehavior behavior) {
         TenantUser user = tenant.user();
         if (user.getPrimaryKey() == null) {
             if (person.email().isNull()) {
