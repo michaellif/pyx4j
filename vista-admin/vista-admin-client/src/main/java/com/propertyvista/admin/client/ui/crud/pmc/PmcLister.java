@@ -24,14 +24,10 @@ public class PmcLister extends ListerBase<PmcDTO> {
     public PmcLister() {
         super(PmcDTO.class, AdminSiteMap.Management.PMC.class, false, true);
 
-        setColumnDescriptors(
-
-        new MemberColumnDescriptor.Builder(proto().name()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().dnsName()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().created()).build());
-
+        setColumnDescriptors( //@formatter:off
+            new MemberColumnDescriptor.Builder(proto().name()).build(),
+            new MemberColumnDescriptor.Builder(proto().dnsName()).build(),
+            new MemberColumnDescriptor.Builder(proto().created()).build()
+        );//@formatter:on
     }
-
 }

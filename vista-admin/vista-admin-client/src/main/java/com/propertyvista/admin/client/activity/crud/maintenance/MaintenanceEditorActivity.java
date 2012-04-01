@@ -7,26 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 22, 2012
- * @author ArtyomB
+ * Created on May 9, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.admin.client.activity.crud.adminusers;
+package com.propertyvista.admin.client.activity.crud.maintenance;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
-import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserEditorView;
+import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
-import com.propertyvista.admin.rpc.AdminUserDTO;
-import com.propertyvista.admin.rpc.services.AdminUserCrudService;
+import com.propertyvista.admin.rpc.services.MaintenanceCrudService;
 
-public class AdminUserEditorActivity extends EditorActivityBase<AdminUserDTO> {
+public class MaintenanceEditorActivity extends EditorActivityBase<SystemMaintenanceState> implements MaintenanceEditorView.Presenter {
 
-    public AdminUserEditorActivity(Place place) {
-        super(place, AdministrationVeiwFactory.instance(AdminUserEditorView.class), GWT.<AdminUserCrudService> create(AdminUserCrudService.class),
-                AdminUserDTO.class);
+    public MaintenanceEditorActivity(Place place) {
+        super(place, AdministrationVeiwFactory.instance(MaintenanceEditorView.class), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
+                SystemMaintenanceState.class);
     }
 }

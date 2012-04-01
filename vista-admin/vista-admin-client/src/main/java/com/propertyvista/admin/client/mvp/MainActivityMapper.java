@@ -24,12 +24,13 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.AccountActivity;
 import com.propertyvista.admin.client.activity.AlertActivity;
-import com.propertyvista.admin.client.activity.MaintenanceActivity;
 import com.propertyvista.admin.client.activity.MessageActivity;
 import com.propertyvista.admin.client.activity.SettingsActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserEditorActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserListerActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserViewerActivity;
+import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceEditorActivity;
+import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceViewerActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnBoardingUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserEditorActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserListerActivity;
@@ -79,7 +80,14 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     // - Administration:
                 } else if (place instanceof AdminSiteMap.Administration.Maintenance) {
-                    activity = new MaintenanceActivity(place);
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new MaintenanceEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new MaintenanceViewerActivity(place);
+                        break;
+                    }
 
                 } else if (place instanceof AdminSiteMap.Administration.AdminUsers) {
                     switch (((CrudAppPlace) place).getType()) {

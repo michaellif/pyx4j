@@ -29,5 +29,4 @@ public class AdminUserListerActivity extends ListerActivityBase<AdminUserDTO> {
         super(place, AdministrationVeiwFactory.instance(AdminUserListerView.class), GWT.<AdminUserCrudService> create(AdminUserCrudService.class),
                 AdminUserDTO.class);
     }
-
 }

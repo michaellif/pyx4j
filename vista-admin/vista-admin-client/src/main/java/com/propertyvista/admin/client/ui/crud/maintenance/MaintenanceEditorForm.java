@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.ui.administration;
+package com.propertyvista.admin.client.ui.crud.maintenance;
 
 import java.util.ArrayList;
 import java.util.Collection;

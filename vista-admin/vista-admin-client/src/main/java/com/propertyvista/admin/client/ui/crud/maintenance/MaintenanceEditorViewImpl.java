@@ -11,11 +11,16 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.admin.client.ui.administration;
+package com.propertyvista.admin.client.ui.crud.maintenance;
 
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-public interface MaintenanceView extends IEditorView<SystemMaintenanceState> {
+import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
+import com.propertyvista.admin.rpc.AdminSiteMap;
 
+public class MaintenanceEditorViewImpl extends AdminEditorViewImplBase<SystemMaintenanceState> implements MaintenanceEditorView {
+
+    public MaintenanceEditorViewImpl() {
+        super(AdminSiteMap.Administration.Maintenance.class, new MaintenanceEditorForm());
+    }
 }

@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.admin.client.ui.administration;
+package com.propertyvista.admin.client.ui.crud.maintenance;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -19,31 +19,27 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.admin.client.activity.MaintenanceActivity;
-import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
+import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceViewerActivity;
+import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
-public class MaintenanceViewImpl extends AdminEditorViewImplBase<SystemMaintenanceState> implements MaintenanceView {
+public class MaintenanceViewerViewImpl extends AdminViewerViewImplBase<SystemMaintenanceState> implements MaintenanceViewerView {
 
-    private final static I18n i18n = I18n.get(MaintenanceViewImpl.class);
+    private final static I18n i18n = I18n.get(MaintenanceViewerViewImpl.class);
 
-    public MaintenanceViewImpl() {
-        super(AdminSiteMap.Administration.Maintenance.class, new MaintenanceEditorForm());
+    private final Button btnResetCache;
 
-        // hide save button:
-        btnSave.setVisible(false);
+    public MaintenanceViewerViewImpl() {
+        super(AdminSiteMap.Administration.Maintenance.class, new MaintenanceEditorForm(true));
 
-        Toolbar footer = ((Toolbar) getFooter());
-
-        Button btnResetCache = new Button(i18n.tr("Reset Global Cache"), new ClickHandler() {
-
+        // Add actions:
+        btnResetCache = new Button(i18n.tr("Reset Global Cache"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((MaintenanceActivity) getPresenter()).resetGlobalCache();
+                ((MaintenanceViewerActivity) getPresenter()).resetGlobalCache();
             }
         });
-        footer.addItem(btnResetCache);
+        addToolbarItem(btnResetCache.asWidget());
     }
 }

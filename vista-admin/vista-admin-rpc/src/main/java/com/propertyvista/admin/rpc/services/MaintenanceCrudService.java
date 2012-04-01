@@ -11,22 +11,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.server.services;
+package com.propertyvista.admin.rpc.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.cache.CacheService;
-import com.pyx4j.essentials.server.admin.AdminServiceImpl;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.admin.rpc.services.VistaAdminService;
+public interface MaintenanceCrudService extends AbstractCrudService<SystemMaintenanceState> {
 
-public class VistaAdminServiceImpl extends AdminServiceImpl implements VistaAdminService {
+    public void getSystemReadOnlyStatus(AsyncCallback<Boolean> callback);
 
-    @Override
-    public void resetGlobalCache(AsyncCallback<VoidSerializable> callback) {
-        CacheService.resetAll();
-        callback.onSuccess(null);
-    }
-
+    public void resetGlobalCache(AsyncCallback<VoidSerializable> callback);
 }

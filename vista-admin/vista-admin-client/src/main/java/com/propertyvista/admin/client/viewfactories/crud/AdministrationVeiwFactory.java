@@ -16,21 +16,25 @@ package com.propertyvista.admin.client.viewfactories.crud;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.admin.client.ui.administration.MaintenanceView;
-import com.propertyvista.admin.client.ui.administration.MaintenanceViewImpl;
 import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserEditorView;
 import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserEditorViewImpl;
 import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserListerView;
 import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserListerViewImpl;
 import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserViewerView;
 import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserViewerViewImpl;
+import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceEditorView;
+import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceEditorViewImpl;
+import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceViewerView;
+import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceViewerViewImpl;
 
 public class AdministrationVeiwFactory extends ViewFactoryBase {
 
     public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
-            if (MaintenanceView.class.equals(type)) {
-                map.put(type, new MaintenanceViewImpl());
+            if (MaintenanceViewerView.class.equals(type)) {
+                map.put(type, new MaintenanceViewerViewImpl());
+            } else if (MaintenanceEditorView.class.equals(type)) {
+                map.put(type, new MaintenanceEditorViewImpl());
             } else if (AdminUserViewerView.class.equals(type)) {
                 map.put(type, new AdminUserViewerViewImpl());
             } else if (AdminUserEditorView.class.equals(type)) {

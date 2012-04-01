@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.rpc;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
@@ -67,6 +68,11 @@ public class AdminSiteMap implements SiteMap {
         @PlaceProperties(caption = "System Maintenance")
         @NavigationItem(navigLabel = "System Maintenance")
         public static class Maintenance extends CrudAppPlace {
+            // set default place type as Viewer one (we have no lister for this item!)
+            public Maintenance() {
+                super(Type.viewer);
+                formViewerPlace(new Key(-1));
+            }
         }
 
         @PlaceProperties(caption = "Users")
