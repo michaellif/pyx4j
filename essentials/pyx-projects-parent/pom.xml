@@ -58,7 +58,7 @@
     </repositories>
 
     <properties>
-        <pyxVersion>2.1.3-SNAPSHOT</pyxVersion><!--pyx-version-->
+        <pyxVersion>2.1.4-SNAPSHOT</pyxVersion><!--pyx-version-->
     </properties>
 
 
