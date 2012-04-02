@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -39,6 +40,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdValidator;
 import com.propertyvista.crm.client.ui.components.cms.FileUploadHyperlink;
 import com.propertyvista.domain.media.Media;
@@ -83,7 +85,11 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15, 10).build());
 
             if (CrmMediaFolder.this.isEditable()) {
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().youTubeVideoID()), 25, 10).build());
+                CTextField utubeEditor = null;
+                main.setWidget(++row, 0, new DecoratorBuilder(utubeEditor = (CTextField) inject(proto().youTubeVideoID()), 25, 10).build());
+                utubeEditor.addValueValidator(new YouTubeVideoIdValidator());
+                utubeEditor.setFormat(new YouTubeVideoIdFormat());
+
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().url()), 25, 10).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), new FileUploadHyperlink(CrmMediaFolder.this.isEditable(), imageTarget)),
                         25, 10).build());
