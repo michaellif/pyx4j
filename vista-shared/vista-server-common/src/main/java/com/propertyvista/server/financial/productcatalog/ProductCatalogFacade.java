@@ -13,11 +13,8 @@
  */
 package com.propertyvista.server.financial.productcatalog;
 
-import java.math.BigDecimal;
-
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface ProductCatalogFacade {
@@ -26,10 +23,10 @@ public interface ProductCatalogFacade {
 
     void updateUnitMarketPrice(Service service);
 
-    BigDecimal getUnitMarketPrice(AptUnit unit);
-
+    /*
+     * TODO Move to LeaseFacade
+     */
+    @Deprecated
     void updateUnitRentPrice(Lease lease);
-
-    BigDecimal getUnitRentPrice(AptUnit unit);
 
 }

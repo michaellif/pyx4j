@@ -34,6 +34,7 @@ public interface AptUnitFinancial extends IEntity {
 
     /**
      * Should be updated when ServiceItem for this Unit is saved.
+     * Now only residentialUnit Service type is taken into account
      */
     @Format("#0.00")
     @Editor(type = EditorType.money)
