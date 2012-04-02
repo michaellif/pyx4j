@@ -173,7 +173,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                 EmailTemplateManager.getVarname(appT.SignUpUrl()),
                 EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
-                EmailTemplateManager.getVarname(bldT.PropertyName()),
+                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
         ), portalT));//@formatter:on
         return template;
@@ -203,7 +203,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                 EmailTemplateManager.getVarname(appT.SignUpUrl()),
                 EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
-                EmailTemplateManager.getVarname(bldT.PropertyName()),
+                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
         ), portalT));//@formatter:on
         return template;
@@ -233,7 +233,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                 EmailTemplateManager.getVarname(appT.SignUpUrl()),
                 EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
-                EmailTemplateManager.getVarname(bldT.PropertyName()),
+                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
         ), portalT));//@formatter:on
         return template;
@@ -268,7 +268,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(leaseT.StartDate()),
                 EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
                 EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(bldT.PropertyName()),
+                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
         ), portalT));//@formatter:on
         return template;
@@ -300,7 +300,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(appT.ApplicantName()),          
                 EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
-                EmailTemplateManager.getVarname(bldT.PropertyName()),
+                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
         ), portalT));//@formatter:on
         return template;
@@ -335,7 +335,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl()),
                 EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
                 EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                EmailTemplateManager.getVarname(bldT.PropertyName()) ,
+                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()) ,
                 EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
         ), portalT));//@formatter:on
         return template;

@@ -116,7 +116,7 @@ public class EmailTemplateRootObjectLoader {
                 throw new Error("Either Building or TenantInLease should be provided in context");
             }
             t.PropertyCode().set(bld.propertyCode());
-            t.PropertyName().set(bld.marketing().name());
+            t.PropertyMarketingName().set(bld.marketing().name());
             t.Website().set(bld.contacts().website());
             t.Address().setValue(bld.info().address().getStringView());
             // set contact info

@@ -337,7 +337,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                     EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(appT.SignUpUrl()),
                     EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
-                    EmailTemplateManager.getVarname(bldT.PropertyName()),
+                    EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                     EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
                 };
                 fmtArgs = args;
@@ -363,7 +363,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                     EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(appT.SignUpUrl()),
                     EmailTemplateManager.getVarname(bldT.MainOffice().Phone()),
-                    EmailTemplateManager.getVarname(bldT.PropertyName()),
+                    EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                     EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
                 };
                 fmtArgs = args;
@@ -392,7 +392,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                     EmailTemplateManager.getVarname(leaseT.StartDate()),
                     EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
                     EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                    EmailTemplateManager.getVarname(bldT.PropertyName()),
+                    EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                     EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
                 };
                 fmtArgs = args;
@@ -416,7 +416,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                     EmailTemplateManager.getVarname(appT.ApplicantName()),
                     EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                     EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
-                    EmailTemplateManager.getVarname(bldT.PropertyName()),
+                    EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                     EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
                 };
                 fmtArgs = args;
@@ -445,7 +445,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl()),
                         EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
                         EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
-                        EmailTemplateManager.getVarname(bldT.PropertyName()) ,
+                        EmailTemplateManager.getVarname(bldT.PropertyMarketingName()) ,
                         EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
                 };
                 fmtArgs = args;

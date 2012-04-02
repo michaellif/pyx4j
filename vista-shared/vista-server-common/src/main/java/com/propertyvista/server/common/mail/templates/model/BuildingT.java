@@ -24,7 +24,7 @@ public interface BuildingT extends IEntity {
 
     IPrimitive<String> PropertyCode();
 
-    IPrimitive<String> PropertyName();
+    IPrimitive<String> PropertyMarketingName();
 
     IPrimitive<String> Website();
 
