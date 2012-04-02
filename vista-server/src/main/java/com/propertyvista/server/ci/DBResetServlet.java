@@ -175,6 +175,7 @@ public class DBResetServlet extends HttpServlet {
                                 NamespaceManager.setNamespace(Pmc.adminNamespace);
                                 try {
                                     new VistaAminDataPreloaders().preloadAll();
+                                    Persistence.service().commit();
                                 } finally {
                                     NamespaceManager.setNamespace(requestNamespace);
                                 }
