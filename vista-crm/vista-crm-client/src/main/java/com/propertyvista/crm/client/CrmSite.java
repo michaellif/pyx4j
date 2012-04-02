@@ -97,6 +97,13 @@ public class CrmSite extends VistaSite {
                 StyleManger.installTheme(new CrmTheme(), new VistaPalette(descriptor.palette()));
                 obtainAuthenticationData();
             }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                hideLoadingIndicator();
+                StyleManger.installTheme(new CrmTheme(), VistaPalette.getServerUnavailablePalette());
+                super.onFailure(caught);
+            }
         }, ClentNavigUtils.getCurrentLocale());
 
     }

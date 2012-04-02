@@ -101,6 +101,14 @@ public class PtAppSite extends VistaSite {
                 StyleManger.installTheme(new PtAppTheme(), new VistaPalette(descriptor.palette()));
                 obtainAuthenticationData();
             }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                hideLoadingIndicator();
+                StyleManger.installTheme(new PtAppTheme(), VistaPalette.getServerUnavailablePalette());
+                super.onFailure(caught);
+            }
+
         }, ClentNavigUtils.getCurrentLocale());
 
     }

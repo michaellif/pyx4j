@@ -20,7 +20,11 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.essentials.rpc.SystemState;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
@@ -31,6 +35,8 @@ import com.propertyvista.shared.CompiledLocale;
 @IgnoreSessionToken
 public class SiteThemeServicesImpl implements SiteThemeServices {
 
+    private static final I18n i18n = I18n.get(SiteThemeServicesImpl.class);
+
     public static SiteDescriptor getSiteDescriptorFromCache() {
         SiteDescriptor descriptor = null;
         Key descriptorKey = (Key) CacheService.get(SiteDescriptor.cacheKey);
@@ -39,15 +45,26 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
         }
         if (descriptor == null) {
             SiteDescriptor siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
-            descriptor = siteDescriptor.duplicate();
-            CacheService.put(SiteDescriptor.cacheKey, descriptor.getPrimaryKey());
+            if (siteDescriptor != null) {
+                descriptor = siteDescriptor.duplicate();
+                CacheService.put(SiteDescriptor.cacheKey, descriptor.getPrimaryKey());
+            }
         }
         return descriptor;
     }
 
     @Override
     public void retrieveSiteDescriptor(AsyncCallback<SiteDefinitionsDTO> callback, CompiledLocale locale) {
+
+        // This is the fist service the GWT application is calling. Manage the system down.
+        if (SystemMaintenance.getState() == SystemState.Unavailable) {
+            throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
+        }
+
         SiteDescriptor descriptor = getSiteDescriptorFromCache();
+        if (descriptor == null) {
+            throw new UserRuntimeException(i18n.tr("This property management site was not set-up yet"));
+        }
         SiteDefinitionsDTO def = EntityFactory.create(SiteDefinitionsDTO.class);
         def.palette().setValue(descriptor.sitePalette().getValue());
         def.skin().setValue(descriptor.skin().getValue());

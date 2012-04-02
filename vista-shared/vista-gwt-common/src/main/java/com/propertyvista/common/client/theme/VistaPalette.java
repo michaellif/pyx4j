@@ -38,4 +38,17 @@ public class VistaPalette extends Palette {
                 (float) SiteDescriptor.Skin.crm.getColorProperties()[10] / 100, (float) SiteDescriptor.Skin.crm.getColorProperties()[11] / 100));
 
     }
+
+    private VistaPalette() {
+        putThemeColor(ThemeColors.object1, "#315EAF");
+        putThemeColor(ThemeColors.object2, "B26C1F");
+        putThemeColor(ThemeColors.contrast1, "red");
+        putThemeColor(ThemeColors.contrast2, "orange");
+        putThemeColor(ThemeColors.background, "#fefefe");
+        putThemeColor(ThemeColors.foreground, "#333333");
+    }
+
+    public static VistaPalette getServerUnavailablePalette() {
+        return new VistaPalette();
+    }
 }
