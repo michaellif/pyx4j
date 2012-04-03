@@ -47,7 +47,7 @@ public class NavigFolder {
     }
 
     public NavigFolder(String title, ImageResource normal, ImageResource hover, ImageResource active) {
-        this(Type.Regular, title, null, null, null);
+        this(Type.Regular, title, normal, hover, active);
     }
 
     public NavigFolder(Type type, String title, ImageResource normal, ImageResource hover, ImageResource active) {
