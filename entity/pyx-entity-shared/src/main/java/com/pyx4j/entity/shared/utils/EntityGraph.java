@@ -70,12 +70,15 @@ public class EntityGraph {
         if (processed.contains(entity) || processedValues.contains(entity.getValue())) {
             return;
         }
-        method.apply(entity);
+        boolean applyRecursively = method.apply(entity);
         processed.add(entity);
         if (entity.isNull()) {
             return;
         }
         processedValues.add(entity.getValue());
+        if (!applyRecursively) {
+            return;
+        }
 
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
