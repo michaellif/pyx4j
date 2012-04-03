@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.breadcurmbs;
+package com.propertyvista.crm.rpc.services.pub;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

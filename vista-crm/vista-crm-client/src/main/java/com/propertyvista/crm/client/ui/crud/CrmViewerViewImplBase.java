@@ -13,8 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
@@ -30,10 +32,14 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.VersionSelectorDialog;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
+import com.propertyvista.crm.rpc.services.pub.BreadcrumbsService;
+import com.propertyvista.domain.breadcrumbs.BreadcrumbTrailDTO;
 
 public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
 
     private static final I18n i18n = I18n.get(CrmViewerViewImplBase.class);
+
+    private BreadcrumbsService breadcumbsService;
 
     protected final String defaultCaption;
 
@@ -64,6 +70,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
             addToolbarItem(editButton);
         }
+
+        this.breadcumbsService = GWT.<BreadcrumbsService> create(BreadcrumbsService.class);
     }
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
@@ -119,6 +127,23 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         }
 
         ((CrmTitleBar) getHeader()).setCaption(caption);
+        populateBreadcrumbs(value);
+    }
+
+    protected void populateBreadcrumbs(E value) {
+        breadcumbsService.breadcrumbtrail(new AsyncCallback<BreadcrumbTrailDTO>() {
+
+            @Override
+            public void onSuccess(BreadcrumbTrailDTO result) {
+                ((CrmTitleBar) getHeader()).populateBreadcrumbs(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                // TODO Auto-generated method stub
+
+            }
+        }, value);
     }
 
     protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass, final AbstractVersionDataListService<V> entityVersionService) {

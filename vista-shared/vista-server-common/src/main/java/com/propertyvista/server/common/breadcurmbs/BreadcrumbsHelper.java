@@ -57,7 +57,15 @@ public class BreadcrumbsHelper {
 
     private String asLabel(IEntity entity) {
         LabelCreator creator = labelCreatorMap.get(entity.getInstanceValueClass());
-        return creator != null ? creator.label(entity.cast()) : entity.getStringView();
+        if (creator != null) {
+            return creator.label(entity.cast());
+        } else {
+            String label = entity.getStringView();
+            if (label == null || "".equals(label)) {
+                label = entity.getEntityMeta().getCaption();
+            }
+            return label;
+        }
     }
 
     public interface LabelCreator {
