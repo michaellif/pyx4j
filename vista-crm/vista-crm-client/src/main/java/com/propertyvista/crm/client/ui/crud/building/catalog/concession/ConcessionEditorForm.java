@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -93,7 +92,7 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
                 comp = new CPercentageField();
                 break;
             case free:
-                comp = new CTextField();
+                comp = new CMoneyField();
                 comp.setEnabled(false);
                 break;
             }
