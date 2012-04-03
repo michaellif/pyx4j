@@ -76,8 +76,8 @@ public abstract class BasePage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
-        String fileCSS = "main" + styleId + ".css";
+        String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+        String fileCSS = skin + "/" + "main.css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
         response.renderCSSReference(refCSS);

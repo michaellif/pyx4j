@@ -41,6 +41,8 @@ public interface SiteDescriptor extends Descriptor {
 
         skin3(92, 33, 35, 42, 98, 98, 98, 98, 0, 10, 0, 100),
 
+        skin4(5, 30, 5, 40, 0, 50, 0, 60, 0, 100, 0, 20),
+
         crm(30, 70, 10, 98, 100, 100, 100, 100, 0, 40, 0, 100);
 
         private final int[] colorProperties;

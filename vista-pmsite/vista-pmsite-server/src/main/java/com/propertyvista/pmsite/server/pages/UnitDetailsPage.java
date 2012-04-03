@@ -106,8 +106,8 @@ public class UnitDetailsPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
-        String fileCSS = "unitdetails" + styleId + ".css";
+        String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+        String fileCSS = skin + "/" + "unitdetails.css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
         response.renderCSSReference(refCSS);

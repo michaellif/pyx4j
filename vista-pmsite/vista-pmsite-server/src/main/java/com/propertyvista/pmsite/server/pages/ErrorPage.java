@@ -36,8 +36,8 @@ public class ErrorPage extends WebPage {
         add(new LocalePanel("locale"));
         add(new Label("footer_legal", ((PMSiteWebRequest) getRequest()).getContentManager().getCopyrightInfo(((PMSiteWebRequest) getRequest()).getSiteLocale())));
 
-        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
-        String fileCSS = "error" + styleId + ".css";
+        String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+        String fileCSS = skin + "/" + "error.css";
         refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
     }

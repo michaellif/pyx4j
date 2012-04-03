@@ -50,8 +50,8 @@ public class FindAptPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
-        String fileCSS = "findapt" + styleId + ".css";
+        String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+        String fileCSS = skin + "/" + "findapt.css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
         response.renderCSSReference(refCSS);

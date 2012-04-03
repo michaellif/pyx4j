@@ -413,6 +413,10 @@ public class PMSiteContentManager implements Serializable {
         return siteDescriptor.skin().getValue().ordinal();
     }
 
+    public String getSiteSkin() {
+        return "skin" + getStyleId();
+    }
+
     public SiteDescriptor getSiteDescriptor() {
         return siteDescriptor;
     }

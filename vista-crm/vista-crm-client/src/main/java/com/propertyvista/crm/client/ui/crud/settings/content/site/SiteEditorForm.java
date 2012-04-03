@@ -75,9 +75,9 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         if (skinComp instanceof CComboBox) {
             Collection<SiteDescriptor.Skin> skinOpt;
             if (ApplicationMode.isDevelopment()) {
-                skinOpt = EnumSet.of(SiteDescriptor.Skin.skin1, SiteDescriptor.Skin.skin2, SiteDescriptor.Skin.skin3);
+                skinOpt = EnumSet.of(SiteDescriptor.Skin.skin1, SiteDescriptor.Skin.skin2, SiteDescriptor.Skin.skin3, SiteDescriptor.Skin.skin4);
             } else {
-                skinOpt = EnumSet.of(SiteDescriptor.Skin.skin2, SiteDescriptor.Skin.skin3);
+                skinOpt = EnumSet.of(SiteDescriptor.Skin.skin2, SiteDescriptor.Skin.skin3, SiteDescriptor.Skin.skin4);
             }
             ((CComboBox<SiteDescriptor.Skin>) skinComp).setOptions(skinOpt);
         }
