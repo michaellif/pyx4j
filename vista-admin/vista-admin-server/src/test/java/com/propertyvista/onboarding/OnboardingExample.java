@@ -69,7 +69,7 @@ public class OnboardingExample {
         {
             cnt++;
             CheckAvailabilityRequestIO r = EntityFactory.create(CheckAvailabilityRequestIO.class);
-            r.onboardingAccountId().setValue("star");
+            r.dnsName().setValue("star11");
             RequestMessageIO rm = createExampleRequest(r);
             writeXML(rm, cnt + "-request-Check.xml");
             writeXML(createExampleResponse(), cnt + "-response-Check.xml");
