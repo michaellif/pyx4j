@@ -13,7 +13,6 @@
  */
 package com.propertyvista.admin.server.onboarding;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,9 +28,10 @@ public class PmcNameValidator {
 
     private static Set<String> reservedWords;
 
-    private static Set<String> reservedWordsWildCards;
+    private static Set<String> reservedWordsRegex;
 
     static {
+        reservedWordsRegex = new HashSet<String>();
         reservedWords = new HashSet<String>();
         load(CSVLoad.loadFile("badWords.csv", "name"));
         load(CSVLoad.loadFile("reservedPmcWords.csv", "name"));
@@ -41,8 +41,19 @@ public class PmcNameValidator {
     }
 
     private static void load(String[] strings) {
-        //TODO Support WildCards
-        reservedWords.addAll(Arrays.asList(strings));
+        for (String reservedWord : strings) {
+            if (hasWildCard(reservedWord)) {
+                reservedWordsRegex.add(wildCardToRegex(reservedWord));
+            } else {
+                reservedWords.add(reservedWord);
+            }
+        }
+    }
+
+    public static void setReservedWords(String[] words) {
+        reservedWordsRegex.clear();
+        reservedWords.clear();
+        load(words);
     }
 
     public static boolean canCreatePmcName(String dnsName) {
@@ -57,7 +68,11 @@ public class PmcNameValidator {
         if (reservedWords.contains(dnsName)) {
             return true;
         }
-        // TODO do WildCards matching
+        for (String reservedWordRegex : reservedWordsRegex) {
+            if (dnsName.matches(reservedWordRegex)) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -66,4 +81,16 @@ public class PmcNameValidator {
         criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), dnsName));
         return (Persistence.service().retrieve(criteria) != null);
     }
+
+    private static String wildCardToRegex(String reservedPmcName) {
+        String pmcNameRegex = reservedPmcName.replaceAll("\\*", ".*");
+        pmcNameRegex = pmcNameRegex.replaceAll("\\?", ".");
+        pmcNameRegex = "^" + pmcNameRegex + "$";
+        return pmcNameRegex;
+    }
+
+    private static boolean hasWildCard(String reservedWord) {
+        return reservedWord.contains("*") | reservedWord.contains("?");
+    }
+
 }
