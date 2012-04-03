@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import java.util.List;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
@@ -32,8 +34,16 @@ import com.pyx4j.entity.test.shared.domain.format.StringFieldsFormated;
 import com.pyx4j.entity.test.shared.domain.format.StringIntFields;
 import com.pyx4j.entity.test.shared.domain.format.StringIntFieldsChoiceFormated;
 import com.pyx4j.entity.test.shared.domain.format.StringIntFieldsFormated;
+import com.pyx4j.entity.test.shared.domain.sort.SortBy;
 
 public class EntityToStringTest extends InitializerTestBase {
+
+    public void testToStringOrderByDeclaration() {
+        SortBy entity = EntityFactory.create(SortBy.class);
+        List<String> toStringMemeber = entity.getEntityMeta().getToStringMemberNames();
+        assertEquals("member 1 Order", 0, toStringMemeber.indexOf(entity.name().getFieldName()));
+        assertEquals("member 2 Order", 1, toStringMemeber.indexOf(entity.amount().getFieldName()));
+    }
 
     public void testStringView() {
         City city = EntityFactory.create(City.class);

@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -222,10 +223,17 @@ public class EntityMetaImpl implements EntityMeta {
             if (ts != null) {
                 switch (ts.value()) {
                 case Created:
+                    if (createdTimestampMember != null) {
+                        throw new Error("Duplicate @Timestamp(Created) declaration " + method.getName() + " and " + createdTimestampMember);
+                    }
                     createdTimestampMember = method.getName();
                     break;
                 case Updated:
+                    if (updatedTimestampMember != null) {
+                        throw new Error("Duplicate @Timestamp(Updated) declaration " + method.getName() + " and " + updatedTimestampMember);
+                    }
                     updatedTimestampMember = method.getName();
+                    break;
                 }
             }
             if (method.getAnnotation(Owner.class) != null) {
@@ -268,14 +276,21 @@ public class EntityMetaImpl implements EntityMeta {
         //TODO move this list creation to EntityImplGenerator for better performance
         if (toStringMemberNames == null) {
             toStringMemberNames = new Vector<String>();
-            final HashMap<String, ToString> sortKeys = new HashMap<String, ToString>();
-            for (Method method : entityClass.getMethods()) {
+            final Map<String, ToString> sortKeys = new HashMap<String, ToString>();
+            for (String memeber : getMemberNames()) {
+                Method method;
+                try {
+                    method = entityClass.getMethod(memeber);
+                } catch (Throwable e) {
+                    throw new Error(e);
+                }
                 ToString ts = method.getAnnotation(ToString.class);
                 if (ts != null) {
-                    toStringMemberNames.add(method.getName());
                     sortKeys.put(method.getName(), ts);
+                    toStringMemberNames.add(method.getName());
                 }
             }
+
             if (toStringMemberNames.size() > 1) {
                 Collections.sort(toStringMemberNames, new Comparator<String>() {
                     @Override
@@ -294,7 +309,13 @@ public class EntityMetaImpl implements EntityMeta {
     public synchronized List<String> getBusinessEqualMemberNames() {
         if (businessEqualMemberNames == null) {
             businessEqualMemberNames = new Vector<String>();
-            for (Method method : entityClass.getMethods()) {
+            for (String memeber : getMemberNames()) {
+                Method method;
+                try {
+                    method = entityClass.getMethod(memeber);
+                } catch (Throwable e) {
+                    throw new Error(e);
+                }
                 BusinessEqualValue ts = method.getAnnotation(BusinessEqualValue.class);
                 if (ts != null) {
                     businessEqualMemberNames.add(method.getName());
