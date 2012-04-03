@@ -53,7 +53,6 @@ import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsEditorForm;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -70,8 +69,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     private static final I18n i18n = I18n.get(BuildingEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
-
-    private ValueChangeHandler<DashboardMetadata> dashboardSelectedHandler;
 
     public BuildingEditorForm() {
         this(false);
@@ -220,10 +217,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
     private Widget createDashboardTab() {
         return ((BuildingViewerView) getParentView()).getDashboardView().asWidget();
-    }
-
-    public void setDashboardSelectedHandler(ValueChangeHandler<DashboardMetadata> handler) {
-        this.dashboardSelectedHandler = handler;
     }
 
     private Widget createGeneralTab() {
