@@ -21,8 +21,7 @@ public class CheckAvailabilityRequest extends Request {
 
     /**
      * May contain up to 63 characters. The characters allowed in a label are a subset of the ASCII character set, and includes the characters a through z, A
-     * through Z, digits 0 through 9, and
-     * the hyphen.
+     * through Z, digits 0 through 9, and the hyphen.
      */
     @XmlElement(required = true)
     @Size(max = 64)

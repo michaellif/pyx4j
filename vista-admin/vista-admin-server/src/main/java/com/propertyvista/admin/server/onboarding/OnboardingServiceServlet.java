@@ -88,8 +88,9 @@ public class OnboardingServiceServlet extends HttpServlet {
         try {
             pp = new OnboardingProcessor();
             log.info("processing message {}", message.messageId().getValue());
-            if (!pp.isValid(message)) {
-                replyWithStatusCode(response, ResponseMessageIO.StatusCode.MessageFormatError, null);
+            Throwable validationResults = pp.isValid(message);
+            if (validationResults != null) {
+                replyWithStatusCode(response, ResponseMessageIO.StatusCode.MessageFormatError, validationResults);
                 return;
             }
 

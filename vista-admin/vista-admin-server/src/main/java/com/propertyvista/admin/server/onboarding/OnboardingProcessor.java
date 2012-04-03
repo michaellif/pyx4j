@@ -17,11 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 import com.propertyvista.admin.server.onboarding.rh.OnboardingRequestHandlerFactory;
 import com.propertyvista.admin.server.onboarding.rhf.RequestHandler;
-import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 import com.propertyvista.onboarding.RequestIO;
 import com.propertyvista.onboarding.RequestMessageIO;
 import com.propertyvista.onboarding.ResponseIO;
@@ -34,13 +37,19 @@ class OnboardingProcessor {
     OnboardingProcessor() {
     }
 
-    public boolean isValid(RequestMessageIO message) {
+    public Throwable isValid(RequestMessageIO message) {
         for (RequestIO request : message.requests()) {
-            if ((!(request instanceof OnboardingUserAuthenticationRequestIO)) && request.onboardingAccountId().isNull()) {
-                return false;
+            RequestIO entity = request.cast();
+            EntityMeta em = entity.getEntityMeta();
+            for (String memberName : em.getMemberNames()) {
+                MemberMeta memberMeta = em.getMemberMeta(memberName);
+                IObject<?> member = entity.getMember(memberName);
+                if ((memberMeta.isValidatorAnnotationPresent(NotNull.class)) && (member.isNull())) {
+                    return new Error(member.getPath() + " is required");
+                }
             }
         }
-        return true;
+        return null;
     }
 
     private ResponseIO execute(RequestIO request) {

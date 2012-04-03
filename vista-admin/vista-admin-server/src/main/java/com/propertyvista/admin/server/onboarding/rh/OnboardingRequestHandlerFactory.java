@@ -21,6 +21,7 @@ public class OnboardingRequestHandlerFactory extends RequestHandlerFactory {
     protected void bind() {
         bind(CreateOnboardingUserRequestHandler.class);
         bind(OnboardingUserAuthenticationRequestHandler.class);
+        bind(CheckAvailabilityRequestHandler.class);
     }
 
 }
