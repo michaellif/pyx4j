@@ -24,10 +24,9 @@ public class CheckAvailabilityRequest extends Request {
      * through Z, digits 0 through 9, and
      * the hyphen.
      */
-    @XmlElement(required = true, name = "pmcId")
-    // name="" is  hack for jaxb  fields ending with Id
+    @XmlElement(required = true)
     @Size(max = 64)
     @Pattern(regexp = "[A-Za-z0-9]+")
-    public String pmcid;
+    public String dnsName;
 
 }
