@@ -37,6 +37,8 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
 
     private static final I18n i18n = I18n.get(PolicyListerBase.class);
 
+    private final Button deleteButton;
+
     protected List<ColumnDescriptor> defaultColumns;
 
     @SuppressWarnings("unchecked")
@@ -45,7 +47,7 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
         getDataTablePanel().setFilteringEnabled(false);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 
-        addActionItem(new Button(i18n.tr("Delete Checked Items"), new ClickHandler() {
+        addActionItem(deleteButton = new Button(i18n.tr("Delete Checked Items"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 Queue<P> checkedItems = new LinkedList<P>(getDataTablePanel().getDataTable().getCheckedItems());
@@ -81,6 +83,14 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
         columns.addAll(Arrays.asList(columnDescriptors));
         super.setColumnDescriptors(columns.toArray(new ColumnDescriptor[columns.size()]));
     };
+
+    public Button getAddButton() {
+        return getDataTablePanel().getAddButton();
+    }
+
+    public Button getdDleteButton() {
+        return deleteButton;
+    }
 
     public void validateAndRemoveRecursively(final Queue<P> itemsToRemove) {
         if (!itemsToRemove.isEmpty()) {
