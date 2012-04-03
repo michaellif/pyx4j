@@ -394,19 +394,11 @@ public class EntityGraph {
 
         while (method.apply(currentEntity)) {
             IEntity castedEntity = currentEntity.cast();
-            IEntity owner = null;
-            for (String memberName : castedEntity.getEntityMeta().getMemberNames()) {
-                IObject<?> member = castedEntity.getMember(memberName);
-                if (member.getMeta().isOwner()) {
-                    owner = (IEntity) member;
-                    break;
-                }
-            }
-            if (owner == null) {
+            String ownerMember = castedEntity.getEntityMeta().getOwnerMemberName();
+            if (ownerMember == null) {
                 break;
-            } else {
-                currentEntity = owner;
             }
+            currentEntity = (IEntity) castedEntity.getMember(ownerMember);
         }
     }
 }
