@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
@@ -30,6 +32,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.domain.tenant.lead.Showing.Result;
 
 public class ShowingEditorForm extends CrmEntityForm<Showing> {
 
@@ -83,9 +86,24 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().result()), 12).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reason()), 12).build());
 
+        // tweak UI:
+        get(proto().result()).addValueChangeHandler(new ValueChangeHandler<Showing.Result>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Result> event) {
+                get(proto().reason()).setVisible(Showing.Result.notInterested.equals(event.getValue()));
+            }
+        });
+
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        get(proto().reason()).setVisible(Showing.Result.notInterested.equals(getValue().result().getValue()));
     }
 }
