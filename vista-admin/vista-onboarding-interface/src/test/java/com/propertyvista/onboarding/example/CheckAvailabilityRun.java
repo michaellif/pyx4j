@@ -23,7 +23,7 @@ public class CheckAvailabilityRun {
     public static void main(String[] args) throws Exception {
         CheckAvailabilityRequest r = new CheckAvailabilityRequest();
         r.requestId = "TestCheckAvailabilityRun";
-        r.dnsName = "star";
+        r.dnsName = "test-properties";
 
         {
             RequestMessage rm = new RequestMessage();

@@ -21,11 +21,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
+import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.domain.PmcDnsName;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 import com.propertyvista.portal.server.preloader.PmcCreator;
@@ -63,6 +65,10 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     @Override
     public void create(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
         editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
+        if (!PmcNameValidator.canCreatePmcName(editableEntity.dnsName().getValue())) {
+            throw new UserRuntimeException("PMC DNS name is reserver of forbidden");
+        }
+
         super.create(callback, editableEntity);
 
         try {
