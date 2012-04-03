@@ -27,13 +27,26 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.security.shared.SecurityViolationException;
 
+import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 @SuppressWarnings("serial")
 public class ApplicationDocumentServlet extends HttpServlet {
+
+    private final static I18n i18n = I18n.get(ApplicationDocumentServlet.class);
 
     private final static Logger log = LoggerFactory.getLogger(ApplicationDocumentServlet.class);
 
@@ -48,12 +61,13 @@ public class ApplicationDocumentServlet extends HttpServlet {
         }
 
         //TODO deserialize key
-        ApplicationDocumentFile doc = Persistence.secureRetrieve(ApplicationDocumentFile.class, new Key(id));
+        ApplicationDocumentFile doc = Persistence.service().retrieve(ApplicationDocumentFile.class, new Key(id));
         if (doc == null) {
             log.debug("no such document {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
+        assertAccessRights(doc);
 
         ApplicationDocumentBlob adata = Persistence.service().retrieve(ApplicationDocumentBlob.class, doc.blobKey().getValue());
         if (adata == null) {
@@ -66,4 +80,53 @@ public class ApplicationDocumentServlet extends HttpServlet {
         response.getOutputStream().write(adata.data().getValue());
     }
 
+    private void assertAccessRights(final ApplicationDocumentFile doc) {
+        final Boolean[] isAccessRightsFound = new Boolean[] { false };
+        if (SecurityController.checkAnyBehavior(VistaTenantBehavior.Prospective, VistaTenantBehavior.ProspectiveSubmitted,
+                VistaTenantBehavior.ProspectiveApplicant, VistaTenantBehavior.ProspectiveSubmittedApplicant, VistaTenantBehavior.ProspectiveCoApplicant,
+                VistaTenantBehavior.ProspectiveSubmittedCoApplicant, VistaTenantBehavior.Guarantor, VistaTenantBehavior.GuarantorSubmitted)) {
+            EntityGraph.applyToOwners(doc, new ApplyMethod() {
+                @Override
+                public boolean apply(IEntity entity) {
+                    if (entity.isValueDetached()) {
+                        Persistence.service().retrieve(entity);
+                    }
+                    if (entity.isInstanceOf(IUserEntity.class)) {
+                        Key documentOwnerUserKey = ((IUserEntity) entity).user().getPrimaryKey();
+                        if (documentOwnerUserKey != null && documentOwnerUserKey.equals(PtAppContext.getCurrentUserPrimaryKey())) {
+                            isAccessRightsFound[0] = true;
+                            return false;
+                        } else {
+                            log.warn(SimpleMessageFormat.format(
+                                    "An attempt to access {0} that belongs different user was blocked (entity id={1}; owner user id={2}, rogue user id={3})",
+
+                                    doc.getInstanceValueClass().getSimpleName(),
+
+                                    doc.getPrimaryKey(),
+
+                                    documentOwnerUserKey,
+
+                                    PtAppContext.getCurrentUserPrimaryKey()
+
+                            ));
+
+                            throw new SecurityViolationException(i18n.tr("Access Denied"));
+                        }
+                    } else {
+                        return true;
+                    }
+                }
+            });
+            if (!isAccessRightsFound[0]) {
+                throw new Error(SimpleMessageFormat.format("Failed to get access rights for {0} (id = {1})",
+
+                doc.getInstanceValueClass().getSimpleName(),
+
+                doc.getPrimaryKey()));
+            }
+        } else {
+            SecurityController.assertBehavior(VistaCrmBehavior.Tenants);
+        }
+
+    }
 }
