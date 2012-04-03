@@ -31,6 +31,12 @@ import com.pyx4j.entity.test.shared.domain.Province;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.bidir.Child;
 import com.pyx4j.entity.test.shared.domain.bidir.Master;
+import com.pyx4j.entity.test.shared.domain.graphwalking.AbstractOwnerB;
+import com.pyx4j.entity.test.shared.domain.graphwalking.BaseEntity;
+import com.pyx4j.entity.test.shared.domain.graphwalking.ClutterEntity;
+import com.pyx4j.entity.test.shared.domain.graphwalking.OwnedEntity;
+import com.pyx4j.entity.test.shared.domain.graphwalking.OwnerA;
+import com.pyx4j.entity.test.shared.domain.graphwalking.OwnerB;
 import com.pyx4j.entity.test.shared.domain.ownership.LeafReference;
 import com.pyx4j.entity.test.shared.domain.ownership.OwnedLeaf;
 import com.pyx4j.entity.test.shared.domain.ownership.RootEnity;
@@ -288,6 +294,86 @@ public class EntityGraphTest extends InitializerTestBase {
         for (Task task : duplicate.tasks()) {
             assertNull(task.id().getValue());
         }
+
+    }
+
+    public void testApplyToOwners() {
+        ClutterEntity clutter = EntityFactory.create(ClutterEntity.class);
+        clutter.clutterValue().setValue("clutter");
+
+        // set up
+        OwnedEntity ownedEntity1 = EntityFactory.create(OwnedEntity.class);
+        ownedEntity1.valueStr().setValue("owned1");
+        ownedEntity1.valueInt().setValue(7);
+
+        OwnedEntity ownedEntity2 = EntityFactory.create(OwnedEntity.class);
+        ownedEntity2.valueStr().setValue("owned2");
+        ownedEntity2.valueInt().setValue(7);
+
+        OwnerB ownerB1 = EntityFactory.create(OwnerB.class);
+        ownerB1.valueStr().setValue("ownerB1");
+        ownerB1.valueInt().setValue(1);
+        ownerB1.clutterA().set(clutter);
+        ownerB1.clutterB().set(clutter);
+        ownerB1.ownedEntity().set(ownedEntity1);
+
+        AbstractOwnerB ownerB2 = EntityFactory.create(OwnerB.class);
+        ownerB2.valueStr().setValue("ownerB2");
+        ownerB2.valueInt().setValue(-1);
+        ownerB2.clutterA().set(clutter);
+        ownerB2.clutterB().set(clutter);
+        ((OwnerB) ownerB2).ownedEntity().set(ownedEntity2);
+        // downcast to test that the function can deal with polymorphism 
+        ownerB2 = ownerB2.duplicate(AbstractOwnerB.class);
+        ownedEntity2 = ownerB2.ownedEntity();
+
+        OwnerA ownerA = EntityFactory.create(OwnerA.class);
+        ownerA.valueStr().setValue("ownerA");
+        ownerA.valueInt().setValue(0);
+        ownerA.clutterA().set(clutter);
+        ownerA.clutterB().set(clutter);
+
+        ownerA.children().add(ownerB1);
+        ownerA.children().add(ownerB2);
+
+        EntityGraph.ApplyMethod f = new EntityGraph.ApplyMethod() {
+            @Override
+            public boolean apply(IEntity entity) {
+                if (((BaseEntity) entity).valueInt().getValue() == -1) {
+                    ((BaseEntity) entity).valueStr().setValue("stopped here");
+                    return false;
+                } else {
+                    ((BaseEntity) entity).valueStr().setValue(":)");
+                    return true;
+                }
+            }
+        };
+        // execute function
+        EntityGraph.applyToOwners(ownedEntity1, f);
+
+        // assert
+        assertEquals(":)", ownedEntity1.valueStr().getValue());
+        assertEquals(":)", ownerB1.valueStr().getValue());
+        assertEquals(":)", ownerA.valueStr().getValue());
+
+        assertEquals("owned2", ownedEntity2.valueStr().getValue());
+        assertEquals("ownerB2", ownerB2.valueStr().getValue());
+
+        // set up to check stopping
+        ownedEntity1.valueStr().setValue("owned1");
+        ownerB1.valueStr().setValue("ownerB1");
+        ownerA.valueStr().setValue("ownerA");
+
+        // execute function
+        EntityGraph.applyToOwners(ownedEntity2, f);
+
+        // assert
+        assertEquals("owned1", ownedEntity1.valueStr().getValue());
+        assertEquals("ownerB1", ownerB1.valueStr().getValue());
+        assertEquals("ownerA", ownerA.valueStr().getValue());
+
+        assertEquals(":)", ownedEntity2.valueStr().getValue());
+        assertEquals("stopped here", ownerB2.valueStr().getValue());
 
     }
 }

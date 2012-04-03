@@ -388,4 +388,25 @@ public class EntityGraph {
 
         return copy;
     }
+
+    public static void applyToOwners(IEntity entity, ApplyMethod method) {
+        IEntity currentEntity = entity;
+
+        while (method.apply(currentEntity)) {
+            IEntity castedEntity = currentEntity.cast();
+            IEntity owner = null;
+            for (String memberName : castedEntity.getEntityMeta().getMemberNames()) {
+                IObject<?> member = castedEntity.getMember(memberName);
+                if (member.getMeta().isOwner()) {
+                    owner = (IEntity) member;
+                    break;
+                }
+            }
+            if (owner == null) {
+                break;
+            } else {
+                currentEntity = owner;
+            }
+        }
+    }
 }
