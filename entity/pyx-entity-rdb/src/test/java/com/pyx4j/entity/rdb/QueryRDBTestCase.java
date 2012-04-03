@@ -267,8 +267,15 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
 
             List<SortSortable> r = srv.query(criteria);
             Assert.assertEquals("result set size", 3, r.size());
+
             Assert.assertEquals("sort Ok", "A", r.get(0).sortByEmbedded().name().getValue());
+            Assert.assertEquals("sort Ok", "1", r.get(0).sortByEmbedded().amount().getValue());
+
+            Assert.assertEquals("sort Ok", "A", r.get(1).sortByEmbedded().name().getValue());
             Assert.assertEquals("sort Ok", "2", r.get(1).sortByEmbedded().amount().getValue());
+
+            Assert.assertEquals("sort Ok", "B", r.get(2).sortByEmbedded().name().getValue());
+            Assert.assertEquals("sort Ok", "1", r.get(2).sortByEmbedded().amount().getValue());
         }
 
         // Created sort by ToString members
@@ -287,6 +294,7 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("sort Ok", "2", r.get(1).sortByEmbedded().amount().getValue());
 
             Assert.assertEquals("sort Ok", "B", r.get(2).sortByEmbedded().name().getValue());
+            Assert.assertEquals("sort Ok", "1", r.get(2).sortByEmbedded().amount().getValue());
         }
     }
 
