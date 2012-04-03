@@ -143,7 +143,6 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     // Data: ----------------------------------------------
 
     @NotNull
-    @ReadOnly
     @ToString(index = 0)
     IPrimitive<String> leaseId();
 

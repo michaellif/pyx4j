@@ -18,7 +18,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
@@ -102,7 +101,6 @@ public interface Lead extends IEntity {
     IList<Guest> guests();
 
     @NotNull
-    @ReadOnly
     @ToString(index = 0)
     IPrimitive<String> leadId();
 
