@@ -80,6 +80,10 @@ public interface TenantInLease extends IBoundToApplication {
     @ToString(index = 0)
     Tenant tenant();
 
+    // TODO
+    @ReadOnly
+    _Customer customer();
+
     @Override
     @NotNull
     @Indexed
