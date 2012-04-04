@@ -18,15 +18,17 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class Customers {
-    private List<Customer> customers = new ArrayList<Customer>();
+public class YardiCustomers {
 
+    private List<YardiCustomer> customers = new ArrayList<YardiCustomer>();
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
         sb.append("--- ");
         sb.append(customers.size()).append(" customers ---");
-        for (Customer customer : customers) {
+        for (YardiCustomer customer : customers) {
             sb.append("\n").append(customer);
         }
 
@@ -34,11 +36,11 @@ public class Customers {
     }
 
     @XmlElement(name = "Customer")
-    public List<Customer> getCustomers() {
+    public List<YardiCustomer> getCustomers() {
         return customers;
     }
 
-    public void setCustomers(List<Customer> customers) {
+    public void setCustomers(List<YardiCustomer> customers) {
         this.customers = customers;
     }
 }

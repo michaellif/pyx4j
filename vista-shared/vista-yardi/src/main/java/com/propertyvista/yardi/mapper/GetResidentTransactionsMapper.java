@@ -28,7 +28,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.yardi.Model;
-import com.propertyvista.yardi.bean.mits.Customer;
+import com.propertyvista.yardi.bean.mits.YardiCustomer;
 import com.propertyvista.yardi.bean.mits.Information;
 import com.propertyvista.yardi.bean.resident.Property;
 import com.propertyvista.yardi.bean.resident.RTCustomer;
@@ -64,12 +64,12 @@ public class GetResidentTransactionsMapper {
 
     public void map(RTCustomer rtCustomer, Building building) {
         map(rtCustomer.getRtunit(), building);
-        for (Customer customer : rtCustomer.getCustomers().getCustomers()) {
+        for (YardiCustomer customer : rtCustomer.getCustomers().getCustomers()) {
             map(customer);
         }
     }
 
-    public void map(Customer customer) {
+    public void map(YardiCustomer customer) {
         Tenant tenant = EntityFactory.create(Tenant.class);
 
         tenant.person().name().firstName().setValue(customer.getName().getFirstName());

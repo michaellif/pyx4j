@@ -15,12 +15,12 @@ package com.propertyvista.yardi.bean.resident;
 
 import javax.xml.bind.annotation.XmlElement;
 
-import com.propertyvista.yardi.bean.mits.Customers;
+import com.propertyvista.yardi.bean.mits.YardiCustomers;
 
 public class RTCustomer {
     private String customerId;
 
-    private Customers customers;
+    private YardiCustomers customers;
 
     private RTUnit rtunit;
 
@@ -64,11 +64,11 @@ public class RTCustomer {
     }
 
     @XmlElement(name = "Customers")
-    public Customers getCustomers() {
+    public YardiCustomers getCustomers() {
         return customers;
     }
 
-    public void setCustomers(Customers customers) {
+    public void setCustomers(YardiCustomers customers) {
         this.customers = customers;
     }
 

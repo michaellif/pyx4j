@@ -38,8 +38,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
-import com.propertyvista.yardi.bean.mits.Customer;
-import com.propertyvista.yardi.bean.mits.Customers;
+import com.propertyvista.yardi.bean.mits.YardiCustomer;
+import com.propertyvista.yardi.bean.mits.YardiCustomers;
 import com.propertyvista.yardi.bean.mits.Identification;
 import com.propertyvista.yardi.bean.mits.PropertyId;
 import com.propertyvista.yardi.bean.resident.PhysicalProperty;
@@ -125,10 +125,10 @@ public class XmlBeanTest {
         RTCustomer rtCustomer = new RTCustomer();
         property.getCustomers().add(rtCustomer);
 
-        Customers customers = new Customers();
+        YardiCustomers customers = new YardiCustomers();
         rtCustomer.setCustomers(customers);
 
-        Customer customer = new Customer();
+        YardiCustomer customer = new YardiCustomer();
         customer.setDescription("277");
         customer.setCustomerId("0007");
         customer.setType("future_resident");
