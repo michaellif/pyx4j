@@ -23,7 +23,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.Locker;
+import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
@@ -34,16 +37,22 @@ public class PlaceResolver {
     private static final Map<String, Class<? extends IEntity>> entityClassNameToEntityClassMap = new HashMap<String, Class<? extends IEntity>>();
 
     static {
+        register(AptUnit.class, new EntityPlaceResolver() {
+            @Override
+            protected CrudAppPlace createCrudAppPlace() {
+                return new CrmSiteMap.Properties.Unit();
+            }
+        });
         register(Building.class, new EntityPlaceResolver() {
             @Override
             protected CrudAppPlace createCrudAppPlace() {
                 return new CrmSiteMap.Properties.Building();
             }
         });
-        register(AptUnit.class, new EntityPlaceResolver() {
+        register(Complex.class, new EntityPlaceResolver() {
             @Override
             protected CrudAppPlace createCrudAppPlace() {
-                return new CrmSiteMap.Properties.Unit();
+                return new CrmSiteMap.Properties.Complex();
             }
         });
         register(Floorplan.class, new EntityTabPlaceResolver(3) {
@@ -57,6 +66,29 @@ public class PlaceResolver {
                 return new CrmSiteMap.Properties.Building();
             }
         });
+        register(Locker.class, new EntityTabPlaceResolver(1) {
+            @Override
+            protected CrudAppPlace createEntityViewerPlace() {
+                return new CrmSiteMap.Properties.Locker();
+            }
+
+            @Override
+            protected CrudAppPlace createEntityListerPlace() {
+                return new CrmSiteMap.Properties.LockerArea();
+            }
+        });
+        register(LockerArea.class, new EntityTabPlaceResolver(6) {
+            @Override
+            protected CrudAppPlace createEntityViewerPlace() {
+                return new CrmSiteMap.Properties.LockerArea();
+            }
+
+            @Override
+            protected CrudAppPlace createEntityListerPlace() {
+                return new CrmSiteMap.Properties.Building();
+            }
+        });
+
     }
 
     /**

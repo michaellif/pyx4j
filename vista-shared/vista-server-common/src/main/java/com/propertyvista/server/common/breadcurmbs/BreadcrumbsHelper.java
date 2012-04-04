@@ -40,6 +40,7 @@ public class BreadcrumbsHelper {
 
             @Override
             public boolean apply(IEntity entity) {
+                entity = entity.cast();
                 if (entity.isValueDetached()) {
                     Persistence.service().retrieve(entity);
                 }

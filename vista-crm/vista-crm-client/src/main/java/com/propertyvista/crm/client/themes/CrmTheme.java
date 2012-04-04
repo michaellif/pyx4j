@@ -435,13 +435,15 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CrmTitleBar.StyleSuffix.Caption));
-        style.addProperty("padding", "0.3em 1em 0.4em 1em");
+        style.addProperty("padding", "0.3em 0.5em 0.4em 0em");
         style.addProperty("font-size", "1.3em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CrmTitleBar.StyleSuffix.Breadcrumb));
-        style.addProperty("padding", "0.3em 1em 0.4em 1em");
-        style.addProperty("font-size", "1.1em");
+        style.addProperty("background-color", ThemeColors.object1, 1);
+        style.addProperty("color", ThemeColors.object1, 0.1);
+        style.addProperty("padding", "0.3em 0.5em 0.4em 0em");
+        style.addProperty("font-size", "1.3em");
         addStyle(style);
 
         prefix = CrmActionsBarDecorator.DEFAULT_STYLE_PREFIX;

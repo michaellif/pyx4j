@@ -140,8 +140,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
             @Override
             public void onFailure(Throwable caught) {
-                // TODO Auto-generated method stub
-
+                throw new Error(caught);
             }
         }, value);
     }
