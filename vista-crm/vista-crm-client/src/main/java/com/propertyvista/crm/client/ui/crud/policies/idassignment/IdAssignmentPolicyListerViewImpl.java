@@ -29,6 +29,8 @@ public class IdAssignmentPolicyListerViewImpl extends CrmListerViewImplBase<IdAs
 
         public IdAssignmentPolicyLister() {
             super(IdAssignmentPolicyDTO.class, CrmSiteMap.Settings.Policies.IdAssignment.class);
+            getAddButton().setVisible(false);
+            getDeleteButton().setVisible(false);
         }
     }
 

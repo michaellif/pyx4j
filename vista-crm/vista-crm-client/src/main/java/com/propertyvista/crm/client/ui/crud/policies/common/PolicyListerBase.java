@@ -88,7 +88,7 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
         return getDataTablePanel().getAddButton();
     }
 
-    public Button getdDleteButton() {
+    public Button getDeleteButton() {
         return deleteButton;
     }
 

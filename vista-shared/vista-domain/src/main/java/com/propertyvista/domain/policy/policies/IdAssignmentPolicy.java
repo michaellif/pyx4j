@@ -19,11 +19,13 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.policy.framework.LowestApplicableNode;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 
 @DiscriminatorValue("IdAssignmentPolicy")
-//Organization
+@LowestApplicableNode(value = OrganizationPoliciesNode.class)
 public interface IdAssignmentPolicy extends Policy {
 
     @Owned
