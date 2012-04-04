@@ -187,7 +187,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         getEditButton().setVisible(status != Status.Closed);
         // tweak finalizing availability:
         if (getFinalizeButton().isVisible()) {
-            getFinalizeButton().setVisible(!value.unit().isNull() && (status == Status.Active || status == Status.Completed));
+            getFinalizeButton().setVisible(!value.unit().isNull() && (status == Status.Approved || status == Status.Active || status == Status.Completed));
         }
 
         // set buttons state:
