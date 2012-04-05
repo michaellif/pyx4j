@@ -19,7 +19,7 @@ public abstract class CRMCrudAppPlace extends CrudAppPlace {
 
     @Override
     public void setType(Type type) {
-        queryArg(ARG_NAME_CRUD_TYPE, type.name());
+        super.setType(type);
         if (Type.editor.equals(type)) {
             setStable(false);
         }
