@@ -649,10 +649,10 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // List/Find Finalized and Draft by version() data
         {
             EntityQueryCriteria<ItemA> criteria = EntityQueryCriteria.create(ItemA.class);
-            criteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+            criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
             criteria.add(PropertyCriterion.eq(criteria.proto().version().testId(), testId));
             List<ItemA> list = srv.query(criteria);
-            assertEquals("final and draft data", 3, list.size());
+            assertEquals("final and draft data", 2, list.size());
         }
     }
 

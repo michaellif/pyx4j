@@ -105,12 +105,12 @@ public class QueryBuilder<T extends IEntity> {
                 firstCriteria = false;
                 appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().toDate()), firstCriteria);
                 break;
-            case finalizedOrDraft:
-                break;
             case finalizedAsOfNow:
                 appendPropertyCriterion(PropertyCriterion.isNotNull(versionedProto.version()), firstCriteria);
                 firstCriteria = false;
                 break;
+            default:
+                throw new Error("Unsupported VersionedCriteria " + criteria.getVersionedCriteria());
             }
         }
 
@@ -335,7 +335,7 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     boolean addDistinct() {
-        return queryJoin.addDistinct || sortAddDistinct;
+        return sortAddDistinct;
     }
 
     String getSQL(String mainTableSqlName) {

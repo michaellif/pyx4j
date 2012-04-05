@@ -90,8 +90,6 @@ class QueryJoinBuilder {
 
     private int nowParameters = 0;
 
-    boolean addDistinct = false;
-
     QueryJoinBuilder(PersistenceContext persistenceContext, Mappings mappings, EntityOperationsMeta operationsMeta, String mainTableSqlAlias,
             VersionedCriteria versionedCriteria) {
         this.persistenceContext = persistenceContext;
@@ -214,10 +212,6 @@ class QueryJoinBuilder {
                     condition.append(" AND ");
                     condition.append(memberJoin.alias).append('.').append(memberVersionDataOper.getSqlToDateColumnName()).append(" IS NULL");
                     break;
-                case finalizedOrDraft:
-                    condition.append(memberJoin.alias).append('.').append(memberVersionDataOper.getSqlToDateColumnName()).append(" IS NULL");
-                    addDistinct = true;
-                    break;
                 case finalizedAsOfNow:
                     condition.append(memberJoin.alias).append('.').append(memberVersionDataOper.getSqlFromDateColumnName()).append(" <= ?");
                     condition.append(" AND (");
@@ -227,6 +221,8 @@ class QueryJoinBuilder {
                     condition.append(")");
                     nowParameters += 2;
                     break;
+                default:
+                    throw new Error("Unsupported VersionedCriteria " + versionedCriteria);
                 }
                 condition.append(")");
             }
