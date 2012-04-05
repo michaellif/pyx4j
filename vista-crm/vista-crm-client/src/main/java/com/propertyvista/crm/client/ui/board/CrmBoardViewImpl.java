@@ -58,7 +58,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
     @Override
     public void populate(DashboardMetadata dashboardMetadata) {
         super.populate(dashboardMetadata);
-        header.setCaption(asBoardCaption(dashboardMetadata));
+        header.populate(null, asBoardCaption(dashboardMetadata));
         if (dashboardMetadata != null) {
             boolean isBuildingDashboard = dashboardMetadata.type().getValue() == DashboardType.building;
             this.setWidgetSize(buildingsBar.asWidget(), isBuildingDashboard ? CrmTheme.defaultHeaderHeight : 0.1); // for some reason setVisible() doesn't work here

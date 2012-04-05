@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.decorations;
 
+import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
@@ -21,12 +23,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.mvp.PlaceResolver;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.domain.breadcrumbs.BreadcrumbDTO;
-import com.propertyvista.domain.breadcrumbs.BreadcrumbTrailDTO;
 
 public class CrmTitleBar extends HorizontalPanel {
 
@@ -36,43 +37,32 @@ public class CrmTitleBar extends HorizontalPanel {
         Caption, Breadcrumb
     }
 
-    private final HTML captionHolder;
-
-    private final BreadcrumbsBar breadcrumbHolder;
+    private final BreadcrumbsBar breadcrumbsBar;
 
     public CrmTitleBar() {
-        breadcrumbHolder = new BreadcrumbsBar();
-        add(breadcrumbHolder);
-        setCellVerticalAlignment(breadcrumbHolder, HorizontalPanel.ALIGN_MIDDLE);
-        setCellWidth(breadcrumbHolder, "100%");
-
-        captionHolder = new HTML("", false);
         setStyleName(getStylePrefix());
-        captionHolder.setStyleName(getStylePrefix() + StyleSuffix.Caption.name());
-        add(captionHolder);
-        setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
-        setCellWidth(captionHolder, "100%");
-
         getElement().getStyle().setProperty("clear", "both");
+        setSize("100%", "36px");
+
+        breadcrumbsBar = new BreadcrumbsBar();
+        add(breadcrumbsBar);
+        setCellVerticalAlignment(breadcrumbsBar, HorizontalPanel.ALIGN_MIDDLE);
+        setCellWidth(breadcrumbsBar, "100%");
     }
 
-    public void setCaption(String caption) {
-        captionHolder.setText(caption);
-        captionHolder.asWidget().setVisible(true);
-        breadcrumbHolder.asWidget().setVisible(false);
+    public void populate(Vector<IEntity> breadcrumbTrail, String caption) {
+        breadcrumbsBar.populate(breadcrumbTrail, caption);
     }
 
-    public void populateBreadcrumbs(BreadcrumbTrailDTO breadcrumbTrail) {
-        breadcrumbHolder.populate(breadcrumbTrail);
-        captionHolder.asWidget().setVisible(false);
-        breadcrumbHolder.asWidget().setVisible(true);
+    public void populate(String caption) {
+        breadcrumbsBar.populate(null, caption);
     }
 
     protected String getStylePrefix() {
         return DEFAULT_STYLE_PREFIX;
     }
 
-    public static class BreadcrumbsBar implements IsWidget {
+    public class BreadcrumbsBar implements IsWidget {
 
         HorizontalPanel widget;
 
@@ -80,22 +70,22 @@ public class CrmTitleBar extends HorizontalPanel {
 
         public BreadcrumbsBar() {
             widget = new HorizontalPanel();
-            widget.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Breadcrumb.name());
+            widget.setStyleName(getStyleName() + StyleSuffix.Breadcrumb.name());
             breadcrumbsPanel = new HorizontalPanel();
             breadcrumbsPanel.setVerticalAlignment(ALIGN_MIDDLE);
             widget.add(breadcrumbsPanel);
         }
 
-        public void populate(BreadcrumbTrailDTO breadcrumbTrail) {
+        public void populate(Vector<IEntity> breadcrumbTrail, String caption) {
             breadcrumbsPanel.clear();
 
-            int i = 0;
-            for (; i < breadcrumbTrail.trail().size() - 1; ++i) {
-                BreadcrumbDTO breadcrumb = breadcrumbTrail.trail().get(i);
-                breadcrumbsPanel.add(new BreadcrumbAnchor(breadcrumb).asWidget());
-                breadcrumbsPanel.add(new BreadcrumbSepearator().asWidget());
+            if (breadcrumbTrail != null) {
+                for (IEntity breadcrumb : breadcrumbTrail) {
+                    breadcrumbsPanel.add(new BreadcrumbAnchor(breadcrumb).asWidget());
+                    breadcrumbsPanel.add(new BreadcrumbSeparator().asWidget());
+                }
             }
-            breadcrumbsPanel.add(new Caption(breadcrumbTrail.trail().get(i).label().getValue()));
+            breadcrumbsPanel.add(new Caption(caption));
         }
 
         @Override
@@ -104,13 +94,13 @@ public class CrmTitleBar extends HorizontalPanel {
         }
     }
 
-    public static class Caption implements IsWidget {
+    public class Caption implements IsWidget {
 
         private final HTML captionWidget;
 
         public Caption(String caption) {
             captionWidget = new HTML(caption);
-            captionWidget.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Caption.name());
+            captionWidget.setStyleName(getStylePrefix() + StyleSuffix.Caption.name());
         }
 
         @Override
@@ -120,27 +110,26 @@ public class CrmTitleBar extends HorizontalPanel {
 
     }
 
-    public static class BreadcrumbSepearator extends Caption implements IsWidget {
+    public class BreadcrumbSeparator extends Caption implements IsWidget {
 
-        public BreadcrumbSepearator() {
+        public BreadcrumbSeparator() {
             super(">");
         }
     }
 
-    public static class BreadcrumbAnchor implements IsWidget {
+    public class BreadcrumbAnchor implements IsWidget {
 
         private final AnchorButton anchor;
 
-        public BreadcrumbAnchor(final BreadcrumbDTO breadcrumb) {
-            anchor = new AnchorButton(breadcrumb.label().getValue(), new ClickHandler() {
+        public BreadcrumbAnchor(final IEntity breadcrumb) {
+            anchor = new AnchorButton(breadcrumb.getStringView(), new ClickHandler() {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    AppSite.getPlaceController().goTo(PlaceResolver.resolvePlace(breadcrumb.entityClass().getValue(), breadcrumb.entityId().getValue()));
+                    AppSite.getPlaceController().goTo(PlaceResolver.resolvePlace(breadcrumb));
                 }
             });
-            asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Breadcrumb.name());
-            //asWidget().getElement().getStyle().setPaddingRight(0.5, Unit.EM);
+            asWidget().setStyleName(getStyleName() + StyleSuffix.Breadcrumb.name());
         }
 
         @Override

@@ -26,6 +26,6 @@ public class CrmListerViewImplBase<E extends IEntity> extends ListerViewImplBase
     public CrmListerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(new CrmTitleBar(), CrmTheme.defaultHeaderHeight);
 
-        ((CrmTitleBar) getHeader()).setCaption(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption());
+        ((CrmTitleBar) getHeader()).populate(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption());
     }
 }

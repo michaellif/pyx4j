@@ -15,58 +15,38 @@ package com.propertyvista.server.common.breadcurmbs;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 
-import com.propertyvista.domain.breadcrumbs.BreadcrumbDTO;
-
 public class BreadcrumbsHelper {
 
-    private final Map<Class<? extends IEntity>, LabelCreator> labelCreatorMap;
-
-    public BreadcrumbsHelper(Map<Class<? extends IEntity>, LabelCreator> labelCreatorMap) {
-        this.labelCreatorMap = labelCreatorMap;
-    }
-
-    public List<BreadcrumbDTO> breadcrumbTrail(IEntity entity) {
-        final LinkedList<BreadcrumbDTO> trail = new LinkedList<BreadcrumbDTO>();
+    public List<IEntity> breadcrumbTrail(IEntity entity) {
+        final LinkedList<IEntity> trail = new LinkedList<IEntity>();
 
         EntityGraph.applyToOwners(entity, new ApplyMethod() {
 
+            // flag for not adding the "Target" of the breadcrumb trail to the trail            
+            private boolean isTarget = true;
+
             @Override
             public boolean apply(IEntity entity) {
-                entity = entity.cast();
-                if (entity.isValueDetached()) {
-                    Persistence.service().retrieve(entity);
+                IEntity castedEntity = entity.cast();
+                if (castedEntity.isValueDetached()) {
+                    Persistence.service().retrieve(castedEntity);
                 }
-                BreadcrumbDTO breadcrumb = EntityFactory.create(BreadcrumbDTO.class);
-                breadcrumb.entityId().setValue(entity.getPrimaryKey());
-                breadcrumb.entityClass().setValue(entity.getInstanceValueClass().getName());
-                breadcrumb.label().setValue(asLabel(entity));
-                trail.addFirst(breadcrumb);
+                if (!isTarget) {
+                    trail.addFirst(castedEntity);
+                } else {
+                    isTarget = false;
+                }
                 return true;
             }
         });
-
+        // TODO detach here
         return trail;
-    }
-
-    private String asLabel(IEntity entity) {
-        LabelCreator creator = labelCreatorMap.get(entity.getInstanceValueClass());
-        if (creator != null) {
-            return creator.label(entity.cast());
-        } else {
-            String label = entity.getStringView();
-            if (label == null || "".equals(label)) {
-                label = entity.getEntityMeta().getCaption();
-            }
-            return label;
-        }
     }
 
     public interface LabelCreator {

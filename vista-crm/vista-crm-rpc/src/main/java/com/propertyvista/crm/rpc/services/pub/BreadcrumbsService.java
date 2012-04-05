@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.rpc.services.pub;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.breadcrumbs.BreadcrumbTrailDTO;
-
 public interface BreadcrumbsService extends IService {
 
-    void breadcrumbtrail(AsyncCallback<BreadcrumbTrailDTO> callback, IEntity entity);
+    void breadcrumbtrail(AsyncCallback<Vector<IEntity>> callback, IEntity entity);
 
 }

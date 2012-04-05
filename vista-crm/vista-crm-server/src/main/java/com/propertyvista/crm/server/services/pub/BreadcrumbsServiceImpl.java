@@ -13,36 +13,31 @@
  */
 package com.propertyvista.crm.server.services.pub;
 
-import static com.propertyvista.crm.server.services.pub.BreadcrumbsConfig.DTO_TO_DBO_MAP;
-import static com.propertyvista.crm.server.services.pub.BreadcrumbsConfig.LABEL_CREATOR_MAP;
+import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.crm.rpc.services.pub.BreadcrumbsService;
-import com.propertyvista.domain.breadcrumbs.BreadcrumbTrailDTO;
 import com.propertyvista.server.common.breadcurmbs.BreadcrumbsHelper;
 
 public class BreadcrumbsServiceImpl implements BreadcrumbsService {
 
     @Override
-    public void breadcrumbtrail(AsyncCallback<BreadcrumbTrailDTO> callback, IEntity entity) {
-        BreadcrumbTrailDTO trail = EntityFactory.create(BreadcrumbTrailDTO.class);
+    public void breadcrumbtrail(AsyncCallback<Vector<IEntity>> callback, IEntity entity) {
+        List<IEntity> temp = new BreadcrumbsHelper().breadcrumbTrail(entity);
+        Vector<IEntity> result = new Vector<IEntity>();
 
-        Class<? extends IEntity> dboClass = DTO_TO_DBO_MAP.get(entity.getInstanceValueClass());
-        IEntity dbo = null;
-        if (dboClass != null) {
-            dbo = entity.duplicate(dboClass);
-        } else {
-            // optimistic approach :)
-            dbo = entity.cast(); // cast if we got an abstract entity
+        // TODO this is workaround!!! must be done in helper i think
+        for (IEntity e : temp) {
+            IEntity x = Persistence.service().retrieve(e.getInstanceValueClass(), e.getPrimaryKey());
+            x.setAttachLevel(AttachLevel.ToStringMembers);
+            result.add(x);
         }
-
-        trail.trail().addAll(new BreadcrumbsHelper(LABEL_CREATOR_MAP).breadcrumbTrail(dbo));
-
-        callback.onSuccess(trail);
+        callback.onSuccess(result);
     }
-
 }

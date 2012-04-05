@@ -18,7 +18,6 @@ import java.util.Map;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -32,9 +31,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class PlaceResolver {
 
-    private static final Map<Class<? extends IEntity>, IPlaceResolver> entityClassToResolverMap = new HashMap<Class<? extends IEntity>, PlaceResolver.IPlaceResolver>();
-
-    private static final Map<String, Class<? extends IEntity>> entityClassNameToEntityClassMap = new HashMap<String, Class<? extends IEntity>>();
+    private static final Map<Class<? extends IEntity>, IPlaceResolver> entityClassToPlaceResolver = new HashMap<Class<? extends IEntity>, PlaceResolver.IPlaceResolver>();
 
     static {
         register(AptUnit.class, new EntityPlaceResolver() {
@@ -96,46 +93,17 @@ public class PlaceResolver {
      * @return if entity is proto / without id returns lister that shows class of that entity).
      */
     public static CrudAppPlace resolvePlace(IEntity entity) {
-        if (entity != null) {
-            IPlaceResolver resolver = entityClassToResolverMap.get(entity.getInstanceValueClass());
-            if (resolver != null) {
-                return resolver.resolve(entity);
-            } else {
-                throw new Error(SimpleMessageFormat.format("Place for {0} is not defined, add {0} to PlaceResolver", entity.getInstanceValueClass().toString()));
-            }
+        assert entity != null;
+        IPlaceResolver resolver = entityClassToPlaceResolver.get(entity.getInstanceValueClass());
+        if (resolver != null) {
+            return resolver.resolve(entity);
         } else {
-            throw new Error("it's imposisble to resolve path when entity is null");
-        }
-
-    }
-
-    public static CrudAppPlace resolvePlace(String entityClassName, Key id) {
-        IEntity proto = createEntity(entityClassName);
-        if (proto != null) {
-            IEntity entity = EntityFactory.create(proto.getInstanceValueClass());
-            entity.setPrimaryKey(id);
-            return resolvePlace(entity);
-        } else {
-            return resolvePlace((IEntity) null);
-        }
-    }
-
-    public static CrudAppPlace resolvePlace(String entityClassName) {
-        return resolvePlace(createEntity(entityClassName));
-    }
-
-    private static IEntity createEntity(String entityClassName) {
-        Class<? extends IEntity> entityClass = entityClassNameToEntityClassMap.get(entityClassName);
-        if (entityClass != null) {
-            return EntityFactory.create(entityClass);
-        } else {
-            throw new Error(SimpleMessageFormat.format("Place for {0} is not defined, add {0} to PlaceResolver", entityClassName));
+            throw new Error(SimpleMessageFormat.format("Place for {0} is not defined, add {0} to PlaceResolver", entity.getInstanceValueClass().toString()));
         }
     }
 
     private static void register(Class<? extends IEntity> entityClass, IPlaceResolver resolver) {
-        entityClassToResolverMap.put(entityClass, resolver);
-        entityClassNameToEntityClassMap.put(entityClass.getName(), entityClass);
+        entityClassToPlaceResolver.put(entityClass, resolver);
     }
 
     public interface IPlaceResolver {

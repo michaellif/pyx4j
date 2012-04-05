@@ -48,7 +48,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         super(new CrmTitleBar(), new Toolbar(), CrmTheme.defaultHeaderHeight);
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
-        ((CrmTitleBar) getHeader()).setCaption(defaultCaption);
+        ((CrmTitleBar) getHeader()).populate(defaultCaption);
 
         Toolbar footer = ((Toolbar) getFooter());
 
@@ -108,10 +108,10 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     public void populate(E value) {
         enableButtons(false);
         if (EditMode.newItem.equals(mode)) {
-            ((CrmTitleBar) getHeader()).setCaption(defaultCaption + " " + i18n.tr("New Item..."));
+            ((CrmTitleBar) getHeader()).populate(defaultCaption + " " + i18n.tr("New Item..."));
             form.setActiveTab(0);
         } else {
-            ((CrmTitleBar) getHeader()).setCaption(defaultCaption + " " + (value == null ? "" : value.getStringView()));
+            ((CrmTitleBar) getHeader()).populate(defaultCaption + " " + (value == null ? "" : value.getStringView()));
         }
 
         super.populate(value);

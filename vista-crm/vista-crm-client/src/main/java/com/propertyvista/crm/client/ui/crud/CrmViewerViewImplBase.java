@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
+import java.util.Vector;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -33,7 +35,6 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.VersionSelectorDialog;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 import com.propertyvista.crm.rpc.services.pub.BreadcrumbsService;
-import com.propertyvista.domain.breadcrumbs.BreadcrumbTrailDTO;
 
 public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
 
@@ -57,7 +58,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         super(new CrmTitleBar(), null, CrmTheme.defaultHeaderHeight);
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
-        ((CrmTitleBar) getHeader()).setCaption(defaultCaption);
+        ((CrmTitleBar) getHeader()).populate(defaultCaption);
 
         if (!viewOnly) {
             editButton = new Button(i18n.tr("Edit"), new ClickHandler() {
@@ -126,16 +127,15 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             finalizeButton.setVisible(((IVersionedEntity<?>) value).version().versionNumber().isNull());
         }
 
-        ((CrmTitleBar) getHeader()).setCaption(caption);
-        populateBreadcrumbs(value);
+        populateBreadcrumbs(value, caption);
     }
 
-    protected void populateBreadcrumbs(E value) {
-        breadcumbsService.breadcrumbtrail(new AsyncCallback<BreadcrumbTrailDTO>() {
+    protected void populateBreadcrumbs(E value, final String caption) {
+        breadcumbsService.breadcrumbtrail(new AsyncCallback<Vector<IEntity>>() {
 
             @Override
-            public void onSuccess(BreadcrumbTrailDTO result) {
-                ((CrmTitleBar) getHeader()).populateBreadcrumbs(result);
+            public void onSuccess(Vector<IEntity> result) {
+                ((CrmTitleBar) getHeader()).populate(result, caption);
             }
 
             @Override
