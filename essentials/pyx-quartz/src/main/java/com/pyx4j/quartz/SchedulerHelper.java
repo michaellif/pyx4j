@@ -36,6 +36,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.jdbcjobstore.Constants;
 import org.quartz.impl.jdbcjobstore.HSQLDBDelegate;
 import org.quartz.impl.jdbcjobstore.JobStoreTX;
+import org.quartz.impl.jdbcjobstore.PostgreSQLDelegate;
 import org.quartz.impl.jdbcjobstore.StdJDBCDelegate;
 import org.quartz.impl.jdbcjobstore.oracle.OracleDelegate;
 import org.slf4j.Logger;
@@ -96,6 +97,9 @@ public class SchedulerHelper {
             break;
         case Oracle:
             quartzProperties.put(delegateProperty, OracleDelegate.class.getName());
+            break;
+        case PostgreSQL:
+            quartzProperties.put(delegateProperty, PostgreSQLDelegate.class.getName());
             break;
         default:
             throw new Error("Unsupported databaseType " + rdbConfiguration.databaseType());
@@ -176,8 +180,11 @@ public class SchedulerHelper {
                 case Oracle:
                     sqlResourceName = "tables_oracle.sql";
                     break;
+                case PostgreSQL:
+                    sqlResourceName = "tables_postgresql.sql";
+                    break;
                 default:
-                    throw new Error("Unsupporte ddatabaseType " + RDBUtils.getRDBConfiguration().databaseType());
+                    throw new Error("Unsupported databaseType " + RDBUtils.getRDBConfiguration().databaseType());
                 }
 
                 String text = IOUtils.getTextResource(SchedulerHelper.class.getPackage().getName().replace('.', '/') + "/" + sqlResourceName);
