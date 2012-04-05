@@ -28,7 +28,6 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
@@ -57,7 +56,7 @@ public abstract class AppSite implements EntryPoint {
 
     private final AppPlaceHistoryMapper historyMapper;
 
-    private final PlaceHistoryHandler historyHandler;
+    private final AppPlaceHistoryHandler historyHandler;
 
     private final AppPlaceContorller placeController;
 
@@ -73,7 +72,7 @@ public abstract class AppSite implements EntryPoint {
         head.setPropertyString("xmlns:pyx", "");
 
         historyMapper = new AppPlaceHistoryMapper(siteMapClass);
-        historyHandler = new PlaceHistoryHandler(historyMapper);
+        historyHandler = new AppPlaceHistoryHandler(historyMapper);
         placeController = new AppPlaceContorller(ClientEventBus.instance, dispatcher);
     }
 
@@ -107,12 +106,12 @@ public abstract class AppSite implements EntryPoint {
         return instance().historyMapper;
     }
 
-    public static PlaceHistoryHandler getHistoryHandler() {
+    public static AppPlaceHistoryHandler getHistoryHandler() {
         return instance().historyHandler;
     }
 
     public static AppPlace getWhere() {
-        return (AppPlace) getPlaceController().getWhere();
+        return getPlaceController().getWhere();
     }
 
     public static EventBus getEventBus() {

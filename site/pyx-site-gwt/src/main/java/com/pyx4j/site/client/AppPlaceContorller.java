@@ -53,6 +53,7 @@ public final class AppPlaceContorller extends PlaceController {
         super(eventBus);
         this.eventBus = eventBus;
         this.dispatcher = dispatcher;
+
         Window.addWindowClosingHandler(new ClosingHandler() {
             @Override
             public void onWindowClosing(ClosingEvent event) {
@@ -137,4 +138,5 @@ public final class AppPlaceContorller extends PlaceController {
         }
         eventBus.fireEvent(new PlaceChangeEvent(where));
     }
+
 }

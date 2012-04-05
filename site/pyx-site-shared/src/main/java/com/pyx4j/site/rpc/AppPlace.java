@@ -47,6 +47,8 @@ public class AppPlace extends Place {
 
     private Map<String, List<String>> args;
 
+    private boolean stable = true;
+
     @I18n(strategy = I18nStrategy.IgnoreAll)
     public static class NoWhereAppPlace extends AppPlace {
     }
@@ -183,5 +185,19 @@ public class AppPlace extends Place {
     @Override
     public String toString() {
         return this.getClass().getName() + createQueryString();
+    }
+
+    /**
+     * Place doesn't depend on the current application internal state and the state of application for that place is defined by place params.
+     * This place can be bookmarked.
+     * 
+     * @return
+     */
+    public boolean isStable() {
+        return stable;
+    }
+
+    public void setStable(boolean stable) {
+        this.stable = stable;
     }
 }
