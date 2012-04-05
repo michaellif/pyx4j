@@ -79,6 +79,9 @@ import com.propertyvista.crm.client.activity.crud.organisation.EmployeeViewerAct
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioEditorActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioListerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioViewerActivity;
+import com.propertyvista.crm.client.activity.crud.organisation.VendorEditorActivity;
+import com.propertyvista.crm.client.activity.crud.organisation.VendorListerActivity;
+import com.propertyvista.crm.client.activity.crud.organisation.VendorViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.PageEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.PageViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteActivity;
@@ -574,6 +577,18 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+                } else if (place instanceof CrmSiteMap.Organization.Vendor) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new VendorEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new VendorViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new VendorListerActivity(place);
+                        break;
+                    }
                 } else if (place instanceof CrmSiteMap.PasswordChange) {
                     activity = new PasswordChangeActivity(place);
 // Reports:
