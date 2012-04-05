@@ -24,6 +24,7 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.tester.client.activity.NavigActivity;
 
 public class NavigActivityMapper implements ActivityMapper {
@@ -33,6 +34,6 @@ public class NavigActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return new NavigActivity(place);
+        return new NavigActivity((AppPlace) place);
     }
 }

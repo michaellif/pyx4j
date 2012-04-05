@@ -43,7 +43,7 @@ public final class AppPlaceContorller extends PlaceController {
 
     private final EventBus eventBus;
 
-    private Place where = Place.NOWHERE;
+    private AppPlace where = AppPlace.NOWHERE;
 
     private AppPlace forwardedFrom = AppPlace.NOWHERE;
 
@@ -56,7 +56,7 @@ public final class AppPlaceContorller extends PlaceController {
         Window.addWindowClosingHandler(new ClosingHandler() {
             @Override
             public void onWindowClosing(ClosingEvent event) {
-                String warning = maybeGoTo(AppPlace.NOWHERE);
+                String warning = confirmGoTo(AppPlace.NOWHERE);
                 if (warning != null) {
                     event.setMessage(warning);
                 }
@@ -65,7 +65,7 @@ public final class AppPlaceContorller extends PlaceController {
     }
 
     @Override
-    public Place getWhere() {
+    public AppPlace getWhere() {
         return where;
     }
 
@@ -73,8 +73,28 @@ public final class AppPlaceContorller extends PlaceController {
         return forwardedFrom;
     }
 
+    public void goTo(final AppPlace newPlace) {
+        maybeGoTo(newPlace);
+    }
+
+    /**
+     * Shouldn't be called by application. Use goTo(AppPlace) instead
+     */
     @Override
     public void goTo(final Place newPlace) {
+        //TODO external request - handle unstable tokens. If stable counterpart exists - execute, otherwise go to NOWHERE
+
+        maybeGoTo(newPlace);
+    }
+
+    private String confirmGoTo(Place newPlace) {
+        PlaceChangeRequestEvent willChange = new PlaceChangeRequestEvent(newPlace);
+        eventBus.fireEvent(willChange);
+        String warning = willChange.getWarning();
+        return warning;
+    }
+
+    private void maybeGoTo(final Place newPlace) {
         log.debug("requested to go to: " + newPlace);
 
         AsyncCallback<AppPlace> callback = new DefaultAsyncCallback<AppPlace>() {
@@ -88,34 +108,26 @@ public final class AppPlaceContorller extends PlaceController {
                     where = result;
                 }
 
-                String warning = maybeGoTo(result);
+                String warning = confirmGoTo(result);
                 if (warning != null) {
                     dispatcher.confirm(warning, new Command() {
 
                         @Override
                         public void execute() {
-                            goToPrivate(newPlace);
+                            sureGoTo(newPlace);
                         }
                     });
                 } else {
-                    goToPrivate(newPlace);
+                    sureGoTo(newPlace);
                 }
             }
 
         };
 
         dispatcher.forwardTo((AppPlace) newPlace, callback);
-
     }
 
-    private String maybeGoTo(Place newPlace) {
-        PlaceChangeRequestEvent willChange = new PlaceChangeRequestEvent(newPlace);
-        eventBus.fireEvent(willChange);
-        String warning = willChange.getWarning();
-        return warning;
-    }
-
-    private void goToPrivate(Place newPlace) {
+    private void sureGoTo(Place newPlace) {
         if (where.equals(newPlace)) {
             forwardedFrom = AppPlace.NOWHERE;
             log.debug("go to: " + where);

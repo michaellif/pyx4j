@@ -20,8 +20,9 @@
  */
 package com.pyx4j.tester.client.view;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.site.rpc.AppPlace;
 
 public interface NavigView extends IsWidget {
 
@@ -29,7 +30,7 @@ public interface NavigView extends IsWidget {
 
     public interface NavigPresenter {
 
-        public void navigTo(Place place);
+        public void navigTo(AppPlace place);
 
     }
 
