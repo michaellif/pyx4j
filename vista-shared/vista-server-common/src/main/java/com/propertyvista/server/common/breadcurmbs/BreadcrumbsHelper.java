@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
@@ -33,19 +34,19 @@ public class BreadcrumbsHelper {
 
             @Override
             public boolean apply(IEntity entity) {
-                IEntity castedEntity = entity.cast();
-                if (castedEntity.isValueDetached()) {
-                    Persistence.service().retrieve(castedEntity);
+                IEntity breadcrumb = entity.cast().detach();
+                if (breadcrumb.isValueDetached()) {
+                    Persistence.service().retrieve(breadcrumb);
                 }
                 if (!isTarget) {
-                    trail.addFirst(castedEntity);
+                    breadcrumb.setAttachLevel(AttachLevel.ToStringMembers);
+                    trail.addFirst(breadcrumb);
                 } else {
                     isTarget = false;
                 }
                 return true;
             }
         });
-        // TODO detach here
         return trail;
     }
 

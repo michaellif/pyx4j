@@ -13,13 +13,10 @@
  */
 package com.propertyvista.crm.server.services.pub;
 
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.crm.rpc.services.pub.BreadcrumbsService;
@@ -29,15 +26,6 @@ public class BreadcrumbsServiceImpl implements BreadcrumbsService {
 
     @Override
     public void breadcrumbtrail(AsyncCallback<Vector<IEntity>> callback, IEntity entity) {
-        List<IEntity> temp = new BreadcrumbsHelper().breadcrumbTrail(entity);
-        Vector<IEntity> result = new Vector<IEntity>();
-
-        // TODO this is workaround!!! must be done in helper i think
-        for (IEntity e : temp) {
-            IEntity x = Persistence.service().retrieve(e.getInstanceValueClass(), e.getPrimaryKey());
-            x.setAttachLevel(AttachLevel.ToStringMembers);
-            result.add(x);
-        }
-        callback.onSuccess(result);
+        callback.onSuccess(new Vector<IEntity>(new BreadcrumbsHelper().breadcrumbTrail(entity)));
     }
 }

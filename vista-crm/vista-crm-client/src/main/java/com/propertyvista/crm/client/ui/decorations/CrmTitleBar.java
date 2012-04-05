@@ -122,7 +122,8 @@ public class CrmTitleBar extends HorizontalPanel {
         private final AnchorButton anchor;
 
         public BreadcrumbAnchor(final IEntity breadcrumb) {
-            anchor = new AnchorButton(breadcrumb.getStringView(), new ClickHandler() {
+            String label = !breadcrumb.getStringView().isEmpty() ? breadcrumb.getStringView() : breadcrumb.getEntityMeta().getCaption();
+            anchor = new AnchorButton(label, new ClickHandler() {
 
                 @Override
                 public void onClick(ClickEvent event) {
