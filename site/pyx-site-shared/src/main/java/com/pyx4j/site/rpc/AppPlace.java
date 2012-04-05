@@ -45,10 +45,13 @@ public class AppPlace extends Place {
 
     private static final Logger log = LoggerFactory.getLogger(AppPlace.class);
 
+    public static final String ARG_NAME_ID = "Id";
+
+    private String name;
+
     private Map<String, List<String>> args;
 
     private boolean stable = true;
-
     @I18n(strategy = I18nStrategy.IgnoreAll)
     public static class NoWhereAppPlace extends AppPlace {
     }
@@ -185,6 +188,14 @@ public class AppPlace extends Place {
     @Override
     public String toString() {
         return this.getClass().getName() + createQueryString();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**

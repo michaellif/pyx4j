@@ -29,8 +29,6 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public static final String ARG_NAME_CRUD_TYPE = "crud";
 
-    public static final String ARG_NAME_ID = "Id";
-
     public static final String ARG_VALUE_NEW = "new";
 
     public static final String ARG_NAME_PARENT_ID = "parentId";
@@ -42,8 +40,6 @@ public abstract class CrudAppPlace extends AppPlace {
     public static enum Type {
         editor, viewer, lister, dashboard, report
     }
-
-    private String name;
 
     public CrudAppPlace() {
         setType(Type.lister);
@@ -59,14 +55,6 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public Type getType() {
         return Type.valueOf(getFirstArg(ARG_NAME_CRUD_TYPE));
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public CrudAppPlace formViewerPlace(Key itemID) {
