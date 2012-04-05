@@ -49,9 +49,12 @@ public class AppPlace extends Place {
 
     private String name;
 
-    private Map<String, List<String>> args;
+    private Map<String, List<String>> queryArgs;
+
+    private Map<String, List<String>> placeArgs;
 
     private boolean stable = true;
+
     @I18n(strategy = I18nStrategy.IgnoreAll)
     public static class NoWhereAppPlace extends AppPlace {
     }
@@ -61,42 +64,64 @@ public class AppPlace extends Place {
     public AppPlace() {
     }
 
-    public AppPlace arg(String key, String... value) {
-        if (args == null) {
-            args = new HashMap<String, List<String>>();
+    public AppPlace queryArg(String key, String... value) {
+        if (queryArgs == null) {
+            queryArgs = new HashMap<String, List<String>>();
         }
         List<String> valuesLists = new ArrayList<String>();
         valuesLists.addAll(Arrays.asList(value));
-        args.put(key, valuesLists);
+        queryArgs.put(key, valuesLists);
+        return this;
+    }
+
+    public AppPlace placeArg(String key, String... value) {
+        if (placeArgs == null) {
+            placeArgs = new HashMap<String, List<String>>();
+        }
+        List<String> valuesLists = new ArrayList<String>();
+        valuesLists.addAll(Arrays.asList(value));
+        placeArgs.put(key, valuesLists);
         return this;
     }
 
     public void parseArgs(String queryString) {
-        if (args == null) {
-            args = new HashMap<String, List<String>>();
+        if (queryArgs == null) {
+            queryArgs = new HashMap<String, List<String>>();
         }
-        args.putAll(parseQueryString(queryString));
+        queryArgs.putAll(parseQueryString(queryString));
     }
 
     public Map<String, List<String>> getArgs() {
-        if (args != null) {
-            return Collections.unmodifiableMap(args);
-        } else {
-            return null;
+        Map<String, List<String>> args = new HashMap<String, List<String>>();
+        if (queryArgs != null) {
+            args.putAll(queryArgs);
         }
+        if (placeArgs != null) {
+            args.putAll(placeArgs);
+        }
+        return args.size() == 0 ? null : Collections.unmodifiableMap(args);
     }
 
     public List<String> getArg(String key) {
-        if (args != null) {
-            return args.get(key);
-        } else {
-            return null;
+        List<String> arg = new ArrayList<String>();
+        if (queryArgs != null) {
+            arg.addAll(queryArgs.get(key));
         }
+        if (placeArgs != null) {
+            arg.addAll(placeArgs.get(key));
+        }
+        return arg.size() == 0 ? null : Collections.unmodifiableList(arg);
     }
 
     public String getFirstArg(String key) {
-        if (args != null) {
-            List<String> values = args.get(key);
+        if (queryArgs != null) {
+            List<String> values = queryArgs.get(key);
+            if (values != null && values.size() > 0) {
+                return values.get(0);
+            }
+        }
+        if (placeArgs != null) {
+            List<String> values = placeArgs.get(key);
             if (values != null && values.size() > 0) {
                 return values.get(0);
             }
@@ -115,9 +140,9 @@ public class AppPlace extends Place {
     @Override
     public boolean equals(Object other) {
         if (getClass() == other.getClass()) {
-            if (args == null && ((AppPlace) other).args == null) {
+            if (queryArgs == null && ((AppPlace) other).queryArgs == null) {
                 return true;
-            } else if (args != null && args.equals(((AppPlace) other).args)) {
+            } else if (queryArgs != null && queryArgs.equals(((AppPlace) other).queryArgs)) {
                 return true;
             }
         }
@@ -127,19 +152,19 @@ public class AppPlace extends Place {
     @Override
     public int hashCode() {
         int hash = getClass().hashCode();
-        if (args != null) {
-            hash = hash * 31 + args.hashCode();
+        if (queryArgs != null) {
+            hash = hash * 31 + queryArgs.hashCode();
         }
         return hash;
     }
 
     protected String createQueryString() {
-        if (args == null) {
+        if (queryArgs == null) {
             return "";
         }
         StringBuilder queryString = new StringBuilder();
         boolean first = true;
-        for (Map.Entry<String, List<String>> me : args.entrySet()) {
+        for (Map.Entry<String, List<String>> me : queryArgs.entrySet()) {
             if (first) {
                 queryString.append(ARGS_GROUP_SEPARATOR);
                 first = false;
@@ -160,7 +185,7 @@ public class AppPlace extends Place {
         return queryString.toString();
     }
 
-    protected static Map<String, List<String>> parseQueryString(String queryString) {
+    private Map<String, List<String>> parseQueryString(String queryString) {
         if (queryString.startsWith(ARGS_GROUP_SEPARATOR)) {
             queryString = queryString.substring(1);
         }
