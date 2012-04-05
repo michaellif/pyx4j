@@ -49,7 +49,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
     }
 
     @Override
-    public void navigTo(Place place) {
+    public void navigTo(AppPlace place) {
         AppSite.getPlaceController().goTo(place);
     }
 
@@ -59,7 +59,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
     }
 
     @Override
-    public Place getWhere() {
+    public AppPlace getWhere() {
         return AppSite.getPlaceController().getWhere();
     }
 

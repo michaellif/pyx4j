@@ -60,12 +60,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
     }
 
     @Override
-    public void navigTo(Place place) {
+    public void navigTo(AppPlace place) {
         AppSite.getPlaceController().goTo(place);
     }
 
     @Override
-    public Place getWhere() {
+    public AppPlace getWhere() {
         return AppSite.getPlaceController().getWhere();
     }
 

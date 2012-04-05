@@ -31,7 +31,7 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
     private final SecondNavigView view;
 
     public SecondNavigActivity(Place place) {
-        view = (SecondNavigView) PtAppViewFactory.instance(SecondNavigView.class);
+        view = PtAppViewFactory.instance(SecondNavigView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -47,7 +47,7 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
     }
 
     @Override
-    public void navigTo(Place place) {
+    public void navigTo(AppPlace place) {
         AppSite.getPlaceController().goTo(place);
     }
 
@@ -73,7 +73,7 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
 
     @Override
     public AppPlace getWhere() {
-        return (AppPlace) AppSite.getPlaceController().getWhere();
+        return AppSite.getPlaceController().getWhere();
     }
 
 }

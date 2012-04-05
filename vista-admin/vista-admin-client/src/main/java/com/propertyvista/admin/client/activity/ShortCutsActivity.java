@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
@@ -32,14 +31,14 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
 
     private final ShortCutsView view;
 
-    public ShortCutsActivity(Place place) {
-        view = (ShortCutsView) AdminVeiwFactory.instance(ShortCutsView.class);
+    public ShortCutsActivity(AppPlace place) {
+        view = AdminVeiwFactory.instance(ShortCutsView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }
 
-    public ShortCutsActivity withPlace(Place place) {
+    public ShortCutsActivity withPlace(AppPlace place) {
         return this;
     }
 
@@ -50,7 +49,7 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
     }
 
     @Override
-    public void navigTo(Place place) {
+    public void navigTo(AppPlace place) {
         AppSite.getPlaceController().goTo(place);
 
     }
@@ -73,7 +72,7 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
     }
 
     @Override
-    public Place getWhere() {
+    public AppPlace getWhere() {
         return AppSite.getPlaceController().getWhere();
     }
 

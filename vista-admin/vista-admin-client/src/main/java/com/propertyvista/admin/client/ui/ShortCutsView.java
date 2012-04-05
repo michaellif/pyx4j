@@ -15,7 +15,6 @@ package com.propertyvista.admin.client.ui;
 
 import java.util.List;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
@@ -26,13 +25,13 @@ public interface ShortCutsView extends IsWidget {
     public void setPresenter(ShortCutsPresenter presenter);
 
     public interface ShortCutsPresenter {
-        public void navigTo(Place place);
+        public void navigTo(AppPlace place);
 
         public String getNavigLabel(AppPlace place);
 
         public List<NavigFolder> getNavigFolders();
 
-        public Place getWhere();
+        public AppPlace getWhere();
 
     }
 

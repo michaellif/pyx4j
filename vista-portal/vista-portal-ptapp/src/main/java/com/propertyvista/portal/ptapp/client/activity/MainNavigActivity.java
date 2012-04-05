@@ -33,7 +33,7 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     private final MainNavigView view;
 
     public MainNavigActivity(Place place) {
-        view = (MainNavigView) PtAppViewFactory.instance(MainNavigView.class);
+        view = PtAppViewFactory.instance(MainNavigView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -49,7 +49,7 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     }
 
     @Override
-    public void navigTo(Place place) {
+    public void navigTo(AppPlace place) {
         AppSite.getPlaceController().goTo(place);
     }
 
@@ -64,7 +64,7 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     }
 
     @Override
-    public Place getWhere() {
+    public AppPlace getWhere() {
         return AppSite.getPlaceController().getWhere();
     }
 

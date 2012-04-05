@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
@@ -25,7 +24,7 @@ public interface SecondNavigView extends IsWidget {
     public void setPresenter(SecondNavigPresenter presenter);
 
     public interface SecondNavigPresenter {
-        public void navigTo(Place place);
+        public void navigTo(AppPlace place);
 
         public String getNavigLabel(AppPlace place);
 
