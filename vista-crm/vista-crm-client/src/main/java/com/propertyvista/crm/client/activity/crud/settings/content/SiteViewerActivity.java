@@ -44,6 +44,6 @@ public class SiteViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> imp
     public void editNew(Key parentid) {
         AppSite.getPlaceController().goTo(
                 AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class).formNewItemPlace(parentid)
-                        .arg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.site.name()));
+                        .queryArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.site.name()));
     }
 }

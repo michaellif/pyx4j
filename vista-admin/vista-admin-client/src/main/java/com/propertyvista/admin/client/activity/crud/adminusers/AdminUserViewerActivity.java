@@ -37,9 +37,9 @@ public class AdminUserViewerActivity extends ViewerActivityBase<AdminUserDTO> im
     @Override
     public void goToChangePassword(Key userId, String userName) {
         AppPlace passwordChangePlace = new AdminSiteMap.PasswordChange();
-        passwordChangePlace.arg(PasswordChangeView.Presenter.PRINCIPAL_PK_ARG, userId.toString());
-        passwordChangePlace.arg(PasswordChangeView.Presenter.PRINCIPAL_NAME_ARG, userName);
-        passwordChangePlace.arg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.ADMIN.toString());
+        passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_PK_ARG, userId.toString());
+        passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_NAME_ARG, userName);
+        passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.ADMIN.toString());
         AppSite.getPlaceController().goTo(passwordChangePlace);
     }
 

@@ -37,9 +37,9 @@ public class OnBoardingUserViewerActivity extends ViewerActivityBase<OnboardingU
     @Override
     public void goToChangePassword(Key userId, String userName) {
         AppPlace passwordChangePlace = new AdminSiteMap.PasswordChange();
-        passwordChangePlace.arg(PasswordChangeView.Presenter.PRINCIPAL_PK_ARG, userId.toString());
-        passwordChangePlace.arg(PasswordChangeView.Presenter.PRINCIPAL_NAME_ARG, userName);
-        passwordChangePlace.arg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.ONBOARDING_PMC.toString());
+        passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_PK_ARG, userId.toString());
+        passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_NAME_ARG, userName);
+        passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.ONBOARDING_PMC.toString());
         AppSite.getPlaceController().goTo(passwordChangePlace);
     }
 

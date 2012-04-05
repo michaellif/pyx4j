@@ -164,7 +164,7 @@ public class PtAppWizardManager {
                 if (step.substeps().size() > 0) {
                     loopOversubsteps: for (ApplicationWizardSubstep substep : step.substeps()) {
                         if (shouldSelect(substep.status())) {
-                            place.arg(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
+                            place.queryArg(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
                             break loopOversubsteps;
                         }
                     }

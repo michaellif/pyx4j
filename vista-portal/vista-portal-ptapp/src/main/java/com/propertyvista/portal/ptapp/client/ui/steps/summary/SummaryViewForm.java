@@ -204,7 +204,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             public void onClick(ClickEvent event) {
                 if (link.getClass().equals(PtSiteMap.Info.class) || link.getClass().equals(PtSiteMap.Financial.class)) {
                     if (!getValue().tenantList().tenants().isEmpty()) {
-                        link.arg(PtSiteMap.STEP_ARG_NAME, getValue().tenantList().tenants().get(0).getPrimaryKey().toString());
+                        link.queryArg(PtSiteMap.STEP_ARG_NAME, getValue().tenantList().tenants().get(0).getPrimaryKey().toString());
                     }
                 }
 
