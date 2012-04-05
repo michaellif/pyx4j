@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
@@ -221,6 +222,15 @@ public class AppPlace extends Place {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public AppPlace formPlace(Key itemID) {
+        return queryArg(ARG_NAME_ID, itemID.toString());
+    }
+
+    public AppPlace formPlace(Key itemID, String name) {
+        setName(name);
+        return formPlace(itemID);
     }
 
     /**

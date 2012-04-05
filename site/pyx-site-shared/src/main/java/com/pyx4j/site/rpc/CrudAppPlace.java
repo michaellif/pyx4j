@@ -38,7 +38,7 @@ public abstract class CrudAppPlace extends AppPlace {
     public static final String ARG_NAME_TAB_IDX = "tabIdx";
 
     public static enum Type {
-        editor, viewer, lister, dashboard, report
+        lister, viewer, editor
     }
 
     public CrudAppPlace() {
@@ -50,7 +50,7 @@ public abstract class CrudAppPlace extends AppPlace {
     }
 
     public void setType(Type type) {
-        queryArg(ARG_NAME_CRUD_TYPE, type.name());
+        placeArg(ARG_NAME_CRUD_TYPE, type.name());
     }
 
     public Type getType() {
@@ -59,61 +59,40 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public CrudAppPlace formViewerPlace(Key itemID) {
         setType(Type.viewer);
-        queryArg(ARG_NAME_ID, itemID.toString());
-        return this;
+        return (CrudAppPlace) formPlace(itemID);
     }
 
     public CrudAppPlace formViewerPlace(Key itemID, int tabIndex) {
-        formViewerPlace(itemID);
         if (tabIndex >= 0) {
-            queryArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
+            placeArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
         }
-        return this;
+        return formViewerPlace(itemID);
     }
 
     public CrudAppPlace formEditorPlace(Key itemID) {
         setType(Type.editor);
-        queryArg(ARG_NAME_ID, itemID.toString());
-        return this;
+        return (CrudAppPlace) formPlace(itemID);
     }
 
     public CrudAppPlace formEditorPlace(Key itemID, int tabIndex) {
-        formEditorPlace(itemID);
         if (tabIndex >= 0) {
-            queryArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
+            placeArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
         }
-        return this;
+        return formEditorPlace(itemID);
     }
 
     public CrudAppPlace formNewItemPlace(Key parentID) {
         setType(Type.editor);
-        queryArg(ARG_NAME_ID, ARG_VALUE_NEW);
         if (parentID != null) {
-            queryArg(ARG_NAME_PARENT_ID, parentID.toString());
+            placeArg(ARG_NAME_PARENT_ID, parentID.toString());
         }
-        return this;
+        return (CrudAppPlace) placeArg(ARG_NAME_ID, ARG_VALUE_NEW);
     }
 
     public CrudAppPlace formNewItemPlace(Key parentID, Class<?> parentClass) {
-        setType(Type.editor);
-        queryArg(ARG_NAME_ID, ARG_VALUE_NEW);
-        if (parentID != null) {
-            queryArg(ARG_NAME_PARENT_ID, parentID.toString());
-            queryArg(ARG_NAME_PARENT_CLASS, parentClass.getName());
+        if (parentClass != null) {
+            placeArg(ARG_NAME_PARENT_CLASS, parentClass.getName());
         }
-        return this;
-    }
-
-    public CrudAppPlace formDashboardPlace(Key itemID) {
-        setType(Type.dashboard);
-        queryArg(ARG_NAME_ID, itemID.toString());
-        return this;
-    }
-
-    public CrudAppPlace formDashboardPlace(Key itemID, String name) {
-        setType(Type.dashboard);
-        queryArg(ARG_NAME_ID, itemID.toString());
-        setName(name);
-        return this;
+        return formNewItemPlace(parentID);
     }
 }
