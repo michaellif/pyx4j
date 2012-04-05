@@ -254,6 +254,11 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Portfolios")
         public static class Portfolio extends CRMCrudAppPlace {
         }
+
+        @PlaceProperties(caption = "Vendor")
+        @NavigationItem(navigLabel = "Vendors")
+        public static class Vendor extends CRMCrudAppPlace {
+        }
     }
 
     @PlaceProperties(caption = "Report")

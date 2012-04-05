@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,6 +28,12 @@ import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioList
 import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioViewerView;
 import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.organisation.vendor.VendorEditorView;
+import com.propertyvista.crm.client.ui.crud.organisation.vendor.VendorEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.organisation.vendor.VendorListerView;
+import com.propertyvista.crm.client.ui.crud.organisation.vendor.VendorListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.organisation.vendor.VendorViewerView;
+import com.propertyvista.crm.client.ui.crud.organisation.vendor.VendorViewerViewImpl;
 
 public class OrganizationViewFactory extends ViewFactoryBase {
 
@@ -45,6 +51,12 @@ public class OrganizationViewFactory extends ViewFactoryBase {
                 map.put(type, new PortfolioViewerViewImpl());
             } else if (PortfolioEditorView.class.equals(type)) {
                 map.put(type, new PortfolioEditorViewImpl());
+            } else if (VendorListerView.class.equals(type)) {
+                map.put(type, new VendorListerViewImpl());
+            } else if (VendorViewerView.class.equals(type)) {
+                map.put(type, new VendorViewerViewImpl());
+            } else if (VendorEditorView.class.equals(type)) {
+                map.put(type, new VendorEditorViewImpl());
             }
         }
         @SuppressWarnings("unchecked")
