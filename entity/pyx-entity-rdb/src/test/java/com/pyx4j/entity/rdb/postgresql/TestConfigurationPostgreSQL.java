@@ -21,6 +21,9 @@
 package com.pyx4j.entity.rdb.postgresql;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.dialect.NamingConvention;
+import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
+import com.pyx4j.entity.rdb.dialect.ShortWords;
 
 public class TestConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.ConfigurationPostgreSQL {
 
@@ -80,5 +83,13 @@ public class TestConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Config
         } else {
             return super.unreturnedConnectionTimeout();
         }
+    }
+
+    @Override
+    public NamingConvention namingConvention() {
+        ShortWords shortWords = new ShortWords();
+        shortWords.add("TEST", "T");
+        shortWords.add("PARENT", "PA");
+        return new NamingConventionOracle(63, shortWords);
     }
 }
