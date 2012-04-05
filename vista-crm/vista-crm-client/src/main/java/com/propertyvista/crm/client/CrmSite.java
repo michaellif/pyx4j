@@ -125,6 +125,6 @@ public class CrmSite extends VistaSite {
     }
 
     static public AppPlace getSystemDashboardPlace() {
-        return new CrmSiteMap.Dashboard().formDashboardPlace(new Key(-1));
+        return new CrmSiteMap.Dashboard().formPlace(new Key(-1));
     }
 }

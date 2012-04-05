@@ -271,7 +271,7 @@ public class CrmSiteMap implements SiteMap {
     }
 
     @PlaceProperties(caption = "Dashboard")
-    public static class Dashboard extends CRMCrudAppPlace {
+    public static class Dashboard extends AppPlace {
 
         @PlaceProperties(caption = "Dashboards")
         @NavigationItem(navigLabel = "Manage Dashboards")

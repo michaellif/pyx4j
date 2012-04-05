@@ -136,7 +136,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
             @Override
             public void onSuccess(Vector<DashboardMetadata> result) {
                 for (DashboardMetadata dmd : result) {
-                    folder.addNavigItem(new CrmSiteMap.Report().formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView()));
+                    folder.addNavigItem(new CrmSiteMap.Report().formPlace(dmd.getPrimaryKey(), dmd.name().getStringView()));
                 }
                 // update UI:
                 view.setNavigFolders(currentfolders);
@@ -160,7 +160,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
                 Collections.sort(result, ORDER_BY_NAME);
                 int j = result.size();
                 for (int i = 0; i < j; i++) {
-                    folder.addNavigItem(new CrmSiteMap.Dashboard().formDashboardPlace(result.get(i).getPrimaryKey(), result.get(i).name().getStringView()));
+                    folder.addNavigItem(new CrmSiteMap.Dashboard().formPlace(result.get(i).getPrimaryKey(), result.get(i).name().getStringView()));
                 }
                 // update UI:
                 view.setNavigFolders(currentfolders);
