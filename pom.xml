@@ -159,6 +159,7 @@
     </repositories>
 
     <modules>
+        <module>vista-biz</module>
         <module>vista-portal</module>
         <module>vista-shared</module>
         <module>vista-admin</module>
