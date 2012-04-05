@@ -41,14 +41,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.widgets.client.dialog.Dialog;
 
 /**
  * Block access to GUI elements while service is running.
  */
 public class GlassPanel extends AbsolutePanel implements ResizeHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(Dialog.class);
+    private static final Logger log = LoggerFactory.getLogger(GlassPanel.class);
 
     private static GlassPanel instance;
 
