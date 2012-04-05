@@ -24,6 +24,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -58,6 +59,8 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 public class TableModel {
@@ -67,6 +70,8 @@ public class TableModel {
     public static final int ENUM_STRING_LENGHT_MAX = 50;
 
     private static final Logger log = LoggerFactory.getLogger(TableModel.class);
+
+    private static final I18n i18n = I18n.get(TableModel.class);
 
     final String tableName;
 
@@ -933,6 +938,10 @@ public class TableModel {
             persistenceContext.setUncommittedChanges();
             int rc = stmt.executeUpdate();
             return rc >= 1;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            log.error("{} SQL: {}", tableName, sql);
+            log.error("{} SQL delete error", tableName, e);
+            throw new UserRuntimeException(i18n.tr("Unable to delete \"{0}\". The record is referenced by another record.", entityMeta().getCaption()));
         } catch (SQLException e) {
             log.error("{} SQL: {}", tableName, sql);
             log.error("{} SQL delete error", tableName, e);
