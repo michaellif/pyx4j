@@ -39,7 +39,7 @@ public class ConcessionLister extends ListerBase<Concession> {
 
     @Override
     protected EntityListCriteria<Concession> updateCriteria(EntityListCriteria<Concession> criteria) {
-        criteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
         return super.updateCriteria(criteria);
     }
 }

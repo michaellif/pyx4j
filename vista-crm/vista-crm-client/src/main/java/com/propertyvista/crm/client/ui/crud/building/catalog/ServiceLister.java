@@ -36,7 +36,7 @@ public class ServiceLister extends ListerBase<Service> {
 
     @Override
     protected EntityListCriteria<Service> updateCriteria(EntityListCriteria<Service> criteria) {
-        criteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
         return super.updateCriteria(criteria);
     }
 }

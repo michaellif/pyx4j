@@ -48,7 +48,7 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
     @Override
     protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
-        criteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
         return super.updateCriteria(criteria);
     }
 }

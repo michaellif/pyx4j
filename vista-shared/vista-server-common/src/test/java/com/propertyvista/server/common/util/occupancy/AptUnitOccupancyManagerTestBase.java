@@ -75,7 +75,7 @@ public class AptUnitOccupancyManagerTestBase {
         Persistence.service().delete(new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class));
         {
             EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
-            leaseCriteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+            leaseCriteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
             Persistence.service().delete(leaseCriteria);
         }
         Persistence.service().delete(new EntityQueryCriteria<AptUnit>(AptUnit.class));

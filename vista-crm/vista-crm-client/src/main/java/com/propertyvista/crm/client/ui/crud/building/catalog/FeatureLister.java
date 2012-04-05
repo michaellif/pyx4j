@@ -38,7 +38,7 @@ public class FeatureLister extends ListerBase<Feature> {
 
     @Override
     protected EntityListCriteria<Feature> updateCriteria(EntityListCriteria<Feature> criteria) {
-        criteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
         return super.updateCriteria(criteria);
     }
 }

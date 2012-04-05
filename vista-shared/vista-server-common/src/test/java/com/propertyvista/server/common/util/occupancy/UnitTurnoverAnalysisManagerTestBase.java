@@ -72,7 +72,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
         Persistence.service().delete(EntityQueryCriteria.create(UnitAvailabilityStatus.class));
         {
             EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
-            leaseCriteria.setVersionedCriteria(VersionedCriteria.finalizedOrDraft);
+            leaseCriteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
             Persistence.service().delete(leaseCriteria);
         }
         Persistence.service().delete(EntityQueryCriteria.create(AptUnit.class));

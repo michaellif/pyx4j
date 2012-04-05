@@ -70,7 +70,6 @@ public class AdminSiteMap implements SiteMap {
         public static class Maintenance extends CrudAppPlace {
             // set default place type as Viewer one (we have no lister for this item!)
             public Maintenance() {
-                super(Type.viewer);
                 formViewerPlace(new Key(-1));
             }
         }
