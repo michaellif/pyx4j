@@ -112,4 +112,13 @@ public class PostgreSQLDialect extends Dialect {
     public boolean limitCriteriaIsRelative() {
         return true;
     }
+
+    @Override
+    public String sqlSortNulls(boolean descending) {
+        if (descending) {
+            return " NULLS LAST";
+        } else {
+            return " NULLS FIRST";
+        }
+    }
 }
