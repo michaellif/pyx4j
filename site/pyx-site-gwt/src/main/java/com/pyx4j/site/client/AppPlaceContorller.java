@@ -101,18 +101,18 @@ public final class AppPlaceContorller extends PlaceController {
         AsyncCallback<AppPlace> callback = new DefaultAsyncCallback<AppPlace>() {
 
             @Override
-            public void onSuccess(AppPlace result) {
+            public void onSuccess(final AppPlace result) {
                 String warning = confirmGoTo(result);
                 if (warning != null) {
                     dispatcher.confirm(warning, new Command() {
 
                         @Override
                         public void execute() {
-                            sureGoTo(newPlace);
+                            sureGoTo(result);
                         }
                     });
                 } else {
-                    sureGoTo(newPlace);
+                    sureGoTo(result);
                 }
             }
 
