@@ -311,6 +311,8 @@
                                     <arguments>
                                         <argument>--username</argument>
                                         <argument>tst_entity</argument>
+                                        <argument>-h</argument>
+                                        <argument>localhost</argument>
                                         <argument>-f</argument>
                                         <argument>${basedir}${file.separator}scripts${file.separator}postgre${file.separator}postgre-reset.sql</argument>
                                     </arguments>
@@ -377,6 +379,8 @@
                                     <arguments>
                                         <argument>--username</argument>
                                         <argument>tst_entity</argument>
+                                        <argument>-h</argument>
+                                        <argument>localhost</argument>
                                         <argument>-f</argument>
                                         <argument>${basedir}${file.separator}scripts${file.separator}postgre${file.separator}postgre-reset.sql</argument>
                                     </arguments>
