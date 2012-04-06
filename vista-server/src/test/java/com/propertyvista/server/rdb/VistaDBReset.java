@@ -31,6 +31,8 @@ import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
+import com.propertyvista.server.config.VistaServerSideConfigurationDev;
+import com.propertyvista.server.config.VistaServerSideConfigurationDevPostgreSQL;
 import com.propertyvista.server.domain.admin.Pmc;
 
 public class VistaDBReset {
@@ -39,7 +41,14 @@ public class VistaDBReset {
 
     public static void main(String[] args) {
         long totalStart = System.currentTimeMillis();
-        VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
+        VistaServerSideConfiguration conf;
+        if (args[0].equals("--postgre")) {
+            log.info("Use PostgreSQL");
+            conf = new VistaServerSideConfigurationDevPostgreSQL();
+        } else {
+            log.info("Use MySQL");
+            conf = new VistaServerSideConfigurationDev();
+        }
         ServerSideConfiguration.setInstance(conf);
         Persistence.service().startBackgroundProcessTransaction();
         try {

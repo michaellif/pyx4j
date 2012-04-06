@@ -219,6 +219,9 @@ public class DBResetServlet extends HttpServlet {
                             buf.append("\nTotal time: " + TimeUtils.secSince(start));
                             log.info("DB reset {} {}", type, TimeUtils.secSince(start));
                             buf.insert(0, "Processing total time: " + TimeUtils.secSince(start) + "\n");
+                        } catch (Throwable t) {
+                            log.error("", t);
+                            throw new Error(t);
                         } finally {
                             Lifecycle.endElevatedUserContext();
                             Persistence.service().endTransaction();

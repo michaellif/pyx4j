@@ -13,6 +13,9 @@
  */
 package com.propertyvista.server.config;
 
+import com.pyx4j.entity.rdb.dialect.NamingConvention;
+import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
+
 public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.ConfigurationPostgreSQL {
 
     @Override
@@ -48,5 +51,10 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
     @Override
     public boolean isMultitenant() {
         return true;
+    }
+
+    @Override
+    public NamingConvention namingConvention() {
+        return new NamingConventionOracle(63, null, false, false);
     }
 }
