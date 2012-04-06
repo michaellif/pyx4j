@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 
@@ -29,8 +29,8 @@ public interface ApplicationService extends IService {
     /**
      * Find existing application for user.
      */
-    public void getApplication(AsyncCallback<Application> callback);
+    public void getApplication(AsyncCallback<OnlineApplication> callback);
 
-    public void getApplicationProgress(AsyncCallback<Application> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep substep);
+    public void getApplicationProgress(AsyncCallback<OnlineApplication> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep substep);
 
 }

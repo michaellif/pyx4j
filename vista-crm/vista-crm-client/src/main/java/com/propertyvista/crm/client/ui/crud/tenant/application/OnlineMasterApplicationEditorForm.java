@@ -39,29 +39,29 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.OnlineMasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 
-public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplicationDTO> {
+public class OnlineMasterApplicationEditorForm extends CrmEntityForm<OnlineMasterApplicationDTO> {
 
-    private static final I18n i18n = I18n.get(MasterApplicationEditorForm.class);
+    private static final I18n i18n = I18n.get(OnlineMasterApplicationEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
-    public MasterApplicationEditorForm() {
+    public OnlineMasterApplicationEditorForm() {
         this(false);
     }
 
-    public MasterApplicationEditorForm(boolean viewMode) {
-        super(MasterApplicationDTO.class, viewMode);
+    public OnlineMasterApplicationEditorForm(boolean viewMode) {
+        super(OnlineMasterApplicationDTO.class, viewMode);
     }
 
     @Override
     public IsWidget createContent() {
 
         tabPanel.add(createGeneralTab(), i18n.tr("Details"));
-        tabPanel.add(isEditable() ? new HTML() : ((MasterApplicationViewerView) getParentView()).getTenantsView().asWidget(), i18n.tr("Tenants"));
+        tabPanel.add(isEditable() ? new HTML() : ((OnlineMasterApplicationViewerView) getParentView()).getTenantsView().asWidget(), i18n.tr("Tenants"));
         tabPanel.setLastTabDisabled(isEditable());
         tabPanel.add(createInfoTab(), i18n.tr("Information"));
         tabPanel.add(createFinancialTab(), i18n.tr("Financial"));

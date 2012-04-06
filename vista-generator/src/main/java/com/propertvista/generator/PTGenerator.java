@@ -68,7 +68,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.EquifaxApproval.Decision;
 import com.propertyvista.misc.EquifaxResult;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -215,7 +215,7 @@ public class PTGenerator {
         return selfEmpl;
     }
 
-    public ApplicationDocumentFile createDocumentPage(Application application, String fileName) {
+    public ApplicationDocumentFile createDocumentPage(OnlineApplication application, String fileName) {
         if (IOUtils.getResource("pt-docs/" + fileName, PTGenerator.class) == null) {
             throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
         }
@@ -421,7 +421,7 @@ public class PTGenerator {
         return tenantSummary;
     }
 
-    private PersonScreening createScreening(PersonScreeningHolder screene, Application application, TenantSummaryGDO tenantSummary) {
+    private PersonScreening createScreening(PersonScreeningHolder screene, OnlineApplication application, TenantSummaryGDO tenantSummary) {
         PersonScreening screening = EntityFactory.create(PersonScreening.class);
         screening.screene().set(screene);
 
@@ -460,7 +460,7 @@ public class PTGenerator {
         return screening;
     }
 
-    private void createFinancialInfo(PersonScreening screening, Application application, TenantSummaryGDO tenantSummary) {
+    private void createFinancialInfo(PersonScreening screening, OnlineApplication application, TenantSummaryGDO tenantSummary) {
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             PersonalIncome income = EntityFactory.create(PersonalIncome.class);

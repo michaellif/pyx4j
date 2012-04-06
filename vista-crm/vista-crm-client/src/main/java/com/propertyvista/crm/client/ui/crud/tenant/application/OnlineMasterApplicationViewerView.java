@@ -20,24 +20,24 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
-import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.crm.rpc.dto.OnlineMasterApplicationActionDTO;
+import com.propertyvista.dto.OnlineApplicationDTO;
 import com.propertyvista.dto.ApplicationUserDTO;
-import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.OnlineMasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
-public interface MasterApplicationViewerView extends IViewerView<MasterApplicationDTO> {
+public interface OnlineMasterApplicationViewerView extends IViewerView<OnlineMasterApplicationDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
-        void action(MasterApplicationActionDTO action);
+        void action(OnlineMasterApplicationActionDTO action);
 
         void retrieveUsers(AsyncCallback<List<ApplicationUserDTO>> callback);
 
         void inviteUsers(List<ApplicationUserDTO> users);
     }
 
-    IListerView<ApplicationDTO> getApplicationsView();
+    IListerView<OnlineApplicationDTO> getApplicationsView();
 
     IListerView<TenantInLeaseDTO> getTenantsView();
 }

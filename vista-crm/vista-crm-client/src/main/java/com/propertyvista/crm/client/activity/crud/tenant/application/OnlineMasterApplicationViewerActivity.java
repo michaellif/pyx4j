@@ -28,37 +28,37 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
+import com.propertyvista.crm.rpc.dto.OnlineMasterApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.tenant.TenantInLeaseCrudService;
-import com.propertyvista.crm.rpc.services.tenant.application.ApplicationCrudService;
-import com.propertyvista.crm.rpc.services.tenant.application.MasterApplicationCrudService;
-import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.crm.rpc.services.tenant.application.OnlineApplicationCrudService;
+import com.propertyvista.crm.rpc.services.tenant.application.OnlineMasterApplicationCrudService;
+import com.propertyvista.dto.OnlineApplicationDTO;
 import com.propertyvista.dto.ApplicationUserDTO;
-import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.OnlineMasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
-public class MasterApplicationViewerActivity extends CrmViewerActivity<MasterApplicationDTO> implements MasterApplicationViewerView.Presenter {
+public class OnlineMasterApplicationViewerActivity extends CrmViewerActivity<OnlineMasterApplicationDTO> implements OnlineMasterApplicationViewerView.Presenter {
 
-    private final IListerView.Presenter<ApplicationDTO> applicationLister;
+    private final IListerView.Presenter<OnlineApplicationDTO> applicationLister;
 
     private final IListerView.Presenter<TenantInLeaseDTO> tenantLister;
 
     @SuppressWarnings("unchecked")
-    public MasterApplicationViewerActivity(Place place) {
-        super(place, TenantViewFactory.instance(MasterApplicationViewerView.class), (AbstractCrudService<MasterApplicationDTO>) GWT
-                .create(MasterApplicationCrudService.class));
+    public OnlineMasterApplicationViewerActivity(Place place) {
+        super(place, TenantViewFactory.instance(OnlineMasterApplicationViewerView.class), (AbstractCrudService<OnlineMasterApplicationDTO>) GWT
+                .create(OnlineMasterApplicationCrudService.class));
 
-        applicationLister = new ListerActivityBase<ApplicationDTO>(place, ((MasterApplicationViewerView) view).getApplicationsView(),
-                (AbstractCrudService<ApplicationDTO>) GWT.create(ApplicationCrudService.class), ApplicationDTO.class);
+        applicationLister = new ListerActivityBase<OnlineApplicationDTO>(place, ((OnlineMasterApplicationViewerView) view).getApplicationsView(),
+                (AbstractCrudService<OnlineApplicationDTO>) GWT.create(OnlineApplicationCrudService.class), OnlineApplicationDTO.class);
 
-        tenantLister = new ListerActivityBase<TenantInLeaseDTO>(place, ((MasterApplicationViewerView) view).getTenantsView(),
+        tenantLister = new ListerActivityBase<TenantInLeaseDTO>(place, ((OnlineMasterApplicationViewerView) view).getTenantsView(),
                 (AbstractCrudService<TenantInLeaseDTO>) GWT.create(TenantInLeaseCrudService.class), TenantInLeaseDTO.class);
     }
 
     @Override
-    public void onPopulateSuccess(MasterApplicationDTO result) {
+    public void onPopulateSuccess(OnlineMasterApplicationDTO result) {
         super.onPopulateSuccess(result);
 
         applicationLister.setParent(result.getPrimaryKey());
@@ -76,10 +76,10 @@ public class MasterApplicationViewerActivity extends CrmViewerActivity<MasterApp
     }
 
     @Override
-    public void action(MasterApplicationActionDTO action) {
-        ((MasterApplicationCrudService) service).action(new DefaultAsyncCallback<MasterApplicationDTO>() {
+    public void action(OnlineMasterApplicationActionDTO action) {
+        ((OnlineMasterApplicationCrudService) service).action(new DefaultAsyncCallback<OnlineMasterApplicationDTO>() {
             @Override
-            public void onSuccess(MasterApplicationDTO result) {
+            public void onSuccess(OnlineMasterApplicationDTO result) {
                 view.populate(result);
             }
         }, action);
@@ -87,7 +87,7 @@ public class MasterApplicationViewerActivity extends CrmViewerActivity<MasterApp
 
     @Override
     public void retrieveUsers(final AsyncCallback<List<ApplicationUserDTO>> callback) {
-        ((MasterApplicationCrudService) service).retrieveUsers(new DefaultAsyncCallback<Vector<ApplicationUserDTO>>() {
+        ((OnlineMasterApplicationCrudService) service).retrieveUsers(new DefaultAsyncCallback<Vector<ApplicationUserDTO>>() {
             @Override
             public void onSuccess(Vector<ApplicationUserDTO> result) {
                 callback.onSuccess(result);
@@ -98,7 +98,7 @@ public class MasterApplicationViewerActivity extends CrmViewerActivity<MasterApp
     @Override
     public void inviteUsers(List<ApplicationUserDTO> users) {
         Vector<ApplicationUserDTO> vector = new Vector<ApplicationUserDTO>(users);
-        ((MasterApplicationCrudService) service).inviteUsers(new DefaultAsyncCallback<VoidSerializable>() {
+        ((OnlineMasterApplicationCrudService) service).inviteUsers(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();

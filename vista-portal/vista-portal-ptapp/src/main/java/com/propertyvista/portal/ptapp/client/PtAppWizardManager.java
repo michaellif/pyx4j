@@ -31,7 +31,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep.Status;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
@@ -46,7 +46,7 @@ public class PtAppWizardManager {
 
     private final ApplicationService applicationService = GWT.create(ApplicationService.class);
 
-    private Application application;
+    private OnlineApplication application;
 
     PtAppWizardManager() {
     }
@@ -90,9 +90,9 @@ public class PtAppWizardManager {
         AppPlace currentPlace = AppSite.getWhere();
         ApplicationWizardStep currentStep = getStep(currentPlace);
         ApplicationWizardSubstep substep = getSubStep(currentPlace, currentStep);
-        applicationService.getApplicationProgress(new DefaultAsyncCallback<Application>() {
+        applicationService.getApplicationProgress(new DefaultAsyncCallback<OnlineApplication>() {
             @Override
-            public void onSuccess(Application result) {
+            public void onSuccess(OnlineApplication result) {
                 application = result;
                 forwardByApplicationProgress(new DefaultAsyncCallback<AppPlace>() {
 
@@ -113,9 +113,9 @@ public class PtAppWizardManager {
         if (application != null) {
             callback.onSuccess(isStepNavigable(targetPlace));
         } else {
-            applicationService.getApplication(new DefaultAsyncCallback<Application>() {
+            applicationService.getApplication(new DefaultAsyncCallback<OnlineApplication>() {
                 @Override
-                public void onSuccess(Application result) {
+                public void onSuccess(OnlineApplication result) {
                     application = result;
                     callback.onSuccess(isStepNavigable(targetPlace));
                 }

@@ -16,12 +16,12 @@ package com.propertyvista.portal.rpc.ptapp.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.dto.MasterApplicationStatusDTO;
+import com.propertyvista.dto.OnlineMasterApplicationStatusDTO;
 
 @Transient
 public interface ApplicationStatusSummaryDTO extends IEntity {
 
-    MasterApplicationStatusDTO status();
+    OnlineMasterApplicationStatusDTO status();
 
     SummaryDTO summary();
 }

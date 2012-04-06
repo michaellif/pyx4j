@@ -19,9 +19,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.dto.OnlineApplicationDTO;
 
-public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
+public class ApplicationEditorForm extends CrmEntityForm<OnlineApplicationDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
@@ -30,7 +30,7 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
     }
 
     public ApplicationEditorForm(boolean viewMode) {
-        super(ApplicationDTO.class, viewMode);
+        super(OnlineApplicationDTO.class, viewMode);
     }
 
     @Override

@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.tenant.PersonScreeningHolder;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
@@ -33,13 +33,13 @@ public class DigitalSignatureMgr {
         update(PtAppContext.getCurrentUserApplication());
     }
 
-    static public void update(Application application) {
+    static public void update(OnlineApplication application) {
         Persistence.service().retrieve(application.lease());
         Persistence.service().retrieve(application.lease().version().tenants());
         update(application, application.lease().version().tenants());
     }
 
-    static public void update(Application application, IList<TenantInLease> tenants) {
+    static public void update(OnlineApplication application, IList<TenantInLease> tenants) {
         List<DigitalSignature> existingSignatures = new Vector<DigitalSignature>(application.signatures());
         application.signatures().clear();
 
@@ -67,7 +67,7 @@ public class DigitalSignatureMgr {
         Persistence.service().merge(application);
     }
 
-    static public void update(Application application, PersonScreeningHolder person) {
+    static public void update(OnlineApplication application, PersonScreeningHolder person) {
         boolean isExist = false;
         for (Iterator<DigitalSignature> it = application.signatures().iterator(); it.hasNext();) {
             DigitalSignature sig = it.next();
@@ -88,7 +88,7 @@ public class DigitalSignatureMgr {
         resetAll(PtAppContext.getCurrentUserApplication());
     }
 
-    static public void resetAll(Application application) {
+    static public void resetAll(OnlineApplication application) {
         application.signatures().clear();
         update(application);
     }
@@ -97,7 +97,7 @@ public class DigitalSignatureMgr {
         reset(PtAppContext.getCurrentUserApplication(), person);
     }
 
-    static public void reset(Application application, PersonScreeningHolder person) {
+    static public void reset(OnlineApplication application, PersonScreeningHolder person) {
         for (Iterator<DigitalSignature> it = application.signatures().iterator(); it.hasNext();) {
             DigitalSignature sig = it.next();
             if (sig.person().equals(person)) {
@@ -112,7 +112,7 @@ public class DigitalSignatureMgr {
         Persistence.service().merge(application);
     }
 
-    static private DigitalSignature createDigitalSignature(Application application, PersonScreeningHolder person) {
+    static private DigitalSignature createDigitalSignature(OnlineApplication application, PersonScreeningHolder person) {
         DigitalSignature sig = EntityFactory.create(DigitalSignature.class);
         sig.person().set(person);
         application.signatures().add(sig);

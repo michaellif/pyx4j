@@ -45,9 +45,9 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
-import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.domain.tenant.ptapp.MasterApplication;
-import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication.Status;
 import com.propertyvista.misc.EquifaxApproval.Decision;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -66,7 +66,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Charges.class, ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class,
+            return deleteAll(Charges.class, ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, OnlineApplication.class,
                     EmergencyContact.class, Summary.class, ApplicationDocumentBlob.class, Guarantor.class, PersonScreening.class);
         } else {
             return "This is production";
@@ -162,7 +162,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
         // Create working appl. only for first half 
         if (cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {
-            MasterApplication ma = summary.lease().application();
+            OnlineMasterApplication ma = summary.lease().application();
             if (PTGenerator.equifaxDemo) {
                 ma.equifaxApproval().percenrtageApproved().setValue(overalPercentageApproval);
 

@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.tenant.application;
 
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.OnlineMasterApplicationDTO;
 
-public interface MasterApplicationListerView extends IListerView<MasterApplicationDTO> {
+public interface OnlineMasterApplicationListerView extends IListerView<OnlineMasterApplicationDTO> {
 
 }

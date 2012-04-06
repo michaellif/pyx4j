@@ -18,13 +18,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface MasterApplicationActionDTO extends IEntity {
+public interface OnlineMasterApplicationActionDTO extends IEntity {
 
-    IPrimitive<MasterApplication.Status> status();
+    IPrimitive<OnlineMasterApplication.Status> status();
 
     IPrimitive<String> decisionReason();
 }

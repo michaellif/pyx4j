@@ -22,7 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.IBoundToApplication;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class ApplicationEntityServiceImpl {
@@ -31,7 +31,7 @@ public class ApplicationEntityServiceImpl {
 
     public static <E extends IEntity & IBoundToApplication> void saveApplicationEntity(E entity) {
         // app specific security stuff
-        final Application application = PtAppContext.getCurrentUserApplication();
+        final OnlineApplication application = PtAppContext.getCurrentUserApplication();
         if ((!entity.application().isNull()) && (!entity.application().equals(application))) {
             throw new SecurityViolationException("Permission denied");
         }
@@ -57,7 +57,7 @@ public class ApplicationEntityServiceImpl {
         retrieveApplicationEntity(entity, PtAppContext.getCurrentUserApplication());
     }
 
-    protected <T extends IBoundToApplication> void retrieveApplicationEntity(T entity, Application application) {
+    protected <T extends IBoundToApplication> void retrieveApplicationEntity(T entity, OnlineApplication application) {
         @SuppressWarnings("unchecked")
         EntityQueryCriteria<T> criteria = (EntityQueryCriteria<T>) EntityQueryCriteria.create(entity.getValueClass());
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));

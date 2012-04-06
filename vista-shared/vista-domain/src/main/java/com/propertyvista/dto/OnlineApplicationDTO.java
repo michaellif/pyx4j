@@ -7,28 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 9, 2011
- * @author michaellif
+ * Created on 2011-05-29
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+
 @Transient
-public interface MasterApplicationStatusDTO extends IEntity {
+public interface OnlineApplicationDTO extends OnlineApplication {
 
-    IList<ApplicationStatusDTO> individualApplications();
-
-    /**
-     * Completed steps/total steps in %
-     */
-    @Format("#0.00")
-    @Caption(name = "Overall Application Progress (%)")
-    IPrimitive<Double> progress();
+    IPrimitive<Integer> stepsCompleted();
 }

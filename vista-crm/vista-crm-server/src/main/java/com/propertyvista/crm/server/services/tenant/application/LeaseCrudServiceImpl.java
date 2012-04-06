@@ -46,7 +46,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.mail.MessageTemplates;
@@ -233,7 +233,7 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
     @Override
     public void startApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.secureRetrieveDraft(dboClass, entityId);
-        MasterApplication ma = ApplicationManager.createMasterApplication(lease);
+        OnlineMasterApplication ma = ApplicationManager.createMasterApplication(lease);
         ApplicationManager.sendMasterApplicationEmail(ma);
         Persistence.service().commit();
         callback.onSuccess(null);

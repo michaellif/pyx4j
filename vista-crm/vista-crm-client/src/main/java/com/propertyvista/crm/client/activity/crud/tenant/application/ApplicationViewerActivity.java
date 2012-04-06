@@ -21,13 +21,13 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.tenant.application.ApplicationCrudService;
-import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.crm.rpc.services.tenant.application.OnlineApplicationCrudService;
+import com.propertyvista.dto.OnlineApplicationDTO;
 
-public class ApplicationViewerActivity extends CrmViewerActivity<ApplicationDTO> implements ApplicationViewerView.Presenter {
+public class ApplicationViewerActivity extends CrmViewerActivity<OnlineApplicationDTO> implements ApplicationViewerView.Presenter {
 
     @SuppressWarnings("unchecked")
     public ApplicationViewerActivity(Place place) {
-        super(place, TenantViewFactory.instance(ApplicationViewerView.class), (AbstractCrudService<ApplicationDTO>) GWT.create(ApplicationCrudService.class));
+        super(place, TenantViewFactory.instance(ApplicationViewerView.class), (AbstractCrudService<OnlineApplicationDTO>) GWT.create(OnlineApplicationCrudService.class));
     }
 }

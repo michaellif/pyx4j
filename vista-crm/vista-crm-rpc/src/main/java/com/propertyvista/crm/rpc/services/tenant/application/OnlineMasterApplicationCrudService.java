@@ -21,13 +21,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
+import com.propertyvista.crm.rpc.dto.OnlineMasterApplicationActionDTO;
 import com.propertyvista.dto.ApplicationUserDTO;
-import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.OnlineMasterApplicationDTO;
 
-public interface MasterApplicationCrudService extends AbstractCrudService<MasterApplicationDTO> {
+public interface OnlineMasterApplicationCrudService extends AbstractCrudService<OnlineMasterApplicationDTO> {
 
-    public void action(AsyncCallback<MasterApplicationDTO> callback, MasterApplicationActionDTO actionDTO);
+    public void action(AsyncCallback<OnlineMasterApplicationDTO> callback, OnlineMasterApplicationActionDTO actionDTO);
 
     public void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId);
 

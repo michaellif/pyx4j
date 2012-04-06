@@ -30,7 +30,7 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.common.mail.templates.model.ApplicationT;
@@ -139,7 +139,7 @@ public class EmailTemplateRootObjectLoader {
             }
         } else if (tObj instanceof ApplicationT) {
             ApplicationT t = (ApplicationT) tObj;
-            Application app = null;
+            OnlineApplication app = null;
             AbstractUser user = null;
             if (!context.tenantInLease().isNull()) {
                 TenantInLease tenantInLease = context.tenantInLease();
@@ -194,7 +194,7 @@ public class EmailTemplateRootObjectLoader {
                 + AuthenticationService.AUTH_TOKEN_ARG + '=' + token;
     }
 
-    private static Application getApplication(TenantInLease tenantInLease) {
+    private static OnlineApplication getApplication(TenantInLease tenantInLease) {
         if (tenantInLease == null || tenantInLease.isNull()) {
             throw new Error("Context cannot be null");
         }
@@ -202,21 +202,21 @@ public class EmailTemplateRootObjectLoader {
         if (tenantInLease.application().isValueDetached()) {
             Persistence.service().retrieve(tenantInLease.application());
         }
-        Application app = tenantInLease.application();
+        OnlineApplication app = tenantInLease.application();
         if (app == null || app.isNull()) {
             throw new Error("Invalid context. No Application found.");
         }
         return app;
     }
 
-    private static Application getApplication(AbstractUser user, Lease lease) {
+    private static OnlineApplication getApplication(AbstractUser user, Lease lease) {
         if (user == null || user.isNull() || lease == null || lease.isNull()) {
             throw new Error("Context cannot be null");
         }
-        EntityQueryCriteria<Application> appSearch = EntityQueryCriteria.create(Application.class);
+        EntityQueryCriteria<OnlineApplication> appSearch = EntityQueryCriteria.create(OnlineApplication.class);
         appSearch.add(PropertyCriterion.eq(appSearch.proto().user(), user));
         appSearch.add(PropertyCriterion.eq(appSearch.proto().lease(), lease));
-        Application app = Persistence.service().retrieve(appSearch);
+        OnlineApplication app = Persistence.service().retrieve(appSearch);
         if (app == null || app.isNull()) {
             throw new Error("Invalid context. No Application found.");
         }

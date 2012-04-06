@@ -39,7 +39,7 @@ import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
@@ -138,7 +138,7 @@ public class VistaAccessControlListTest {
         TestLifecycle.endRequest();
     }
 
-    void assertEntityPermission(boolean expected, Class<? extends IEntity> entityClass, Application application) {
+    void assertEntityPermission(boolean expected, Class<? extends IEntity> entityClass, OnlineApplication application) {
         try {
             IEntity ent = EntityFactory.create(entityClass);
             if ((application != null) && (ent instanceof IBoundToApplication)) {
@@ -174,7 +174,7 @@ public class VistaAccessControlListTest {
         TestLifecycle.testSession(new UserVisit(new Key(-101), "bob"), VistaTenantBehavior.Prospective);
         TestLifecycle.beginRequest();
 
-        Application application = EntityFactory.create(Application.class);
+        OnlineApplication application = EntityFactory.create(OnlineApplication.class);
         application.setPrimaryKey(new Key(-251));
         PtAppContext.setCurrentUserApplication(application);
 
@@ -187,7 +187,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(true, Summary.class, application);
         assertEntityPermission(true, PaymentInformation.class, application);
 
-        Application application2 = EntityFactory.create(Application.class);
+        OnlineApplication application2 = EntityFactory.create(OnlineApplication.class);
         application2.setPrimaryKey(new Key(-252));
         assertEntityPermission(false, ApplicationDocumentFile.class, application2);
         assertEntityPermission(false, TenantInLeaseListDTO.class, application2);

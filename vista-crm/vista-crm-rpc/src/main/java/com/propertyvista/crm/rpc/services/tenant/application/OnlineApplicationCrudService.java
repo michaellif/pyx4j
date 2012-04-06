@@ -7,19 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-29
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.crm.rpc.services.tenant.application;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.dto.OnlineApplicationDTO;
 
-@Transient
-public interface ApplicationDTO extends Application {
-
-    IPrimitive<Integer> stepsCompleted();
+public interface OnlineApplicationCrudService extends AbstractCrudService<OnlineApplicationDTO> {
 }

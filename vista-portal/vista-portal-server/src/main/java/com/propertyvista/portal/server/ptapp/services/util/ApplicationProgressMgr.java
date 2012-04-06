@@ -34,7 +34,7 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.dto.TenantInLeaseDTO;
@@ -67,7 +67,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
         return false;
     }
 
-    public static void syncronizeApplicationProgress(Application application, List<TenantInLeaseDTO> tenants) {
+    public static void syncronizeApplicationProgress(OnlineApplication application, List<TenantInLeaseDTO> tenants) {
         ApplicationWizardStep infoStep = findWizardStep(application, PtSiteMap.Info.class);
         ApplicationWizardStep financialStep = findWizardStep(application, PtSiteMap.Financial.class);
 
@@ -97,7 +97,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
         Persistence.service().merge(financialStep);
     }
 
-    public static void createTenantDataSteps(Application application, Tenant tenant) {
+    public static void createTenantDataSteps(OnlineApplication application, Tenant tenant) {
 
         EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
@@ -109,7 +109,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
         createPersonDataSteps(application, tenant.person(), outer.getPrimaryKey());
     }
 
-    public static void createGurantorDataSteps(Application application, Guarantor guarantor) {
+    public static void createGurantorDataSteps(OnlineApplication application, Guarantor guarantor) {
 
         EntityQueryCriteria<PersonGuarantor> criteria = EntityQueryCriteria.create(PersonGuarantor.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().guarantor(), guarantor));
@@ -121,7 +121,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
         createPersonDataSteps(application, guarantor.person(), outer.getPrimaryKey());
     }
 
-    public static void createPersonDataSteps(Application application, Person person, Key stepID) {
+    public static void createPersonDataSteps(OnlineApplication application, Person person, Key stepID) {
 
         // create an new sub-step:
         ApplicationWizardSubstep subStep = EntityFactory.create(ApplicationWizardSubstep.class);
@@ -146,7 +146,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
         }
     }
 
-    public static void invalidateChargesStep(Application application) {
+    public static void invalidateChargesStep(OnlineApplication application) {
 // TODO : Charges and Payment steps are closed (removed) so far...
         if (false) {
             ApplicationWizardStep chargesStep = findWizardStep(application, PtSiteMap.Charges.class);
@@ -159,7 +159,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
         }
     }
 
-    public static void invalidateSummaryStep(Application application) {
+    public static void invalidateSummaryStep(OnlineApplication application) {
         ApplicationWizardStep summaryStep = findWizardStep(application, PtSiteMap.Summary.class);
         switch (summaryStep.status().getValue()) {
         case latest:
@@ -234,7 +234,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
         }
     }
 
-    private static ApplicationWizardStep findWizardStep(Application application, Class<? extends AppPlace> place) {
+    private static ApplicationWizardStep findWizardStep(OnlineApplication application, Class<? extends AppPlace> place) {
         for (ApplicationWizardStep step : application.steps()) {
             if (step.placeId().getValue().equals(AppPlaceInfo.getPlaceId(place))) {
                 return step;

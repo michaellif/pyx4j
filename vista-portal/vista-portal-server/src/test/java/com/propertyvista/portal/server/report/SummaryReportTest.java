@@ -36,7 +36,7 @@ import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
@@ -77,9 +77,9 @@ public class SummaryReportTest extends ReportsTestBase {
         CrmUser devUser = Persistence.service().retrieve(userCriteria);
         Assert.assertNotNull("devUser " + DemoData.UserType.PTENANT.getEmail(0), devUser);
 
-        EntityQueryCriteria<Application> applicationCriteria = EntityQueryCriteria.create(Application.class);
+        EntityQueryCriteria<OnlineApplication> applicationCriteria = EntityQueryCriteria.create(OnlineApplication.class);
         applicationCriteria.add(PropertyCriterion.eq(applicationCriteria.proto().user(), devUser));
-        Application application = Persistence.service().retrieve(applicationCriteria);
+        OnlineApplication application = Persistence.service().retrieve(applicationCriteria);
         Assert.assertNotNull("devUser application", application);
 
         EntityQueryCriteria<Summary> criteria = EntityQueryCriteria.create(Summary.class);

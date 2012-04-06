@@ -26,10 +26,10 @@ import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationLister
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerView;
@@ -84,10 +84,10 @@ public class TenantViewFactory extends ViewFactoryBase {
             } else if (BillViewerView.class.equals(type)) {
                 map.put(type, new BillViewerViewImpl());
 
-            } else if (MasterApplicationListerView.class.equals(type)) {
-                map.put(type, new MasterApplicationListerViewImpl());
-            } else if (MasterApplicationViewerView.class.equals(type)) {
-                map.put(type, new MasterApplicationViewerViewImpl());
+            } else if (OnlineMasterApplicationListerView.class.equals(type)) {
+                map.put(type, new OnlineMasterApplicationListerViewImpl());
+            } else if (OnlineMasterApplicationViewerView.class.equals(type)) {
+                map.put(type, new OnlineMasterApplicationViewerViewImpl());
 
             } else if (ApplicationListerView.class.equals(type)) {
                 map.put(type, new ApplicationListerViewImpl());

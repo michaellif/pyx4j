@@ -19,16 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.tenant.application.MasterApplicationCrudService;
-import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.crm.rpc.services.tenant.application.OnlineMasterApplicationCrudService;
+import com.propertyvista.dto.OnlineMasterApplicationDTO;
 
-public class MasterApplicationListerActivity extends ListerActivityBase<MasterApplicationDTO> {
+public class OnlineMasterApplicationListerActivity extends ListerActivityBase<OnlineMasterApplicationDTO> {
 
     @SuppressWarnings("unchecked")
-    public MasterApplicationListerActivity(Place place) {
-        super(place, TenantViewFactory.instance(MasterApplicationListerView.class), (AbstractCrudService<MasterApplicationDTO>) GWT
-                .create(MasterApplicationCrudService.class), MasterApplicationDTO.class);
+    public OnlineMasterApplicationListerActivity(Place place) {
+        super(place, TenantViewFactory.instance(OnlineMasterApplicationListerView.class), (AbstractCrudService<OnlineMasterApplicationDTO>) GWT
+                .create(OnlineMasterApplicationCrudService.class), OnlineMasterApplicationDTO.class);
     }
 }

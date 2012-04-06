@@ -54,7 +54,7 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.tenant.TenantCrudService;
 import com.propertyvista.crm.rpc.services.tenant.TenantInLeaseCrudService;
 import com.propertyvista.crm.rpc.services.tenant.TenantPasswordChangeService;
-import com.propertyvista.crm.rpc.services.tenant.application.ApplicationCrudService;
+import com.propertyvista.crm.rpc.services.tenant.application.OnlineApplicationCrudService;
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.crm.rpc.services.tenant.lead.AppointmentCrudService;
 import com.propertyvista.crm.rpc.services.tenant.lead.LeadCrudService;
@@ -96,7 +96,7 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.server.common.security.SharedUserEntityInstanceAccess;
 
@@ -194,8 +194,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseCrudService.class));
 
-        grant(VistaBasicBehavior.CRM, new EntityPermission(Application.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationCrudService.class));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(OnlineApplication.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(OnlineApplicationCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 

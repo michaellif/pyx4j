@@ -27,10 +27,10 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
@@ -44,7 +44,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
     private final static Logger log = LoggerFactory.getLogger(ApplicationServiceImpl.class);
 
     @Override
-    public void getApplication(AsyncCallback<Application> callback) {
+    public void getApplication(AsyncCallback<OnlineApplication> callback) {
 
         TenantUser currentUser = PtAppContext.getCurrentUser();
         log.debug("Asking for current application for current user {}", currentUser);
@@ -75,7 +75,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 //            }
 //        }
 
-        Application application = PtAppContext.getCurrentUserApplication();
+        OnlineApplication application = PtAppContext.getCurrentUserApplication();
         if (application == null) {
             throw new UserRuntimeException(i18n.tr("You have no applications assigned"));
         }
@@ -84,12 +84,12 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         // now application set into  PtAppContext in @link PtAuthenticationServiceImpl.beginSession() 
         // but this stuff I live here
         //
-        if (application.status().getValue() == MasterApplication.Status.Invited) {
-            application.status().setValue(MasterApplication.Status.Incomplete);
+        if (application.status().getValue() == OnlineMasterApplication.Status.Invited) {
+            application.status().setValue(OnlineMasterApplication.Status.Incomplete);
             Persistence.service().persist(application);
             Persistence.service().retrieve(application.belongsTo());
-            if (application.belongsTo().status().getValue() == MasterApplication.Status.Invited) {
-                application.belongsTo().status().setValue(MasterApplication.Status.Incomplete);
+            if (application.belongsTo().status().getValue() == OnlineMasterApplication.Status.Invited) {
+                application.belongsTo().status().setValue(OnlineMasterApplication.Status.Incomplete);
                 Persistence.service().persist(application.belongsTo());
             }
         }
@@ -113,8 +113,8 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
     }
 
     @Override
-    public void getApplicationProgress(AsyncCallback<Application> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep currentSubstep) {
-        Application application = PtAppContext.getCurrentUserApplication();
+    public void getApplicationProgress(AsyncCallback<OnlineApplication> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep currentSubstep) {
+        OnlineApplication application = PtAppContext.getCurrentUserApplication();
 
         if (currentStep != null) {
             int idx = application.steps().indexOf(currentStep);
@@ -175,7 +175,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         callback.onSuccess(application);
     }
 
-    private void onStepCompleted(Application application, ApplicationWizardStep currentStep) {
+    private void onStepCompleted(OnlineApplication application, ApplicationWizardStep currentStep) {
         boolean isEndOfTheWizard = (application.steps().indexOf(currentStep) + 1 == application.steps().size() - 1);
         if (isEndOfTheWizard) {
             ApplicationManager.makeApplicationCompleted(application);

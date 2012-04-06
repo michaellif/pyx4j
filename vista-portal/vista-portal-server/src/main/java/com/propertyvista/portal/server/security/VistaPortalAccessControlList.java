@@ -32,7 +32,7 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -101,7 +101,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaTenantBehavior.Prospective, new EntityPermission(Province.class, EntityPermission.READ));
 
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
-        grant(VistaTenantBehavior.Prospective, new EntityPermission(Application.class, userEntityAccess, CRUD));
+        grant(VistaTenantBehavior.Prospective, new EntityPermission(OnlineApplication.class, userEntityAccess, CRUD));
 
         InstanceAccess applicationEntityAccess = new ApplicationEntityInstanceAccess();
 

@@ -33,19 +33,19 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
-import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
-import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.crm.rpc.dto.OnlineMasterApplicationActionDTO;
+import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication.Status;
+import com.propertyvista.dto.OnlineApplicationDTO;
 import com.propertyvista.dto.ApplicationUserDTO;
-import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.OnlineMasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 
-public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<MasterApplicationDTO> implements MasterApplicationViewerView {
+public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase<OnlineMasterApplicationDTO> implements OnlineMasterApplicationViewerView {
 
-    private final static I18n i18n = I18n.get(MasterApplicationViewerViewImpl.class);
+    private final static I18n i18n = I18n.get(OnlineMasterApplicationViewerViewImpl.class);
 
-    private final IListerView<ApplicationDTO> applicationLister;
+    private final IListerView<OnlineApplicationDTO> applicationLister;
 
     private final IListerView<TenantInLeaseDTO> tenantLister;
 
@@ -71,10 +71,10 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
 
     private static final String CANCEL = i18n.tr("Cancel");
 
-    public MasterApplicationViewerViewImpl() {
-        super(CrmSiteMap.Tenants.MasterApplication.class, true);
+    public OnlineMasterApplicationViewerViewImpl() {
+        super(CrmSiteMap.Tenants.OnlineMasterApplication.class, true);
 
-        applicationLister = new ListerInternalViewImplBase<ApplicationDTO>(new ApplicationLister());
+        applicationLister = new ListerInternalViewImplBase<OnlineApplicationDTO>(new ApplicationLister());
 
         tenantLister = new ListerInternalViewImplBase<TenantInLeaseDTO>(new TenantInLeaseLister());
 
@@ -83,7 +83,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         inviteAction = new Button(INVITE, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((MasterApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
+                ((OnlineMasterApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
                     @Override
                     public void onSuccess(List<ApplicationUserDTO> result) {
                         new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants To Send An Invitation To"), true, result,
@@ -96,7 +96,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
 
                             @Override
                             public boolean onClickOk() {
-                                ((MasterApplicationViewerView.Presenter) presenter).inviteUsers(getSelectedItems());
+                                ((OnlineMasterApplicationViewerView.Presenter) presenter).inviteUsers(getSelectedItems());
                                 return true;
                             }
 
@@ -154,7 +154,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                 new ActionBox(APPROVE) {
                     @Override
                     public boolean onClickOk() {
-                        ((MasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Approved));
+                        ((OnlineMasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Approved));
                         return true;
                     }
                 }.show();
@@ -199,7 +199,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                 new ActionBox(DECLINE) {
                     @Override
                     public boolean onClickOk() {
-                        ((MasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Declined));
+                        ((OnlineMasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Declined));
                         return true;
                     }
                 }.show();
@@ -213,7 +213,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                 new ActionBox(CANCEL) {
                     @Override
                     public boolean onClickOk() {
-                        ((MasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Cancelled));
+                        ((OnlineMasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Cancelled));
                         return true;
                     }
                 }.show();
@@ -222,7 +222,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         addToolbarItem(cancelAction.asWidget());
 
         //set main form here:
-        setForm(new MasterApplicationEditorForm(true));
+        setForm(new OnlineMasterApplicationEditorForm(true));
     }
 
     @Override
@@ -237,7 +237,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
     }
 
     @Override
-    public void populate(MasterApplicationDTO value) {
+    public void populate(OnlineMasterApplicationDTO value) {
         super.populate(value);
 
         // set buttons state:
@@ -253,7 +253,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
     }
 
     @Override
-    public IListerView<ApplicationDTO> getApplicationsView() {
+    public IListerView<OnlineApplicationDTO> getApplicationsView() {
         return applicationLister;
     }
 
@@ -284,8 +284,8 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             return content.asWidget();
         }
 
-        public MasterApplicationActionDTO updateValue(Status status) {
-            MasterApplicationActionDTO action = EntityFactory.create(MasterApplicationActionDTO.class);
+        public OnlineMasterApplicationActionDTO updateValue(Status status) {
+            OnlineMasterApplicationActionDTO action = EntityFactory.create(OnlineMasterApplicationActionDTO.class);
             action.setPrimaryKey(form.getValue().getPrimaryKey());
             action.decisionReason().setValue(reason.getValue());
             action.status().setValue(status);

@@ -17,12 +17,12 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.dto.OnlineApplicationDTO;
 
-public class ApplicationLister extends ListerBase<ApplicationDTO> {
+public class ApplicationLister extends ListerBase<OnlineApplicationDTO> {
 
     public ApplicationLister() {
-        super(ApplicationDTO.class, CrmSiteMap.Tenants.Application.class, false, true);
+        super(OnlineApplicationDTO.class, CrmSiteMap.Tenants.Application.class, false, true);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().status()).build(),

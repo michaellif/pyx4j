@@ -19,15 +19,15 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.OnlineMasterApplicationDTO;
 import com.propertyvista.misc.VistaTODO;
 
-public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
+public class OnlineMasterApplicationLister extends ListerBase<OnlineMasterApplicationDTO> {
 
-    private static final I18n i18n = I18n.get(MasterApplicationLister.class);
+    private static final I18n i18n = I18n.get(OnlineMasterApplicationLister.class);
 
-    public MasterApplicationLister() {
-        super(MasterApplicationDTO.class, CrmSiteMap.Tenants.MasterApplication.class, false, false);
+    public OnlineMasterApplicationLister() {
+        super(OnlineMasterApplicationDTO.class, CrmSiteMap.Tenants.OnlineMasterApplication.class, false, false);
 
         setColumnDescriptors(new ColumnDescriptor[] {//@formatter:off
 

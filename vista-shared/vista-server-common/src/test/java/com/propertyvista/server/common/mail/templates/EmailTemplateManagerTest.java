@@ -48,8 +48,8 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
-import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.common.mail.MessageTemplates;
@@ -84,9 +84,9 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
     private Lease lease;
 
-    private Application mainApp;
+    private OnlineApplication mainApp;
 
-    private Application coApp;
+    private OnlineApplication coApp;
 
     private final String token = "qwerty12345";
 
@@ -567,9 +567,9 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         // ...
 
         // create applications
-        MasterApplication mApp = EntityFactory.create(MasterApplication.class);
+        OnlineMasterApplication mApp = EntityFactory.create(OnlineMasterApplication.class);
         Persistence.service().persist(mApp);
-        mainApp = EntityFactory.create(Application.class);
+        mainApp = EntityFactory.create(OnlineApplication.class);
         mainApp.belongsTo().set(mApp);
         mainApp.lease().set(lease);
         mainApp.user().set(mainAplt.tenant().user());
@@ -577,7 +577,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         mainAplt.application().set(mainApp);
         Persistence.service().merge(mainAplt);
 
-        coApp = EntityFactory.create(Application.class);
+        coApp = EntityFactory.create(OnlineApplication.class);
         coApp.belongsTo().set(mApp);
         coApp.lease().set(lease);
         coApp.user().set(coAplt.tenant().user());

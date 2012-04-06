@@ -13,59 +13,22 @@
  */
 package com.propertyvista.dto;
 
-import java.io.Serializable;
-
-import javax.xml.bind.annotation.XmlType;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
-
-import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication.Status;
 
 @Transient
-public interface ApplicationStatusDTO extends IEntity {
+public interface OnlineMasterApplicationStatusDTO extends IEntity {
 
-    @I18n
-    @XmlType(name = "PersonRole")
-    public static enum Role implements Serializable {
-
-        Tenant,
-
-        Guarantor;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    IPrimitive<Status> status();
-
-    TenantUser user();
-
-    /**
-     * Tenant/Guarantor
-     */
-    Name person();
-
-    /**
-     * Applicant, Co-Applicant or Guarantor
-     */
-    IPrimitive<Role> role();
+    IList<ApplicationStatusDTO> individualApplications();
 
     /**
      * Completed steps/total steps in %
      */
     @Format("#0.00")
-    @Caption(name = "Progress (%)")
+    @Caption(name = "Overall Application Progress (%)")
     IPrimitive<Double> progress();
-
-    IPrimitive<String> description();
 }

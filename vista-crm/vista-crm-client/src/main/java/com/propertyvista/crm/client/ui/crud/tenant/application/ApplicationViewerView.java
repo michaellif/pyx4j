@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.application;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.dto.OnlineApplicationDTO;
 
-public interface ApplicationViewerView extends IViewerView<ApplicationDTO> {
+public interface ApplicationViewerView extends IViewerView<OnlineApplicationDTO> {
 }

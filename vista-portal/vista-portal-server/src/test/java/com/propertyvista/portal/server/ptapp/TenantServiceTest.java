@@ -24,7 +24,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -34,7 +34,7 @@ public class TenantServiceTest extends VistaDBTestBase {
 
     private String email;
 
-    private Application application;
+    private OnlineApplication application;
 
     @Override
     protected void setUp() throws Exception {

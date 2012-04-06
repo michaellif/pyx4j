@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.tenant.application;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.dto.OnlineApplicationDTO;
 
-public class ApplicationListerViewImpl extends CrmListerViewImplBase<ApplicationDTO> implements ApplicationListerView {
+public class ApplicationListerViewImpl extends CrmListerViewImplBase<OnlineApplicationDTO> implements ApplicationListerView {
 
     public ApplicationListerViewImpl() {
         super(CrmSiteMap.Tenants.Application.class);

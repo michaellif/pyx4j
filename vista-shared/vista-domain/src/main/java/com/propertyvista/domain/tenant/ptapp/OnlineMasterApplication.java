@@ -35,7 +35,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.EquifaxApproval;
 
-public interface MasterApplication extends IEntity {
+public interface OnlineMasterApplication extends IEntity {
 
     @I18n(context = "Application")
     @XmlType(name = "ApplicationStatus")
@@ -74,7 +74,7 @@ public interface MasterApplication extends IEntity {
 
     @Owned
     @Detached
-    ISet<Application> applications();
+    ISet<OnlineApplication> applications();
 
     Employee decidedBy();
 

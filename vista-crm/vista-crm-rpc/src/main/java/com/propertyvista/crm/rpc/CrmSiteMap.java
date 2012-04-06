@@ -192,7 +192,7 @@ public class CrmSiteMap implements SiteMap {
 
         @PlaceProperties(caption = "Application")
         @NavigationItem(navigLabel = "Applications")
-        public static class MasterApplication extends CRMCrudAppPlace {
+        public static class OnlineMasterApplication extends CRMCrudAppPlace {
         }
 
         public static class Application extends CRMCrudAppPlace {

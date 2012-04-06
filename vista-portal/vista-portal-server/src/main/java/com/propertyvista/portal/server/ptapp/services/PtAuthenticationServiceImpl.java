@@ -23,7 +23,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
@@ -52,9 +52,9 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
 
     @Override
     public String beginSession(AbstractUser user, TenantUserCredential userCredential) {
-        EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
+        EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), userCredential.user()));
-        Application application = Persistence.service().retrieve(criteria);
+        OnlineApplication application = Persistence.service().retrieve(criteria);
         if (application == null) {
             throw new Error("Application not found for user" + userCredential.user().getDebugExceptionInfoString());
         }

@@ -15,12 +15,12 @@ package com.propertyvista.crm.client.ui.crud.tenant.application;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.OnlineMasterApplicationDTO;
 
-public class MasterApplicationListerViewImpl extends CrmListerViewImplBase<MasterApplicationDTO> implements MasterApplicationListerView {
+public class OnlineMasterApplicationListerViewImpl extends CrmListerViewImplBase<OnlineMasterApplicationDTO> implements OnlineMasterApplicationListerView {
 
-    public MasterApplicationListerViewImpl() {
-        super(CrmSiteMap.Tenants.MasterApplication.class);
-        setLister(new MasterApplicationLister());
+    public OnlineMasterApplicationListerViewImpl() {
+        super(CrmSiteMap.Tenants.OnlineMasterApplication.class);
+        setLister(new OnlineMasterApplicationLister());
     }
 }

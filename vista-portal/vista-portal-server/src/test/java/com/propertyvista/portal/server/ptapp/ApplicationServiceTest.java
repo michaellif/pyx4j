@@ -21,7 +21,7 @@ import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -54,9 +54,9 @@ public class ApplicationServiceTest extends VistaDBTestBase {
         HappyPath.step1createAccount();
 
         ApplicationService applicationService = createService();
-        applicationService.getApplication(new UnitTestsAsyncCallback<Application>() {
+        applicationService.getApplication(new UnitTestsAsyncCallback<OnlineApplication>() {
             @Override
-            public void onSuccess(Application result) {
+            public void onSuccess(OnlineApplication result) {
                 Assert.fail("Expect exception");
             }
 

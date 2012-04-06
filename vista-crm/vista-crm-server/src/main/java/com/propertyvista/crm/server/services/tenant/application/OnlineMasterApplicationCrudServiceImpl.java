@@ -28,8 +28,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
-import com.propertyvista.crm.rpc.services.tenant.application.MasterApplicationCrudService;
+import com.propertyvista.crm.rpc.dto.OnlineMasterApplicationActionDTO;
+import com.propertyvista.crm.rpc.services.tenant.application.OnlineMasterApplicationCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.security.VistaTenantBehavior;
@@ -39,10 +39,10 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.ApplicationUserDTO.ApplicationUser;
-import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.OnlineMasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
@@ -51,11 +51,11 @@ import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
-public class MasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<MasterApplication, MasterApplicationDTO> implements
-        MasterApplicationCrudService {
+public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<OnlineMasterApplication, OnlineMasterApplicationDTO> implements
+        OnlineMasterApplicationCrudService {
 
-    public MasterApplicationCrudServiceImpl() {
-        super(MasterApplication.class, MasterApplicationDTO.class);
+    public OnlineMasterApplicationCrudServiceImpl() {
+        super(OnlineMasterApplication.class, OnlineMasterApplicationDTO.class);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl
     }
 
     @Override
-    protected void enhanceListRetrieved(MasterApplication in, MasterApplicationDTO dto) {
+    protected void enhanceListRetrieved(OnlineMasterApplication in, OnlineMasterApplicationDTO dto) {
 
         Persistence.service().retrieve(dto.lease());
         Persistence.service().retrieve(dto.lease().unit());
@@ -98,15 +98,15 @@ public class MasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl
     }
 
     @Override
-    protected void enhanceRetrieved(MasterApplication in, MasterApplicationDTO dto) {
+    protected void enhanceRetrieved(OnlineMasterApplication in, OnlineMasterApplicationDTO dto) {
         enhanceListRetrieved(in, dto);
         dto.masterApplicationStatus().set(ApplicationManager.calculateStatus(in));
     }
 
     @Override
-    public void action(AsyncCallback<MasterApplicationDTO> callback, MasterApplicationActionDTO actionDTO) {
-        MasterApplication dbo = Persistence.service().retrieve(dboClass, actionDTO.getPrimaryKey());
-        MasterApplication.Status currentStatus = dbo.status().getValue();
+    public void action(AsyncCallback<OnlineMasterApplicationDTO> callback, OnlineMasterApplicationActionDTO actionDTO) {
+        OnlineMasterApplication dbo = Persistence.service().retrieve(dboClass, actionDTO.getPrimaryKey());
+        OnlineMasterApplication.Status currentStatus = dbo.status().getValue();
 
         dbo.status().setValue(actionDTO.status().getValue());
         dbo.decidedBy().set(CrmAppContext.getCurrentUserEmployee());
@@ -117,13 +117,13 @@ public class MasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl
         switch (actionDTO.status().getValue()) {
         case Approved:
             Lease approvedLease = new LeaseManager().approveApplication(dbo.lease().getPrimaryKey());
-            if (currentStatus != MasterApplication.Status.Created) {
+            if (currentStatus != OnlineMasterApplication.Status.Created) {
                 ApplicationManager.sendApproveDeclineApplicationEmail(approvedLease, true);
             }
             break;
         case Declined:
             Lease declinedLease = new LeaseManager().declineApplication(dbo.lease().getPrimaryKey());
-            if (currentStatus != MasterApplication.Status.Created) {
+            if (currentStatus != OnlineMasterApplication.Status.Created) {
                 ApplicationManager.sendApproveDeclineApplicationEmail(declinedLease, false);
             }
             break;
@@ -151,7 +151,7 @@ public class MasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl
         return tfDTO;
     }
 
-    private void calculatePrices(MasterApplication in, MasterApplicationDTO dto) {
+    private void calculatePrices(OnlineMasterApplication in, OnlineMasterApplicationDTO dto) {
         // calculate price adjustments:
         PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().version().leaseProducts().serviceItem());
 
@@ -179,7 +179,7 @@ public class MasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl
 
     @Override
     public void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId) {
-        MasterApplication entity = Persistence.service().retrieve(dboClass, entityId);
+        OnlineMasterApplication entity = Persistence.service().retrieve(dboClass, entityId);
         if ((entity == null) || (entity.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }
@@ -227,7 +227,7 @@ public class MasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl
 
     @Override
     public void inviteUsers(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users) {
-        MasterApplication entity = Persistence.service().retrieve(dboClass, entityId);
+        OnlineMasterApplication entity = Persistence.service().retrieve(dboClass, entityId);
         if ((entity == null) || (entity.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }

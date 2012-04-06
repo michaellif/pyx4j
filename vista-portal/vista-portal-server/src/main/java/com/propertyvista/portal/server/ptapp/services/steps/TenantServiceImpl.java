@@ -30,7 +30,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
@@ -54,7 +54,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
     @Override
     public void save(AsyncCallback<TenantInApplicationListDTO> callback, TenantInApplicationListDTO tenants) {
-        Application application = PtAppContext.getCurrentUserApplication();
+        OnlineApplication application = PtAppContext.getCurrentUserApplication();
 
         Lease lease = PtAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.version().tenants());

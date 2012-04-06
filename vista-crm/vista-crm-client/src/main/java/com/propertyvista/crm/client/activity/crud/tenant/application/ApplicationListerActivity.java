@@ -21,15 +21,15 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.tenant.application.ApplicationCrudService;
-import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.crm.rpc.services.tenant.application.OnlineApplicationCrudService;
+import com.propertyvista.dto.OnlineApplicationDTO;
 
-public class ApplicationListerActivity extends ListerActivityBase<ApplicationDTO> {
+public class ApplicationListerActivity extends ListerActivityBase<OnlineApplicationDTO> {
 
     @SuppressWarnings("unchecked")
     public ApplicationListerActivity(Place place) {
-        super(place, TenantViewFactory.instance(ApplicationListerView.class), (AbstractCrudService<ApplicationDTO>) GWT.create(ApplicationCrudService.class),
-                ApplicationDTO.class);
+        super(place, TenantViewFactory.instance(ApplicationListerView.class), (AbstractCrudService<OnlineApplicationDTO>) GWT.create(OnlineApplicationCrudService.class),
+                OnlineApplicationDTO.class);
     }
 
 }

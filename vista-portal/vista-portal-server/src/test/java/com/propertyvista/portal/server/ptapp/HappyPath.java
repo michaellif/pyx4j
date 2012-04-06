@@ -20,7 +20,7 @@ import com.propertvista.generator.BusinessDataGenerator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.server.TestUtil;
@@ -57,7 +57,7 @@ public class HappyPath {
         return email;
     }
 
-    public static Application step2createApplication() {
+    public static OnlineApplication step2createApplication() {
         ApplicationServiceSync service = new ApplicationServiceSync();
         return service.getCurrentApplication();
     }

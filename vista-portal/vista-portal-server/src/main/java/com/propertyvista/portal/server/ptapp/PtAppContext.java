@@ -31,7 +31,7 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.server.common.security.VistaContext;
 
 public class PtAppContext extends VistaContext {
@@ -67,7 +67,7 @@ public class PtAppContext extends VistaContext {
         return user;
     }
 
-    public static void setCurrentUserApplication(Application application) {
+    public static void setCurrentUserApplication(OnlineApplication application) {
         getVisitAttributes().setApplicationPrimaryKey(application.getPrimaryKey());
     }
 
@@ -80,8 +80,8 @@ public class PtAppContext extends VistaContext {
         return key;
     }
 
-    public static Application getCurrentUserApplication() {
-        return Persistence.service().retrieve(Application.class, getCurrentUserApplicationPrimaryKey());
+    public static OnlineApplication getCurrentUserApplication() {
+        return Persistence.service().retrieve(OnlineApplication.class, getCurrentUserApplicationPrimaryKey());
     }
 
     public static Key getCurrentUserLeasePrimaryKey() {

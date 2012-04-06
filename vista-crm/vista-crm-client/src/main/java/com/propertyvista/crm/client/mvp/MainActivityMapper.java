@@ -109,8 +109,8 @@ import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationViewerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.application.MasterApplicationListerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.application.MasterApplicationViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.application.OnlineMasterApplicationListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.application.OnlineMasterApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseViewerActivity;
@@ -183,7 +183,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
 import com.propertyvista.misc.EquifaxResult;
 
 public class MainActivityMapper implements AppActivityMapper {
@@ -215,8 +215,8 @@ public class MainActivityMapper implements AppActivityMapper {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Guarantor.class);
         } else if (entityClass.equals(Lease.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Lease.class);
-        } else if (entityClass.equals(MasterApplication.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.MasterApplication.class);
+        } else if (entityClass.equals(OnlineMasterApplication.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.OnlineMasterApplication.class);
         } else if (entityClass.equals(EquifaxResult.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.EquifaxResult.class);
         } else if (entityClass.equals(MaintenanceRequest.class)) {
@@ -510,13 +510,13 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Tenants.MasterApplication) {
+                } else if (place instanceof CrmSiteMap.Tenants.OnlineMasterApplication) {
                     switch (((CrudAppPlace) place).getType()) {
                     case viewer:
-                        activity = new MasterApplicationViewerActivity(place);
+                        activity = new OnlineMasterApplicationViewerActivity(place);
                         break;
                     case lister:
-                        activity = new MasterApplicationListerActivity(place);
+                        activity = new OnlineMasterApplicationListerActivity(place);
                         break;
                     }
 
