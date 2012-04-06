@@ -24,7 +24,7 @@ import java.util.List;
 
 public class NamingConventionOracle implements NamingConvention {
 
-    private final boolean mustBeginWithLetter = true;
+    private boolean mustBeginWithLetter = false;
 
     private final int identifierMaximumLength;
 
@@ -41,9 +41,14 @@ public class NamingConventionOracle implements NamingConvention {
     }
 
     public NamingConventionOracle(int identifierMaximumLength, ShortWords shortWords, boolean forceShortWords) {
+        this(identifierMaximumLength, shortWords, forceShortWords, true);
+    }
+
+    public NamingConventionOracle(int identifierMaximumLength, ShortWords shortWords, boolean forceShortWords, boolean mustBeginWithLetter) {
         this.identifierMaximumLength = identifierMaximumLength;
         this.shortWords = shortWords;
         this.forceShortWords = forceShortWords;
+        this.mustBeginWithLetter = mustBeginWithLetter;
     }
 
     public String shortForm(String word) {
