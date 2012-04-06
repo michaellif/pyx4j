@@ -42,7 +42,7 @@ public class VistaDBReset {
     public static void main(String[] args) {
         long totalStart = System.currentTimeMillis();
         VistaServerSideConfiguration conf;
-        if (args[0].equals("--postgre")) {
+        if ((args.length > 0) && (args[0].equals("--postgre"))) {
             log.info("Use PostgreSQL");
             conf = new VistaServerSideConfigurationDevPostgreSQL();
         } else {
