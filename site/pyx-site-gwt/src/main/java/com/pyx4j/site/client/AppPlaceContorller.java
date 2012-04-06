@@ -85,7 +85,7 @@ public final class AppPlaceContorller extends PlaceController {
     public void goTo(final Place newPlace) {
         //TODO external request - handle unstable tokens. If stable counterpart exists - execute, otherwise go to NOWHERE
 
-        maybeGoTo(newPlace);
+        maybeGoTo((AppPlace) newPlace);
     }
 
     private String confirmGoTo(Place newPlace) {
@@ -95,20 +95,13 @@ public final class AppPlaceContorller extends PlaceController {
         return warning;
     }
 
-    private void maybeGoTo(final Place newPlace) {
+    private void maybeGoTo(final AppPlace newPlace) {
         log.debug("requested to go to: " + newPlace);
 
         AsyncCallback<AppPlace> callback = new DefaultAsyncCallback<AppPlace>() {
 
             @Override
             public void onSuccess(AppPlace result) {
-                if (result == null) {
-                    where = AppPlace.NOWHERE;
-                    return;
-                } else {
-                    where = result;
-                }
-
                 String warning = confirmGoTo(result);
                 if (warning != null) {
                     dispatcher.confirm(warning, new Command() {
@@ -125,17 +118,14 @@ public final class AppPlaceContorller extends PlaceController {
 
         };
 
-        dispatcher.forwardTo((AppPlace) newPlace, callback);
+        dispatcher.forwardTo(newPlace, callback);
     }
 
-    private void sureGoTo(Place newPlace) {
-        if (where.equals(newPlace)) {
-            forwardedFrom = AppPlace.NOWHERE;
-            log.debug("go to: " + where);
-        } else {
-            forwardedFrom = (AppPlace) newPlace;
-            log.debug("forwarded to: {} from {}", where, forwardedFrom);
-        }
+    private void sureGoTo(AppPlace newPlace) {
+        forwardedFrom = where;
+        where = newPlace;
+        log.debug("forwarded to: {} from {}", where, forwardedFrom);
+
         eventBus.fireEvent(new PlaceChangeEvent(where));
     }
 
