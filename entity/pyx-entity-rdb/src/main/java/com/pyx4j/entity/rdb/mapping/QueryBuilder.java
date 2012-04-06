@@ -127,7 +127,7 @@ public class QueryBuilder<T extends IEntity> {
                 } else {
                     sortsSql.append(", ");
                 }
-                QueryMember queryMember = queryJoin.buildQueryMember(sort.getPropertyPath(), true);
+                QueryMember queryMember = queryJoin.buildQueryMember(sort.getPropertyPath(), true, true);
                 if (queryMember == null) {
                     throw new RuntimeException("Unknown member " + sort.getPropertyPath() + " in " + operationsMeta.entityMeta().getEntityClass().getName());
                 }
@@ -188,7 +188,7 @@ public class QueryBuilder<T extends IEntity> {
             if ((bindHolder.bindValue == null) && (propertyCriterion.getRestriction() == Restriction.EQUAL)) {
                 leftJoin = true;
             }
-            QueryMember queryMember = queryJoin.buildQueryMember(propertyCriterion.getPropertyPath(), leftJoin);
+            QueryMember queryMember = queryJoin.buildQueryMember(propertyCriterion.getPropertyPath(), leftJoin, false);
             if (queryMember == null) {
                 throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyPath() + " in "
                         + queryJoin.operationsMeta.entityMeta().getEntityClass().getName());
@@ -305,8 +305,11 @@ public class QueryBuilder<T extends IEntity> {
                 result.add(sort);
             }
 
-            if (path.isUndefinedCollectionPath() || (sort.getPropertyPath().endsWith(Path.COLLECTION_SEPARATOR + Path.PATH_SEPARATOR))) {
-                sortAddDistinct = true;
+            // Removed for postgresql, Join will use sqlOrderColumnName = 0
+            if (false) {
+                if (path.isUndefinedCollectionPath() || (sort.getPropertyPath().endsWith(Path.COLLECTION_SEPARATOR + Path.PATH_SEPARATOR))) {
+                    sortAddDistinct = true;
+                }
             }
 
         }

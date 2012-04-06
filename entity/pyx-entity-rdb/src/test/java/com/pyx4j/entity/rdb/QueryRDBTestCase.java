@@ -298,26 +298,26 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
         }
     }
 
-    public void testSortByCollectionValueToString() {
+    public void testSortByListValueToString() {
         String testId = uniqueString();
         {
             SortSortable item = EntityFactory.create(SortSortable.class);
             item.testId().setValue(testId);
             item.name().setValue("B3");
-            SortBy member = item.sortByCollectionMember().$();
+            SortBy member = item.sortByListMember().$();
             member.name().setValue("B");
             member.amount().setValue("1");
-            item.sortByCollectionMember().add(member);
+            item.sortByListMember().add(member);
             srv.persist(item);
         }
         {
             SortSortable item = EntityFactory.create(SortSortable.class);
             item.testId().setValue(testId);
             item.name().setValue("B2");
-            SortBy member = item.sortByCollectionMember().$();
+            SortBy member = item.sortByListMember().$();
             member.name().setValue("A");
             member.amount().setValue("2");
-            item.sortByCollectionMember().add(member);
+            item.sortByListMember().add(member);
             srv.persist(item);
         }
         {
@@ -325,16 +325,16 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
             item.testId().setValue(testId);
             item.name().setValue("B1");
             {
-                SortBy member = item.sortByCollectionMember().$();
+                SortBy member = item.sortByListMember().$();
                 member.name().setValue("A");
                 member.amount().setValue("1");
-                item.sortByCollectionMember().add(member);
+                item.sortByListMember().add(member);
             }
             {
-                SortBy member = item.sortByCollectionMember().$();
+                SortBy member = item.sortByListMember().$();
                 member.name().setValue("A");
                 member.amount().setValue("1");
-                item.sortByCollectionMember().add(member);
+                item.sortByListMember().add(member);
             }
             srv.persist(item);
         }
@@ -343,31 +343,31 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
         {
             EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.asc(criteria.proto().sortByCollectionMember().$().name());
-            criteria.asc(criteria.proto().sortByCollectionMember().$().amount());
+            criteria.asc(criteria.proto().sortByListMember().$().name());
+            criteria.asc(criteria.proto().sortByListMember().$().amount());
 
             List<SortSortable> r = srv.query(criteria);
             Assert.assertEquals("result set size", 3, r.size());
-            Assert.assertEquals("sort Ok", "A", r.get(0).sortByCollectionMember().iterator().next().name().getValue());
-            Assert.assertEquals("sort Ok", "2", r.get(1).sortByCollectionMember().iterator().next().amount().getValue());
+            Assert.assertEquals("sort Ok", "A", r.get(0).sortByListMember().iterator().next().name().getValue());
+            Assert.assertEquals("sort Ok", "2", r.get(1).sortByListMember().iterator().next().amount().getValue());
         }
 
         // Created sort by ToString members
         {
             EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.asc(criteria.proto().sortByCollectionMember().$());
+            criteria.asc(criteria.proto().sortByListMember().$());
 
             List<SortSortable> r = srv.query(criteria);
             Assert.assertEquals("result set size", 3, r.size());
 
-            Assert.assertEquals("sort Ok", "A", r.get(0).sortByCollectionMember().iterator().next().name().getValue());
-            Assert.assertEquals("sort Ok", "1", r.get(0).sortByCollectionMember().iterator().next().amount().getValue());
+            Assert.assertEquals("sort Ok", "A", r.get(0).sortByListMember().iterator().next().name().getValue());
+            Assert.assertEquals("sort Ok", "1", r.get(0).sortByListMember().iterator().next().amount().getValue());
 
-            Assert.assertEquals("sort Ok", "A", r.get(1).sortByCollectionMember().iterator().next().name().getValue());
-            Assert.assertEquals("sort Ok", "2", r.get(1).sortByCollectionMember().iterator().next().amount().getValue());
+            Assert.assertEquals("sort Ok", "A", r.get(1).sortByListMember().iterator().next().name().getValue());
+            Assert.assertEquals("sort Ok", "2", r.get(1).sortByListMember().iterator().next().amount().getValue());
 
-            Assert.assertEquals("sort Ok", "B", r.get(2).sortByCollectionMember().iterator().next().name().getValue());
+            Assert.assertEquals("sort Ok", "B", r.get(2).sortByListMember().iterator().next().name().getValue());
         }
     }
 }
