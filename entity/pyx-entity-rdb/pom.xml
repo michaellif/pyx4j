@@ -262,7 +262,7 @@
                                         <argument>-L</argument>
                                         <argument>-S</argument>
                                         <argument>tst_entity/tst_entity@TST_ENTITY</argument>
-                                        <argument>@${basedir}\scripts\oracle\ora-reset.sql</argument>
+                                        <argument>@${basedir}${file.separator}scripts${file.separator}oracle${file.separator}ora-reset.sql</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -276,6 +276,121 @@
                             <excludes>
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>pyx4j-postgresql-tests</id>
+            <activation>
+                <property>
+                    <name>pyx4j-postgresql-tests</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>test-reset-postgresql-db</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>psql</executable>
+                                    <environmentVariables>
+                                        <PGPASSWORD>tst_entity</PGPASSWORD>
+                                    </environmentVariables>
+                                    <arguments>
+                                        <argument>--username</argument>
+                                        <argument>tst_entity</argument>
+                                        <argument>-f</argument>
+                                        <argument>${basedir}${file.separator}scripts${file.separator}postgre${file.separator}postgre-reset.sql</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/oracle/*.*</exclude>
+                                <exclude>**/mysql/*.*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>pyx4j-open-db-tests</id>
+            <activation>
+                <property>
+                    <name>pyx4j-open-db-tests</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>test-reset-mysql-db</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>mysql</executable>
+                                    <arguments>
+                                        <argument>--user=tst_entity</argument>
+                                        <argument>--password=tst_entity</argument>
+                                        <argument>-e</argument>
+                                        <argument>DROP DATABASE tst_entity; CREATE DATABASE tst_entity;</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>test-reset-postgresql-db</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>psql</executable>
+                                    <environmentVariables>
+                                        <PGPASSWORD>tst_entity</PGPASSWORD>
+                                    </environmentVariables>
+                                    <arguments>
+                                        <argument>--username</argument>
+                                        <argument>tst_entity</argument>
+                                        <argument>-f</argument>
+                                        <argument>${basedir}${file.separator}scripts${file.separator}postgre${file.separator}postgre-reset.sql</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/oracle/*.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
