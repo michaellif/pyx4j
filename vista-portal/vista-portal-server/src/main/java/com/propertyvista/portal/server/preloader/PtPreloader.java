@@ -167,27 +167,27 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
                 ma.equifaxApproval().percenrtageApproved().setValue(overalPercentageApproval);
 
                 if (maxPercentageApproval > 80) {
-                    ma.status().setValue(Status.Approved);
+                    //ma.status().setValue(Status.Approved);
                     ma.equifaxApproval().suggestedDecision().setValue(Decision.Approve);
                 } else if (overalPercentageApproval > 20) {
                     ma.status().setValue(Status.InformationRequested);
                     ma.equifaxApproval().suggestedDecision().setValue(Decision.RequestInfo);
                 } else if (overalPercentageApproval > 50) {
-                    ma.status().setValue(Status.Declined);
+                    //ma.status().setValue(Status.Declined);
                     ma.equifaxApproval().suggestedDecision().setValue(Decision.Decline);
                 } else {
                     ma.equifaxApproval().suggestedDecision().setValue(Decision.Pending);
                 }
 
                 switch (ma.status().getValue()) {
-                case Approved:
+                //case Approved:
                 case InformationRequested:
-                case Declined:
+                    //case Declined:
                 case Cancelled:
                     EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
-                    ma.decidedBy().set(RandomUtil.random(Persistence.service().query(criteria)));
-                    ma.decisionDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
-                    ma.decisionReason().setValue("Decided according current application state and Equifax check results");
+                    summary.lease().leaseApplication().decidedBy().set(RandomUtil.random(Persistence.service().query(criteria)));
+                    summary.lease().leaseApplication().decisionDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
+                    summary.lease().leaseApplication().decisionReason().setValue("Decided according current application state and Equifax check results");
                 }
 
                 Persistence.service().persist(ma.equifaxApproval().checkResultDetails());

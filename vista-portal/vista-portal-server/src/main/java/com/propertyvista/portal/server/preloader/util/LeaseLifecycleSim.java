@@ -75,7 +75,7 @@ public class LeaseLifecycleSim {
         Persistence.secureSave(lease);
 
         Persistence.service().retrieve(lease.application());
-        lease.application().status().setValue(com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication.Status.Invited);
+        lease.application().status().setValue(com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication.Status.Incomplete);
         Persistence.service().merge(lease.application());
 
         return lease;

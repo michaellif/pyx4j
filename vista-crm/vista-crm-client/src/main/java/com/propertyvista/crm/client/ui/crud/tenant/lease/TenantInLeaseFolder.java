@@ -25,7 +25,6 @@ import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -89,12 +88,6 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             }
         }
         return false;
-    }
-
-    @Override
-    protected void removeItem(CEntityFolderItem<TenantInLease> item) {
-        ((LeaseEditorView.Presenter) view.getPresenter()).removeTenat(item.getValue());
-        super.removeItem(item);
     }
 
     @Override

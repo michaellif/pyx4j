@@ -22,7 +22,6 @@ import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -33,8 +32,6 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
         void setSelectedUnit(AptUnit selected);
 
         void setSelectedService(ProductItem serviceItem);
-
-        void removeTenat(TenantInLease tenant);
 
         void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
     }

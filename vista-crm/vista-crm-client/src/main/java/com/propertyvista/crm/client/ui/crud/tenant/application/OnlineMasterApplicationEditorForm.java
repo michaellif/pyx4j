@@ -123,9 +123,9 @@ public class OnlineMasterApplicationEditorForm extends CrmEntityForm<OnlineMaste
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decidedBy()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionDate()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionReason()), 40).build());
+//        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decidedBy()), 25).build());
+//        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionDate()), 9).build());
+//        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionReason()), 40).build());
         main.setHR(++row, 0, 1);
 
         main.setBR(++row, 0, 1);

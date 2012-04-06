@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
+import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -37,6 +38,8 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
         void startBilling();
 
+        void applicationAction(LeaseApplicationActionDTO action);
+
         void notice(LogicalDate date, LogicalDate moveOut);
 
         void cancelNotice();
@@ -46,6 +49,7 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
         void cancelEvict();
 
         void sendMail(List<TenantInLease> tenants, EmailTemplateType emailType);
+
     }
 
     IListerView<BillDTO> getBillListerView();

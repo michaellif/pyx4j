@@ -44,8 +44,8 @@ import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
 import com.propertyvista.dto.ApplicationStatusDTO;
 import com.propertyvista.dto.ApplicationStatusDTO.Role;
@@ -70,9 +70,9 @@ public class ApplicationManager {
 
         OnlineMasterApplication mapp = EntityFactory.create(OnlineMasterApplication.class);
         mapp.lease().set(lease);
-        mapp.status().setValue(OnlineMasterApplication.Status.Created);
+        mapp.status().setValue(OnlineMasterApplication.Status.Incomplete);
 
-        mapp.applicationId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.application));
+        mapp.onlineApplicationId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.application));
         Persistence.service().persist(mapp);
 
         Persistence.service().retrieve(lease.version().tenants());
@@ -80,7 +80,7 @@ public class ApplicationManager {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
                 OnlineApplication app = EntityFactory.create(OnlineApplication.class);
                 app.belongsTo().set(mapp);
-                app.status().setValue(OnlineMasterApplication.Status.Created);
+                app.status().setValue(OnlineApplication.Status.Invited);
                 app.steps().addAll(ApplicationManager.createApplicationProgress(app, tenantInLease.tenant(), VistaTenantBehavior.ProspectiveApplicant));
                 app.user().set(ensureProspectiveTenantUser(tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveApplicant));
                 app.lease().set(mapp.lease());
@@ -111,7 +111,7 @@ public class ApplicationManager {
                 Persistence.service().retrieve(tenantInLease.tenant().user());
                 sendInvitationEmail(tenantInLease.tenant().user(), mapp.lease(), EmailTemplateType.ApplicationCreatedApplicant);
 
-                mapp.status().setValue(OnlineMasterApplication.Status.Invited);
+                //mapp.status().setValue(OnlineMasterApplication.Status.Invited);
                 Persistence.service().persist(mapp);
 
                 mapp.lease().version().status().setValue(Lease.Status.ApplicationInProgress);
@@ -137,7 +137,7 @@ public class ApplicationManager {
     }
 
     public static void makeApplicationCompleted(OnlineApplication application) {
-        application.status().setValue(OnlineMasterApplication.Status.Submitted);
+        application.status().setValue(OnlineApplication.Status.Submitted);
         Persistence.service().persist(application);
 
         TenantUser user = application.user();
@@ -205,10 +205,10 @@ public class ApplicationManager {
         }
 
         if (allApplicationsSubmited) {
-            ma.status().setValue(OnlineMasterApplication.Status.PendingDecision);
+            //ma.status().setValue(OnlineMasterApplication.Status.PendingDecision);
             Persistence.service().persist(ma);
             for (OnlineApplication app : ma.applications()) {
-                app.status().setValue(OnlineMasterApplication.Status.PendingDecision);
+                //app.status().setValue(OnlineMasterApplication.Status.PendingDecision);
                 Persistence.service().persist(app);
             }
         }
@@ -228,7 +228,7 @@ public class ApplicationManager {
 
             application.belongsTo().set(ma);
             application.lease().set(ma.lease());
-            application.status().setValue(OnlineMasterApplication.Status.Created);
+            //application.status().setValue(OnlineMasterApplication.Status.Created);
             application.steps().addAll(ApplicationManager.createApplicationProgress(application, tenant, behaviour));
             application.user().set(ensureProspectiveTenantUser(tenant, person, behaviour));
 
@@ -256,7 +256,7 @@ public class ApplicationManager {
         }
 
         // update app status:
-        application.status().setValue(OnlineMasterApplication.Status.Invited);
+        //application.status().setValue(OnlineMasterApplication.Status.Invited);
         Persistence.service().persist(application);
         return application;
     }
@@ -289,7 +289,7 @@ public class ApplicationManager {
                 }
             }
 
-            status.status().setValue(app.status().getValue());
+            //status.status().setValue(app.status().getValue());
             status.user().set(app.user());
 
             // calculate progress:

@@ -33,10 +33,11 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.OnlineMasterApplicationActionDTO;
+import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
+import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication.Status;
-import com.propertyvista.dto.OnlineApplicationDTO;
 import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.dto.OnlineApplicationDTO;
 import com.propertyvista.dto.OnlineMasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -147,65 +148,68 @@ public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase
         });
         addToolbarItem(checkAction.asWidget());
 
-        approveAction = new Button(APPROVE, new ClickHandler() {
+        // TODO Move Lease
+        {
+            approveAction = new Button(APPROVE, new ClickHandler() {
 
-            @Override
-            public void onClick(ClickEvent event) {
-                new ActionBox(APPROVE) {
-                    @Override
-                    public boolean onClickOk() {
-                        ((OnlineMasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Approved));
-                        return true;
-                    }
-                }.show();
-            }
-        });
-        addToolbarItem(approveAction.asWidget());
+                @Override
+                public void onClick(ClickEvent event) {
+                    new ActionBox(APPROVE) {
+                        @Override
+                        public boolean onClickOk() {
+                            //((OnlineMasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Approved));
+                            return true;
+                        }
+                    }.show();
+                }
+            });
+            addToolbarItem(approveAction.asWidget());
 
-        moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                new EntitySelectorListDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Acqure Info"), true, form.getValue().tenantInfo(),
-                        new EntitySelectorListDialog.Formatter<TenantInfoDTO>() {
-                            @Override
-                            public String format(TenantInfoDTO enntity) {
-                                return enntity.person().name().getStringView();
-                            }
-                        }) {
+            moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    new EntitySelectorListDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Acqure Info"), true, form.getValue().tenantInfo(),
+                            new EntitySelectorListDialog.Formatter<TenantInfoDTO>() {
+                                @Override
+                                public String format(TenantInfoDTO enntity) {
+                                    return enntity.person().name().getStringView();
+                                }
+                            }) {
 
-                    @Override
-                    public boolean onClickOk() {
-                        // TODO make the credit check happen
-                        return true;
-                    }
+                        @Override
+                        public boolean onClickOk() {
+                            // TODO make the credit check happen
+                            return true;
+                        }
 
-                    @Override
-                    public String defineWidth() {
-                        return "350px";
-                    }
+                        @Override
+                        public String defineWidth() {
+                            return "350px";
+                        }
 
-                    @Override
-                    public String defineHeight() {
-                        return "100px";
-                    }
-                }.show();
-            }
-        });
-        addToolbarItem(moreInfoAction.asWidget());
+                        @Override
+                        public String defineHeight() {
+                            return "100px";
+                        }
+                    }.show();
+                }
+            });
+            addToolbarItem(moreInfoAction.asWidget());
 
-        declineAction = new Button(DECLINE, new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                new ActionBox(DECLINE) {
-                    @Override
-                    public boolean onClickOk() {
-                        ((OnlineMasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Declined));
-                        return true;
-                    }
-                }.show();
-            }
-        });
-        addToolbarItem(declineAction.asWidget());
+            declineAction = new Button(DECLINE, new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    new ActionBox(DECLINE) {
+                        @Override
+                        public boolean onClickOk() {
+                            //((OnlineMasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Declined));
+                            return true;
+                        }
+                    }.show();
+                }
+            });
+            addToolbarItem(declineAction.asWidget());
+        }
 
         cancelAction = new Button(CANCEL, new ClickHandler() {
             @Override
@@ -213,7 +217,7 @@ public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase
                 new ActionBox(CANCEL) {
                     @Override
                     public boolean onClickOk() {
-                        ((OnlineMasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Cancelled));
+                        //((OnlineMasterApplicationViewerView.Presenter) presenter).action(updateValue(Status.Cancelled));
                         return true;
                     }
                 }.show();
@@ -242,12 +246,12 @@ public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase
 
         // set buttons state:
         if (!value.lease().unit().isNull()) {
-            Status status = value.status().getValue();
-            inviteAction.setVisible(status != Status.Declined && status != Status.Cancelled);
-            checkAction.setVisible(status != Status.Declined && status != Status.Cancelled);
-            approveAction.setVisible(status != Status.Approved && status != Status.Declined && status != Status.Cancelled);
-            moreInfoAction.setVisible(status != Status.Declined && status != Status.Cancelled);
-            declineAction.setVisible(status != Status.Approved && status != Status.Declined && status != Status.Cancelled);
+            OnlineMasterApplication.Status status = value.status().getValue();
+            inviteAction.setVisible(status != Status.Cancelled);
+            checkAction.setVisible(status != Status.Cancelled);
+            approveAction.setVisible(status != Status.Cancelled);
+            moreInfoAction.setVisible(status != Status.Cancelled);
+            declineAction.setVisible(status != Status.Cancelled);
             cancelAction.setVisible(status != Status.Cancelled);
         }
     }
@@ -284,11 +288,11 @@ public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase
             return content.asWidget();
         }
 
-        public OnlineMasterApplicationActionDTO updateValue(Status status) {
-            OnlineMasterApplicationActionDTO action = EntityFactory.create(OnlineMasterApplicationActionDTO.class);
+        public LeaseApplicationActionDTO updateValue(Status status) {
+            LeaseApplicationActionDTO action = EntityFactory.create(LeaseApplicationActionDTO.class);
             action.setPrimaryKey(form.getValue().getPrimaryKey());
             action.decisionReason().setValue(reason.getValue());
-            action.status().setValue(status);
+            //action.action().setValue(status);
             return action;
         }
     }

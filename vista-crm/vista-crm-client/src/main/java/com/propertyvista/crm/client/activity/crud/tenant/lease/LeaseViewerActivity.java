@@ -37,10 +37,11 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
+import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
+import com.propertyvista.crm.rpc.services.tenant.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -134,6 +135,16 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
             }
         }, entityId);
 
+    }
+
+    @Override
+    public void applicationAction(LeaseApplicationActionDTO action) {
+        ((LeaseCrudService) service).applicationAction(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, action);
     }
 
     @Override

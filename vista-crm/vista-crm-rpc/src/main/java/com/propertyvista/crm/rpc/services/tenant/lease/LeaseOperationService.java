@@ -7,16 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on Apr 5, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.tenant.application;
+package com.propertyvista.crm.rpc.services.tenant.lease;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.dto.OnlineApplicationDTO;
+public interface LeaseOperationService extends IService {
 
-@Deprecated
-public interface OnlineApplicationCrudService extends AbstractCrudService<OnlineApplicationDTO> {
 }

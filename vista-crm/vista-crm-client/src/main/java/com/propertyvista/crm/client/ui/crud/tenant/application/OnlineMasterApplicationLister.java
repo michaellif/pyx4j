@@ -31,7 +31,7 @@ public class OnlineMasterApplicationLister extends ListerBase<OnlineMasterApplic
 
         setColumnDescriptors(new ColumnDescriptor[] {//@formatter:off
 
-                new MemberColumnDescriptor.Builder(proto().applicationId(), true).build(), 
+                new MemberColumnDescriptor.Builder(proto().onlineApplicationId(), true).build(), 
                 new MemberColumnDescriptor.Builder(proto().lease().type(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().propertyCode()).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().unit(), true).build(),
@@ -58,10 +58,10 @@ public class OnlineMasterApplicationLister extends ListerBase<OnlineMasterApplic
                 new MemberColumnDescriptor.Builder(proto().status(), true).build(),
 
                 new MemberColumnDescriptor.Builder(proto().equifaxApproval().percenrtageApproved(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().equifaxApproval().suggestedDecision(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().decidedBy(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().decisionDate(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().decisionReason(), false).build()
+                new MemberColumnDescriptor.Builder(proto().equifaxApproval().suggestedDecision(), false).build()
+//                new MemberColumnDescriptor.Builder(proto().decidedBy(), false).build(),
+//                new MemberColumnDescriptor.Builder(proto().decisionDate(), false).build(),
+//                new MemberColumnDescriptor.Builder(proto().decisionReason(), false).build()
                 }); //@formatter:on
     }
 }

@@ -27,9 +27,9 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -84,11 +84,11 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         // now application set into  PtAppContext in @link PtAuthenticationServiceImpl.beginSession() 
         // but this stuff I live here
         //
-        if (application.status().getValue() == OnlineMasterApplication.Status.Invited) {
-            application.status().setValue(OnlineMasterApplication.Status.Incomplete);
+        if (application.status().getValue() == OnlineApplication.Status.Incomplete) {
+            application.status().setValue(OnlineApplication.Status.Incomplete);
             Persistence.service().persist(application);
             Persistence.service().retrieve(application.belongsTo());
-            if (application.belongsTo().status().getValue() == OnlineMasterApplication.Status.Invited) {
+            if (application.belongsTo().status().getValue() == OnlineMasterApplication.Status.Incomplete) {
                 application.belongsTo().status().setValue(OnlineMasterApplication.Status.Incomplete);
                 Persistence.service().persist(application.belongsTo());
             }

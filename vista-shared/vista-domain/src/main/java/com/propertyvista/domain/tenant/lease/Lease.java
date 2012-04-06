@@ -60,10 +60,6 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
         Approved, // Application
 
-        Declined, // Application
-
-        ApplicationCancelled, // Application
-
         Active,
 
         Completed, // Lease end date is passed
@@ -75,6 +71,19 @@ public interface Lease extends IVersionedEntity<LeaseV> {
         @Override
         public String toString() {
             return I18nEnum.toString(this);
+        }
+
+        public boolean isCurrent() {
+            return this == Approved || this == Active || this == Completed || this == FinalBillIssued;
+        }
+
+        public boolean isDraft() {
+            return this == Created || this == ApplicationInProgress;
+        }
+
+        //TODO find better name
+        public boolean isClosed() {
+            return this == Completed || this == Closed;
         }
     }
 
@@ -189,7 +198,11 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     IPrimitive<LogicalDate> approvalDate();
 
     @Detached
+    @Deprecated
     OnlineMasterApplication application();
+
+    @Owned
+    LeaseApplication leaseApplication();
 
     // Versioned part:
 

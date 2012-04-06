@@ -30,7 +30,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
+import com.propertyvista.crm.rpc.services.tenant.lease.LeaseCrudService;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Concession.Status;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -39,7 +39,6 @@ import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -124,20 +123,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
             view.populate(currentValue);
         }
-    }
-
-    @Override
-    public void removeTenat(TenantInLease tenantInLease) {
-        if (tenantInLease.getPrimaryKey() == null) {
-            // newly added tenant
-            return;
-        }
-        ((LeaseCrudService) service).removeTenat(new DefaultAsyncCallback<Boolean>() {
-
-            @Override
-            public void onSuccess(Boolean result) {
-            }
-        }, tenantInLease.getPrimaryKey());
     }
 
     @Override

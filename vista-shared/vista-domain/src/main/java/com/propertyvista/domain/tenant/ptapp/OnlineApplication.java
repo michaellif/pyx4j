@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.ptapp;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -24,15 +26,34 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication.Status;
 
 /**
  * This is an application progress for tenant, secondary tenant and guarantors.
  */
 public interface OnlineApplication extends IEntity {
+
+    @I18n(context = "OnlineApplication")
+    @XmlType(name = "OnlineApplicationStatus")
+    public enum Status {
+
+        Invited,
+
+        Incomplete,
+
+        InformationRequested,
+
+        Submitted;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
 
     @Owner
     @NotNull
@@ -49,9 +70,10 @@ public interface OnlineApplication extends IEntity {
 
     @Detached
     @Versioned
+    @Deprecated
     Lease lease();
 
-    IPrimitive<Status> status();
+    IPrimitive<OnlineApplication.Status> status();
 
     @Owned
     IList<ApplicationWizardStep> steps();

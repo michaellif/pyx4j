@@ -30,34 +30,22 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.Notes;
-import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.EquifaxApproval;
 
 public interface OnlineMasterApplication extends IEntity {
 
-    @I18n(context = "Application")
-    @XmlType(name = "ApplicationStatus")
+    @I18n(context = "MasterApplication")
+    @XmlType(name = "OnlineMasterApplicationStatus")
     public enum Status {
-
-        Created, // Mapped to Lease status Created
-
-        Invited, // Mapped to Lease status ApplicationInProgress
 
         Incomplete, // Mapped to Lease status ApplicationInProgress
 
-        Submitted, // Mapped to Lease status ApplicationInProgress for Application or PendingDecision for MasterApplication
+        Submitted, // LeaseApplication.Status.Draft
 
-        PendingDecision, // Mapped to Lease status PendingDecision
+        InformationRequested,
 
-        InformationRequested, // Mapped to Lease status ApplicationInProgress
-
-        Approved, // Mapped to Lease status Approved
-
-        Declined, // Mapped to Lease status Approved
-
-        Cancelled; // Mapped to Lease status ApplicationCancelled
+        Cancelled; // LeaseApplication.Status.Draft
 
         @Override
         public String toString() {
@@ -68,7 +56,7 @@ public interface OnlineMasterApplication extends IEntity {
     @NotNull
     @ReadOnly
     @ToString
-    IPrimitive<String> applicationId();
+    IPrimitive<String> onlineApplicationId();
 
     IPrimitive<Status> status();
 
@@ -76,16 +64,9 @@ public interface OnlineMasterApplication extends IEntity {
     @Detached
     ISet<OnlineApplication> applications();
 
-    Employee decidedBy();
-
-    IPrimitive<LogicalDate> decisionDate();
-
-    IPrimitive<String> decisionReason();
-
-    Notes notes();
-
     @Detached
     @Versioned
+    @Deprecated
     Lease lease();
 
     @Timestamp(Update.Created)

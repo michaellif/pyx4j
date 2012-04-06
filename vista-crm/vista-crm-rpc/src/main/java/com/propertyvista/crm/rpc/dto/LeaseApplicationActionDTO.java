@@ -13,18 +13,34 @@
  */
 package com.propertyvista.crm.rpc.dto;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface OnlineMasterApplicationActionDTO extends IEntity {
+public interface LeaseApplicationActionDTO extends IEntity {
 
-    IPrimitive<OnlineMasterApplication.Status> status();
+    public enum Action {
+
+        Approve,
+
+        Decline,
+
+        Cancel;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    IPrimitive<Key> leasePk();
+
+    IPrimitive<Action> action();
 
     IPrimitive<String> decisionReason();
 }

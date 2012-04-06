@@ -30,12 +30,11 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.dto.OnlineMasterApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.tenant.TenantInLeaseCrudService;
 import com.propertyvista.crm.rpc.services.tenant.application.OnlineApplicationCrudService;
 import com.propertyvista.crm.rpc.services.tenant.application.OnlineMasterApplicationCrudService;
-import com.propertyvista.dto.OnlineApplicationDTO;
 import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.dto.OnlineApplicationDTO;
 import com.propertyvista.dto.OnlineMasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
@@ -73,16 +72,6 @@ public class OnlineMasterApplicationViewerActivity extends CrmViewerActivity<Onl
         ((AbstractActivity) applicationLister).onStop();
         ((AbstractActivity) tenantLister).onStop();
         super.onStop();
-    }
-
-    @Override
-    public void action(OnlineMasterApplicationActionDTO action) {
-        ((OnlineMasterApplicationCrudService) service).action(new DefaultAsyncCallback<OnlineMasterApplicationDTO>() {
-            @Override
-            public void onSuccess(OnlineMasterApplicationDTO result) {
-                view.populate(result);
-            }
-        }, action);
     }
 
     @Override

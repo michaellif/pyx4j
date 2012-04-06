@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.tenant.application;
+package com.propertyvista.crm.server.services.tenant.lease;
 
 import java.math.BigDecimal;
 import java.util.Vector;
@@ -30,7 +30,8 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
+import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
+import com.propertyvista.crm.rpc.services.tenant.lease.LeaseCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -47,6 +48,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionTyp
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication.Status;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.mail.MessageTemplates;
@@ -178,14 +180,6 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         callback.onSuccess(unit);
     }
 
-    @Override
-    public void removeTenat(AsyncCallback<Boolean> callback, Key tenantId) {
-        // TODO if should physically remove it here or just break relation to Lease (TenantInLease.lease().set(null))? 
-        Persistence.service().delete(Persistence.service().retrieve(TenantInLease.class, tenantId));
-        Persistence.service().commit();
-        callback.onSuccess(true);
-    }
-
     private Building syncBuildingProductCatalog(Building building) {
         if (building == null || building.isNull()) {
             return null;
@@ -235,6 +229,40 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         Lease lease = Persistence.secureRetrieveDraft(dboClass, entityId);
         OnlineMasterApplication ma = ApplicationManager.createMasterApplication(lease);
         ApplicationManager.sendMasterApplicationEmail(ma);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO) {
+        Lease lease = Persistence.service().retrieve(Lease.class, actionDTO.leasePk().getValue());
+
+        // TODO this is wrong!
+        Status currentStatus = lease.application().status().getValue();
+
+        //TODO set status base on action.
+        lease.leaseApplication().decidedBy().set(CrmAppContext.getCurrentUserEmployee());
+        lease.leaseApplication().decisionReason().setValue(actionDTO.decisionReason().getValue());
+        lease.leaseApplication().decisionDate().setValue(new LogicalDate());
+        Persistence.secureSave(lease);
+
+        switch (actionDTO.action().getValue()) {
+        case Approve:
+            Lease approvedLease = new LeaseManager().approveApplication(lease.getPrimaryKey());
+            if (currentStatus != OnlineMasterApplication.Status.Incomplete) {
+                ApplicationManager.sendApproveDeclineApplicationEmail(approvedLease, true);
+            }
+            break;
+        case Decline:
+            Lease declinedLease = new LeaseManager().declineApplication(lease.getPrimaryKey());
+            if (currentStatus != OnlineMasterApplication.Status.Incomplete) {
+                ApplicationManager.sendApproveDeclineApplicationEmail(declinedLease, false);
+            }
+            break;
+        case Cancel:
+            new LeaseManager().cancelApplication(lease.getPrimaryKey());
+            break;
+        }
         Persistence.service().commit();
         callback.onSuccess(null);
     }

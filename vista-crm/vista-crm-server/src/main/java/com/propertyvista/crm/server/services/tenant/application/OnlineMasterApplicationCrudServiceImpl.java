@@ -20,7 +20,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -28,9 +27,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.crm.rpc.dto.OnlineMasterApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.tenant.application.OnlineMasterApplicationCrudService;
-import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.PersonGuarantor;
@@ -38,7 +35,6 @@ import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.ApplicationUserDTO.ApplicationUser;
@@ -47,7 +43,6 @@ import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
-import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -101,41 +96,6 @@ public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceD
     protected void enhanceRetrieved(OnlineMasterApplication in, OnlineMasterApplicationDTO dto) {
         enhanceListRetrieved(in, dto);
         dto.masterApplicationStatus().set(ApplicationManager.calculateStatus(in));
-    }
-
-    @Override
-    public void action(AsyncCallback<OnlineMasterApplicationDTO> callback, OnlineMasterApplicationActionDTO actionDTO) {
-        OnlineMasterApplication dbo = Persistence.service().retrieve(dboClass, actionDTO.getPrimaryKey());
-        OnlineMasterApplication.Status currentStatus = dbo.status().getValue();
-
-        dbo.status().setValue(actionDTO.status().getValue());
-        dbo.decidedBy().set(CrmAppContext.getCurrentUserEmployee());
-        dbo.decisionReason().setValue(actionDTO.decisionReason().getValue());
-        dbo.decisionDate().setValue(new LogicalDate());
-        Persistence.service().merge(dbo);
-
-        switch (actionDTO.status().getValue()) {
-        case Approved:
-            Lease approvedLease = new LeaseManager().approveApplication(dbo.lease().getPrimaryKey());
-            if (currentStatus != OnlineMasterApplication.Status.Created) {
-                ApplicationManager.sendApproveDeclineApplicationEmail(approvedLease, true);
-            }
-            break;
-        case Declined:
-            Lease declinedLease = new LeaseManager().declineApplication(dbo.lease().getPrimaryKey());
-            if (currentStatus != OnlineMasterApplication.Status.Created) {
-                ApplicationManager.sendApproveDeclineApplicationEmail(declinedLease, false);
-            }
-            break;
-        case Cancelled:
-            new LeaseManager().cancelApplication(dbo.lease().getPrimaryKey());
-            break;
-        }
-        Persistence.service().commit();
-
-        // return data for view
-        retrieve(callback, actionDTO.getPrimaryKey(), RetrieveTraget.View);
-        Persistence.service().commit();
     }
 
     // internal helpers:

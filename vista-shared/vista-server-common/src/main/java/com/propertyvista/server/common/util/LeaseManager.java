@@ -249,7 +249,7 @@ public class LeaseManager {
 
     public Lease declineApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
-        lease.version().status().setValue(Status.Declined);
+        //lease.version().status().setValue(Status.Declined);
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
@@ -261,7 +261,7 @@ public class LeaseManager {
 
     public Lease cancelApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
-        lease.version().status().setValue(Status.ApplicationCancelled);
+        //lease.version().status().setValue(Status.ApplicationCancelled);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
