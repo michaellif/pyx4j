@@ -44,4 +44,9 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
     public int tablesItentityOffset() {
         return 997;
     }
+
+    @Override
+    public boolean isMultitenant() {
+        return true;
+    }
 }
