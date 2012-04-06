@@ -35,7 +35,7 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
@@ -274,9 +274,9 @@ public class LeaseManager {
 
     private void updateApplicationReferencesToFinalVersionOfLase(Lease lease) {
         // update reference to first version of Lease in MasterApplication and Applications
-        EntityQueryCriteria<OnlineMasterApplication> criteria = EntityQueryCriteria.create(OnlineMasterApplication.class);
+        EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease.getPrimaryKey().asDraftKey()));
-        OnlineMasterApplication ma = Persistence.service().retrieve(criteria);
+        MasterOnlineApplication ma = Persistence.service().retrieve(criteria);
         if (ma != null) {
             ma.lease().set(lease);
             Persistence.service().retrieve(ma.applications());

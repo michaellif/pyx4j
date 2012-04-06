@@ -47,8 +47,8 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication.Status;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication.Status;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.mail.MessageTemplates;
@@ -227,7 +227,7 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
     @Override
     public void startApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.secureRetrieveDraft(dboClass, entityId);
-        OnlineMasterApplication ma = ApplicationManager.createMasterApplication(lease);
+        MasterOnlineApplication ma = ApplicationManager.createMasterApplication(lease);
         ApplicationManager.sendMasterApplicationEmail(ma);
         Persistence.service().commit();
         callback.onSuccess(null);
@@ -249,13 +249,13 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         switch (actionDTO.action().getValue()) {
         case Approve:
             Lease approvedLease = new LeaseManager().approveApplication(lease.getPrimaryKey());
-            if (currentStatus != OnlineMasterApplication.Status.Incomplete) {
+            if (currentStatus != MasterOnlineApplication.Status.Incomplete) {
                 ApplicationManager.sendApproveDeclineApplicationEmail(approvedLease, true);
             }
             break;
         case Decline:
             Lease declinedLease = new LeaseManager().declineApplication(lease.getPrimaryKey());
-            if (currentStatus != OnlineMasterApplication.Status.Incomplete) {
+            if (currentStatus != MasterOnlineApplication.Status.Incomplete) {
                 ApplicationManager.sendApproveDeclineApplicationEmail(declinedLease, false);
             }
             break;

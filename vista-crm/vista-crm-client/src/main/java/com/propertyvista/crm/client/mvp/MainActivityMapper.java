@@ -183,7 +183,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.misc.EquifaxResult;
 
 public class MainActivityMapper implements AppActivityMapper {
@@ -215,7 +215,7 @@ public class MainActivityMapper implements AppActivityMapper {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Guarantor.class);
         } else if (entityClass.equals(Lease.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Lease.class);
-        } else if (entityClass.equals(OnlineMasterApplication.class)) {
+        } else if (entityClass.equals(MasterOnlineApplication.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.OnlineMasterApplication.class);
         } else if (entityClass.equals(EquifaxResult.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.EquifaxResult.class);

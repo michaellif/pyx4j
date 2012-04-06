@@ -7,16 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 10, 2012
+ * Created on Apr 6, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.security;
+package com.propertyvista.domain.tenant.lease;
 
-import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.shared.IEntity;
 
-//TODO rename CustomerUser
-@Caption(name = "User")
-public interface TenantUser extends AbstractUser {
+@AbstractEntity
+public interface LeaseParticipant extends IEntity {
+
+    // Customer;
+
+    //@Owner
+    // Lease.LeaseV leaseV();
 
 }

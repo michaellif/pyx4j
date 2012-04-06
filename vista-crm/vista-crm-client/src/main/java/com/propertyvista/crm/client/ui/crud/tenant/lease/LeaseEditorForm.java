@@ -53,7 +53,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -156,9 +156,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     ++row,
                     0,
                     new DecoratorBuilder(inject(proto().application(),
-                            new CEntityCrudHyperlink<OnlineMasterApplication>(MainActivityMapper.getCrudAppPlace(OnlineMasterApplication.class))), 20).build());
+                            new CEntityCrudHyperlink<MasterOnlineApplication>(MainActivityMapper.getCrudAppPlace(MasterOnlineApplication.class))), 20).build());
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().application(), new CEntityLabel<OnlineMasterApplication>()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().application(), new CEntityLabel<MasterOnlineApplication>()), 20).build());
         }
 
         // Lease dates:

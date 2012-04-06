@@ -46,7 +46,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.ApplicationStatusDTO;
 import com.propertyvista.dto.ApplicationStatusDTO.Role;
 import com.propertyvista.dto.OnlineMasterApplicationStatusDTO;
@@ -62,15 +62,15 @@ public class ApplicationManager {
 
     private static final I18n i18n = I18n.get(ApplicationManager.class);
 
-    public static OnlineMasterApplication createMasterApplication(Lease lease) {
+    public static MasterOnlineApplication createMasterApplication(Lease lease) {
         if (!lease.application().isNull()) {
             Persistence.service().retrieve(lease.application());
             return lease.application();
         }
 
-        OnlineMasterApplication mapp = EntityFactory.create(OnlineMasterApplication.class);
+        MasterOnlineApplication mapp = EntityFactory.create(MasterOnlineApplication.class);
         mapp.lease().set(lease);
-        mapp.status().setValue(OnlineMasterApplication.Status.Incomplete);
+        mapp.status().setValue(MasterOnlineApplication.Status.Incomplete);
 
         mapp.onlineApplicationId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.application));
         Persistence.service().persist(mapp);
@@ -103,7 +103,7 @@ public class ApplicationManager {
         throw new UserRuntimeException("Main applicant not found");
     }
 
-    public static void sendMasterApplicationEmail(OnlineMasterApplication mapp) {
+    public static void sendMasterApplicationEmail(MasterOnlineApplication mapp) {
         Persistence.service().retrieve(mapp.lease());
         Persistence.service().retrieve(mapp.lease().version().tenants());
         for (TenantInLease tenantInLease : mapp.lease().version().tenants()) {
@@ -162,7 +162,7 @@ public class ApplicationManager {
             Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
         }
 
-        OnlineMasterApplication ma = application.belongsTo();
+        MasterOnlineApplication ma = application.belongsTo();
         Persistence.service().retrieve(ma);
         Persistence.service().retrieve(ma.lease());
         boolean allApplicationsSubmited = false;
@@ -197,7 +197,7 @@ public class ApplicationManager {
             allApplicationsSubmited = true;
             Persistence.service().retrieve(ma.applications());
             for (OnlineApplication app : ma.applications()) {
-                if (!app.status().getValue().equals(OnlineMasterApplication.Status.Submitted)) {
+                if (!app.status().getValue().equals(MasterOnlineApplication.Status.Submitted)) {
                     allApplicationsSubmited = false;
                     break;
                 }
@@ -214,7 +214,7 @@ public class ApplicationManager {
         }
     }
 
-    public static OnlineApplication inviteUser(OnlineMasterApplication ma, TenantUserHolder tenant, Person person, VistaTenantBehavior behaviour) {
+    public static OnlineApplication inviteUser(MasterOnlineApplication ma, TenantUserHolder tenant, Person person, VistaTenantBehavior behaviour) {
         OnlineApplication application = null;
         for (OnlineApplication app : ma.applications()) {
             Persistence.service().retrieve(app);
@@ -261,7 +261,7 @@ public class ApplicationManager {
         return application;
     }
 
-    public static OnlineMasterApplicationStatusDTO calculateStatus(OnlineMasterApplication ma) {
+    public static OnlineMasterApplicationStatusDTO calculateStatus(MasterOnlineApplication ma) {
         OnlineMasterApplicationStatusDTO maStatus = EntityFactory.create(OnlineMasterApplicationStatusDTO.class);
 
         double progressSum = 0.0;

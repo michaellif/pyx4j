@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationStatusSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -39,11 +39,11 @@ public class ApplicationStatusServiceImpl extends ApplicationEntityServiceImpl i
         log.info("Retrieving Status and Summary for tenant {}", PtAppContext.getCurrentUserLeasePrimaryKey());
 
         // find master application:
-        EntityQueryCriteria<OnlineMasterApplication> criteria = new EntityQueryCriteria<OnlineMasterApplication>(OnlineMasterApplication.class);
+        EntityQueryCriteria<MasterOnlineApplication> criteria = new EntityQueryCriteria<MasterOnlineApplication>(MasterOnlineApplication.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease(), PtAppContext.getCurrentUserLeasePrimaryKey()));
-        OnlineMasterApplication ma = Persistence.service().retrieve(criteria);
+        MasterOnlineApplication ma = Persistence.service().retrieve(criteria);
         if ((ma == null) || (ma.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(OnlineMasterApplication.class).getCaption() + "' for lease "
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(MasterOnlineApplication.class).getCaption() + "' for lease "
                     + PtAppContext.getCurrentUserLeasePrimaryKey() + " NotFound");
         }
 

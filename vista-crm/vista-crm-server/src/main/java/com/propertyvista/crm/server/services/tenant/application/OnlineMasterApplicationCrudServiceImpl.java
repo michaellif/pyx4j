@@ -35,7 +35,7 @@ import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.ApplicationUserDTO.ApplicationUser;
 import com.propertyvista.dto.OnlineMasterApplicationDTO;
@@ -46,11 +46,11 @@ import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
-public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<OnlineMasterApplication, OnlineMasterApplicationDTO> implements
+public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceDtoImpl<MasterOnlineApplication, OnlineMasterApplicationDTO> implements
         OnlineMasterApplicationCrudService {
 
     public OnlineMasterApplicationCrudServiceImpl() {
-        super(OnlineMasterApplication.class, OnlineMasterApplicationDTO.class);
+        super(MasterOnlineApplication.class, OnlineMasterApplicationDTO.class);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceD
     }
 
     @Override
-    protected void enhanceListRetrieved(OnlineMasterApplication in, OnlineMasterApplicationDTO dto) {
+    protected void enhanceListRetrieved(MasterOnlineApplication in, OnlineMasterApplicationDTO dto) {
 
         Persistence.service().retrieve(dto.lease());
         Persistence.service().retrieve(dto.lease().unit());
@@ -93,7 +93,7 @@ public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceD
     }
 
     @Override
-    protected void enhanceRetrieved(OnlineMasterApplication in, OnlineMasterApplicationDTO dto) {
+    protected void enhanceRetrieved(MasterOnlineApplication in, OnlineMasterApplicationDTO dto) {
         enhanceListRetrieved(in, dto);
         dto.masterApplicationStatus().set(ApplicationManager.calculateStatus(in));
     }
@@ -111,7 +111,7 @@ public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceD
         return tfDTO;
     }
 
-    private void calculatePrices(OnlineMasterApplication in, OnlineMasterApplicationDTO dto) {
+    private void calculatePrices(MasterOnlineApplication in, OnlineMasterApplicationDTO dto) {
         // calculate price adjustments:
         PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().version().leaseProducts().serviceItem());
 
@@ -139,7 +139,7 @@ public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceD
 
     @Override
     public void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId) {
-        OnlineMasterApplication entity = Persistence.service().retrieve(dboClass, entityId);
+        MasterOnlineApplication entity = Persistence.service().retrieve(dboClass, entityId);
         if ((entity == null) || (entity.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }
@@ -187,7 +187,7 @@ public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceD
 
     @Override
     public void inviteUsers(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users) {
-        OnlineMasterApplication entity = Persistence.service().retrieve(dboClass, entityId);
+        MasterOnlineApplication entity = Persistence.service().retrieve(dboClass, entityId);
         if ((entity == null) || (entity.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }

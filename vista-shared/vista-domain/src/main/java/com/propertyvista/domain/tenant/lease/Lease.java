@@ -45,7 +45,7 @@ import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 
 @ToStringFormat("{0}, {1}, {2}, {3}")
 public interface Lease extends IVersionedEntity<LeaseV> {
@@ -199,7 +199,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
     @Detached
     @Deprecated
-    OnlineMasterApplication application();
+    MasterOnlineApplication application();
 
     @Owned
     LeaseApplication leaseApplication();

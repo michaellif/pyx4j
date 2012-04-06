@@ -16,6 +16,7 @@ package com.propertyvista.domain.tenant.lease;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -26,7 +27,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.misc.EquifaxApproval;
 
 public interface LeaseApplication extends IEntity {
@@ -58,7 +59,8 @@ public interface LeaseApplication extends IEntity {
     Lease lease();
 
     @Owned
-    OnlineMasterApplication onlineApplication();
+    @Detached
+    MasterOnlineApplication onlineApplication();
 
     Employee decidedBy();
 

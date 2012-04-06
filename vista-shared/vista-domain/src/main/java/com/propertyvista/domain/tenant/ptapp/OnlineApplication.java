@@ -60,7 +60,7 @@ public interface OnlineApplication extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    OnlineMasterApplication belongsTo();
+    MasterOnlineApplication belongsTo();
 
     @NotNull
     @ReadOnly

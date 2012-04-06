@@ -24,10 +24,10 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 
 @Transient
-public interface OnlineMasterApplicationDTO extends OnlineMasterApplication {
+public interface OnlineMasterApplicationDTO extends MasterOnlineApplication {
 
     Tenant mainApplicant();
 

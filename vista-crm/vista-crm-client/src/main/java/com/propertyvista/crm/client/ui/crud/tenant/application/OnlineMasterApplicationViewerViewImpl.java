@@ -34,8 +34,8 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication.Status;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication.Status;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.OnlineApplicationDTO;
 import com.propertyvista.dto.OnlineMasterApplicationDTO;
@@ -246,7 +246,7 @@ public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase
 
         // set buttons state:
         if (!value.lease().unit().isNull()) {
-            OnlineMasterApplication.Status status = value.status().getValue();
+            MasterOnlineApplication.Status status = value.status().getValue();
             inviteAction.setVisible(status != Status.Cancelled);
             checkAction.setVisible(status != Status.Cancelled);
             approveAction.setVisible(status != Status.Cancelled);

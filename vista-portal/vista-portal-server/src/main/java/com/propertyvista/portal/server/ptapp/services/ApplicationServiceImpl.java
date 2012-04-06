@@ -30,7 +30,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
@@ -88,8 +88,8 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             application.status().setValue(OnlineApplication.Status.Incomplete);
             Persistence.service().persist(application);
             Persistence.service().retrieve(application.belongsTo());
-            if (application.belongsTo().status().getValue() == OnlineMasterApplication.Status.Incomplete) {
-                application.belongsTo().status().setValue(OnlineMasterApplication.Status.Incomplete);
+            if (application.belongsTo().status().getValue() == MasterOnlineApplication.Status.Incomplete) {
+                application.belongsTo().status().setValue(MasterOnlineApplication.Status.Incomplete);
                 Persistence.service().persist(application.belongsTo());
             }
         }

@@ -36,11 +36,12 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 
 @ToStringFormat("{0} - {1}, {2}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface TenantInLease extends IBoundToApplication {
+public interface TenantInLease extends IBoundToApplication, LeaseParticipant {
 
     @I18n
     @XmlType(name = "TenantStatus")

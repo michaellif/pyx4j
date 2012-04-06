@@ -46,8 +46,8 @@ import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication.Status;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication.Status;
 import com.propertyvista.misc.EquifaxApproval.Decision;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -162,7 +162,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
         // Create working appl. only for first half 
         if (cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {
-            OnlineMasterApplication ma = summary.lease().application();
+            MasterOnlineApplication ma = summary.lease().application();
             if (PTGenerator.equifaxDemo) {
                 ma.equifaxApproval().percenrtageApproved().setValue(overalPercentageApproval);
 

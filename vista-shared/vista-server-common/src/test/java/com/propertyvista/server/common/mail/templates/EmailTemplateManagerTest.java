@@ -49,7 +49,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineMasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.common.mail.MessageTemplates;
@@ -567,7 +567,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         // ...
 
         // create applications
-        OnlineMasterApplication mApp = EntityFactory.create(OnlineMasterApplication.class);
+        MasterOnlineApplication mApp = EntityFactory.create(MasterOnlineApplication.class);
         Persistence.service().persist(mApp);
         mainApp = EntityFactory.create(OnlineApplication.class);
         mainApp.belongsTo().set(mApp);

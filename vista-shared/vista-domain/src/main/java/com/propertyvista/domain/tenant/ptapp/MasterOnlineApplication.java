@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
@@ -31,12 +32,13 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.misc.EquifaxApproval;
 
-public interface OnlineMasterApplication extends IEntity {
+public interface MasterOnlineApplication extends IEntity {
 
-    @I18n(context = "MasterApplication")
-    @XmlType(name = "OnlineMasterApplicationStatus")
+    @I18n(context = "MasterOnlineApplication")
+    @XmlType(name = "MasterOnlineApplicationStatus")
     public enum Status {
 
         Incomplete, // Mapped to Lease status ApplicationInProgress
@@ -52,6 +54,9 @@ public interface OnlineMasterApplication extends IEntity {
             return I18nEnum.toString(this);
         }
     }
+
+    @Owner
+    LeaseApplication leaseApplication();
 
     @NotNull
     @ReadOnly
