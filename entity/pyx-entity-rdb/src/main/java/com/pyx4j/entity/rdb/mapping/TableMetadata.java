@@ -77,7 +77,13 @@ public class TableMetadata {
         ResultSet rs = null;
         try {
             DatabaseMetaData dbMeta = connection.getMetaData();
-            rs = dbMeta.getTables(null, null, name, null);
+            String storedName = name;
+            if (dbMeta.storesLowerCaseIdentifiers()) {
+                storedName = name.toLowerCase(Locale.ENGLISH);
+            } else if (dbMeta.storesUpperCaseIdentifiers()) {
+                storedName = name.toUpperCase(Locale.ENGLISH);
+            }
+            rs = dbMeta.getTables(null, null, storedName, null);
             if (rs.next()) {
                 return true;
             } else {

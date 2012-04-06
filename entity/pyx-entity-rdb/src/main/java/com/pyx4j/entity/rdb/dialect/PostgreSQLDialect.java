@@ -100,7 +100,7 @@ public class PostgreSQLDialect extends Dialect {
 
     @Override
     public String sqlDropForeignKey(String tableName, String constraintName) {
-        return "ALTER TABLE " + tableName + " DROP FOREIGN KEY " + constraintName;
+        return "ALTER TABLE " + tableName + " DROP CONSTRAINT " + constraintName;
     }
 
     @Override
