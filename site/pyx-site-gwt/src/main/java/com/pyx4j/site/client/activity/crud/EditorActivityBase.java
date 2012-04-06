@@ -23,7 +23,6 @@ package com.pyx4j.site.client.activity.crud;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -204,7 +203,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void cancel() {
         if (isNewEntity()) {
-            History.back();
+            AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
         } else {
             goToViewer(entityID);
         }

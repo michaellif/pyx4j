@@ -50,7 +50,7 @@ public abstract class CrudAppPlace extends AppPlace {
     }
 
     public void setType(Type type) {
-        placeArg(ARG_NAME_CRUD_TYPE, type.name());
+        queryArg(ARG_NAME_CRUD_TYPE, type.name());
     }
 
     public Type getType() {
