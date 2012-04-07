@@ -1,8 +1,8 @@
 @echo off
 rem @version $Revision$ ($Author$)  $Date$
 title psql
-set PGPASSWORD=tst_entity
-psql --username tst_entity --file postgre-reset.sql
+set PGPASSWORD=root
+psql --username postgres
 @if errorlevel 1 goto errormark
 
 @goto endmark

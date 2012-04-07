@@ -1,5 +1,3 @@
-
-DROP DATABASE tst_entity;
-
-CREATE DATABASE tst_entity;
-
+-- @version $Revision$ ($Author$) $Date$
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
