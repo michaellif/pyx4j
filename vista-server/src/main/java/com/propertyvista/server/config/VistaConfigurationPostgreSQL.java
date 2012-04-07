@@ -55,6 +55,6 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
 
     @Override
     public NamingConvention namingConvention() {
-        return new NamingConventionOracle(63, null, false, false);
+        return new NamingConventionOracle(63, null, false, false, '$');
     }
 }
