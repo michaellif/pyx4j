@@ -24,13 +24,15 @@ import java.util.List;
 
 public class NamingConventionOracle implements NamingConvention {
 
-    private boolean mustBeginWithLetter = false;
+    private final boolean mustBeginWithLetter;
 
     private final int identifierMaximumLength;
 
     private final ShortWords shortWords;
 
     private final boolean forceShortWords;
+
+    private final char childSeparator;
 
     public NamingConventionOracle() {
         this(30, null);
@@ -41,14 +43,15 @@ public class NamingConventionOracle implements NamingConvention {
     }
 
     public NamingConventionOracle(int identifierMaximumLength, ShortWords shortWords, boolean forceShortWords) {
-        this(identifierMaximumLength, shortWords, forceShortWords, true);
+        this(identifierMaximumLength, shortWords, forceShortWords, true, '_');
     }
 
-    public NamingConventionOracle(int identifierMaximumLength, ShortWords shortWords, boolean forceShortWords, boolean mustBeginWithLetter) {
+    public NamingConventionOracle(int identifierMaximumLength, ShortWords shortWords, boolean forceShortWords, boolean mustBeginWithLetter, char childSeparator) {
         this.identifierMaximumLength = identifierMaximumLength;
         this.shortWords = shortWords;
         this.forceShortWords = forceShortWords;
         this.mustBeginWithLetter = mustBeginWithLetter;
+        this.childSeparator = childSeparator;
     }
 
     public String shortForm(String word) {
@@ -72,7 +75,7 @@ public class NamingConventionOracle implements NamingConvention {
         StringBuilder currentWord = new StringBuilder();
         boolean wordStart = true;
         for (char c : word.toCharArray()) {
-            if (c == '_') {
+            if (c == '_' || c == childSeparator) {
                 if (currentWord.length() > 0) {
                     b.append(makeNameFragment(currentWord.toString(), useShortForms));
                     currentWord = new StringBuilder();
@@ -80,7 +83,7 @@ public class NamingConventionOracle implements NamingConvention {
                 } else if (mustBeginWithLetter) {
                     continue;
                 }
-                b.append('_');
+                b.append(c);
             } else if (Character.isUpperCase(c)) {
                 if (!wordStart) {
                     b.append(makeNameFragment(currentWord.toString(), useShortForms));
@@ -153,7 +156,7 @@ public class NamingConventionOracle implements NamingConvention {
 
     @Override
     public String sqlChildTableName(String javaPersistenceTableName, String javaPersistenceChildTableName) {
-        return makeName(sqlTableName(javaPersistenceTableName) + "_" + sqlTableName(javaPersistenceChildTableName));
+        return makeName(sqlTableName(javaPersistenceTableName) + childSeparator + sqlTableName(javaPersistenceChildTableName));
     }
 
     @Override
@@ -203,7 +206,7 @@ public class NamingConventionOracle implements NamingConvention {
         sql.append(makeName(javaPersistenceTableName));
         for (String pathPart : path) {
             sql.append(makeName(pathPart));
-            sql.append('_');
+            sql.append(childSeparator);
         }
         sql.append(makeName(javaPersistenceFieldName));
         return makeName(sql.toString());
