@@ -313,6 +313,7 @@
                                         <argument>tst_entity</argument>
                                         <argument>-h</argument>
                                         <argument>localhost</argument>
+                                        <argument>-q</argument>
                                         <argument>-f</argument>
                                         <argument>${basedir}${file.separator}scripts${file.separator}postgre${file.separator}postgre-reset.sql</argument>
                                     </arguments>
@@ -381,6 +382,7 @@
                                         <argument>tst_entity</argument>
                                         <argument>-h</argument>
                                         <argument>localhost</argument>
+                                        <argument>-q</argument>
                                         <argument>-f</argument>
                                         <argument>${basedir}${file.separator}scripts${file.separator}postgre${file.separator}postgre-reset.sql</argument>
                                     </arguments>
