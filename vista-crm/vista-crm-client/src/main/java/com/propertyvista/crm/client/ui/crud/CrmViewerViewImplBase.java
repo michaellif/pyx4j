@@ -27,18 +27,20 @@ import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.VersionSelectorDialog;
-import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 import com.propertyvista.crm.rpc.services.pub.BreadcrumbsService;
 
 public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
 
     private static final I18n i18n = I18n.get(CrmViewerViewImplBase.class);
+
+    private BreadcrumbsBar breadcrumbsBar;
 
     private BreadcrumbsService breadcumbsService;
 
@@ -55,10 +57,10 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     }
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, boolean viewOnly) {
-        super(new CrmTitleBar(), null, CrmTheme.defaultHeaderHeight);
+        super();
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
-        ((CrmTitleBar) getHeader()).populate(defaultCaption);
+        setCaption(defaultCaption);
 
         if (!viewOnly) {
             editButton = new Button(i18n.tr("Edit"), new ClickHandler() {
@@ -69,10 +71,13 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             });
             editButton.addStyleName(editButton.getStylePrimaryName() + CrmTheme.StyleSuffixEx.EditButton);
 
-            addToolbarItem(editButton);
+            addHeaderToolbarTwoItem(editButton);
         }
 
         this.breadcumbsService = GWT.<BreadcrumbsService> create(BreadcrumbsService.class);
+
+        breadcrumbsBar = new BreadcrumbsBar();
+        addHeaderToolbarOneItem(breadcrumbsBar);
     }
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
@@ -131,11 +136,12 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     }
 
     protected void populateBreadcrumbs(E value, final String caption) {
-        breadcumbsService.breadcrumbtrail(new AsyncCallback<Vector<IEntity>>() {
+        breadcumbsService.obtainBreadcrumbTrail(new AsyncCallback<Vector<IEntity>>() {
 
             @Override
             public void onSuccess(Vector<IEntity> result) {
-                ((CrmTitleBar) getHeader()).populate(result, caption);
+                setCaption(caption);
+                breadcrumbsBar.populate(result);
             }
 
             @Override
@@ -164,7 +170,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
                 }.show();
             }
         });
-        addToolbarItem(selectVersion.asWidget());
+        addHeaderToolbarTwoItem(selectVersion.asWidget());
 
         finalizeButton = new Button(i18n.tr("Finalize"), new ClickHandler() {
             @Override
@@ -172,7 +178,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
                 presenter.approveFinal();
             }
         });
-        addToolbarItem(finalizeButton.asWidget());
+        addHeaderToolbarTwoItem(finalizeButton.asWidget());
 
         if (editButton != null) {
             editButton.setCaption(i18n.tr("Edit Draft"));

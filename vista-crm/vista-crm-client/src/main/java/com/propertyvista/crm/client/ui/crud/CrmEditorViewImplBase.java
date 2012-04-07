@@ -26,11 +26,8 @@ import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 
 public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
@@ -45,12 +42,10 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     protected EditMode mode;
 
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        super(new CrmTitleBar(), new Toolbar(), CrmTheme.defaultHeaderHeight);
+        super();
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
-        ((CrmTitleBar) getHeader()).populate(defaultCaption);
-
-        Toolbar footer = ((Toolbar) getFooter());
+        setCaption(defaultCaption);
 
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
@@ -62,7 +57,8 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
                 getPresenter().apply();
             }
         });
-        footer.addItem(btnApply);
+
+        addFooterToolbarItem(btnApply);
 
         btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
@@ -74,7 +70,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
                 getPresenter().save();
             }
         });
-        footer.addItem(btnSave);
+        addFooterToolbarItem(btnSave);
 
         AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
             @Override
@@ -82,7 +78,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
                 getPresenter().cancel();
             }
         });
-        footer.addItem(btnCancel);
+        addFooterToolbarItem(btnCancel);
 
         enableButtons(false);
     }
@@ -108,10 +104,10 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     public void populate(E value) {
         enableButtons(false);
         if (EditMode.newItem.equals(mode)) {
-            ((CrmTitleBar) getHeader()).populate(defaultCaption + " " + i18n.tr("New Item..."));
+            setCaption(defaultCaption + " " + i18n.tr("New Item..."));
             form.setActiveTab(0);
         } else {
-            ((CrmTitleBar) getHeader()).populate(defaultCaption + " " + (value == null ? "" : value.getStringView()));
+            setCaption(defaultCaption + " " + (value == null ? "" : value.getStringView()));
         }
 
         super.populate(value);

@@ -32,7 +32,7 @@ public class PageViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implem
         super(CrmSiteMap.Settings.Page.class, new PageEditorForm(true));
 
         // Add actions:
-        addToolbarItem(new Button(i18n.tr("Add Child Page"), new ClickHandler() {
+        addHeaderToolbarTwoItem(new Button(i18n.tr("Add Child Page"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 Key valueKey = form.getValue().getPrimaryKey();

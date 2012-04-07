@@ -25,7 +25,7 @@ import com.propertyvista.server.common.breadcurmbs.BreadcrumbsHelper;
 public class BreadcrumbsServiceImpl implements BreadcrumbsService {
 
     @Override
-    public void breadcrumbtrail(AsyncCallback<Vector<IEntity>> callback, IEntity entity) {
+    public void obtainBreadcrumbTrail(AsyncCallback<Vector<IEntity>> callback, IEntity entity) {
         callback.onSuccess(new Vector<IEntity>(new BreadcrumbsHelper().breadcrumbTrail(entity)));
     }
 }

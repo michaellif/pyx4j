@@ -32,11 +32,11 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
-import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -135,8 +135,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             left.setWidget(++row, 0, buildingPlace = new SimplePanel());
         } else {
             left.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().belongsTo(), new CEntityCrudHyperlink<Building>(MainActivityMapper.getCrudAppPlace(Building.class))),
-                            20).build());
+                    new DecoratorBuilder(inject(proto().belongsTo(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20)
+                            .build());
         }
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatus()), 20).build());

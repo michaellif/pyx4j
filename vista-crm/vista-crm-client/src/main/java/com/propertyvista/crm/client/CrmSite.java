@@ -69,6 +69,8 @@ public class CrmSite extends VistaSite {
 
         RootLayoutPanel.get().add(new CrmPanel());
 
+        CrmEntityMapper.init();
+
         SessionInactiveDialog.register();
         SessionMonitor.addSessionInactiveHandler(new SessionInactiveHandler() {
             @Override

@@ -39,6 +39,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -47,7 +48,6 @@ import com.propertyvista.common.client.ui.components.editors.AddressStructuredEd
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
-import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -243,7 +243,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             get(proto().complex()).setViewable(true);
         } else {
             main.setWidget(row++, 1,
-                    new DecoratorBuilder(inject(proto().complex(), new CEntityCrudHyperlink<Complex>(MainActivityMapper.getCrudAppPlace(Complex.class))), 15)
+                    new DecoratorBuilder(inject(proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15)
                             .build());
         }
         main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());

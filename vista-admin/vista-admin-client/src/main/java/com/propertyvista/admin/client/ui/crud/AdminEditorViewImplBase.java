@@ -26,11 +26,8 @@ import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.admin.client.themes.AdminTheme;
 import com.propertyvista.admin.client.ui.components.AnchorButton;
-import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 
 public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
@@ -45,13 +42,11 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
     protected EditMode mode;
 
     public AdminEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        super(new AdminHeaderDecorator(), new Toolbar(), AdminTheme.defaultHeaderHeight);
+        super();
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
 
-        ((AdminHeaderDecorator) getHeader()).setCaption(defaultCaption);
-
-        Toolbar footer = ((Toolbar) getFooter());
+        setCaption(defaultCaption);
 
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
@@ -63,7 +58,7 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
                 AdminEditorViewImplBase.this.getPresenter().apply();
             }
         });
-        footer.addItem(btnApply);
+        addFooterToolbarItem(btnApply);
 
         btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
@@ -75,7 +70,7 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
                 getPresenter().save();
             }
         });
-        footer.addItem(btnSave);
+        addFooterToolbarItem(btnSave);
 
         AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
             @Override
@@ -83,7 +78,7 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
                 getPresenter().cancel();
             }
         });
-        footer.addItem(btnCancel);
+        addFooterToolbarItem(btnCancel);
 
         enableButtons(false);
 
@@ -109,7 +104,7 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
     @Override
     public void populate(E value) {
         enableButtons(false);
-        ((AdminHeaderDecorator) getHeader()).setCaption(defaultCaption + " " + value.getStringView());
+        setCaption(defaultCaption + " " + value.getStringView());
         if (EditMode.newItem.equals(mode)) {
             form.setActiveTab(0);
         }

@@ -17,11 +17,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
-import com.propertyvista.crm.client.mvp.MainActivityMapper;
 
 public class CrmViewersComponentFactory extends VistaViewersComponentFactory {
 
@@ -34,7 +34,7 @@ public class CrmViewersComponentFactory extends VistaViewersComponentFactory {
         MemberMeta mm = member.getMeta();
         if (mm.isEntity() && !mm.isOwnedRelationships()) {
             @SuppressWarnings("unchecked")
-            CrudAppPlace place = MainActivityMapper.getCrudAppPlace((Class<IEntity>) mm.getObjectClass());
+            CrudAppPlace place = AppPlaceEntityMapper.resolvePlace((Class<IEntity>) mm.getObjectClass());
             if (place != null) {
                 return new CEntityCrudHyperlink(place);
             }

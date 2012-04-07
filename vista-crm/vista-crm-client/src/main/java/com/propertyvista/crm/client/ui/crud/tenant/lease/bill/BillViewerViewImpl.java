@@ -56,7 +56,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDTO> implement
                 ((BillViewerView.Presenter) presenter).print();
             }
         });
-        addToolbarItem(print.asWidget());
+        addHeaderToolbarTwoItem(print.asWidget());
 
         approveAction = new Button(APPROVE, new ClickHandler() {
 
@@ -65,7 +65,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDTO> implement
                 ((BillViewerView.Presenter) presenter).confirm();
             }
         });
-        addToolbarItem(approveAction.asWidget());
+        addHeaderToolbarTwoItem(approveAction.asWidget());
 
         declineAction = new Button(DECLINE, new ClickHandler() {
             @Override
@@ -79,7 +79,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDTO> implement
                 }.show();
             }
         });
-        addToolbarItem(declineAction.asWidget());
+        addHeaderToolbarTwoItem(declineAction.asWidget());
 
     }
 

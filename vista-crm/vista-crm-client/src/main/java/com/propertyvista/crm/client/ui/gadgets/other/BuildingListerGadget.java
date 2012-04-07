@@ -26,9 +26,9 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
@@ -85,7 +85,7 @@ public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
         @Override
         protected void onItemSelect(BuildingDTO item) {
             if ((item != null) && (item.getPrimaryKey() != null)) {
-                AppSite.getPlaceController().goTo(MainActivityMapper.getCrudAppPlace(Building.class).formViewerPlace(item.getPrimaryKey()));
+                AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Building.class, item.getPrimaryKey()));
             }
         }
 

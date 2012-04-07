@@ -115,7 +115,7 @@ public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase
                 });
             }
         });
-        addToolbarItem(inviteAction.asWidget());
+        addHeaderToolbarTwoItem(inviteAction.asWidget());
 
         checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
             @Override
@@ -146,7 +146,7 @@ public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase
                 }.show();
             }
         });
-        addToolbarItem(checkAction.asWidget());
+        addHeaderToolbarTwoItem(checkAction.asWidget());
 
         // TODO Move Lease
         {
@@ -163,7 +163,7 @@ public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase
                     }.show();
                 }
             });
-            addToolbarItem(approveAction.asWidget());
+            addHeaderToolbarTwoItem(approveAction.asWidget());
 
             moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
                 @Override
@@ -194,7 +194,7 @@ public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase
                     }.show();
                 }
             });
-            addToolbarItem(moreInfoAction.asWidget());
+            addHeaderToolbarTwoItem(moreInfoAction.asWidget());
 
             declineAction = new Button(DECLINE, new ClickHandler() {
                 @Override
@@ -208,7 +208,7 @@ public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase
                     }.show();
                 }
             });
-            addToolbarItem(declineAction.asWidget());
+            addHeaderToolbarTwoItem(declineAction.asWidget());
         }
 
         cancelAction = new Button(CANCEL, new ClickHandler() {
@@ -223,7 +223,7 @@ public class OnlineMasterApplicationViewerViewImpl extends CrmViewerViewImplBase
                 }.show();
             }
         });
-        addToolbarItem(cancelAction.asWidget());
+        addHeaderToolbarTwoItem(cancelAction.asWidget());
 
         //set main form here:
         setForm(new OnlineMasterApplicationEditorForm(true));

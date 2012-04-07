@@ -36,12 +36,12 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -158,12 +158,13 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().tenant(), new CEntitySelectorHyperlink<Tenant>() {
             @Override
             protected AppPlace getTargetPlace() {
-                return MainActivityMapper.getCrudAppPlace(Tenant.class).formViewerPlace(getValue().getPrimaryKey());
+                return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
             }
 
             @Override
             protected EntitySelectorTableDialog<Tenant> getSelectorDialog() {
                 return new EntitySelectorTableDialog<Tenant>(Tenant.class, false, new ArrayList<Tenant>(), "Select Item") {
+
 
                     @Override
                     public boolean onClickOk() {

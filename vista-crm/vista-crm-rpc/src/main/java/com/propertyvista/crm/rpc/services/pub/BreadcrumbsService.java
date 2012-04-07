@@ -22,6 +22,6 @@ import com.pyx4j.rpc.shared.IService;
 
 public interface BreadcrumbsService extends IService {
 
-    void breadcrumbtrail(AsyncCallback<Vector<IEntity>> callback, IEntity entity);
+    void obtainBreadcrumbTrail(AsyncCallback<Vector<IEntity>> callback, IEntity entity);
 
 }

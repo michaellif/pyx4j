@@ -20,8 +20,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -170,66 +168,10 @@ import com.propertyvista.crm.client.activity.report.ReportViewActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
-import com.propertyvista.domain.financial.GlCode;
-import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.property.asset.Complex;
-import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.LockerArea;
-import com.propertyvista.domain.property.asset.Parking;
-import com.propertyvista.domain.property.asset.Roof;
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
-import com.propertyvista.misc.EquifaxResult;
 
 public class MainActivityMapper implements AppActivityMapper {
 
     public MainActivityMapper() {
-    }
-
-    //TODO create a better two directional mapping
-    public static CrudAppPlace getCrudAppPlace(Class<? extends IEntity> entityClass) {
-
-        if (entityClass.equals(Complex.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Complex.class);
-        } else if (entityClass.equals(Building.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Building.class);
-        } else if (entityClass.equals(Floorplan.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Floorplan.class);
-        } else if (entityClass.equals(AptUnit.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Unit.class);
-        } else if (entityClass.equals(LockerArea.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.LockerArea.class);
-        } else if (entityClass.equals(Parking.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Parking.class);
-        } else if (entityClass.equals(Roof.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Roof.class);
-
-        } else if (entityClass.equals(Tenant.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Tenant.class);
-        } else if (entityClass.equals(Guarantor.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Guarantor.class);
-        } else if (entityClass.equals(Lease.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Lease.class);
-        } else if (entityClass.equals(MasterOnlineApplication.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.OnlineMasterApplication.class);
-        } else if (entityClass.equals(EquifaxResult.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.EquifaxResult.class);
-        } else if (entityClass.equals(MaintenanceRequest.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.MaintenanceRequest.class);
-
-        } else if (entityClass.equals(GlCode.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.GlCodeCategory.class);
-
-        } else if (entityClass.equals(ProductItem.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Service.class);
-        }
-
-        return null;
     }
 
     @Override

@@ -50,7 +50,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
                         .getStringView());
             }
         });
-        addToolbarItem(passwordAction.asWidget());
+        addHeaderToolbarTwoItem(passwordAction.asWidget());
     }
 
     @Override

@@ -91,7 +91,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         });
         scopeAction.ensureDebugId(DebugIds.unitViewerViewScopeAction.debugId());
 
-        addToolbarItem(scopeAction);
+        addHeaderToolbarTwoItem(scopeAction);
         makeVacantAction = new Button(i18n.tr("Make Vacant..."), new ClickHandler() {
 
             @Override
@@ -101,7 +101,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
                 }.show();
             }
         });
-        addToolbarItem(makeVacantAction);
+        addHeaderToolbarTwoItem(makeVacantAction);
         scopeAction.ensureDebugId(DebugIds.unitViewerViewMakeVacantAction.debugId());
     }
 

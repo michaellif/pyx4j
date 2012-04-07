@@ -18,12 +18,10 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.ListerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.admin.client.themes.AdminTheme;
-import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
-
 public class AdminListerViewImplBase<E extends IEntity> extends ListerViewImplBase<E> {
 
     public AdminListerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        super(new AdminHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption()), AdminTheme.defaultHeaderHeight);
+        super();
+        setCaption(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption());
     }
 }

@@ -36,7 +36,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 ImportUploadDialog.show(form.getValue());
             }
         });
-        addToolbarItem(upload.asWidget());
+        addHeaderToolbarTwoItem(upload.asWidget());
 
         Button downloadFull = new Button("Download export.xml", new ClickHandler() {
             @Override
@@ -44,7 +44,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 Window.open(GWT.getModuleBaseURL() + "export.xml?pmc=" + getForm().getValue().getPrimaryKey(), null, null);
             }
         });
-        addToolbarItem(downloadFull.asWidget());
+        addHeaderToolbarTwoItem(downloadFull.asWidget());
 
         Button downloadNoImages = new Button("Download export.xml (no images)", new ClickHandler() {
             @Override
@@ -52,7 +52,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 Window.open(GWT.getModuleBaseURL() + "export.xml?pmc=" + getForm().getValue().getPrimaryKey() + "&images=false", null, null);
             }
         });
-        addToolbarItem(downloadNoImages.asWidget());
+        addHeaderToolbarTwoItem(downloadNoImages.asWidget());
 
         Button resetCache = new Button("Reset Cache", new ClickHandler() {
 
@@ -61,6 +61,6 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 ((PmcViewerActivity) presenter).resetCache();
             }
         });
-        addToolbarItem(resetCache);
+        addHeaderToolbarTwoItem(resetCache);
     }
 }

@@ -29,11 +29,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.rpc.services.selections.SelectGuarantorListService;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
@@ -82,7 +82,7 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
                 if (isEditable()) {
                     return new CEntityLabel<Guarantor>();
                 } else {
-                    return new CEntityCrudHyperlink<Guarantor>(MainActivityMapper.getCrudAppPlace(Guarantor.class));
+                    return new CEntityCrudHyperlink<Guarantor>(AppPlaceEntityMapper.resolvePlace(Guarantor.class));
                 }
             }
             return super.create(member);

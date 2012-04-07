@@ -20,10 +20,10 @@ import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.misc.EquifaxResult;
 
@@ -48,7 +48,7 @@ public class TenantApprovalFolder extends VistaTableFolder<TenantFinancialDTO> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(EquifaxResult.class)) {
-            return new CEntityCrudHyperlink<EquifaxResult>(i18n.tr("View"), MainActivityMapper.getCrudAppPlace(EquifaxResult.class));
+            return new CEntityCrudHyperlink<EquifaxResult>(i18n.tr("View"), AppPlaceEntityMapper.resolvePlace(EquifaxResult.class));
         }
         return super.create(member);
     }

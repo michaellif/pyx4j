@@ -39,9 +39,7 @@ import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.board.BoardBase;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
-import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectoryDialog;
 
 public class CrmTheme extends VistaTheme {
@@ -56,6 +54,10 @@ public class CrmTheme extends VistaTheme {
 
     public static enum StyleSuffixEx implements IStyleName {
         SaveButton, CancelButton, EditButton, ActionButton;
+    }
+
+    public static enum TitleBarStyleName implements IStyleName {
+        TitleBarBreadcrumb
     }
 
     public CrmTheme() {
@@ -97,7 +99,6 @@ public class CrmTheme extends VistaTheme {
 
         initSearchBoxStyles();
         initButtonStylesEx();
-        initHeadersStyle();
 
         initSectionSeparatorStyle();
 
@@ -423,41 +424,6 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("border-bottom", "2px dotted");
         style.addProperty("border-bottom-color", ThemeColors.object1, 0.15);
         addStyle(style);
-    }
-
-    protected void initHeadersStyle() {
-
-        String prefix = CrmTitleBar.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background-color", ThemeColors.object1, 1);
-        style.addProperty("color", ThemeColors.object1, 0.1);
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmTitleBar.StyleSuffix.Caption));
-        style.addProperty("padding", "0.3em 0.5em 0.4em 0em");
-        style.addProperty("font-size", "1.3em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmTitleBar.StyleSuffix.Breadcrumb));
-        style.addProperty("background-color", ThemeColors.object1, 1);
-        style.addProperty("color", ThemeColors.object1, 0.1);
-        style.addProperty("padding", "0.3em 0.5em 0.4em 0em");
-        style.addProperty("font-size", "1.3em");
-        addStyle(style);
-
-        prefix = CrmActionsBarDecorator.DEFAULT_STYLE_PREFIX;
-        style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
-        style.addProperty("color", ThemeColors.foreground, 0.9);
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmActionsBarDecorator.StyleSuffix.Caption));
-        style.addProperty("padding", "0.3em 1em 0.4em 1em");
-        style.addProperty("font-size", "1.3em");
-        addStyle(style);
-
     }
 
     protected void initSectionSeparatorStyle() {

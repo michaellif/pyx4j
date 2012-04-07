@@ -99,7 +99,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 }.show();
             }
         });
-        addToolbarItem(sendMail.asWidget());
+        addHeaderToolbarTwoItem(sendMail.asWidget());
 
         onlineApplication = new Button(i18n.tr("Start Online Application"), new ClickHandler() {
             @Override
@@ -107,7 +107,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 ((LeaseViewerView.Presenter) presenter).startApplication();
             }
         });
-        addToolbarItem(onlineApplication.asWidget());
+        addHeaderToolbarTwoItem(onlineApplication.asWidget());
 
         runBill = new Button(i18n.tr("Run Bill"), new ClickHandler() {
             @Override
@@ -115,7 +115,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 ((LeaseViewerView.Presenter) presenter).startBilling();
             }
         });
-        addToolbarItem(runBill.asWidget());
+        addHeaderToolbarTwoItem(runBill.asWidget());
 
         notice = new Button(i18n.tr("Notice..."), new ClickHandler() {
             @Override
@@ -130,7 +130,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 }.show();
             }
         });
-        addToolbarItem(notice.asWidget());
+        addHeaderToolbarTwoItem(notice.asWidget());
 
         cancelNotice = new Button(i18n.tr("Cancel Notice"), new ClickHandler() {
             @Override
@@ -138,7 +138,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 ((LeaseViewerView.Presenter) presenter).cancelNotice();
             }
         });
-        addToolbarItem(cancelNotice.asWidget());
+        addHeaderToolbarTwoItem(cancelNotice.asWidget());
 
         evict = new Button(i18n.tr("Evict..."), new ClickHandler() {
             @Override
@@ -153,7 +153,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 }.show();
             }
         });
-        addToolbarItem(evict.asWidget());
+        addHeaderToolbarTwoItem(evict.asWidget());
 
         cancelEvict = new Button(i18n.tr("Cancel Evict"), new ClickHandler() {
 
@@ -162,7 +162,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 ((LeaseViewerView.Presenter) presenter).cancelEvict();
             }
         });
-        addToolbarItem(cancelEvict.asWidget());
+        addHeaderToolbarTwoItem(cancelEvict.asWidget());
     }
 
     @Override

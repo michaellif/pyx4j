@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
@@ -43,7 +44,6 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
@@ -87,7 +87,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             protected AppPlace getTargetPlace() {
                 //TODO make it working
                 if (false) {
-                    return MainActivityMapper.getCrudAppPlace(ProductItem.class).formViewerPlace(getValue().product().getPrimaryKey());
+                    return AppPlaceEntityMapper.resolvePlace(ProductItem.class, getValue().product().getPrimaryKey());
                 } else {
                     return null;
                 }

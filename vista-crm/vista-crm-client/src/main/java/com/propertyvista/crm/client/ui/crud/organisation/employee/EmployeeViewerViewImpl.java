@@ -40,7 +40,7 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
                         .getStringView());
             }
         });
-        addToolbarItem(passwordAction.asWidget());
+        addHeaderToolbarTwoItem(passwordAction.asWidget());
     }
 
     @Override

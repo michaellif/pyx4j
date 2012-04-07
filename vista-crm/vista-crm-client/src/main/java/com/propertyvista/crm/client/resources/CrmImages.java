@@ -169,6 +169,9 @@ public interface CrmImages extends VistaImages {
     @Source("Properties_normal.png")
     ImageResource propertiesNormal();
 
+    @Source("Units_normal.png")
+    ImageResource unitsNormal();
+
     @Source("Reports_active.png")
     ImageResource reportsActive();
 

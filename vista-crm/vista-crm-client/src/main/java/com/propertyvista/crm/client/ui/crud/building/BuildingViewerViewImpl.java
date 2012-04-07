@@ -109,7 +109,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             }
         });
         if (!VistaTODO.removedForProduction) {
-            addToolbarItem(runBillAction.asWidget());
+            addHeaderToolbarTwoItem(runBillAction.asWidget());
         }
     }
 

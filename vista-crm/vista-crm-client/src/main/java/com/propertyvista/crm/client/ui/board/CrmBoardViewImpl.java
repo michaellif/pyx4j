@@ -31,7 +31,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
-import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -40,15 +39,9 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
     private final static I18n i18n = I18n.get(CrmBoardViewImpl.class);
 
-    private final CrmTitleBar header;
-
     private final BuildingsBar buildingsBar;
 
     public CrmBoardViewImpl(BoardBase board) {
-        header = new CrmTitleBar();
-        header.setHeight("100%");
-        addNorth(header, CrmTheme.defaultHeaderHeight);
-
         buildingsBar = new BuildingsBar();
         addNorth(buildingsBar, 0.1); // 0.1 instead of "setVisible(false)"
 
@@ -58,7 +51,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
     @Override
     public void populate(DashboardMetadata dashboardMetadata) {
         super.populate(dashboardMetadata);
-        header.populate(null, asBoardCaption(dashboardMetadata));
+        setCaption(asBoardCaption(dashboardMetadata));
         if (dashboardMetadata != null) {
             boolean isBuildingDashboard = dashboardMetadata.type().getValue() == DashboardType.building;
             this.setWidgetSize(buildingsBar.asWidget(), isBuildingDashboard ? CrmTheme.defaultHeaderHeight : 0.1); // for some reason setVisible() doesn't work here

@@ -79,7 +79,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
             }
         });
         convertAction.addStyleName(convertAction.getStylePrimaryName() + CrmTheme.StyleSuffixEx.ActionButton);
-        addToolbarItem(convertAction);
+        addHeaderToolbarTwoItem(convertAction);
 
         closeAction = new Button(i18n.tr("Close Lead"), new ClickHandler() {
             @Override
@@ -92,7 +92,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                 });
             }
         });
-        addToolbarItem(closeAction.asWidget());
+        addHeaderToolbarTwoItem(closeAction.asWidget());
 
         appointmentLister = new ListerInternalViewImplBase<Appointment>(new AppointmentLister());
 

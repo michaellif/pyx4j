@@ -24,7 +24,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.admin.client.themes.AdminTheme;
-import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 
 public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
 
@@ -37,10 +36,10 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
     }
 
     public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, boolean viewOnly) {
-        super(new AdminHeaderDecorator(), null, AdminTheme.defaultHeaderHeight);
+        super();
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
-        ((AdminHeaderDecorator) getHeader()).setCaption(defaultCaption);
+        setCaption(defaultCaption);
 
         if (!viewOnly) {
             Button btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
@@ -51,7 +50,7 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
             });
             btnEdit.addStyleName(btnEdit.getStylePrimaryName() + AdminTheme.StyleSuffixEx.EditButton);
 
-            addToolbarItem(btnEdit);
+            addHeaderToolbarTwoItem(btnEdit);
         }
 
     }
@@ -69,7 +68,7 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
     @Override
     public void populate(E value) {
         super.populate(value);
-        ((AdminHeaderDecorator) getHeader()).setCaption(defaultCaption + " " + value.getStringView());
+        setCaption(defaultCaption + " " + value.getStringView());
     }
 
 }

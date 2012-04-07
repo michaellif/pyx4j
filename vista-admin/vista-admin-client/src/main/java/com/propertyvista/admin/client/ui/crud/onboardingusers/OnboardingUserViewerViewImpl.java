@@ -40,7 +40,7 @@ public class OnboardingUserViewerViewImpl extends AdminViewerViewImplBase<Onboar
                         .getStringView());
             }
         });
-        addToolbarItem(passwordAction.asWidget());
+        addHeaderToolbarTwoItem(passwordAction.asWidget());
     }
 
     @Override

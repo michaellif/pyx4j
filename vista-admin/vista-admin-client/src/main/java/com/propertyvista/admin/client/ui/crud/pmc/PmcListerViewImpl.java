@@ -48,7 +48,7 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
                     new ReportDialog("Report", "Creating report...").start(GWT.<ReportService<?>> create(PmcDataReportService.class), criteria, params);
                 }
             });
-            addActionButton(downloadFull);
+            addHeaderToolbarTwoItem(downloadFull);
         }
 
         {
@@ -60,7 +60,7 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
                     new ReportDialog("Report", "Creating report...").start(GWT.<ReportService<?>> create(PmcDataReportService.class), criteria);
                 }
             });
-            addActionButton(downloadFull);
+            addHeaderToolbarTwoItem(downloadFull);
         }
 
     }
