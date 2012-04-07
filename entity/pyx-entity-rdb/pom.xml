@@ -261,7 +261,7 @@
                                     <arguments>
                                         <argument>-L</argument>
                                         <argument>-S</argument>
-                                        <argument>tst_entity/tst_entity@TST_ENTITY</argument>
+                                        <argument>tst_entity/tst_entity@orcl</argument>
                                         <argument>@${basedir}${file.separator}scripts${file.separator}oracle${file.separator}ora-reset.sql</argument>
                                     </arguments>
                                 </configuration>

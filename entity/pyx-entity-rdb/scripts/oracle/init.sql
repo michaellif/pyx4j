@@ -1,5 +1,10 @@
 -- @version $Revision$ ($Author$) $Date$
 
+-- Make Oracle Smaller
+-- ALTER SYSTEM SET MEMORY_MAX_TARGET=500M SCOPE=SPFILE;
+-- ALTER SYSTEM SET MEMORY_TARGET=500M SCOPE=SPFILE;
+-- Load Scripts from https://svn.pyx4j.com/svn/pyx4j/pyx4j-gwt/pyx4j-server/scripts/oracle
+
 CREATE USER tst_entity IDENTIFIED BY tst_entity;
 GRANT CREATE SESSION to tst_entity;
 GRANT CONNECT TO tst_entity;

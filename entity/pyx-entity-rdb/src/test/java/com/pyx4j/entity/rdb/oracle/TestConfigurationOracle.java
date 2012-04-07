@@ -34,7 +34,7 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
 
     @Override
     public String dbName() {
-        return "test";
+        return "orcl";
     }
 
     @Override
@@ -75,8 +75,11 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("ARCHIVE", "ARC");
         shortWords.add("ENTITY", "ENT");
         shortWords.add("ENTITIES", "ENTS");
+        shortWords.add("EMBEDDED", "EB");
         shortWords.add("FORCE", "FRC");
+        shortWords.add("SORT", "SR");
         shortWords.add("SORTED", "SRT");
+        shortWords.add("SORTABLE", "SRT");
         shortWords.add("STRING", "STR");
         shortWords.add("DETD", "D");
         shortWords.add("DETACHED", "DET");
@@ -84,6 +87,7 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("OWNED", "OW");
         shortWords.add("OWNER", "OR");
         shortWords.add("MAIN", "M");
+        shortWords.add("MEMBER", "MBR");
         shortWords.add("HOLDER", "HLR");
         shortWords.add("CREATION", "CRN");
         shortWords.add("CONCRETE1", "C1");
@@ -102,6 +106,7 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("MANY", "M");
         shortWords.add("LIST", "LST");
         shortWords.add("VALUE", "VL");
+        shortWords.add("AMOUNT", "AMT");
         return new NamingConventionOracle(30, shortWords);
     }
 
