@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultSiteCrudPanelsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        ActionsPanel, Lister, ListerFiltersPanel, ListerListPanel, Header, Footer
+        HeaderToolbarOne, HeaderToolbarTwo, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor
     }
 
     public DefaultSiteCrudPanelsTheme() {
@@ -38,23 +38,53 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
     }
 
     protected void initStyles() {
-        initToolbarStyles();
+        initGeneralStyles();
         initListerStyles();
     }
 
-    private void initToolbarStyles() {
+    private void initGeneralStyles() {
 
-        initButtonrStyles("." + StyleName.ActionsPanel);
+        initButtonrStyles("." + StyleName.HeaderToolbarOne);
 
-        initButtonrStyles("." + StyleName.Footer);
+        initButtonrStyles("." + StyleName.HeaderToolbarTwo);
 
-        Style style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        initButtonrStyles("." + StyleName.FooterToolbar);
+
+        Style style = new Style(".", StyleName.HeaderToolbarOne);
+        style.addProperty("padding", "2px 6px");
         addStyle(style);
 
-        style = new Style(".", StyleName.Footer, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style = new Style(".", StyleName.HeaderToolbarTwo);
+        style.addProperty("padding", "2px 6px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FooterToolbar);
+        style.addProperty("padding", "2px 6px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Header);
+        style.addProperty("background-color", ThemeColors.object1, 1);
+        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addProperty("width", "100%");
+        style.addProperty("padding", "0 1em");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("font-size", "1.3em");
+        style.addProperty("line-height", "35px");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FooterToolbar, " .", DefaultWidgetsTheme.StyleName.Toolbar);
         style.addProperty("border-top", "4px solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.3);
         style.addProperty("padding", "2px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.BreadcrumbAnchor);
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(".", StyleName.BreadcrumbAnchor, ":hover");
+        style.addProperty("text-decoration", "underline");
         addStyle(style);
 
     }
@@ -87,10 +117,6 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
 
         Style style = new Style(".", StyleName.Lister);
         style.addProperty("width", "100%");
-        style.addProperty("padding", "6px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.ActionsPanel);
         style.addProperty("padding", "6px");
         addStyle(style);
 

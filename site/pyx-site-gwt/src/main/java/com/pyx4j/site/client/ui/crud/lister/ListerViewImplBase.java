@@ -22,45 +22,22 @@ package com.pyx4j.site.client.ui.crud.lister;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
+import com.pyx4j.site.client.ui.ViewImplBase;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel implements IListerView<E> {
+public class ListerViewImplBase<E extends IEntity> extends ViewImplBase implements IListerView<E> {
 
     protected ListerBase<E> lister = null;
 
-    private final Toolbar toolbar;
-
-    private final Widget header;
-
-    public ListerViewImplBase(Widget header, double size) {
-        super(Unit.EM);
-        this.header = header;
-        addNorth(header, size);
-
-        SimplePanel actionsBar = new SimplePanel();
-        actionsBar.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ActionsPanel.name());
-
-        toolbar = new Toolbar();
-        actionsBar.setWidget(toolbar);
-        addNorth(actionsBar, 3);
-
-    }
-
-    public Widget getHeader() {
-        return header;
+    public ListerViewImplBase() {
+        super();
     }
 
     /*
@@ -138,10 +115,6 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     @Override
     public void restoreState() {
         getLister().restoreState();
-    }
-
-    public void addActionButton(Widget widget) {
-        toolbar.addItem(widget, true);
     }
 
     @Override

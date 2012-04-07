@@ -20,72 +20,26 @@
  */
 package com.pyx4j.site.client.ui.crud.form;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.ui.ViewImplBase;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
-import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public class FormViewImplBase<E extends IEntity> extends DockLayoutPanel implements IFormView<E> {
+public class FormViewImplBase<E extends IEntity> extends ViewImplBase implements IFormView<E> {
 
     protected CrudEntityForm<E> form;
 
-    private Widget header;
-
-    private Widget footer;
-
-    private Toolbar toolbar;
-
     private final IMemento memento = new MementoImpl();
 
-    public FormViewImplBase(Widget header, double size) {
-        this(header, null, size);
-    }
-
-    public FormViewImplBase(Widget header, Widget footer, double size) {
-        super(Unit.EM);
-        this.header = header;
-        SimplePanel headerHolder = new SimplePanel();
-        headerHolder.setWidget(header);
-        headerHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Header.name());
-
-        addNorth(headerHolder, size);
-
-        SimplePanel actionsBar = new SimplePanel();
-        actionsBar.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ActionsPanel.name());
-
-        toolbar = new Toolbar();
-        actionsBar.setWidget(toolbar);
-        addNorth(actionsBar, 3);
-
-        if (footer != null) {
-            this.footer = footer;
-
-            SimplePanel footerHolder = new SimplePanel();
-            footerHolder.setWidget(footer);
-            footerHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Footer.name());
-
-            addSouth(footerHolder, size);
-        }
-    }
-
-    public Widget getHeader() {
-        return header;
-    }
-
-    public Widget getFooter() {
-        return footer;
+    public FormViewImplBase() {
+        super();
     }
 
     /*
@@ -161,7 +115,4 @@ public class FormViewImplBase<E extends IEntity> extends DockLayoutPanel impleme
     public void restoreState() {
     }
 
-    public void addToolbarItem(Widget widget) {
-        toolbar.addItem(widget, true);
-    }
 }

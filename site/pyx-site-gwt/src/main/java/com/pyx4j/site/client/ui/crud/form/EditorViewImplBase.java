@@ -20,16 +20,14 @@
  */
 package com.pyx4j.site.client.ui.crud.form;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.shared.IEntity;
 
 public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> implements IEditorView<E> {
 
     private IEditorView.Presenter presenter;
 
-    public EditorViewImplBase(Widget header, Widget footer, double size) {
-        super(header, footer, size);
+    public EditorViewImplBase() {
+        super();
     }
 
     @Override

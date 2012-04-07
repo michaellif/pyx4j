@@ -20,16 +20,15 @@
  */
 package com.pyx4j.site.client.ui.crud.form;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.shared.IEntity;
 
 public class ViewerViewImplBase<E extends IEntity> extends FormViewImplBase<E> implements IViewerView<E> {
 
     protected IViewerView.Presenter presenter;
 
-    public ViewerViewImplBase(Widget header, Widget footer, double size) {
-        super(header, footer, size);
+    public ViewerViewImplBase() {
+        super();
+        setHeaderToolbarOneHeight(25);
     }
 
     @Override
