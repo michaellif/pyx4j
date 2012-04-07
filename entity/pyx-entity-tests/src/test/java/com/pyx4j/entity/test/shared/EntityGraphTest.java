@@ -352,7 +352,7 @@ public class EntityGraphTest extends InitializerTestBase {
         EntityGraph.applyToOwners(ownedEntity1, f);
 
         // assert
-        assertEquals(":)", ownedEntity1.valueStr().getValue());
+        assertEquals("owned1", ownedEntity1.valueStr().getValue());
         assertEquals(":)", ownerB1.valueStr().getValue());
         assertEquals(":)", ownerA.valueStr().getValue());
 
@@ -372,7 +372,7 @@ public class EntityGraphTest extends InitializerTestBase {
         assertEquals("ownerB1", ownerB1.valueStr().getValue());
         assertEquals("ownerA", ownerA.valueStr().getValue());
 
-        assertEquals(":)", ownedEntity2.valueStr().getValue());
+        assertEquals("owned2", ownedEntity2.valueStr().getValue());
         assertEquals("stopped here", ownerB2.valueStr().getValue());
 
     }

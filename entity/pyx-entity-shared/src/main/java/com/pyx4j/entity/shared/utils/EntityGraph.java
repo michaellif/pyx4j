@@ -389,16 +389,18 @@ public class EntityGraph {
         return copy;
     }
 
+    /**
+     * ApplyMethod would be called for every 'owner' Entity in MetaData even if the Owner object is null.
+     */
     public static void applyToOwners(IEntity entity, ApplyMethod method) {
         IEntity currentEntity = entity;
-
-        while (method.apply(currentEntity)) {
+        do {
             IEntity castedEntity = currentEntity.cast();
             String ownerMember = castedEntity.getEntityMeta().getOwnerMemberName();
             if (ownerMember == null) {
                 break;
             }
             currentEntity = (IEntity) castedEntity.getMember(ownerMember);
-        }
+        } while (method.apply(currentEntity));
     }
 }
