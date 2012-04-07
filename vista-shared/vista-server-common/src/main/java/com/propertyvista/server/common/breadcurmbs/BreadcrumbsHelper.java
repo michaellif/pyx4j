@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -24,34 +25,31 @@ import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 
 public class BreadcrumbsHelper {
 
-    public List<IEntity> breadcrumbTrail(IEntity entity) {
+    public List<IEntity> breadcrumbTrail(IEntity targetEntity) {
+
         final LinkedList<IEntity> trail = new LinkedList<IEntity>();
 
-        EntityGraph.applyToOwners(entity, new ApplyMethod() {
+        IEntity startFromTarget = Persistence.service().retrieve(ServerEntityFactory.resolveDTOClass(targetEntity), targetEntity.getPrimaryKey());
 
-            // flag for not adding the "Target" of the breadcrumb trail to the trail            
-            private boolean isTarget = true;
+        EntityGraph.applyToOwners(startFromTarget, new ApplyMethod() {
 
             @Override
-            public boolean apply(IEntity entity) {
-                IEntity breadcrumb = entity.cast().detach();
-                if (breadcrumb.isValueDetached()) {
-                    Persistence.service().retrieve(breadcrumb);
+            public boolean apply(IEntity owner) {
+                if (owner.getPrimaryKey() == null) {
+                    // Breaks on non existent owner 
+                    return false;
                 }
-                if (!isTarget) {
-                    breadcrumb.setAttachLevel(AttachLevel.ToStringMembers);
-                    trail.addFirst(breadcrumb);
-                } else {
-                    isTarget = false;
+                if (owner.isValueDetached()) {
+                    Persistence.service().retrieve(owner);
                 }
+                IEntity toStringOnlyEntity = owner.duplicate();
+                toStringOnlyEntity.setAttachLevel(AttachLevel.ToStringMembers);
+                trail.addFirst(toStringOnlyEntity);
                 return true;
             }
+
         });
         return trail;
     }
 
-    public interface LabelCreator {
-
-        String label(IEntity entity);
-    }
 }

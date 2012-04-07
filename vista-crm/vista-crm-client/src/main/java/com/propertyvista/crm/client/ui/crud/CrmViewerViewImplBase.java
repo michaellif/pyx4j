@@ -148,7 +148,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             public void onFailure(Throwable caught) {
                 throw new Error(caught);
             }
-        }, value);
+
+        }, value.createIdentityStub());
     }
 
     protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass, final AbstractVersionDataListService<V> entityVersionService) {
