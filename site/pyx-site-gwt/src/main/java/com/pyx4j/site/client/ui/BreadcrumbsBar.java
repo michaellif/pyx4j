@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -71,11 +72,14 @@ public class BreadcrumbsBar extends HorizontalPanel {
                     AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(breadcrumb.getObjectClass(), breadcrumb.getPrimaryKey()));
                 }
             });
-            add(new Image(AppPlaceEntityMapper.resolveImageResource(breadcrumb.getObjectClass())));
+
+            ImageResource image = AppPlaceEntityMapper.resolveImageResource(breadcrumb.getObjectClass());
+            if (image != null) {
+                add(new Image(image));
+            }
             add(anchor);
             setCellVerticalAlignment(anchor, HorizontalPanel.ALIGN_MIDDLE);
 
         }
-
     }
 }
