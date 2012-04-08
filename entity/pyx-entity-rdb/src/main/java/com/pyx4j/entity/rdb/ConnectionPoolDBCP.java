@@ -40,6 +40,10 @@ public class ConnectionPoolDBCP implements ConnectionPool {
 
     private final DataSource dataSourceBackgroundProcess;
 
+    private final GenericObjectPool connectionPoolAministration;
+
+    private final DataSource dataSourceAministration;
+
     public ConnectionPoolDBCP(Configuration cfg) {
         {
             connectionPool = new GenericObjectPool(null);
@@ -66,6 +70,20 @@ public class ConnectionPoolDBCP implements ConnectionPool {
 
             dataSourceBackgroundProcess = new PoolingDataSource(connectionPoolBackgroundProcess);
         }
+
+        {
+            connectionPoolAministration = new GenericObjectPool(null);
+            connectionPoolAministration.setTestWhileIdle(true);
+
+            ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.dbAdministrationUserName(),
+                    cfg.dbAdministrationPassword());
+
+            PoolableConnectionFactory poolable = new PoolableConnectionFactory(connectionFactory, connectionPoolAministration, null,
+                    cfg.connectionValidationQuery(), cfg.readOnly(), true);
+            poolable.setValidationQueryTimeout(1);
+
+            dataSourceAministration = new PoolingDataSource(connectionPoolAministration);
+        }
     }
 
     @Override
@@ -76,6 +94,11 @@ public class ConnectionPoolDBCP implements ConnectionPool {
     @Override
     public DataSource getBackgroundProcessDataSource() {
         return dataSourceBackgroundProcess;
+    }
+
+    @Override
+    public DataSource getAministrationDataSource() {
+        return dataSourceAministration;
     }
 
     @Override

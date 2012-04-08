@@ -28,10 +28,12 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 public class PersistenceContext {
 
@@ -42,6 +44,8 @@ public class PersistenceContext {
     private final TransactionType transactionType;
 
     private Connection connection = null;
+
+    private String connectionNamespace;
 
     private boolean uncommittedChanges;
 
@@ -114,8 +118,32 @@ public class PersistenceContext {
                     throw new RuntimeException(e);
                 }
             }
+            if (connectionProvider.getDialect().isMultitenantSeparateSchemas()) {
+                setConnectionNamespace(connection, NamespaceManager.getNamespace());
+            }
+        }
+        if (connectionProvider.getDialect().isMultitenantSeparateSchemas()
+                && (!CommonsStringUtils.equals(NamespaceManager.getNamespace(), connectionNamespace))) {
+            setConnectionNamespace(connection, NamespaceManager.getNamespace());
+            log.info("Namespace changed to {}", connectionNamespace);
         }
         return connection;
+    }
+
+    private void setConnectionNamespace(Connection connection, String namespace) {
+        try {
+            String sql = connectionProvider.getDialect().sqlChangeConnectionNamespace(namespace);
+            if (sql == null) {
+                connection.setCatalog(namespace);
+            } else {
+                SQLUtils.execute(connection, sql);
+            }
+            connectionNamespace = namespace;
+        } catch (SQLException e) {
+            SQLUtils.closeQuietly(connection);
+            connection = null;
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean isUncommittedChanges() {

@@ -50,6 +50,8 @@ public @interface Table {
      */
     String prefix() default "";
 
+    String namespace() default "";
+
     /**
      * Disable the use of ServerSideConfiguration.persistenceNamePrefix()
      */

@@ -136,7 +136,7 @@ class QueryJoinBuilder {
         }
         @SuppressWarnings("unchecked")
         Class<? extends IEntity> targetEntityClass = (Class<? extends IEntity>) memberOper.getMemberMeta().getValueClass();
-        EntityOperationsMeta targetEntityOperationsMeta = mappings.getEntityOperationsMeta(persistenceContext.getConnection(), targetEntityClass);
+        EntityOperationsMeta targetEntityOperationsMeta = mappings.getEntityOperationsMeta(persistenceContext, targetEntityClass);
 
         String pathFragmet = propertyPath.substring(memberOper.getMemberPath().length());
         if (pathFragmet.startsWith(Path.COLLECTION_SEPARATOR)) {

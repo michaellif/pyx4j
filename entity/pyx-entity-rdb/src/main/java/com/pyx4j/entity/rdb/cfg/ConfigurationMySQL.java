@@ -56,8 +56,23 @@ public abstract class ConfigurationMySQL implements Configuration {
     }
 
     @Override
+    public String dbAdministrationUserName() {
+        return userName();
+    }
+
+    @Override
+    public String dbAdministrationPassword() {
+        return password();
+    }
+
+    @Override
     public MultitenancyType getMultitenancyType() {
         return MultitenancyType.SingleTenant;
+    }
+
+    @Override
+    public String sharedSequencesSchema() {
+        return null;
     }
 
     @Override

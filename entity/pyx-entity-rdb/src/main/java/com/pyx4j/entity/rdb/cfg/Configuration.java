@@ -57,7 +57,16 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public String password();
 
+    public String dbAdministrationUserName();
+
+    public String dbAdministrationPassword();
+
     public MultitenancyType getMultitenancyType();
+
+    /**
+     * Applicable for MultitenancyType.SeparateSchemas
+     */
+    public String sharedSequencesSchema();
 
     public boolean createForeignKeys();
 

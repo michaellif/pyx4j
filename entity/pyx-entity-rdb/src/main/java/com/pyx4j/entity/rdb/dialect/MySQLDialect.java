@@ -77,4 +77,10 @@ public class MySQLDialect extends Dialect {
     public boolean limitCriteriaIsRelative() {
         return true;
     }
+
+    @Override
+    public String sqlChangeConnectionNamespace(String namespace) {
+        return "USE DTABASE " + namespace;
+    }
+
 }

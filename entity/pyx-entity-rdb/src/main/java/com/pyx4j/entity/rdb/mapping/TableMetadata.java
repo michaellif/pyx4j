@@ -34,7 +34,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.SQLUtils;
+import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 public class TableMetadata {
 
@@ -52,17 +55,26 @@ public class TableMetadata {
 
     private Map<String, String> foreignKeysReference;
 
-    public static TableMetadata getTableMetadata(Connection connection, String name) throws SQLException {
+    public static TableMetadata getTableMetadata(PersistenceContext persistenceContext, String name) throws SQLException {
         ResultSet rs = null;
         try {
-            DatabaseMetaData dbMeta = connection.getMetaData();
+            DatabaseMetaData dbMeta = persistenceContext.getConnection().getMetaData();
             String storedName = name;
             if (dbMeta.storesLowerCaseIdentifiers()) {
                 storedName = name.toLowerCase(Locale.ENGLISH);
             } else if (dbMeta.storesUpperCaseIdentifiers()) {
                 storedName = name.toUpperCase(Locale.ENGLISH);
             }
-            rs = dbMeta.getTables(null, null, storedName, null);
+            String schema = null;
+            if (persistenceContext.getDialect().isMultitenantSeparateSchemas()) {
+                schema = NamespaceManager.getNamespace();
+                if (dbMeta.storesLowerCaseIdentifiers()) {
+                    schema = schema.toLowerCase(Locale.ENGLISH);
+                } else if (dbMeta.storesUpperCaseIdentifiers()) {
+                    schema = schema.toUpperCase(Locale.ENGLISH);
+                }
+            }
+            rs = dbMeta.getTables(null, schema, storedName, null);
             if (rs.next()) {
                 return new TableMetadata(rs, dbMeta);
             } else {
@@ -73,7 +85,11 @@ public class TableMetadata {
         }
     }
 
-    public static boolean isTableExists(Connection connection, String name) throws SQLException {
+    public static boolean isTableExists(PersistenceContext persistenceContext, String name) throws SQLException {
+        return isTableExists(persistenceContext.getDialect(), persistenceContext.getConnection(), NamespaceManager.getNamespace(), name);
+    }
+
+    public static boolean isTableExists(Dialect dialect, Connection connection, String namespace, String name) throws SQLException {
         ResultSet rs = null;
         try {
             DatabaseMetaData dbMeta = connection.getMetaData();
@@ -83,7 +99,16 @@ public class TableMetadata {
             } else if (dbMeta.storesUpperCaseIdentifiers()) {
                 storedName = name.toUpperCase(Locale.ENGLISH);
             }
-            rs = dbMeta.getTables(null, null, storedName, null);
+            String schema = null;
+            if (dialect.isMultitenantSeparateSchemas() && (namespace != null)) {
+                schema = namespace;
+                if (dbMeta.storesLowerCaseIdentifiers()) {
+                    schema = schema.toLowerCase(Locale.ENGLISH);
+                } else if (dbMeta.storesUpperCaseIdentifiers()) {
+                    schema = schema.toUpperCase(Locale.ENGLISH);
+                }
+            }
+            rs = dbMeta.getTables(null, schema, storedName, null);
             if (rs.next()) {
                 return true;
             } else {
@@ -114,11 +139,11 @@ public class TableMetadata {
         log.debug("columns {} " + columnsMetadata);
     }
 
-    void readForeignKeys(Connection connection) throws SQLException {
+    void readForeignKeys(PersistenceContext persistenceContext) throws SQLException {
         foreignKeys = new ArrayList<String>();
         // read Foreign Keys on this table
         ResultSet krs = null;
-        DatabaseMetaData dbMeta = connection.getMetaData();
+        DatabaseMetaData dbMeta = persistenceContext.getConnection().getMetaData();
         try {
             krs = dbMeta.getImportedKeys(catalog, schema, name);
             while (krs.next()) {
@@ -133,14 +158,14 @@ public class TableMetadata {
         }
     }
 
-    void readReferenceForeignKeys(Connection connection) throws SQLException {
+    void readReferenceForeignKeys(PersistenceContext persistenceContext) throws SQLException {
         if (foreignKeys == null) {
-            readForeignKeys(connection);
+            readForeignKeys(persistenceContext);
         }
         foreignKeysReference = new HashMap<String, String>();
         // read Foreign Keys to this table
         ResultSet krs = null;
-        DatabaseMetaData dbMeta = connection.getMetaData();
+        DatabaseMetaData dbMeta = persistenceContext.getConnection().getMetaData();
         try {
             krs = dbMeta.getExportedKeys(catalog, schema, name);
             while (krs.next()) {

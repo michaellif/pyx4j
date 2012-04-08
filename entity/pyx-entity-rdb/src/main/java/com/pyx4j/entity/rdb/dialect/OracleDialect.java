@@ -142,4 +142,13 @@ public class OracleDialect extends Dialect {
             return " NULLS FIRST";
         }
     }
+
+    /**
+     * return null to use Connection.setCatalog
+     */
+    @Override
+    public String sqlChangeConnectionNamespace(String namespace) {
+        return null;
+    }
+
 }

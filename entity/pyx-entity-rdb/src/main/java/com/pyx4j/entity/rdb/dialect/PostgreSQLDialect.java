@@ -122,4 +122,13 @@ public class PostgreSQLDialect extends Dialect {
             return " NULLS FIRST";
         }
     }
+
+    @Override
+    public String sqlChangeConnectionNamespace(String namespace) {
+        if (namespace == null) {
+            return "SET search_path TO " + "public";
+        } else {
+            return "SET search_path TO " + namespace + ",public";
+        }
+    }
 }

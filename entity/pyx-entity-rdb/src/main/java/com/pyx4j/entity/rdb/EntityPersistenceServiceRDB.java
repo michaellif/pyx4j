@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.rdb;
 
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Date;
@@ -33,6 +32,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
@@ -52,6 +52,7 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.PersistenceContext.TransactionType;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.MemberCollectionOperationsMeta;
@@ -82,6 +83,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityViolationException;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 /**
  * 
@@ -136,6 +138,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     public void resetMapping() {
         mappings.reset();
+    }
+
+    public MultitenancyType getMultitenancyType() {
+        return connectionProvider.getDialect().getMultitenancyType();
     }
 
     private void startContext(ConnectionTarget reason) {
@@ -249,61 +255,78 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         persistenceContext.rollback();
     }
 
-    public boolean isTableExists(Class<? extends IEntity> entityClass) {
-        try {
-            return TableModel.isTableExists(connectionProvider, EntityFactory.getEntityMeta(entityClass));
-        } catch (SQLException e) {
-            log.error("table exists error", e);
-            throw new RuntimeExceptionSerializable(e);
-        }
-    }
-
-    public void dropTable(Class<? extends IEntity> entityClass) {
-        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-        TableModel tm = new TableModel(connectionProvider.getDialect(), mappings, entityMeta);
-        try {
-            tm.dropTable(connectionProvider);
-            mappings.droppedTable(connectionProvider.getDialect(), entityMeta);
-        } catch (SQLException e) {
-            log.error("drop table error", e);
-            throw new RuntimeExceptionSerializable(e);
-        }
-    }
-
-    public int dropForeignKeys(Class<? extends IEntity> entityClass) {
-        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-        TableModel tm = new TableModel(connectionProvider.getDialect(), mappings, entityMeta);
-        try {
-            return tm.dropForeignKeys(connectionProvider);
-        } catch (SQLException e) {
-            log.error("drop ForeignKeys error", e);
-            throw new RuntimeExceptionSerializable(e);
-        }
-    }
-
     private void databaseVersion() {
-        Connection connection = null;
+        startContext(ConnectionTarget.forRead);
         try {
-            connection = connectionProvider.getConnection();
-            DatabaseMetaData dbMeta = connection.getMetaData();
-            log.debug("DB {} {}", dbMeta.getDatabaseProductName(), dbMeta.getDatabaseProductVersion());
+            DatabaseMetaData dbMeta = getPersistenceContext().getConnection().getMetaData();
+            log.info("DB {} {}", dbMeta.getDatabaseProductName(), dbMeta.getDatabaseProductVersion());
         } catch (SQLException e) {
             log.error("databaseMetaData access error", e);
             throw new RuntimeExceptionSerializable(e);
         } finally {
-            SQLUtils.closeQuietly(connection);
+            endContext();
+        }
+    }
+
+    public boolean isTableExists(Class<? extends IEntity> entityClass) {
+        startContext(ConnectionTarget.forRead);
+        try {
+            return TableModel.isTableExists(getPersistenceContext(), EntityFactory.getEntityMeta(entityClass));
+        } catch (SQLException e) {
+            log.error("table exists error", e);
+            throw new RuntimeExceptionSerializable(e);
+        } finally {
+            endContext();
+        }
+    }
+
+    public void dropTable(Class<? extends IEntity> entityClass) {
+        startContext(ConnectionTarget.forDDL);
+        try {
+            mappings.dropTable(getPersistenceContext(), EntityFactory.getEntityMeta(entityClass));
+        } catch (SQLException e) {
+            log.error("drop table error", e);
+            throw new RuntimeExceptionSerializable(e);
+        } finally {
+            endContext();
+        }
+    }
+
+    public boolean allowNamespaceUse(Class<? extends IEntity> entityClass) {
+        Table table = entityClass.getAnnotation(Table.class);
+        if (table == null) {
+            return true;
+        } else {
+            if (CommonsStringUtils.isStringSet(table.namespace())) {
+                return NamespaceManager.getNamespace().equals(table.namespace());
+            } else {
+                return true;
+            }
+        }
+    }
+
+    public int dropForeignKeys(Class<? extends IEntity> entityClass) {
+        startContext(ConnectionTarget.forDDL);
+        try {
+            EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+            TableModel tm = new TableModel(getPersistenceContext().getDialect(), mappings, entityMeta);
+            return tm.dropForeignKeys(getPersistenceContext());
+        } catch (SQLException e) {
+            log.error("drop ForeignKeys error", e);
+            throw new RuntimeExceptionSerializable(e);
+        } finally {
+            endContext();
         }
     }
 
     TableModel tableModel(EntityMeta entityMeta) {
-        return mappings.ensureTable(getPersistenceContext().getConnection(), connectionProvider.getDialect(), entityMeta);
+        return mappings.ensureTable(getPersistenceContext(), entityMeta);
     }
 
     public TableMetadata getTableMetadata(EntityMeta entityMeta) throws SQLException {
         startContext(ConnectionTarget.forRead);
         try {
-            return TableMetadata
-                    .getTableMetadata(getPersistenceContext().getConnection(), TableModel.getTableName(connectionProvider.getDialect(), entityMeta));
+            return TableMetadata.getTableMetadata(getPersistenceContext(), TableModel.getTableName(getPersistenceContext().getDialect(), entityMeta));
         } finally {
             endContext();
         }

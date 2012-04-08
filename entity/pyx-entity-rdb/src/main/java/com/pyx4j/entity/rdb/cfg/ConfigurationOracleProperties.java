@@ -36,6 +36,10 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
     protected String password;
 
+    protected String dbAdministrationUserName;
+
+    protected String dbAdministrationPassword;
+
     protected int minPoolSize = 3;
 
     protected int maxPoolSize = 15;
@@ -75,6 +79,16 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     @Override
     public String password() {
         return password;
+    }
+
+    @Override
+    public String dbAdministrationUserName() {
+        return dbAdministrationUserName;
+    }
+
+    @Override
+    public String dbAdministrationPassword() {
+        return dbAdministrationPassword;
     }
 
     @Override
@@ -125,6 +139,9 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
         this.user = c.getValue("user", this.user);
         this.password = c.getValue("password", this.password);
+
+        this.dbAdministrationUserName = c.getValue("dbAdministrationUserName", this.user);
+        this.dbAdministrationPassword = c.getValue("dbAdministrationPassword", this.password);
 
         this.createForeignKeys = c.getBooleanValue("createForeignKeys", this.createForeignKeys);
 

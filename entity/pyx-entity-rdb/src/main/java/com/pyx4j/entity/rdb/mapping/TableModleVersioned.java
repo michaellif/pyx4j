@@ -57,7 +57,7 @@ public class TableModleVersioned {
             criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), forDate));
             criteria.or(PropertyCriterion.gt(criteria.proto().toDate(), forDate), PropertyCriterion.isNull(criteria.proto().toDate()));
         }
-        TableModel tm = mappings.getTableModel(persistenceContext.getConnection(), targetEntityClass);
+        TableModel tm = mappings.getTableModel(persistenceContext, targetEntityClass);
         List<Key> keys = tm.queryKeys(persistenceContext, criteria, 1);
         IVersionData<?> memeberEntity = (IVersionData<?>) member.getMember(entity);
 
@@ -84,7 +84,7 @@ public class TableModleVersioned {
         @SuppressWarnings("unchecked")
         Class<? extends IVersionData<IVersionedEntity<?>>> targetEntityClass = (Class<? extends IVersionData<IVersionedEntity<?>>>) member.getMemberMeta()
                 .getValueClass();
-        TableModel tm = mappings.getTableModel(persistenceContext.getConnection(), targetEntityClass);
+        TableModel tm = mappings.getTableModel(persistenceContext, targetEntityClass);
 
         // Find existing Draft
         IVersionData<IVersionedEntity<?>> existingDraft = null;

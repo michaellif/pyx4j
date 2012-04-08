@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.mchange.v2.c3p0.DataSources;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.rdb.cfg.Configuration;
@@ -38,27 +39,36 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
     private final ComboPooledDataSource dataSourceBackgroundProcess;
 
+    private final DataSource dataSourceAministration;
+
     public ConnectionPoolC3P0(Configuration cfg) throws Exception {
-        dataSource = createDataSource(cfg);
+        {
+            dataSource = createDataSource(cfg);
 
-        // the settings below are optional -- c3p0 can work with defaults
-        dataSource.setMinPoolSize(cfg.minPoolSize()); // default is 3
-        dataSource.setMaxPoolSize(cfg.maxPoolSize()); // default is 15, we may need more for the server
+            // the settings below are optional -- c3p0 can work with defaults
+            dataSource.setMinPoolSize(cfg.minPoolSize()); // default is 3
+            dataSource.setMaxPoolSize(cfg.maxPoolSize()); // default is 15, we may need more for the server
 
-        dataSource.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionTimeout());
-        dataSource.setDebugUnreturnedConnectionStackTraces(true);
+            dataSource.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionTimeout());
+            dataSource.setDebugUnreturnedConnectionStackTraces(true);
 
-        log.debug("Pool size is {} min and {} max", dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
+            log.debug("Pool size is {} min and {} max", dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
+        }
 
-        dataSourceBackgroundProcess = createDataSource(cfg);
+        {
+            dataSourceBackgroundProcess = createDataSource(cfg);
 
-        // the settings below are optional -- c3p0 can work with defaults
-        dataSourceBackgroundProcess.setMinPoolSize(cfg.minPoolSize()); // default is 3
-        dataSourceBackgroundProcess.setMaxPoolSize(cfg.maxBackgroundProcessPoolSize());
+            // the settings below are optional -- c3p0 can work with defaults
+            dataSourceBackgroundProcess.setMinPoolSize(cfg.minPoolSize()); // default is 3
+            dataSourceBackgroundProcess.setMaxPoolSize(cfg.maxBackgroundProcessPoolSize());
 
-        dataSourceBackgroundProcess.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionBackgroundProcessTimeout());
-        dataSourceBackgroundProcess.setDebugUnreturnedConnectionStackTraces(true);
+            dataSourceBackgroundProcess.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionBackgroundProcessTimeout());
+            dataSourceBackgroundProcess.setDebugUnreturnedConnectionStackTraces(true);
+        }
 
+        {
+            dataSourceAministration = DataSources.unpooledDataSource(cfg.connectionUrl(), cfg.dbAdministrationUserName(), cfg.dbAdministrationPassword());
+        }
     }
 
     private ComboPooledDataSource createDataSource(Configuration cfg) throws Exception {
@@ -91,6 +101,11 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
     }
 
     @Override
+    public DataSource getAministrationDataSource() {
+        return dataSourceAministration;
+    }
+
+    @Override
     public void close() throws Exception {
         try {
             dataSource.close();
@@ -103,4 +118,5 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
     public String toString() {
         return "C3P0";
     }
+
 }

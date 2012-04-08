@@ -39,6 +39,8 @@ public abstract class Dialect {
 
     private final DatabaseType databaseType;
 
+    private final MultitenancyType multitenancyType;
+
     private final boolean multitenantSharedSchema;
 
     private final boolean multitenantSeparateSchemas;
@@ -48,6 +50,7 @@ public abstract class Dialect {
     protected Dialect(DatabaseType databaseType, NamingConvention namingConvention, MultitenancyType multitenancyType) {
         this.databaseType = databaseType;
         this.namingConvention = namingConvention;
+        this.multitenancyType = multitenancyType;
         this.multitenantSharedSchema = (multitenancyType == MultitenancyType.SharedSchema);
         this.multitenantSeparateSchemas = (multitenancyType == MultitenancyType.SeparateSchemas);
         addTypeMeta(Integer.class, "integer");
@@ -69,6 +72,10 @@ public abstract class Dialect {
 
     public NamingConvention getNamingConvention() {
         return namingConvention;
+    }
+
+    public MultitenancyType getMultitenancyType() {
+        return multitenancyType;
     }
 
     public boolean isMultitenantSharedSchema() {
@@ -225,6 +232,13 @@ public abstract class Dialect {
 
     public String sqlSortNulls(boolean descending) {
         return "";
+    }
+
+    /**
+     * return null to use Connection.setCatalog
+     */
+    public String sqlChangeConnectionNamespace(String namespace) {
+        throw new Error("Dialect does not support SeparateSchemas Multitenancy");
     }
 
 }

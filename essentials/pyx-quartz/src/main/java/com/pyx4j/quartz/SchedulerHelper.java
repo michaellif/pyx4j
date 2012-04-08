@@ -170,7 +170,7 @@ public class SchedulerHelper {
                 log.debug("All quartz tables are present");
             } else {
                 String sqlResourceName;
-                switch (RDBUtils.getRDBConfiguration().databaseType()) {
+                switch (rdb.databaseType()) {
                 case HSQLDB:
                     sqlResourceName = "tables_hsqldb.sql";
                     break;
@@ -184,7 +184,7 @@ public class SchedulerHelper {
                     sqlResourceName = "tables_postgresql.sql";
                     break;
                 default:
-                    throw new Error("Unsupported databaseType " + RDBUtils.getRDBConfiguration().databaseType());
+                    throw new Error("Unsupported databaseType " + rdb.databaseType());
                 }
 
                 String text = IOUtils.getTextResource(SchedulerHelper.class.getPackage().getName().replace('.', '/') + "/" + sqlResourceName);

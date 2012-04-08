@@ -22,8 +22,11 @@ package com.pyx4j.entity.rdb;
 
 import java.io.Closeable;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -37,7 +40,7 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.cfg.Configuration;
-import com.pyx4j.entity.rdb.dialect.MySQLDialect;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -46,16 +49,23 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 public class RDBUtils implements Closeable {
 
     private static final Logger log = LoggerFactory.getLogger(RDBUtils.class);
 
+    private final Configuration configuration;
+
     private final ConnectionProvider connectionProvider;
+
+    private String connectionNamespace;
+
+    private Connection connection = null;
 
     public RDBUtils() {
         try {
-            connectionProvider = new ConnectionProvider(getRDBConfiguration());
+            connectionProvider = new ConnectionProvider(configuration = getRDBConfiguration());
         } catch (SQLException e) {
             log.error("RDB initialization error", e);
             throw new RuntimeException(e.getMessage());
@@ -73,74 +83,146 @@ public class RDBUtils implements Closeable {
         return (Configuration) cfg;
     }
 
-    public Connection getConnection() {
-        return connectionProvider.getConnection(ConnectionTarget.forUpdate);
+    private Connection connection() {
+        if (connection == null) {
+            connection = connectionProvider.getConnection(ConnectionTarget.forDDL);
+            if (connectionNamespace != null) {
+                setConnectionNamespace(connectionNamespace);
+            }
+        }
+        return connection;
+    }
+
+    public void setConnectionNamespace(String connectionNamespace) {
+        this.connectionNamespace = connectionNamespace;
+        if (connection != null) {
+            String sql = connectionProvider.getDialect().sqlChangeConnectionNamespace(connectionNamespace);
+            try {
+                if (sql == null) {
+                    connection.setCatalog(connectionNamespace);
+                } else {
+                    SQLUtils.execute(connection, sql);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
     public void close() {
+        SQLUtils.closeQuietly(connection);
+        connection = null;
         connectionProvider.dispose();
     }
 
+    public DatabaseType databaseType() {
+        return configuration.databaseType();
+    }
+
     public boolean isTableExists(String tableName) throws SQLException {
-        Connection connection = connectionProvider.getConnection(ConnectionTarget.forRead);
-        try {
-            return (TableMetadata.getTableMetadata(connection, tableName) != null);
-        } finally {
-            SQLUtils.closeQuietly(connection);
-        }
+        return TableMetadata.isTableExists(connectionProvider.getDialect(), connection(), connectionNamespace, tableName);
     }
 
     public void dropTable(String tableName) throws SQLException {
-        Connection connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
         List<String> sqls = new Vector<String>();
-        try {
-            sqls.add("drop table " + tableName);
-            SQLUtils.execute(connection, sqls);
-        } finally {
-            SQLUtils.closeQuietly(connection);
-        }
+        sqls.add("drop table " + tableName);
+        SQLUtils.execute(connection(), sqls);
     }
 
     public void execute(List<String> sqls) throws SQLException {
-        Connection connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
-        try {
-            SQLUtils.execute(connection, sqls);
-        } finally {
-            SQLUtils.closeQuietly(connection);
-        }
+        SQLUtils.execute(connection(), sqls);
     }
 
     public void execute(String sql) throws SQLException {
-        Connection connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
+        SQLUtils.execute(connection(), sql);
+    }
+
+    public static void ensureNamespace() {
+        RDBUtils utils = new RDBUtils();
+        Connection connection = null;
         try {
-            SQLUtils.execute(connection, sql);
+            if (utils.connectionProvider.getDialect().isMultitenantSeparateSchemas()) {
+                connection = utils.connectionProvider.getConnection(ConnectionTarget.forDDL);
+                String storedNamespaceName = NamespaceManager.getNamespace();
+                boolean schemaExists = false;
+                ResultSet rs = null;
+                try {
+                    DatabaseMetaData dbMeta = connection.getMetaData();
+                    if (dbMeta.storesLowerCaseIdentifiers()) {
+                        storedNamespaceName = storedNamespaceName.toLowerCase(Locale.ENGLISH);
+                    } else if (dbMeta.storesUpperCaseIdentifiers()) {
+                        storedNamespaceName = storedNamespaceName.toUpperCase(Locale.ENGLISH);
+                    }
+                    rs = dbMeta.getSchemas(null, storedNamespaceName);
+                    if (rs.next()) {
+                        schemaExists = true;
+                    }
+                } finally {
+                    SQLUtils.closeQuietly(rs);
+                }
+
+                if (!schemaExists) {
+                    switch (utils.connectionProvider.getDialect().databaseType()) {
+                    case PostgreSQL:
+                        utils.execute("CREATE SCHEMA " + storedNamespaceName);
+                        break;
+                    case MySQL:
+                        utils.execute("CREATE DATABASE " + storedNamespaceName + "  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
+                        break;
+                    default:
+                        throw new Error("Unsupported dialect");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new Error(e);
         } finally {
             SQLUtils.closeQuietly(connection);
+            utils.close();
+        }
+    }
+
+    public static void resetDatabase() {
+        long start = System.currentTimeMillis();
+        RDBUtils utils = new RDBUtils();
+        try {
+            switch (utils.connectionProvider.getDialect().databaseType()) {
+            case PostgreSQL:
+                DatabaseMetaData dbMeta = utils.connection().getMetaData();
+                ResultSet rs = null;
+                try {
+                    rs = dbMeta.getSchemas();
+                    while (rs.next()) {
+                        String schema = rs.getString(1);
+                        if (schema.equalsIgnoreCase("information_schema") || schema.equalsIgnoreCase("pg_catalog")) {
+                            continue;
+                        }
+                        utils.execute("DROP SCHEMA " + schema + " CASCADE");
+                    }
+                } finally {
+                    SQLUtils.closeQuietly(rs);
+                }
+                utils.execute("CREATE SCHEMA public");
+                break;
+            case MySQL:
+                utils.execute("DROP DATABASE " + utils.configuration.dbName());
+                utils.execute("CREATE DATABASE " + utils.configuration.dbName() + "  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
+                break;
+            default:
+                throw new Error("Unsupported dialect");
+            }
+            ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+            log.info("Database '{}' recreated in {}", utils.configuration.dbName(), TimeUtils.secSince(start));
+        } catch (SQLException e) {
+            throw new Error(e);
+        } finally {
+            utils.close();
         }
     }
 
     public static void dropAllEntityTables() {
         long start = System.currentTimeMillis();
-        RDBUtils utils = new RDBUtils();
-        try {
-            if (utils.connectionProvider.getDialect() instanceof MySQLDialect) {
-                Configuration cfg = getRDBConfiguration();
-                try {
-                    utils.execute("DROP DATABASE " + cfg.dbName());
-                    utils.execute("CREATE DATABASE " + cfg.dbName() + "  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
-                } catch (SQLException e) {
-                    throw new Error(e);
-                } finally {
-                    ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
-                }
-                log.info("Database '{}' recreated in {}", cfg.dbName(), TimeUtils.secSince(start));
-                return;
-            }
-        } finally {
-            utils.close();
-        }
-
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         int countTotal = 0;
@@ -190,6 +272,9 @@ public class RDBUtils implements Closeable {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
             if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null || entityClass.getAnnotation(EmbeddedEntity.class) != null) {
+                continue;
+            }
+            if (!srv.allowNamespaceUse(entityClass)) {
                 continue;
             }
             srv.count(EntityQueryCriteria.create(entityClass));

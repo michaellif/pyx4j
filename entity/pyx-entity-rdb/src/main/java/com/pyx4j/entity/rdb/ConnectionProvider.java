@@ -63,6 +63,8 @@ public class ConnectionProvider {
 
     public static enum ConnectionTarget {
 
+        forDDL,
+
         forUpdate,
 
         forRead,
@@ -185,7 +187,11 @@ public class ConnectionProvider {
             if ((reason == ConnectionTarget.forUpdate) && ServerSideConfiguration.instance().datastoreReadOnly()) {
                 throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
             }
-            return dataSource.getConnection();
+            if (reason == ConnectionTarget.forDDL) {
+                return connectionPool.getAministrationDataSource().getConnection();
+            } else {
+                return dataSource.getConnection();
+            }
         } catch (SQLException e) {
             log.error("SQL connection error", e);
             throw new RuntimeException(e);
@@ -204,6 +210,15 @@ public class ConnectionProvider {
     public Connection getBackgroundProcessConnection() {
         try {
             return backgroundProcessDataSource.getConnection();
+        } catch (SQLException e) {
+            log.error("SQL connection error", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Connection getAdministrationConnection() {
+        try {
+            return connectionPool.getAministrationDataSource().getConnection();
         } catch (SQLException e) {
             log.error("SQL connection error", e);
             throw new RuntimeException(e);
