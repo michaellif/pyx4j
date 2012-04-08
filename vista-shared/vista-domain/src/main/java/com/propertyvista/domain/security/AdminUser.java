@@ -14,8 +14,12 @@
 package com.propertyvista.domain.security;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Table;
+
+import com.propertyvista.domain.VistaNamespace;
 
 @Caption(name = "User")
+@Table(namespace = VistaNamespace.adminNamespace)
 public interface AdminUser extends AbstractUser {
 
 }

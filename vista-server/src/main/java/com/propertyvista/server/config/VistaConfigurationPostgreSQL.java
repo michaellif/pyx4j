@@ -44,13 +44,23 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
     }
 
     @Override
+    public int maxPoolPreparedStatements() {
+        return 0;
+    }
+
+    @Override
     public int tablesItentityOffset() {
         return 997;
     }
 
     @Override
     public MultitenancyType getMultitenancyType() {
-        return MultitenancyType.SharedSchema;
+        return MultitenancyType.SeparateSchemas;
+    }
+
+    @Override
+    public String sharedSequencesSchema() {
+        return "public";
     }
 
     @Override

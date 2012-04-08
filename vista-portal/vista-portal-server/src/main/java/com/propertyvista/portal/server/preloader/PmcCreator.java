@@ -17,6 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.rdb.RDBUtils;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -34,6 +37,13 @@ public class PmcCreator {
         final String namespace = NamespaceManager.getNamespace();
         NamespaceManager.setNamespace(pmc.dnsName().getValue());
         try {
+            RDBUtils.ensureNamespace();
+
+            if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                // TODO Hack for non implemented SeparateSchemas DML 
+                ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+                RDBUtils.initAllEntityTables();
+            }
 
             AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
             preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());

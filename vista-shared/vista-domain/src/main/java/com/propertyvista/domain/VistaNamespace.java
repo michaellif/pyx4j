@@ -7,19 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 5, 2011
+ * Created on Apr 8, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.security;
+package com.propertyvista.domain;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Table;
+public interface VistaNamespace {
 
-import com.propertyvista.domain.VistaNamespace;
-
-@Caption(name = "User")
-@Table(namespace = VistaNamespace.adminNamespace)
-public interface OnboardingUser extends AbstractUser {
+    public static final String adminNamespace = "_admin_";
 
 }

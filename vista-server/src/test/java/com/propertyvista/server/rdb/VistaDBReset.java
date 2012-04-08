@@ -18,7 +18,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -52,13 +54,14 @@ public class VistaDBReset {
         ServerSideConfiguration.setInstance(conf);
         Persistence.service().startBackgroundProcessTransaction();
         try {
+            RDBUtils.resetDatabase();
             NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
+            RDBUtils.ensureNamespace();
             RDBUtils.dropAllEntityTables();
             SchedulerHelper.dbReset();
             RDBUtils.initAllEntityTables();
             log.info("Generating new Data...");
             long start = System.currentTimeMillis();
-            //log.info(conf.getDataPreloaders().preloadAll());
 
             DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
             if ((args != null) && (args.length > 0)) {
@@ -72,11 +75,20 @@ public class VistaDBReset {
             try {
                 Lifecycle.startElevatedUserContext();
                 log.info(preloaders.preloadAll());
+                Persistence.service().commit();
             } finally {
                 Lifecycle.endElevatedUserContext();
             }
 
             NamespaceManager.setNamespace(Pmc.adminNamespace);
+
+            if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                RDBUtils.ensureNamespace();
+                // TODO Hack for non implemented SeparateSchemas DML 
+                ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+                RDBUtils.dropAllEntityTables();
+            }
+
             Pmc pmc = EntityFactory.create(Pmc.class);
             pmc.name().setValue("Vista Demo");
             pmc.dnsName().setValue(VistaNamespaceResolver.demoNamespace);
@@ -90,6 +102,8 @@ public class VistaDBReset {
             log.info("Total time: " + TimeUtils.secSince(totalStart));
 
         } catch (Throwable t) {
+            // This is test environment, we need to see what was created.
+            Persistence.service().commit();
             log.error("", t);
         } finally {
             Persistence.service().endTransaction();

@@ -30,13 +30,14 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.PmcDnsName;
+import com.propertyvista.domain.VistaNamespace;
 
-@Table(prefix = "admin")
+@Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
 @Caption(name = "PMC")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface Pmc extends IEntity {
 
-    public static final String adminNamespace = "-vista-admin\u0010-";
+    public static final String adminNamespace = VistaNamespace.adminNamespace;
 
     @NotNull
     @ToString

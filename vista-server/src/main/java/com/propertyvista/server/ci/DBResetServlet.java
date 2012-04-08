@@ -34,7 +34,9 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
@@ -166,13 +168,21 @@ public class DBResetServlet extends HttpServlet {
                         try {
                             if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
                                 SchedulerHelper.shutdown();
-                                RDBUtils.dropAllEntityTables();
+                                RDBUtils.resetDatabase();
                                 SchedulerHelper.dbReset();
                                 Thread.sleep(150);
                                 SchedulerHelper.init();
-                                RDBUtils.initAllEntityTables();
+                                if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() != MultitenancyType.SeparateSchemas) {
+                                    RDBUtils.initAllEntityTables();
+                                }
                                 CacheService.resetAll();
+
                                 NamespaceManager.setNamespace(Pmc.adminNamespace);
+                                RDBUtils.ensureNamespace();
+                                // TODO Hack for non implemented SeparateSchemas DML 
+                                {
+                                    ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+                                }
                                 try {
                                     new VistaAminDataPreloaders().preloadAll();
                                     Persistence.service().commit();
@@ -275,6 +285,12 @@ public class DBResetServlet extends HttpServlet {
 
         NamespaceManager.setNamespace(demoPmcName);
         buf.append("\n--- Preload  " + demoPmcName + " ---\n");
+        if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+            RDBUtils.ensureNamespace();
+            // TODO Hack for non implemented SeparateSchemas DML 
+            ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+            RDBUtils.initAllEntityTables();
+        }
 
         if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.addPmcMockup, ResetType.allAddMockup, ResetType.addPmcMockupTest1).contains(type)) {
             RDBUtils.deleteFromAllEntityTables();

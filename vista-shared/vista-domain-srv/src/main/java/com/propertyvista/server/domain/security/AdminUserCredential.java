@@ -18,11 +18,12 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaAdminBehavior;
 
 @RpcBlacklist
-@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = AdminUser.class)
+@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = AdminUser.class, namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AdminUserCredential extends AbstractUserCredential<AdminUser> {
 

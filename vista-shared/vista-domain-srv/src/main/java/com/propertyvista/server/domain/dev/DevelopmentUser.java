@@ -14,11 +14,15 @@
 package com.propertyvista.server.domain.dev;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.VistaNamespace;
+
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+@Table(namespace = VistaNamespace.adminNamespace)
 public interface DevelopmentUser extends IEntity {
 
     IPrimitive<String> firstName();
