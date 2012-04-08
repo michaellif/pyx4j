@@ -16,10 +16,12 @@ package com.propertyvista.onboarding;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 
+@Ignore
 public class PmcNameValidatorTest {
 
     @Test
