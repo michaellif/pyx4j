@@ -49,8 +49,8 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
     }
 
     @Override
-    public boolean isMultitenant() {
-        return true;
+    public MultitenancyType getMultitenancyType() {
+        return MultitenancyType.SharedSchema;
     }
 
     @Override

@@ -29,8 +29,8 @@ public class VistaTestsDBConfigurationHSQLFile extends ConfigurationHSQL {
     }
 
     @Override
-    public boolean isMultitenant() {
-        return true;
+    public MultitenancyType getMultitenancyType() {
+        return MultitenancyType.SharedSchema;
     }
 
     @Override

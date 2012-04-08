@@ -40,8 +40,8 @@ public class VistaTestsDBConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Con
     }
 
     @Override
-    public boolean isMultitenant() {
-        return true;
+    public MultitenancyType getMultitenancyType() {
+        return MultitenancyType.SharedSchema;
     }
 
     @Override
