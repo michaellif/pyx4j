@@ -77,6 +77,15 @@ public class PropertiesConfiguration {
         }
     }
 
+    public <T extends Enum<T>> T getEnumValue(String key, Class<T> enumClass, T defaultValue) {
+        String value = getValue(key);
+        if (value == null) {
+            return defaultValue;
+        } else {
+            return Enum.valueOf(enumClass, value);
+        }
+    }
+
     public static Map<String, String> loadProperties(File file) {
         Properties p = new Properties();
         FileReader reader = null;

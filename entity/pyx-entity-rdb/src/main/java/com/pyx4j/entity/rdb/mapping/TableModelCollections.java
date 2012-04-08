@@ -109,7 +109,7 @@ public class TableModelCollections {
                 sql.append(", ").append(member.sqlOrderColumnName());
                 numberOfParams++;
             }
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 sql.append(", ").append(dialect.getNamingConvention().sqlNameSpaceColumnName());
                 numberOfParams++;
             }
@@ -154,7 +154,7 @@ public class TableModelCollections {
                     stmt.setInt(parameterIndex, seq);
                     parameterIndex++;
                 }
-                if (dialect.isMultitenant()) {
+                if (dialect.isMultitenantSharedSchema()) {
                     stmt.setString(parameterIndex, NamespaceManager.getNamespace());
                     parameterIndex++;
                 }
@@ -218,7 +218,7 @@ public class TableModelCollections {
                 }
                 sql.append(name);
             }
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 sql.append(", ").append(dialect.getNamingConvention().sqlNameSpaceColumnName());
             }
             if (isList) {
@@ -236,7 +236,7 @@ public class TableModelCollections {
                 sql.append(name).append(" = ?");
             }
 
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
@@ -247,12 +247,12 @@ public class TableModelCollections {
             int parameterIndex = 1;
             parameterIndex += member.getOwnerValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, entity);
 
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());
             }
             rs = stmt.executeQuery();
             while (rs.next()) {
-                if ((dialect.isMultitenant()) && !rs.getString(dialect.getNamingConvention().sqlNameSpaceColumnName()).equals(NamespaceManager.getNamespace())) {
+                if ((dialect.isMultitenantSharedSchema()) && !rs.getString(dialect.getNamingConvention().sqlNameSpaceColumnName()).equals(NamespaceManager.getNamespace())) {
                     throw new RuntimeException("namespace access error");
                 }
                 Object value = member.getValueAdapter().retrieveValue(rs, member.sqlValueName());
@@ -331,7 +331,7 @@ public class TableModelCollections {
                 sql.append(name).append(" = ?");
             }
 
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (isList) {
@@ -346,7 +346,7 @@ public class TableModelCollections {
             int parameterIndex = 1;
             parameterIndex += member.getOwnerValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, entity);
 
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());
                 parameterIndex++;
             }
@@ -387,7 +387,7 @@ public class TableModelCollections {
                 sql.append(name);
             }
             sql.append(" FROM ").append(member.sqlName()).append(" WHERE ");
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" ns = ? AND ");
             }
             //TODO use  member.getOwnerValueAdapter().
@@ -410,7 +410,7 @@ public class TableModelCollections {
             // zero means there is no limit, Need for pooled connections 
             stmt.setMaxRows(0);
             int parameterIndex = 1;
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());
                 parameterIndex++;
             }
@@ -447,7 +447,7 @@ public class TableModelCollections {
                 throw new Error("TODO delete by Polymorphic Owner");
             }
             sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
@@ -455,7 +455,7 @@ public class TableModelCollections {
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             stmt.setLong(1, primaryKey.asLong());
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 stmt.setString(2, NamespaceManager.getNamespace());
             }
             persistenceContext.setUncommittedChanges();
@@ -476,7 +476,7 @@ public class TableModelCollections {
         try {
             //TODO delete by Polymorphic Owner
             sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
@@ -486,7 +486,7 @@ public class TableModelCollections {
             int pkSize = 0;
             for (Key primaryKey : primaryKeys) {
                 stmt.setLong(1, primaryKey.asLong());
-                if (dialect.isMultitenant()) {
+                if (dialect.isMultitenantSharedSchema()) {
                     stmt.setString(2, NamespaceManager.getNamespace());
                 }
                 stmt.addBatch();

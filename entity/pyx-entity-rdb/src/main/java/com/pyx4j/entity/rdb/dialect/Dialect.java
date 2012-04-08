@@ -28,6 +28,7 @@ import java.util.Map;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.shared.IEntity;
 
 public abstract class Dialect {
@@ -38,14 +39,17 @@ public abstract class Dialect {
 
     private final DatabaseType databaseType;
 
-    private final boolean multitenant;
+    private final boolean multitenantSharedSchema;
+
+    private final boolean multitenantSeparateSchemas;
 
     private int tablesItentityOffset;
 
-    protected Dialect(DatabaseType databaseType, NamingConvention namingConvention, boolean multitenant) {
+    protected Dialect(DatabaseType databaseType, NamingConvention namingConvention, MultitenancyType multitenancyType) {
         this.databaseType = databaseType;
         this.namingConvention = namingConvention;
-        this.multitenant = multitenant;
+        this.multitenantSharedSchema = (multitenancyType == MultitenancyType.SharedSchema);
+        this.multitenantSeparateSchemas = (multitenancyType == MultitenancyType.SeparateSchemas);
         addTypeMeta(Integer.class, "integer");
         addTypeMeta(Character.class, "char");
         addTypeMeta(String.class, "varchar");
@@ -67,8 +71,12 @@ public abstract class Dialect {
         return namingConvention;
     }
 
-    public boolean isMultitenant() {
-        return multitenant;
+    public boolean isMultitenantSharedSchema() {
+        return multitenantSharedSchema;
+    }
+
+    public boolean isMultitenantSeparateSchemas() {
+        return multitenantSeparateSchemas;
     }
 
     protected void addTypeMeta(TypeMeta typeMeta) {

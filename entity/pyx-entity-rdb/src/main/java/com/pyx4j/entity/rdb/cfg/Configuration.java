@@ -33,6 +33,16 @@ public interface Configuration extends IPersistenceConfiguration {
         Oracle, MySQL, PostgreSQL, HSQLDB, Other
     };
 
+    public enum MultitenancyType {
+
+        SingleTenant,
+
+        SeparateSchemas,
+
+        SharedSchema
+
+    }
+
     public String driverClass();
 
     public DatabaseType databaseType();
@@ -47,7 +57,7 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public String password();
 
-    public boolean isMultitenant();
+    public MultitenancyType getMultitenancyType();
 
     public boolean createForeignKeys();
 

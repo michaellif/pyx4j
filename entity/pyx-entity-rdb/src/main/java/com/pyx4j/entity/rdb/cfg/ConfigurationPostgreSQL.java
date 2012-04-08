@@ -46,8 +46,8 @@ public abstract class ConfigurationPostgreSQL implements Configuration {
     }
 
     @Override
-    public boolean isMultitenant() {
-        return false;
+    public MultitenancyType getMultitenancyType() {
+        return MultitenancyType.SingleTenant;
     }
 
     @Override

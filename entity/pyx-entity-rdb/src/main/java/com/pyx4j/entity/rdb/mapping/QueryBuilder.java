@@ -87,7 +87,7 @@ public class QueryBuilder<T extends IEntity> {
         this.queryJoin = new QueryJoinBuilder(persistenceContext, mappings, operationsMeta, alias, criteria.getVersionedCriteria());
 
         boolean firstCriteria = true;
-        if (dialect.isMultitenant()) {
+        if (dialect.isMultitenantSharedSchema()) {
             sql.append(alias).append('.').append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             firstCriteria = false;
         }
@@ -391,7 +391,7 @@ public class QueryBuilder<T extends IEntity> {
     int bindParameters(PersistenceContext persistenceContext, PreparedStatement stmt) throws SQLException {
         int parameterIndex = 1;
         parameterIndex = this.queryJoin.bindParameters(parameterIndex, persistenceContext, stmt);
-        if (dialect.isMultitenant()) {
+        if (dialect.isMultitenantSharedSchema()) {
             stmt.setString(parameterIndex, NamespaceManager.getNamespace());
             parameterIndex++;
         }

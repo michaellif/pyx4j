@@ -23,8 +23,10 @@ package com.pyx4j.entity.rdb;
 import org.junit.After;
 import org.junit.Before;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
@@ -59,4 +61,12 @@ public class RDBDatastorePersistenceEnvironment extends PersistenceEnvironment {
         NamespaceManager.remove();
     }
 
+    public static MultitenancyType getTestsMultitenancyType() {
+        String value = System.getProperty("com.pyx4j.tests.multitenancy");
+        if (CommonsStringUtils.isEmpty(value)) {
+            return MultitenancyType.SharedSchema;
+        } else {
+            return Enum.valueOf(MultitenancyType.class, value);
+        }
+    }
 }

@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.mysql;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.RDBDatastorePersistenceEnvironment;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.ShortWords;
@@ -58,8 +59,8 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
     }
 
     @Override
-    public boolean isMultitenant() {
-        return true;
+    public MultitenancyType getMultitenancyType() {
+        return RDBDatastorePersistenceEnvironment.getTestsMultitenancyType();
     }
 
     @Override
@@ -72,7 +73,7 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
         if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
             return true;
         } else {
-            return Boolean.valueOf(System.getProperty("com.pyx4j.mysql.trace", "false")).booleanValue();
+            return Boolean.valueOf(System.getProperty("com.pyx4j.tests.mysql.trace", "false")).booleanValue();
         }
     }
 

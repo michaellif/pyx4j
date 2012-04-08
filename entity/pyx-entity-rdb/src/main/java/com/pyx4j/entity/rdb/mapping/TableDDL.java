@@ -79,7 +79,7 @@ class TableDDL {
         if (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
             sql.append(" ").append(dialect.getGeneratedIdColumnString());
         }
-        if (dialect.isMultitenant()) {
+        if (dialect.isMultitenantSharedSchema()) {
             sql.append(", ");
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(' ').append(dialect.getSqlType(String.class));
             sql.append('(').append(64).append(')');
@@ -107,7 +107,7 @@ class TableDDL {
 
         sql.append(", CONSTRAINT ").append(dialect.getNamingConvention().sqlTablePKName(tableModel.tableName));
         sql.append(" PRIMARY KEY (").append(dialect.getNamingConvention().sqlIdColumnName());
-        if (dialect.isMultitenant() && NS_PART_OF_PK) {
+        if (dialect.isMultitenantSharedSchema() && NS_PART_OF_PK) {
             sql.append(", ");
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
         }
@@ -145,14 +145,14 @@ class TableDDL {
         sql.append(" FOREIGN KEY ");
         sql.append(" (");
         sql.append(indexColName);
-        if (dialect.isMultitenant() && NS_PART_OF_PK) {
+        if (dialect.isMultitenantSharedSchema() && NS_PART_OF_PK) {
             sql.append(", ");
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
         }
         sql.append(") REFERENCES ");
         sql.append(tableTo);
         sql.append("(").append(dialect.getNamingConvention().sqlIdColumnName());
-        if (dialect.isMultitenant() && NS_PART_OF_PK) {
+        if (dialect.isMultitenantSharedSchema() && NS_PART_OF_PK) {
             sql.append(", ");
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
         }
@@ -226,7 +226,7 @@ class TableDDL {
 
         sql.append(" ON ").append(tableName).append(" (");
         boolean first = true;
-        if (dialect.isMultitenant()) {
+        if (dialect.isMultitenantSharedSchema()) {
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
             first = false;
         }
@@ -314,7 +314,7 @@ class TableDDL {
         sql.append(tableName);
 
         sql.append(" (");
-        if (dialect.isMultitenant()) {
+        if (dialect.isMultitenantSharedSchema()) {
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
             sql.append(' ').append(dialect.getSqlType(String.class)).append('(').append(200).append("), ");
         }
@@ -335,7 +335,7 @@ class TableDDL {
 
         sql.append(", CONSTRAINT ").append(dialect.getNamingConvention().sqlTablePKName(tableName));
         sql.append(" PRIMARY KEY (").append(dialect.getNamingConvention().sqlIdColumnName());
-        if (dialect.isMultitenant() && NS_PART_OF_PK) {
+        if (dialect.isMultitenantSharedSchema() && NS_PART_OF_PK) {
             sql.append(", ");
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
         }

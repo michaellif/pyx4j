@@ -36,7 +36,7 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
 
     protected String password;
 
-    protected boolean multitenant;
+    protected MultitenancyType multitenant = MultitenancyType.SingleTenant;
 
     private boolean createForeignKeys = true;
 
@@ -82,7 +82,7 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
     }
 
     @Override
-    public boolean isMultitenant() {
+    public MultitenancyType getMultitenancyType() {
         return multitenant;
     }
 
@@ -140,7 +140,7 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
         this.user = c.getValue("user", this.user);
         this.password = c.getValue("password", this.password);
 
-        this.multitenant = c.getBooleanValue("multitenant", this.multitenant);
+        this.multitenant = c.getEnumValue("multitenant", MultitenancyType.class, this.multitenant);
         this.createForeignKeys = c.getBooleanValue("createForeignKeys", this.createForeignKeys);
         this.autoReconnect = c.getBooleanValue("autoReconnect", this.autoReconnect);
 

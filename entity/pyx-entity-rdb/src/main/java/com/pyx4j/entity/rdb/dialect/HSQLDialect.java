@@ -23,11 +23,12 @@ package com.pyx4j.entity.rdb.dialect;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 
 public class HSQLDialect extends Dialect {
 
-    public HSQLDialect(NamingConvention namingConvention, boolean multitenant) {
-        super(DatabaseType.HSQLDB, namingConvention, multitenant);
+    public HSQLDialect(NamingConvention namingConvention, MultitenancyType multitenancyType) {
+        super(DatabaseType.HSQLDB, namingConvention, multitenancyType);
         addTypeMeta(Short.class, "smallint");
         addTypeMeta(Byte.class, "tinyint");
         addTypeMeta(Long.class, "bigint");

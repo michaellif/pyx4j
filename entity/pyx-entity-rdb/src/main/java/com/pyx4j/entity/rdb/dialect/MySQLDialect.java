@@ -23,11 +23,12 @@ package com.pyx4j.entity.rdb.dialect;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 
 public class MySQLDialect extends Dialect {
 
-    public MySQLDialect(NamingConvention namingConvention, boolean multitenant) {
-        super(DatabaseType.MySQL, namingConvention, multitenant);
+    public MySQLDialect(NamingConvention namingConvention, MultitenancyType multitenancyType) {
+        super(DatabaseType.MySQL, namingConvention, multitenancyType);
         addTypeMeta(Integer.class, "int");
         addTypeMeta(Short.class, "smallint");
         addTypeMeta(Byte.class, "tinyint");

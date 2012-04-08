@@ -71,7 +71,7 @@ public class TableModleExternal {
                 sql.append(name).append(" = ?");
             }
 
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
@@ -84,7 +84,7 @@ public class TableModleExternal {
             int parameterIndex = 1;
             parameterIndex += member.getOwnerValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, entity);
 
-            if (dialect.isMultitenant()) {
+            if (dialect.isMultitenantSharedSchema()) {
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());
                 parameterIndex++;
             }

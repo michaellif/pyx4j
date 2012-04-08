@@ -107,16 +107,16 @@ public class ConnectionProvider {
 
         switch (cfg.databaseType()) {
         case HSQLDB:
-            dialect = new HSQLDialect(namingConvention, cfg.isMultitenant());
+            dialect = new HSQLDialect(namingConvention, cfg.getMultitenancyType());
             break;
         case MySQL:
-            dialect = new MySQLDialect(namingConvention, cfg.isMultitenant());
+            dialect = new MySQLDialect(namingConvention, cfg.getMultitenancyType());
             break;
         case Oracle:
-            dialect = new OracleDialect(namingConvention, cfg.isMultitenant());
+            dialect = new OracleDialect(namingConvention, cfg.getMultitenancyType());
             break;
         case PostgreSQL:
-            dialect = new PostgreSQLDialect(namingConvention, cfg.isMultitenant());
+            dialect = new PostgreSQLDialect(namingConvention, cfg.getMultitenancyType());
             break;
         default:
             throw new Error("Unsupported driver Dialect " + cfg.driverClass());

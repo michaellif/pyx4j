@@ -45,8 +45,8 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
-    public boolean isMultitenant() {
-        return false;
+    public MultitenancyType getMultitenancyType() {
+        return MultitenancyType.SingleTenant;
     }
 
     @Override

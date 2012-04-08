@@ -24,11 +24,12 @@ import java.math.BigDecimal;
 import java.sql.Types;
 
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 
 public class OracleDialect extends Dialect {
 
-    public OracleDialect(NamingConvention namingConvention, boolean multitenant) {
-        super(DatabaseType.Oracle, namingConvention, multitenant);
+    public OracleDialect(NamingConvention namingConvention, MultitenancyType multitenancyType) {
+        super(DatabaseType.Oracle, namingConvention, multitenancyType);
         addTypeMeta(Integer.class, "number", 10, 0);
         addTypeMeta(Short.class, "number", 5, 0);
         addTypeMeta(Byte.class, "number", 3, 0);

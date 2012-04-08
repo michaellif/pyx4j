@@ -24,11 +24,12 @@ import java.math.BigDecimal;
 import java.sql.Types;
 
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 
 public class PostgreSQLDialect extends Dialect {
 
-    public PostgreSQLDialect(NamingConvention namingConvention, boolean multitenant) {
-        super(DatabaseType.PostgreSQL, namingConvention, multitenant);
+    public PostgreSQLDialect(NamingConvention namingConvention, MultitenancyType multitenancyType) {
+        super(DatabaseType.PostgreSQL, namingConvention, multitenancyType);
         addTypeMeta(Byte.class, "smallint", "int2");
         addTypeMeta(Short.class, "smallint", "int2");
         addTypeMeta(Integer.class, "integer", "int4");
