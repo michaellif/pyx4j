@@ -28,7 +28,7 @@ public class IdAssignmentPolicyListerViewImpl extends CrmListerViewImplBase<IdAs
     private static class IdAssignmentPolicyLister extends PolicyListerBase<IdAssignmentPolicyDTO> {
 
         public IdAssignmentPolicyLister() {
-            super(IdAssignmentPolicyDTO.class, CrmSiteMap.Settings.Policies.IdAssignment.class);
+            super(IdAssignmentPolicyDTO.class);
             getAddButton().setVisible(false);
             getDeleteButton().setVisible(false);
         }

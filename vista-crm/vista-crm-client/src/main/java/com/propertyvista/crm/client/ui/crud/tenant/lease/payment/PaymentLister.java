@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease.payment;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.PaymentRecord;
 
 public class PaymentLister extends ListerBase<PaymentRecord> {
 
     public PaymentLister() {
-        super(PaymentRecord.class, CrmSiteMap.Tenants.Payment.class, false, true);
+        super(PaymentRecord.class, false, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off

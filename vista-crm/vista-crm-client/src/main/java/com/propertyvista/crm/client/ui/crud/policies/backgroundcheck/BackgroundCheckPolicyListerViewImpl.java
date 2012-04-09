@@ -28,7 +28,7 @@ public class BackgroundCheckPolicyListerViewImpl extends CrmListerViewImplBase<B
     private static class BackgroundCheckPolicyLister extends PolicyListerBase<BackgroundCheckPolicyDTO> {
 
         public BackgroundCheckPolicyLister() {
-            super(BackgroundCheckPolicyDTO.class, CrmSiteMap.Settings.Policies.BackgroundCheck.class);
+            super(BackgroundCheckPolicyDTO.class);
         }
     }
 

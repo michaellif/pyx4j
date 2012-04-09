@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.building.lockers;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.Locker;
 
 public class LockerLister extends ListerBase<Locker> {
 
     public LockerLister() {
-        super(Locker.class, CrmSiteMap.Properties.Locker.class, false, true);
+        super(Locker.class, false, true);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().name()).build(), 

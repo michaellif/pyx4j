@@ -26,7 +26,6 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -41,9 +40,8 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
 
     protected List<ColumnDescriptor> defaultColumns;
 
-    @SuppressWarnings("unchecked")
-    public PolicyListerBase(Class<P> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
-        super(clazz, itemOpenPlaceClass, false, true);
+    public PolicyListerBase(Class<P> clazz) {
+        super(clazz, false, true);
         getDataTablePanel().setFilteringEnabled(false);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

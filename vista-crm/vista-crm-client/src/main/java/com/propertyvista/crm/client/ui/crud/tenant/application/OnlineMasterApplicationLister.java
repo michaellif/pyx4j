@@ -18,7 +18,6 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.OnlineMasterApplicationDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -27,7 +26,7 @@ public class OnlineMasterApplicationLister extends ListerBase<OnlineMasterApplic
     private static final I18n i18n = I18n.get(OnlineMasterApplicationLister.class);
 
     public OnlineMasterApplicationLister() {
-        super(OnlineMasterApplicationDTO.class, CrmSiteMap.Tenants.OnlineMasterApplication.class, false, false);
+        super(OnlineMasterApplicationDTO.class, false, false);
 
         setColumnDescriptors(new ColumnDescriptor[] {//@formatter:off
 

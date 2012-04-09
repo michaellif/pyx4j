@@ -21,7 +21,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxLister extends ListerBase<Tax> {
@@ -29,7 +28,7 @@ public class TaxLister extends ListerBase<Tax> {
     private static final I18n i18n = I18n.get(TaxLister.class);
 
     public TaxLister() {
-        super(Tax.class, CrmSiteMap.Settings.Tax.class, false, true);
+        super(Tax.class, false, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

@@ -23,7 +23,7 @@ import com.propertyvista.misc.VistaTODO;
 public class TenantInLeaseLister extends ListerBase<TenantInLeaseDTO> {
 
     public TenantInLeaseLister() {
-        super(TenantInLeaseDTO.class, CrmSiteMap.Tenants.Tenant.class, false, false);
+        super(TenantInLeaseDTO.class, false, false);
 
         setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().tenant().id(), true).build(),
 

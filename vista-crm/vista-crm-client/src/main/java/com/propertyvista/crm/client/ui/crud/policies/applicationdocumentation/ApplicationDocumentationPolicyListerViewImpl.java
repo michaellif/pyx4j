@@ -31,7 +31,7 @@ public class ApplicationDocumentationPolicyListerViewImpl extends CrmListerViewI
     private static class ApplicationDocumentationPolicyLister extends PolicyListerBase<ApplicationDocumentationPolicyDTO> {
 
         public ApplicationDocumentationPolicyLister() {
-            super(ApplicationDocumentationPolicyDTO.class, CrmSiteMap.Settings.Policies.ApplicationDocumentation.class);
+            super(ApplicationDocumentationPolicyDTO.class);
             setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().numberOfRequiredIDs()).build()
             );//@formatter:on

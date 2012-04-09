@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioLister extends ListerBase<Portfolio> {
 
     public PortfolioLister() {
-        super(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, false, true);
+        super(Portfolio.class, false, true);
 
         setColumnDescriptors(
 

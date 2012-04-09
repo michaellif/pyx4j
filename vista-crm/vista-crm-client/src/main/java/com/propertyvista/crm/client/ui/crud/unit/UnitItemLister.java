@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
 public class UnitItemLister extends ListerBase<AptUnitItem> {
 
     public UnitItemLister() {
-        super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class, false, true);
+        super(AptUnitItem.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.tenant.screening;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.PersonScreening;
 
 public class PersonScreeningLister extends ListerBase<PersonScreening> {
 
     public PersonScreeningLister() {
-        super(PersonScreening.class, CrmSiteMap.Tenants.Screening.class, false, true);
+        super(PersonScreening.class, false, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off

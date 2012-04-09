@@ -28,7 +28,7 @@ public class EmailTemplatesPolicyListerViewImpl extends CrmListerViewImplBase<Em
     private static class EmailTemplatesPolicyLister extends PolicyListerBase<EmailTemplatesPolicyDTO> {
 
         public EmailTemplatesPolicyLister() {
-            super(EmailTemplatesPolicyDTO.class, CrmSiteMap.Settings.Policies.EmailTemplates.class);
+            super(EmailTemplatesPolicyDTO.class);
         }
     }
 

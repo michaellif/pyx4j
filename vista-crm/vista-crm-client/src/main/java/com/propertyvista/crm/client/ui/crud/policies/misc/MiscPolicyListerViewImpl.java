@@ -30,7 +30,7 @@ public class MiscPolicyListerViewImpl extends CrmListerViewImplBase<MiscPolicyDT
     private static class MiscPolicyLister extends PolicyListerBase<MiscPolicyDTO> {
 
         public MiscPolicyLister() {
-            super(MiscPolicyDTO.class, CrmSiteMap.Settings.Policies.Misc.class);
+            super(MiscPolicyDTO.class);
             setColumnDescriptors( // @formatter:off
                     new MemberColumnDescriptor.Builder(proto().occupantsOver18areApplicants()).build(), 
                     new MemberColumnDescriptor.Builder(proto().occupantsPerBedRoom()).build(), 

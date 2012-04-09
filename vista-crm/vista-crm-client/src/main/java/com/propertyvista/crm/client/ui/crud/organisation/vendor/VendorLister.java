@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.organisation.vendor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.vendor.Vendor;
 
 public class VendorLister extends ListerBase<Vendor> {
 
     public VendorLister() {
-        super(Vendor.class, CrmSiteMap.Organization.Vendor.class, false, true);
+        super(Vendor.class, false, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),

@@ -30,7 +30,7 @@ public class OnboardingUserListerViewImpl extends AdminListerViewImplBase<Onboar
     private static class OnboardingUserLister extends ListerBase<OnboardingUserDTO> {
 
         public OnboardingUserLister() {
-            super(OnboardingUserDTO.class, AdminSiteMap.Management.OnboardingUsers.class, false, true);
+            super(OnboardingUserDTO.class, false, true);
             setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().name()).build(),
                     new MemberColumnDescriptor.Builder(proto().email()).build(),

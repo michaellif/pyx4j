@@ -21,7 +21,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
@@ -30,7 +29,7 @@ public class ServiceTypeLister extends ListerBase<ServiceItemType> {
     private static final I18n i18n = I18n.get(ServiceTypeLister.class);
 
     public ServiceTypeLister() {
-        super(ServiceItemType.class, CrmSiteMap.Settings.ServiceItemType.class, false, true);
+        super(ServiceItemType.class, false, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

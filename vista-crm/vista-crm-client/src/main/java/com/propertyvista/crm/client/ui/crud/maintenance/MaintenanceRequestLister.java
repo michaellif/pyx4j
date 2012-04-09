@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.maintenance;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestLister extends ListerBase<MaintenanceRequestDTO> {
 
     public MaintenanceRequestLister() {
-        super(MaintenanceRequestDTO.class, CrmSiteMap.Tenants.MaintenanceRequest.class, false, true);
+        super(MaintenanceRequestDTO.class, false, true);
 
         setColumnDescriptors( // @formatter:off
                 new MemberColumnDescriptor.Builder(proto().issueClassification().issue()).build(),

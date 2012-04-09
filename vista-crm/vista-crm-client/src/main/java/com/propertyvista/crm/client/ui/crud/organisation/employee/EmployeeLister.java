@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.organisation.employee;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
 public class EmployeeLister extends ListerBase<EmployeeDTO> {
 
     public EmployeeLister() {
-        super(EmployeeDTO.class, CrmSiteMap.Organization.Employee.class, false, true);
+        super(EmployeeDTO.class, false, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().title()).build(),

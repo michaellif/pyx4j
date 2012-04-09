@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.building.parking;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingLister extends ListerBase<ParkingDTO> {
 
     public ParkingLister() {
-        super(ParkingDTO.class, CrmSiteMap.Properties.Parking.class, false, true);
+        super(ParkingDTO.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

@@ -38,7 +38,7 @@ public class AdminSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
-
+        AdminEntityMapper.init();
         DefaultErrorHandlerDialog.register();
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), new AdminSiteMap.Management());

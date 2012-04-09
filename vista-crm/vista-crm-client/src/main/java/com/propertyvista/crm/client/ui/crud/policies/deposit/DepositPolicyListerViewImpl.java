@@ -28,7 +28,7 @@ public class DepositPolicyListerViewImpl extends CrmListerViewImplBase<DepositPo
     private static class DepositPolicyLister extends PolicyListerBase<DepositPolicyDTO> {
 
         public DepositPolicyLister() {
-            super(DepositPolicyDTO.class, CrmSiteMap.Settings.Policies.Deposits.class);
+            super(DepositPolicyDTO.class);
         }
     }
 

@@ -22,7 +22,7 @@ public class PetPolicyListerViewImpl extends CrmListerViewImplBase<PetPolicyDTO>
 
     public PetPolicyListerViewImpl() {
         super(CrmSiteMap.Settings.Policies.PetPolicy.class);
-        setLister(new PolicyListerBase<PetPolicyDTO>(PetPolicyDTO.class, CrmSiteMap.Settings.Policies.PetPolicy.class) {
+        setLister(new PolicyListerBase<PetPolicyDTO>(PetPolicyDTO.class) {
         });
     }
 }

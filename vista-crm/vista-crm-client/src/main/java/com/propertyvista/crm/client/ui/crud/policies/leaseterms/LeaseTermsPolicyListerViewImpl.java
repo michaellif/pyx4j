@@ -28,7 +28,7 @@ public class LeaseTermsPolicyListerViewImpl extends CrmListerViewImplBase<LeaseT
     private static class LeaseTermsPolicyLister extends PolicyListerBase<LeaseTermsPolicyDTO> {
 
         public LeaseTermsPolicyLister() {
-            super(LeaseTermsPolicyDTO.class, CrmSiteMap.Settings.Policies.LeaseTerms.class);
+            super(LeaseTermsPolicyDTO.class);
         }
     }
 }

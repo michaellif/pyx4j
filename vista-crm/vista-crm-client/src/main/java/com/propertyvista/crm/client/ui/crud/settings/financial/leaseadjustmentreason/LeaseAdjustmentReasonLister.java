@@ -21,7 +21,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class LeaseAdjustmentReasonLister extends ListerBase<LeaseAdjustmentReason> {
@@ -29,7 +28,7 @@ public class LeaseAdjustmentReasonLister extends ListerBase<LeaseAdjustmentReaso
     private static final I18n i18n = I18n.get(LeaseAdjustmentReasonLister.class);
 
     public LeaseAdjustmentReasonLister() {
-        super(LeaseAdjustmentReason.class, CrmSiteMap.Settings.LeaseAdjustmentReason.class, false, true);
+        super(LeaseAdjustmentReason.class, false, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

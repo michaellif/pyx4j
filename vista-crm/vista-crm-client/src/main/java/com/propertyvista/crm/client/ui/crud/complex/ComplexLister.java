@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.complex;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexLister extends ListerBase<ComplexDTO> {
 
     public ComplexLister() {
-        super(ComplexDTO.class, CrmSiteMap.Properties.Complex.class, false, true);
+        super(ComplexDTO.class, false, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(), 

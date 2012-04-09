@@ -16,14 +16,12 @@ package com.propertyvista.crm.client.ui.crud.marketing.lead;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentLister extends ListerBase<Appointment> {
 
     public AppointmentLister() {
-        super(Appointment.class, Marketing.Appointment.class, false, true);
-
+        super(Appointment.class, false, true);
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().date()).build(),
                 new MemberColumnDescriptor.Builder(proto().time()).build(),

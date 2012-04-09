@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.ElevatorDTO;
 
 public class ElevatorLister extends ListerBase<ElevatorDTO> {
 
     public ElevatorLister() {
-        super(ElevatorDTO.class, CrmSiteMap.Properties.Elevator.class, false, true);
+        super(ElevatorDTO.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

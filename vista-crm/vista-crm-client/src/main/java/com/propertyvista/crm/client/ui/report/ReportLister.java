@@ -21,7 +21,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class ReportLister extends ListerBase<DashboardMetadata> {
@@ -29,7 +28,7 @@ public class ReportLister extends ListerBase<DashboardMetadata> {
     private static final I18n i18n = I18n.get(ReportLister.class);
 
     public ReportLister() {
-        super(DashboardMetadata.class, CrmSiteMap.Report.Edit.class, false, true);
+        super(DashboardMetadata.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

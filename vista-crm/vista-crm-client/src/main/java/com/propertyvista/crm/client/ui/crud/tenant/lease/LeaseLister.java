@@ -18,13 +18,12 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseLister extends ListerBase<LeaseDTO> {
 
     public LeaseLister() {
-        super(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class, false, true);
+        super(LeaseDTO.class, false, true);
 
         setColumnDescriptors(//@formatter:off
             new Builder(proto().unit().belongsTo().propertyCode()).build(),

@@ -18,13 +18,13 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionLister extends ListerBase<Concession> {
 
     public ConcessionLister() {
-        super(Concession.class, CrmSiteMap.Properties.Concession.class, false, true);
+        super(Concession.class, false, true);
+
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

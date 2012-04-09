@@ -28,7 +28,7 @@ public class ProductTaxPolicyListerViewImpl extends CrmListerViewImplBase<Produc
     private static class ChargePolicyLister extends PolicyListerBase<ProductTaxPolicyDTO> {
 
         public ChargePolicyLister() {
-            super(ProductTaxPolicyDTO.class, CrmSiteMap.Settings.Policies.ProductTax.class);
+            super(ProductTaxPolicyDTO.class);
         }
     }
 }

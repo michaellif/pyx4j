@@ -16,13 +16,12 @@ package com.propertyvista.admin.client.ui.crud.pmc;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.PmcDTO;
 
 public class PmcLister extends ListerBase<PmcDTO> {
 
     public PmcLister() {
-        super(PmcDTO.class, AdminSiteMap.Management.PMC.class, false, true);
+        super(PmcDTO.class, false, true);
 
         setColumnDescriptors( //@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),

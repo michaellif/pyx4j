@@ -17,7 +17,6 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitLister extends ListerBase<AptUnitDTO> {
@@ -29,7 +28,7 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
     }
 
     public UnitLister(boolean allowAddNew) {
-        super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, false, allowAddNew);
+        super(AptUnitDTO.class, false, allowAddNew);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),

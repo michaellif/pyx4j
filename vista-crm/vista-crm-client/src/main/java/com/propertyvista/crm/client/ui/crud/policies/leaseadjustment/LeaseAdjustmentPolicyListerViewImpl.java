@@ -28,7 +28,7 @@ public class LeaseAdjustmentPolicyListerViewImpl extends CrmListerViewImplBase<L
     private static class ChargePolicyLister extends PolicyListerBase<LeaseAdjustmentPolicyDTO> {
 
         public ChargePolicyLister() {
-            super(LeaseAdjustmentPolicyDTO.class, CrmSiteMap.Settings.Policies.LeaseAdjustment.class);
+            super(LeaseAdjustmentPolicyDTO.class);
         }
     }
 }

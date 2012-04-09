@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerLister extends ListerBase<BoilerDTO> {
 
     public BoilerLister() {
-        super(BoilerDTO.class, CrmSiteMap.Properties.Boiler.class, false, true);
+        super(BoilerDTO.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

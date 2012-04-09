@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.crud.tenant;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantLister extends ListerBase<TenantDTO> {
 
     public TenantLister() {
-        super(TenantDTO.class, CrmSiteMap.Tenants.Tenant.class, false, true);
+        super(TenantDTO.class, false, true);
 
         // TODO: currently we use just person tenant, so we'll display more data for them:
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().displayName()));
