@@ -19,13 +19,11 @@ import java.util.List;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -83,10 +81,9 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             }
             buildingElementSelectionBox = new UnitSelectorDialog(true, alreadySelected) {
                 @Override
-                protected void setFilters(List<DataTableFilterData> filters) {
+                protected void setFilters(List<PropertyCriterion> filters) {
                     super.setFilters(filters);
-                    addFilter(new DataTableFilterData(EntityFactory.getEntityPrototype(AptUnit.class).belongsTo().getPath(), Restriction.EQUAL, parent
-                            .getValue().catalog().building()));
+                    addFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(AptUnit.class).belongsTo(), parent.getValue().catalog().building()));
                 }
 
                 @Override

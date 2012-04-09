@@ -21,10 +21,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.client.DeferredProcessDialog;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
@@ -88,17 +87,17 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     }
 
     protected void populateBills(LeaseDTO result) {
-        List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
-        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(BillDTO.class).billingAccount().id().getPath(), Restriction.EQUAL,
-                result.billingAccount().getPrimaryKey()));
+        List<PropertyCriterion> preDefinedFilters = new ArrayList<PropertyCriterion>();
+        preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillDTO.class).billingAccount().id(), result.billingAccount()
+                .getPrimaryKey()));
         billLister.setPreDefinedFilters(preDefinedFilters);
         billLister.populate();
     }
 
     protected void populatePayments(LeaseDTO result) {
-        List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
-        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(PaymentRecord.class).billingAccount().id().getPath(), Restriction.EQUAL,
-                result.billingAccount().getPrimaryKey()));
+        List<PropertyCriterion> preDefinedFilters = new ArrayList<PropertyCriterion>();
+        preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).billingAccount().id(), result.billingAccount()
+                .getPrimaryKey()));
         paymentLister.setPreDefinedFilters(preDefinedFilters);
         paymentLister.setParent(result.billingAccount().getPrimaryKey());
         paymentLister.populate();

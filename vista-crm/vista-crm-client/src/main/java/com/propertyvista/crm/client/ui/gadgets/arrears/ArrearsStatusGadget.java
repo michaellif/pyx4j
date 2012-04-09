@@ -27,7 +27,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -175,7 +174,8 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
                     public void onFailure(Throwable caught) {
                         populateFailed(caught);
                     }
-                }, getCustomCriteria(), new Vector<Key>(buildings), getStatusDate(), new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
+                }, new Vector<Criterion>(getListerFilterData()), new Vector<Key>(buildings), getStatusDate(), new Vector<Sort>(getSorting()), getPageNumber(),
+                        getPageSize());
             } else {
                 setPageData(new ArrayList<MockupArrearsState>(1), 0, 0, false);
             }
@@ -183,19 +183,6 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
 
         private LogicalDate getStatusDate() {
             return new LogicalDate();
-        }
-
-        private Vector<Criterion> getCustomCriteria() {
-            Vector<Criterion> customCriteria = new Vector<Criterion>();
-            List<DataTableFilterData> filters = getListerFilterData();
-            if (filters != null) {
-                for (DataTableFilterData filterData : filters) {
-                    if (filterData.isFilterOK()) {
-                        customCriteria.add(filterData.convertToPropertyCriterion());
-                    }
-                }
-            }
-            return customCriteria;
         }
     }
 

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.complex;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +22,9 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -63,9 +63,9 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
     protected void addItem() {
         new BuildingSelectorDialog(true, getValue()) {
             @Override
-            protected void setFilters(List<DataTableFilterData> filters) {
+            protected void setFilters(List<PropertyCriterion> filters) {
                 super.setFilters(filters);
-                addFilter(new DataTableFilterData(ComplexBuildingFolder.this.proto().complex().getPath(), Restriction.EQUAL, null));
+                addFilter(PropertyCriterion.eq(ComplexBuildingFolder.this.proto().complex(), (Serializable) null));
             }
 
             @Override

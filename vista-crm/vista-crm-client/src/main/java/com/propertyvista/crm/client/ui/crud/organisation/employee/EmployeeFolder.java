@@ -26,12 +26,11 @@ import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.i18n.shared.I18n;
@@ -121,7 +120,7 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
 
             // add restriction for papa/mama employee, so that he/she won't be able manage himself :)
             // FIXME: somehow we need to forbid circular references. maybe only server side (if someone wants to be a smart ass)
-            addFilter(new DataTableFilterData(proto().id().getPath(), Restriction.NOT_EQUAL, parentEmployeeGetter.getParentId()));
+            addFilter(PropertyCriterion.ne(proto().id(), parentEmployeeGetter.getParentId()));
         }
 
         @Override
