@@ -87,7 +87,7 @@ public class EntityFactory {
         if (meta.getExpandedFromClass() != null) {
             return meta.getExpandedFromClass();
         } else if (meta.isTransient()) {
-            throw new Error("Unable to resolve DBO class from DTO, use @DTO annotation on DTO class");
+            throw new Error("Unable to resolve DBO class from DTO, use @DTO annotation on DTO class " + instanceClass.getName());
         } else {
             return instanceClass;
         }
