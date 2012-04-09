@@ -51,7 +51,8 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         initButtonrStyles("." + StyleName.FooterToolbar);
 
         Style style = new Style(".", StyleName.HeaderToolbarOne);
-        style.addProperty("padding", "2px 6px");
+        style.addProperty("background-color", ThemeColors.object1, 0.3);
+        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style(".", StyleName.HeaderToolbarTwo);
