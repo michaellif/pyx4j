@@ -16,6 +16,10 @@ package com.propertyvista.admin.server.onboarding;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -25,6 +29,8 @@ import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.propertyvista.server.domain.admin.Pmc;
 
 public class PmcNameValidator {
+
+    private static Logger log = LoggerFactory.getLogger(PmcNameValidator.class);
 
     private static Set<String> reservedWords;
 
@@ -43,7 +49,14 @@ public class PmcNameValidator {
     private static void load(String[] strings) {
         for (String reservedWord : strings) {
             if (hasWildCard(reservedWord)) {
-                reservedWordsRegex.add(wildCardToRegex(reservedWord));
+                if (reservedWord.matches("[a-z0-9-\\?\\*]+")) {
+                    reservedWordsRegex.add(wildCardToRegex(reservedWord));
+                } else {
+                    log.warn(SimpleMessageFormat
+                            .format("skipping reserved or forbidden domain name pattern '{0}' because it contains charachters that cannot be used in a domain name anyway",
+                                    reservedWord));
+
+                }
             } else {
                 reservedWords.add(reservedWord);
             }
@@ -68,12 +81,9 @@ public class PmcNameValidator {
         if (reservedWords.contains(dnsName)) {
             return true;
         }
-        //TODO fix this!
-        if (false) {
-            for (String reservedWordRegex : reservedWordsRegex) {
-                if (dnsName.matches(reservedWordRegex)) {
-                    return true;
-                }
+        for (String reservedWordRegex : reservedWordsRegex) {
+            if (dnsName.matches(reservedWordRegex)) {
+                return true;
             }
         }
         return false;
