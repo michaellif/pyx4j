@@ -13,12 +13,14 @@
  */
 package com.propertyvista.domain.policy.dto;
 
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 
 @Transient
+@ExtendsDBO(LeaseTermsPolicy.class)
 public interface LeaseTermsPolicyDTO extends PolicyDTOBase, LeaseTermsPolicy {
 
 }

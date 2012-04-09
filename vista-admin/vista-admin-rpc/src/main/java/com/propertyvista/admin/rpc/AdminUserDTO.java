@@ -14,6 +14,7 @@
 package com.propertyvista.admin.rpc;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.security.AdminUser;
@@ -21,6 +22,7 @@ import com.propertyvista.domain.security.UserCredentialEditDTO;
 
 @Transient
 @Caption(name = "User")
+@ExtendsDBO(AdminUser.class)
 public interface AdminUserDTO extends AdminUser, UserCredentialEditDTO {
 
 }

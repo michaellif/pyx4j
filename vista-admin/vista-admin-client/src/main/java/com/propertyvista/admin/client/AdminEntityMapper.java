@@ -19,8 +19,6 @@ import com.google.gwt.resources.client.ImageResource;
 
 import com.propertyvista.admin.client.resources.AdminImages;
 import com.propertyvista.admin.rpc.AdminSiteMap;
-import com.propertyvista.admin.rpc.AdminUserDTO;
-import com.propertyvista.admin.rpc.OnboardingUserDTO;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.OnboardingUser;
@@ -31,9 +29,7 @@ public class AdminEntityMapper {
 
     public static void init() {
         register(AdminUser.class, AdminSiteMap.Administration.AdminUsers.class, DEFAULT_IMAGE);
-        register(AdminUserDTO.class, AdminSiteMap.Administration.AdminUsers.class, DEFAULT_IMAGE);
         register(OnboardingUser.class, AdminSiteMap.Management.OnboardingUsers.class, DEFAULT_IMAGE);
-        register(OnboardingUserDTO.class, AdminSiteMap.Management.OnboardingUsers.class, DEFAULT_IMAGE);
         register(PmcDTO.class, AdminSiteMap.Management.PMC.class, DEFAULT_IMAGE);
     }
 

@@ -18,12 +18,13 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
-import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -33,17 +34,17 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
-import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
-import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
-import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
-import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
-import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
-import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
-import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
-import com.propertyvista.domain.policy.dto.MiscPolicyDTO;
-import com.propertyvista.domain.policy.dto.PetPolicyDTO;
-import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
+import com.propertyvista.domain.policy.policies.DepositPolicy;
+import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
+import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
+import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
+import com.propertyvista.domain.policy.policies.MiscPolicy;
+import com.propertyvista.domain.policy.policies.PetPolicy;
+import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -67,34 +68,20 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.dto.AptUnitDTO;
-import com.propertyvista.dto.BillDTO;
-import com.propertyvista.dto.BuildingDTO;
-import com.propertyvista.dto.ElevatorDTO;
-import com.propertyvista.dto.FloorplanDTO;
-import com.propertyvista.dto.GuarantorDTO;
-import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.OnlineApplicationDTO;
-import com.propertyvista.dto.OnlineMasterApplicationDTO;
-import com.propertyvista.dto.RoofDTO;
-import com.propertyvista.dto.TenantInLeaseDTO;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.EquifaxResult;
 
 public class CrmEntityMapper {
 
     public static void init() {
         AppPlaceEntityMapper.register(AptUnit.class, CrmSiteMap.Properties.Unit.class, CrmImages.INSTANCE.unitsNormal());
-        AppPlaceEntityMapper.register(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, CrmImages.INSTANCE.unitsNormal());
         AppPlaceEntityMapper.register(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class, CrmImages.INSTANCE.unitsNormal());
         AppPlaceEntityMapper.register(Boiler.class, CrmSiteMap.Properties.Boiler.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Building.class, CrmSiteMap.Properties.Building.class, CrmImages.INSTANCE.propertiesNormal());
-        AppPlaceEntityMapper.register(BuildingDTO.class, CrmSiteMap.Properties.Building.class, CrmImages.INSTANCE.propertiesNormal());
         AppPlaceEntityMapper.register(Complex.class, CrmSiteMap.Properties.Complex.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Elevator.class, CrmSiteMap.Properties.Elevator.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(ElevatorDTO.class, CrmSiteMap.Properties.Elevator.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Floorplan.class, CrmSiteMap.Properties.Floorplan.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(FloorplanDTO.class, CrmSiteMap.Properties.Floorplan.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Feature.class, CrmSiteMap.Properties.Feature.class, CrmImages.INSTANCE.arrowGreyLeft());
 
         AppPlaceEntityMapper.register(Concession.class, CrmSiteMap.Properties.Concession.class, CrmImages.INSTANCE.arrowGreyLeft());
@@ -103,25 +90,20 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(ParkingSpot.class, CrmSiteMap.Properties.ParkingSpot.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(ProductItem.class, CrmSiteMap.Properties.Service.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Roof.class, CrmSiteMap.Properties.Roof.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(RoofDTO.class, CrmSiteMap.Properties.Roof.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Service.class, CrmSiteMap.Properties.Service.class, CrmImages.INSTANCE.arrowGreyLeft());
 
-        AppPlaceEntityMapper.register(BillDTO.class, CrmSiteMap.Tenants.Bill.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(Bill.class, CrmSiteMap.Tenants.Bill.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(EquifaxResult.class, CrmSiteMap.Tenants.EquifaxResult.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Guarantor.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(GuarantorDTO.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Lease.class, CrmSiteMap.Tenants.Lease.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Locker.class, CrmSiteMap.Properties.Locker.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(MaintenanceRequestDTO.class, CrmSiteMap.Tenants.MaintenanceRequest.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(OnlineApplicationDTO.class, CrmSiteMap.Tenants.Application.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(OnlineMasterApplicationDTO.class, CrmSiteMap.Tenants.OnlineMasterApplication.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(MasterOnlineApplication.class, CrmSiteMap.Tenants.OnlineMasterApplication.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(OnlineApplication.class, CrmSiteMap.Tenants.Application.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(PaymentRecord.class, CrmSiteMap.Tenants.Payment.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(PersonScreening.class, CrmSiteMap.Tenants.Screening.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Tenant.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(TenantInLease.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(TenantInLeaseDTO.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.arrowGreyLeft());
 
         AppPlaceEntityMapper.register(Appointment.class, Marketing.Appointment.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Lead.class, Marketing.Lead.class, CrmImages.INSTANCE.arrowGreyLeft());
@@ -129,7 +111,7 @@ public class CrmEntityMapper {
 
         AppPlaceEntityMapper.register(BillingRun.class, CrmSiteMap.Finance.BillingRun.class, CrmImages.INSTANCE.arrowGreyLeft());
 
-        AppPlaceEntityMapper.register(EmployeeDTO.class, CrmSiteMap.Organization.Employee.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(Employee.class, CrmSiteMap.Organization.Employee.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Vendor.class, CrmSiteMap.Organization.Vendor.class, CrmImages.INSTANCE.arrowGreyLeft());
 
@@ -145,19 +127,17 @@ public class CrmEntityMapper {
         // TODO add report place mapping here
 
         // policies
-        AppPlaceEntityMapper.register(ApplicationDocumentationPolicyDTO.class, CrmSiteMap.Settings.Policies.ApplicationDocumentation.class,
+        AppPlaceEntityMapper.register(ApplicationDocumentationPolicy.class, CrmSiteMap.Settings.Policies.ApplicationDocumentation.class,
                 CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(BackgroundCheckPolicyDTO.class, CrmSiteMap.Settings.Policies.BackgroundCheck.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(DepositPolicyDTO.class, CrmSiteMap.Settings.Policies.Deposits.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(EmailTemplatesPolicyDTO.class, CrmSiteMap.Settings.Policies.EmailTemplates.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(IdAssignmentPolicyDTO.class, CrmSiteMap.Settings.Policies.IdAssignment.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(IdAssignmentPolicyDTO.class, CrmSiteMap.Settings.Policies.IdAssignment.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(LeaseAdjustmentPolicyDTO.class, CrmSiteMap.Settings.Policies.LeaseAdjustment.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(LeaseBillingPolicyDTO.class, CrmSiteMap.Settings.Policies.LeaseBilling.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(LeaseBillingPolicyDTO.class, CrmSiteMap.Settings.Policies.LeaseBilling.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(LeaseTermsPolicyDTO.class, CrmSiteMap.Settings.Policies.LeaseTerms.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(MiscPolicyDTO.class, CrmSiteMap.Settings.Policies.Misc.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(PetPolicyDTO.class, CrmSiteMap.Settings.Policies.PetPolicy.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(ProductTaxPolicyDTO.class, CrmSiteMap.Settings.Policies.ProductTax.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(BackgroundCheckPolicy.class, CrmSiteMap.Settings.Policies.BackgroundCheck.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(DepositPolicy.class, CrmSiteMap.Settings.Policies.Deposits.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(EmailTemplatesPolicy.class, CrmSiteMap.Settings.Policies.EmailTemplates.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(IdAssignmentPolicy.class, CrmSiteMap.Settings.Policies.IdAssignment.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(LeaseAdjustmentPolicy.class, CrmSiteMap.Settings.Policies.LeaseAdjustment.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(LeaseBillingPolicy.class, CrmSiteMap.Settings.Policies.LeaseBilling.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(LeaseTermsPolicy.class, CrmSiteMap.Settings.Policies.LeaseTerms.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(MiscPolicy.class, CrmSiteMap.Settings.Policies.Misc.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(PetPolicy.class, CrmSiteMap.Settings.Policies.PetPolicy.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(ProductTaxPolicy.class, CrmSiteMap.Settings.Policies.ProductTax.class, CrmImages.INSTANCE.arrowGreyLeft());
     }
 }

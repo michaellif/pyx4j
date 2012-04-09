@@ -14,6 +14,7 @@
 package com.propertyvista.admin.rpc;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -23,6 +24,7 @@ import com.propertyvista.domain.security.VistaOnboardingBehavior;
 
 @Transient
 @Caption(name = "User")
+@ExtendsDBO(OnboardingUser.class)
 public interface OnboardingUserDTO extends OnboardingUser, UserCredentialEditDTO {
 
     IPrimitive<String> onboardingAccountId();

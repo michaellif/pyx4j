@@ -13,12 +13,14 @@
  */
 package com.propertyvista.domain.policy.dto;
 
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 
 @Transient
+@ExtendsDBO(value = IdAssignmentPolicy.class)
 public interface IdAssignmentPolicyDTO extends PolicyDTOBase, IdAssignmentPolicy {
 
 }

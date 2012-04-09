@@ -13,11 +13,13 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.property.asset.Roof;
 
 @Transient
+@ExtendsDBO
 public interface RoofDTO extends Roof {
 
 }
