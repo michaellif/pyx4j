@@ -33,6 +33,7 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
     @Override
     public void retrieve(AsyncCallback<SimulationDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
         SimulationDTO result = EntityFactory.create(SimulationDTO.class);
+        result.setPrimaryKey(entityId);
 
         IEntityCacheService entityCacheService = ServerSideFactory.create(IEntityCacheService.class);
         result.entityCacheServiceEnabled().setValue(!entityCacheService.isDisabled());
@@ -48,7 +49,7 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
         entityCacheService.setDisabled(!entity.entityCacheServiceEnabled().isBooleanTrue());
 
         NetworkSimulationServiceFilter.setNetworkSimulationConfig(entity.networkSimulation());
-        retrieve(callback, null, null);
+        retrieve(callback, entity.getPrimaryKey(), null);
     }
 
     @Override
