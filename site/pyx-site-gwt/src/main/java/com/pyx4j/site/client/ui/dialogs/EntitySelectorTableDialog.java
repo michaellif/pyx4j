@@ -33,10 +33,10 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 
@@ -128,7 +128,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         E proto = EntityFactory.getEntityPrototype(entityClass);
 
         for (E entity : alreadySelected) {
-            restrictAlreadySelected.add(new DataTableFilterData(proto.id().getPath(), Operators.isNot, entity.id().getValue()));
+            restrictAlreadySelected.add(new DataTableFilterData(proto.id().getPath(), Restriction.NOT_EQUAL, entity.id().getValue()));
         }
 
         return restrictAlreadySelected;

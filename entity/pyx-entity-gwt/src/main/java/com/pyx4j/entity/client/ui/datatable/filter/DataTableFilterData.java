@@ -25,61 +25,22 @@ import java.io.Serializable;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 public class DataTableFilterData {
 
-    @I18n
-    public static enum Operators {
-
-        is,
-
-        isNot,
-
-        like,
-//        
-// TODO ? These criterias aren't supported by DB search engine currently, so postpone implementation ?          
-//        contains,
-//        doesNotContain,
-//        beginsWith,
-//        endsWith,
-//        
-        lessThan,
-
-        lessOrEqualThan,
-
-        earlierThan,
-
-        earlierOrEqualThan,
-
-        greaterThan,
-
-        greaterOrEqualThan,
-
-        laterThan,
-
-        laterOrEqualThan;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
     private final String path;
 
-    private final Operators operand;
+    private final Restriction restriction;
 
     private final Serializable value;
 
-    public DataTableFilterData(String memberPath, Operators operand, Serializable value) {
+    public DataTableFilterData(String memberPath, Restriction restriction, Serializable value) {
         this.path = memberPath;
-        this.operand = operand;
+        this.restriction = restriction;
         this.value = value;
     }
 
-    public DataTableFilterData(Path memberPath, Operators operand, Serializable value) {
+    public DataTableFilterData(Path memberPath, Restriction operand, Serializable value) {
         this(memberPath.toString(), operand, value);
     }
 
@@ -87,8 +48,8 @@ public class DataTableFilterData {
         return path;
     }
 
-    public Operators getOperand() {
-        return operand;
+    public Restriction getRestriction() {
+        return restriction;
     }
 
     public Serializable getValue() {
@@ -96,42 +57,15 @@ public class DataTableFilterData {
     }
 
     public boolean isFilterOK() {
-        return (getMemberPath() != null && getOperand() != null && (getValue() != null || (getOperand().equals(Operators.is) || getOperand().equals(
-                Operators.isNot))));
+        return (getMemberPath() != null && getRestriction() != null && (getValue() != null || (getRestriction().equals(Restriction.EQUAL) || getRestriction()
+                .equals(Restriction.NOT_EQUAL))));
     }
 
     public PropertyCriterion convertToPropertyCriterion() {
         PropertyCriterion criterion = null;
         if (isFilterOK()) {
-            switch (getOperand()) {
-            case is:
-                criterion = new PropertyCriterion(getMemberPath(), Restriction.EQUAL, getValue());
-                break;
-            case isNot:
-                criterion = new PropertyCriterion(getMemberPath(), Restriction.NOT_EQUAL, getValue());
-                break;
-            case like:
-                criterion = new PropertyCriterion(getMemberPath(), Restriction.RDB_LIKE, getValue());
-                break;
-            case lessThan:
-            case earlierThan:
-                criterion = new PropertyCriterion(getMemberPath(), Restriction.LESS_THAN, getValue());
-                break;
-            case lessOrEqualThan:
-            case earlierOrEqualThan:
-                criterion = new PropertyCriterion(getMemberPath(), Restriction.LESS_THAN_OR_EQUAL, getValue());
-                break;
-            case greaterThan:
-            case laterThan:
-                criterion = new PropertyCriterion(getMemberPath(), Restriction.GREATER_THAN, getValue());
-                break;
-            case greaterOrEqualThan:
-            case laterOrEqualThan:
-                criterion = new PropertyCriterion(getMemberPath(), Restriction.GREATER_THAN_OR_EQUAL, getValue());
-                break;
-            }
+            criterion = new PropertyCriterion(getMemberPath(), getRestriction(), getValue());
         }
         return criterion;
     }
-
 }

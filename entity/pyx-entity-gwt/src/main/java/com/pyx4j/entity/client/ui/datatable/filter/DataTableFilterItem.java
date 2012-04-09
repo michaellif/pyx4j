@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.Iterator;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -40,15 +41,17 @@ import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.widgets.client.IconButton;
 
 public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
@@ -57,7 +60,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
     protected final CComboBox<FieldData> fieldsList = new CComboBox<FieldData>(true);
 
-    protected final CComboBox<Operators> operandsList = new CComboBox<Operators>(true);
+    protected final CComboBox<Operator> operandsList = new CComboBox<Operator>(true);
 
     protected final SimplePanel valueHolder = new SimplePanel();
 
@@ -81,6 +84,76 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         public String toString() {
             return cd.getColumnTitle();
         }
+    }
+
+    @com.pyx4j.i18n.annotations.I18n
+    public static enum Operator {
+
+        is(Restriction.EQUAL),
+
+        isNot(Restriction.NOT_EQUAL),
+
+        like(Restriction.RDB_LIKE),
+
+        lessThan(Restriction.LESS_THAN),
+
+        lessOrEqualThan(Restriction.LESS_THAN_OR_EQUAL),
+
+        earlierThan(Restriction.LESS_THAN, true),
+
+        earlierOrEqualThan(Restriction.LESS_THAN_OR_EQUAL, true),
+
+        greaterThan(Restriction.GREATER_THAN),
+
+        greaterOrEqualThan(Restriction.GREATER_THAN_OR_EQUAL),
+
+        laterThan(Restriction.GREATER_THAN, true),
+
+        laterOrEqualThan(Restriction.GREATER_THAN_OR_EQUAL, true);
+//        
+// TODO ? These criterias aren't supported by DB search engine currently, so postpone implementation ?          
+//        contains,
+//        doesNotContain,
+//        beginsWith,
+//        endsWith,
+//
+        // internals:
+
+        private PropertyCriterion.Restriction criterion;
+
+        private boolean isDate;
+
+        private Operator(Restriction criterion) {
+            this(criterion, false);
+        }
+
+        private Operator(Restriction criterion, boolean isDate) {
+            this.criterion = criterion;
+            this.isDate = isDate;
+        }
+
+        public PropertyCriterion.Restriction getCriterion() {
+            return criterion;
+        }
+
+        public boolean isDate() {
+            return isDate;
+        }
+
+        public static Operator getOperator(Restriction restriction, IObject<?> member) {
+            for (Operator op : Operator.values()) {
+                if (op.getCriterion() == restriction && op.isDate == DataTableFilterItem.isDate(member.getValueClass())) {
+                    return op;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+
     }
 
     public DataTableFilterItem(final DataTableFilterGrid<E> parent) {
@@ -108,8 +181,8 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
             fieldsList.setValue(fds.iterator().next());
             setValueHolder(fieldsList.getValue().getPath());
         } else {
-            operandsList.setOptions(EnumSet.allOf(Operators.class));
-            operandsList.setValue(Operators.is);
+            operandsList.setOptions(EnumSet.allOf(Operator.class));
+            operandsList.setValue(Operator.is);
         }
         fieldsList.addValueChangeHandler(new ValueChangeHandler<FieldData>() {
             @Override
@@ -121,13 +194,13 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
         add(fieldsList);
 
-        setCellWidth(fieldsList, "40%");
+        setCellWidth(fieldsList, "35%");
 
         operandsList.setWidth("100%");
 
         add(operandsList);
 
-        setCellWidth(operandsList, "20%");
+        setCellWidth(operandsList, "25%");
         valueHolder.setWidth("100%");
 
         add(valueHolder);
@@ -149,10 +222,10 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         if (fieldsList.getValue() != null) {
             path = fieldsList.getValue().getPath();
         }
-        Operators operand = operandsList.getValue();
+        Operator operand = operandsList.getValue();
         Serializable value = (Serializable) ((CComponent) ((INativeComponent<?>) valueHolder.getWidget()).getCComponent()).getValue();
 
-        return new DataTableFilterData(path, operand, value);
+        return new DataTableFilterData(path, operand.getCriterion(), value);
     }
 
     public void setFilterData(DataTableFilterData filterData) {
@@ -160,8 +233,9 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         for (FieldData fd : fds) {
             if (fd.getPath().compareTo(filterData.getMemberPath()) == 0) {
                 fieldsList.setValue(fd);
-                operandsList.setValue(filterData.getOperand());
                 setValueHolder(filterData.getMemberPath(), filterData.getValue());
+                IObject<?> member = parent.getDataTablePanel().proto().getMember(new Path(filterData.getMemberPath()));
+                operandsList.setValue(Operator.getOperator(filterData.getRestriction(), member));
                 break;
             }
         }
@@ -171,34 +245,53 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         setValueHolder(valuePath, null);
     }
 
+    // internals:
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void setValueHolder(String valuePath, Serializable value) {
-
         IObject<?> member = parent.getDataTablePanel().proto().getMember(new Path(valuePath));
+
         CComponent comp = compFactory.create(member);
         comp.setValue(value);
         valueHolder.setWidget(comp);
 
-        Collection<Operators> options;
+        Collection<Operator> options = getOperators(member);
+        operandsList.setOptions(options);
+        if (options.contains(Operator.like)) {
+            operandsList.setValue(Operator.like);
+        } else {
+            operandsList.setValue(Operator.is);
+        }
+    }
+
+    private Collection<Operator> getOperators(IObject<?> member) {
+        Collection<Operator> options;
         // correct operands list:
         Class<?> valueClass = member.getValueClass();
         if (member.getMeta().isEntity() || valueClass.isEnum() || valueClass.equals(Boolean.class)) {
-            options = EnumSet.of(Operators.is, Operators.isNot);
+            options = EnumSet.of(Operator.is, Operator.isNot);
         } else if (valueClass.equals(String.class)) {
-            options = EnumSet.of(Operators.is, Operators.isNot, Operators.like);
+            options = EnumSet.of(Operator.is, Operator.isNot, Operator.like);
         } else if ((member.getMeta().getObjectClassType() == ObjectClassType.EntityList)
                 || (member.getMeta().getObjectClassType() == ObjectClassType.EntitySet)) {
-            options = EnumSet.of(Operators.is, Operators.isNot);
-        } else if (valueClass.equals(Date.class) || valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class)) {
-            options = EnumSet.of(Operators.is, Operators.isNot, Operators.earlierThan, Operators.laterThan);
+            options = EnumSet.of(Operator.is, Operator.isNot);
+        } else if (isDate(valueClass)) {
+            options = EnumSet.of(Operator.is, Operator.isNot, Operator.earlierThan, Operator.laterThan, Operator.earlierOrEqualThan, Operator.laterOrEqualThan);
         } else {
-            options = EnumSet.allOf(Operators.class);
+            options = EnumSet.allOf(Operator.class);
+            // remove duplicate entries:
+            Iterator<Operator> it = options.iterator();
+            while (it.hasNext()) {
+                Operator op = it.next();
+                if (op.isDate()) {
+                    it.remove();
+                }
+            }
         }
-        operandsList.setOptions(options);
-        if (options.contains(Operators.like)) {
-            operandsList.setValue(Operators.like);
-        } else {
-            operandsList.setValue(Operators.is);
-        }
+        return options;
+    }
+
+    private static boolean isDate(Class<?> valueClass) {
+        return (valueClass.equals(Date.class) || valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class));
     }
 }
