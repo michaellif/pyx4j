@@ -17,8 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
@@ -29,7 +29,7 @@ public class BreadcrumbsHelper {
 
         final LinkedList<IEntity> trail = new LinkedList<IEntity>();
 
-        IEntity startFromTarget = Persistence.service().retrieve(ServerEntityFactory.resolveDTOClass(targetEntity), targetEntity.getPrimaryKey());
+        IEntity startFromTarget = Persistence.service().retrieve(EntityFactory.resolveDTOClass(targetEntity), targetEntity.getPrimaryKey());
 
         EntityGraph.applyToOwners(startFromTarget, new ApplyMethod() {
 

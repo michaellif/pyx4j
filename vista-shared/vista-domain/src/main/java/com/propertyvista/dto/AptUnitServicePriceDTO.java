@@ -15,6 +15,7 @@ package com.propertyvista.dto;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.DTO;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -25,6 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.offering.Service;
 
 @Transient
+@DTO
 public interface AptUnitServicePriceDTO extends IEntity {
 
     IPrimitive<Service.Type> type();

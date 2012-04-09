@@ -15,6 +15,7 @@ package com.propertyvista.dto;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.DTO;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
@@ -27,6 +28,7 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.TenantUserHolder;
 
 @Transient
+@DTO
 @ToStringFormat("{0}, {1}")
 public interface ApplicationUserDTO extends IEntity {
 

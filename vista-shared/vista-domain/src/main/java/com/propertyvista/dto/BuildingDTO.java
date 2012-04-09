@@ -13,6 +13,7 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.DTO;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
@@ -22,6 +23,7 @@ import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
+@DTO
 public interface BuildingDTO extends Building {
 
     IList<FeatureItemType> availableUtilities();

@@ -13,10 +13,12 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.DTO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.tenant.Guarantor;
 
 @Transient
+@DTO
 public interface GuarantorDTO extends Guarantor {
 }
