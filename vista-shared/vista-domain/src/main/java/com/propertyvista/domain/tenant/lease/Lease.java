@@ -14,6 +14,7 @@
 package com.propertyvista.domain.tenant.lease;
 
 import java.util.Date;
+import java.util.EnumSet;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -73,8 +74,12 @@ public interface Lease extends IVersionedEntity<LeaseV> {
             return I18nEnum.toString(this);
         }
 
+        public static EnumSet<Status> current() {
+            return EnumSet.of(Approved, Active, Completed, FinalBillIssued);
+        }
+
         public boolean isCurrent() {
-            return this == Approved || this == Active || this == Completed || this == FinalBillIssued;
+            return current().contains(this);
         }
 
         public boolean isDraft() {
