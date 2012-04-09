@@ -45,6 +45,8 @@ public class CacheService {
 
     private static Configuration configuration = createCacheConfiguration();
 
+    private static boolean disabled = false;
+
     private static Cache getCache() {
         if (shutdown) {
             throw new Error("Cache already shutdown");
@@ -75,8 +77,19 @@ public class CacheService {
         return entityCacheService;
     }
 
+    public static boolean isDisabled() {
+        return disabled;
+    }
+
+    public static void setDisabled(boolean disabled) {
+        CacheService.disabled = disabled;
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> T get(Object key) {
+        if (disabled) {
+            return null;
+        }
         Element element = getCache().get(key);
         if (element != null) {
             return (T) element.getObjectValue();
@@ -86,7 +99,9 @@ public class CacheService {
     }
 
     public static void put(Object key, Object value) {
-        getCache().put(new Element(key, value));
+        if (!disabled) {
+            getCache().put(new Element(key, value));
+        }
     }
 
     public static void remove(Object key) {
