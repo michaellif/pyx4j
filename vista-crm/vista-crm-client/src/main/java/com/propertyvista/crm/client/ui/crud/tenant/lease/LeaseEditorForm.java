@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -202,8 +202,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         LeaseDTO currentValue = LeaseEditorForm.this.getValue();
                         if (!currentValue.leaseFrom().isNull() && !currentValue.leaseTo().isNull() && filters != null) {
                             // filter out already leased units (null) and not available by date:
-                            filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Operators.isNot, (Serializable) null));
-                            filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Operators.lessOrEqualThan, currentValue.leaseFrom()
+                            filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Restriction.NOT_EQUAL, (Serializable) null));
+                            filters.add(new DataTableFilterData(proto()._availableForRent().getPath(), Restriction.LESS_THAN_OR_EQUAL, currentValue.leaseFrom()
                                     .getValue()));
                         }
                         super.setFilters(filters);

@@ -31,8 +31,6 @@ import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -193,31 +191,12 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
             if (filters != null) {
                 for (DataTableFilterData filterData : filters) {
                     if (filterData.isFilterOK()) {
-                        switch (filterData.getOperand()) {
-                        case is:
-                            customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.EQUAL, filterData.getValue()));
-                            break;
-                        case isNot:
-                            customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.NOT_EQUAL, filterData.getValue()));
-                            break;
-                        case like:
-                            customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.RDB_LIKE, filterData.getValue()));
-                            break;
-                        case laterThan:
-                        case greaterThan:
-                            customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.GREATER_THAN, filterData.getValue()));
-                            break;
-                        case earlierThan:
-                        case lessThan:
-                            customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.LESS_THAN, filterData.getValue()));
-                            break;
-                        }
+                        customCriteria.add(filterData.convertToPropertyCriterion());
                     }
                 }
             }
             return customCriteria;
         }
-
     }
 
     public ArrearsStatusGadget() {

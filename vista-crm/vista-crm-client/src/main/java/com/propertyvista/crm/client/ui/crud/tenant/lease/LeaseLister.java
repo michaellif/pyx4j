@@ -16,8 +16,10 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseLister extends ListerBase<LeaseDTO> {
@@ -48,6 +50,7 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
     @Override
     protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+        criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
         return super.updateCriteria(criteria);
     }
 }
