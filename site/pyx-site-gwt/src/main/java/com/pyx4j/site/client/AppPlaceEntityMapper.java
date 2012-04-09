@@ -55,6 +55,15 @@ public class AppPlaceEntityMapper {
         return resolvePlace(type, null);
     }
 
+    public static Class<? extends CrudAppPlace> resolvePlaceClass(Class<? extends IEntity> type) {
+        AppPlaceData data = map.get(type);
+        if (data != null) {
+            return data.placeClass;
+        } else {
+            return null;
+        }
+    }
+
     public static ImageResource resolveImageResource(Class<? extends IEntity> type) {
         AppPlaceData data = map.get(type);
         if (data != null) {

@@ -45,11 +45,11 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private static final I18n i18n = I18n.get(EditorActivityBase.class);
 
-    protected final IEditorView<E> view;
+    private final IEditorView<E> view;
 
-    protected final AbstractCrudService<E> service;
+    private final AbstractCrudService<E> service;
 
-    protected final Class<E> entityClass;
+    private final Class<E> entityClass;
 
     protected Key entityID;
 
@@ -71,6 +71,18 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         this.service = service;
         this.entityClass = entityClass;
         setPlace(place);
+    }
+
+    public IEditorView<E> getView() {
+        return view;
+    }
+
+    public AbstractCrudService<E> getService() {
+        return service;
+    }
+
+    public Class<E> getEntityClass() {
+        return entityClass;
     }
 
     private void setPlace(Place place) {

@@ -22,6 +22,7 @@ package com.pyx4j.site.client.ui.crud.lister;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public abstract class ListerBase<E extends IEntity> extends BasicLister<E> implements IListerView<E> {
@@ -41,12 +42,17 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
 
     }
 
+    @Deprecated
     public ListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass, boolean openEditor, boolean allowAddNew) {
         super(clazz, itemOpenPlaceClass != null, allowAddNew);
 
         this.itemOpenPlaceClass = itemOpenPlaceClass;
         this.openEditor = openEditor;
 
+    }
+
+    public ListerBase(Class<E> clazz, boolean openEditor, boolean allowAddNew) {
+        this(clazz, AppPlaceEntityMapper.resolvePlaceClass(clazz), openEditor, allowAddNew);
     }
 
     // Actions:
