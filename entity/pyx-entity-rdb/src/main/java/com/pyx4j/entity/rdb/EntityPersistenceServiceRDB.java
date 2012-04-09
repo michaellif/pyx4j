@@ -259,7 +259,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         startContext(ConnectionTarget.forRead);
         try {
             DatabaseMetaData dbMeta = getPersistenceContext().getConnection().getMetaData();
-            log.info("DB {} {}", dbMeta.getDatabaseProductName(), dbMeta.getDatabaseProductVersion());
+            log.debug("DB {} {}", dbMeta.getDatabaseProductName(), dbMeta.getDatabaseProductVersion());
         } catch (SQLException e) {
             log.error("databaseMetaData access error", e);
             throw new RuntimeExceptionSerializable(e);
