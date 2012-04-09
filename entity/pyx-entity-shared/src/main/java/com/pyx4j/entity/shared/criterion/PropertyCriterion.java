@@ -22,6 +22,8 @@ package com.pyx4j.entity.shared.criterion;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -76,6 +78,10 @@ public class PropertyCriterion implements Criterion {
         this(member.getPath().toString(), restriction, value);
     }
 
+    private PropertyCriterion(IObject<?> member, Restriction restriction, Collection<?> value) {
+        this(member.getPath().toString(), restriction, new Vector(value));
+    }
+
     public static PropertyCriterion eq(IObject<?> member, Class<? extends IEntity> value) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
     }
@@ -114,6 +120,10 @@ public class PropertyCriterion implements Criterion {
 
     public static <T extends Collection<?> & Serializable> PropertyCriterion in(IObject<?> member, T values) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.IN, values);
+    }
+
+    public static <T extends Enum<T>> PropertyCriterion in(IObject<T> member, EnumSet<T> values) {
+        return new PropertyCriterion(member, Restriction.IN, (Collection<T>) values);
     }
 
     public static PropertyCriterion in(IObject<?> member, Serializable... value) {
