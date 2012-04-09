@@ -14,7 +14,7 @@
 package com.propertyvista.crm.rpc.dto.company;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.DTO;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -24,7 +24,7 @@ import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.UserCredentialEditDTO;
 
 @Transient
-@DTO
+@ExtendsDBO(Employee.class)
 public interface EmployeeDTO extends Employee, UserCredentialEditDTO {
 
     @Override

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.DTO;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
@@ -24,7 +24,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
-@DTO
+@ExtendsDBO
 public interface LeaseDTO extends Lease {
 
     @Detached

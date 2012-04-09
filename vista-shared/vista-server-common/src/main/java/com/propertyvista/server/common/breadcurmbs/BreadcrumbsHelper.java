@@ -29,7 +29,7 @@ public class BreadcrumbsHelper {
 
         final LinkedList<IEntity> trail = new LinkedList<IEntity>();
 
-        IEntity startFromTarget = Persistence.service().retrieve(EntityFactory.resolveDTOClass(targetEntity), targetEntity.getPrimaryKey());
+        IEntity startFromTarget = Persistence.service().retrieve(EntityFactory.resolveDBOClass(targetEntity), targetEntity.getPrimaryKey());
 
         EntityGraph.applyToOwners(startFromTarget, new ApplyMethod() {
 

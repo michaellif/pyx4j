@@ -16,7 +16,7 @@ package com.propertyvista.dto;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.DTO;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -28,7 +28,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 
 @Transient
-@DTO
+@ExtendsDBO
 public interface OnlineMasterApplicationDTO extends MasterOnlineApplication {
 
     Tenant mainApplicant();

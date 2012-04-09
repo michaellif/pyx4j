@@ -13,7 +13,7 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.DTO;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @Transient
-@DTO
+@ExtendsDBO
 public interface AptUnitDTO extends AptUnit {
 
     IPrimitive<String> buildingCode();

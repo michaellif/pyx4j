@@ -13,13 +13,13 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.DTO;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.property.asset.Boiler;
 
 @Transient
-@DTO
+@ExtendsDBO
 public interface BoilerDTO extends Boiler {
 
 }

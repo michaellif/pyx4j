@@ -18,7 +18,6 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.DTO;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -31,7 +30,6 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication.Status;
 
 @Transient
-@DTO
 public interface ApplicationStatusDTO extends IEntity {
 
     @I18n

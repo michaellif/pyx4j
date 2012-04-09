@@ -13,14 +13,14 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.DTO;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
-@DTO
+@ExtendsDBO
 public interface BillDTO extends Bill {
 
     Lease lease();
