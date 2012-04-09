@@ -38,6 +38,8 @@ import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
 import com.propertyvista.admin.client.activity.security.PasswordChangeActivity;
+import com.propertyvista.admin.client.activity.simulation.SimulationEditorActivity;
+import com.propertyvista.admin.client.activity.simulation.SimulationViewerActivity;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class MainActivityMapper implements AppActivityMapper {
@@ -86,6 +88,16 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case viewer:
                         activity = new MaintenanceViewerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof AdminSiteMap.Administration.Simulation) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new SimulationEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new SimulationViewerActivity(place);
                         break;
                     }
 

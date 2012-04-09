@@ -74,6 +74,16 @@ public class AdminSiteMap implements SiteMap {
             }
         }
 
+        @PlaceProperties(caption = "Simulation")
+        @NavigationItem(navigLabel = "Simulation")
+        public static class Simulation extends CrudAppPlace {
+
+            public Simulation() {
+                formViewerPlace(new Key(-1));
+            }
+
+        }
+
         @PlaceProperties(caption = "Users")
         @NavigationItem(navigLabel = "Users")
         public static class AdminUsers extends CrudAppPlace {

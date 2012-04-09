@@ -21,6 +21,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -76,7 +77,11 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         // Administration
         folder = new NavigFolder("System Administration");
         folder.addNavigItem(new AdminSiteMap.Administration.Maintenance());
+        if (ApplicationMode.isDevelopment()) {
+            folder.addNavigItem(new AdminSiteMap.Administration.Simulation());
+        }
         folder.addNavigItem(new AdminSiteMap.Administration.AdminUsers());
+
         list.add(folder);
 
         return list;
