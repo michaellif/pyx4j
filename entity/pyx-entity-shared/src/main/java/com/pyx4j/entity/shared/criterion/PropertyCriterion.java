@@ -174,6 +174,10 @@ public class PropertyCriterion implements Criterion {
         return this.value;
     }
 
+    public boolean isOK() {
+        return (getPropertyPath() != null && getRestriction() != null && (getValue() != null || (getRestriction() == Restriction.EQUAL || getRestriction() == Restriction.NOT_EQUAL)));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof PropertyCriterion)) {

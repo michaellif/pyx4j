@@ -32,11 +32,10 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTable.ItemSelectionHandler;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 
@@ -122,13 +121,13 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         return EntityFactory.getEntityPrototype(entityClass);
     }
 
-    protected List<DataTableFilterData> createRestrictionFilterForAlreadySelected() {
-        List<DataTableFilterData> restrictAlreadySelected = new ArrayList<DataTableFilterData>(alreadySelected.size());
+    protected List<PropertyCriterion> createRestrictionFilterForAlreadySelected() {
+        List<PropertyCriterion> restrictAlreadySelected = new ArrayList<PropertyCriterion>(alreadySelected.size());
 
         E proto = EntityFactory.getEntityPrototype(entityClass);
 
         for (E entity : alreadySelected) {
-            restrictAlreadySelected.add(new DataTableFilterData(proto.id().getPath(), Restriction.NOT_EQUAL, entity.id().getValue()));
+            restrictAlreadySelected.add(PropertyCriterion.ne(proto.id(), entity.id().getValue()));
         }
 
         return restrictAlreadySelected;
@@ -142,11 +141,11 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         dataSource.setParentFiltering(parentID, parentClass);
     }
 
-    protected void addFilter(DataTableFilterData filter) {
+    protected void addFilter(PropertyCriterion filter) {
         dataSource.addPreDefinedFilter(filter);
     }
 
-    protected void addFilters(List<DataTableFilterData> filters) {
+    protected void addFilters(List<PropertyCriterion> filters) {
         dataSource.addPreDefinedFilters(filters);
     }
 
@@ -157,7 +156,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
      * 
      * @param filters
      */
-    protected void setFilters(List<DataTableFilterData> filters) {
+    protected void setFilters(List<PropertyCriterion> filters) {
         dataSource.setPreDefinedFilters(filters);
     }
 

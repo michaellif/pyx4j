@@ -36,11 +36,11 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
@@ -287,11 +287,11 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         return dataTablePanel.getPageNumber();
     }
 
-    public List<DataTableFilterData> getFilters() {
+    public List<PropertyCriterion> getFilters() {
         return dataTablePanel.getFilters();
     }
 
-    public void setFilters(List<DataTableFilterData> filters) {
+    public void setFilters(List<PropertyCriterion> filters) {
         dataTablePanel.setFilters(filters);
     }
 
@@ -346,12 +346,12 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
     @SuppressWarnings("unchecked")
     public void restoreState() {
         int pageNumber = 0;
-        List<DataTableFilterData> filters = null;
+        List<PropertyCriterion> filters = null;
         List<Sort> sorts = null;
 
         if (getMemento().mayRestore()) {
             pageNumber = getMemento().getInteger(MementoKeys.page.name());
-            filters = (List<DataTableFilterData>) getMemento().getObject(MementoKeys.filterData.name());
+            filters = (List<PropertyCriterion>) getMemento().getObject(MementoKeys.filterData.name());
             sorts = (List<Sort>) getMemento().getObject(MementoKeys.sortingData.name());
         }
 
@@ -371,9 +371,9 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
 
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
         if (getFilters() != null) {
-            for (DataTableFilterData fd : getFilters()) {
-                if (fd.isFilterOK()) {
-                    criteria.add(fd.convertToPropertyCriterion());
+            for (PropertyCriterion fd : getFilters()) {
+                if (fd.isOK()) {
+                    criteria.add(fd);
                 }
             }
         }

@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 public class DataTableFilterGrid<E extends IEntity> extends FlowPanel {
 
@@ -61,8 +62,8 @@ public class DataTableFilterGrid<E extends IEntity> extends FlowPanel {
     }
 
     @SuppressWarnings("unchecked")
-    public List<DataTableFilterData> getFilters() {
-        ArrayList<DataTableFilterData> filters = new ArrayList<DataTableFilterData>();
+    public List<PropertyCriterion> getFilters() {
+        ArrayList<PropertyCriterion> filters = new ArrayList<PropertyCriterion>();
 
         for (Widget w : this) {
             if (w instanceof DataTableFilterItem) {
@@ -73,13 +74,11 @@ public class DataTableFilterGrid<E extends IEntity> extends FlowPanel {
         return filters;
     }
 
-    public void setFilters(List<DataTableFilterData> filters) {
+    public void setFilters(List<PropertyCriterion> filters) {
         clear();
         if (filters != null) {
-            DataTableFilterItem<E> filter;
-            for (DataTableFilterData item : filters) {
-                addFilter(filter = new DataTableFilterItem<E>(this));
-                filter.setFilterData(item);
+            for (PropertyCriterion item : filters) {
+                addFilter(new DataTableFilterItem<E>(this, item));
             }
         }
     }

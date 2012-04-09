@@ -21,7 +21,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.EntityDataSource;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -29,6 +28,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -38,9 +38,9 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     private final AbstractListService<E> service;
 
-    private DataTableFilterData parentFiltering;
+    private PropertyCriterion parentFiltering;
 
-    private List<DataTableFilterData> preDefinedFilters = new LinkedList<DataTableFilterData>();;
+    private List<PropertyCriterion> preDefinedFilters = new LinkedList<PropertyCriterion>();;
 
     public ListerDataSource(Class<E> entityClass, AbstractListService<E> service) {
         this.entityClass = entityClass;
@@ -69,30 +69,30 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
         String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
         assert (ownerMemberName != null) : "No @Owner in " + entityClass;
 
-        Serializable serchBy;
+        Serializable searchBy;
         if (parentClass != null) {
-            serchBy = EntityFactory.create(parentClass);
-            ((IEntity) serchBy).setPrimaryKey(parentID);
+            searchBy = EntityFactory.create(parentClass);
+            ((IEntity) searchBy).setPrimaryKey(parentID);
         } else {
-            serchBy = parentID;
+            searchBy = parentID;
         }
 
-        parentFiltering = new DataTableFilterData(new Path(entityClass, ownerMemberName), Restriction.EQUAL, serchBy);
+        parentFiltering = new PropertyCriterion(new Path(entityClass, ownerMemberName).toString(), Restriction.EQUAL, searchBy);
     }
 
     public void clearParentFiltering() {
         parentFiltering = null;
     }
 
-    public void setPreDefinedFilters(List<DataTableFilterData> preDefinedFilters) {
+    public void setPreDefinedFilters(List<PropertyCriterion> preDefinedFilters) {
         this.preDefinedFilters = preDefinedFilters;
     }
 
-    public void addPreDefinedFilters(List<DataTableFilterData> preDefinedFilters) {
+    public void addPreDefinedFilters(List<PropertyCriterion> preDefinedFilters) {
         preDefinedFilters.addAll(preDefinedFilters);
     }
 
-    public void addPreDefinedFilter(DataTableFilterData preDefinedFilter) {
+    public void addPreDefinedFilter(PropertyCriterion preDefinedFilter) {
         preDefinedFilters.add(preDefinedFilter);
     }
 
@@ -101,7 +101,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
     }
 
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
-        List<DataTableFilterData> currentFilters = new LinkedList<DataTableFilterData>();
+        List<PropertyCriterion> currentFilters = new LinkedList<PropertyCriterion>();
 
         // combine filters:
         if (parentFiltering != null) {
@@ -112,9 +112,9 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
         }
 
         // update search criteria:
-        for (DataTableFilterData fd : currentFilters) {
-            if (fd.isFilterOK()) {
-                criteria.add(fd.convertToPropertyCriterion());
+        for (PropertyCriterion fd : currentFilters) {
+            if (fd.isOK()) {
+                criteria.add(fd);
             }
         }
 

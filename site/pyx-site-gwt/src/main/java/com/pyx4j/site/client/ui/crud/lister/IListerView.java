@@ -23,9 +23,9 @@ package com.pyx4j.site.client.ui.crud.lister;
 import java.util.List;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.ui.crud.IView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -41,9 +41,9 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         void setFilterByParent(boolean flag);
 
-        void setPreDefinedFilters(List<DataTableFilterData> filters);
+        void setPreDefinedFilters(List<PropertyCriterion> filters);
 
-        void addPreDefinedFilters(List<DataTableFilterData> filters);
+        void addPreDefinedFilters(List<PropertyCriterion> filters);
 
         void clearPreDefinedFilters();
 
@@ -78,9 +78,9 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
     void discard();
 
-    List<DataTableFilterData> getFilters();
+    List<PropertyCriterion> getFilters();
 
-    void setFilters(List<DataTableFilterData> filterData);
+    void setFilters(List<PropertyCriterion> filterData);
 
     List<Sort> getSorting();
 

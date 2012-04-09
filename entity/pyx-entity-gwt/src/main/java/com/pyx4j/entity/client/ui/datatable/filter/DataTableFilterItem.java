@@ -212,12 +212,17 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         setWidth("100%");
     }
 
+    public DataTableFilterItem(final DataTableFilterGrid<E> parent, PropertyCriterion filterData) {
+        this(parent);
+        setFilterData(filterData);
+    }
+
     protected void setParent(final DataTableFilterGrid<E> parent) {
         this.parent = parent;
     }
 
     @SuppressWarnings("rawtypes")
-    public DataTableFilterData getFilterData() {
+    public PropertyCriterion getFilterData() {
         String path = null;
         if (fieldsList.getValue() != null) {
             path = fieldsList.getValue().getPath();
@@ -225,16 +230,16 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         Operator operand = operandsList.getValue();
         Serializable value = (Serializable) ((CComponent) ((INativeComponent<?>) valueHolder.getWidget()).getCComponent()).getValue();
 
-        return new DataTableFilterData(path, operand.getCriterion(), value);
+        return new PropertyCriterion(path, operand.getCriterion(), value);
     }
 
-    public void setFilterData(DataTableFilterData filterData) {
+    public void setFilterData(PropertyCriterion filterData) {
         Collection<FieldData> fds = fieldsList.getOptions();
         for (FieldData fd : fds) {
-            if (fd.getPath().compareTo(filterData.getMemberPath()) == 0) {
+            if (fd.getPath().compareTo(filterData.getPropertyPath()) == 0) {
                 fieldsList.setValue(fd);
-                setValueHolder(filterData.getMemberPath(), filterData.getValue());
-                IObject<?> member = parent.getDataTablePanel().proto().getMember(new Path(filterData.getMemberPath()));
+                setValueHolder(filterData.getPropertyPath(), filterData.getValue());
+                IObject<?> member = parent.getDataTablePanel().proto().getMember(new Path(filterData.getPropertyPath()));
                 operandsList.setValue(Operator.getOperator(filterData.getRestriction(), member));
                 break;
             }
