@@ -203,16 +203,25 @@ public class DBResetServlet extends HttpServlet {
                             case addPmcMockup:
                             case addPmcMockupTest1:
                             case preloadPmcWithMockup:
-                            case preloadPmc:
-                                preloadPmc(req, buf, NamespaceManager.getNamespace(), type);
+                            case preloadPmc: {
+                                String pmc = req.getParameter("pmc");
+                                if (pmc == null) {
+                                    pmc = NamespaceManager.getNamespace();
+                                }
+                                preloadPmc(req, buf, pmc, type);
+
                                 break;
+                            }
                             case clearPmc: {
-                                String thisPmcName = NamespaceManager.getNamespace();
-                                buf.append("\n--- PMC  '" + thisPmcName + "' ---\n");
+                                String pmc = req.getParameter("pmc");
+                                if (pmc == null) {
+                                    pmc = NamespaceManager.getNamespace();
+                                }
+                                buf.append("\n--- PMC  '" + pmc + "' ---\n");
                                 RDBUtils.deleteFromAllEntityTables();
                                 NamespaceManager.setNamespace(Pmc.adminNamespace);
                                 EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                                criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), thisPmcName));
+                                criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), pmc));
                                 Persistence.service().delete(criteria);
                                 Persistence.service().commit();
                             }
