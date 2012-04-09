@@ -35,6 +35,7 @@ public class SimulationEditorForm extends AdminEntityForm<SimulationDTO> {
         int row = -1;
 
         content.setH1(++row, 0, 1, i18n.tr("Cache"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().generalCacheEnabled())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().entityCacheServiceEnabled())).build());
 
         content.setH1(++row, 0, 1, i18n.tr("Network"));

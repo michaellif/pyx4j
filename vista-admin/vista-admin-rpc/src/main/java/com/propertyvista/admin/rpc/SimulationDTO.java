@@ -22,6 +22,8 @@ import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 @Transient
 public interface SimulationDTO extends IEntity {
 
+    IPrimitive<Boolean> generalCacheEnabled();
+
     IPrimitive<Boolean> entityCacheServiceEnabled();
 
     @ReadOnly

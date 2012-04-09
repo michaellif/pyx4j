@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -35,6 +36,8 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
         SimulationDTO result = EntityFactory.create(SimulationDTO.class);
         result.setPrimaryKey(entityId);
 
+        result.generalCacheEnabled().setValue(!CacheService.isDisabled());
+
         IEntityCacheService entityCacheService = ServerSideFactory.create(IEntityCacheService.class);
         result.entityCacheServiceEnabled().setValue(!entityCacheService.isDisabled());
 
@@ -44,6 +47,8 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
 
     @Override
     public void save(AsyncCallback<SimulationDTO> callback, SimulationDTO entity) {
+
+        CacheService.setDisabled(!entity.generalCacheEnabled().isBooleanTrue());
 
         IEntityCacheService entityCacheService = ServerSideFactory.create(IEntityCacheService.class);
         entityCacheService.setDisabled(!entity.entityCacheServiceEnabled().isBooleanTrue());
