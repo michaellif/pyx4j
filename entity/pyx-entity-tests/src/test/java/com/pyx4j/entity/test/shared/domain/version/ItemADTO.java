@@ -20,12 +20,12 @@
  */
 package com.pyx4j.entity.test.shared.domain.version;
 
-import com.pyx4j.entity.annotations.DTO;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-@DTO
+@ExtendsDBO
 public interface ItemADTO extends ItemA {
 
     IPrimitive<String> otherData();

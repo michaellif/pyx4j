@@ -40,10 +40,10 @@ import com.google.gwt.user.rebind.SourceWriter;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.DTO;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
@@ -140,19 +140,21 @@ public class EntityMetaWriter {
         List<String> businessEqualMemberNames = new Vector<String>();
 
         String expandedFromClassName = null;
-        if (interfaceType.getAnnotation(DTO.class) != null) {
-            Class<?> expandedFromClass = interfaceType.getAnnotation(DTO.class).expands();
+        if (interfaceType.getAnnotation(ExtendsDBO.class) != null) {
+            Class<?> expandedFromClass = interfaceType.getAnnotation(ExtendsDBO.class).value();
             if (expandedFromClass != IEntity.class) {
-                expandedFromClassName = expandedFromClass.getName() + ".class";
+                expandedFromClassName = expandedFromClass.getName();
             }
             if (expandedFromClassName == null) {
                 if (interfaceType.getImplementedInterfaces().length > 1) {
-                    logger.log(TreeLogger.Type.ERROR, "Unresolved Multiple inheritance DTO declaration in " + interfaceType.getName());
+                    logger.log(TreeLogger.Type.ERROR, "Unresolved Multiple inheritance @ExtendsDBO declaration  on interface " + interfaceType.getName());
                     throw new UnableToCompleteException();
                 } else {
-                    expandedFromClassName = interfaceType.getImplementedInterfaces()[0].getQualifiedSourceName() + ".class";
+                    expandedFromClassName = interfaceType.getImplementedInterfaces()[0].getQualifiedSourceName();
                 }
             }
+        } else {
+            expandedFromClassName = interfaceType.getName();
         }
 
         List<JMethod> allMethods = contextHelper.getAllEntityMethods(interfaceType, true);
@@ -210,8 +212,8 @@ public class EntityMetaWriter {
         writer.print(interfaceType.getName());
         writer.print(".class, ");
 
-        writer.print((expandedFromClassName == null) ? "null" : expandedFromClassName);
-        writer.print(", ");
+        writer.print(expandedFromClassName);
+        writer.print(".class, ");
 
         writer.print(i18nEscapeSourceString(caption));
         writer.print(", ");

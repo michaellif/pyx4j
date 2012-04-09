@@ -35,7 +35,7 @@ import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.DTO;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
@@ -96,21 +96,21 @@ public class EntityMetaImpl implements EntityMeta {
             persistenceName = ((persistenceNamePrefix != null) ? persistenceNamePrefix : "") + entityClass.getSimpleName();
         }
 
-        DTO dtoAnnotation = entityClass.getAnnotation(DTO.class);
+        ExtendsDBO dtoAnnotation = entityClass.getAnnotation(ExtendsDBO.class);
         if (dtoAnnotation != null) {
-            if (dtoAnnotation.expands() == IEntity.class) {
+            if (dtoAnnotation.value() == IEntity.class) {
                 if (clazz.getInterfaces().length > 1) {
-                    throw new Error("Unresolved Multiple inheritance DTO declaration in " + clazz.getName());
+                    throw new Error("Unresolved Multiple inheritance @ExtendsDBO declaration on interface " + clazz.getName());
                 } else {
                     @SuppressWarnings("unchecked")
                     Class<? extends IEntity> superClass = (Class<? extends IEntity>) clazz.getInterfaces()[0];
                     expandedFromClass = superClass;
                 }
             } else {
-                expandedFromClass = dtoAnnotation.expands();
+                expandedFromClass = dtoAnnotation.value();
             }
         } else {
-            expandedFromClass = null;
+            expandedFromClass = entityClass;
         }
 
         Caption captionAnnotation = entityClass.getAnnotation(Caption.class);
@@ -141,7 +141,7 @@ public class EntityMetaImpl implements EntityMeta {
     }
 
     @Override
-    public Class<? extends IEntity> getExpandedFromClass() {
+    public Class<? extends IEntity> getDBOClass() {
         return expandedFromClass;
     }
 

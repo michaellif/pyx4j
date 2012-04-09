@@ -38,9 +38,9 @@ public interface EntityMeta {
     public Class<? extends IEntity> getEntityClass();
 
     /**
-     * @return null if this class is not annotated with @DTO
+     * @return 'This class' if this class is not annotated with @ExtendsDBO, else returns value declared in @ExtendsDBO.value
      */
-    public Class<? extends IEntity> getExpandedFromClass();
+    public Class<? extends IEntity> getDBOClass();
 
     public <T extends IEntity> boolean isEntityClassAssignableFrom(T targetInstance);
 

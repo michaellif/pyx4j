@@ -173,16 +173,16 @@ public class EntityMetaTest extends InitializerTestBase {
     public void testExpandedFromClass() {
         {
             EntityMeta meta = EntityFactory.getEntityMeta(BidirectionalOneToManyParentDTO.class);
-            assertEquals("ExpandedFromClass", BidirectionalOneToManyParent.class, meta.getExpandedFromClass());
+            assertEquals("ExpandedFromClass", BidirectionalOneToManyParent.class, meta.getDBOClass());
         }
 
         {
             EntityMeta meta = EntityFactory.getEntityMeta(ItemADTO.class);
-            assertEquals("ExpandedFromClass", ItemA.class, meta.getExpandedFromClass());
+            assertEquals("ExpandedFromClass", ItemA.class, meta.getDBOClass());
         }
         {
             EntityMeta meta = EntityFactory.getEntityMeta(MultipleInheritanceDTO.class);
-            assertEquals("ExpandedFromClass", Concrete1Entity.class, meta.getExpandedFromClass());
+            assertEquals("ExpandedFromClass", Concrete1Entity.class, meta.getDBOClass());
         }
     }
 

@@ -92,7 +92,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     }
 
     @Override
-    public Class<? extends IEntity> getExpandedFromClass() {
+    public Class<? extends IEntity> getDBOClass() {
         return expandedFromClass;
     }
 

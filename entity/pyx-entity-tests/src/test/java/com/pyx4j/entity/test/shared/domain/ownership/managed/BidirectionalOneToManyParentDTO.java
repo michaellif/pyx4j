@@ -20,11 +20,11 @@
  */
 package com.pyx4j.entity.test.shared.domain.ownership.managed;
 
-import com.pyx4j.entity.annotations.DTO;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
 @Transient
-@DTO
+@ExtendsDBO
 public interface BidirectionalOneToManyParentDTO extends BidirectionalOneToManyParent {
 
 }
