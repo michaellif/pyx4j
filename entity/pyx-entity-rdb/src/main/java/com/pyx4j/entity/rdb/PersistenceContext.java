@@ -32,6 +32,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.server.NamespaceNotFoundException;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -119,18 +120,18 @@ public class PersistenceContext {
                 }
             }
             if (connectionProvider.getDialect().isMultitenantSeparateSchemas()) {
-                setConnectionNamespace(connection, NamespaceManager.getNamespace());
+                setConnectionNamespace(NamespaceManager.getNamespace());
             }
         }
         if (connectionProvider.getDialect().isMultitenantSeparateSchemas()
                 && (!CommonsStringUtils.equals(NamespaceManager.getNamespace(), connectionNamespace))) {
-            setConnectionNamespace(connection, NamespaceManager.getNamespace());
+            setConnectionNamespace(NamespaceManager.getNamespace());
             log.info("Namespace changed to {}", connectionNamespace);
         }
         return connection;
     }
 
-    private void setConnectionNamespace(Connection connection, String namespace) {
+    private void setConnectionNamespace(String namespace) {
         try {
             String sql = connectionProvider.getDialect().sqlChangeConnectionNamespace(namespace);
             if (sql == null) {
@@ -142,7 +143,11 @@ public class PersistenceContext {
         } catch (SQLException e) {
             SQLUtils.closeQuietly(connection);
             connection = null;
-            throw new RuntimeException(e);
+            if (e.getMessage() != null && e.getMessage().contains("does not exist")) {
+                throw new NamespaceNotFoundException();
+            } else {
+                throw new RuntimeException(e);
+            }
         }
     }
 
