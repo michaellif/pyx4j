@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.entity.server.NamespaceNotFoundException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -44,7 +45,12 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
             descriptor = Persistence.service().retrieve(SiteDescriptor.class, descriptorKey);
         }
         if (descriptor == null) {
-            SiteDescriptor siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
+            SiteDescriptor siteDescriptor = null;
+            try {
+                siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
+            } catch (NamespaceNotFoundException e) {
+                siteDescriptor = null;
+            }
             if (siteDescriptor != null) {
                 descriptor = siteDescriptor.duplicate();
                 CacheService.put(SiteDescriptor.cacheKey, descriptor.getPrimaryKey());

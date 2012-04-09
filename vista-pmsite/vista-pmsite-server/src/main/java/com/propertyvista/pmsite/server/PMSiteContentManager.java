@@ -24,6 +24,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.server.NamespaceNotFoundException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
@@ -90,10 +91,16 @@ public class PMSiteContentManager implements Serializable {
 
     public PMSiteContentManager() {
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
-        siteDescriptor = Persistence.service().retrieve(criteria);
-        if (siteDescriptor == null) {
+        SiteDescriptor foundSiteDescriptor;
+        try {
+            foundSiteDescriptor = Persistence.service().retrieve(criteria);
+        } catch (NamespaceNotFoundException e) {
+            foundSiteDescriptor = null;
+        }
+        if (foundSiteDescriptor == null) {
             throw new UserRuntimeException(i18n.tr("This property management site was not set-up yet"));
         }
+        siteDescriptor = foundSiteDescriptor;
         for (PageDescriptor descriptor : siteDescriptor.childPages()) {
             createPath(descriptor);
         }
