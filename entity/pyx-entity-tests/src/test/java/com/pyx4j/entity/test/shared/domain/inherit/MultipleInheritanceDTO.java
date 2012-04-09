@@ -14,20 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 16, 2012
+ * Created on 2012-04-09
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.version;
+package com.pyx4j.entity.test.shared.domain.inherit;
 
 import com.pyx4j.entity.annotations.DTO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-@DTO
-public interface ItemADTO extends ItemA {
-
-    IPrimitive<String> otherData();
+@DTO(expands = Concrete1Entity.class)
+public interface MultipleInheritanceDTO extends Concrete1Entity, ReferenceEntity {
 
 }

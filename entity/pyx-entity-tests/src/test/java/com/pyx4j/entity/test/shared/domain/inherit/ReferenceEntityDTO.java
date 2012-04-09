@@ -20,10 +20,12 @@
  */
 package com.pyx4j.entity.test.shared.domain.inherit;
 
+import com.pyx4j.entity.annotations.DTO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
+@DTO
 public interface ReferenceEntityDTO extends ReferenceEntity {
 
     IPrimitive<String> dtoStuff();

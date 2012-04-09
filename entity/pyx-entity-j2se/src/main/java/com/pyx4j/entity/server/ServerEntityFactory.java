@@ -137,20 +137,6 @@ public class ServerEntityFactory implements IEntityFactory {
         return new EntityMetaImpl(entityClass);
     }
 
-    /**
-     * This is the temporary place to resolve Entity class from DTO Class until @DTO expands implemented
-     */
-    public static Class<? extends IEntity> resolveDTOClass(IEntity entity) {
-        if (!entity.getEntityMeta().isTransient()) {
-            return entity.getInstanceValueClass();
-        } else {
-            Class<? extends IEntity> instanceClass = entity.getInstanceValueClass();
-            @SuppressWarnings("unchecked")
-            Class<? extends IEntity> superClass = (Class<? extends IEntity>) instanceClass.getInterfaces()[0];
-            return superClass;
-        }
-    }
-
     public static Set<Class<? extends IEntity>> getAllEntityClasses() {
         if (allEntityClasses == null) {
             List<String> allClasses = EntityClassFinder.getEntityClassesNames();

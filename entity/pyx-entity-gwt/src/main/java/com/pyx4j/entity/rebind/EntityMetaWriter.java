@@ -40,6 +40,7 @@ import com.google.gwt.user.rebind.SourceWriter;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DTO;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -138,6 +139,22 @@ public class EntityMetaWriter {
         final HashMap<String, ToString> sortKeys = new HashMap<String, ToString>();
         List<String> businessEqualMemberNames = new Vector<String>();
 
+        String expandedFromClassName = null;
+        if (interfaceType.getAnnotation(DTO.class) != null) {
+            Class<?> expandedFromClass = interfaceType.getAnnotation(DTO.class).expands();
+            if (expandedFromClass != IEntity.class) {
+                expandedFromClassName = expandedFromClass.getName() + ".class";
+            }
+            if (expandedFromClassName == null) {
+                if (interfaceType.getImplementedInterfaces().length > 1) {
+                    logger.log(TreeLogger.Type.ERROR, "Unresolved Multiple inheritance DTO declaration in " + interfaceType.getName());
+                    throw new UnableToCompleteException();
+                } else {
+                    expandedFromClassName = interfaceType.getImplementedInterfaces()[0].getQualifiedSourceName() + ".class";
+                }
+            }
+        }
+
         List<JMethod> allMethods = contextHelper.getAllEntityMethods(interfaceType, true);
 
         String ownerMemberName = null;
@@ -150,7 +167,8 @@ public class EntityMetaWriter {
             }
             if (method.getAnnotation(Owner.class) != null) {
                 if (ownerMemberName != null) {
-                    throw new Error("Duplicate @Owner declaration " + method.getName() + " and " + ownerMemberName);
+                    logger.log(TreeLogger.Type.ERROR, "Duplicate @Owner declaration " + method.getName() + " and " + ownerMemberName);
+                    throw new UnableToCompleteException();
                 }
                 ownerMemberName = method.getName();
             }
@@ -191,6 +209,9 @@ public class EntityMetaWriter {
 
         writer.print(interfaceType.getName());
         writer.print(".class, ");
+
+        writer.print((expandedFromClassName == null) ? "null" : expandedFromClassName);
+        writer.print(", ");
 
         writer.print(i18nEscapeSourceString(caption));
         writer.print(", ");

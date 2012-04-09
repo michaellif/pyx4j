@@ -35,6 +35,7 @@ import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DTO;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
@@ -54,6 +55,8 @@ import com.pyx4j.i18n.annotations.I18nAnnotation;
 public class EntityMetaImpl implements EntityMeta {
 
     private final Class<? extends IEntity> entityClass;
+
+    private final Class<? extends IEntity> expandedFromClass;
 
     private final String persistenceName;
 
@@ -93,6 +96,23 @@ public class EntityMetaImpl implements EntityMeta {
             persistenceName = ((persistenceNamePrefix != null) ? persistenceNamePrefix : "") + entityClass.getSimpleName();
         }
 
+        DTO dtoAnnotation = entityClass.getAnnotation(DTO.class);
+        if (dtoAnnotation != null) {
+            if (dtoAnnotation.expands() == IEntity.class) {
+                if (clazz.getInterfaces().length > 1) {
+                    throw new Error("Unresolved Multiple inheritance DTO declaration in " + clazz.getName());
+                } else {
+                    @SuppressWarnings("unchecked")
+                    Class<? extends IEntity> superClass = (Class<? extends IEntity>) clazz.getInterfaces()[0];
+                    expandedFromClass = superClass;
+                }
+            } else {
+                expandedFromClass = dtoAnnotation.expands();
+            }
+        } else {
+            expandedFromClass = null;
+        }
+
         Caption captionAnnotation = entityClass.getAnnotation(Caption.class);
         String captionValue = I18nAnnotation.DEFAULT_VALUE;
         if (captionAnnotation != null) {
@@ -118,6 +138,11 @@ public class EntityMetaImpl implements EntityMeta {
     @Override
     public Class<? extends IEntity> getEntityClass() {
         return entityClass;
+    }
+
+    @Override
+    public Class<? extends IEntity> getExpandedFromClass() {
+        return expandedFromClass;
     }
 
     @Override

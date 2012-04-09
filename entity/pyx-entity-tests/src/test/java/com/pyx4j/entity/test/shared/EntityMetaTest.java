@@ -41,6 +41,11 @@ import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.MultipleInheritanceDTO;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyParent;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyParentDTO;
+import com.pyx4j.entity.test.shared.domain.version.ItemA;
+import com.pyx4j.entity.test.shared.domain.version.ItemADTO;
 
 public class EntityMetaTest extends InitializerTestBase {
 
@@ -163,6 +168,22 @@ public class EntityMetaTest extends InitializerTestBase {
 
         ent1x.nameB1().setValue("v-name1-mod");
         assertEquals("value of name1 change", "v-name1-mod", ent2.reference().nameB1().getValue());
+    }
+
+    public void testExpandedFromClass() {
+        {
+            EntityMeta meta = EntityFactory.getEntityMeta(BidirectionalOneToManyParentDTO.class);
+            assertEquals("ExpandedFromClass", BidirectionalOneToManyParent.class, meta.getExpandedFromClass());
+        }
+
+        {
+            EntityMeta meta = EntityFactory.getEntityMeta(ItemADTO.class);
+            assertEquals("ExpandedFromClass", ItemA.class, meta.getExpandedFromClass());
+        }
+        {
+            EntityMeta meta = EntityFactory.getEntityMeta(MultipleInheritanceDTO.class);
+            assertEquals("ExpandedFromClass", Concrete1Entity.class, meta.getExpandedFromClass());
+        }
     }
 
     public void testDownCast() {
