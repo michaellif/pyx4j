@@ -16,25 +16,32 @@ package com.propertyvista.admin.client.ui.crud.simulation;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.rpc.SimulationDTO;
 
 public class SimulationEditorForm extends AdminEntityForm<SimulationDTO> {
 
+    private final static I18n i18n = I18n.get(SimulationEditorForm.class);
+
     public SimulationEditorForm(boolean viewable) {
         super(SimulationDTO.class, viewable);
-    }
-
-    public SimulationEditorForm() {
-        this(false);
     }
 
     @Override
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enableSimulation())).build());
+
+        content.setH1(++row, 0, 1, i18n.tr("Cache"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().entityCacheServiceEnabled())).build());
+
+        content.setH1(++row, 0, 1, i18n.tr("Network"));
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().networkSimulation().enabled())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().networkSimulation().delay())).build());
+
         return content;
     }
 

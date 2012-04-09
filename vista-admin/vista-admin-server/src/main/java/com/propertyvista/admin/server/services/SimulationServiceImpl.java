@@ -16,9 +16,13 @@ package com.propertyvista.admin.server.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.server.IEntityCacheService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.essentials.server.admin.AdminServiceImpl;
+import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.admin.rpc.SimulationDTO;
@@ -28,15 +32,23 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
 
     @Override
     public void retrieve(AsyncCallback<SimulationDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
-        // TODO Auto-generated method stub
-        throw new Error("not implemented");
+        SimulationDTO result = EntityFactory.create(SimulationDTO.class);
+
+        IEntityCacheService entityCacheService = ServerSideFactory.create(IEntityCacheService.class);
+        result.entityCacheServiceEnabled().setValue(!entityCacheService.isDisabled());
+
+        result.networkSimulation().set(NetworkSimulationServiceFilter.getNetworkSimulationConfig());
+        callback.onSuccess(result);
     }
 
     @Override
-    public void save(AsyncCallback<SimulationDTO> callback, SimulationDTO editableEntity) {
-        // TODO Auto-generated method stub
-        throw new Error("not implemented");
+    public void save(AsyncCallback<SimulationDTO> callback, SimulationDTO entity) {
 
+        IEntityCacheService entityCacheService = ServerSideFactory.create(IEntityCacheService.class);
+        entityCacheService.setDisabled(!entity.entityCacheServiceEnabled().isBooleanTrue());
+
+        NetworkSimulationServiceFilter.setNetworkSimulationConfig(entity.networkSimulation());
+        retrieve(callback, null, null);
     }
 
     @Override
