@@ -41,16 +41,16 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
 
     @Override
     public void setSelectedUnit(AptUnit selected) {
-        ((ShowingCrudService) service).updateValue(new AsyncCallback<AptUnit>() {
+        ((ShowingCrudService) getService()).updateValue(new AsyncCallback<AptUnit>() {
 
             @Override
             public void onSuccess(AptUnit result) {
-                Showing current = view.getValue().duplicate();
+                Showing current = getView().getValue().duplicate();
 
                 current.unit().set(result);
                 current.building().set(result.belongsTo());
 
-                view.populate(current);
+                getView().populate(current);
             }
 
             @Override

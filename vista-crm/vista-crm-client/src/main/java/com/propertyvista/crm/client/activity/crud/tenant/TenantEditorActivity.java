@@ -37,10 +37,10 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
 
     @Override
     protected void createNewEntity(final AsyncCallback<TenantDTO> callback) {
-        ((TenantEditorView) view).showSelectTypePopUp(new DefaultAsyncCallback<Tenant.Type>() {
+        ((TenantEditorView) getView()).showSelectTypePopUp(new DefaultAsyncCallback<Tenant.Type>() {
             @Override
             public void onSuccess(Tenant.Type type) {
-                TenantDTO entity = EntityFactory.create(entityClass);
+                TenantDTO entity = EntityFactory.create(getEntityClass());
                 entity.type().setValue(type);
 
                 callback.onSuccess(entity);

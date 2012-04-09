@@ -30,13 +30,18 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.dto.ElevatorDTO;
 import com.propertyvista.misc.EquifaxResult;
 
 public class CrmEntityMapper {
 
     public static void init() {
         AppPlaceEntityMapper.register(Complex.class, CrmSiteMap.Properties.Complex.class, CrmImages.INSTANCE.arrowGreyLeft());
+
         AppPlaceEntityMapper.register(Building.class, CrmSiteMap.Properties.Building.class, CrmImages.INSTANCE.propertiesNormal());
+        AppPlaceEntityMapper.register(BuildingDTO.class, CrmSiteMap.Properties.Building.class, CrmImages.INSTANCE.propertiesNormal());
+
         AppPlaceEntityMapper.register(Floorplan.class, CrmSiteMap.Properties.Floorplan.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(AptUnit.class, CrmSiteMap.Properties.Unit.class, CrmImages.INSTANCE.unitsNormal());
         AppPlaceEntityMapper.register(LockerArea.class, CrmSiteMap.Properties.LockerArea.class, CrmImages.INSTANCE.arrowGreyLeft());
@@ -49,6 +54,9 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(GlCode.class, CrmSiteMap.Settings.GlCodeCategory.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(ProductItem.class, CrmSiteMap.Properties.Service.class, CrmImages.INSTANCE.arrowGreyLeft());
+
+        AppPlaceEntityMapper.register(ElevatorDTO.class, CrmSiteMap.Properties.Elevator.class, CrmImages.INSTANCE.arrowGreyLeft());
+
     }
 
 }

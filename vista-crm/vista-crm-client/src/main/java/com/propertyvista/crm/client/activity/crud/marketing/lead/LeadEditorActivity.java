@@ -39,16 +39,16 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
 
     @Override
     public void setSelectedFloorplan(Floorplan selected) {
-        ((LeadCrudService) service).setSelectedFloorplan(new AsyncCallback<Floorplan>() {
+        ((LeadCrudService) getService()).setSelectedFloorplan(new AsyncCallback<Floorplan>() {
 
             @Override
             public void onSuccess(Floorplan item) {
-                Lead currentValue = view.getValue().duplicate();
+                Lead currentValue = getView().getValue().duplicate();
 
                 currentValue.building().set(item.building());
                 currentValue.floorplan().set(item);
 
-                view.populate(currentValue);
+                getView().populate(currentValue);
             }
 
             @Override
@@ -60,7 +60,7 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
 
     @Override
     protected void createNewEntity(AsyncCallback<Lead> callback) {
-        Lead entity = EntityFactory.create(entityClass);
+        Lead entity = EntityFactory.create(getEntityClass());
         entity.createDate().setValue(new LogicalDate());
         entity.status().setValue(Status.active);
         callback.onSuccess(entity);

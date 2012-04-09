@@ -61,7 +61,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     protected void createNewEntity(final AsyncCallback<LeaseDTO> callback) {
-        ((LeaseEditorView) view).showSelectTypePopUp(new DefaultAsyncCallback<Service.Type>() {
+        ((LeaseEditorView) getView()).showSelectTypePopUp(new DefaultAsyncCallback<Service.Type>() {
             @Override
             public void onSuccess(Service.Type type) {
                 LeaseDTO entity = EntityFactory.create(LeaseDTO.class);
@@ -77,11 +77,11 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void setSelectedUnit(AptUnit selected) {
-        ((LeaseCrudService) service).setSelectededUnit(new AsyncCallback<AptUnit>() {
+        ((LeaseCrudService) getService()).setSelectededUnit(new AsyncCallback<AptUnit>() {
 
             @Override
             public void onSuccess(AptUnit unit) {
-                LeaseDTO currentValue = view.getValue().duplicate();
+                LeaseDTO currentValue = getView().getValue().duplicate();
 
                 currentValue.unit().set(unit);
                 currentValue.selectedBuilding().set(unit.belongsTo());
@@ -89,7 +89,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
                 clearServiceAgreement(currentValue, true);
                 fillserviceItems(currentValue);
 
-                view.populate(currentValue);
+                getView().populate(currentValue);
 
                 // if there is only one service for the selected unit - pre-set it:
                 if (currentValue.selectedServiceItems().size() == 1) {
@@ -106,7 +106,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void setSelectedService(ProductItem serviceItem) {
-        LeaseDTO currentValue = view.getValue().duplicate();
+        LeaseDTO currentValue = getView().getValue().duplicate();
         if (fillServiceEligibilityData(currentValue, serviceItem)) {
 
             // clear current dependable data:
@@ -121,13 +121,13 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
                 currentValue.version().leaseProducts().featureItems().add(createBillableItem(item));
             }
 
-            view.populate(currentValue);
+            getView().populate(currentValue);
         }
     }
 
     @Override
     public void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item) {
-        ((LeaseCrudService) service).calculateChargeItemAdjustments(callback, item);
+        ((LeaseCrudService) getService()).calculateChargeItemAdjustments(callback, item);
     }
 
     private void clearServiceAgreement(LeaseDTO currentValue, boolean all) {

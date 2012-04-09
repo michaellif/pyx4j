@@ -38,14 +38,14 @@ public class ReportEditorActivity extends EditorActivityBase<DashboardMetadata> 
 
     @SuppressWarnings("unchecked")
     public ReportEditorActivity(Place place) {
-        super(place, (ReportEditor) DashboardViewFactory.instance(ReportEditor.class), (AbstractCrudService<DashboardMetadata>) GWT
-                .create(ReportMetadataCrudService.class), DashboardMetadata.class);
+        super(place, DashboardViewFactory.instance(ReportEditor.class), (AbstractCrudService<DashboardMetadata>) GWT.create(ReportMetadataCrudService.class),
+                DashboardMetadata.class);
 
     }
 
     @Override
     protected void createNewEntity(AsyncCallback<DashboardMetadata> callback) {
-        DashboardMetadata entity = EntityFactory.create(entityClass);
+        DashboardMetadata entity = EntityFactory.create(getEntityClass());
         entity.type().setValue(DashboardType.system);
         entity.layoutType().setValue(LayoutType.Report);
         callback.onSuccess(entity);

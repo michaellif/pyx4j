@@ -31,7 +31,7 @@ public abstract class PolicyEditorActivityBase<POLICY_DTO extends PolicyDTOBase>
 
     @Override
     protected void createNewEntity(final AsyncCallback<POLICY_DTO> callback) {
-        ((AbstractPolicyCrudService<POLICY_DTO>) service).createNewPolicy(new DefaultAsyncCallback<POLICY_DTO>() {
+        ((AbstractPolicyCrudService<POLICY_DTO>) getService()).createNewPolicy(new DefaultAsyncCallback<POLICY_DTO>() {
             @Override
             public void onSuccess(POLICY_DTO result) {
                 callback.onSuccess(result);

@@ -46,10 +46,10 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
 
     @Override
     protected void createNewEntity(final AsyncCallback<DashboardMetadata> callback) {
-        ((DashboardEditor) view).showSelectTypePopUp(new DefaultAsyncCallback<DashboardMetadata.DashboardType>() {
+        ((DashboardEditor) getView()).showSelectTypePopUp(new DefaultAsyncCallback<DashboardMetadata.DashboardType>() {
             @Override
             public void onSuccess(DashboardType type) {
-                DashboardMetadata entity = EntityFactory.create(entityClass);
+                DashboardMetadata entity = EntityFactory.create(getEntityClass());
                 entity.type().setValue(type);
                 entity.layoutType().setValue(LayoutType.Two12);
                 // TODO: get current user Key here: 

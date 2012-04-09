@@ -37,7 +37,7 @@ public class ConcessionEditorActivity extends EditorActivityBase<Concession> {
 
     @Override
     protected void createNewEntity(AsyncCallback<Concession> callback) {
-        Concession entity = EntityFactory.create(entityClass);
+        Concession entity = EntityFactory.create(getEntityClass());
 
         entity.version().status().setValue(Status.draft);
 

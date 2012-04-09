@@ -38,7 +38,7 @@ public class MaintenanceRequestEditorActivity extends EditorActivityBase<Mainten
 
     @Override
     protected void createNewEntity(AsyncCallback<MaintenanceRequestDTO> callback) {
-        MaintenanceRequestDTO entity = EntityFactory.create(entityClass);
+        MaintenanceRequestDTO entity = EntityFactory.create(getEntityClass());
         entity.submitted().setValue(new LogicalDate());
         entity.status().setValue(MaintenanceRequestStatus.Submitted);
         callback.onSuccess(entity);

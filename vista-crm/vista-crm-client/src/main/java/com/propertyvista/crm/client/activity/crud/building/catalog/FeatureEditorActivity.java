@@ -37,13 +37,13 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> {
 
     @Override
     protected void createNewEntity(final AsyncCallback<Feature> callback) {
-        ((FeatureEditorView) view).showSelectTypePopUp(new DefaultAsyncCallback<Feature.Type>() {
+        ((FeatureEditorView) getView()).showSelectTypePopUp(new DefaultAsyncCallback<Feature.Type>() {
             @Override
             public void onSuccess(final Feature.Type type) {
-                ((FeatureCrudService) service).retrieveCatalog(new DefaultAsyncCallback<ProductCatalog>() {
+                ((FeatureCrudService) getService()).retrieveCatalog(new DefaultAsyncCallback<ProductCatalog>() {
                     @Override
                     public void onSuccess(ProductCatalog catalog) {
-                        Feature entity = EntityFactory.create(entityClass);
+                        Feature entity = EntityFactory.create(getEntityClass());
                         entity.version().type().setValue(type);
                         entity.catalog().set(catalog);
 

@@ -38,7 +38,7 @@ public class PersonScreeningEditorActivity extends EditorActivityBase<PersonScre
 
     @Override
     protected void createNewEntity(AsyncCallback<PersonScreening> callback) {
-        PersonScreening screening = EntityFactory.create(entityClass);
+        PersonScreening screening = EntityFactory.create(getEntityClass());
 
         if (Tenant.class.getName().equals(parentClass)) {
             screening.screene().set(EntityFactory.create(Tenant.class));

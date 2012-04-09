@@ -37,13 +37,13 @@ public class ServiceEditorActivity extends EditorActivityBase<Service> implement
 
     @Override
     protected void createNewEntity(final AsyncCallback<Service> callback) {
-        ((ServiceEditorView) view).showSelectTypePopUp(new DefaultAsyncCallback<Service.Type>() {
+        ((ServiceEditorView) getView()).showSelectTypePopUp(new DefaultAsyncCallback<Service.Type>() {
             @Override
             public void onSuccess(final Service.Type type) {
-                ((ServiceCrudService) service).retrieveCatalog(new DefaultAsyncCallback<ProductCatalog>() {
+                ((ServiceCrudService) getService()).retrieveCatalog(new DefaultAsyncCallback<ProductCatalog>() {
                     @Override
                     public void onSuccess(ProductCatalog catalog) {
-                        Service entity = EntityFactory.create(entityClass);
+                        Service entity = EntityFactory.create(getEntityClass());
                         entity.version().type().setValue(type);
                         entity.catalog().set(catalog);
 
