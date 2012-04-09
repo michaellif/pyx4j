@@ -15,7 +15,7 @@ package com.propertyvista.misc;
 
 public interface VistaTODO {
 
-    public static boolean removedForProduction = true;
+    public static boolean removedForProduction = false;
 
     // e.g. person().name()
     public final boolean entityAsStringQueryCriteria = true;
