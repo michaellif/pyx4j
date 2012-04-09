@@ -80,8 +80,13 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         style.addProperty("padding", "2px");
         addStyle(style);
 
+        style = new Style(".", StyleName.BreadcrumbsBar);
+        style.addProperty("height", "29px");
+        addStyle(style);
+
         style = new Style(".", StyleName.BreadcrumbAnchor);
         style.addProperty("cursor", "pointer");
+        style.addProperty("height", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.BreadcrumbAnchor, ":hover");

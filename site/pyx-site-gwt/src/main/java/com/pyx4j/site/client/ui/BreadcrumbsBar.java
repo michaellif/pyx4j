@@ -25,6 +25,7 @@ import java.util.Vector;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -48,7 +49,7 @@ public class BreadcrumbsBar extends HorizontalPanel {
                 IEntity breadcrumb = breadcrumbTrail.get(i);
                 add(new BreadcrumbAnchor(breadcrumb).asWidget());
                 if (i < breadcrumbTrail.size() - 1) {
-                    Label separator = new Label(">");
+                    Label separator = new HTML("&nbsp;>&nbsp;");
                     add(separator);
                     setCellVerticalAlignment(separator, HorizontalPanel.ALIGN_MIDDLE);
                 }
@@ -75,7 +76,9 @@ public class BreadcrumbsBar extends HorizontalPanel {
 
             ImageResource image = AppPlaceEntityMapper.resolveImageResource(breadcrumb.getObjectClass());
             if (image != null) {
-                add(new Image(image));
+                Image icon = new Image(image);
+                add(icon);
+                setCellVerticalAlignment(icon, HorizontalPanel.ALIGN_MIDDLE);
             }
             add(anchor);
             setCellVerticalAlignment(anchor, HorizontalPanel.ALIGN_MIDDLE);
