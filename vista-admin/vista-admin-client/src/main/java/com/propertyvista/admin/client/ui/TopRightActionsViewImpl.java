@@ -1,24 +1,18 @@
 package com.propertyvista.admin.client.ui;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.admin.client.resources.AdminImages;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 
 public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
@@ -41,11 +35,11 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final CHyperlink settings;
 
-    private final Image message;
+//    private final Image message;
 
-    private final Image alert;
+//    private final Image alert;
 
-    private final SearchBox search;
+//    private final SearchBox search;
 
     private final Theme otherTheme = Theme.BrownWarm;
 
@@ -100,53 +94,53 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
             }
         });
 
-        alert = new Image(AdminImages.INSTANCE.alert());
-        alert.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showAlerts();
-            }
-        });
-        //  alert.getElement().getStyle().setMarginRight(1, Unit.EM);
-        alert.getElement().getStyle().setCursor(Cursor.POINTER);
-
-        message = new Image(AdminImages.INSTANCE.message());
-        message.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showMessages();
-            }
-        });
-        //    message.getElement().getStyle().setMarginRight(1, Unit.EM);
-        //   message.getElement().getStyle().setMarginLeft(1, Unit.EM);
-        message.getElement().getStyle().setCursor(Cursor.POINTER);
-
-        search = new SearchBox();
-
-        /**
-         * the following set of wrappers keep login/logout group relatively steady when
-         * the elements right of it disappear
-         */
-        SimplePanel searchwr = new SimplePanel();
-        searchwr.getElement().setAttribute("style", "min-width:12em");
-        searchwr.add(search);
-
-        SimplePanel messagewr = new SimplePanel();
-        messagewr.getElement().setAttribute("style", "min-width:3em");
-        messagewr.add(message);
-
-        SimplePanel alertwr = new SimplePanel();
-        alertwr.getElement().setAttribute("style", "min-width:3em");
-        alertwr.add(alert);
+//        alert = new Image(AdminImages.INSTANCE.alert());
+//        alert.addClickHandler(new ClickHandler() {
+//            @Override
+//            public void onClick(ClickEvent event) {
+//                presenter.showAlerts();
+//            }
+//        });
+//        //  alert.getElement().getStyle().setMarginRight(1, Unit.EM);
+//        alert.getElement().getStyle().setCursor(Cursor.POINTER);
+//
+//        message = new Image(AdminImages.INSTANCE.message());
+//        message.addClickHandler(new ClickHandler() {
+//            @Override
+//            public void onClick(ClickEvent event) {
+//                presenter.showMessages();
+//            }
+//        });
+//        //    message.getElement().getStyle().setMarginRight(1, Unit.EM);
+//        //   message.getElement().getStyle().setMarginLeft(1, Unit.EM);
+//        message.getElement().getStyle().setCursor(Cursor.POINTER);
+//
+//        search = new SearchBox();
+//
+//        /**
+//         * the following set of wrappers keep login/logout group relatively steady when
+//         * the elements right of it disappear
+//         */
+//        SimplePanel searchwr = new SimplePanel();
+//        searchwr.getElement().setAttribute("style", "min-width:12em");
+//        searchwr.add(search);
+//
+//        SimplePanel messagewr = new SimplePanel();
+//        messagewr.getElement().setAttribute("style", "min-width:3em");
+//        messagewr.add(message);
+//
+//        SimplePanel alertwr = new SimplePanel();
+//        alertwr.getElement().setAttribute("style", "min-width:3em");
+//        alertwr.add(alert);
 
         container.add(greetings);
         container.add(account);
         container.add(settings);
         container.add(login);
         container.add(logout);
-        container.add(searchwr);
-        container.add(messagewr);
-        container.add(alertwr);
+//        container.add(searchwr);
+//        container.add(messagewr);
+//        container.add(alertwr);
 
         add(container);
     }
@@ -159,9 +153,9 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     @Override
     public void onLogedOut() {
         logout.setVisible(false);
-        alert.setVisible(false);
-        message.setVisible(false);
-        search.setVisible(false);
+//        alert.setVisible(false);
+//        message.setVisible(false);
+//        search.setVisible(false);
         account.setVisible(false);
         settings.setVisible(false);
         login.setVisible(true);
@@ -172,11 +166,11 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     public void onLogedIn(String userName) {
         logout.setVisible(true);
         login.setVisible(false);
-        alert.setVisible(true);
-        message.setVisible(true);
+//        alert.setVisible(true);
+//        message.setVisible(true);
+//        search.setVisible(true);
         account.setVisible(true);
         settings.setVisible(true);
-        search.setVisible(true);
         greetings.setHTML(i18n.tr("Welcome &nbsp;{0}", userName));
     }
 }
