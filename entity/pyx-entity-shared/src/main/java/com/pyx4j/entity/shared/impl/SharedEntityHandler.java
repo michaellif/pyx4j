@@ -543,6 +543,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
         targetValue.put(TO_STRING_ATTR, this.getStringView());
         targetValue.put(DETACHED_ATTR, AttachLevel.ToStringMembers);
+        IEntity typeAttr = (IEntity) this.getValue().get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
+        if (typeAttr != null) {
+            targetValue.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, typeAttr);
+        }
     }
 
     @Override

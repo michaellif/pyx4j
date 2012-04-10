@@ -202,8 +202,12 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                         ((ICollection<IEntity, ?>) dtoM).add(dboMi);
                     }
                 } else if (dboM.getAttachLevel() == AttachLevel.IdOnly) {
-                    ((IEntity) dtoM).setPrimaryKey(((IEntity) dboM).getPrimaryKey());
-                    dtoM.setAttachLevel(AttachLevel.IdOnly);
+                    if (!((IEntity) dboM).isObjectClassSameAsDef()) {
+                        ((IEntity) dtoM).set(((IEntity) dboM).createIdentityStub());
+                    } else {
+                        ((IEntity) dtoM).setPrimaryKey(((IEntity) dboM).getPrimaryKey());
+                        dtoM.setAttachLevel(AttachLevel.IdOnly);
+                    }
                 } else if (dboM.getAttachLevel() == AttachLevel.ToStringMembers) {
                     ((IEntity) dboM).copyStringView((IEntity) dtoM);
                 } else {
@@ -247,8 +251,12 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                         ((ICollection<IEntity, ?>) dboM).add(dtoMi);
                     }
                 } else if (dtoM.getAttachLevel() == AttachLevel.IdOnly) {
-                    ((IEntity) dboM).setPrimaryKey(((IEntity) dtoM).getPrimaryKey());
-                    dboM.setAttachLevel(AttachLevel.IdOnly);
+                    if (!((IEntity) dtoM).isObjectClassSameAsDef()) {
+                        ((IEntity) dboM).set(((IEntity) dtoM).createIdentityStub());
+                    } else {
+                        ((IEntity) dboM).setPrimaryKey(((IEntity) dtoM).getPrimaryKey());
+                        dboM.setAttachLevel(AttachLevel.IdOnly);
+                    }
                 } else if (dtoM.getAttachLevel() == AttachLevel.ToStringMembers) {
                     ((IEntity) dtoM).copyStringView((IEntity) dboM);
                 } else {

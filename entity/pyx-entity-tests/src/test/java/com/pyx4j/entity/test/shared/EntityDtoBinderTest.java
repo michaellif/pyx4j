@@ -25,10 +25,14 @@ import java.sql.Date;
 import junit.framework.Assert;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntityDTO;
 
 public class EntityDtoBinderTest extends InitializerTestBase {
 
@@ -115,5 +119,47 @@ public class EntityDtoBinderTest extends InitializerTestBase {
 
         Assert.assertEquals("owned PK Value", emp1.workAddress().id().getValue(), emp2.workAddress().id().getValue());
         Assert.assertEquals("address.streetName Value", emp1.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
+    }
+
+    private class PolymorphicEntityDtoBinder extends EntityDtoBinder<ReferenceEntityDTO, ReferenceEntity> {
+
+        protected PolymorphicEntityDtoBinder() {
+            super(ReferenceEntityDTO.class, ReferenceEntity.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(dtoProto.name(), dboProto.name());
+            bind(dtoProto.reference(), dboProto.reference());
+        }
+
+    }
+
+    public void testPolymorphicEntityBinding() {
+        ReferenceEntity ent1 = EntityFactory.create(ReferenceEntity.class);
+        Concrete2Entity ent12 = EntityFactory.create(Concrete2Entity.class);
+        ent12.setPrimaryKey(new Key(22));
+        ent12.nameB1().setValue("b1");
+
+        ent1.reference().set(ent12);
+
+        ReferenceEntityDTO ent2 = new PolymorphicEntityDtoBinder().createDBO(ent1);
+
+        Assert.assertEquals(ent12.nameB1(), ent2.reference().nameB1());
+        Assert.assertEquals("Proper instance", Concrete2Entity.class, ent2.reference().getInstanceValueClass());
+    }
+
+    public void testPolymorphicDetachedEntityBinding() {
+
+        ReferenceEntity ent1 = EntityFactory.create(ReferenceEntity.class);
+        Concrete2Entity ent12 = EntityFactory.create(Concrete2Entity.class);
+        ent12.setPrimaryKey(new Key(22));
+        ent12.setAttachLevel(AttachLevel.IdOnly);
+
+        ent1.reference().set(ent12);
+
+        ReferenceEntityDTO ent2 = new PolymorphicEntityDtoBinder().createDBO(ent1);
+
+        Assert.assertEquals("Proper instance", Concrete2Entity.class, ent2.reference().getInstanceValueClass());
     }
 }
