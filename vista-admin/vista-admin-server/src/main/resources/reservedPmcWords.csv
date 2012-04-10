@@ -10,3 +10,5 @@ interface
 interfaces
 admin
 _admin_
+_dba*
+pg_*
