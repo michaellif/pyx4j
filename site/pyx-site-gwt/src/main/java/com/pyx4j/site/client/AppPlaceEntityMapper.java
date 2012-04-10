@@ -25,6 +25,7 @@ import java.util.HashMap;
 import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -38,7 +39,7 @@ public class AppPlaceEntityMapper {
     }
 
     public static CrudAppPlace resolvePlace(Class<? extends IEntity> type, Key id) {
-        AppPlaceData data = map.get(type);
+        AppPlaceData data = map.get(EntityFactory.getEntityMeta(type).getDBOClass());
         if (data != null) {
             CrudAppPlace place = AppSite.getHistoryMapper().createPlace(data.placeClass);
             if (id != null) {
@@ -56,7 +57,7 @@ public class AppPlaceEntityMapper {
     }
 
     public static Class<? extends CrudAppPlace> resolvePlaceClass(Class<? extends IEntity> type) {
-        AppPlaceData data = map.get(type);
+        AppPlaceData data = map.get(EntityFactory.getEntityMeta(type).getDBOClass());
         if (data != null) {
             return data.placeClass;
         } else {
@@ -65,7 +66,7 @@ public class AppPlaceEntityMapper {
     }
 
     public static ImageResource resolveImageResource(Class<? extends IEntity> type) {
-        AppPlaceData data = map.get(type);
+        AppPlaceData data = map.get(EntityFactory.getEntityMeta(type).getDBOClass());
         if (data != null) {
             return data.image;
         } else {
