@@ -13,6 +13,7 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
@@ -23,6 +24,7 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.Testimonial;
 
 @Transient
+@ExtendsDBO
 public interface SiteDescriptorDTO extends SiteDescriptor {
 
     @Owned

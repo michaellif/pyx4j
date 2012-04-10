@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 
 @Transient
-@ExtendsDBO(value = ApplicationDocumentationPolicyDTO.class)
+@ExtendsDBO(value = ApplicationDocumentationPolicy.class)
 public interface ApplicationDocumentationPolicyDTO extends PolicyDTOBase, ApplicationDocumentationPolicy {
 
 }
