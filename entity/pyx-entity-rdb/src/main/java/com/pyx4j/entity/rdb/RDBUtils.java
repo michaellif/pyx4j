@@ -194,8 +194,8 @@ public class RDBUtils implements Closeable {
                 try {
                     rs = dbMeta.getSchemas();
                     while (rs.next()) {
-                        String schema = rs.getString(1);
-                        if (schema.equalsIgnoreCase("information_schema") || schema.equalsIgnoreCase("pg_catalog")) {
+                        String schema = rs.getString(1).toLowerCase(Locale.ENGLISH);
+                        if (schema.equals("information_schema") || schema.startsWith("pg_") || schema.startsWith("_dba")) {
                             continue;
                         }
                         utils.execute("DROP SCHEMA " + schema + " CASCADE");
