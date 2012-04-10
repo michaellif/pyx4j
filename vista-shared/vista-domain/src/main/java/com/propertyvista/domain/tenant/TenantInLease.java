@@ -79,11 +79,7 @@ public interface TenantInLease extends IBoundToApplication, LeaseParticipant {
     @NotNull
     @ReadOnly
     @ToString(index = 0)
-    Tenant tenant();
-
-    // TODO
-    @ReadOnly
-    _Customer customer();
+    Customer tenant();
 
     @Override
     @NotNull

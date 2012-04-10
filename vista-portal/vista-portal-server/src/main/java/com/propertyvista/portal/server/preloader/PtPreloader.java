@@ -41,7 +41,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.Guarantor_Old;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
@@ -67,7 +67,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Charges.class, ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, OnlineApplication.class,
-                    EmergencyContact.class, Summary.class, ApplicationDocumentBlob.class, Guarantor.class, PersonScreening.class);
+                    EmergencyContact.class, Summary.class, ApplicationDocumentBlob.class, Guarantor_Old.class, PersonScreening.class);
         } else {
             return "This is production";
         }

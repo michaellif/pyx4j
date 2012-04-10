@@ -31,7 +31,7 @@ import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.portal.dto.MessageDTO;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
@@ -47,9 +47,9 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
         TenantDashboardDTO dashboard = EntityFactory.create(TenantDashboardDTO.class);
 
         // get tenant
-        EntityQueryCriteria<Tenant> crit = EntityQueryCriteria.create(Tenant.class);
+        EntityQueryCriteria<Customer> crit = EntityQueryCriteria.create(Customer.class);
         crit.add(PropertyCriterion.eq(crit.proto().user(), TenantAppContext.getCurrentUser()));
-        Tenant tenant = Persistence.service().retrieve(crit);
+        Customer tenant = Persistence.service().retrieve(crit);
 
         Persistence.service().retrieve(tenant.user());
         dashboard.general().tenantName().set(tenant.user().name());

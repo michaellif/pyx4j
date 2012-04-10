@@ -22,10 +22,10 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.Guarantor_Old;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.PersonScreeningHolder;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 
 public class TenantRetriever {
 
@@ -84,8 +84,8 @@ public class TenantRetriever {
                 tenantScreening.screene().set(screeningHolder);
             }
 
-            if (screeningHolder instanceof Tenant) {
-                Persistence.service().retrieve(((Tenant) screeningHolder).emergencyContacts());
+            if (screeningHolder instanceof Customer) {
+                Persistence.service().retrieve(((Customer) screeningHolder).emergencyContacts());
             }
         }
     }
@@ -98,17 +98,17 @@ public class TenantRetriever {
         return screeningHolder;
     }
 
-    public Tenant getTenant() {
-        if (screeningHolder instanceof Tenant) {
-            return (Tenant) screeningHolder;
+    public Customer getTenant() {
+        if (screeningHolder instanceof Customer) {
+            return (Customer) screeningHolder;
         } else {
             throw new Error(tenantClass.getName() + " object stored!");
         }
     }
 
-    public Guarantor getGuarantor() {
-        if (screeningHolder instanceof Guarantor) {
-            return (Guarantor) screeningHolder;
+    public Guarantor_Old getGuarantor() {
+        if (screeningHolder instanceof Guarantor_Old) {
+            return (Guarantor_Old) screeningHolder;
         } else {
             throw new Error(tenantClass.getName() + " object stored!");
         }

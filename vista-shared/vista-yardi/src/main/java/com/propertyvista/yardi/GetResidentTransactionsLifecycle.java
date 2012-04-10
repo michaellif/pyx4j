@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.GetResidentTransactionsMapper;
 import com.propertyvista.yardi.merger.UnitsMerger;
@@ -35,7 +35,7 @@ public class GetResidentTransactionsLifecycle {
 
     public Model load() {
         List<AptUnit> units = Persistence.service().query(new EntityQueryCriteria<AptUnit>(AptUnit.class));
-        List<Tenant> tenants = Persistence.service().query(new EntityQueryCriteria<Tenant>(Tenant.class));
+        List<Customer> tenants = Persistence.service().query(new EntityQueryCriteria<Customer>(Customer.class));
         List<Building> buildings = Persistence.service().query(new EntityQueryCriteria<Building>(Building.class));
         Model model = new Model();
         model.getAptUnits().addAll(units);

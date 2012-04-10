@@ -44,7 +44,7 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -540,7 +540,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         TenantUser user = EntityFactory.create(TenantUser.class);
         user.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
         Persistence.service().persist(user);
-        Tenant tenant = EntityFactory.create(Tenant.class);
+        Customer tenant = EntityFactory.create(Customer.class);
         tenant.user().set(user);
         Persistence.service().persist(tenant);
         mainAplt = EntityFactory.create(TenantInLease.class);
@@ -553,7 +553,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         user = EntityFactory.create(TenantUser.class);
         user.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
         Persistence.service().persist(user);
-        tenant = EntityFactory.create(Tenant.class);
+        tenant = EntityFactory.create(Customer.class);
         tenant.user().set(user);
         Persistence.service().persist(tenant);
         coAplt = EntityFactory.create(TenantInLease.class);

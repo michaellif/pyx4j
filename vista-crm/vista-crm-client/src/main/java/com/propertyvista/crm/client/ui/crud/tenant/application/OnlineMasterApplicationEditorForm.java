@@ -37,7 +37,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.OnlineMasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -91,7 +91,7 @@ public class OnlineMasterApplicationEditorForm extends CrmEntityForm<OnlineMaste
                 new DecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))), 15).build());
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mainApplicant(), new CEntityLabel<Tenant>()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mainApplicant(), new CEntityLabel<Customer>()), 25).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfOccupants()), 5).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfCoApplicants()), 5).build());

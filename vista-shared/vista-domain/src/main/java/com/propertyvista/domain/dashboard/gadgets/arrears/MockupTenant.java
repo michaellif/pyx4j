@@ -26,11 +26,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 /**
- * Kind of bastard child of {@link Lease} and {@link Tenant}.
+ * Kind of bastard child of {@link Lease} and {@link Customer}.
  * 
  * @author ArtyomB
  * 

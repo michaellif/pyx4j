@@ -31,7 +31,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
@@ -108,7 +108,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        TenantRetriever r = new TenantRetriever(Tenant.class, PtAppContext.getCurrentUserTenant().getPrimaryKey());
+        TenantRetriever r = new TenantRetriever(Customer.class, PtAppContext.getCurrentUserTenant().getPrimaryKey());
         callback.onSuccess(r.tenantScreening.currentAddress().duplicate(AddressStructured.class));
     }
 }

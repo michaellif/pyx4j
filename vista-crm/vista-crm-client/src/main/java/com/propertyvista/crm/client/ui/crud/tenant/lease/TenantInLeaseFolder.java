@@ -39,7 +39,7 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
 import com.propertyvista.domain.tenant.PersonRelationship;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -109,8 +109,8 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof Tenant && !parent.isEditable()) {
-                return new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class));
+            if (member instanceof Customer && !parent.isEditable()) {
+                return new CEntityCrudHyperlink<Customer>(AppPlaceEntityMapper.resolvePlace(Customer.class));
             }
             return super.create(member);
         }
@@ -154,18 +154,18 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         }
     }
 
-    private static List<Tenant> extractTenantFromTenantInLeaseList(List<TenantInLease> list) {
-        List<Tenant> tenants = new ArrayList<Tenant>(list.size());
+    private static List<Customer> extractTenantFromTenantInLeaseList(List<TenantInLease> list) {
+        List<Customer> tenants = new ArrayList<Customer>(list.size());
         for (TenantInLease wrapper : list) {
             tenants.add(wrapper.tenant());
         }
         return tenants;
     }
 
-    private class TenantSelectorDialog extends EntitySelectorTableDialog<Tenant> {
+    private class TenantSelectorDialog extends EntitySelectorTableDialog<Customer> {
 
         public TenantSelectorDialog() {
-            super(Tenant.class, true, extractTenantFromTenantInLeaseList(getValue()), i18n.tr("Select Tenant"));
+            super(Customer.class, true, extractTenantFromTenantInLeaseList(getValue()), i18n.tr("Select Tenant"));
             setWidth("700px");
         }
 
@@ -174,7 +174,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             if (getSelectedItems().isEmpty()) {
                 return false;
             } else {
-                for (Tenant tenant : getSelectedItems()) {
+                for (Customer tenant : getSelectedItems()) {
                     TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
                     newTenantInLease.leaseV().setPrimaryKey(parent.getValue().version().getPrimaryKey());
                     newTenantInLease.tenant().set(tenant);
@@ -200,8 +200,8 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         }
 
         @Override
-        protected AbstractListService<Tenant> getSelectService() {
-            return GWT.<AbstractListService<Tenant>> create(SelectTenantListService.class);
+        protected AbstractListService<Customer> getSelectService() {
+            return GWT.<AbstractListService<Customer>> create(SelectTenantListService.class);
         }
 
     }

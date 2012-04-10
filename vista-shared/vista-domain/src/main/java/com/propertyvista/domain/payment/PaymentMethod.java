@@ -25,13 +25,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 
 public interface PaymentMethod extends IEntity {
 
     @Detached
     @ReadOnly
-    Tenant tenant();
+    Customer tenant();
 
     @MemberColumn(name = "prim")
     IPrimitive<Boolean> primary();

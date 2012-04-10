@@ -43,7 +43,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.security.TenantUserHolder;
 
 @DiscriminatorValue("Tenant")
-public interface Tenant extends IEntity, PersonScreeningHolder, TenantUserHolder {
+public interface Customer extends IEntity, PersonScreeningHolder, TenantUserHolder {
 
     @I18n
     @XmlType(name = "TenantType")

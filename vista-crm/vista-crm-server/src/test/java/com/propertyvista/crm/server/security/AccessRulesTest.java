@@ -31,7 +31,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -55,13 +55,13 @@ public class AccessRulesTest extends VistaDBTestBase {
         TestLifecycle.testSession(new UserVisit(new Key(-101), "bob"), VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
-        Tenant t1 = EntityFactory.create(Tenant.class);
+        Customer t1 = EntityFactory.create(Customer.class);
         t1.person().name().firstName().setValue(setId);
         Persistence.service().persist(t1);
 
         // Tenant with Lease but no Unit
         {
-            Tenant t2 = EntityFactory.create(Tenant.class);
+            Customer t2 = EntityFactory.create(Customer.class);
             t2.person().name().firstName().setValue(setId);
             Persistence.service().persist(t2);
 
@@ -76,11 +76,11 @@ public class AccessRulesTest extends VistaDBTestBase {
             Persistence.service().persist(tl2);
         }
 
-        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().person().name().firstName(), setId));
         new TenantDatasetAccessRule().applyRule(criteria);
 
-        List<Tenant> r = Persistence.service().query(criteria);
+        List<Customer> r = Persistence.service().query(criteria);
         Assert.assertEquals("result set size", 1, r.size());
     }
 
@@ -95,7 +95,7 @@ public class AccessRulesTest extends VistaDBTestBase {
         TestLifecycle.testSession(new UserVisit(user.getPrimaryKey(), "bob"), VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
-        Tenant t1 = EntityFactory.create(Tenant.class);
+        Customer t1 = EntityFactory.create(Customer.class);
         t1.person().name().firstName().setValue(setId);
         Persistence.service().persist(t1);
 
@@ -114,11 +114,11 @@ public class AccessRulesTest extends VistaDBTestBase {
         tl1.tenant().set(t1);
         Persistence.service().persist(tl1);
 
-        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().person().name().firstName(), setId));
         new TenantDatasetAccessRule().applyRule(criteria);
 
-        List<Tenant> r = Persistence.service().query(criteria);
+        List<Customer> r = Persistence.service().query(criteria);
         Assert.assertEquals("should not find building", 0, r.size());
 
         // Create access rule record

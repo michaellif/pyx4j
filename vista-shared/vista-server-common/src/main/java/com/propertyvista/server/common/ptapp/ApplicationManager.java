@@ -41,7 +41,7 @@ import com.propertyvista.domain.security.TenantUserHolder;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
@@ -273,9 +273,9 @@ public class ApplicationManager {
 
             ApplicationStatusDTO status = EntityFactory.create(ApplicationStatusDTO.class);
 
-            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), app.user()));
-            Tenant tenant = Persistence.service().retrieve(criteria);
+            Customer tenant = Persistence.service().retrieve(criteria);
             if (tenant != null) {
                 status.person().set(tenant.person().name());
                 status.role().setValue(Role.Tenant);

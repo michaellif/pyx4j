@@ -40,7 +40,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -113,8 +113,8 @@ public class UnitTurnoverAnalysisManagerTestBase {
      * @param dateTo
      */
     protected void lease(AptUnit unit, String dateFrom, String dateTo) {
-        Tenant tenant = EntityFactory.create(Tenant.class);
-        tenant.type().setValue(Tenant.Type.person);
+        Customer tenant = EntityFactory.create(Customer.class);
+        tenant.type().setValue(Customer.Type.person);
         TenantUser user = EntityFactory.create(TenantUser.class);
         user.name().setValue("tenant " + dateFrom);
         Persistence.service().merge(user);

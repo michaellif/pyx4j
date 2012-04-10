@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.TenantInLease;
 
 @Transient
@@ -27,7 +27,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 //Generator/Preloader Data OBject only!
 public interface TenantSummaryGDO extends IEntity {
 
-    Tenant tenant();
+    Customer tenant();
 
     TenantInLease tenantInLease();
 

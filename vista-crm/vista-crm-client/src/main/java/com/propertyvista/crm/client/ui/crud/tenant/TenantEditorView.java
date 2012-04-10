@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.dto.TenantDTO;
 
 public interface TenantEditorView extends IEditorView<TenantDTO> {
@@ -25,5 +25,5 @@ public interface TenantEditorView extends IEditorView<TenantDTO> {
     interface Presenter extends IEditorView.Presenter {
     }
 
-    void showSelectTypePopUp(AsyncCallback<Tenant.Type> callback);
+    void showSelectTypePopUp(AsyncCallback<Customer.Type> callback);
 }

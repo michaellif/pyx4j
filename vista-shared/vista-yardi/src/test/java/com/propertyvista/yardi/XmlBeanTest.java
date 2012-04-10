@@ -35,7 +35,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
 import com.propertyvista.yardi.bean.mits.YardiCustomer;
@@ -187,7 +187,7 @@ public class XmlBeanTest {
         }
 
         Assert.assertTrue("Has tenants", !mapper.getModel().getTenants().isEmpty());
-        for (Tenant tenant : mapper.getModel().getTenants()) {
+        for (Customer tenant : mapper.getModel().getTenants()) {
             log.info("Tenant {}", tenant);
 
             // name

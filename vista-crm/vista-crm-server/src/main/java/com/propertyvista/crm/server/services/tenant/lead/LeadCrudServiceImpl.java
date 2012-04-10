@@ -34,7 +34,7 @@ import com.propertyvista.crm.rpc.services.tenant.lead.LeadCrudService;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -124,8 +124,8 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
 
             boolean asApplicant = true;
             for (Guest guest : lead.guests()) {
-                Tenant tenant = EntityFactory.create(Tenant.class);
-                tenant.type().setValue(Tenant.Type.person);
+                Customer tenant = EntityFactory.create(Customer.class);
+                tenant.type().setValue(Customer.Type.person);
                 tenant.person().set(guest.person());
                 Persistence.service().persist(tenant);
 

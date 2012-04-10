@@ -16,12 +16,12 @@ package com.propertyvista.crm.server.services.selections;
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 
-public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Tenant> implements SelectTenantListService {
+public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Customer> implements SelectTenantListService {
 
     public SelectTenantListServiceImpl() {
-        super(Tenant.class);
+        super(Customer.class);
     }
 
     @Override

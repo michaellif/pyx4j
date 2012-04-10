@@ -27,7 +27,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
@@ -36,8 +36,8 @@ import com.propertyvista.portal.server.ptapp.util.Converter;
 
 public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
 
-    private Tenant getOwner() {
-        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+    private Customer getOwner() {
+        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), TenantAppContext.getCurrentUser()));
         return Persistence.service().retrieve(criteria);
     }

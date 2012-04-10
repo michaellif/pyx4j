@@ -7,14 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 6, 2012
+ * Created on Jan 24, 2012
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.domain.tenant;
 
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IEntity;
 
-public interface _Guarantor extends LeaseParticipant {
+import com.propertyvista.domain.security.TenantUserHolder;
+
+@DiscriminatorValue("Guarantor")
+@Deprecated
+public interface Guarantor_Old extends IEntity, PersonScreeningHolder, TenantUserHolder {
 
 }

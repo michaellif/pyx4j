@@ -50,7 +50,7 @@ import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceRequestDTO> {
@@ -155,15 +155,15 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel()), 10).build());
 
         row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().tenant(), new CEntitySelectorHyperlink<Tenant>() {
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().tenant(), new CEntitySelectorHyperlink<Customer>() {
             @Override
             protected AppPlace getTargetPlace() {
-                return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
+                return AppPlaceEntityMapper.resolvePlace(Customer.class, getValue().getPrimaryKey());
             }
 
             @Override
-            protected EntitySelectorTableDialog<Tenant> getSelectorDialog() {
-                return new EntitySelectorTableDialog<Tenant>(Tenant.class, false, new ArrayList<Tenant>(), "Select Item") {
+            protected EntitySelectorTableDialog<Customer> getSelectorDialog() {
+                return new EntitySelectorTableDialog<Customer>(Customer.class, false, new ArrayList<Customer>(), "Select Item") {
 
 
                     @Override
@@ -187,8 +187,8 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
                     }
 
                     @Override
-                    protected AbstractListService<Tenant> getSelectService() {
-                        return GWT.<AbstractListService<Tenant>> create(SelectTenantListService.class);
+                    protected AbstractListService<Customer> getSelectService() {
+                        return GWT.<AbstractListService<Customer>> create(SelectTenantListService.class);
                     }
                 };
             }

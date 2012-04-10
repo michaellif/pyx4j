@@ -41,7 +41,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
@@ -77,7 +77,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Tenant.class, Person.class, Company.class, Lead.class, Appointment.class);
+            return deleteAll(Customer.class, Person.class, Company.class, Lead.class, Appointment.class);
         } else {
             return "This is production";
         }
@@ -128,7 +128,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
         List<IssueClassification> issues = Persistence.service().query(EntityQueryCriteria.create(IssueClassification.class));
         for (int i = 1; i <= config().numTenants; i++) {
             String email = DemoData.UserType.TENANT.getEmail(i);
-            Tenant tenant = generator.createTenant();
+            Customer tenant = generator.createTenant();
             TenantUser user = UserPreloader.createTenantUser(tenant.person().name().getStringView(), email, email, VistaTenantBehavior.TenantPrimary);
             tenant.person().email().setValue(email);
             tenant.user().set(user);
@@ -194,7 +194,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
         for (int i = 1; i <= config().numUnAssigendTenants; i++) {
             String email = DemoData.UserType.NEW_TENANT.getEmail(i);
             TenantUser user = UserPreloader.createTenantUser(email, email, null);
-            Tenant tenant = generator.createTenant();
+            Customer tenant = generator.createTenant();
             tenant.person().email().setValue(email);
             tenant.user().set(user);
             // Update user name
@@ -244,7 +244,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
         return sb.toString();
     }
 
-    public void persistTenant(Tenant tenant) {
+    public void persistTenant(Customer tenant) {
         switch (tenant.type().getValue()) {
         case company:
             log.debug("Persisting tenant {}", tenant.company().name());

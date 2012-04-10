@@ -18,12 +18,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 
-public class TenantDatasetAccessRule implements DatasetAccessRule<Tenant> {
+public class TenantDatasetAccessRule implements DatasetAccessRule<Customer> {
 
     @Override
-    public void applyRule(EntityQueryCriteria<Tenant> criteria) {
+    public void applyRule(EntityQueryCriteria<Customer> criteria) {
 
         criteria.or()
 

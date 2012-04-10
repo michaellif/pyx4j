@@ -30,7 +30,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -46,7 +46,7 @@ import com.propertyvista.server.financial.billing.BillingFacade;
 public class LeaseLifecycleSim {
 
     public Lease newLease(final LogicalDate eventDate, String leaseId, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo, LogicalDate expectedMoveIn,
-            PaymentFrequency paymentFrequency, Tenant tenant) {
+            PaymentFrequency paymentFrequency, Customer tenant) {
         Lease lease = leaseManager(eventDate).create(leaseId, Service.Type.residentialUnit, unit, leaseFrom, leaseTo);
         lease.createDate().setValue(eventDate);
 

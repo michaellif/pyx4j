@@ -13,9 +13,9 @@
  */
 package com.propertyvista.domain.communication;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 
 public interface ContactInternal extends Contact {
 
-    Tenant tenant();
+    Customer tenant();
 }

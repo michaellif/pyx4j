@@ -49,7 +49,7 @@ public interface PersonGuarantor extends IEntity {
     @NotNull
     @ReadOnly
     @ToString(index = 0)
-    Guarantor guarantor();
+    Guarantor_Old guarantor();
 
     @NotNull
     @ToString(index = 1)

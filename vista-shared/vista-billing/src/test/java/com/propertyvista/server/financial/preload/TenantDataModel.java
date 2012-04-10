@@ -17,17 +17,17 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 
 public class TenantDataModel {
 
-    private Tenant tenant;
+    private Customer tenant;
 
     public TenantDataModel() {
     }
 
     public void generate(boolean persist) {
-        tenant = EntityFactory.create(Tenant.class);
+        tenant = EntityFactory.create(Customer.class);
 
         if (persist) {
             Persistence.service().persist(tenant);

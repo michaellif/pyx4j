@@ -33,7 +33,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -46,19 +46,19 @@ public class TenantsGenerator {
         DataGenerator.setRandomSeed(seed);
     }
 
-    public List<Tenant> createTenants(int num) {
-        List<Tenant> items = new ArrayList<Tenant>();
+    public List<Customer> createTenants(int num) {
+        List<Customer> items = new ArrayList<Customer>();
         for (int i = 0; i < num; i++) {
             items.add(createTenant());
         }
         return items;
     }
 
-    public Tenant createTenant() {
-        Tenant item = EntityFactory.create(Tenant.class);
+    public Customer createTenant() {
+        Customer item = EntityFactory.create(Customer.class);
 
 // TODO currently create just person tenants!         
-        item.type().setValue(Tenant.Type.person);
+        item.type().setValue(Customer.Type.person);
 //        item.type().setValue(RandomUtil.random(Tenant.Type.values()));
         switch (item.type().getValue()) {
         case person:
@@ -72,7 +72,7 @@ public class TenantsGenerator {
         return item;
     }
 
-    public List<PaymentMethod> createPaymentMethods(Tenant tenant) {
+    public List<PaymentMethod> createPaymentMethods(Customer tenant) {
         List<PaymentMethod> l = new Vector<PaymentMethod>();
 
         for (int i = 0; i < 2; i++) {

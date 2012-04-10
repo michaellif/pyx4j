@@ -30,9 +30,9 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.Guarantor_Old;
 import com.propertyvista.domain.tenant.PersonGuarantor;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
@@ -97,7 +97,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
         Persistence.service().merge(financialStep);
     }
 
-    public static void createTenantDataSteps(OnlineApplication application, Tenant tenant) {
+    public static void createTenantDataSteps(OnlineApplication application, Customer tenant) {
 
         EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
@@ -109,7 +109,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
         createPersonDataSteps(application, tenant.person(), outer.getPrimaryKey());
     }
 
-    public static void createGurantorDataSteps(OnlineApplication application, Guarantor guarantor) {
+    public static void createGurantorDataSteps(OnlineApplication application, Guarantor_Old guarantor) {
 
         EntityQueryCriteria<PersonGuarantor> criteria = EntityQueryCriteria.create(PersonGuarantor.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().guarantor(), guarantor));

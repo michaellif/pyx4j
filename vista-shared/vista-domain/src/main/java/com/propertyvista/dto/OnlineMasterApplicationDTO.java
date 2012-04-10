@@ -24,14 +24,14 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 
 @Transient
 @ExtendsDBO
 public interface OnlineMasterApplicationDTO extends MasterOnlineApplication {
 
-    Tenant mainApplicant();
+    Customer mainApplicant();
 
     IPrimitive<Integer> numberOfOccupants();
 

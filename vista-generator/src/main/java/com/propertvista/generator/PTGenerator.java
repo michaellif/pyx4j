@@ -51,12 +51,12 @@ import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.Guarantor_Old;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.PersonScreeningHolder;
-import com.propertyvista.domain.tenant.Tenant.Type;
+import com.propertyvista.domain.tenant.Customer.Type;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
@@ -493,7 +493,7 @@ public class PTGenerator {
 
         if (tenantSummary != null) {
             for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-                Guarantor guarantor = EntityFactory.create(Guarantor.class);
+                Guarantor_Old guarantor = EntityFactory.create(Guarantor_Old.class);
                 guarantor.person().set(CommonsGenerator.createPerson());
                 PersonGuarantor personGuarantor = EntityFactory.create(PersonGuarantor.class);
                 personGuarantor.guarantor().set(guarantor);

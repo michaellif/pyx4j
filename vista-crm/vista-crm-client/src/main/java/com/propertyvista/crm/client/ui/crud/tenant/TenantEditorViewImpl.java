@@ -22,7 +22,7 @@ import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> implements TenantEditorView {
@@ -33,8 +33,8 @@ public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> imple
     }
 
     @Override
-    public void showSelectTypePopUp(final AsyncCallback<Tenant.Type> callback) {
-        new SelectEnumDialog<Tenant.Type>(i18n.tr("Select Tenant Type"), EnumSet.of(Tenant.Type.person, Tenant.Type.company)) {
+    public void showSelectTypePopUp(final AsyncCallback<Customer.Type> callback) {
+        new SelectEnumDialog<Customer.Type>(i18n.tr("Select Tenant Type"), EnumSet.of(Customer.Type.person, Customer.Type.company)) {
             @Override
             public boolean onClickOk() {
                 callback.onSuccess(getSelectedType());

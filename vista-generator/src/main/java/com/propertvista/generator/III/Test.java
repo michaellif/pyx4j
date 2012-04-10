@@ -15,7 +15,7 @@ package com.propertvista.generator.III;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class Test {
@@ -45,8 +45,8 @@ public class Test {
             AptUnit unit = factory.getPersisted(AptUnit.class);
             AptUnit unit2 = factory.create(AptUnit.class);
 
-            Tenant tenant1 = factory.getPersisted(Tenant.class);
-            Tenant tenant2 = factory.getPersisted(Tenant.class);
+            Customer tenant1 = factory.getPersisted(Customer.class);
+            Customer tenant2 = factory.getPersisted(Customer.class);
 
             Lease lease = factory.create(Lease.class, unit, tenant1, tenant2);
             // laseCrudService.create(lease,,,, );

@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -39,9 +39,9 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
         try {
             TenantUser currentUser = TenantAppContext.getCurrentUser();
             // find associated tenant entry
-            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
-            Tenant tenant = Persistence.service().retrieve(criteria);
+            Customer tenant = Persistence.service().retrieve(criteria);
             Persistence.service().retrieve(tenant.emergencyContacts());
             // build dto
             ResidentDTO dto = EntityFactory.create(ResidentDTO.class);
@@ -64,9 +64,9 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
     public void save(AsyncCallback<ResidentDTO> callback, ResidentDTO dto) {
         try {
             TenantUser currentUser = TenantAppContext.getCurrentUser();
-            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
-            Tenant tenant = Persistence.service().retrieve(criteria);
+            Customer tenant = Persistence.service().retrieve(criteria);
             tenant.person().set(dto);
             tenant.emergencyContacts().set(dto.emergencyContacts());
             Persistence.service().persist(tenant);

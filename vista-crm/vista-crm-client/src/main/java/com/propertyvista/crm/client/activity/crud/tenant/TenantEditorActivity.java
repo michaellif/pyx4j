@@ -25,7 +25,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.tenant.TenantCrudService;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implements TenantEditorView.Presenter {
@@ -37,9 +37,9 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
 
     @Override
     protected void createNewEntity(final AsyncCallback<TenantDTO> callback) {
-        ((TenantEditorView) getView()).showSelectTypePopUp(new DefaultAsyncCallback<Tenant.Type>() {
+        ((TenantEditorView) getView()).showSelectTypePopUp(new DefaultAsyncCallback<Customer.Type>() {
             @Override
-            public void onSuccess(Tenant.Type type) {
+            public void onSuccess(Customer.Type type) {
                 TenantDTO entity = EntityFactory.create(getEntityClass());
                 entity.type().setValue(type);
 

@@ -25,13 +25,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 
 public interface ReservationSchedule extends IEntity {
 
     Building building();
 
-    Tenant tenant();
+    Customer tenant();
 
     @MemberColumn(name = "cmt")
     IPrimitive<String> comment();

@@ -17,7 +17,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityViolationException;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.TenantInLease;
 
 public class TenantInLeaseRetriever extends TenantRetriever {
@@ -26,16 +26,16 @@ public class TenantInLeaseRetriever extends TenantRetriever {
 
     // Construction:
     public TenantInLeaseRetriever() {
-        super(Tenant.class);
+        super(Customer.class);
     }
 
     public TenantInLeaseRetriever(Key tenanInLeasetId) {
-        super(Tenant.class, false);
+        super(Customer.class, false);
         retrieve(tenanInLeasetId);
     }
 
     public TenantInLeaseRetriever(Key tenanInLeasetId, boolean financial) {
-        super(Tenant.class, financial);
+        super(Customer.class, financial);
         retrieve(tenanInLeasetId);
     }
 
