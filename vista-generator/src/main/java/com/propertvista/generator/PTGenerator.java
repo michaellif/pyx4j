@@ -82,13 +82,13 @@ public class PTGenerator {
 
     private final static Logger log = LoggerFactory.getLogger(PTGenerator.class);
 
-    private static final long MAX_CREATE_WAIT = 1000L * 60L * 60L * 24L * 30L;
+    protected static final long MAX_CREATE_WAIT = 1000L * 60L * 60L * 24L * 30L;
 
-    private static final long MAX_RESERVED_DURATION = 1000L * 60L * 60L * 24L * 30L;
+    protected static final long MAX_RESERVED_DURATION = 1000L * 60L * 60L * 24L * 30L;
 
-    private static final long MAX_LEASE_DURATION = 1000L * 60L * 60L * 24L * 365L * 3L;
+    protected static final long MAX_LEASE_DURATION = 1000L * 60L * 60L * 24L * 365L * 3L;
 
-    private static final long MIN_LEASE_DURATION = 1000L * 60L * 60L * 24L * 365L;
+    protected static final long MIN_LEASE_DURATION = 1000L * 60L * 60L * 24L * 365L;
 
     private final long seed;
 
@@ -96,7 +96,7 @@ public class PTGenerator {
 
     private int reservedCoApplicantNumber = 0;
 
-    private final Random rnd;
+    protected final Random rnd;
 
     public PTGenerator(VistaDevPreloadConfig config) {
         this.seed = config.ptGenerationSeed;
