@@ -97,6 +97,11 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     }
 
     @Override
+    public Class<? extends IEntity> getPerstableSuperClass() {
+        return null;
+    }
+
+    @Override
     public String getPersistenceName() {
         return null;
     }

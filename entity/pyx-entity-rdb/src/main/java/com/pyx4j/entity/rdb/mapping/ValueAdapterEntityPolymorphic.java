@@ -52,19 +52,19 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         sqlTypeKey = dialect.getTargetSqlType(Long.class);
         sqlTypeDiscriminator = dialect.getTargetSqlType(String.class);
 
-        for (Class<? extends IEntity> ec : Mappings.getPersistableAssignableFrom(entityClass)) {
-            DiscriminatorValue discriminator = ec.getAnnotation(DiscriminatorValue.class);
+        for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(entityClass)) {
+            DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
             if (discriminator != null) {
                 if (CommonsStringUtils.isEmpty(discriminator.value())) {
-                    throw new Error("Missing value of @DiscriminatorValue annotation on class " + ec.getName());
+                    throw new Error("Missing value of @DiscriminatorValue annotation on class " + subclass.getName());
                 }
                 if (impClasses.containsKey(discriminator.value())) {
-                    throw new Error("Duplicate value of @DiscriminatorValue annotation on class " + ec.getName() + "; the same as in calss "
+                    throw new Error("Duplicate value of @DiscriminatorValue annotation on class " + subclass.getName() + "; the same as in class "
                             + impClasses.get(discriminator.value()));
                 }
-                impClasses.put(discriminator.value(), ec);
-            } else if (ec.getAnnotation(AbstractEntity.class) == null) {
-                throw new Error("Class " + ec.getName() + " require @AbstractEntity or @DiscriminatorValue annotation");
+                impClasses.put(discriminator.value(), subclass);
+            } else if (subclass.getAnnotation(AbstractEntity.class) == null) {
+                throw new Error("Class " + subclass.getName() + " require @AbstractEntity or @DiscriminatorValue annotation");
             }
         }
     }

@@ -185,6 +185,11 @@ public class NamingConventionOracle implements NamingConvention {
     }
 
     @Override
+    public String sqlDiscriminatorColumnName() {
+        return "discriminator";
+    }
+
+    @Override
     public String sqlFieldName(String javaPersistenceFieldName) {
         return makeName(javaPersistenceFieldName).replace('-', '_');
     }

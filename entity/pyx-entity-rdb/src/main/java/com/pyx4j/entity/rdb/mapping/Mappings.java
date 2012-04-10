@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rdb.ConnectionProvider;
@@ -114,8 +115,11 @@ public class Mappings {
             return model;
         }
         assertPersistableEntity(entityMeta);
+        Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
         if (entityMeta.getAnnotation(AbstractEntity.class) != null) {
-            throw new Error("Can't operate on Abstract Entity " + entityMeta.getEntityClass().getName());
+            if ((inheritance == null) || (inheritance.strategy() == Inheritance.InheritanceStrategy.TABLE_PER_CLASS)) {
+                throw new Error("Can't operate on Abstract Entity " + entityMeta.getEntityClass().getName());
+            }
         }
 
         // Avoid lock on EntityClass

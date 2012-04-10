@@ -35,6 +35,9 @@ import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete3AssignedPKEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceNotOwnerEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SBaseEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete2Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SReferenceEntity;
 
 public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
@@ -437,5 +440,66 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
             Assert.assertEquals(ent1, found);
             Assert.assertEquals(ent11, found.references().get(0));
         }
+    }
+
+    public void testSingleTablePersist() {
+        testSingleTable(TestCaseMethod.Persist);
+    }
+
+    public void testSingleTableMerge() {
+        testSingleTable(TestCaseMethod.Merge);
+    }
+
+    private void testSingleTable(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+
+        SConcrete2Entity ent = EntityFactory.create(SConcrete2Entity.class);
+        ent.testId().setValue(testId);
+        ent.nameC2().setValue("c2:" + uniqueString());
+        ent.nameB1().setValue("b1:" + uniqueString());
+
+        srvSave(ent, testCaseMethod);
+
+        SBaseEntity entr = srv.retrieve(SBaseEntity.class, ent.getPrimaryKey());
+
+        Assert.assertEquals("Proper instance", SConcrete2Entity.class, entr.getInstanceValueClass());
+
+        SConcrete2Entity ent2r = entr.cast();
+
+        Assert.assertEquals("Proper value", ent.nameB1().getValue(), ent2r.nameB1().getValue());
+        Assert.assertEquals("Proper value", ent.nameC2().getValue(), ent2r.nameC2().getValue());
+    }
+
+    public void testSingleTableMemeberPersist() {
+        testSingleTableMemeber(TestCaseMethod.Persist);
+    }
+
+    public void testSingleTableMemeberMerge() {
+        testSingleTableMemeber(TestCaseMethod.Merge);
+    }
+
+    private void testSingleTableMemeber(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+
+        SReferenceEntity ent = EntityFactory.create(SReferenceEntity.class);
+        ent.testId().setValue(testId);
+
+        SConcrete2Entity ent2 = EntityFactory.create(SConcrete2Entity.class);
+        ent2.nameC2().setValue("c2:" + uniqueString());
+        ent2.nameB1().setValue("b1:" + uniqueString());
+        ent.reference().set(ent2);
+
+        srvSave(ent, testCaseMethod);
+
+        SReferenceEntity entr = srv.retrieve(SReferenceEntity.class, ent.getPrimaryKey());
+
+        Assert.assertFalse("Value retrieved", entr.reference().isValueDetached());
+
+        Assert.assertEquals("Proper instance", SConcrete2Entity.class, entr.reference().getInstanceValueClass());
+
+        SConcrete2Entity ent2r = entr.reference().cast();
+
+        Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r.nameB1().getValue());
+        Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r.nameC2().getValue());
     }
 }

@@ -34,6 +34,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
+import com.pyx4j.entity.rdb.mapping.TableModel.ModelType;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -82,6 +83,12 @@ class TableDDL {
         if (dialect.isMultitenantSharedSchema()) {
             sql.append(", ");
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(' ').append(dialect.getSqlType(String.class));
+            sql.append('(').append(64).append(')');
+            sql.append(" NOT NULL ");
+        }
+        if (tableModel.classModel != ModelType.regular) {
+            sql.append(", ");
+            sql.append(dialect.getNamingConvention().sqlDiscriminatorColumnName()).append(' ').append(dialect.getSqlType(String.class));
             sql.append('(').append(64).append(')');
             sql.append(" NOT NULL ");
         }

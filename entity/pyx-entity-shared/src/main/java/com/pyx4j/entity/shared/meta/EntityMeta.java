@@ -42,6 +42,8 @@ public interface EntityMeta {
      */
     public Class<? extends IEntity> getDBOClass();
 
+    public Class<? extends IEntity> getPerstableSuperClass();
+
     public <T extends IEntity> boolean isEntityClassAssignableFrom(T targetInstance);
 
     /**

@@ -36,6 +36,11 @@ public @interface Inheritance {
 
     public enum InheritanceStrategy {
         /**
+         * A single table per class hierarchy
+         */
+        SINGLE_TABLE,
+
+        /**
          * A table per concrete entity class
          */
         TABLE_PER_CLASS;

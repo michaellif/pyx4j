@@ -35,7 +35,9 @@ import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
@@ -57,6 +59,8 @@ public class EntityMetaImpl implements EntityMeta {
     private final Class<? extends IEntity> entityClass;
 
     private final Class<? extends IEntity> expandedFromClass;
+
+    private final Class<? extends IEntity> perstableSuperClass;
 
     private final String persistenceName;
 
@@ -86,14 +90,30 @@ public class EntityMetaImpl implements EntityMeta {
 
     public EntityMetaImpl(Class<? extends IEntity> clazz) {
         entityClass = clazz;
+
+        Class<? extends IEntity> persistableClass = null;
+        DiscriminatorValue discriminator = clazz.getAnnotation(DiscriminatorValue.class);
+        if (discriminator != null) {
+            persistableClass = findSingeTableInheritance(entityClass);
+        }
+        if (persistableClass == null) {
+            persistableClass = entityClass;
+        }
+
+        if (persistableClass != entityClass) {
+            perstableSuperClass = persistableClass;
+        } else {
+            perstableSuperClass = null;
+        }
+
         String persistenceNamePrefix = ServerSideConfiguration.instance().persistenceNamePrefix();
-        Table tableAnnotation = entityClass.getAnnotation(Table.class);
+        Table tableAnnotation = persistableClass.getAnnotation(Table.class);
         if (tableAnnotation != null) {
             persistenceName = (((persistenceNamePrefix != null) && (!tableAnnotation.disableGlobalPrefix())) ? persistenceNamePrefix : "")
                     + tableAnnotation.prefix()
-                    + (CommonsStringUtils.isStringSet(tableAnnotation.name()) ? tableAnnotation.name() : entityClass.getSimpleName());
+                    + (CommonsStringUtils.isStringSet(tableAnnotation.name()) ? tableAnnotation.name() : persistableClass.getSimpleName());
         } else {
-            persistenceName = ((persistenceNamePrefix != null) ? persistenceNamePrefix : "") + entityClass.getSimpleName();
+            persistenceName = ((persistenceNamePrefix != null) ? persistenceNamePrefix : "") + persistableClass.getSimpleName();
         }
 
         ExtendsDBO dtoAnnotation = entityClass.getAnnotation(ExtendsDBO.class);
@@ -135,6 +155,18 @@ public class EntityMetaImpl implements EntityMeta {
         rpcTransient = (entityClass.getAnnotation(RpcTransient.class) != null) || (entityClass.getAnnotation(RpcBlacklist.class) != null);
     }
 
+    private Class<? extends IEntity> findSingeTableInheritance(Class<? extends IEntity> clazz) {
+        for (Class<?> superClasses : clazz.getInterfaces()) {
+            Inheritance inheritance = superClasses.getAnnotation(Inheritance.class);
+            if ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE)) {
+                @SuppressWarnings("unchecked")
+                Class<? extends IEntity> superEntityClasses = (Class<? extends IEntity>) superClasses;
+                return superEntityClasses;
+            }
+        }
+        return null;
+    }
+
     @Override
     public Class<? extends IEntity> getEntityClass() {
         return entityClass;
@@ -143,6 +175,11 @@ public class EntityMetaImpl implements EntityMeta {
     @Override
     public Class<? extends IEntity> getDBOClass() {
         return expandedFromClass;
+    }
+
+    @Override
+    public Class<? extends IEntity> getPerstableSuperClass() {
+        return perstableSuperClass;
     }
 
     @Override

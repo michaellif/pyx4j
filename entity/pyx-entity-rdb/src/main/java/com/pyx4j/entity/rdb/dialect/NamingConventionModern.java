@@ -84,6 +84,11 @@ public class NamingConventionModern implements NamingConvention {
     }
 
     @Override
+    public String sqlDiscriminatorColumnName() {
+        return "discriminator";
+    }
+
+    @Override
     public String sqlFieldName(String javaPersistenceFieldName) {
         return javaPersistenceFieldName.replace('-', '_');
     }
