@@ -29,6 +29,7 @@ import com.propertyvista.admin.client.ui.crud.AdminListerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcDataReportService;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implements PmcListerView {
 
@@ -45,7 +46,9 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
                     HashMap<String, Serializable> params = new HashMap<String, Serializable>();
                     params.put(PmcDataReportService.LoadImagesParameter, Boolean.TRUE);
 
-                    new ReportDialog("Report", "Creating report...").start(GWT.<ReportService<?>> create(PmcDataReportService.class), criteria, params);
+                    ReportDialog d = new ReportDialog("Report", "Creating report...");
+                    d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+                    d.start(GWT.<ReportService<?>> create(PmcDataReportService.class), criteria, params);
                 }
             });
             addHeaderToolbarTwoItem(downloadFull);
@@ -57,7 +60,9 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
                 public void onClick(ClickEvent event) {
                     EntityQueryCriteria<PmcDTO> criteria = EntityQueryCriteria.create(PmcDTO.class);
                     // TODO move to activity use and call ListerActivityBase.constructSearchCriteria()
-                    new ReportDialog("Report", "Creating report...").start(GWT.<ReportService<?>> create(PmcDataReportService.class), criteria);
+                    ReportDialog d = new ReportDialog("Report", "Creating report...");
+                    d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+                    d.start(GWT.<ReportService<?>> create(PmcDataReportService.class), criteria);
                 }
             });
             addHeaderToolbarTwoItem(downloadFull);

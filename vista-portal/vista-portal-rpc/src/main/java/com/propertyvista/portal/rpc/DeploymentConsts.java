@@ -25,6 +25,8 @@ public interface DeploymentConsts {
 
     public static final String ADMIN_URL = "admin/";
 
+    public static final String downloadServletMapping = "download/";
+
     public static final String uploadServletMapping = "upload/";
 
     public static final String mediaImagesServletMapping = "media/";
