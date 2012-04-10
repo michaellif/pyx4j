@@ -25,7 +25,6 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -44,7 +43,8 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 
@@ -251,8 +251,11 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
         @Owned
         @Detached
-        @OrderBy(TenantInLease.OrderInLeaseId.class)
-        IList<TenantInLease> tenants();
+        IList<Tenant> tenants();
+
+        @Owned
+        @Detached
+        IList<Guarantor> guarantors();
 
         @EmbeddedEntity
         LeaseProducts leaseProducts();

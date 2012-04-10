@@ -15,25 +15,25 @@ package com.propertyvista.server.common.util;
 
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
-import com.propertyvista.domain.tenant.Guarantor_Old;
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 
 public class TenantConverter {
 
-    public static class TenantEditorConverter extends EntityDtoBinder<TenantInLease, TenantInLeaseDTO> {
+    public static class TenantEditorConverter extends EntityDtoBinder<Tenant, TenantInLeaseDTO> {
 
         public TenantEditorConverter() {
-            super(TenantInLease.class, TenantInLeaseDTO.class);
+            super(Tenant.class, TenantInLeaseDTO.class);
         }
 
         @Override
         protected void bind() {
-            bind(dtoProto.tenant(), dboProto.tenant());
+            bind(dtoProto.customer(), dboProto.customer());
             bind(dtoProto.relationship(), dboProto.relationship());
             bind(dtoProto.role(), dboProto.role());
             bind(dtoProto.takeOwnership(), dboProto.takeOwnership());
@@ -53,15 +53,15 @@ public class TenantConverter {
         }
     }
 
-    public static class Guarantor2TenantInfo extends EntityDtoBinder<Guarantor_Old, TenantInfoDTO> {
+    public static class Guarantor2TenantInfo extends EntityDtoBinder<Guarantor, TenantInfoDTO> {
 
         public Guarantor2TenantInfo() {
-            super(Guarantor_Old.class, TenantInfoDTO.class);
+            super(Guarantor.class, TenantInfoDTO.class);
         }
 
         @Override
         protected void bind() {
-            bind(dtoProto.person(), dboProto.person());
+            bind(dtoProto.person(), dboProto.customer().person());
         }
     }
 

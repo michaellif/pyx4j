@@ -27,7 +27,7 @@ import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.server.common.security.VistaContext;
 
 /**
@@ -58,9 +58,9 @@ public class TenantAppContext extends VistaContext {
         return Persistence.service().retrieve(criteria);
     }
 
-    public static TenantInLease getCurrentUserTenantInLease() {
-        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().tenant().user(), TenantAppContext.getCurrentUser()));
+    public static Tenant getCurrentUserTenantInLease() {
+        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer().user(), TenantAppContext.getCurrentUser()));
         return Persistence.service().retrieve(criteria);
     }
 }

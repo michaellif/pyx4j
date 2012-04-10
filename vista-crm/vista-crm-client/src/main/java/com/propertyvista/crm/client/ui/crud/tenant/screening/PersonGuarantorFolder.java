@@ -35,7 +35,7 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.rpc.services.selections.SelectGuarantorListService;
-import com.propertyvista.domain.tenant.Guarantor_Old;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 
 public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
@@ -47,8 +47,8 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
         return Arrays.asList(//@formatter:off
                 new EntityFolderColumnDescriptor(proto().guarantor(), "25em"),
                 new EntityFolderColumnDescriptor(proto().relationship(), "10em"),
-                new EntityFolderColumnDescriptor(proto().guarantor().person().birthDate(), "9em"),
-                new EntityFolderColumnDescriptor(proto().guarantor().person().email(), "15em")
+                new EntityFolderColumnDescriptor(proto().guarantor().customer().person().birthDate(), "9em"),
+                new EntityFolderColumnDescriptor(proto().guarantor().customer().person().email(), "15em")
         );//@formatter:on
     }
 
@@ -78,11 +78,11 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof Guarantor_Old) {
+            if (member instanceof Guarantor) {
                 if (isEditable()) {
-                    return new CEntityLabel<Guarantor_Old>();
+                    return new CEntityLabel<Guarantor>();
                 } else {
-                    return new CEntityCrudHyperlink<Guarantor_Old>(AppPlaceEntityMapper.resolvePlace(Guarantor_Old.class));
+                    return new CEntityCrudHyperlink<Guarantor>(AppPlaceEntityMapper.resolvePlace(Guarantor.class));
                 }
             }
             return super.create(member);
@@ -98,8 +98,8 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
         }
     }
 
-    List<Guarantor_Old> getAlreadySelected() {
-        List<Guarantor_Old> selected = new Vector<Guarantor_Old>();
+    List<Guarantor> getAlreadySelected() {
+        List<Guarantor> selected = new Vector<Guarantor>();
         for (PersonGuarantor item : getValue()) {
             if (!item.guarantor().isNull()) {
                 selected.add(item.guarantor());
@@ -108,10 +108,10 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
         return selected;
     }
 
-    private class TenantSelectorDialog extends EntitySelectorTableDialog<Guarantor_Old> {
+    private class TenantSelectorDialog extends EntitySelectorTableDialog<Guarantor> {
 
         public TenantSelectorDialog() {
-            super(Guarantor_Old.class, true, getAlreadySelected(), i18n.tr("Select Guarantor"));
+            super(Guarantor.class, true, getAlreadySelected(), i18n.tr("Select Guarantor"));
             setWidth("700px");
         }
 
@@ -120,7 +120,7 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
             if (getSelectedItems().isEmpty()) {
                 return false;
             } else {
-                for (Guarantor_Old selected : getSelectedItems()) {
+                for (Guarantor selected : getSelectedItems()) {
                     PersonGuarantor item = EntityFactory.create(PersonGuarantor.class);
                     item.guarantor().set(selected);
                     addItem(item);
@@ -132,15 +132,15 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().person().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().person().birthDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().person().email()).build()
+                    new MemberColumnDescriptor.Builder(proto().customer().person().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().customer().person().birthDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().customer().person().email()).build()
             );//@formatter:on
         }
 
         @Override
-        protected AbstractListService<Guarantor_Old> getSelectService() {
-            return GWT.<AbstractListService<Guarantor_Old>> create(SelectGuarantorListService.class);
+        protected AbstractListService<Guarantor> getSelectService() {
+            return GWT.<AbstractListService<Guarantor>> create(SelectGuarantorListService.class);
         }
     }
 }

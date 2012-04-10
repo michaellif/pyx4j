@@ -59,10 +59,10 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.domain.security.CrmRole;
-import com.propertyvista.domain.tenant.Guarantor_Old;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
@@ -94,7 +94,7 @@ public class CrmEntityMapper {
 
         AppPlaceEntityMapper.register(Bill.class, CrmSiteMap.Tenants.Bill.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(EquifaxResult.class, CrmSiteMap.Tenants.EquifaxResult.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(Guarantor_Old.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(Guarantor.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Lease.class, CrmSiteMap.Tenants.Lease.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Locker.class, CrmSiteMap.Properties.Locker.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, CrmImages.INSTANCE.arrowGreyLeft());
@@ -103,7 +103,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(PaymentRecord.class, CrmSiteMap.Tenants.Payment.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(PersonScreening.class, CrmSiteMap.Tenants.Screening.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Customer.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(TenantInLease.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(Tenant.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.arrowGreyLeft());
 
         AppPlaceEntityMapper.register(Appointment.class, Marketing.Appointment.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Lead.class, Marketing.Lead.class, CrmImages.INSTANCE.arrowGreyLeft());

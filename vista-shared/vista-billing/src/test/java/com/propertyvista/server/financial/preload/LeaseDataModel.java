@@ -24,8 +24,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantInLease.Role;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -82,8 +82,8 @@ public class LeaseDataModel {
     }
 
     private void addTenants() {
-        TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
-        tenantInLease.tenant().set(tenantDataModel.getTenant());
+        Tenant tenantInLease = EntityFactory.create(Tenant.class);
+        tenantInLease.customer().set(tenantDataModel.getTenant());
         tenantInLease.role().setValue(Role.Applicant);
         lease.version().tenants().add(tenantInLease);
     }

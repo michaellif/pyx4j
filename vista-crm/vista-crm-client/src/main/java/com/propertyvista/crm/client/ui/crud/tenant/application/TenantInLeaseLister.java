@@ -25,13 +25,13 @@ public class TenantInLeaseLister extends ListerBase<TenantInLeaseDTO> {
     public TenantInLeaseLister() {
         super(TenantInLeaseDTO.class, false, false);
 
-        setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().tenant().id(), true).build(),
+        setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().customer().id(), true).build(),
 
-        new MemberColumnDescriptor.Builder(proto().tenant().person().name(), true).searchable(false).build(),
+        new MemberColumnDescriptor.Builder(proto().customer().person().name(), true).searchable(false).build(),
 
-        new MemberColumnDescriptor.Builder(proto().tenant().person().sex(), true).build(),
+        new MemberColumnDescriptor.Builder(proto().customer().person().sex(), true).build(),
 
-        new MemberColumnDescriptor.Builder(proto().tenant().person().birthDate(), true).build(),
+        new MemberColumnDescriptor.Builder(proto().customer().person().birthDate(), true).build(),
 
         new MemberColumnDescriptor.Builder(proto().role(), true).build(),
 
@@ -42,6 +42,6 @@ public class TenantInLeaseLister extends ListerBase<TenantInLeaseDTO> {
 
     @Override
     protected void onItemSelect(TenantInLeaseDTO item) {
-        getPresenter().view(CrmSiteMap.Tenants.Tenant.class, item.tenant().getPrimaryKey());
+        getPresenter().view(CrmSiteMap.Tenants.Tenant.class, item.customer().getPrimaryKey());
     }
 }

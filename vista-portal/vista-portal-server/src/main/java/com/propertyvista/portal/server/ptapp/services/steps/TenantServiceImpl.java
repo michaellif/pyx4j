@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.policy.policies.MiscPolicy;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.TenantInLeaseDTO;
@@ -59,14 +59,14 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         Lease lease = PtAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.version().tenants());
 
-        List<TenantInLease> existingTenants = new Vector<TenantInLease>(lease.version().tenants());
+        List<Tenant> existingTenants = new Vector<Tenant>(lease.version().tenants());
         lease.version().tenants().clear();
 
         TenantInApplicationListDTO currentTenants = EntityFactory.create(TenantInApplicationListDTO.class);
         int no = 0;
         for (TenantInLeaseDTO tenantInApplication : tenants.tenants()) {
             // Find existing record
-            TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
+            Tenant tenantInLease = EntityFactory.create(Tenant.class);
             tenantInLease.setPrimaryKey(tenantInApplication.getPrimaryKey());
             int idx = existingTenants.indexOf(tenantInLease);
             if (idx == -1) {
@@ -77,8 +77,8 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             } else {
                 existingTenants.remove(idx);
                 Persistence.service().retrieve(tenantInLease);
-                if (!EntityGraph.memebersEquals(tenantInApplication.tenant().person().name(), tenantInLease.tenant().person().name(), tenantInApplication
-                        .tenant().person().name().firstName(), tenantInApplication.tenant().person().name().middleName(), tenantInApplication.tenant().person()
+                if (!EntityGraph.memebersEquals(tenantInApplication.customer().person().name(), tenantInLease.customer().person().name(), tenantInApplication
+                        .customer().person().name().firstName(), tenantInApplication.customer().person().name().middleName(), tenantInApplication.customer().person()
                         .name().lastName())) {
                     tenantInApplication.changeStatus().setValue(TenantInLeaseDTO.ChangeStatus.Updated);
                 }
@@ -88,7 +88,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             tenantInLease.leaseV().set(lease.version());
             tenantInLease.orderInLease().setValue(no++);
             new TenantConverter.TenantEditorConverter().copyDTOtoDBO(tenantInApplication, tenantInLease);
-            Persistence.service().merge(tenantInLease.tenant());
+            Persistence.service().merge(tenantInLease.customer());
             Persistence.service().merge(tenantInLease);
             lease.version().tenants().add(tenantInLease);
 
@@ -98,7 +98,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         }
 
         // remove deleted tenants:
-        for (TenantInLease orphan : existingTenants) {
+        for (Tenant orphan : existingTenants) {
             Persistence.service().delete(orphan);
         }
 
@@ -131,7 +131,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         Persistence.service().retrieve(lease.version().tenants());
 
         TenantInApplicationListDTO tenants = EntityFactory.create(TenantInApplicationListDTO.class);
-        for (TenantInLease tenantInLease : lease.version().tenants()) {
+        for (Tenant tenantInLease : lease.version().tenants()) {
             Persistence.service().retrieve(tenantInLease);
             tenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }

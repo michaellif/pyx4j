@@ -41,7 +41,7 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
@@ -132,11 +132,11 @@ public class UnitTurnoverAnalysisManagerTestBase {
         lease.version().expectedMoveIn().setValue(asDate(dateFrom));
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
-        TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
+        Tenant tenantInLease = EntityFactory.create(Tenant.class);
         tenantInLease.leaseV().set(lease.version());
-        tenantInLease.tenant().set(tenant);
+        tenantInLease.customer().set(tenant);
         tenantInLease.orderInLease().setValue(1);
-        tenantInLease.role().setValue(TenantInLease.Role.Applicant);
+        tenantInLease.role().setValue(Tenant.Role.Applicant);
         lease.version().tenants().add(tenantInLease);
         Persistence.secureSave(lease);
 

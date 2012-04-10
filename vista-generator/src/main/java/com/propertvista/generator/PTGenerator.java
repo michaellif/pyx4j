@@ -51,13 +51,13 @@ import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.domain.tenant.Guarantor_Old;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Customer.Type;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.PersonScreeningHolder;
-import com.propertyvista.domain.tenant.Customer.Type;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeSource;
@@ -366,18 +366,18 @@ public class PTGenerator {
         tenantSummary.tenant().person().set(CommonsGenerator.createPerson());
 
         // Join the objects
-        tenantSummary.tenantInLease().tenant().set(tenantSummary.tenant());
+        tenantSummary.tenantInLease().customer().set(tenantSummary.tenant());
 
         // first tenant must always be an applicant
         if (index == 0) {
-            tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.Applicant);
+            tenantSummary.tenantInLease().role().setValue(Tenant.Role.Applicant);
             tenantSummary.tenant().user().set(user);
         } else if (index == 1) {
-            tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.CoApplicant);
+            tenantSummary.tenantInLease().role().setValue(Tenant.Role.CoApplicant);
         } else if (index == 2) {
-            tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.CoApplicant);
+            tenantSummary.tenantInLease().role().setValue(Tenant.Role.CoApplicant);
         } else {
-            tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.Dependent);
+            tenantSummary.tenantInLease().role().setValue(Tenant.Role.Dependent);
         }
 
         if (index == 0) {
@@ -391,7 +391,7 @@ public class PTGenerator {
         tenantSummary.tenantInLease().percentage().setValue(RandomUtil.randomInt(100));
 
         if (EnumSet.of(PersonRelationship.Daughter, PersonRelationship.Son).contains(tenantSummary.tenantInLease().relationship().getValue())) {
-            tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.Dependent);
+            tenantSummary.tenantInLease().role().setValue(Tenant.Role.Dependent);
         }
         tenantSummary.tenantInLease().takeOwnership().setValue(RandomUtil.randomBoolean());
 
@@ -400,8 +400,7 @@ public class PTGenerator {
             tenantSummary.tenant().person().name().middleName().setValue("");
             tenantSummary.tenant().person().email().setValue(user.email().getValue());
             user.name().setValue(tenantSummary.tenant().person().name().getStringView());
-        } else if (!tenantSummary.tenantInLease().takeOwnership().getValue()
-                && (tenantSummary.tenantInLease().role().getValue() == TenantInLease.Role.CoApplicant)) {
+        } else if (!tenantSummary.tenantInLease().takeOwnership().getValue() && (tenantSummary.tenantInLease().role().getValue() == Tenant.Role.CoApplicant)) {
             String email = DemoData.UserType.PCOAPPLICANT.getEmail(++reservedCoApplicantNumber);
             tenantSummary.tenant().person().email().setValue(email);
         }
@@ -421,7 +420,7 @@ public class PTGenerator {
         return tenantSummary;
     }
 
-    private PersonScreening createScreening(PersonScreeningHolder screene, OnlineApplication application, TenantSummaryGDO tenantSummary) {
+    private PersonScreening createScreening(Customer screene, OnlineApplication application, TenantSummaryGDO tenantSummary) {
         PersonScreening screening = EntityFactory.create(PersonScreening.class);
         screening.screene().set(screene);
 
@@ -493,14 +492,14 @@ public class PTGenerator {
 
         if (tenantSummary != null) {
             for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-                Guarantor_Old guarantor = EntityFactory.create(Guarantor_Old.class);
-                guarantor.person().set(CommonsGenerator.createPerson());
+                Guarantor guarantor = EntityFactory.create(Guarantor.class);
+                guarantor.customer().person().set(CommonsGenerator.createPerson());
                 PersonGuarantor personGuarantor = EntityFactory.create(PersonGuarantor.class);
                 personGuarantor.guarantor().set(guarantor);
                 personGuarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
                 screening.guarantors().add(personGuarantor);
 
-                tenantSummary.guarantorScreening().add(createScreening(guarantor, application, null));
+                tenantSummary.guarantorScreening().add(createScreening(guarantor.customer(), application, null));
             }
         }
     }

@@ -29,6 +29,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @ToStringFormat("{0}, {1}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@Deprecated
 public interface PersonGuarantor extends IEntity {
 
     @Owner
@@ -49,7 +50,7 @@ public interface PersonGuarantor extends IEntity {
     @NotNull
     @ReadOnly
     @ToString(index = 0)
-    Guarantor_Old guarantor();
+    Guarantor guarantor();
 
     @NotNull
     @ToString(index = 1)

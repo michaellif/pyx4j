@@ -167,12 +167,14 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
                 }
                 lease = leaseSim.activate(lease.getPrimaryKey(), eventDate);
 
-                // Maintenance Requests
-                for (MaintenanceRequest req : generator.createMntRequests(config().numMntRequests)) {
-                    req.submitted().setValue(new LogicalDate(random(lease.leaseFrom().getValue().getTime(), lease.leaseTo().getValue().getTime())));
-                    req.issueClassification().set(RandomUtil.random(issues));
-                    req.tenant().set(tenant);
-                    Persistence.service().persist(req);
+                if (false) {
+                    // Maintenance Requests
+                    for (MaintenanceRequest req : generator.createMntRequests(config().numMntRequests)) {
+                        req.submitted().setValue(new LogicalDate(random(lease.leaseFrom().getValue().getTime(), lease.leaseTo().getValue().getTime())));
+                        req.issueClassification().set(RandomUtil.random(issues));
+                        req.tenant().set(tenant);
+                        Persistence.service().persist(req);
+                    }
                 }
 
                 eventDate = new LogicalDate(Math.max(lease.leaseFrom().getValue().getTime(),

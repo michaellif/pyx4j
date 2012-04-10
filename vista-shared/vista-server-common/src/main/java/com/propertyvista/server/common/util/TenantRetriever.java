@@ -22,16 +22,15 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.Guarantor_Old;
-import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.PersonScreeningHolder;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonScreening;
 
 public class TenantRetriever {
 
-    public Class<? extends PersonScreeningHolder> tenantClass;
+    public Class<? extends Customer> tenantClass;
 
-    private PersonScreeningHolder screeningHolder;
+    private Customer screeningHolder;
 
     public PersonScreening tenantScreening;
 
@@ -40,20 +39,20 @@ public class TenantRetriever {
     private final boolean financial;
 
     // Construction:
-    public TenantRetriever(Class<? extends PersonScreeningHolder> tenantClass) {
+    public TenantRetriever(Class<? extends Customer> tenantClass) {
         this(tenantClass, false);
     }
 
-    public TenantRetriever(Class<? extends PersonScreeningHolder> tenantClass, boolean financial) {
+    public TenantRetriever(Class<? extends Customer> tenantClass, boolean financial) {
         this.tenantClass = tenantClass;
         this.financial = financial;
     }
 
-    public TenantRetriever(Class<? extends PersonScreeningHolder> tenantClass, Key tenantId) {
+    public TenantRetriever(Class<? extends Customer> tenantClass, Key tenantId) {
         this(tenantClass, tenantId, false);
     }
 
-    public TenantRetriever(Class<? extends PersonScreeningHolder> tenantClass, Key tenantId, boolean financial) {
+    public TenantRetriever(Class<? extends Customer> tenantClass, Key tenantId, boolean financial) {
         this(tenantClass, financial);
         retrieve(tenantId);
     }
@@ -85,7 +84,7 @@ public class TenantRetriever {
             }
 
             if (screeningHolder instanceof Customer) {
-                Persistence.service().retrieve(((Customer) screeningHolder).emergencyContacts());
+                Persistence.service().retrieve(screeningHolder.emergencyContacts());
             }
         }
     }
@@ -94,21 +93,21 @@ public class TenantRetriever {
         return screeningHolder.person();
     }
 
-    public PersonScreeningHolder getPersonScreeningHolder() {
+    public Customer getCustomer() {
         return screeningHolder;
     }
 
     public Customer getTenant() {
         if (screeningHolder instanceof Customer) {
-            return (Customer) screeningHolder;
+            return screeningHolder;
         } else {
             throw new Error(tenantClass.getName() + " object stored!");
         }
     }
 
-    public Guarantor_Old getGuarantor() {
-        if (screeningHolder instanceof Guarantor_Old) {
-            return (Guarantor_Old) screeningHolder;
+    public Guarantor getGuarantor() {
+        if (screeningHolder instanceof Guarantor) {
+            return (Guarantor) screeningHolder;
         } else {
             throw new Error(tenantClass.getName() + " object stored!");
         }

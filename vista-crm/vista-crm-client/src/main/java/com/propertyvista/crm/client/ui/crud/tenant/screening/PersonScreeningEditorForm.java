@@ -44,7 +44,7 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.tenant.Guarantor_Old;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.misc.BusinessRules;
@@ -110,7 +110,7 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
             if (tabPanel.getWidgetIndex(guarantorsTabWidget) < 0) {
                 tabPanel.add(guarantorsTabWidget, i18n.tr("Guarantors"));
             }
-        } else if (getValue().screene().getInstanceValueClass().equals(Guarantor_Old.class)) {
+        } else if (getValue().screene().getInstanceValueClass().equals(Guarantor.class)) {
             if (tabPanel.getWidgetIndex(guarantorsTabWidget) >= 0) {
                 tabPanel.remove(guarantorsTabWidget);
             }

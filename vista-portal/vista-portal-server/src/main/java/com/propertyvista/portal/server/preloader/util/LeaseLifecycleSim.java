@@ -31,7 +31,7 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -53,11 +53,11 @@ public class LeaseLifecycleSim {
         lease.version().expectedMoveIn().setValue(expectedMoveIn);
 
         if (tenant != null) {
-            TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
+            Tenant tenantInLease = EntityFactory.create(Tenant.class);
             tenantInLease.leaseV().set(lease.version());
-            tenantInLease.tenant().set(tenant);
+            tenantInLease.customer().set(tenant);
             tenantInLease.orderInLease().setValue(1);
-            tenantInLease.role().setValue(TenantInLease.Role.Applicant);
+            tenantInLease.role().setValue(Tenant.Role.Applicant);
             lease.version().tenants().add(tenantInLease);
         }
 

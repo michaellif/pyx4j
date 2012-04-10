@@ -18,8 +18,8 @@ import com.propertvista.generator.II.TreeGenerator;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantInLease.Role;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -43,7 +43,7 @@ public class LeaseGenerator implements TreeGenerator<Lease> {
         for (int i = 0; i < config.numTenantsInLease; i++) {
 
         }
-        TenantInLease tl = EntityFactory.create(TenantInLease.class);
+        Tenant tl = EntityFactory.create(Tenant.class);
         lease.version().tenants().add(tl);
         tl.role().setValue(Role.Applicant);
         // tl.tenant().set(dataSource.retreive(Tenant.class, null));

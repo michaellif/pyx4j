@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
@@ -32,33 +32,33 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
     private final static Logger log = LoggerFactory.getLogger(ChargesServerCalculation.class);
 
-    public static boolean isEligibleForPaymentSplit(TenantInLease tenant) {
+    public static boolean isEligibleForPaymentSplit(Tenant tenant) {
         if (tenant.isNull()) {
             log.info("Received a null tenant when checking for eligibility");
             return false;
         }
 
         //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
-        if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
+        if (tenant.role().getValue() == Tenant.Role.Applicant) {
             return true;
         }
-        if (tenant.role().getValue() == TenantInLease.Role.Dependent) {
+        if (tenant.role().getValue() == Tenant.Role.Dependent) {
             return false;
         }
-        return TimeUtils.isOlderThan(tenant.tenant().person().birthDate().getValue(), 18);
+        return TimeUtils.isOlderThan(tenant.customer().person().birthDate().getValue(), 18);
     }
 
-    public static boolean updatePaymentSplitCharges(Charges charges, List<TenantInLease> tenants) {
+    public static boolean updatePaymentSplitCharges(Charges charges, List<Tenant> tenants) {
         boolean dirty = charges.paymentSplitCharges().charges().isEmpty(); // if there a no charges let's create them
 
-        List<TenantInLease> chargedTenants = new ArrayList<TenantInLease>();
+        List<Tenant> chargedTenants = new ArrayList<Tenant>();
         for (TenantCharge tenantCharge : charges.paymentSplitCharges().charges()) {
-            TenantInLease tenant = tenantCharge.tenant();
+            Tenant tenant = tenantCharge.tenant();
             log.info("Tenant from charge: {}", tenant);
             chargedTenants.add(tenant);
         }
 
-        for (TenantInLease tenant : tenants) {
+        for (Tenant tenant : tenants) {
             log.debug("Tenant from master tenant list: {}", tenant);
             if (!isEligibleForPaymentSplit(tenant)) {
                 log.info("Charges contained tenant {} who should be removed", tenant);
@@ -88,13 +88,13 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
     // internals:
 
-    private static boolean areTwoTenantListsTheSame(List<TenantInLease> tenants1, List<TenantInLease> tenants2) {
+    private static boolean areTwoTenantListsTheSame(List<Tenant> tenants1, List<Tenant> tenants2) {
 
         log.info("Exam");
-        for (TenantInLease tenant1 : tenants1) {
+        for (Tenant tenant1 : tenants1) {
             // first, find the tenant (matching by first name and last name)
-            TenantInLease tenant2 = null;
-            for (TenantInLease currTenant : tenants2) {
+            Tenant tenant2 = null;
+            for (Tenant currTenant : tenants2) {
                 if (EqualsHelper.equals(currTenant.getPrimaryKey(), tenant1.getPrimaryKey())) {
                     tenant2 = currTenant;
                     continue;
@@ -116,11 +116,11 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         return true;
     }
 
-    private static void resetPaymentSplitCharges(Charges charges, List<TenantInLease> tenants) {
+    private static void resetPaymentSplitCharges(Charges charges, List<Tenant> tenants) {
         charges.paymentSplitCharges().charges().clear();
-        for (TenantInLease tenant : tenants) {
-            TenantInLease.Role status = tenant.role().getValue();
-            log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.tenant().person().birthDate()
+        for (Tenant tenant : tenants) {
+            Tenant.Role status = tenant.role().getValue();
+            log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.customer().person().birthDate()
                     .getValue());
 
             if (!isEligibleForPaymentSplit(tenant)) { // make sure that it is eligible
@@ -129,7 +129,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             }
 
             int percentage = 0;
-            if (status == TenantInLease.Role.Applicant) {
+            if (status == Tenant.Role.Applicant) {
                 percentage = 100;
             }
             TenantCharge tenantCharge = com.propertyvista.portal.domain.util.DomainUtil.createTenantCharge(percentage, new BigDecimal(0));

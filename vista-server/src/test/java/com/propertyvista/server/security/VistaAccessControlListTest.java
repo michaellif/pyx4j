@@ -38,7 +38,7 @@ import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -160,7 +160,7 @@ public class VistaAccessControlListTest {
 
         assertEntityPermission(false, ApplicationDocumentFile.class, null);
         assertEntityPermission(false, TenantInLeaseListDTO.class, null);
-        assertEntityPermission(false, TenantInLease.class, null);
+        assertEntityPermission(false, Tenant.class, null);
         assertEntityPermission(false, PetsDTO.class, null);
         assertEntityPermission(false, TenantFinancialDTO.class, null);
         assertEntityPermission(false, Charges.class, null);
@@ -180,7 +180,7 @@ public class VistaAccessControlListTest {
 
         assertEntityPermission(true, ApplicationDocumentFile.class, application);
         assertEntityPermission(true, TenantInLeaseListDTO.class, application);
-        assertEntityPermission(true, TenantInLease.class, application);
+        assertEntityPermission(true, Tenant.class, application);
         assertEntityPermission(true, PetsDTO.class, application);
         assertEntityPermission(true, TenantFinancialDTO.class, application);
         assertEntityPermission(true, Charges.class, application);
@@ -191,7 +191,7 @@ public class VistaAccessControlListTest {
         application2.setPrimaryKey(new Key(-252));
         assertEntityPermission(false, ApplicationDocumentFile.class, application2);
         assertEntityPermission(false, TenantInLeaseListDTO.class, application2);
-        assertEntityPermission(false, TenantInLease.class, application2);
+        assertEntityPermission(false, Tenant.class, application2);
         assertEntityPermission(false, PetsDTO.class, application2);
         assertEntityPermission(false, TenantFinancialDTO.class, application2);
         assertEntityPermission(false, Charges.class, application2);

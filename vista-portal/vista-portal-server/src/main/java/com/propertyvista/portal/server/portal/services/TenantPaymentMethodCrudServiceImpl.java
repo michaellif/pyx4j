@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
@@ -63,7 +63,7 @@ public class TenantPaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        TenantInLease tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+        Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseV());
         Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
         Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().belongsTo());

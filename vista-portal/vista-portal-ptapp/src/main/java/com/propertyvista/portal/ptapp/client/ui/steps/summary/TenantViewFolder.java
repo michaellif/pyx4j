@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.tenant.TenantInLease.Role;
+import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
 public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
@@ -46,9 +46,9 @@ public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().name(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().birthDate(), "9em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().email(), "21em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().customer().person().name(), "20em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().customer().person().birthDate(), "9em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().customer().person().email(), "21em"));
         columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "10em"));
         columns.add(new EntityFolderColumnDescriptor(proto().role(), "10em"));
         return columns;
@@ -65,7 +65,7 @@ public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             CComponent<?, ?> comp = null;
-            if (proto().tenant().person().name() == column.getObject()) {
+            if (proto().customer().person().name() == column.getObject()) {
                 comp = inject(column.getObject(), new CEntityLabel<Name>());
             } else {
                 comp = super.createCell(column);

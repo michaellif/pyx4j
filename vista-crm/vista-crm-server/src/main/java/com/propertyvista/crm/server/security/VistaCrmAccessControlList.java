@@ -91,7 +91,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
@@ -185,7 +185,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Customer.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(TenantCrudService.class));
 
-        grant(VistaBasicBehavior.CRM, new EntityPermission(TenantInLease.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(Tenant.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(TenantInLeaseCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(PersonScreening.class, EntityPermission.ALL));

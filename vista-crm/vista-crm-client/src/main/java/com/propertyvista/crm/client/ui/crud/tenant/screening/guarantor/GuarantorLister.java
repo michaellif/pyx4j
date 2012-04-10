@@ -29,15 +29,15 @@ public class GuarantorLister extends ListerBase<GuarantorDTO> {
 
         setColumnDescriptors(//@formatter:off
             new Builder(proto().id()).build(),
-            new Builder(proto().person().name()).searchable(false).build(),
-            new Builder(proto().person().name().firstName(), false).build(),
-            new Builder(proto().person().name().lastName(), false).build(),
-            new Builder(proto().person().sex()).build(),
-            new Builder(proto().person().birthDate()).build(),
-            new Builder(proto().person().homePhone()).build(),
-            new Builder(proto().person().mobilePhone()).build(),
-            new Builder(proto().person().workPhone()).build(),
-            new Builder(proto().person().email()).title("E-mail address").build()
+            new Builder(proto().customer().person().name()).searchable(false).build(),
+            new Builder(proto().customer().person().name().firstName(), false).build(),
+            new Builder(proto().customer().person().name().lastName(), false).build(),
+            new Builder(proto().customer().person().sex()).build(),
+            new Builder(proto().customer().person().birthDate()).build(),
+            new Builder(proto().customer().person().homePhone()).build(),
+            new Builder(proto().customer().person().mobilePhone()).build(),
+            new Builder(proto().customer().person().workPhone()).build(),
+            new Builder(proto().customer().person().email()).title("E-mail address").build()
         );//@formatter:on
     }
 }

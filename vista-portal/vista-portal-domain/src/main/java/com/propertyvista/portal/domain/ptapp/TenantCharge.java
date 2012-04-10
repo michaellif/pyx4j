@@ -14,9 +14,9 @@
 package com.propertyvista.portal.domain.ptapp;
 
 import com.propertyvista.domain.charges.Charge_OLD;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 
 public interface TenantCharge extends Charge_OLD {
 
-    TenantInLease tenant();
+    Tenant tenant();
 }

@@ -32,8 +32,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantInLease.Role;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.ApplicationUserDTO;
@@ -70,11 +70,11 @@ public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceD
         dto.numberOfCoApplicants().setValue(0);
         dto.numberOfGuarantors().setValue(0);
 
-        for (TenantInLease tenantInLease : dto.lease().version().tenants()) {
+        for (Tenant tenantInLease : dto.lease().version().tenants()) {
             Persistence.service().retrieve(tenantInLease);
 
             if (tenantInLease.role().getValue() == Role.Applicant) {
-                dto.mainApplicant().set(tenantInLease.tenant());
+                dto.mainApplicant().set(tenantInLease.customer());
             } else if (tenantInLease.role().getValue() == Role.CoApplicant) {
                 dto.numberOfCoApplicants().setValue(dto.numberOfCoApplicants().getValue() + 1);
             }
@@ -149,15 +149,15 @@ public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceD
         Persistence.service().retrieve(entity.lease());
         Persistence.service().retrieve(entity.lease().version().tenants());
 
-        for (TenantInLease tenantInLease : entity.lease().version().tenants()) {
+        for (Tenant tenantInLease : entity.lease().version().tenants()) {
             Persistence.service().retrieve(tenantInLease);
             switch (tenantInLease.role().getValue()) {
             case Applicant:
             case CoApplicant:
                 ApplicationUserDTO tenant = EntityFactory.create(ApplicationUserDTO.class);
 
-                tenant.person().set(tenantInLease.tenant().person());
-                tenant.user().set(tenantInLease.tenant());
+                tenant.person().set(tenantInLease.customer().person());
+                tenant.user().set(tenantInLease.customer());
                 tenant.userType().setValue(tenantInLease.role().getValue() == Role.Applicant ? ApplicationUser.Applicant : ApplicationUser.CoApplicant);
 
                 users.add(tenant);
@@ -165,14 +165,14 @@ public class OnlineMasterApplicationCrudServiceImpl extends AbstractCrudServiceD
                 // process Guarantors:
 
                 EntityQueryCriteria<PersonScreening> criteriaPS = EntityQueryCriteria.create(PersonScreening.class);
-                criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.tenant()));
+                criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.customer()));
                 PersonScreening tenantScreenings = Persistence.service().retrieve(criteriaPS);
                 if (tenantScreenings != null) {
                     Persistence.service().retrieve(tenantScreenings.guarantors());
                     for (PersonGuarantor pg : tenantScreenings.guarantors()) {
                         ApplicationUserDTO guarantor = EntityFactory.create(ApplicationUserDTO.class);
 
-                        guarantor.person().set(pg.guarantor().person());
+                        guarantor.person().set(pg.guarantor().customer().person());
                         guarantor.user().set(pg.guarantor());
                         guarantor.userType().setValue(ApplicationUser.Guarantor);
 

@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Tenant;
 
 public interface MaintenanceRequest extends IEntity {
 
@@ -34,7 +35,7 @@ public interface MaintenanceRequest extends IEntity {
     @Detached
     @NotNull
     @JoinColumn
-    Customer tenant();
+    Tenant tenant();
 
     //TODO Add 
     //Building building();

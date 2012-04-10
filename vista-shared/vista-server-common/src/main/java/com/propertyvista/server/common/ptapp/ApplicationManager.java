@@ -39,14 +39,14 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.TenantUserHolder;
 import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.ApplicationStatusDTO;
 import com.propertyvista.dto.ApplicationStatusDTO.Role;
 import com.propertyvista.dto.OnlineMasterApplicationStatusDTO;
@@ -76,13 +76,14 @@ public class ApplicationManager {
         Persistence.service().persist(mapp);
 
         Persistence.service().retrieve(lease.version().tenants());
-        for (TenantInLease tenantInLease : lease.version().tenants()) {
-            if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
+        for (Tenant tenantInLease : lease.version().tenants()) {
+            if (Tenant.Role.Applicant == tenantInLease.role().getValue()) {
                 OnlineApplication app = EntityFactory.create(OnlineApplication.class);
                 app.belongsTo().set(mapp);
                 app.status().setValue(OnlineApplication.Status.Invited);
-                app.steps().addAll(ApplicationManager.createApplicationProgress(app, tenantInLease.tenant(), VistaTenantBehavior.ProspectiveApplicant));
-                app.user().set(ensureProspectiveTenantUser(tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveApplicant));
+                app.steps().addAll(ApplicationManager.createApplicationProgress(app, tenantInLease.customer(), VistaTenantBehavior.ProspectiveApplicant));
+                app.user().set(
+                        ensureProspectiveTenantUser(tenantInLease.customer(), tenantInLease.customer().person(), VistaTenantBehavior.ProspectiveApplicant));
                 app.lease().set(mapp.lease());
                 Persistence.service().persist(app);
 
@@ -106,10 +107,10 @@ public class ApplicationManager {
     public static void sendMasterApplicationEmail(MasterOnlineApplication mapp) {
         Persistence.service().retrieve(mapp.lease());
         Persistence.service().retrieve(mapp.lease().version().tenants());
-        for (TenantInLease tenantInLease : mapp.lease().version().tenants()) {
-            if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
-                Persistence.service().retrieve(tenantInLease.tenant().user());
-                sendInvitationEmail(tenantInLease.tenant().user(), mapp.lease(), EmailTemplateType.ApplicationCreatedApplicant);
+        for (Tenant tenantInLease : mapp.lease().version().tenants()) {
+            if (Tenant.Role.Applicant == tenantInLease.role().getValue()) {
+                Persistence.service().retrieve(tenantInLease.customer().user());
+                sendInvitationEmail(tenantInLease.customer().user(), mapp.lease(), EmailTemplateType.ApplicationCreatedApplicant);
 
                 //mapp.status().setValue(OnlineMasterApplication.Status.Invited);
                 Persistence.service().persist(mapp);
@@ -123,7 +124,7 @@ public class ApplicationManager {
 
     public static void sendApproveDeclineApplicationEmail(Lease lease, boolean isApproved) {
         Persistence.service().retrieve(lease.version().tenants());
-        for (TenantInLease tenantInLease : lease.version().tenants()) {
+        for (Tenant tenantInLease : lease.version().tenants()) {
             OnlineApplication test = tenantInLease.application();
             if (test.getValue() == null) { //co-applicants have no dedicated application
                 return;
@@ -169,27 +170,27 @@ public class ApplicationManager {
 
         // Invite Guarantors:
         if (!isGuarantor) {
-            EntityQueryCriteria<TenantInLease> criteriaTL = EntityQueryCriteria.create(TenantInLease.class);
+            EntityQueryCriteria<Tenant> criteriaTL = EntityQueryCriteria.create(Tenant.class);
             criteriaTL.add(PropertyCriterion.eq(criteriaTL.proto().application(), application));
-            TenantInLease tenantInLease = Persistence.service().retrieve(criteriaTL);
+            Tenant tenantInLease = Persistence.service().retrieve(criteriaTL);
 
             EntityQueryCriteria<PersonScreening> criteriaPS = EntityQueryCriteria.create(PersonScreening.class);
-            criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.tenant()));
+            criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.customer()));
             PersonScreening tenantScreenings = Persistence.service().retrieve(criteriaPS);
 
             Persistence.service().retrieve(tenantScreenings.guarantors());
             for (PersonGuarantor personGuarantor : tenantScreenings.guarantors()) {
-                inviteUser(ma, personGuarantor.guarantor(), personGuarantor.guarantor().person(), VistaTenantBehavior.Guarantor);
+                inviteUser(ma, personGuarantor.guarantor(), personGuarantor.guarantor().customer().person(), VistaTenantBehavior.Guarantor);
             }
         }
 
         // Invite CoApplicants:
         if (isApplicant) {
             Persistence.service().retrieve(ma.lease().version().tenants());
-            for (TenantInLease tenantInLease : ma.lease().version().tenants()) {
-                if ((TenantInLease.Role.CoApplicant == tenantInLease.role().getValue() && (!tenantInLease.takeOwnership().isBooleanTrue()))) {
+            for (Tenant tenantInLease : ma.lease().version().tenants()) {
+                if ((Tenant.Role.CoApplicant == tenantInLease.role().getValue() && (!tenantInLease.takeOwnership().isBooleanTrue()))) {
                     tenantInLease.application().set(
-                            inviteUser(ma, tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveCoApplicant));
+                            inviteUser(ma, tenantInLease.customer(), tenantInLease.customer().person(), VistaTenantBehavior.ProspectiveCoApplicant));
                     Persistence.service().persist(tenantInLease);
                 }
             }
@@ -284,7 +285,7 @@ public class ApplicationManager {
                 criteria1.add(PropertyCriterion.eq(criteria1.proto().guarantor().user(), app.user()));
                 PersonGuarantor guarantor = Persistence.service().retrieve(criteria1);
                 if (guarantor != null) {
-                    status.person().set(guarantor.guarantor().person().name());
+                    status.person().set(guarantor.guarantor().customer().person().name());
                     status.role().setValue(Role.Guarantor);
                 }
             }
@@ -397,11 +398,11 @@ public class ApplicationManager {
     }
 
     public static boolean isTenantInSplitCharge(OnlineApplication application, TenantUserHolder tenant) {
-        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
 // TODO: make sure we get user from necessary application (if he participate in more than one):         
 //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
-        TenantInLease tenantInLease = Persistence.service().retrieve(criteria);
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), tenant));
+        Tenant tenantInLease = Persistence.service().retrieve(criteria);
 
         return !(tenantInLease.percentage().isNull() || tenantInLease.percentage().getValue() == 0);
     }

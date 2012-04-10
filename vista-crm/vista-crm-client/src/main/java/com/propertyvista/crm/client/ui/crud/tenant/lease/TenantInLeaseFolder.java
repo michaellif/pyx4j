@@ -40,12 +40,12 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantInLease.Role;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.ValidationUtils;
 
-class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
+class TenantInLeaseFolder extends VistaTableFolder<Tenant> {
 
     private static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
 
@@ -58,7 +58,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
     }
 
     public TenantInLeaseFolder(CEntityEditor<? extends Lease> parent, LeaseEditorView view) {
-        super(TenantInLease.class, parent.isEditable());
+        super(Tenant.class, parent.isEditable());
         this.parent = parent;
         this.view = view;
         setOrderable(false);
@@ -68,9 +68,9 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().tenant(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().birthDate(), "9em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().email(), "15em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().customer(), "20em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().customer().person().birthDate(), "9em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().customer().person().email(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
         columns.add(new EntityFolderColumnDescriptor(proto().role(), "9em"));
         return columns;
@@ -82,7 +82,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
     }
 
     private boolean isApplicantPresent() {
-        for (TenantInLease til : getValue()) {
+        for (Tenant til : getValue()) {
             if (Role.Applicant == til.role().getValue()) {
                 return true;
             }
@@ -92,18 +92,18 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof TenantInLease) {
+        if (member instanceof Tenant) {
             return new TenantInLeaseEditor();
         }
         return super.create(member);
     }
 
-    private class TenantInLeaseEditor extends CEntityFolderRowEditor<TenantInLease> {
+    private class TenantInLeaseEditor extends CEntityFolderRowEditor<Tenant> {
 
         private boolean applicant;
 
         public TenantInLeaseEditor() {
-            super(TenantInLease.class, columns());
+            super(Tenant.class, columns());
             setViewable(true);
         }
 
@@ -136,28 +136,28 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                 get(proto().role()).setViewable(true);
                 get(proto().relationship()).setVisible(false);
             } else if (get(proto().role()) instanceof CComboBox) {
-                Collection<TenantInLease.Role> roles = EnumSet.allOf(TenantInLease.Role.class);
-                roles.remove(TenantInLease.Role.Applicant);
+                Collection<Tenant.Role> roles = EnumSet.allOf(Tenant.Role.class);
+                roles.remove(Tenant.Role.Applicant);
                 ((CComboBox<Role>) get(proto().role())).setOptions(roles);
             }
 
-            if (!applicant && !getValue().tenant().person().birthDate().isNull()) {
-                if (!ValidationUtils.isOlderThen18(getValue().tenant().person().birthDate().getValue())) {
+            if (!applicant && !getValue().customer().person().birthDate().isNull()) {
+                if (!ValidationUtils.isOlderThen18(getValue().customer().person().birthDate().getValue())) {
                     setMandatoryDependant();
                 }
             }
         }
 
         private void setMandatoryDependant() {
-            get(proto().role()).setValue(TenantInLease.Role.Dependent);
+            get(proto().role()).setValue(Tenant.Role.Dependent);
             get(proto().role()).setEditable(false);
         }
     }
 
-    private static List<Customer> extractTenantFromTenantInLeaseList(List<TenantInLease> list) {
+    private static List<Customer> extractTenantFromTenantInLeaseList(List<Tenant> list) {
         List<Customer> tenants = new ArrayList<Customer>(list.size());
-        for (TenantInLease wrapper : list) {
-            tenants.add(wrapper.tenant());
+        for (Tenant wrapper : list) {
+            tenants.add(wrapper.customer());
         }
         return tenants;
     }
@@ -175,9 +175,9 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                 return false;
             } else {
                 for (Customer tenant : getSelectedItems()) {
-                    TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
+                    Tenant newTenantInLease = EntityFactory.create(Tenant.class);
                     newTenantInLease.leaseV().setPrimaryKey(parent.getValue().version().getPrimaryKey());
-                    newTenantInLease.tenant().set(tenant);
+                    newTenantInLease.customer().set(tenant);
                     if (!isApplicantPresent()) {
                         newTenantInLease.role().setValue(Role.Applicant);
                         newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!

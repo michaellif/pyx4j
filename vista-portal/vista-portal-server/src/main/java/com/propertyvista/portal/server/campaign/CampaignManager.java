@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.callfire.CallFire;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.domain.CampaignHistory;
@@ -38,24 +38,24 @@ public class CampaignManager {
     private final static Logger log = LoggerFactory.getLogger(CampaignManager.class);
 
     public static void fireEvent(CampaignTrigger trigger, TenantInLeaseListDTO tenants) {
-        for (TenantInLease tenantInfo : tenants.tenants()) {
-            TenantInLease.Role status = tenantInfo.role().getValue();
+        for (Tenant tenantInfo : tenants.tenants()) {
+            Tenant.Role status = tenantInfo.role().getValue();
 
             switch (trigger) {
             case ApplicationCompleated:
-                if (TenantInLease.Role.Applicant.equals(status)) {
+                if (Tenant.Role.Applicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
                 break;
             default:
-                if (TenantInLease.Role.Applicant.equals(status) || TenantInLease.Role.CoApplicant.equals(status)) {
+                if (Tenant.Role.Applicant.equals(status) || Tenant.Role.CoApplicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
             }
         }
     }
 
-    public static void fireEvent(CampaignTrigger trigger, TenantInLease tenant) {
+    public static void fireEvent(CampaignTrigger trigger, Tenant tenant) {
         EntityQueryCriteria<CampaignHistory> criteria = EntityQueryCriteria.create(CampaignHistory.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
         criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
@@ -75,10 +75,10 @@ public class CampaignManager {
         Persistence.service().persist(history);
     }
 
-    private static void execute(PhoneCallCampaign phoneCallCampaign, TenantInLease tenant) {
+    private static void execute(PhoneCallCampaign phoneCallCampaign, Tenant tenant) {
         List<String> numbers = new ArrayList<String>();
-        String name = tenant.tenant().person().name().firstName().getValue() + " " + tenant.tenant().person().name().lastName().getValue();
-        String number = tenant.tenant().person().homePhone().getValue();
+        String name = tenant.customer().person().name().firstName().getValue() + " " + tenant.customer().person().name().lastName().getValue();
+        String number = tenant.customer().person().homePhone().getValue();
         if (ApplicationMode.isDevelopment()) {
             String allowedNumber = DevelopmentSecurity.callNumberFilter(number);
             log.info("We will call {} instead of {}", allowedNumber, number);

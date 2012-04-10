@@ -20,7 +20,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
@@ -29,7 +29,7 @@ public interface TenantSummaryGDO extends IEntity {
 
     Customer tenant();
 
-    TenantInLease tenantInLease();
+    Tenant tenantInLease();
 
     PersonScreening tenantScreening();
 

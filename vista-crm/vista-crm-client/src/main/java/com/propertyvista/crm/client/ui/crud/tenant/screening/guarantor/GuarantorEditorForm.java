@@ -70,27 +70,27 @@ public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
         int row = -1;
 
         if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 5).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().maidenName()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().nameSuffix()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().namePrefix()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().firstName()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().middleName()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().lastName()), 25).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().maidenName()), 25).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().nameSuffix()), 5).build());
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Guarantor"))
-                    .build());
-            get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+            main.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().customer().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Guarantor")).build());
+            get(proto().customer().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().sex()), 7).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().birthDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
         main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
 
         return new CrmScrollPanel(main);
     }

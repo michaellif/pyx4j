@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
 
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 
 public class DatePickerValidationTest extends DatePickerTestBase {
@@ -98,7 +98,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -20);
         navigateToDateAndClick(datePickerId(index), calendar);
-        setStatus(index, TenantInLease.Role.Dependent);
+        setStatus(index, Tenant.Role.Dependent);
         calendar.add(Calendar.YEAR, 10);
         navigateToDateAndClick(datePickerId(index), calendar);
         assertNotEditable(statusId(index));
@@ -109,7 +109,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         navigateToDateAndClick(datePickerId(index), calendar);
         assertEditable(statusId(index));
         assertEditable(ownershipId(index));
-        setStatus(index, TenantInLease.Role.Dependent);
+        setStatus(index, Tenant.Role.Dependent);
         //TODO 
         //ask anya about this test
         //assertEquals("off", selenium.getValue(ownershipId(index)));
@@ -121,7 +121,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -20);
         navigateToDate(datePickerId(index), calendar);
-        setStatus(index, TenantInLease.Role.CoApplicant);
+        setStatus(index, Tenant.Role.CoApplicant);
         validateBirthDateLessThen18(index);
     }
 
@@ -163,24 +163,24 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         selenium.click(lastNameId(index));
     }
 
-    private void setStatus(int index, TenantInLease.Role status) {
+    private void setStatus(int index, Tenant.Role status) {
         selenium.setValue(statusId(index), status.toString());
     }
 
     private IDebugId ownershipId(int index) {
-        return D.id(baseID(index), D.id(proto(TenantInLease.class).takeOwnership()));
+        return D.id(baseID(index), D.id(proto(Tenant.class).takeOwnership()));
     }
 
     private IDebugId statusId(int index) {
-        return D.id(baseID(index), D.id(proto(TenantInLease.class).role()));
+        return D.id(baseID(index), D.id(proto(Tenant.class).role()));
     }
 
     private IDebugId lastNameId(int index) {
-        return D.id(baseID(index), D.id(proto(TenantInLease.class).tenant().person().name().lastName()));
+        return D.id(baseID(index), D.id(proto(Tenant.class).customer().person().name().lastName()));
     }
 
     private IDebugId datePickerTextBoxId(int index) {
-        return D.id(baseID(index), D.id(proto(TenantInLease.class).tenant().person().birthDate()));
+        return D.id(baseID(index), D.id(proto(Tenant.class).customer().person().birthDate()));
     }
 
     private IDebugId datePickerId(int index) {

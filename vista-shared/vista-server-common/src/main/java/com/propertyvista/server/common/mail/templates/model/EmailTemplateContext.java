@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.security.AbstractUser;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
@@ -32,5 +32,5 @@ public interface EmailTemplateContext extends IEntity {
 
     Lease lease();
 
-    TenantInLease tenantInLease();
+    Tenant tenantInLease();
 }

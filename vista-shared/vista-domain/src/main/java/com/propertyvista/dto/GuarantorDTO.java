@@ -16,9 +16,9 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.tenant.Guarantor_Old;
+import com.propertyvista.domain.tenant.Guarantor;
 
 @Transient
 @ExtendsDBO
-public interface GuarantorDTO extends Guarantor_Old {
+public interface GuarantorDTO extends Guarantor {
 }

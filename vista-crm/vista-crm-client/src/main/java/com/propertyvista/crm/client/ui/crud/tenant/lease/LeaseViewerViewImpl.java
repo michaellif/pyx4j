@@ -46,7 +46,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.version.LeaseVersionService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
@@ -295,15 +295,15 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         }
     }
 
-    private abstract class SendMailBox extends EntitySelectorListDialog<TenantInLease> {
+    private abstract class SendMailBox extends EntitySelectorListDialog<Tenant> {
 
         private CComboBox<EmailTemplateType> emailType;
 
-        public SendMailBox(List<TenantInLease> tenants) {
-            super(i18n.tr("Send Mail"), true, tenants, new EntitySelectorListDialog.Formatter<TenantInLease>() {
+        public SendMailBox(List<Tenant> tenants) {
+            super(i18n.tr("Send Mail"), true, tenants, new EntitySelectorListDialog.Formatter<Tenant>() {
                 @Override
-                public String format(TenantInLease entity) {
-                    return entity.tenant().person().name().getStringView();
+                public String format(Tenant entity) {
+                    return entity.customer().person().name().getStringView();
                 }
             });
 
@@ -311,7 +311,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         }
 
         @Override
-        protected Widget initBody(boolean isMultiselectAllowed, List<TenantInLease> data) {
+        protected Widget initBody(boolean isMultiselectAllowed, List<Tenant> data) {
             VerticalPanel body = new VerticalPanel();
             body.add(new HTML(i18n.tr("Select Tenants:")));
             body.add(super.initBody(isMultiselectAllowed, data));

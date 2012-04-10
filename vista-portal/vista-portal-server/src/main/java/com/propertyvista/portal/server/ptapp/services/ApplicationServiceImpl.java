@@ -25,12 +25,12 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.domain.tenant.Guarantor_Old;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
@@ -101,9 +101,9 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             DigitalSignatureMgr.update(application, person);
             ApplicationProgressMgr.createTenantDataSteps(application, person);
         } else if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
-            Guarantor_Old person = PtAppContext.getCurrentUserGuarantor();
+            Guarantor person = PtAppContext.getCurrentUserGuarantor();
 
-            DigitalSignatureMgr.update(application, person);
+            DigitalSignatureMgr.update(application, person.customer());
             ApplicationProgressMgr.createGurantorDataSteps(application, person);
         }
 

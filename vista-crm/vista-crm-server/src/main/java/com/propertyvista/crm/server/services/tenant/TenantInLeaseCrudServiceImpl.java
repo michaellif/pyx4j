@@ -17,14 +17,14 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.tenant.TenantInLeaseCrudService;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
-public class TenantInLeaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<TenantInLease, TenantInLeaseDTO> implements TenantInLeaseCrudService {
+public class TenantInLeaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, TenantInLeaseDTO> implements TenantInLeaseCrudService {
 
     public TenantInLeaseCrudServiceImpl() {
-        super(TenantInLease.class, TenantInLeaseDTO.class);
+        super(Tenant.class, TenantInLeaseDTO.class);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class TenantInLeaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Ten
     }
 
     @Override
-    protected void enhanceListRetrieved(TenantInLease in, TenantInLeaseDTO dto) {
+    protected void enhanceListRetrieved(Tenant in, TenantInLeaseDTO dto) {
         TenantInLeaseRetriever tr = new TenantInLeaseRetriever(in.getPrimaryKey(), true);
         if (!tr.tenantScreening.isEmpty()) {
             if (!tr.tenantScreening.incomes().isEmpty()) {

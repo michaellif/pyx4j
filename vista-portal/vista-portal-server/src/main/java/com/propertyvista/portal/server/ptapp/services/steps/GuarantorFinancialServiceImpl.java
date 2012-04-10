@@ -47,7 +47,7 @@ public class GuarantorFinancialServiceImpl extends ApplicationEntityServiceImpl 
 
         tr.saveScreening();
 
-        DigitalSignatureMgr.reset(tr.getGuarantor());
+        DigitalSignatureMgr.reset(tr.getGuarantor().customer());
         Persistence.service().commit();
 
         // we do not use return value, so return the same as input one:        

@@ -153,13 +153,13 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     }
 
     private void enterTenantRow(IDebugId fromDebugId, TenantInLeaseDTO tenant, boolean fullInfo) {
-        setValueOnForm(fromDebugId, tenant.tenant().person().name().firstName());
-        setValueOnForm(fromDebugId, tenant.tenant().person().name().lastName());
-        setValueOnForm(fromDebugId, tenant.tenant().person().name().middleName());
-        setValueOnForm(fromDebugId, tenant.tenant().person().birthDate());
+        setValueOnForm(fromDebugId, tenant.customer().person().name().firstName());
+        setValueOnForm(fromDebugId, tenant.customer().person().name().lastName());
+        setValueOnForm(fromDebugId, tenant.customer().person().name().middleName());
+        setValueOnForm(fromDebugId, tenant.customer().person().birthDate());
 
         if (fullInfo) {
-            setValueOnForm(fromDebugId, tenant.tenant().person().email());
+            setValueOnForm(fromDebugId, tenant.customer().person().email());
             setValueOnForm(fromDebugId, tenant.relationship());
             setValueOnForm(fromDebugId, tenant.role());
             setValueOnForm(fromDebugId, tenant.takeOwnership());
@@ -392,14 +392,14 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     }
 
     private void enterGuarantorRow(IDebugId fromDebugId, PersonGuarantor guarantor) {
-        setValueOnForm(fromDebugId, guarantor.guarantor().person().name().firstName());
-        setValueOnForm(fromDebugId, guarantor.guarantor().person().name().middleName());
-        setValueOnForm(fromDebugId, guarantor.guarantor().person().name().lastName());
-        setValueOnForm(fromDebugId, guarantor.guarantor().person().homePhone());
-        setValueOnForm(fromDebugId, guarantor.guarantor().person().mobilePhone());
-        setValueOnForm(fromDebugId, guarantor.guarantor().person().workPhone());
-        setValueOnForm(fromDebugId, guarantor.guarantor().person().birthDate());
-        setValueOnForm(fromDebugId, guarantor.guarantor().person().email());
+        setValueOnForm(fromDebugId, guarantor.guarantor().customer().person().name().firstName());
+        setValueOnForm(fromDebugId, guarantor.guarantor().customer().person().name().middleName());
+        setValueOnForm(fromDebugId, guarantor.guarantor().customer().person().name().lastName());
+        setValueOnForm(fromDebugId, guarantor.guarantor().customer().person().homePhone());
+        setValueOnForm(fromDebugId, guarantor.guarantor().customer().person().mobilePhone());
+        setValueOnForm(fromDebugId, guarantor.guarantor().customer().person().workPhone());
+        setValueOnForm(fromDebugId, guarantor.guarantor().customer().person().birthDate());
+        setValueOnForm(fromDebugId, guarantor.guarantor().customer().person().email());
         setValueOnForm(fromDebugId, guarantor.relationship());
     }
 

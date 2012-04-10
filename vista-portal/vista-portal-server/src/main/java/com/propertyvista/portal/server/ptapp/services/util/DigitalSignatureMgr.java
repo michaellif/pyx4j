@@ -21,10 +21,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonScreeningHolder;
-import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class DigitalSignatureMgr {
@@ -39,17 +40,17 @@ public class DigitalSignatureMgr {
         update(application, application.lease().version().tenants());
     }
 
-    static public void update(OnlineApplication application, IList<TenantInLease> tenants) {
+    static public void update(OnlineApplication application, IList<Tenant> tenants) {
         List<DigitalSignature> existingSignatures = new Vector<DigitalSignature>(application.signatures());
         application.signatures().clear();
 
         // check/create signature for every tenant which needs it: 
-        for (TenantInLease tenant : tenants) {
+        for (Tenant tenant : tenants) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenant)) {
                 boolean isExist = false;
                 for (Iterator<DigitalSignature> it = existingSignatures.iterator(); it.hasNext();) {
                     DigitalSignature sig = it.next();
-                    if (sig.person().equals(tenant.tenant())) {
+                    if (sig.person().equals(tenant.customer())) {
                         isExist = true;
                         application.signatures().add(sig);
                         it.remove();
@@ -58,7 +59,7 @@ public class DigitalSignatureMgr {
                 }
 
                 if (!isExist) { // create signature if absent: 
-                    createDigitalSignature(application, tenant.tenant());
+                    createDigitalSignature(application, tenant.customer());
                     ApplicationProgressMgr.invalidateSummaryStep(application);
                 }
             }
@@ -93,11 +94,11 @@ public class DigitalSignatureMgr {
         update(application);
     }
 
-    static public void reset(PersonScreeningHolder person) {
+    static public void reset(Customer person) {
         reset(PtAppContext.getCurrentUserApplication(), person);
     }
 
-    static public void reset(OnlineApplication application, PersonScreeningHolder person) {
+    static public void reset(OnlineApplication application, Customer person) {
         for (Iterator<DigitalSignature> it = application.signatures().iterator(); it.hasNext();) {
             DigitalSignature sig = it.next();
             if (sig.person().equals(person)) {

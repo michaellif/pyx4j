@@ -32,7 +32,7 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
@@ -70,9 +70,9 @@ public class AccessRulesTest extends VistaDBTestBase {
             lease.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.service().persist(lease);
 
-            TenantInLease tl2 = EntityFactory.create(TenantInLease.class);
+            Tenant tl2 = EntityFactory.create(Tenant.class);
             tl2.leaseV().set(lease.version());
-            tl2.tenant().set(t2);
+            tl2.customer().set(t2);
             Persistence.service().persist(tl2);
         }
 
@@ -108,10 +108,10 @@ public class AccessRulesTest extends VistaDBTestBase {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(lease);
 
-        TenantInLease tl1 = EntityFactory.create(TenantInLease.class);
+        Tenant tl1 = EntityFactory.create(Tenant.class);
 
         tl1.leaseV().set(lease.version());
-        tl1.tenant().set(t1);
+        tl1.customer().set(t1);
         Persistence.service().persist(tl1);
 
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);

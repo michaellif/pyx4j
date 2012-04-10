@@ -32,7 +32,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.tenant.screening.GuarantorCrudService;
 import com.propertyvista.crm.rpc.services.tenant.screening.PersonScreeningCrudService;
-import com.propertyvista.domain.tenant.Guarantor_Old;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.GuarantorDTO;
 
@@ -69,7 +69,7 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     public void onPopulateSuccess(GuarantorDTO result) {
         super.onPopulateSuccess(result);
 
-        screeningLister.setParent(result.getPrimaryKey(), Guarantor_Old.class);
+        screeningLister.setParent(result.getPrimaryKey(), Guarantor.class);
         screeningLister.populate();
     }
 

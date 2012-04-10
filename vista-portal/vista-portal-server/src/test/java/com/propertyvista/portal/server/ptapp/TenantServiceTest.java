@@ -23,7 +23,7 @@ import com.propertvista.generator.PTGenerator;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
@@ -64,10 +64,10 @@ public class TenantServiceTest extends VistaDBTestBase {
         log.info(tenantList.toString());
         Assert.assertEquals("One tenant", 1, tenantList.tenants().size());
 
-        TenantInLease tenant = tenantList.tenants().get(0);
+        Tenant tenant = tenantList.tenants().get(0);
 
-        Assert.assertEquals("Applicant status", TenantInLease.Role.Applicant, tenant.role().getValue());
-        Assert.assertEquals("Email", email, tenant.tenant().person().email().getValue());
+        Assert.assertEquals("Applicant status", Tenant.Role.Applicant, tenant.role().getValue());
+        Assert.assertEquals("Email", email, tenant.customer().person().email().getValue());
     }
 
     public void testLoadAndSave() {

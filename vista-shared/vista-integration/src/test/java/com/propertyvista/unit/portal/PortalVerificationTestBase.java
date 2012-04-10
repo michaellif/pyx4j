@@ -75,7 +75,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             num++;
         }
 
-        assertNotPresent(D.id(proto(TenantInApplicationListDTO.class).tenants(), num, proto(TenantInLeaseDTO.class).tenant().person().name().firstName()));
+        assertNotPresent(D.id(proto(TenantInApplicationListDTO.class).tenants(), num, proto(TenantInLeaseDTO.class).customer().person().name().firstName()));
 
         if (doSave) {
             saveAndContinue();
@@ -83,14 +83,14 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
     }
 
     protected void assertTenantRow(IDebugId formDebugId, TenantInLeaseDTO tenant, boolean fullInfo) {
-        assertValueOnForm(formDebugId, tenant.tenant().person().name().firstName());
-        assertValueOnForm(formDebugId, tenant.tenant().person().name().lastName());
-        assertValueOnForm(formDebugId, tenant.tenant().person().name().middleName());
+        assertValueOnForm(formDebugId, tenant.customer().person().name().firstName());
+        assertValueOnForm(formDebugId, tenant.customer().person().name().lastName());
+        assertValueOnForm(formDebugId, tenant.customer().person().name().middleName());
 
-        assertValueOnForm(formDebugId, tenant.tenant().person().birthDate());
+        assertValueOnForm(formDebugId, tenant.customer().person().birthDate());
 
         if (fullInfo) {
-            assertValueOnForm(formDebugId, tenant.tenant().person().email());
+            assertValueOnForm(formDebugId, tenant.customer().person().email());
             assertValueOnForm(formDebugId, tenant.relationship());
             assertValueOnForm(formDebugId, tenant.role());
             assertValueOnForm(formDebugId, tenant.takeOwnership());
@@ -277,7 +277,8 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             verifyGuarantor(debugID, detach(guarantor));
             row++;
         }
-        assertNotPresent(D.id(proto(TenantFinancialDTO.class).guarantors(), row, proto(PersonGuarantor.class).guarantor().person().name().firstName()));
+        assertNotPresent(D.id(proto(TenantFinancialDTO.class).guarantors(), row, proto(PersonGuarantor.class).guarantor().customer().person().name()
+                .firstName()));
     }
 
     private void verifyIncome(IDebugId formDebugId, PersonalIncome income) {
@@ -353,14 +354,14 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
     }
 
     private void verifyGuarantor(IDebugId debugID, PersonGuarantor guarantor) {
-        assertValueOnForm(debugID, guarantor.guarantor().person().name().firstName());
-        assertValueOnForm(debugID, guarantor.guarantor().person().name().middleName());
-        assertValueOnForm(debugID, guarantor.guarantor().person().name().lastName());
-        assertValueOnForm(debugID, guarantor.guarantor().person().homePhone());
-        assertValueOnForm(debugID, guarantor.guarantor().person().mobilePhone());
-        assertValueOnForm(debugID, guarantor.guarantor().person().workPhone());
-        assertValueOnForm(debugID, guarantor.guarantor().person().birthDate());
-        assertValueOnForm(debugID, guarantor.guarantor().person().email());
+        assertValueOnForm(debugID, guarantor.guarantor().customer().person().name().firstName());
+        assertValueOnForm(debugID, guarantor.guarantor().customer().person().name().middleName());
+        assertValueOnForm(debugID, guarantor.guarantor().customer().person().name().lastName());
+        assertValueOnForm(debugID, guarantor.guarantor().customer().person().homePhone());
+        assertValueOnForm(debugID, guarantor.guarantor().customer().person().mobilePhone());
+        assertValueOnForm(debugID, guarantor.guarantor().customer().person().workPhone());
+        assertValueOnForm(debugID, guarantor.guarantor().customer().person().birthDate());
+        assertValueOnForm(debugID, guarantor.guarantor().customer().person().email());
         assertValueOnForm(debugID, guarantor.relationship());
     }
 

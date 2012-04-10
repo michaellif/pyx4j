@@ -51,7 +51,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -294,9 +294,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().expectedMoveIn())));
         get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().expectedMoveIn())));
 
-        get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<TenantInLease>>() {
+        get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<Tenant>>() {
             @Override
-            public ValidationFailure isValid(CComponent<List<TenantInLease>, ?> component, List<TenantInLease> value) {
+            public ValidationFailure isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
                 if (value != null) {
                     return (value.isEmpty() ? new ValidationFailure(i18n.tr("At least one tenant should be selected!")) : null);
                 }

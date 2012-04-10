@@ -52,7 +52,7 @@ public class GuarantorInfoServiceImpl implements GuarantorInfoService {
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, entity);
         entity.setPrimaryKey(tr.personGuarantor.getPrimaryKey());
 
-        DigitalSignatureMgr.reset(tr.getGuarantor());
+        DigitalSignatureMgr.reset(tr.getGuarantor().customer());
         Persistence.service().commit();
 
         // we do not use return value, so return the same as input one:        

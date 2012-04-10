@@ -18,11 +18,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 
 public class TenantInLeaseRetriever extends TenantRetriever {
 
-    public TenantInLease tenantInLease;
+    public Tenant tenantInLease;
 
     // Construction:
     public TenantInLeaseRetriever() {
@@ -42,12 +42,12 @@ public class TenantInLeaseRetriever extends TenantRetriever {
     // Manipulation:
     @Override
     public void retrieve(Key tenanInLeasetId) {
-        tenantInLease = Persistence.service().retrieve(TenantInLease.class, tenanInLeasetId);
+        tenantInLease = Persistence.service().retrieve(Tenant.class, tenanInLeasetId);
         // TODO correct this check:
         if ((tenantInLease == null) /* || (!tenantInLease.lease().getPrimaryKey().equals(PtAppContext.getCurrentUserLeasePrimaryKey())) */) {
             throw new SecurityViolationException("Invalid data access");
         }
 
-        super.retrieve(tenantInLease.tenant().getPrimaryKey());
+        super.retrieve(tenantInLease.customer().getPrimaryKey());
     }
 }

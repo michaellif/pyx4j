@@ -57,18 +57,19 @@ public class PersonGuarantorEditor extends CEntityDecoratableEditor<PersonGuaran
         int row1 = row;
 
         if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().person().name().namePrefix()), 5).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().person().name().firstName()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().person().name().middleName()), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().person().name().lastName()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().customer().person().name().namePrefix()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().customer().person().name().firstName()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().customer().person().name().middleName()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().customer().person().name().lastName()), 20).build());
         } else {
             main.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().guarantor().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Guarantor")).build());
-            get(proto().guarantor().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+                    new DecoratorBuilder(inject(proto().guarantor().customer().person().name(), new CEntityLabel<Name>()), 25)
+                            .customLabel(i18n.tr("Guarantor")).build());
+            get(proto().guarantor().customer().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().person().sex()), 7).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().person().birthDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().customer().person().sex()), 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().customer().person().birthDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 9).build());
 
         int col = 1;
@@ -76,10 +77,10 @@ public class PersonGuarantorEditor extends CEntityDecoratableEditor<PersonGuaran
             row1 = row;
             col = 0;
         }
-        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().guarantor().person().homePhone()), 15).build());
-        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().guarantor().person().mobilePhone()), 15).build());
-        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().guarantor().person().workPhone()), 15).build());
-        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().guarantor().person().email()), 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().guarantor().customer().person().homePhone()), 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().guarantor().customer().person().mobilePhone()), 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().guarantor().customer().person().workPhone()), 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().guarantor().customer().person().email()), 15).build());
 
         return main;
     }
@@ -87,9 +88,9 @@ public class PersonGuarantorEditor extends CEntityDecoratableEditor<PersonGuaran
     @Override
     public void addValidations() {
 
-        get(proto().guarantor().person().email()).setMandatory(true);
+        get(proto().guarantor().customer().person().email()).setMandatory(true);
 
-        get(proto().guarantor().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+        get(proto().guarantor().customer().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
 
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {

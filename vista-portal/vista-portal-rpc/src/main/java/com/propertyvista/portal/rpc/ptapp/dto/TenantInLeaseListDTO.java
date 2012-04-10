@@ -21,14 +21,14 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.IBoundToApplication;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface TenantInLeaseListDTO extends IEntity, IBoundToApplication {
 
     @Length(6)
-    IList<TenantInLease> tenants();
+    IList<Tenant> tenants();
 
     //TODO this should be AptUnit property
     IPrimitive<Integer> tenantsMaximum();

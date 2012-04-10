@@ -28,7 +28,7 @@ import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.domain.tenant.Guarantor_Old;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
@@ -98,8 +98,8 @@ public class PtAppContext extends VistaContext {
         return Persistence.service().retrieve(criteria);
     }
 
-    public static Guarantor_Old getCurrentUserGuarantor() {
-        EntityQueryCriteria<Guarantor_Old> criteria = EntityQueryCriteria.create(Guarantor_Old.class);
+    public static Guarantor getCurrentUserGuarantor() {
+        EntityQueryCriteria<Guarantor> criteria = EntityQueryCriteria.create(Guarantor.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtAppContext.getCurrentUser()));
         return Persistence.service().retrieve(criteria);
     }

@@ -22,7 +22,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -48,7 +48,7 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
         void cancelEvict();
 
-        void sendMail(List<TenantInLease> tenants, EmailTemplateType emailType);
+        void sendMail(List<Tenant> tenants, EmailTemplateType emailType);
 
     }
 

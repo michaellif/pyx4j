@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.dashboard.gadgets.util.ComparableComparator;
 import com.propertyvista.domain.dashboard.gadgets.util.CustomComparator;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Tenant;
 
 public interface ArrearsState extends IEntity {
 
@@ -39,7 +40,7 @@ public interface ArrearsState extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    Customer tenant();
+    Tenant tenant();
 
     IPrimitive<LogicalDate> asOf();
 

@@ -14,12 +14,29 @@
 package com.propertyvista.domain.tenant;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.security.TenantUserHolder;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @DiscriminatorValue("Guarantor")
-@Deprecated
-public interface Guarantor_Old extends IEntity, PersonScreeningHolder, TenantUserHolder {
+public interface Guarantor extends LeaseParticipant, TenantUserHolder {
 
+    @Override
+    @NotNull
+    @ReadOnly
+    @ToString(index = 0)
+    Customer customer();
+
+    @NotNull
+    @ToString(index = 1)
+    IPrimitive<PersonRelationship> relationship();
+
+    /**
+     * Who invited this Guarantor to lease
+     */
+    Tenant tenant();
 }

@@ -35,7 +35,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.Status;
@@ -129,9 +129,9 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
                 tenant.person().set(guest.person());
                 Persistence.service().persist(tenant);
 
-                TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
-                tenantInLease.tenant().set(tenant);
-                tenantInLease.role().setValue(asApplicant ? TenantInLease.Role.Applicant : TenantInLease.Role.CoApplicant);
+                Tenant tenantInLease = EntityFactory.create(Tenant.class);
+                tenantInLease.customer().set(tenant);
+                tenantInLease.role().setValue(asApplicant ? Tenant.Role.Applicant : Tenant.Role.CoApplicant);
                 lease.version().tenants().add(tenantInLease);
                 asApplicant = false;
             }

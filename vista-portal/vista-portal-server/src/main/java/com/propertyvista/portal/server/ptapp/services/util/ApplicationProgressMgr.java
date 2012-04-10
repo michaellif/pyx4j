@@ -30,13 +30,13 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.domain.tenant.Guarantor_Old;
-import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonGuarantor;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -46,7 +46,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
 
     private final static Logger log = LoggerFactory.getLogger(ApplicationProgressMgr.class);
 
-    public static boolean shouldEnterInformation(TenantInLease tenant) {
+    public static boolean shouldEnterInformation(Tenant tenant) {
         if (tenant.isNull()) {
             log.info("Received a null tenant when checking for eligibility");
             return false;
@@ -54,14 +54,14 @@ public class ApplicationProgressMgr extends ApplicationManager {
 
         if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant)) {
             //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
-            if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
+            if (tenant.role().getValue() == Tenant.Role.Applicant) {
                 return true;
             }
             if (!tenant.takeOwnership().isBooleanTrue()) {
                 return false;
             }
-            return (TimeUtils.isOlderThan(tenant.tenant().person().birthDate().getValue(), 18));
-        } else if (tenant.tenant().equals(PtAppContext.getCurrentUserTenant())) {
+            return (TimeUtils.isOlderThan(tenant.customer().person().birthDate().getValue(), 18));
+        } else if (tenant.customer().equals(PtAppContext.getCurrentUserTenant())) {
             return true; // allow just his/her data...
         }
         return false;
@@ -99,9 +99,9 @@ public class ApplicationProgressMgr extends ApplicationManager {
 
     public static void createTenantDataSteps(OnlineApplication application, Customer tenant) {
 
-        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
-        TenantInLease outer = Persistence.service().retrieve(criteria);
+        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), tenant));
+        Tenant outer = Persistence.service().retrieve(criteria);
         if (outer == null) {
             throw new Error("TenantInLease for '" + tenant.getStringView() + "' not found");
         }
@@ -109,7 +109,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
         createPersonDataSteps(application, tenant.person(), outer.getPrimaryKey());
     }
 
-    public static void createGurantorDataSteps(OnlineApplication application, Guarantor_Old guarantor) {
+    public static void createGurantorDataSteps(OnlineApplication application, Guarantor guarantor) {
 
         EntityQueryCriteria<PersonGuarantor> criteria = EntityQueryCriteria.create(PersonGuarantor.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().guarantor(), guarantor));
@@ -118,7 +118,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
             throw new Error("PersonGuarantor for '" + guarantor.getStringView() + "' not found");
         }
 
-        createPersonDataSteps(application, guarantor.person(), outer.getPrimaryKey());
+        createPersonDataSteps(application, guarantor.customer().person(), outer.getPrimaryKey());
     }
 
     public static void createPersonDataSteps(OnlineApplication application, Person person, Key stepID) {
@@ -194,7 +194,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
             // create an new sub-step:
             subStep = EntityFactory.create(ApplicationWizardSubstep.class);
             subStep.placeArgument().setValue(tenant.getPrimaryKey().toString());
-            subStep.name().setValue(tenant.tenant().person().name().getStringView());
+            subStep.name().setValue(tenant.customer().person().name().getStringView());
             subStep.status().setValue(ApplicationWizardStep.Status.notVisited);
         }
 

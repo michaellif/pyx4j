@@ -41,7 +41,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
@@ -122,7 +122,7 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
         new LeaseManager().save(dbo);
 
         int no = 0;
-        for (TenantInLease item : dbo.version().tenants()) {
+        for (Tenant item : dbo.version().tenants()) {
             item.leaseV().set(dbo.version());
             item.orderInLease().setValue(no++);
             Persistence.service().merge(item);
@@ -297,20 +297,20 @@ public class LeaseCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<Le
     }
 
     @Override
-    public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<TenantInLease> tenants, EmailTemplateType emailType) {
+    public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<Tenant> tenants, EmailTemplateType emailType) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, entityId);
-        for (TenantInLease tenant : tenants) {
-            tenant = Persistence.service().retrieve(TenantInLease.class, tenant.getPrimaryKey());
-            TenantUser user = tenant.tenant().user();
+        for (Tenant tenant : tenants) {
+            tenant = Persistence.service().retrieve(Tenant.class, tenant.getPrimaryKey());
+            TenantUser user = tenant.customer().user();
             if (user.isValueDetached()) {
                 Persistence.service().retrieve(user);
             }
             switch (tenant.role().getValue()) {
             case Applicant:
-                ApplicationManager.ensureProspectiveTenantUser(tenant.tenant(), tenant.tenant().person(), VistaTenantBehavior.TenantPrimary);
+                ApplicationManager.ensureProspectiveTenantUser(tenant.customer(), tenant.customer().person(), VistaTenantBehavior.TenantPrimary);
                 break;
             case CoApplicant:
-                ApplicationManager.ensureProspectiveTenantUser(tenant.tenant(), tenant.tenant().person(), VistaTenantBehavior.TenantSecondary);
+                ApplicationManager.ensureProspectiveTenantUser(tenant.customer(), tenant.customer().person(), VistaTenantBehavior.TenantSecondary);
                 break;
             }
 

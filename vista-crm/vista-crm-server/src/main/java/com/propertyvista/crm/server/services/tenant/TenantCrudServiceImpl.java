@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.propertyvista.crm.rpc.services.tenant.TenantCrudService;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
 
@@ -44,7 +44,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Customer, 
         // find first corresponding lease(s):
         Persistence.service().retrieveMember(in._tenantInLease());
         if (!in._tenantInLease().isEmpty()) {
-            TenantInLease til = in._tenantInLease().iterator().next();
+            Tenant til = in._tenantInLease().iterator().next();
             Persistence.service().retrieve(til.leaseV());
             dto.lease().set(til.leaseV().holder());
             Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);
@@ -56,7 +56,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Customer, 
         // find first corresponding lease(s):
         Persistence.service().retrieveMember(in._tenantInLease());
         if (!in._tenantInLease().isEmpty()) {
-            TenantInLease til = in._tenantInLease().iterator().next();
+            Tenant til = in._tenantInLease().iterator().next();
             Persistence.service().retrieve(til.leaseV());
             dto.lease().set(til.leaseV().holder());
             Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);

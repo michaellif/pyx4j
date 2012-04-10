@@ -19,30 +19,26 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityViolationException;
 
-import com.propertyvista.domain.tenant.Guarantor_Old;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 
 public class PersonGuarantorRetriever extends TenantRetriever {
 
     public PersonGuarantor personGuarantor;
 
-    // Construction:
-    public PersonGuarantorRetriever() {
-        super(Guarantor_Old.class);
-    }
-
     public PersonGuarantorRetriever(Key personGuarantorId) {
-        super(Guarantor_Old.class, false);
+        super(Customer.class, false);
         retrieve(personGuarantorId);
     }
 
     public PersonGuarantorRetriever(Key personGuarantorId, boolean financial) {
-        super(Guarantor_Old.class, financial);
+        super(Customer.class, financial);
         retrieve(personGuarantorId);
     }
 
-    public PersonGuarantorRetriever(Guarantor_Old guarantor) {
-        super(Guarantor_Old.class, true);
+    public PersonGuarantorRetriever(Guarantor guarantor) {
+        super(Customer.class, true);
         // retrieve data opposite way:
         super.retrieve(guarantor.getPrimaryKey());
         EntityQueryCriteria<PersonGuarantor> criteria = EntityQueryCriteria.create(PersonGuarantor.class);

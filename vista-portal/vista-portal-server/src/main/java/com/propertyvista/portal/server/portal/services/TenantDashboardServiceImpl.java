@@ -32,7 +32,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.portal.dto.MessageDTO;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
@@ -54,7 +54,7 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
         Persistence.service().retrieve(tenant.user());
         dashboard.general().tenantName().set(tenant.user().name());
 
-        TenantInLease tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+        Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseV());
         Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
         Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().floorplan());

@@ -16,12 +16,12 @@ package com.propertyvista.crm.server.services.selections;
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 
 import com.propertyvista.crm.rpc.services.selections.SelectGuarantorListService;
-import com.propertyvista.domain.tenant.Guarantor_Old;
+import com.propertyvista.domain.tenant.Guarantor;
 
-public class SelectGuarantorListServiceImpl extends AbstractListServiceImpl<Guarantor_Old> implements SelectGuarantorListService {
+public class SelectGuarantorListServiceImpl extends AbstractListServiceImpl<Guarantor> implements SelectGuarantorListService {
 
     public SelectGuarantorListServiceImpl() {
-        super(Guarantor_Old.class);
+        super(Guarantor.class);
     }
 
     @Override

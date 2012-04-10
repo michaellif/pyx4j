@@ -51,7 +51,7 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder<Iden
     @ReadOnly
     @Detached
     @JoinColumn
-    PersonScreeningHolder screene();
+    Customer screene();
 
     @Format("MM/dd/yyyy")
     @Timestamp(Update.Created)

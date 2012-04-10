@@ -41,7 +41,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.mail.templates.EmailTemplateManager;
 import com.propertyvista.server.common.mail.templates.EmailTemplateRootObjectLoader;
@@ -81,7 +81,7 @@ public class MessageTemplates {
         return null;
     }
 
-    public static MailMessage createApplicationStatusEmail(TenantInLease tenantInLease, EmailTemplateType type) {
+    public static MailMessage createApplicationStatusEmail(Tenant tenantInLease, EmailTemplateType type) {
         // get building policy node
         Persistence.service().retrieve(tenantInLease.leaseV());
         Persistence.service().retrieve(tenantInLease.leaseV().holder());
@@ -99,9 +99,9 @@ public class MessageTemplates {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
         MailMessage email = new MailMessage();
-        TenantUser user = tenantInLease.tenant().user();
+        TenantUser user = tenantInLease.customer().user();
         if (user.isValueDetached()) {
-            Persistence.service().retrieve(tenantInLease.tenant().user());
+            Persistence.service().retrieve(tenantInLease.customer().user());
         }
         email.setTo(user.email().getValue());
         email.setSender(getSender());
@@ -167,9 +167,9 @@ public class MessageTemplates {
                     templateType = EmailTemplateType.PasswordRetrievalTenant;
                 }
                 // get building policy node form the first available TenantInLease entry
-                EntityQueryCriteria<TenantInLease> tilCrit = EntityQueryCriteria.create(TenantInLease.class);
-                tilCrit.add(PropertyCriterion.eq(tilCrit.proto().tenant().user(), user));
-                TenantInLease til = Persistence.service().retrieve(tilCrit);
+                EntityQueryCriteria<Tenant> tilCrit = EntityQueryCriteria.create(Tenant.class);
+                tilCrit.add(PropertyCriterion.eq(tilCrit.proto().customer().user(), user));
+                Tenant til = Persistence.service().retrieve(tilCrit);
                 if (til != null) {
                     Persistence.service().retrieve(til.leaseV());
                     Persistence.service().retrieve(til.leaseV().holder());
