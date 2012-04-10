@@ -74,21 +74,32 @@ public interface Lease extends IVersionedEntity<LeaseV> {
             return I18nEnum.toString(this);
         }
 
+        // state sets:
+
+        public static EnumSet<Status> draft() {
+            return EnumSet.of(Created, ApplicationInProgress);
+        }
+
         public static EnumSet<Status> current() {
             return EnumSet.of(Approved, Active, Completed, FinalBillIssued);
         }
+
+        public static EnumSet<Status> former() {
+            return EnumSet.of(Completed, FinalBillIssued, Closed);
+        }
+
+        // states:
 
         public boolean isCurrent() {
             return current().contains(this);
         }
 
         public boolean isDraft() {
-            return this == Created || this == ApplicationInProgress;
+            return draft().contains(this);
         }
 
-        //TODO find better name
-        public boolean isClosed() {
-            return this == Completed || this == Closed;
+        public boolean isFormer() {
+            return former().contains(this);
         }
     }
 
