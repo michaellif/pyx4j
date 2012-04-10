@@ -77,14 +77,14 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
         case file:
             dto.mediaType().setValue(MediaIO.MediaType.file);
             if (mediaConfig.baseFolder != null) {
-                dto.uri().setValue(dbo.file().blobKey().getStringView() + "-" + dbo.file().fileName().getStringView());
+                dto.uri().setValue(mediaConfig.directory + dbo.file().blobKey().getStringView() + "-" + dbo.file().fileName().getStringView());
                 try {
                     BlobService.save(dbo.file().blobKey().getValue(), new File(mediaConfig.baseFolder + dto.uri().getValue()));
                 } catch (IOException e) {
                     throw new Error(e);
                 }
             } else {
-                dto.uri().setValue(dbo.id().getStringView() + "/" + dbo.file().fileName().getStringView());
+                dto.uri().setValue(dbo.id().getStringView() + dbo.file().fileName().getStringView());
             }
             break;
         case externalUrl:

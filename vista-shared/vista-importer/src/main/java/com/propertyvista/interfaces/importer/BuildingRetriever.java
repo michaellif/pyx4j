@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -45,7 +45,14 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class BuildingRetriever {
 
+    private static MediaConfig buildingConfig = new MediaConfig();
+
     public BuildingIO getModel(Building building, MediaConfig mediaConfig) {
+
+        buildingConfig = mediaConfig;
+        buildingConfig.directory = "";
+
+        MediaConfig floorplanConfig = new MediaConfig();
 
         if (building.contacts().organizationContacts().getMeta().isDetached()) {
             Persistence.service().retrieve(building.contacts().organizationContacts());
@@ -58,6 +65,9 @@ public class BuildingRetriever {
         }
 
         BuildingIO buildingIO = new BuildingConverter().createDTO(building);
+        if (!buildingIO.propertyCode().isNull()) {
+            buildingConfig.directory = buildingIO.propertyCode().getStringView() + "/";
+        }
 
         //Get Amenity
         {
@@ -78,7 +88,7 @@ public class BuildingRetriever {
 
         Persistence.service().retrieve(building.media());
         for (Media media : building.media()) {
-            buildingIO.medias().add(new MediaConverter(mediaConfig, ImageTarget.Building).createDTO(media));
+            buildingIO.medias().add(new MediaConverter(buildingConfig, ImageTarget.Building).createDTO(media));
         }
 
         //TODO
@@ -109,9 +119,12 @@ public class BuildingRetriever {
                 }
             }
 
+            floorplanConfig.baseFolder = buildingConfig.baseFolder;
+            floorplanConfig.directory = buildingConfig.directory + "floorplans/" + floorplan.name().getStringView() + "/";
+
             Persistence.service().retrieve(floorplan.media());
             for (Media media : floorplan.media()) {
-                floorplanIO.medias().add(new MediaConverter(mediaConfig, ImageTarget.Floorplan).createDTO(media));
+                floorplanIO.medias().add(new MediaConverter(floorplanConfig, ImageTarget.Floorplan).createDTO(media));
             }
 
         }
