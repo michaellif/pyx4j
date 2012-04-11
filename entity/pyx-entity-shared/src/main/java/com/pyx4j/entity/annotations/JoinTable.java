@@ -39,10 +39,6 @@ public @interface JoinTable {
 
     Class<? extends IEntity> value();
 
-    /**
-     * N.B. cascade() true is not implemented!
-     */
-    @Deprecated
     boolean cascade() default false;
 
     /**
