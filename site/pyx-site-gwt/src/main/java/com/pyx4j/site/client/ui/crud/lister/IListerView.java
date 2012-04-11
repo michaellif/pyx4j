@@ -35,6 +35,10 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         public ListerDataSource<E> getDataSource();
 
+        Key getParent();
+
+        Class<? extends IEntity> getParentClass();
+
         void setParent(Key parentID);
 
         void setParent(Key parentID, Class<? extends IEntity> parentClass);

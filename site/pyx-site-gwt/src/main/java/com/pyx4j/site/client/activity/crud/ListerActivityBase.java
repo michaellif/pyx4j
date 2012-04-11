@@ -84,6 +84,16 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
+    public Key getParent() {
+        return parentID;
+    }
+
+    @Override
+    public Class<? extends IEntity> getParentClass() {
+        return parentClass;
+    }
+
+    @Override
     public void setParent(Key parentID) {
         setParent(parentID, null);
     }
