@@ -21,7 +21,7 @@ import com.propertyvista.dto.GuarantorDTO;
 public class GuarantorLister extends ListerBase<GuarantorDTO> {
 
     public GuarantorLister() {
-        super(GuarantorDTO.class, false, true);
+        super(GuarantorDTO.class, false, false);
 
         // TODO: currently we use just person tenant, so we'll display more data for them:
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().displayName()));

@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.tenant;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.dto.TenantDTO;
@@ -41,11 +40,5 @@ public class TenantLister extends ListerBase<TenantDTO> {
                 new Builder(proto().leaseV().holder()).searchable(false).build(),
                 new Builder(proto().leaseV().holder().leaseId()).searchableOnly().build()
             ); // @formatter:on
-    }
-
-    @Override
-    protected EntityListCriteria<TenantDTO> updateCriteria(EntityListCriteria<TenantDTO> criteria) {
-//        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-        return super.updateCriteria(criteria);
     }
 }
