@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
@@ -27,6 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
@@ -47,7 +47,7 @@ import com.propertyvista.dto.LeaseDTO;
 public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements LeaseEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public LeaseEditorActivity(Place place) {
+    public LeaseEditorActivity(CrudAppPlace place) {
         super(place, TenantViewFactory.instance(LeaseEditorView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class), LeaseDTO.class);
     }
 

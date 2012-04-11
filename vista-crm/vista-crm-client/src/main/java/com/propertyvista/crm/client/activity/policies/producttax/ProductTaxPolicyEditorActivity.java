@@ -14,7 +14,8 @@
 package com.propertyvista.crm.client.activity.policies.producttax;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
+
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.producttaxes.ProductTaxPolicyEditorView;
@@ -24,7 +25,7 @@ import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
 public class ProductTaxPolicyEditorActivity extends PolicyEditorActivityBase<ProductTaxPolicyDTO> {
 
-    public ProductTaxPolicyEditorActivity(Place place) {
+    public ProductTaxPolicyEditorActivity(CrudAppPlace place) {
         super(place, PolicyViewFactory.instance(ProductTaxPolicyEditorView.class), GWT.<ProductTaxPolicyCrudService> create(ProductTaxPolicyCrudService.class),
                 ProductTaxPolicyDTO.class);
     }

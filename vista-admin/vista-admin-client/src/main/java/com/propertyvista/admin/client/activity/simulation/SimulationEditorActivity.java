@@ -14,10 +14,10 @@
 package com.propertyvista.admin.client.activity.simulation;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.ui.crud.simulation.SimulationEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
@@ -26,7 +26,7 @@ import com.propertyvista.admin.rpc.services.SimulationService;
 
 public class SimulationEditorActivity extends EditorActivityBase<SimulationDTO> implements SimulationEditorView.Presenter {
 
-    public SimulationEditorActivity(Place place) {
+    public SimulationEditorActivity(CrudAppPlace place) {
         super(place, AdministrationVeiwFactory.instance(SimulationEditorView.class), GWT.<AbstractCrudService<SimulationDTO>> create(SimulationService.class),
                 SimulationDTO.class);
     }

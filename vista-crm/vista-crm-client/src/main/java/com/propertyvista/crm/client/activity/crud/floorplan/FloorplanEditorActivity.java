@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.floorplan;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
@@ -27,7 +27,7 @@ import com.propertyvista.dto.FloorplanDTO;
 public class FloorplanEditorActivity extends EditorActivityBase<FloorplanDTO> implements FloorplanEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public FloorplanEditorActivity(Place place) {
+    public FloorplanEditorActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(FloorplanEditorView.class), (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class),
                 FloorplanDTO.class);
     }

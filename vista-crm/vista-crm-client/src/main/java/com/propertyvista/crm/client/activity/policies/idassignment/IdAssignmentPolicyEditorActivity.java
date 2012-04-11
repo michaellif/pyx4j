@@ -14,7 +14,8 @@
 package com.propertyvista.crm.client.activity.policies.idassignment;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
+
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.idassignment.IdAssignmentPolicyEditorView;
@@ -24,7 +25,7 @@ import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 
 public class IdAssignmentPolicyEditorActivity extends PolicyEditorActivityBase<IdAssignmentPolicyDTO> {
 
-    public IdAssignmentPolicyEditorActivity(Place place) {
+    public IdAssignmentPolicyEditorActivity(CrudAppPlace place) {
         super(place, PolicyViewFactory.instance(IdAssignmentPolicyEditorView.class), GWT
                 .<IdAssignmentPolicyCrudService> create(IdAssignmentPolicyCrudService.class), IdAssignmentPolicyDTO.class);
     }

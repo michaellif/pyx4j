@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.settings.content;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -39,11 +38,11 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
     private PageParent pageParentArg = null;
 
     @SuppressWarnings("unchecked")
-    public PageEditorActivity(Place place) {
+    public PageEditorActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(PageEditor.class), (AbstractCrudService<PageDescriptor>) GWT.create(PageDescriptorCrudService.class),
                 PageDescriptor.class);
 
-        String val = ((CrudAppPlace) place).getFirstArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT);
+        String val = place.getFirstArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT);
         if (val != null) {
             pageParentArg = PageParent.valueOf(val);
         }

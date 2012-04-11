@@ -14,9 +14,9 @@
 package com.propertyvista.admin.client.activity.crud.adminusers;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
@@ -25,7 +25,7 @@ import com.propertyvista.admin.rpc.services.AdminUserCrudService;
 
 public class AdminUserEditorActivity extends EditorActivityBase<AdminUserDTO> {
 
-    public AdminUserEditorActivity(Place place) {
+    public AdminUserEditorActivity(CrudAppPlace place) {
         super(place, AdministrationVeiwFactory.instance(AdminUserEditorView.class), GWT.<AdminUserCrudService> create(AdminUserCrudService.class),
                 AdminUserDTO.class);
     }

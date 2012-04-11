@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.activity.report;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -37,7 +36,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 public class ReportEditorActivity extends EditorActivityBase<DashboardMetadata> {
 
     @SuppressWarnings("unchecked")
-    public ReportEditorActivity(Place place) {
+    public ReportEditorActivity(CrudAppPlace place) {
         super(place, DashboardViewFactory.instance(ReportEditor.class), (AbstractCrudService<DashboardMetadata>) GWT.create(ReportMetadataCrudService.class),
                 DashboardMetadata.class);
 

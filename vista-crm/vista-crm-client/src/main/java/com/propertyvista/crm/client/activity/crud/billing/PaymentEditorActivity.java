@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.billing;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
@@ -26,7 +26,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 
 public class PaymentEditorActivity extends EditorActivityBase<PaymentRecord> {
 
-    public PaymentEditorActivity(Place place) {
+    public PaymentEditorActivity(CrudAppPlace place) {
         super(place,
 
         SettingsViewFactory.instance(PaymentEditorView.class),

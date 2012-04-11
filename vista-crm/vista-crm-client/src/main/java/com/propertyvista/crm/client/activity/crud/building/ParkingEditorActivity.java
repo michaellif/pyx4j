@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
@@ -27,7 +27,7 @@ import com.propertyvista.dto.ParkingDTO;
 public class ParkingEditorActivity extends EditorActivityBase<ParkingDTO> implements ParkingEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public ParkingEditorActivity(Place place) {
+    public ParkingEditorActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(ParkingEditorView.class), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class),
                 ParkingDTO.class);
     }

@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.building.mech.ElevatorEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
@@ -27,7 +27,7 @@ import com.propertyvista.dto.ElevatorDTO;
 public class ElevatorEditorActivity extends EditorActivityBase<ElevatorDTO> {
 
     @SuppressWarnings("unchecked")
-    public ElevatorEditorActivity(Place place) {
+    public ElevatorEditorActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(ElevatorEditorView.class), (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class),
                 ElevatorDTO.class);
     }

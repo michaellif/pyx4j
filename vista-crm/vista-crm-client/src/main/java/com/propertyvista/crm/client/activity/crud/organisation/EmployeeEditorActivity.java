@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.organisation;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
@@ -27,7 +27,7 @@ import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 public class EmployeeEditorActivity extends EditorActivityBase<EmployeeDTO> implements EmployeeEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public EmployeeEditorActivity(Place place) {
+    public EmployeeEditorActivity(CrudAppPlace place) {
         super(place, OrganizationViewFactory.instance(EmployeeEditorView.class), (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class),
                 EmployeeDTO.class);
     }

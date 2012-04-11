@@ -54,67 +54,70 @@ public class MainActivityMapper implements AppActivityMapper {
             @Override
             public void onSuccess() {
                 Activity activity = null;
-                if (place instanceof AdminSiteMap.Management.PMC) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new PmcEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new PmcViewerActivity(place);
-                        break;
-                    case lister:
-                        activity = new PmcListerActivity(place);
-                        break;
-                    }
+                if (place instanceof CrudAppPlace) {
+                    CrudAppPlace crudPlace = (CrudAppPlace) place;
+                    if (place instanceof AdminSiteMap.Management.PMC) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new PmcEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PmcViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new PmcListerActivity(crudPlace);
+                            break;
+                        }
 
-                } else if (place instanceof AdminSiteMap.Management.OnboardingUsers) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new OnboardingUserEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new OnBoardingUserViewerActivity(place);
-                        break;
-                    case lister:
-                        activity = new OnboardingUserListerActivity(place);
-                        break;
-                    }
+                    } else if (place instanceof AdminSiteMap.Management.OnboardingUsers) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new OnboardingUserEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new OnBoardingUserViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new OnboardingUserListerActivity(crudPlace);
+                            break;
+                        }
 
-                    // - Administration:
-                } else if (place instanceof AdminSiteMap.Administration.Maintenance) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new MaintenanceEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new MaintenanceViewerActivity(place);
-                        break;
-                    }
+                        // - Administration:
+                    } else if (place instanceof AdminSiteMap.Administration.Maintenance) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new MaintenanceEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new MaintenanceViewerActivity(crudPlace);
+                            break;
+                        }
 
-                } else if (place instanceof AdminSiteMap.Administration.Simulation) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new SimulationEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new SimulationViewerActivity(place);
-                        break;
-                    }
+                    } else if (place instanceof AdminSiteMap.Administration.Simulation) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new SimulationEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new SimulationViewerActivity(crudPlace);
+                            break;
+                        }
 
-                } else if (place instanceof AdminSiteMap.Administration.AdminUsers) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new AdminUserEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new AdminUserViewerActivity(place);
-                        break;
-                    case lister:
-                        activity = new AdminUserListerActivity(place);
-                        break;
-                    }
+                    } else if (place instanceof AdminSiteMap.Administration.AdminUsers) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new AdminUserEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new AdminUserViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new AdminUserListerActivity(crudPlace);
+                            break;
+                        }
 
-                    // - Settings:
+                        // - Settings:
+                    }
                 } else if (place instanceof AdminSiteMap.Settings) {
                     activity = new SettingsActivity(place);
 

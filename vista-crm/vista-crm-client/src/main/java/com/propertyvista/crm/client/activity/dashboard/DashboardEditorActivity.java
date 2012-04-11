@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.activity.dashboard;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -38,7 +37,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadata> {
 
     @SuppressWarnings("unchecked")
-    public DashboardEditorActivity(Place place) {
+    public DashboardEditorActivity(CrudAppPlace place) {
         super(place, DashboardViewFactory.instance(DashboardEditor.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(DashboardMetadataCrudService.class), DashboardMetadata.class);
 

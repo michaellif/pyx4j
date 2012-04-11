@@ -15,10 +15,10 @@
 package com.propertyvista.crm.client.activity.crud.settings.dictionary;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.FeatureTypeEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
@@ -28,7 +28,7 @@ import com.propertyvista.domain.financial.offering.FeatureItemType;
 public class FeatureItemTypeEditorActivity extends EditorActivityBase<FeatureItemType> {
 
     @SuppressWarnings("unchecked")
-    public FeatureItemTypeEditorActivity(Place place) {
+    public FeatureItemTypeEditorActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(FeatureTypeEditorView.class), (AbstractCrudService<FeatureItemType>) GWT
                 .create(FeatureItemTypeCrudService.class), FeatureItemType.class);
     }

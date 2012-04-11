@@ -14,7 +14,8 @@
 package com.propertyvista.crm.client.activity.policies.deposit;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
+
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyEditorView;
@@ -24,7 +25,7 @@ import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 
 public class DepositPolicyEditorActivity extends PolicyEditorActivityBase<DepositPolicyDTO> {
 
-    public DepositPolicyEditorActivity(Place place) {
+    public DepositPolicyEditorActivity(CrudAppPlace place) {
         super(place, PolicyViewFactory.instance(DepositPolicyEditorView.class), GWT.<DepositPolicyCrudService> create(DepositPolicyCrudService.class),
                 DepositPolicyDTO.class);
     }

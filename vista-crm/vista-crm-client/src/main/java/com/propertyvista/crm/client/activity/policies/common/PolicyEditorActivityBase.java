@@ -13,19 +13,20 @@
  */
 package com.propertyvista.crm.client.activity.policies.common;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 
 public abstract class PolicyEditorActivityBase<POLICY_DTO extends PolicyDTOBase> extends EditorActivityBase<POLICY_DTO> {
 
-    public PolicyEditorActivityBase(Place place, IEditorView<POLICY_DTO> view, AbstractPolicyCrudService<POLICY_DTO> service, Class<POLICY_DTO> entityClass) {
+    public PolicyEditorActivityBase(CrudAppPlace place, IEditorView<POLICY_DTO> view, AbstractPolicyCrudService<POLICY_DTO> service,
+            Class<POLICY_DTO> entityClass) {
         super(place, view, service, entityClass);
     }
 

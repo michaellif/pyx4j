@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.organisation;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.organisation.vendor.VendorEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
@@ -26,7 +26,7 @@ import com.propertyvista.domain.property.vendor.Vendor;
 
 public class VendorEditorActivity extends EditorActivityBase<Vendor> {
 
-    public VendorEditorActivity(Place place) {
+    public VendorEditorActivity(CrudAppPlace place) {
         super(place,
 
         OrganizationViewFactory.instance(VendorEditorView.class),

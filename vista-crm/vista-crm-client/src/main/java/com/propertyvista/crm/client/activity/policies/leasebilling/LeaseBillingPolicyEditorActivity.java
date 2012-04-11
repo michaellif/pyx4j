@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.policies.leasebilling;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyEditorView;
@@ -28,7 +28,7 @@ import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 
 public class LeaseBillingPolicyEditorActivity extends PolicyEditorActivityBase<LeaseBillingPolicyDTO> {
 
-    public LeaseBillingPolicyEditorActivity(Place place) {
+    public LeaseBillingPolicyEditorActivity(CrudAppPlace place) {
         super(place, PolicyViewFactory.instance(LeaseBillingPolicyEditorView.class), GWT
                 .<LeaseBillingPolicyCrudService> create(LeaseBillingPolicyCrudService.class), LeaseBillingPolicyDTO.class);
     }

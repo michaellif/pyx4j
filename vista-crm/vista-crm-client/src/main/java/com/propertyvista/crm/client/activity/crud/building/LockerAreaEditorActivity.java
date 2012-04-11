@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
@@ -27,7 +27,7 @@ import com.propertyvista.dto.LockerAreaDTO;
 public class LockerAreaEditorActivity extends EditorActivityBase<LockerAreaDTO> implements LockerAreaEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public LockerAreaEditorActivity(Place place) {
+    public LockerAreaEditorActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class),
                 LockerAreaDTO.class);
     }

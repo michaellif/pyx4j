@@ -14,13 +14,13 @@
 package com.propertyvista.crm.client.activity.crud.tenant;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
@@ -31,7 +31,7 @@ import com.propertyvista.dto.TenantDTO;
 public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implements TenantEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public TenantEditorActivity(Place place) {
+    public TenantEditorActivity(CrudAppPlace place) {
         super(place, TenantViewFactory.instance(TenantEditorView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class), TenantDTO.class);
     }
 

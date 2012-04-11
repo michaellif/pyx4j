@@ -14,7 +14,8 @@
 package com.propertyvista.crm.client.activity.policies.misc;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
+
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyEditorView;
@@ -25,7 +26,7 @@ import com.propertyvista.domain.policy.dto.MiscPolicyDTO;
 
 public class MiscPolicyEditorActivity extends PolicyEditorActivityBase<MiscPolicyDTO> {
 
-    public MiscPolicyEditorActivity(Place place) {
+    public MiscPolicyEditorActivity(CrudAppPlace place) {
         super(place,
 
         PolicyViewFactory.instance(MiscPolicyEditorView.class),

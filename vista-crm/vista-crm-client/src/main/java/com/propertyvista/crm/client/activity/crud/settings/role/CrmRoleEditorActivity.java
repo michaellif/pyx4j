@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.settings.role;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
@@ -26,7 +26,7 @@ import com.propertyvista.domain.security.CrmRole;
 
 public class CrmRoleEditorActivity extends EditorActivityBase<CrmRole> {
 
-    public CrmRoleEditorActivity(Place place) {
+    public CrmRoleEditorActivity(CrudAppPlace place) {
         super(place,
 
         SettingsViewFactory.instance(CrmRoleEditorView.class),

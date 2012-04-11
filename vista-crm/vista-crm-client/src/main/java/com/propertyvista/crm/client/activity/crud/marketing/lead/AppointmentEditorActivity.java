@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.marketing.lead;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 public class AppointmentEditorActivity extends EditorActivityBase<Appointment> {
 
     @SuppressWarnings("unchecked")
-    public AppointmentEditorActivity(Place place) {
+    public AppointmentEditorActivity(CrudAppPlace place) {
         super(place, MarketingViewFactory.instance(AppointmentEditorView.class), (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class),
                 Appointment.class);
     }

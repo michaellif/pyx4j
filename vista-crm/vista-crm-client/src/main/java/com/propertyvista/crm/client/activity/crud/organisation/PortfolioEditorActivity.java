@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.organisation;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
@@ -26,7 +26,7 @@ import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioEditorActivity extends EditorActivityBase<Portfolio> {
 
-    public PortfolioEditorActivity(Place place) {
+    public PortfolioEditorActivity(CrudAppPlace place) {
         super(place, OrganizationViewFactory.instance(PortfolioEditorView.class), GWT.<AbstractCrudService<Portfolio>> create(PortfolioCrudService.class),
                 Portfolio.class);
     }

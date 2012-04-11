@@ -14,12 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.marketing.lead;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
@@ -30,7 +30,7 @@ import com.propertyvista.domain.tenant.lead.Showing;
 public class ShowingEditorActivity extends EditorActivityBase<Showing> implements ShowingEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public ShowingEditorActivity(Place place) {
+    public ShowingEditorActivity(CrudAppPlace place) {
         super(place, MarketingViewFactory.instance(ShowingEditorView.class), (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class), Showing.class);
     }
 

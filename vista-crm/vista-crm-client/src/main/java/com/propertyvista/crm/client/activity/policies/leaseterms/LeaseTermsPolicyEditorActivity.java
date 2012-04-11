@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.activity.policies.leaseterms;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorView;
@@ -32,7 +32,7 @@ import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 public class LeaseTermsPolicyEditorActivity extends PolicyEditorActivityBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public LeaseTermsPolicyEditorActivity(Place place) {
+    public LeaseTermsPolicyEditorActivity(CrudAppPlace place) {
         super(place, PolicyViewFactory.instance(LeaseTermsPolicyEditorView.class), (AbstractPolicyCrudService<LeaseTermsPolicyDTO>) GWT
                 .create(LeaseTermsPolicyCrudService.class), LeaseTermsPolicyDTO.class);
     }

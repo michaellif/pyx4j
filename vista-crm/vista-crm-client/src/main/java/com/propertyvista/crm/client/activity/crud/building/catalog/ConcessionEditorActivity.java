@@ -14,12 +14,12 @@
 package com.propertyvista.crm.client.activity.crud.building.catalog;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
@@ -30,7 +30,7 @@ import com.propertyvista.domain.financial.offering.Concession.Status;
 public class ConcessionEditorActivity extends EditorActivityBase<Concession> {
 
     @SuppressWarnings("unchecked")
-    public ConcessionEditorActivity(Place place) {
+    public ConcessionEditorActivity(CrudAppPlace place) {
         super(place, UnitViewFactory.instance(ConcessionEditorView.class), (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class),
                 Concession.class);
     }

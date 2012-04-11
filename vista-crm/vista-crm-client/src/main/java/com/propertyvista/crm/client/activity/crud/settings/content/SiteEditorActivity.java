@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.activity.crud.settings.content;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
@@ -29,7 +29,7 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 public class SiteEditorActivity extends EditorActivityBase<SiteDescriptorDTO> implements SiteEditor.Presenter {
 
     @SuppressWarnings("unchecked")
-    public SiteEditorActivity(Place place) {
+    public SiteEditorActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(SiteEditor.class), (AbstractCrudService<SiteDescriptorDTO>) GWT.create(SiteDescriptorCrudService.class),
                 SiteDescriptorDTO.class);
     }
