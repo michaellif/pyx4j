@@ -19,7 +19,6 @@ import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.pyx4j.commons.Key;
@@ -30,7 +29,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.server.common.breadcurmbs.BreadcrumbsHelper;
 
-@Ignore
 public class BreadcrumbsHelperTest {
 
     private Key level1pk;
