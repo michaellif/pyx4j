@@ -140,7 +140,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
 
         row = -1;
-        main.setH4(++row, 1, 1, i18n.tr("Prefered Appontment Times") + ":");
+        main.setH4(++row, 1, 1, i18n.tr("Preferred Appointment Times") + ":");
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentDate1()), 9).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentTime1()), 9).build());
         main.setBR(++row, 1, 1);
