@@ -114,6 +114,10 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         dataSource.addPreDefinedFilters(filters);
     }
 
+    public void addPreDefinedFilter(PropertyCriterion filter) {
+        dataSource.addPreDefinedFilter(filter);
+    }
+
     @Override
     public void clearPreDefinedFilters() {
         dataSource.clearPreDefinedFilters();

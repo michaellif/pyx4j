@@ -45,6 +45,8 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         void addPreDefinedFilters(List<PropertyCriterion> filters);
 
+        void addPreDefinedFilter(PropertyCriterion filter);
+
         void clearPreDefinedFilters();
 
         void retrieveData(int pageNumber);
