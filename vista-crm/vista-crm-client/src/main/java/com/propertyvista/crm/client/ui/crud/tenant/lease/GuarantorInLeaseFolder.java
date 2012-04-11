@@ -48,21 +48,33 @@ class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
 
     @Override
     protected void addItem() {
-        new CustomerSelectorDialog(retrieveExistingCustomers(getValue())) {
+        new YesNoCancelDialog(i18n.tr("Select Existing Guarantor?")) {
             @Override
-            public boolean onClickOk() {
-                if (getSelectedItems().isEmpty()) {
-                    return false;
-                } else {
-                    for (Customer tenant : getSelectedItems()) {
-                        Guarantor newTenantInLease = EntityFactory.create(Guarantor.class);
-                        newTenantInLease.leaseV().setPrimaryKey(parent.getValue().version().getPrimaryKey());
-                        newTenantInLease.customer().set(tenant);
-                        newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
-                        addItem(newTenantInLease);
+            public boolean onClickYes() {
+                new CustomerSelectorDialog(retrieveExistingCustomers(getValue())) {
+                    @Override
+                    public boolean onClickOk() {
+                        if (getSelectedItems().isEmpty()) {
+                            return false;
+                        } else {
+                            for (Customer tenant : getSelectedItems()) {
+                                Guarantor newTenantInLease = EntityFactory.create(Guarantor.class);
+                                newTenantInLease.leaseV().setPrimaryKey(parent.getValue().version().getPrimaryKey());
+                                newTenantInLease.customer().set(tenant);
+                                newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
+                                addItem(newTenantInLease);
+                            }
+                            return true;
+                        }
                     }
-                    return true;
-                }
+                }.show();
+                return true;
+            }
+
+            @Override
+            public boolean onClickNo() {
+                GuarantorInLeaseFolder.super.addItem();
+                return true;
             }
         }.show();
     }

@@ -53,24 +53,36 @@ class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
 
     @Override
     protected void addItem() {
-        new CustomerSelectorDialog(retrieveExistingCustomers(getValue())) {
+        new YesNoCancelDialog(i18n.tr("Select Existing Tenant?")) {
             @Override
-            public boolean onClickOk() {
-                if (getSelectedItems().isEmpty()) {
-                    return false;
-                } else {
-                    for (Customer tenant : getSelectedItems()) {
-                        Tenant newTenantInLease = EntityFactory.create(Tenant.class);
-                        newTenantInLease.leaseV().setPrimaryKey(parent.getValue().version().getPrimaryKey());
-                        newTenantInLease.customer().set(tenant);
-                        if (!isApplicantPresent()) {
-                            newTenantInLease.role().setValue(Role.Applicant);
-                            newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
+            public boolean onClickYes() {
+                new CustomerSelectorDialog(retrieveExistingCustomers(getValue())) {
+                    @Override
+                    public boolean onClickOk() {
+                        if (getSelectedItems().isEmpty()) {
+                            return false;
+                        } else {
+                            for (Customer tenant : getSelectedItems()) {
+                                Tenant newTenantInLease = EntityFactory.create(Tenant.class);
+                                newTenantInLease.leaseV().setPrimaryKey(parent.getValue().version().getPrimaryKey());
+                                newTenantInLease.customer().set(tenant);
+                                if (!isApplicantPresent()) {
+                                    newTenantInLease.role().setValue(Role.Applicant);
+                                    newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
+                                }
+                                addItem(newTenantInLease);
+                            }
+                            return true;
                         }
-                        addItem(newTenantInLease);
                     }
-                    return true;
-                }
+                }.show();
+                return true;
+            }
+
+            @Override
+            public boolean onClickNo() {
+                TenantInLeaseFolder.super.addItem();
+                return true;
             }
         }.show();
     }

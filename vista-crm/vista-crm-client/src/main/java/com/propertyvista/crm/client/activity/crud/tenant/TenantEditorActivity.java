@@ -14,18 +14,14 @@
 package com.propertyvista.crm.client.activity.crud.tenant;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.tenant.TenantCrudService;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implements TenantEditorView.Presenter {
@@ -33,18 +29,5 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
     @SuppressWarnings("unchecked")
     public TenantEditorActivity(CrudAppPlace place) {
         super(place, TenantViewFactory.instance(TenantEditorView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class), TenantDTO.class);
-    }
-
-    @Override
-    protected void createNewEntity(final AsyncCallback<TenantDTO> callback) {
-        ((TenantEditorView) getView()).showSelectTypePopUp(new DefaultAsyncCallback<Customer.Type>() {
-            @Override
-            public void onSuccess(Customer.Type type) {
-                TenantDTO entity = EntityFactory.create(getEntityClass());
-                entity.customer().type().setValue(type);
-
-                callback.onSuccess(entity);
-            }
-        });
     }
 }

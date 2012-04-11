@@ -7,18 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2012-04-11
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant;
+package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
 
-import com.propertyvista.dto.TenantDTO;
+public abstract class YesNoCancelDialog extends Dialog implements YesNoCancelOption {
 
-public interface TenantEditorView extends IEditorView<TenantDTO> {
+    public YesNoCancelDialog(String caption) {
+        super(caption);
+        setDialogOptions(this);
+    }
 
-    interface Presenter extends IEditorView.Presenter {
+    @Override
+    public boolean onClickCancel() {
+        return true;
     }
 }
