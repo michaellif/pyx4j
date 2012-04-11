@@ -20,6 +20,7 @@
     <modules>
         <module>vista-biz-common</module>
         <module>vista-biz-tenant</module>
+        <module>vista-biz-occupancy</module>
     </modules>
 
 </project>
