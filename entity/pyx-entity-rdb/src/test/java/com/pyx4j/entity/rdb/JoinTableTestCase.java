@@ -120,6 +120,58 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
         }
     }
 
+    public void testJoinTableInsertPersist() {
+        testJoinTableInsert(TestCaseMethod.Persist);
+    }
+
+    public void testJoinTableInsertMerge() {
+        testJoinTableInsert(TestCaseMethod.Merge);
+    }
+
+    public void testJoinTableInsert(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+
+        AccPrincipal principal1 = EntityFactory.create(AccPrincipal.class);
+        principal1.name().setValue(uniqueString());
+        principal1.testId().setValue(testId);
+        srv.persist(principal1);
+
+        AccSubject subject1 = EntityFactory.create(AccSubject.class);
+        subject1.name().setValue(uniqueString());
+        subject1.testId().setValue(testId);
+        srv.persist(subject1);
+
+        AccPrincipalEdit edit1 = EntityFactory.create(AccPrincipalEdit.class);
+        edit1.name().setValue(uniqueString());
+        edit1.testId().setValue(testId);
+        edit1.setPrimaryKey(principal1.getPrimaryKey());
+        edit1.subjects().add(subject1);
+
+        srvSave(edit1, testCaseMethod);
+
+        {
+            AccPrincipalEdit edit1r1 = srv.retrieve(AccPrincipalEdit.class, principal1.getPrimaryKey());
+            Assert.assertEquals("Data retrieved using JoinTable", 1, edit1r1.subjects().size());
+            Assert.assertTrue("Inserted value present", edit1r1.subjects().contains(subject1));
+        }
+
+        AccSubject subject2 = EntityFactory.create(AccSubject.class);
+        subject2.name().setValue(uniqueString());
+        subject2.testId().setValue(testId);
+        srv.persist(subject2);
+
+        edit1.subjects().add(subject2);
+        edit1.subjects().remove(subject1);
+
+        srvSave(edit1, testCaseMethod);
+
+        {
+            AccPrincipalEdit edit1r1 = srv.retrieve(AccPrincipalEdit.class, principal1.getPrimaryKey());
+            Assert.assertEquals("Data retrieved using JoinTable", 1, edit1r1.subjects().size());
+            Assert.assertTrue("Inserted value present", edit1r1.subjects().contains(subject2));
+        }
+    }
+
     public void testBackreferencesRead() {
         // Setup data
         String testId = uniqueString();
