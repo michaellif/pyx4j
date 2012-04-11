@@ -69,6 +69,8 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
 
     private final IMemento memento = new MementoImpl();
 
+    private boolean allowZoomIn;
+
     public BasicLister(Class<E> clazz) {
         this.clazz = clazz;
         setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Lister.name());
@@ -137,7 +139,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
 
     public BasicLister(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
         this(clazz);
-
+        this.allowZoomIn = allowZoomIn;
         if (allowZoomIn) {
             // item selection stuff:
             dataTablePanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
@@ -163,6 +165,10 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         } else {
             dataTablePanel.getDataTable().setHasDetailsNavigation(false);
         }
+    }
+
+    public boolean isAllowZoomIn() {
+        return allowZoomIn;
     }
 
     public void setDataSource(ListerDataSource<E> dataSource) {

@@ -42,17 +42,10 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
 
     }
 
-    @Deprecated
-    public ListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass, boolean openEditor, boolean allowAddNew) {
-        super(clazz, itemOpenPlaceClass != null, allowAddNew);
-
-        this.itemOpenPlaceClass = itemOpenPlaceClass;
-        this.openEditor = openEditor;
-
-    }
-
     public ListerBase(Class<E> clazz, boolean openEditor, boolean allowAddNew) {
-        this(clazz, AppPlaceEntityMapper.resolvePlaceClass(clazz), openEditor, allowAddNew);
+        super(clazz, AppPlaceEntityMapper.resolvePlaceClass(clazz) != null, allowAddNew);
+        this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
+        this.openEditor = openEditor;
     }
 
     // Actions:
