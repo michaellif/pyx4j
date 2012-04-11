@@ -18,11 +18,9 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -31,9 +29,9 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
-import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.Tenant;
@@ -114,18 +112,8 @@ class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            if (isEditable()) {
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().namePrefix()), 5).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().firstName()), 15).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().middleName()), 5).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().lastName()), 25).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().maidenName()), 25).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().nameSuffix()), 5).build());
-            } else {
-                main.setWidget(++row, 0,
-                        new DecoratorBuilder(inject(proto().customer().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Tenant")).build());
-                get(proto().customer().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-            }
+
+            main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"))));
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
