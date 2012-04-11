@@ -118,7 +118,6 @@ public class UnitTurnoverAnalysisManagerTestBase {
      */
     protected void lease(AptUnit unit, String dateFrom, String dateTo) {
         Customer tenant = EntityFactory.create(Customer.class);
-        tenant.type().setValue(Customer.Type.person);
         TenantUser user = EntityFactory.create(TenantUser.class);
         user.name().setValue("tenant " + dateFrom);
         Persistence.service().merge(user);
