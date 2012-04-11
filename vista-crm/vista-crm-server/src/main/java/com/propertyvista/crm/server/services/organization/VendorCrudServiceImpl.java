@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.organization;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
 import com.propertyvista.domain.property.vendor.Vendor;
@@ -27,5 +28,12 @@ public class VendorCrudServiceImpl extends AbstractCrudServiceImpl<Vendor> imple
     @Override
     protected void bind() {
         bindCompleateDBO();
+    }
+
+    @Override
+    protected void persist(Vendor entity, Vendor vendor) {
+        Persistence.service().merge(entity.phones());
+        Persistence.service().merge(entity.emails());
+        Persistence.service().persist(entity);
     }
 }
