@@ -53,6 +53,7 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
 
+        @Deprecated
         void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID);
 
         void editNew(Class<? extends CrudAppPlace> openPlaceClass, E newItem);
