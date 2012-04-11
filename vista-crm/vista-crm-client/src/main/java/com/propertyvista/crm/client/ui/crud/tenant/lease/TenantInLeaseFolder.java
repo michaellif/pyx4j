@@ -14,40 +14,36 @@
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
-import com.propertyvista.domain.tenant.PersonRelationship;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.ValidationUtils;
 
-class TenantInLeaseFolder extends VistaTableFolder<Tenant> {
+class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
 
-    private static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
+    static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
 
     private final CEntityEditor<? extends Lease> parent;
 
@@ -65,20 +61,27 @@ class TenantInLeaseFolder extends VistaTableFolder<Tenant> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().customer(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().customer().person().birthDate(), "9em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().customer().person().email(), "15em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().role(), "9em"));
-        return columns;
-    }
-
-    @Override
     protected void addItem() {
-        new TenantSelectorDialog().show();
+        new CustomerSelectorDialog(extractTenantFromTenantInLeaseList(getValue())) {
+            @Override
+            public boolean onClickOk() {
+                if (getSelectedItems().isEmpty()) {
+                    return false;
+                } else {
+                    for (Customer tenant : getSelectedItems()) {
+                        Tenant newTenantInLease = EntityFactory.create(Tenant.class);
+                        newTenantInLease.leaseV().setPrimaryKey(parent.getValue().version().getPrimaryKey());
+                        newTenantInLease.customer().set(tenant);
+                        if (!isApplicantPresent()) {
+                            newTenantInLease.role().setValue(Role.Applicant);
+                            newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
+                        }
+                        addItem(newTenantInLease);
+                    }
+                    return true;
+                }
+            }
+        }.show();
     }
 
     private boolean isApplicantPresent() {
@@ -98,32 +101,46 @@ class TenantInLeaseFolder extends VistaTableFolder<Tenant> {
         return super.create(member);
     }
 
-    private class TenantInLeaseEditor extends CEntityFolderRowEditor<Tenant> {
+    private class TenantInLeaseEditor extends CEntityDecoratableEditor<Tenant> {
 
         private boolean applicant;
 
         public TenantInLeaseEditor() {
-            super(Tenant.class, columns());
-            setViewable(true);
+            super(Tenant.class);
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof Customer && !parent.isEditable()) {
-                return new CEntityCrudHyperlink<Customer>(AppPlaceEntityMapper.resolvePlace(Customer.class));
-            }
-            return super.create(member);
-        }
+        public IsWidget createContent() {
+            FormFlexPanel main = new FormFlexPanel();
 
-        @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp = super.createCell(column);
-            if (proto().role() == column.getObject() || proto().relationship() == column.getObject()) {
-                if (parent.isEditable()) { // allow editing of these fields...
-                    comp.inheritViewable(false);
-                }
+            int row = -1;
+            if (isEditable()) {
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().namePrefix()), 5).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().firstName()), 15).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().middleName()), 5).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().lastName()), 25).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().maidenName()), 25).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().nameSuffix()), 5).build());
+            } else {
+                main.setWidget(++row, 0,
+                        new DecoratorBuilder(inject(proto().customer().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Tenant")).build());
+                get(proto().customer().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
             }
-            return comp;
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
+
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
+
+            row = -1; // second column
+            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
+            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
+            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
+
+            main.getColumnFormatter().setWidth(0, "60%");
+            main.getColumnFormatter().setWidth(1, "40%");
+            return main;
         }
 
         @SuppressWarnings("unchecked")
@@ -160,49 +177,5 @@ class TenantInLeaseFolder extends VistaTableFolder<Tenant> {
             tenants.add(wrapper.customer());
         }
         return tenants;
-    }
-
-    private class TenantSelectorDialog extends EntitySelectorTableDialog<Customer> {
-
-        public TenantSelectorDialog() {
-            super(Customer.class, true, extractTenantFromTenantInLeaseList(getValue()), i18n.tr("Select Tenant"));
-            setWidth("700px");
-        }
-
-        @Override
-        public boolean onClickOk() {
-            if (getSelectedItems().isEmpty()) {
-                return false;
-            } else {
-                for (Customer tenant : getSelectedItems()) {
-                    Tenant newTenantInLease = EntityFactory.create(Tenant.class);
-                    newTenantInLease.leaseV().setPrimaryKey(parent.getValue().version().getPrimaryKey());
-                    newTenantInLease.customer().set(tenant);
-                    if (!isApplicantPresent()) {
-                        newTenantInLease.role().setValue(Role.Applicant);
-                        newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
-                    }
-                    addItem(newTenantInLease);
-                }
-                return true;
-            }
-        }
-
-        @Override
-        protected List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().type()).build(),
-                    new MemberColumnDescriptor.Builder(proto().person().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().person().birthDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().person().email()).build(),
-                    new MemberColumnDescriptor.Builder(proto().person().homePhone()).build()
-            );//@formatter:on
-        }
-
-        @Override
-        protected AbstractListService<Customer> getSelectService() {
-            return GWT.<AbstractListService<Customer>> create(SelectTenantListService.class);
-        }
-
     }
 }
