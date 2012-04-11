@@ -20,15 +20,23 @@
  */
 package com.pyx4j.essentials.client;
 
+import java.util.Random;
+
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+
 public class DownloadFrame extends Frame {
+
+    private final String downloadFrameElementId;
 
     public DownloadFrame(String url) {
         super();
+        downloadFrameElementId = generateId();
+        getElement().setId(downloadFrameElementId);
         setSize("0px", "0px");
         setVisible(false);
         sinkEvents(Event.ONLOAD);
@@ -41,10 +49,23 @@ public class DownloadFrame extends Frame {
         if (DOM.eventGetType(event) == Event.ONLOAD) {
             unsinkEvents(Event.ONLOAD);
             DOM.eventCancelBubble(event, true);
+
+            String errorMessage = getDownloadFrameContent();
+            MessageDialog.error("Download Error", errorMessage);
+
             RootPanel.get().remove(this);
         } else {
             super.onBrowserEvent(event);
         }
+    }
+
+    private native String getDownloadFrameContent() /*-{ 
+                                                    return $doc.getElementById(this.@com.pyx4j.essentials.client.DownloadFrame::downloadFrameElementId).contentWindow.document.documentElement.innerHTML;
+                                                    }-*/;
+
+    private String generateId() {
+        Random rnd = new Random();
+        return "downloadFrame" + String.valueOf(rnd.nextInt(10)) + String.valueOf(rnd.nextInt(10)) + String.valueOf(rnd.nextInt(10));
     }
 
 }
