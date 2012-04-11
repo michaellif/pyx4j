@@ -21,6 +21,7 @@
 package com.pyx4j.site.rpc;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
@@ -36,6 +37,8 @@ public abstract class CrudAppPlace extends AppPlace {
     public static final String ARG_NAME_PARENT_CLASS = "parentClass";
 
     public static final String ARG_NAME_TAB_IDX = "tabIdx";
+
+    private IEntity newItem;
 
     public static enum Type {
         lister, viewer, editor
@@ -94,5 +97,16 @@ public abstract class CrudAppPlace extends AppPlace {
             placeArg(ARG_NAME_PARENT_CLASS, parentClass.getName());
         }
         return formNewItemPlace(parentID);
+    }
+
+    public CrudAppPlace formNewItemPlace(IEntity newItem) {
+        this.newItem = newItem;
+        setType(Type.editor);
+        setStable(false);
+        return (CrudAppPlace) placeArg(ARG_NAME_ID, ARG_VALUE_NEW);
+    }
+
+    public IEntity getNewItem() {
+        return newItem;
     }
 }

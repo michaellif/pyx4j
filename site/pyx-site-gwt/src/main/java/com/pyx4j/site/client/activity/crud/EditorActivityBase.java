@@ -22,7 +22,6 @@ package com.pyx4j.site.client.activity.crud;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -61,16 +60,57 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected Class<? extends CrudAppPlace> placeClass;
 
-    public EditorActivityBase(Place place, IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
+    private final CrudAppPlace place;
+
+    public EditorActivityBase(CrudAppPlace place, IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
+
         // development correctness checks:
+        assert (place instanceof CrudAppPlace);
         assert (view != null);
         assert (service != null);
         assert (entityClass != null);
 
+        this.place = place;
         this.view = view;
         this.service = service;
         this.entityClass = entityClass;
-        setPlace(place);
+
+        entityID = null;
+        parentID = null;
+        parentClass = null;
+        tabIndex = -1;
+
+        view.getMemento().setCurrentPlace(place);
+
+        placeClass = place.getClass();
+
+        String val;
+        if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
+            entityID = new Key(val);
+            // Validate argument
+            try {
+                entityID.asLong();
+            } catch (NumberFormatException e) {
+                entityID = null;
+            }
+
+        }
+        if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
+            parentID = new Key(val);
+            // Validate argument
+            try {
+                parentID.asLong();
+            } catch (NumberFormatException e) {
+                parentID = null;
+            }
+        }
+        if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_CLASS)) != null) {
+            // TODO: currently we can't restore java class by it's name in GWT - so use just name instead - find the solution...
+            parentClass = val;
+        }
+        if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
+            tabIndex = Integer.parseInt(val);
+        }
     }
 
     public IEditorView<E> getView() {
@@ -83,46 +123,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public Class<E> getEntityClass() {
         return entityClass;
-    }
-
-    private void setPlace(Place place) {
-        entityID = null;
-        parentID = null;
-        parentClass = null;
-        tabIndex = -1;
-
-        view.getMemento().setCurrentPlace(place);
-
-        assert (place instanceof CrudAppPlace);
-        placeClass = ((CrudAppPlace) place).getClass();
-
-        String val;
-        if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
-            entityID = new Key(val);
-            // Validate argument
-            try {
-                entityID.asLong();
-            } catch (NumberFormatException e) {
-                entityID = null;
-            }
-
-        }
-        if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
-            parentID = new Key(val);
-            // Validate argument
-            try {
-                parentID.asLong();
-            } catch (NumberFormatException e) {
-                parentID = null;
-            }
-        }
-        if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_PARENT_CLASS)) != null) {
-            // TODO: currently we can't restore java class by it's name in GWT - so use just name instead - find the solution...
-            parentClass = val;
-        }
-        if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
-            tabIndex = Integer.parseInt(val);
-        }
     }
 
     @Override
@@ -190,7 +190,11 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
      * @param callback
      */
     protected void createNewEntity(AsyncCallback<E> callback) {
-        callback.onSuccess(EntityFactory.create(entityClass));
+        if (place.getNewItem() != null) {
+            callback.onSuccess((E) place.getNewItem());
+        } else {
+            callback.onSuccess(EntityFactory.create(entityClass));
+        }
     }
 
     protected boolean isNewEntity() {

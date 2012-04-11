@@ -66,7 +66,7 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
      */
     @Override
     protected void onItemNew() {
-        getPresenter().editNew(itemOpenPlaceClass, null);
+        getPresenter().editNew(itemOpenPlaceClass, (E) null);
     }
 
     @Override
@@ -97,5 +97,9 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
     @Override
     public void onDeleted(Key itemID, boolean isSuccessful) {
         // TODO Auto-generated method stub
+    }
+
+    public Class<? extends CrudAppPlace> getItemOpenPlaceClass() {
+        return itemOpenPlaceClass;
     }
 }

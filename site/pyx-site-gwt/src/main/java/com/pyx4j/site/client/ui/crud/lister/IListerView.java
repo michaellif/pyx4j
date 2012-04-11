@@ -55,6 +55,8 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID);
 
+        void editNew(Class<? extends CrudAppPlace> openPlaceClass, E newItem);
+
         /**
          * Should be called after populate, return value is security feature
          */

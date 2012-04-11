@@ -170,6 +170,13 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         }
     }
 
+    @Override
+    public void editNew(Class<? extends CrudAppPlace> openPlaceClass, E newItem) {
+        if (canEditNew()) {
+            AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(newItem));
+        }
+    }
+
     /**
      * Empty methods, implementations don't need to call it.
      */
