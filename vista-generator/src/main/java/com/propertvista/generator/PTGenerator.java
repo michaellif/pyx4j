@@ -52,7 +52,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Customer.Type;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
@@ -362,7 +361,6 @@ public class PTGenerator {
         TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);
 
         // Tenant as person, first to have the same random names
-        tenantSummary.tenant().type().setValue(Type.person);
         tenantSummary.tenant().person().set(CommonsGenerator.createPerson());
 
         // Join the objects

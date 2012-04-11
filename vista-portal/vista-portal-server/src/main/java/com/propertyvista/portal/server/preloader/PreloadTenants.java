@@ -247,13 +247,6 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
     }
 
     public void persistTenant(Customer tenant) {
-        switch (tenant.type().getValue()) {
-        case company:
-            log.debug("Persisting tenant {}", tenant.company().name());
-            CmpanyVendorPersistHelper.persistCompany(tenant.company());
-            break;
-        }
-
         tenant.tenantId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.tenant));
         Persistence.service().persist(tenant);
     }

@@ -71,10 +71,8 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     public void onPopulateSuccess(TenantDTO result) {
         super.onPopulateSuccess(result);
 
-        if (Customer.Type.person.equals(result.customer().type().getValue())) {
-            screeningLister.setParent(result.getPrimaryKey(), Customer.class);
-            screeningLister.populate();
-        }
+        screeningLister.setParent(result.getPrimaryKey(), Customer.class);
+        screeningLister.populate();
     }
 
     @Override

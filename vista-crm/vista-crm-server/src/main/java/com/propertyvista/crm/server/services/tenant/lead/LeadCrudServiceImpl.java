@@ -125,7 +125,6 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
             boolean asApplicant = true;
             for (Guest guest : lead.guests()) {
                 Customer tenant = EntityFactory.create(Customer.class);
-                tenant.type().setValue(Customer.Type.person);
                 tenant.person().set(guest.person());
                 Persistence.service().persist(tenant);
 

@@ -15,51 +15,30 @@ package com.propertyvista.crm.client.ui.crud.tenant;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
-import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.components.folders.EmailFolder;
+import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
-import com.propertyvista.common.client.ui.components.folders.PhoneFolder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
     private static final I18n i18n = I18n.get(TenantEditorForm.class);
-
-    private final FormFlexPanel detailsContent = new FormFlexPanel();
-
-    private final FormFlexPanel person = new FormFlexPanel();
-
-    private final FormFlexPanel company = new FormFlexPanel();
-
-    private final FormFlexPanel contacts = new FormFlexPanel();
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
@@ -74,63 +53,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     @Override
     public IsWidget createContent() {
 
-        // Person:
-        int row = -1;
-
-        if (isEditable()) {
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().namePrefix()), 5).build());
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().firstName()), 15).build());
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().middleName()), 5).build());
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().lastName()), 25).build());
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().maidenName()), 25).build());
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().nameSuffix()), 5).build());
-        } else {
-            person.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().customer().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Tenant")).build());
-            get(proto().customer().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-        }
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
-
-        person.setBR(++row, 0, 1);
-
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
-
-        // ------------------------------------------------------------------------------------------------------------
-
-        // Company:
-        row = -1;
-        company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().company().name()), 25).build());
-        company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().company().website()), 25).build());
-
-        company.setH1(++row, 0, 1, proto().customer().company().phones().getMeta().getCaption());
-        company.setWidget(++row, 0, inject(proto().customer().company().phones(), new PhoneFolder(isEditable())));
-
-        company.setH1(++row, 0, 1, proto().customer().company().emails().getMeta().getCaption());
-        company.setWidget(++row, 0, inject(proto().customer().company().emails(), new EmailFolder(isEditable())));
-
-        // ------------------------------------------------------------------------------------------------------------
-
-        contacts.setWidget(++row, 0, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
-
-        // ------------------------------------------------------------------------------------------------------------
-
-        // form the hole combined content:
-        row = -1;
-        detailsContent.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().tenantId()), 20).build());
-        detailsContent.setWidget(++row, 0, person);
-        detailsContent.setWidget(++row, 0, company);
-        detailsContent.setBR(++row, 0, 1);
-        if (isEditable()) {
-            detailsContent.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV().holder(), new CEntityLabel<Lease>())).build());
-        } else {
-            detailsContent.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().leaseV().holder(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))))
-                            .build());
-        }
+        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
+        tabPanel.add(createContactsTab(), i18n.tr("Contacts"));
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
@@ -138,9 +62,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
     @Override
     public void setActiveTab(int index) {
-        if (index < tabPanel.getWidgetCount()) {
-            tabPanel.selectTab(index);
-        }
+        tabPanel.selectTab(index);
     }
 
     @Override
@@ -148,10 +70,30 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         return tabPanel.getSelectedIndex();
     }
 
-    @Override
-    protected void onPopulate() {
-        super.onPopulate();
-        setVisibility();
+    private Widget createDetailsTab() {
+        FormFlexPanel main = new FormFlexPanel();
+
+        int row = -1;
+        main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"))));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
+
+        main.setBR(++row, 0, 1);
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
+
+        return new CrmScrollPanel(main);
+    }
+
+    private Widget createContactsTab() {
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
+
+        return new CrmScrollPanel(main);
     }
 
     @Override
@@ -173,58 +115,5 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
         new PastDateValidation(get(proto().customer().person().birthDate()));
 
-    }
-
-    private void setVisibility() {
-        tabPanel.clear();
-        person.setVisible(false);
-        company.setVisible(false);
-
-        switch (getValue().customer().type().getValue()) {
-        case person:
-            person.setVisible(true);
-            tabPanel.add(new CrmScrollPanel(detailsContent), i18n.tr("Details"));
-            tabPanel.add(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
-            tabPanel.setLastTabDisabled(isEditable());
-            break;
-        case company:
-            company.setVisible(true);
-            tabPanel.add(new CrmScrollPanel(detailsContent), proto().customer().company().getMeta().getCaption());
-            break;
-        }
-
-        get(proto().leaseV().holder()).setVisible(!getValue().leaseV().holder().isNull());
-
-        get(proto().customer().tenantId()).setViewable(false);
-        ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
-                new DefaultAsyncCallback<IdAssignmentPolicy>() {
-                    @Override
-                    public void onSuccess(IdAssignmentPolicy result) {
-                        IdAssignmentItem targetItem = null;
-                        for (IdAssignmentItem item : result.itmes()) {
-                            if (item.target().getValue() == IdTarget.tenant) {
-                                targetItem = item;
-                                break;
-                            }
-                        }
-
-                        if (targetItem != null) {
-                            switch (targetItem.type().getValue()) {
-                            case generatedAlphaNumeric:
-                            case generatedNumber:
-                                get(proto().customer().tenantId()).setViewable(true);
-                                break;
-                            case userEditable:
-                                get(proto().customer().tenantId()).setViewable(false);
-                                break;
-                            case userAssigned:
-                                get(proto().customer().tenantId()).setViewable(getValue().getPrimaryKey() != null);
-                                break;
-                            }
-                        }
-                    }
-                });
-
-        tabPanel.add(new ScrollPanel(contacts), proto().customer().emergencyContacts().getMeta().getCaption());
     }
 }

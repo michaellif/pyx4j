@@ -15,14 +15,11 @@ package com.propertyvista.domain.tenant;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlType;
-
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -33,30 +30,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.TenantUserHolder;
 
 @DiscriminatorValue("Tenant")
 public interface Customer extends IEntity, PersonScreeningHolder, TenantUserHolder {
-
-    @I18n
-    @XmlType(name = "TenantType")
-    public enum Type {
-
-        person,
-
-        company;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
 
     @NotNull
     IPrimitive<String> tenantId();
@@ -65,14 +45,6 @@ public interface Customer extends IEntity, PersonScreeningHolder, TenantUserHold
     @ToString(index = 0)
     @EmbeddedEntity
     Person person();
-
-    @NotNull
-    @MemberColumn(name = "tenantType")
-    IPrimitive<Type> type();
-
-    @ToString(index = 1)
-    @EmbeddedEntity
-    Company company();
 
     @Owned
 // TODO : commented because of strange behavior of with @Owned - entities duplicated on loading/saving...  
@@ -97,5 +69,4 @@ public interface Customer extends IEntity, PersonScreeningHolder, TenantUserHold
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = Tenant.class, cascade = false)
     ISet<Tenant> _tenantInLease();
-
 }

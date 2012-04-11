@@ -166,6 +166,7 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
                 return new EntitySelectorTableDialog<Customer>(Customer.class, false, new ArrayList<Customer>(), "Select Item") {
 
 
+
                     @Override
                     public boolean onClickOk() {
                         if (getSelectedItems().isEmpty()) {
@@ -178,7 +179,6 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
                     @Override
                     protected List<ColumnDescriptor> defineColumnDescriptors() {
                         return Arrays.asList(//@formatter:off
-                                new MemberColumnDescriptor.Builder(proto().type()).build(),
                                 new MemberColumnDescriptor.Builder(proto().person().name()).build(),
                                 new MemberColumnDescriptor.Builder(proto().person().birthDate()).build(),
                                 new MemberColumnDescriptor.Builder(proto().person().email()).build(),

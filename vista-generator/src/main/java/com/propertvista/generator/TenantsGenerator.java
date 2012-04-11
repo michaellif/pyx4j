@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.propertvista.generator.util.CommonsGenerator;
-import com.propertvista.generator.util.CompanyVendor;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -56,19 +55,7 @@ public class TenantsGenerator {
 
     public Customer createTenant() {
         Customer item = EntityFactory.create(Customer.class);
-
-// TODO currently create just person tenants!         
-        item.type().setValue(Customer.Type.person);
-//        item.type().setValue(RandomUtil.random(Tenant.Type.values()));
-        switch (item.type().getValue()) {
-        case person:
-            item.person().set(CommonsGenerator.createPerson());
-            break;
-        case company:
-            item.company().set(CompanyVendor.createCompany());
-            break;
-        }
-
+        item.person().set(CommonsGenerator.createPerson());
         return item;
     }
 
