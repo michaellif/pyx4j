@@ -19,56 +19,40 @@ import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.crm.rpc.services.tenant.TenantCrudService;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
 
-public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Customer, TenantDTO> implements TenantCrudService {
+public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, TenantDTO> implements TenantCrudService {
 
     public TenantCrudServiceImpl() {
-        super(Customer.class, TenantDTO.class);
+        super(Tenant.class, TenantDTO.class);
     }
 
     @Override
     protected void bind() {
         bindCompleateDBO();
-        bind(dtoProto.lease(), dboProto._tenantInLease().$().leaseV().holder());
     }
 
     @Override
-    protected void enhanceRetrieved(Customer in, TenantDTO dto) {
+    protected void enhanceRetrieved(Tenant in, TenantDTO dto) {
         // load detached data:
-        Persistence.service().retrieve(dto.emergencyContacts());
-
-        // find first corresponding lease(s):
-        Persistence.service().retrieveMember(in._tenantInLease());
-        if (!in._tenantInLease().isEmpty()) {
-            Tenant til = in._tenantInLease().iterator().next();
-            Persistence.service().retrieve(til.leaseV());
-            dto.lease().set(til.leaseV().holder());
-            Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);
-        }
+        Persistence.service().retrieve(dto.customer().emergencyContacts());
+        Persistence.service().retrieve(dto.leaseV());
+        Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
     }
 
     @Override
-    protected void enhanceListRetrieved(Customer in, TenantDTO dto) {
-        // find first corresponding lease(s):
-        Persistence.service().retrieveMember(in._tenantInLease());
-        if (!in._tenantInLease().isEmpty()) {
-            Tenant til = in._tenantInLease().iterator().next();
-            Persistence.service().retrieve(til.leaseV());
-            dto.lease().set(til.leaseV().holder());
-            Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);
-        }
+    protected void enhanceListRetrieved(Tenant in, TenantDTO dto) {
+        Persistence.service().retrieve(dto.leaseV());
+        Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
     }
 
     @Override
-    protected void persist(Customer dbo, TenantDTO in) {
+    protected void persist(Tenant dbo, TenantDTO in) {
         if (dbo.id().isNull() && IdAssignmentSequenceUtil.needsGeneratedId(IdTarget.tenant)) {
-            dbo.tenantId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.tenant));
+            dbo.customer().tenantId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.tenant));
         }
-
         super.persist(dbo, in);
     }
 }

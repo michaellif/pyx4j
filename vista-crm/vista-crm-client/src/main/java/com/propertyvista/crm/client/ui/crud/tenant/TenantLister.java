@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.tenant;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.dto.TenantDTO;
@@ -23,23 +24,28 @@ public class TenantLister extends ListerBase<TenantDTO> {
     public TenantLister() {
         super(TenantDTO.class, false, true);
 
-        // TODO: currently we use just person tenant, so we'll display more data for them:
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().displayName()));
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type()));
-
         setColumnDescriptors(//@formatter:off
-                new Builder(proto().tenantId(), false).build(),
-                new Builder(proto().person().name()).searchable(false).build(),
-                new Builder(proto().person().name().firstName(), false).build(),
-                new Builder(proto().person().name().lastName(), false).build(),
-                new Builder(proto().person().sex()).build(),
-                new Builder(proto().person().birthDate()).build(),
-                new Builder(proto().person().homePhone()).build(),
-                new Builder(proto().person().mobilePhone(), false).build(),
-                new Builder(proto().person().workPhone(), false).build(),
-                new Builder(proto().person().email()).build(),
-                new Builder(proto().lease()).searchable(false).build(),
-                new Builder(proto().lease().leaseId()).searchableOnly().build()
+                new Builder(proto().customer().tenantId(), false).build(),
+                new Builder(proto().role()).build(),
+                
+                new Builder(proto().customer().person().name()).searchable(false).build(),
+                new Builder(proto().customer().person().name().firstName(), false).build(),
+                new Builder(proto().customer().person().name().lastName(), false).build(),
+                new Builder(proto().customer().person().sex(), false).build(),
+                new Builder(proto().customer().person().birthDate()).build(),
+                new Builder(proto().customer().person().homePhone()).build(),
+                new Builder(proto().customer().person().mobilePhone(), false).build(),
+                new Builder(proto().customer().person().workPhone(), false).build(),
+                new Builder(proto().customer().person().email()).build(),
+                
+                new Builder(proto().leaseV().holder()).searchable(false).build(),
+                new Builder(proto().leaseV().holder().leaseId()).searchableOnly().build()
             ); // @formatter:on
+    }
+
+    @Override
+    protected EntityListCriteria<TenantDTO> updateCriteria(EntityListCriteria<TenantDTO> criteria) {
+//        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+        return super.updateCriteria(criteria);
     }
 }

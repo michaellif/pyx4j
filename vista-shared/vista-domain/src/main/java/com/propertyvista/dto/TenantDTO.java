@@ -16,12 +16,10 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 @ExtendsDBO
-public interface TenantDTO extends Customer {
-
-    Lease lease();
+public interface TenantDTO extends Tenant {
 }

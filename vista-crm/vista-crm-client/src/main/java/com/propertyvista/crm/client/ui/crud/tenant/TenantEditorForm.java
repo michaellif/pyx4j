@@ -78,55 +78,58 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         int row = -1;
 
         if (isEditable()) {
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 5).build());
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 25).build());
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().maidenName()), 25).build());
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().nameSuffix()), 5).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().namePrefix()), 5).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().firstName()), 15).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().middleName()), 5).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().lastName()), 25).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().maidenName()), 25).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().name().nameSuffix()), 5).build());
         } else {
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Tenant"))
-                    .build());
-            get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+            person.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().customer().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Tenant")).build());
+            get(proto().customer().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().sex()), 7).build());
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().birthDate()), 9).build());
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
         person.setBR(++row, 0, 1);
 
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 25).build());
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
 
         // ------------------------------------------------------------------------------------------------------------
 
         // Company:
         row = -1;
-        company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().company().name()), 25).build());
-        company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().company().website()), 25).build());
+        company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().company().name()), 25).build());
+        company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().company().website()), 25).build());
 
-        company.setH1(++row, 0, 1, proto().company().phones().getMeta().getCaption());
-        company.setWidget(++row, 0, inject(proto().company().phones(), new PhoneFolder(isEditable())));
+        company.setH1(++row, 0, 1, proto().customer().company().phones().getMeta().getCaption());
+        company.setWidget(++row, 0, inject(proto().customer().company().phones(), new PhoneFolder(isEditable())));
 
-        company.setH1(++row, 0, 1, proto().company().emails().getMeta().getCaption());
-        company.setWidget(++row, 0, inject(proto().company().emails(), new EmailFolder(isEditable())));
+        company.setH1(++row, 0, 1, proto().customer().company().emails().getMeta().getCaption());
+        company.setWidget(++row, 0, inject(proto().customer().company().emails(), new EmailFolder(isEditable())));
 
-        contacts.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
+        // ------------------------------------------------------------------------------------------------------------
+
+        contacts.setWidget(++row, 0, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
 
         // ------------------------------------------------------------------------------------------------------------
 
         // form the hole combined content:
         row = -1;
-        detailsContent.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantId()), 20).build());
+        detailsContent.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().tenantId()), 20).build());
         detailsContent.setWidget(++row, 0, person);
         detailsContent.setWidget(++row, 0, company);
         detailsContent.setBR(++row, 0, 1);
         if (isEditable()) {
-            detailsContent.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease(), new CEntityLabel<Lease>())).build());
+            detailsContent.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV().holder(), new CEntityLabel<Lease>())).build());
         } else {
             detailsContent.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class)))).build());
+                    new DecoratorBuilder(inject(proto().leaseV().holder(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))))
+                            .build());
         }
 
         tabPanel.setSize("100%", "100%");
@@ -153,22 +156,22 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
     @Override
     public void addValidations() {
-        get(proto().person().email()).setMandatory(true);
+        get(proto().customer().person().email()).setMandatory(true);
 
-        get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
+        get(proto().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
             @Override
             public ValidationFailure isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
                 if (value == null || getValue() == null) {
                     return null;
                 }
-                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationFailure(i18n
+                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new ValidationFailure(i18n
                         .tr("Duplicate contacts specified"));
             }
 
         });
 
-        new PastDateValidation(get(proto().person().birthDate()));
+        new PastDateValidation(get(proto().customer().person().birthDate()));
 
     }
 
@@ -177,7 +180,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         person.setVisible(false);
         company.setVisible(false);
 
-        switch (getValue().type().getValue()) {
+        switch (getValue().customer().type().getValue()) {
         case person:
             person.setVisible(true);
             tabPanel.add(new CrmScrollPanel(detailsContent), i18n.tr("Details"));
@@ -186,13 +189,13 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             break;
         case company:
             company.setVisible(true);
-            tabPanel.add(new CrmScrollPanel(detailsContent), proto().company().getMeta().getCaption());
+            tabPanel.add(new CrmScrollPanel(detailsContent), proto().customer().company().getMeta().getCaption());
             break;
         }
 
-        get(proto().lease()).setVisible(!getValue().lease().isNull());
+        get(proto().leaseV().holder()).setVisible(!getValue().leaseV().holder().isNull());
 
-        get(proto().tenantId()).setViewable(false);
+        get(proto().customer().tenantId()).setViewable(false);
         ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
                 new DefaultAsyncCallback<IdAssignmentPolicy>() {
                     @Override
@@ -209,19 +212,19 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
                             switch (targetItem.type().getValue()) {
                             case generatedAlphaNumeric:
                             case generatedNumber:
-                                get(proto().tenantId()).setViewable(true);
+                                get(proto().customer().tenantId()).setViewable(true);
                                 break;
                             case userEditable:
-                                get(proto().tenantId()).setViewable(false);
+                                get(proto().customer().tenantId()).setViewable(false);
                                 break;
                             case userAssigned:
-                                get(proto().tenantId()).setViewable(getValue().getPrimaryKey() != null);
+                                get(proto().customer().tenantId()).setViewable(getValue().getPrimaryKey() != null);
                                 break;
                             }
                         }
                     }
                 });
 
-        tabPanel.add(new ScrollPanel(contacts), proto().emergencyContacts().getMeta().getCaption());
+        tabPanel.add(new ScrollPanel(contacts), proto().customer().emergencyContacts().getMeta().getCaption());
     }
 }

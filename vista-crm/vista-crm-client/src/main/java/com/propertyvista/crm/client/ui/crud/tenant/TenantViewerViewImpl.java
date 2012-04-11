@@ -46,8 +46,8 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((TenantViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().user().getPrimaryKey(), getForm().getValue().person()
-                        .getStringView());
+                ((TenantViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().customer().user().getPrimaryKey(), getForm().getValue()
+                        .customer().person().getStringView());
             }
         });
         addHeaderToolbarTwoItem(passwordAction.asWidget());
@@ -63,7 +63,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         super.populate(value);
 
         // Disable password change button for tenants with no associated user principal
-        if (value != null & !value.user().isNull()) {
+        if (value != null & !value.customer().user().isNull()) {
             passwordAction.setVisible(true);
         } else {
             passwordAction.setVisible(false);

@@ -41,7 +41,7 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
             @Override
             public void onSuccess(Customer.Type type) {
                 TenantDTO entity = EntityFactory.create(getEntityClass());
-                entity.type().setValue(type);
+                entity.customer().type().setValue(type);
 
                 callback.onSuccess(entity);
             }
