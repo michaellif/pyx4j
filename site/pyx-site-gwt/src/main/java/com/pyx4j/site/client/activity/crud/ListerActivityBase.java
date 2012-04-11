@@ -114,6 +114,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         dataSource.addPreDefinedFilters(filters);
     }
 
+    @Override
     public void addPreDefinedFilter(PropertyCriterion filter) {
         dataSource.addPreDefinedFilter(filter);
     }
@@ -162,14 +163,12 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID) {
+    public void editNew(Class<? extends CrudAppPlace> openPlaceClass) {
         if (canEditNew()) {
             if (parentClass != null) {
-                AppSite.getPlaceController().goTo(
-                        AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID != null ? parentID : this.parentID, parentClass));
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID, parentClass));
             } else {
-                AppSite.getPlaceController().goTo(
-                        AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID != null ? parentID : this.parentID));
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID));
             }
         }
     }

@@ -66,7 +66,7 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
      */
     @Override
     protected void onItemNew() {
-        getPresenter().editNew(itemOpenPlaceClass, (E) null);
+        getPresenter().editNew(itemOpenPlaceClass);
     }
 
     @Override
