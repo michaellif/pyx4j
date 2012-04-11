@@ -87,6 +87,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
@@ -239,6 +240,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public void setTransactionSystemTime(Date date) {
+    }
+
+    @Override
+    public Date getTransactionSystemTime() {
+        return DateUtils.getRoundedNow();
     }
 
     @Override

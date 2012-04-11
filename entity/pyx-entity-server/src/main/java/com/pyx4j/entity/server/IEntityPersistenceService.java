@@ -60,6 +60,8 @@ public interface IEntityPersistenceService {
      */
     public void setTransactionSystemTime(Date date);
 
+    public Date getTransactionSystemTime();
+
     public interface ICursorIterator<T> extends Iterator<T> {
 
         /**
