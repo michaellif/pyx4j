@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitLister extends ListerBase<AptUnitDTO> {
@@ -51,10 +52,18 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
 
     @Override
     protected void onItemNew() {
-        AptUnitDTO newItem = EntityFactory.create(AptUnitDTO.class);
-
-        //TODO show selector
-
-        getPresenter().editNew(getItemOpenPlaceClass(), newItem);
+        new BuildingSelectorDialog() {
+            @Override
+            public boolean onClickOk() {
+                if (!getSelectedItems().isEmpty()) {
+                    AptUnitDTO newUnit = EntityFactory.create(AptUnitDTO.class);
+                    newUnit.belongsTo().set(getSelectedItems().get(0));
+                    getPresenter().editNew(getItemOpenPlaceClass(), newUnit);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }.show();
     }
 }

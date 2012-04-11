@@ -13,16 +13,27 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import java.util.EnumSet;
+
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseLister extends ListerBase<LeaseDTO> {
+
+    private final static I18n i18n = I18n.get(LeaseLister.class);
 
     public LeaseLister() {
         super(LeaseDTO.class, false, true);
@@ -52,5 +63,48 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
         criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
         return super.updateCriteria(criteria);
+    }
+
+    @Override
+    protected void onItemNew() {
+        new SelectLeaseTypeDialog().show();
+    }
+
+    private LeaseDTO createNewLease(Service.Type leaseType) {
+        LeaseDTO newLease = EntityFactory.create(LeaseDTO.class);
+        newLease.createDate().setValue(new LogicalDate());
+        newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        newLease.version().status().setValue(Lease.Status.Created);
+        newLease.type().setValue(leaseType);
+        return newLease;
+    }
+
+    private class SelectLeaseTypeDialog extends SelectEnumDialog<Service.Type> implements OkCancelOption {
+
+        public SelectLeaseTypeDialog() {
+            super(i18n.tr("Select Lease Type"), EnumSet.allOf(Service.Type.class));
+        }
+
+        @Override
+        public boolean onClickOk() {
+            getPresenter().editNew(getItemOpenPlaceClass(), createNewLease(getSelectedType()));
+            return true;
+        }
+
+        @Override
+        public boolean onClickCancel() {
+            return true;
+        };
+
+        @Override
+        public String defineHeight() {
+            return "100px";
+        };
+
+        @Override
+        public String defineWidth() {
+            return "300px";
+        }
+
     }
 }

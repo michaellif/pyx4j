@@ -24,7 +24,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -40,8 +39,6 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements LeaseEditorView.Presenter {
@@ -57,22 +54,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         fillServiceEligibilityData(result, result.version().leaseProducts().serviceItem().item());
 
         super.onPopulateSuccess(result);
-    }
-
-    @Override
-    protected void createNewEntity(final AsyncCallback<LeaseDTO> callback) {
-        ((LeaseEditorView) getView()).showSelectTypePopUp(new DefaultAsyncCallback<Service.Type>() {
-            @Override
-            public void onSuccess(Service.Type type) {
-                LeaseDTO entity = EntityFactory.create(LeaseDTO.class);
-                entity.createDate().setValue(new LogicalDate());
-                entity.paymentFrequency().setValue(PaymentFrequency.Monthly);
-                entity.version().status().setValue(Lease.Status.Created);
-                entity.type().setValue(type);
-
-                callback.onSuccess(entity);
-            }
-        });
     }
 
     @Override

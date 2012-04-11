@@ -13,46 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
-import java.util.EnumSet;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> implements LeaseEditorView {
 
-    private static final I18n i18n = I18n.get(LeaseEditorViewImpl.class);
-
     public LeaseEditorViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
         setForm(new LeaseEditorForm());
-    }
-
-    @Override
-    public void showSelectTypePopUp(final AsyncCallback<Service.Type> callback) {
-        new SelectEnumDialog<Service.Type>(i18n.tr("Select Lease Type"), EnumSet.allOf(Service.Type.class)) {
-            @Override
-            public boolean onClickOk() {
-                callback.onSuccess(getSelectedType());
-                return true;
-            }
-
-            @Override
-            public String defineHeight() {
-                return "100px";
-            };
-
-            @Override
-            public String defineWidth() {
-                return "300px";
-            };
-        }.show();
     }
 
 }

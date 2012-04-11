@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
@@ -49,8 +48,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     private static final I18n i18n = I18n.get(UnitEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
-
-    private SimplePanel buildingPlace;
 
     public UnitEditorForm() {
         this(false);
@@ -83,35 +80,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     protected void onPopulate() {
         super.onPopulate();
 
-        if (isEditable()) {
-            // setup Building Editor:
-            CComponent<?, ?> building = null;
-            if (getValue().belongsTo().getPrimaryKey() == null) {
-                CEntityComboBox<Building> combo = new CEntityComboBox<Building>(Building.class);
-                combo.addValueChangeHandler(new ValueChangeHandler<Building>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<Building> event) {
-                        setupFloorplanCombo(event.getValue());
-                    }
-                });
-                building = combo;
-                // Hack to clear CEntityComboBox
-                setupFloorplanCombo(null);
-            } else {
-                setupFloorplanCombo(getValue().belongsTo());
-                if (!getValue().belongsTo().isEmpty()) {
-                    CEntityLabel<Building> label = new CEntityLabel<Building>();
-                    label.populate(getValue().belongsTo());
-                    building = label;
-                }
-            }
-
-            buildingPlace.clear();
-            if (building != null) {
-                unbind(proto().belongsTo());
-                buildingPlace.setWidget(new DecoratorBuilder(inject(proto().belongsTo(), building), 20).build());
-            }
-        }
+        setupFloorplanCombo(getValue().belongsTo());
 
         get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
         get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
@@ -131,13 +100,15 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         int row = -1;
         FormFlexPanel left = new FormFlexPanel();
+
+        CComponent<?, ?> buildingComp;
         if (isEditable()) {
-            left.setWidget(++row, 0, buildingPlace = new SimplePanel());
+            buildingComp = new CEntityLabel<Building>();
         } else {
-            left.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().belongsTo(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20)
-                            .build());
+            buildingComp = new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class));
         }
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().belongsTo(), buildingComp), 20).build());
+
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatus()), 20).build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
