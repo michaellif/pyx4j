@@ -29,10 +29,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-05-02").toTheEndOfTime().status(Status.vacant).x();
 
         now("2010-04-30");
-        Assert.assertTrue(getUOM().isScopeOffMarketAvailable());
+        Assert.assertTrue(getUOM().isScopeOffMarketAvailable(unitId));
 
         now("2010-05-05");
-        Assert.assertTrue(getUOM().isScopeOffMarketAvailable());
+        Assert.assertTrue(getUOM().isScopeOffMarketAvailable(unitId));
     }
 
     @Test
@@ -41,10 +41,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-05-02").toTheEndOfTime().status(Status.available).x();
 
         now("2010-04-30");
-        Assert.assertFalse(getUOM().isScopeOffMarketAvailable());
+        Assert.assertFalse(getUOM().isScopeOffMarketAvailable(unitId));
 
         now("2010-05-05");
-        Assert.assertFalse(getUOM().isScopeOffMarketAvailable());
+        Assert.assertFalse(getUOM().isScopeOffMarketAvailable(unitId));
     }
 
     @Test
@@ -53,10 +53,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-05-02").toTheEndOfTime().status(Status.vacant).x();
 
         now("2010-04-30");
-        Assert.assertEquals(asDate("2010-05-02"), getUOM().isRenovationAvailable());
+        Assert.assertEquals(asDate("2010-05-02"), getUOM().isRenovationAvailable(unitId));
 
         now("2010-05-05");
-        Assert.assertEquals(asDate("2010-05-05"), getUOM().isRenovationAvailable());
+        Assert.assertEquals(asDate("2010-05-05"), getUOM().isRenovationAvailable(unitId));
     }
 
     @Test
@@ -65,10 +65,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-05-02").toTheEndOfTime().status(Status.available).x();
 
         now("2010-04-30");
-        Assert.assertNull(getUOM().isRenovationAvailable());
+        Assert.assertNull(getUOM().isRenovationAvailable(unitId));
 
         now("2010-05-05");
-        Assert.assertNull(getUOM().isRenovationAvailable());
+        Assert.assertNull(getUOM().isRenovationAvailable(unitId));
     }
 
     @Test
@@ -77,10 +77,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-05-02").toTheEndOfTime().status(Status.vacant).x();
 
         now("2010-04-30");
-        Assert.assertTrue(getUOM().isScopeAvailableAvailable());
+        Assert.assertTrue(getUOM().isScopeAvailableAvailable(unitId));
 
         now("2010-05-05");
-        Assert.assertTrue(getUOM().isScopeAvailableAvailable());
+        Assert.assertTrue(getUOM().isScopeAvailableAvailable(unitId));
     }
 
     @Test
@@ -89,10 +89,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-05-02").toTheEndOfTime().status(Status.available).x();
 
         now("2010-04-30");
-        Assert.assertFalse(getUOM().isScopeAvailableAvailable());
+        Assert.assertFalse(getUOM().isScopeAvailableAvailable(unitId));
 
         now("2010-05-05");
-        Assert.assertFalse(getUOM().isScopeAvailableAvailable());
+        Assert.assertFalse(getUOM().isScopeAvailableAvailable(unitId));
     }
 
     @Test
@@ -103,22 +103,22 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-02-06").toTheEndOfTime().status(Status.available).x();
 
         now("2010-01-01");
-        MakeVacantConstraintsDTO constraints = getUOM().getMakeVacantConstraints();
+        MakeVacantConstraintsDTO constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertEquals(asDate("2010-01-03"), constraints.minVacantFrom().getValue());
         Assert.assertEquals(asDate("2010-02-06"), constraints.maxVacantFrom().getValue());
 
         now("2010-02-01");
-        constraints = getUOM().getMakeVacantConstraints();
+        constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertEquals(asDate("2010-02-01"), constraints.minVacantFrom().getValue());
         Assert.assertEquals(asDate("2010-02-06"), constraints.maxVacantFrom().getValue());
 
         now("2010-02-06");
-        constraints = getUOM().getMakeVacantConstraints();
+        constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertEquals(asDate("2010-02-06"), constraints.minVacantFrom().getValue());
         Assert.assertEquals(asDate("2010-02-06"), constraints.maxVacantFrom().getValue());
 
         now("2010-02-10");
-        constraints = getUOM().getMakeVacantConstraints();
+        constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertEquals(asDate("2010-02-10"), constraints.minVacantFrom().getValue());
         Assert.assertEquals(asDate("2010-02-10"), constraints.maxVacantFrom().getValue());
     }
@@ -131,21 +131,21 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-02-06").toTheEndOfTime().status(Status.vacant).x();
 
         now("2010-01-01");
-        MakeVacantConstraintsDTO constraints = getUOM().getMakeVacantConstraints();
+        MakeVacantConstraintsDTO constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertEquals(asDate("2010-01-03"), constraints.minVacantFrom().getValue());
         Assert.assertEquals(asDate("2010-02-05"), constraints.maxVacantFrom().getValue());
 
         now("2010-02-01");
-        constraints = getUOM().getMakeVacantConstraints();
+        constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertEquals(asDate("2010-02-01"), constraints.minVacantFrom().getValue());
         Assert.assertEquals(asDate("2010-02-05"), constraints.maxVacantFrom().getValue());
 
         now("2010-02-06");
-        constraints = getUOM().getMakeVacantConstraints();
+        constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertNull(constraints);
 
         now("2010-02-10");
-        constraints = getUOM().getMakeVacantConstraints();
+        constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertNull(constraints);
     }
 
@@ -157,22 +157,22 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-02-06").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.employee).x();
 
         now("2010-01-01");
-        MakeVacantConstraintsDTO constraints = getUOM().getMakeVacantConstraints();
+        MakeVacantConstraintsDTO constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertEquals(asDate("2010-01-03"), constraints.minVacantFrom().getValue());
         Assert.assertNull(constraints.maxVacantFrom().getValue());
 
         now("2010-02-01");
-        constraints = getUOM().getMakeVacantConstraints();
+        constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertEquals(asDate("2010-02-01"), constraints.minVacantFrom().getValue());
         Assert.assertNull(constraints.maxVacantFrom().getValue());
 
         now("2010-02-06");
-        constraints = getUOM().getMakeVacantConstraints();
+        constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertEquals(asDate("2010-02-06"), constraints.minVacantFrom().getValue());
         Assert.assertNull(constraints.maxVacantFrom().getValue());
 
         now("2010-02-10");
-        constraints = getUOM().getMakeVacantConstraints();
+        constraints = getUOM().getMakeVacantConstraints(unitId);
         Assert.assertEquals(asDate("2010-02-10"), constraints.minVacantFrom().getValue());
         Assert.assertNull(constraints.maxVacantFrom().getValue());
     }
@@ -184,16 +184,16 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-02-02").toTheEndOfTime().status(Status.leased).withLease(lease).x();
 
         now("2010-01-01");
-        Assert.assertNull(getUOM().getMakeVacantConstraints());
+        Assert.assertNull(getUOM().getMakeVacantConstraints(unitId));
 
         now("2010-01-02");
-        Assert.assertNull(getUOM().getMakeVacantConstraints());
+        Assert.assertNull(getUOM().getMakeVacantConstraints(unitId));
 
         now("2010-02-02");
-        Assert.assertNull(getUOM().getMakeVacantConstraints());
+        Assert.assertNull(getUOM().getMakeVacantConstraints(unitId));
 
         now("2010-02-04");
-        Assert.assertNull(getUOM().getMakeVacantConstraints());
+        Assert.assertNull(getUOM().getMakeVacantConstraints(unitId));
     }
 
     @Test
@@ -203,16 +203,16 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-02-02").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
         now("2010-01-01");
-        Assert.assertNull(getUOM().getMakeVacantConstraints());
+        Assert.assertNull(getUOM().getMakeVacantConstraints(unitId));
 
         now("2010-01-02");
-        Assert.assertNull(getUOM().getMakeVacantConstraints());
+        Assert.assertNull(getUOM().getMakeVacantConstraints(unitId));
 
         now("2010-02-02");
-        Assert.assertNull(getUOM().getMakeVacantConstraints());
+        Assert.assertNull(getUOM().getMakeVacantConstraints(unitId));
 
         now("2010-02-04");
-        Assert.assertNull(getUOM().getMakeVacantConstraints());
+        Assert.assertNull(getUOM().getMakeVacantConstraints(unitId));
     }
 
     @Test
@@ -221,10 +221,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-11").toTheEndOfTime().status(Status.available).x();
 
         now("2010-01-01");
-        Assert.assertEquals(asDate("2010-01-11"), getUOM().isReserveAvailable());
+        Assert.assertEquals(asDate("2010-01-11"), getUOM().isReserveAvailable(unitId));
 
         now("2010-01-12");
-        Assert.assertEquals(asDate("2010-01-12"), getUOM().isReserveAvailable());
+        Assert.assertEquals(asDate("2010-01-12"), getUOM().isReserveAvailable(unitId));
     }
 
     @Test
@@ -233,10 +233,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-11").toTheEndOfTime().status(Status.vacant).x();
 
         now("2010-01-01");
-        Assert.assertNull(getUOM().isReserveAvailable());
+        Assert.assertNull(getUOM().isReserveAvailable(unitId));
 
         now("2010-01-12");
-        Assert.assertNull(getUOM().isReserveAvailable());
+        Assert.assertNull(getUOM().isReserveAvailable(unitId));
 
     }
 
@@ -247,10 +247,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-11").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
         now("2010-01-01");
-        Assert.assertTrue(getUOM().isUnreserveAvailable());
+        Assert.assertTrue(getUOM().isUnreserveAvailable(unitId));
 
         now("2010-01-11");
-        Assert.assertTrue(getUOM().isUnreserveAvailable());
+        Assert.assertTrue(getUOM().isUnreserveAvailable(unitId));
     }
 
     @Test
@@ -259,10 +259,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-11").toTheEndOfTime().status(Status.available).x();
 
         now("2010-01-01");
-        Assert.assertFalse(getUOM().isUnreserveAvailable());
+        Assert.assertFalse(getUOM().isUnreserveAvailable(unitId));
 
         now("2010-01-11");
-        Assert.assertFalse(getUOM().isUnreserveAvailable());
+        Assert.assertFalse(getUOM().isUnreserveAvailable(unitId));
     }
 
     @Test
@@ -272,10 +272,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-11").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
         now("2010-01-01");
-        Assert.assertTrue(getUOM().isApproveLeaseAvaialble());
+        Assert.assertTrue(getUOM().isApproveLeaseAvaialble(unitId));
 
         now("2010-01-11");
-        Assert.assertTrue(getUOM().isApproveLeaseAvaialble());
+        Assert.assertTrue(getUOM().isApproveLeaseAvaialble(unitId));
     }
 
     @Test
@@ -284,10 +284,10 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-11").toTheEndOfTime().status(Status.available).x();
 
         now("2010-01-01");
-        Assert.assertFalse(getUOM().isApproveLeaseAvaialble());
+        Assert.assertFalse(getUOM().isApproveLeaseAvaialble(unitId));
 
         now("2010-01-11");
-        Assert.assertFalse(getUOM().isApproveLeaseAvaialble());
+        Assert.assertFalse(getUOM().isApproveLeaseAvaialble(unitId));
     }
 
     @Test
@@ -297,13 +297,13 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-11").toTheEndOfTime().status(Status.leased).withLease(lease).x();
 
         now("2010-01-01");
-        Assert.assertFalse(getUOM().isEndLeaseAvailable());
+        Assert.assertFalse(getUOM().isEndLeaseAvailable(unitId));
 
         now("2010-01-11");
-        Assert.assertTrue(getUOM().isEndLeaseAvailable());
+        Assert.assertTrue(getUOM().isEndLeaseAvailable(unitId));
 
         now("2010-01-15");
-        Assert.assertTrue(getUOM().isEndLeaseAvailable());
+        Assert.assertTrue(getUOM().isEndLeaseAvailable(unitId));
     }
 
     @Test
@@ -314,7 +314,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-12").toTheEndOfTime().status(Status.available).x();
 
         now("2010-01-12");
-        Assert.assertTrue(getUOM().isCancelEndLeaseAvaialble());
+        Assert.assertTrue(getUOM().isCancelEndLeaseAvaialble(unitId));
     }
 
     @Test
@@ -327,7 +327,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2011-01-12").toTheEndOfTime().status(Status.leased).withLease(lease2).x();
 
         now("2010-01-12");
-        Assert.assertFalse(getUOM().isCancelEndLeaseAvaialble());
+        Assert.assertFalse(getUOM().isCancelEndLeaseAvaialble(unitId));
     }
 
 }

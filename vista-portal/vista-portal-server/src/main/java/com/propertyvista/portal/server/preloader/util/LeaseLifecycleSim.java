@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -39,8 +40,6 @@ import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.common.util.LeaseManager.TimeContextProvider;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
 import com.propertyvista.server.financial.billing.BillingFacade;
 
 public class LeaseLifecycleSim {
@@ -121,15 +120,14 @@ public class LeaseLifecycleSim {
 
     /** completes the lease and makes the unit "available" */
     public Lease complete(Key leaseId, final LogicalDate completionDay) {
-        Lease lease = leaseManager(completionDay).complete(leaseId);
-
-        AptUnitOccupancyManagerImpl.get(lease.unit().getPrimaryKey(), new NowSource() {
-            @Override
-            public LogicalDate getNow() {
-                return completionDay;
-            }
-        }).scopeAvailable();
-
+        Lease lease;
+        Persistence.service().setTransactionSystemTime(completionDay);
+        try {
+            lease = leaseManager(completionDay).complete(leaseId);
+            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
+        } finally {
+            Persistence.service().setTransactionSystemTime(null);
+        }
         return lease;
     }
 

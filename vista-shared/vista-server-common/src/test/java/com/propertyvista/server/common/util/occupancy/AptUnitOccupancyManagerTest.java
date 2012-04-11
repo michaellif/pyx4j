@@ -26,7 +26,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         setup().from("2011-01-01").toTheEndOfTime().status(Status.vacant).x();
 
         now("2011-02-03");
-        getUOM().scopeAvailable();
+        getUOM().scopeAvailable(unitId);
 
         expect().from("2011-01-01").to("2011-02-02").status(Status.vacant).x();
         expect().from("2011-02-03").toTheEndOfTime().status(Status.available).x();
@@ -40,7 +40,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         now("2011-02-03");
 
         Lease lease = createLease("2011-02-15", "2011-10-25");
-        getUOM().reserve(lease);
+        getUOM().reserve(unitId, lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
@@ -57,7 +57,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         now("2011-09-03");
 
         Lease lease2 = createLease("2011-10-05", "2012-12-31");
-        getUOM().reserve(lease2);
+        getUOM().reserve(unitId, lease2);
 
         expect().fromTheBeginning().to("2011-02-01").status(Status.available).x();
         expect().from("2011-02-02").to("2011-10-02").status(Status.leased).withLease(lease1).x();
@@ -73,7 +73,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-02-01");
 
-        getUOM().unreserve();
+        getUOM().unreserve(unitId);
 
         expect().fromTheBeginning().toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
@@ -87,7 +87,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-02-05");
 
-        getUOM().unreserve();
+        getUOM().unreserve(unitId);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-04").status(Status.reserved).withLease(lease).x();
@@ -103,7 +103,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-02-10");
 
-        getUOM().approveLease();
+        getUOM().approveLease(unitId);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -127,7 +127,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         lease.version().expectedMoveOut().setValue(asDate("2011-10-23")); // two days before leaseTo() date
         updateLease(lease);
 
-        getUOM().endLease();
+        getUOM().endLease(unitId);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -146,7 +146,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         setup().from("2011-10-26").toTheEndOfTime().status(Status.vacant).x();
 
         now("2011-09-25");
-        getUOM().scopeAvailable();
+        getUOM().scopeAvailable(unitId);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -165,7 +165,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         setup().from("2011-10-26").toTheEndOfTime().status(Status.vacant).x();
 
         now("2011-09-25");
-        getUOM().scopeRenovation(asDate("2011-11-10"));
+        getUOM().scopeRenovation(unitId, asDate("2011-11-10"));
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -185,7 +185,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         setup().from("2011-10-26").toTheEndOfTime().status(Status.vacant).x();
 
         now("2011-11-05");
-        getUOM().scopeRenovation(asDate("2011-11-10"));
+        getUOM().scopeRenovation(unitId, asDate("2011-11-10"));
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -202,7 +202,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-05-02");
 
-        getUOM().scopeOffMarket(OffMarketType.down);
+        getUOM().scopeOffMarket(unitId, OffMarketType.down);
 
         expect().fromTheBeginning().to("2011-05-01").status(Status.vacant).x();
         expect().from("2011-05-02").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
@@ -217,7 +217,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-07-18");
 
-        getUOM().scopeOffMarket(OffMarketType.model);
+        getUOM().scopeOffMarket(unitId, OffMarketType.model);
 
         expect().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         expect().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
@@ -233,7 +233,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-05-01");
 
-        getUOM().makeVacant(asDate("2011-06-15"));
+        getUOM().makeVacant(unitId, asDate("2011-06-15"));
 
         expect().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         expect().from("2011-05-20").to("2011-06-14").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
@@ -249,7 +249,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-05-01");
 
-        getUOM().makeVacant(asDate("2011-06-15"));
+        getUOM().makeVacant(unitId, asDate("2011-06-15"));
 
         expect().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         expect().from("2011-05-20").to("2011-06-14").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
@@ -265,7 +265,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-05-01");
 
-        getUOM().makeVacant(asDate("2011-07-20"));
+        getUOM().makeVacant(unitId, asDate("2011-07-20"));
 
         expect().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         expect().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
@@ -282,7 +282,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-11-01");
 
-        getUOM().cancelEndLease();
+        getUOM().cancelEndLease(unitId);
 
         expect().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
         expect().from("2011-05-20").toTheEndOfTime().status(Status.leased).withLease(lease).x();

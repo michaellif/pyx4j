@@ -17,87 +17,89 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerService {
 
     @Override
     public void scopeOffMarket(AsyncCallback<VoidSerializable> callback, Key unitPk, OffMarketType type) {
-        new AptUnitOccupancyManagerImpl(unitPk).scopeOffMarket(type);
-        callback.onSuccess(null);
+        ServerSideFactory.create(OccupancyFacade.class).scopeOffMarket(unitPk, type);
         Persistence.service().commit();
+
+        callback.onSuccess(null);
     }
 
     @Override
     public void scopeRenovation(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate renovationEndDate) {
-        new AptUnitOccupancyManagerImpl(unitPk).scopeRenovation(renovationEndDate);
-        callback.onSuccess(null);
+        ServerSideFactory.create(OccupancyFacade.class).scopeRenovation(unitPk, renovationEndDate);
         Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override
     public void scopeAvailable(AsyncCallback<VoidSerializable> callback, Key unitPk) {
-        new AptUnitOccupancyManagerImpl(unitPk).scopeAvailable();
-        callback.onSuccess(null);
+        ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(unitPk);
         Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override
     public void makeVacant(AsyncCallback<VoidSerializable> callback, Key unitPk, LogicalDate vacantFrom) {
-        new AptUnitOccupancyManagerImpl(unitPk).makeVacant(vacantFrom);
-        callback.onSuccess(null);
+        ServerSideFactory.create(OccupancyFacade.class).makeVacant(unitPk, vacantFrom);
         Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override
     public void canScopeOffMarket(AsyncCallback<Boolean> callback, Key unitPk) {
-        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isScopeOffMarketAvailable());
+        callback.onSuccess(ServerSideFactory.create(OccupancyFacade.class).isScopeOffMarketAvailable(unitPk));
     }
 
     @Override
     public void canScopeRenovation(AsyncCallback<LogicalDate> callback, Key unitPk) {
-        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isRenovationAvailable());
+        callback.onSuccess(ServerSideFactory.create(OccupancyFacade.class).isRenovationAvailable(unitPk));
     }
 
     @Override
     public void canScopeAvailable(AsyncCallback<Boolean> callback, Key unitPk) {
-        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isScopeAvailableAvailable());
+        callback.onSuccess(ServerSideFactory.create(OccupancyFacade.class).isScopeAvailableAvailable(unitPk));
     }
 
     @Override
     public void getMakeVacantConstraints(AsyncCallback<MakeVacantConstraintsDTO> callback, Key unitPk) {
-        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).getMakeVacantConstraints());
+        callback.onSuccess(ServerSideFactory.create(OccupancyFacade.class).getMakeVacantConstraints(unitPk));
     }
 
     @Override
     public void reserve(AsyncCallback<VoidSerializable> callback, Key unitPk, Lease lease) {
-        new AptUnitOccupancyManagerImpl(unitPk).reserve(lease);
+        ServerSideFactory.create(OccupancyFacade.class).reserve(unitPk, lease);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
     public void canReserve(AsyncCallback<LogicalDate> callback, Key unitPk) {
-        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isReserveAvailable());
+        callback.onSuccess(ServerSideFactory.create(OccupancyFacade.class).isReserveAvailable(unitPk));
     }
 
     @Override
     public void approveLease(AsyncCallback<VoidSerializable> callback, Key unitPk) {
-        new AptUnitOccupancyManagerImpl(unitPk).approveLease();
+        ServerSideFactory.create(OccupancyFacade.class).approveLease(unitPk);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
     public void canApproveLease(AsyncCallback<Boolean> callback, Key unitPk) {
-        callback.onSuccess(new AptUnitOccupancyManagerImpl(unitPk).isApproveLeaseAvaialble());
+        callback.onSuccess(ServerSideFactory.create(OccupancyFacade.class).isApproveLeaseAvaialble(unitPk));
     }
 
 }

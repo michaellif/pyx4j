@@ -27,6 +27,10 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
+import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.occupancy.SplittingHandler;
+import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
@@ -52,9 +56,9 @@ public class UnitTurnoverAnalysisManagerTestBase {
 
     private Floorplan floorplan;
 
-    private final UnitTurnoverAnalysisManager theMan;
+    private final UnitTurnoverAnalysisFacade theMan;
 
-    protected UnitTurnoverAnalysisManagerTestBase(UnitTurnoverAnalysisManager manager) {
+    protected UnitTurnoverAnalysisManagerTestBase(UnitTurnoverAnalysisFacade manager) {
         theMan = manager;
     }
 
@@ -180,8 +184,8 @@ public class UnitTurnoverAnalysisManagerTestBase {
             unit.floorplan().set(floorplan);
             AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
             segment.status().setValue(Status.available);
-            segment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
-            segment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+            segment.dateFrom().setValue(OccupancyFacade.MIN_DATE);
+            segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
             unit._AptUnitOccupancySegment().add(segment);
             Persistence.service().merge(unit);
         }

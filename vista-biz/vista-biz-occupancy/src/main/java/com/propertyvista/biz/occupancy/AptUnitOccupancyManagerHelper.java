@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.util.occupancy;
+package com.propertyvista.biz.occupancy;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,10 +35,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
  * This class contains utility methods for unit occupancy manager.
  */
 public class AptUnitOccupancyManagerHelper {
-
-    public static final LogicalDate MIN_DATE = new LogicalDate(0, 0, 1); // 1900-1-1
-
-    public static final LogicalDate MAX_DATE = new LogicalDate(1100, 0, 1); // 3000-1-1
 
     private static final long MILLIS_IN_DAY = 1000l * 60l * 60l * 24l;
 
@@ -172,9 +168,9 @@ public class AptUnitOccupancyManagerHelper {
      *            the first segment in the retrieved list must contain this date
      * @return
      */
-    public static List<AptUnitOccupancySegment> retrieveOccupancy(AptUnit unit, LogicalDate dateContainedByTheFirstSegment) {
+    public static List<AptUnitOccupancySegment> retrieveOccupancy(Key unitPk, LogicalDate dateContainedByTheFirstSegment) {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit().id(), unitPk));
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), dateContainedByTheFirstSegment));
         criteria.asc(criteria.proto().dateFrom());
         List<AptUnitOccupancySegment> occupancyTimeline = Persistence.secureQuery(criteria);

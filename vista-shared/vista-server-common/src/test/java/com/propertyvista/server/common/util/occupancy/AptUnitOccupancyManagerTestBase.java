@@ -26,6 +26,7 @@ import org.junit.Before;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -34,6 +35,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -44,7 +46,6 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl.NowSource;
 
 public class AptUnitOccupancyManagerTestBase {
 
@@ -52,11 +53,9 @@ public class AptUnitOccupancyManagerTestBase {
 
     protected static final String MIN_DATE = "MIN_DATE";
 
-    private LogicalDate now = null;
-
-    private AptUnitOccupancyManager manager = null;
-
     private AptUnit unit = null;
+
+    protected Key unitId = null;
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -67,9 +66,6 @@ public class AptUnitOccupancyManagerTestBase {
         VistaTestDBSetup.init();
         TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
-
-        now = null;
-        manager = null;
 
         Persistence.service().delete(new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class));
         Persistence.service().delete(new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class));
@@ -85,6 +81,7 @@ public class AptUnitOccupancyManagerTestBase {
         unit.belongsTo().propertyCode().setValue("2");
         Persistence.service().merge(unit.belongsTo());
         Persistence.service().merge(unit);
+        unitId = unit.getPrimaryKey();
 
         expectedTimeline = new LinkedList<AptUnitOccupancySegment>();
     }
@@ -95,23 +92,11 @@ public class AptUnitOccupancyManagerTestBase {
     }
 
     protected void now(String nowDate) {
-        manager = null;
-        now = asDate(nowDate);
+        Persistence.service().setTransactionSystemTime(asDate(nowDate));
     }
 
-    protected AptUnitOccupancyManager getUOM() {
-        if (manager == null) {
-            if (now == null) {
-                throw new IllegalStateException("can't create manager without the NOW date");
-            }
-            manager = new AptUnitOccupancyManagerImpl(unit, new NowSource() {
-                @Override
-                public LogicalDate getNow() {
-                    return AptUnitOccupancyManagerTestBase.this.now;
-                }
-            });
-        }
-        return manager;
+    protected OccupancyFacade getUOM() {
+        return ServerSideFactory.create(OccupancyFacade.class);
     }
 
     protected Lease createLease(String leaseFrom, String leaseTo) {
@@ -164,9 +149,9 @@ public class AptUnitOccupancyManagerTestBase {
 
     public static LogicalDate asDate(String dateRepr) {
         if ("MAX_DATE".equals(dateRepr)) {
-            return new LogicalDate(AptUnitOccupancyManagerHelper.MAX_DATE);
+            return new LogicalDate(OccupancyFacade.MAX_DATE);
         } else if ("MIN_DATE".equals(dateRepr)) {
-            return new LogicalDate(AptUnitOccupancyManagerHelper.MIN_DATE);
+            return new LogicalDate(OccupancyFacade.MIN_DATE);
         } else {
             try {
                 return new LogicalDate(DATE_FORMAT.parse(dateRepr));
@@ -202,7 +187,7 @@ public class AptUnitOccupancyManagerTestBase {
         }
 
         public T fromTheBeginning() {
-            segment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
+            segment.dateFrom().setValue(OccupancyFacade.MIN_DATE);
             return self();
         }
 
@@ -212,7 +197,7 @@ public class AptUnitOccupancyManagerTestBase {
         }
 
         public T toTheEndOfTime() {
-            segment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+            segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
             return self();
         }
 

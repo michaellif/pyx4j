@@ -11,14 +11,14 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.util.occupancy;
+package com.propertyvista.biz.occupancy;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface UnitTurnoverAnalysisManager {
+public interface UnitTurnoverAnalysisFacade {
 
     /**
      * Update turnover statistics for the relevant building if needed

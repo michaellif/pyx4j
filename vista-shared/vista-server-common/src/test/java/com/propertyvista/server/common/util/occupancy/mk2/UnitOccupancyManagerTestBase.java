@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -44,7 +45,6 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 
 public class UnitOccupancyManagerTestBase {
 
@@ -148,9 +148,9 @@ public class UnitOccupancyManagerTestBase {
 
     public static LogicalDate asDate(String dateRepr) {
         if ("MAX_DATE".equals(dateRepr)) {
-            return new LogicalDate(AptUnitOccupancyManagerHelper.MAX_DATE);
+            return new LogicalDate(OccupancyFacade.MAX_DATE);
         } else if ("MIN_DATE".equals(dateRepr)) {
-            return new LogicalDate(AptUnitOccupancyManagerHelper.MIN_DATE);
+            return new LogicalDate(OccupancyFacade.MIN_DATE);
         } else {
             try {
                 return new LogicalDate(DATE_FORMAT.parse(dateRepr));

@@ -17,12 +17,13 @@ import static java.util.Arrays.asList;
 
 import org.junit.Ignore;
 
+import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
 
 @Ignore
 public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTestBase {
@@ -38,7 +39,7 @@ public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTe
 
         now("2011-10-01");
 
-        AptUnitOccupancyManagerHelper.merge(getUnit(), AptUnitOccupancyManagerHelper.MIN_DATE, asList(Status.available), new MergeHandler() {
+        AptUnitOccupancyManagerHelper.merge(getUnit(), OccupancyFacade.MIN_DATE, asList(Status.available), new MergeHandler() {
             @Override
             public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
                 merged.status().setValue(Status.vacant);
@@ -65,7 +66,7 @@ public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTe
 
         now("2011-10-01");
 
-        AptUnitOccupancyManagerHelper.merge(getUnit(), AptUnitOccupancyManagerHelper.MIN_DATE, asList(Status.vacant), new MergeHandler() {
+        AptUnitOccupancyManagerHelper.merge(getUnit(), OccupancyFacade.MIN_DATE, asList(Status.vacant), new MergeHandler() {
             @Override
             public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
                 merged.status().setValue(Status.offMarket);
@@ -97,7 +98,7 @@ public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTe
 
         now("2010-04-20");
 
-        AptUnitOccupancyManagerHelper.merge(getUnit(), AptUnitOccupancyManagerHelper.MIN_DATE, asList(Status.vacant, Status.available), new MergeHandler() {
+        AptUnitOccupancyManagerHelper.merge(getUnit(), OccupancyFacade.MIN_DATE, asList(Status.vacant, Status.available), new MergeHandler() {
             @Override
             public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
                 merged.status().setValue(Status.offMarket);

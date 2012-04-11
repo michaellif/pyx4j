@@ -19,9 +19,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 
 public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUnitOccupancySegment> implements UnitOccupancyCrudService {
 
@@ -36,10 +36,10 @@ public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUni
 
     @Override
     protected void enhanceRetrieved(AptUnitOccupancySegment entity, AptUnitOccupancySegment dto) {
-        if (dto.dateFrom().getValue().equals(AptUnitOccupancyManagerHelper.MIN_DATE)) {
+        if (dto.dateFrom().getValue().equals(OccupancyFacade.MIN_DATE)) {
             dto.dateFrom().setValue(null);
         }
-        if (dto.dateTo().getValue().equals(AptUnitOccupancyManagerHelper.MAX_DATE)) {
+        if (dto.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
             dto.dateTo().setValue(null);
         }
     }

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.util.occupancy;
+package com.propertyvista.biz.occupancy;
 
 import java.math.BigDecimal;
 import java.math.MathContext;

@@ -13,12 +13,12 @@
  */
 package com.propertyvista.server.common.util.occupancy.mk2;
 
-import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.addDay;
-import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.assertStatus;
-import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.merge;
-import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancySegment;
-import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.split;
-import static com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.substractDay;
+import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.addDay;
+import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.assertStatus;
+import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.merge;
+import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancySegment;
+import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.split;
+import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.substractDay;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,15 +32,16 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper;
+import com.propertyvista.biz.occupancy.AvailabilityReportManager;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.occupancy.SplittingHandler;
+import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
-import com.propertyvista.server.common.util.occupancy.AvailabilityReportManager;
-import com.propertyvista.server.common.util.occupancy.SplittingHandler;
 import com.propertyvista.server.common.util.occupancy.mk2.opconstraints.ApproveLeaseConstraintsDTO;
 import com.propertyvista.server.common.util.occupancy.mk2.opconstraints.CancelEndLeaseConstraintsDTO;
 import com.propertyvista.server.common.util.occupancy.mk2.opconstraints.CancelReservationConstraintsDTO;
@@ -206,7 +207,7 @@ public class UnitOccupancyManager implements IUnitOccupancyManager {
             public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
                 segment.status().setValue(Status.vacant);
                 segment.offMarket().setValue(null);
-                segment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+                segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
             }
         });
 

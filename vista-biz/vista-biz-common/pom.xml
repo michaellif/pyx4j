@@ -23,6 +23,11 @@
             <artifactId>vista-server-config</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+	    <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-server</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>

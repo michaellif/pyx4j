@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.util.occupancy;
+package com.propertyvista.biz.occupancy;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -20,12 +20,13 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisManager {
+public class UnitTurnoverAnalysisFacadeImpl implements UnitTurnoverAnalysisFacade {
 
     @Override
     public int turnoversSinceBeginningOfTheMonth(LogicalDate asOf, Key... buildings) {

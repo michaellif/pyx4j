@@ -25,6 +25,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
@@ -34,14 +36,10 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManager;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
-import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManager;
-import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManagerImpl;
 import com.propertyvista.server.financial.billing.BillingFacade;
 import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
@@ -50,8 +48,6 @@ public class LeaseManager {
     private static final I18n i18n = I18n.get(LeaseManager.class);
 
     private final TimeContextProvider timeContextProvider;
-
-    private final UnitTurnoverAnalysisManager turnoverAnalysisManager;
 
     public LeaseManager() {
         this(new TimeContextProvider() {
@@ -63,14 +59,8 @@ public class LeaseManager {
     }
 
     public LeaseManager(TimeContextProvider timeContextProvider) {
-        this(timeContextProvider, new UnitTurnoverAnalysisManagerImpl());
-    }
-
-    public LeaseManager(TimeContextProvider timeContextProvider, UnitTurnoverAnalysisManager turnoverAnalysisManager) {
         assert timeContextProvider != null;
-        assert turnoverAnalysisManager != null;
         this.timeContextProvider = timeContextProvider;
-        this.turnoverAnalysisManager = turnoverAnalysisManager;
     }
 
     public Lease create(String leaseId, Service.Type type, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo) {
@@ -139,10 +129,10 @@ public class LeaseManager {
 
         if (isUnitChanged) {
             if (doUnreserve) {
-                occupancyManager(oldLease.unit().getPrimaryKey()).unreserve();
+                ServerSideFactory.create(OccupancyFacade.class).unreserve(oldLease.unit().getPrimaryKey());
             }
             if (doReserve) {
-                occupancyManager(lease.unit().getPrimaryKey()).reserve(lease);
+                ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
             }
         }
 
@@ -165,7 +155,7 @@ public class LeaseManager {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
-        occupancyManager(lease.unit().getPrimaryKey()).endLease();
+        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
         return lease;
     }
 
@@ -184,7 +174,7 @@ public class LeaseManager {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
-        occupancyManager(lease.unit().getPrimaryKey()).cancelEndLease();
+        ServerSideFactory.create(OccupancyFacade.class).cancelEndLease(lease.unit().getPrimaryKey());
         return lease;
     }
 
@@ -203,7 +193,7 @@ public class LeaseManager {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
-        occupancyManager(lease.unit().getPrimaryKey()).endLease();
+        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
         return lease;
     }
 
@@ -222,7 +212,7 @@ public class LeaseManager {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
-        occupancyManager(lease.unit().getPrimaryKey()).cancelEndLease();
+        ServerSideFactory.create(OccupancyFacade.class).cancelEndLease(lease.unit().getPrimaryKey());
         return lease;
     }
 
@@ -237,7 +227,7 @@ public class LeaseManager {
 
         updateApplicationReferencesToFinalVersionOfLase(lease);
 
-        occupancyManager(lease.unit().getPrimaryKey()).approveLease();
+        ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
 
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
 
@@ -255,7 +245,7 @@ public class LeaseManager {
 
         updateApplicationReferencesToFinalVersionOfLase(lease);
 
-        occupancyManager(lease.unit().getPrimaryKey()).unreserve();
+        ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
         return lease;
     }
 
@@ -268,7 +258,7 @@ public class LeaseManager {
 
         updateApplicationReferencesToFinalVersionOfLase(lease);
 
-        occupancyManager(lease.unit().getPrimaryKey()).unreserve();
+        ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
         return lease;
     }
 
@@ -298,7 +288,7 @@ public class LeaseManager {
             lease.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.secureSave(lease);
 
-            turnoverAnalysisManager.propagateLeaseActivationToTurnoverReport(lease);
+            ServerSideFactory.create(UnitTurnoverAnalysisFacade.class).propagateLeaseActivationToTurnoverReport(lease);
 
             // update Lead state (if present)
             EntityQueryCriteria<Lead> criteria = new EntityQueryCriteria<Lead>(Lead.class);
@@ -330,15 +320,6 @@ public class LeaseManager {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
         return lease;
-    }
-
-    private AptUnitOccupancyManager occupancyManager(Key unitId) {
-        return AptUnitOccupancyManagerImpl.get(unitId, new AptUnitOccupancyManagerImpl.NowSource() {
-            @Override
-            public LogicalDate getNow() {
-                return timeContextProvider.getTimeContext();
-            }
-        });
     }
 
     public interface TimeContextProvider {

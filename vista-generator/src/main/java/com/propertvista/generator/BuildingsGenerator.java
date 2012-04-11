@@ -28,6 +28,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
@@ -52,7 +53,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 
 public class BuildingsGenerator {
 
@@ -509,8 +509,8 @@ public class BuildingsGenerator {
 
         AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
         occupancySegment.unit().set(unit);
-        occupancySegment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
-        occupancySegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+        occupancySegment.dateFrom().setValue(OccupancyFacade.MIN_DATE);
+        occupancySegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
         occupancySegment.status().setValue(AptUnitOccupancySegment.Status.available);
         unit._availableForRent().setValue(occupancySegment.dateFrom().getValue());
         occupancySegment.description().setValue(RandomUtil.randomLetters(25).toLowerCase());

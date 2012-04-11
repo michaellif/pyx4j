@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -39,7 +40,6 @@ import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
 
 public class BuildingImporter extends ImportPersister {
 
@@ -170,12 +170,12 @@ public class BuildingImporter extends ImportPersister {
                         occupancySegment.unit().set(i);
 
                         if (i._availableForRent().isNull()) {
-                            occupancySegment.dateFrom().setValue(AptUnitOccupancyManagerHelper.MIN_DATE);
-                            occupancySegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+                            occupancySegment.dateFrom().setValue(OccupancyFacade.MIN_DATE);
+                            occupancySegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
                             occupancySegment.status().setValue(AptUnitOccupancySegment.Status.offMarket);
                         } else {
                             occupancySegment.dateFrom().setValue(i._availableForRent().getValue());
-                            occupancySegment.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+                            occupancySegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
                             occupancySegment.status().setValue(AptUnitOccupancySegment.Status.available);
                         }
 

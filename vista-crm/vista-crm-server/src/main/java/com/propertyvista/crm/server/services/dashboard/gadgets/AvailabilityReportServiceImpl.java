@@ -28,6 +28,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -36,6 +37,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.util.SortingFactory;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO;
@@ -49,8 +51,6 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPr
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManager;
-import com.propertyvista.server.common.util.occupancy.UnitTurnoverAnalysisManagerImpl;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
 
@@ -342,7 +342,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         LogicalDate tweleveMonthsAgo = new LogicalDate(reportDate.getYear() - 1, reportDate.getMonth(), 1);
         LogicalDate endOfTheMonth = thisMonthEnd(tweleveMonthsAgo);
-        UnitTurnoverAnalysisManager manager = new UnitTurnoverAnalysisManagerImpl();
+        UnitTurnoverAnalysisFacade manager = ServerSideFactory.create(UnitTurnoverAnalysisFacade.class);
 
         Key[] buildingsArray = buidlings.toArray(new Key[buidlings.size()]);
         int totalTurnovers = 0;

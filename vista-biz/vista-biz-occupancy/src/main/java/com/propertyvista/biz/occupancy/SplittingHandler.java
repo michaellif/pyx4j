@@ -11,13 +11,14 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.util.occupancy;
+package com.propertyvista.biz.occupancy;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
-public interface InsertionHandler {
+public interface SplittingHandler {
 
-    void initAddedStatus(AptUnitOccupancySegment addedSegment);
+    void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException;
 
-    void initRemainderOfTheSplitStatus(AptUnitOccupancySegment splitStatus);
+    void updateAfterSplitPointSegment(AptUnitOccupancySegment segment);
+
 }

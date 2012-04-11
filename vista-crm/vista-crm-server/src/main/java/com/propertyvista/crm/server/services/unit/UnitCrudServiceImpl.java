@@ -18,12 +18,14 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -33,8 +35,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.AptUnitServicePriceDTO;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerHelper;
-import com.propertyvista.server.common.util.occupancy.AptUnitOccupancyManagerImpl;
 
 public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
@@ -90,18 +90,19 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     protected void persist(AptUnit dbo, AptUnitDTO in) {
         boolean isNewUnit = dbo.id().isNull();
 
-        if (isNewUnit) {
+        // TODO is this part of OccupancyFacade
+        if (isNewUnit && OccupancyFacade.TODO) {
             // if the unit is new, create a new occupancy for it and
             AptUnitOccupancySegment vacant = EntityFactory.create(AptUnitOccupancySegment.class);
             vacant.status().setValue(Status.vacant);
             vacant.dateFrom().setValue(new LogicalDate());
-            vacant.dateTo().setValue(AptUnitOccupancyManagerHelper.MAX_DATE);
+            vacant.dateTo().setValue(OccupancyFacade.MAX_DATE);
             dbo._AptUnitOccupancySegment().add(vacant);
 
         }
         super.persist(dbo, in);
         if (isNewUnit) {
-            new AptUnitOccupancyManagerImpl(dbo).scopeAvailable();
+            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(dbo.getPrimaryKey());
         }
     }
 
