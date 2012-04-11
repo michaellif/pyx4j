@@ -75,6 +75,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
+        tabPanel.add(createGuarantorsTab(), i18n.tr("Guarantors"));
         tabPanel.add(createServiceAgreementTab(), i18n.tr("Charges"));
         if (!VistaTODO.removedForProduction) {
             tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
@@ -253,11 +254,15 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     private Widget createTenantsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        if (isEditable()) {
-            main.setWidget(0, 0, inject(proto().version().tenants(), new TenantInLeaseFolder(this, (LeaseEditorView) getParentView())));
-        } else {
-            main.setWidget(0, 0, inject(proto().version().tenants(), new TenantInLeaseFolder(this)));
-        }
+        main.setWidget(0, 0, inject(proto().version().tenants(), new TenantInLeaseFolder(this, isEditable())));
+
+        return new CrmScrollPanel(main);
+    }
+
+    private Widget createGuarantorsTab() {
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().version().guarantors(), new GuarantorInLeaseFolder(this, isEditable())));
 
         return new CrmScrollPanel(main);
     }
