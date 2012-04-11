@@ -22,7 +22,7 @@ import com.propertyvista.dto.TenantDTO;
 public class TenantLister extends ListerBase<TenantDTO> {
 
     public TenantLister() {
-        super(TenantDTO.class, false, true);
+        super(TenantDTO.class, false, false);
 
         setColumnDescriptors(//@formatter:off
                 new Builder(proto().customer().tenantId(), false).build(),
