@@ -84,7 +84,7 @@ public class NamingConventionModern implements NamingConvention {
     }
 
     @Override
-    public String sqlDiscriminatorColumnName() {
+    public String sqlDiscriminatorColumnNameSufix() {
         return "discriminator";
     }
 

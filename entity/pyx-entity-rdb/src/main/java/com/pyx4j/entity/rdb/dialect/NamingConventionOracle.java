@@ -185,7 +185,7 @@ public class NamingConventionOracle implements NamingConvention {
     }
 
     @Override
-    public String sqlDiscriminatorColumnName() {
+    public String sqlDiscriminatorColumnNameSufix() {
         return "discriminator";
     }
 

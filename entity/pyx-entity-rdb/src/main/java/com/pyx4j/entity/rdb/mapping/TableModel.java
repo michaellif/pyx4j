@@ -306,7 +306,7 @@ public class TableModel {
                 if (numberOfParams > 0) {
                     sql.append(", ");
                 }
-                sql.append(dialect.getNamingConvention().sqlDiscriminatorColumnName());
+                sql.append(dialect.sqlDiscriminatorColumnName());
                 numberOfParams++;
             }
 
@@ -374,7 +374,7 @@ public class TableModel {
             boolean first = true;
 
             if (classModel != ModelType.regular) {
-                sql.append(dialect.getNamingConvention().sqlDiscriminatorColumnName());
+                sql.append(dialect.sqlDiscriminatorColumnName());
                 first = false;
             }
 
@@ -639,7 +639,7 @@ public class TableModel {
                 entity.setPrimaryKey(primaryKey);
 
                 if (classModel != ModelType.regular) {
-                    String discriminator = rs.getString(dialect.getNamingConvention().sqlDiscriminatorColumnName());
+                    String discriminator = rs.getString(dialect.sqlDiscriminatorColumnName());
                     if (classModel == ModelType.superclass) {
                         Class<? extends IEntity> subclass = entityOperationsMeta.impClasses.get(discriminator);
                         TableModel subclassModel = mappings.getTableModel(persistenceContext, subclass);

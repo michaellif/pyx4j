@@ -74,6 +74,10 @@ public abstract class Dialect {
         return namingConvention;
     }
 
+    public String sqlDiscriminatorColumnName() {
+        return getNamingConvention().sqlIdColumnName() + getNamingConvention().sqlDiscriminatorColumnNameSufix();
+    }
+
     public MultitenancyType getMultitenancyType() {
         return multitenancyType;
     }

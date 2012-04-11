@@ -88,7 +88,7 @@ class TableDDL {
         }
         if (tableModel.classModel != ModelType.regular) {
             sql.append(", ");
-            sql.append(dialect.getNamingConvention().sqlDiscriminatorColumnName()).append(' ').append(dialect.getSqlType(String.class));
+            sql.append(dialect.sqlDiscriminatorColumnName()).append(' ').append(dialect.getSqlType(String.class));
             sql.append('(').append(64).append(')');
             sql.append(" NOT NULL ");
         }

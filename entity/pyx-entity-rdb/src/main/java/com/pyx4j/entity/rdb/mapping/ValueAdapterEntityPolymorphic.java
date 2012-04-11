@@ -40,17 +40,18 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 public class ValueAdapterEntityPolymorphic implements ValueAdapter {
 
-    private static String DISCRIMINATOR_COLUNM_NAME_SUFIX = "_disc";
-
     protected int sqlTypeKey;
 
     protected int sqlTypeDiscriminator;
 
     private final Map<String, Class<? extends IEntity>> impClasses = new HashMap<String, Class<? extends IEntity>>();
 
+    private final String discriminatorColumnNameSufix;
+
     protected ValueAdapterEntityPolymorphic(Dialect dialect, Class<? extends IEntity> entityClass) {
         sqlTypeKey = dialect.getTargetSqlType(Long.class);
         sqlTypeDiscriminator = dialect.getTargetSqlType(String.class);
+        discriminatorColumnNameSufix = dialect.getNamingConvention().sqlDiscriminatorColumnNameSufix();
 
         for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(entityClass)) {
             DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
@@ -72,14 +73,14 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
     @Override
     public List<String> getColumnNames(String memberSqlName) {
         List<String> columnNames = new Vector<String>();
-        columnNames.add(memberSqlName + DISCRIMINATOR_COLUNM_NAME_SUFIX);
+        columnNames.add(memberSqlName + discriminatorColumnNameSufix);
         columnNames.add(memberSqlName);
         return columnNames;
     }
 
     @Override
     public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName) {
-        if (coumnName.endsWith(DISCRIMINATOR_COLUNM_NAME_SUFIX)) {
+        if (coumnName.endsWith(discriminatorColumnNameSufix)) {
             return dialect.isCompatibleType(String.class, TableModel.ENUM_STRING_LENGHT_MAX, typeName);
         } else {
             return dialect.isCompatibleType(Long.class, 0, typeName);
@@ -88,7 +89,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
 
     @Override
     public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName) {
-        if (coumnName.endsWith(DISCRIMINATOR_COLUNM_NAME_SUFIX)) {
+        if (coumnName.endsWith(discriminatorColumnNameSufix)) {
             sql.append(dialect.getSqlType(String.class));
             sql.append('(').append(TableModel.ENUM_STRING_LENGHT_MAX).append(')');
         } else {
@@ -119,7 +120,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         if (rs.wasNull()) {
             return null;
         } else {
-            String discriminatorValue = rs.getString(memberSqlName + DISCRIMINATOR_COLUNM_NAME_SUFIX);
+            String discriminatorValue = rs.getString(memberSqlName + discriminatorColumnNameSufix);
             Class<? extends IEntity> entityClass = impClasses.get(discriminatorValue);
             IEntity entityValue = EntityFactory.create(entityClass);
             entityValue.setPrimaryKey(new Key(value));
@@ -148,7 +149,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
                 @Override
                 public List<String> getColumnNames(String memberSqlName) {
                     List<String> columnNames = new Vector<String>();
-                    columnNames.add(memberSqlName + DISCRIMINATOR_COLUNM_NAME_SUFIX);
+                    columnNames.add(memberSqlName + discriminatorColumnNameSufix);
                     return columnNames;
                 }
             };
