@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.ClientViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.lease.participants.TenantCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TenantDTO;
@@ -31,7 +31,7 @@ public class TenantListerActivity extends ListerActivityBase<TenantDTO> {
 
     @SuppressWarnings("unchecked")
     public TenantListerActivity(Place place) {
-        super(place, ClientViewFactory.instance(TenantListerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class), TenantDTO.class);
+        super(place, CustomerViewFactory.instance(TenantListerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class), TenantDTO.class);
 
         // filter out just current tenants:
         TenantDTO proto = EntityFactory.getEntityPrototype(TenantDTO.class);

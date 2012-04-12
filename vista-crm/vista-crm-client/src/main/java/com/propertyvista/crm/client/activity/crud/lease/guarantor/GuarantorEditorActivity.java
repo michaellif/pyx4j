@@ -20,7 +20,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.lease.guarantor.GuarantorEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.ClientViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.lease.participants.GuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;
 
@@ -28,7 +28,7 @@ public class GuarantorEditorActivity extends EditorActivityBase<GuarantorDTO> im
 
     @SuppressWarnings("unchecked")
     public GuarantorEditorActivity(CrudAppPlace place) {
-        super(place, ClientViewFactory.instance(GuarantorEditorView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class),
+        super(place, CustomerViewFactory.instance(GuarantorEditorView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class),
                 GuarantorDTO.class);
     }
 }

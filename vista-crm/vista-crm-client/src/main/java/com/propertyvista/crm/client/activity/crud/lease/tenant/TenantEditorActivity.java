@@ -20,7 +20,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.ClientViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.lease.participants.TenantCrudService;
 import com.propertyvista.dto.TenantDTO;
 
@@ -28,6 +28,6 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
 
     @SuppressWarnings("unchecked")
     public TenantEditorActivity(CrudAppPlace place) {
-        super(place, ClientViewFactory.instance(TenantEditorView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class), TenantDTO.class);
+        super(place, CustomerViewFactory.instance(TenantEditorView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class), TenantDTO.class);
     }
 }

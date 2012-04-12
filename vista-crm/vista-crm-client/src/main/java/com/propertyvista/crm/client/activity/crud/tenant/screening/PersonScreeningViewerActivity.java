@@ -20,7 +20,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.ClientViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
 import com.propertyvista.domain.tenant.PersonScreening;
 
@@ -28,7 +28,7 @@ public class PersonScreeningViewerActivity extends CrmViewerActivity<PersonScree
 
     @SuppressWarnings("unchecked")
     public PersonScreeningViewerActivity(Place place) {
-        super(place, ClientViewFactory.instance(PersonScreeningViewerView.class), (AbstractCrudService<PersonScreening>) GWT
+        super(place, CustomerViewFactory.instance(PersonScreeningViewerView.class), (AbstractCrudService<PersonScreening>) GWT
                 .create(PersonScreeningCrudService.class));
     }
 }

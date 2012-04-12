@@ -37,7 +37,7 @@ import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEdit
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningViewerViewImpl;
 
-public class ClientViewFactory extends ViewFactoryBase {
+public class CustomerViewFactory extends ViewFactoryBase {
 
     public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
         if (!map.containsKey(type)) {

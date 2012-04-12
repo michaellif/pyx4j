@@ -20,7 +20,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.EquifaxResultViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.ClientViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.screening.EquifaxResultCrudService;
 import com.propertyvista.misc.EquifaxResult;
 
@@ -28,6 +28,6 @@ public class EquifaxResultViewerActivity extends CrmViewerActivity<EquifaxResult
 
     @SuppressWarnings("unchecked")
     public EquifaxResultViewerActivity(Place place) {
-        super(place, ClientViewFactory.instance(EquifaxResultViewerView.class), (AbstractCrudService<EquifaxResult>) GWT.create(EquifaxResultCrudService.class));
+        super(place, CustomerViewFactory.instance(EquifaxResultViewerView.class), (AbstractCrudService<EquifaxResult>) GWT.create(EquifaxResultCrudService.class));
     }
 }
