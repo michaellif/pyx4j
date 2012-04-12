@@ -197,12 +197,13 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             Floorplan proto = EntityFactory.getEntityPrototype(Floorplan.class);
             COLUMNS = Arrays.asList(//@formatter:off                    
                     new MemberColumnDescriptor.Builder(proto.name()).build(),
+                    new MemberColumnDescriptor.Builder(proto.marketingName(), false).build(),
                     new MemberColumnDescriptor.Builder(proto.floorCount()).build(),
                     new MemberColumnDescriptor.Builder(proto.bedrooms()).build(),
                     new MemberColumnDescriptor.Builder(proto.bathrooms()).build(),
                     new MemberColumnDescriptor.Builder(proto.halfBath()).build(),
                     new MemberColumnDescriptor.Builder(proto.dens()).build(),
-                    new MemberColumnDescriptor.Builder(proto.description()).build()
+                    new MemberColumnDescriptor.Builder(proto.description(), false).build()
             );//    
         }
 
