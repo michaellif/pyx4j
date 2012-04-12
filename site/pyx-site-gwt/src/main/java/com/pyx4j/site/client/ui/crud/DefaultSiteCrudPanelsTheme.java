@@ -56,7 +56,7 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.HeaderToolbarTwo);
-        style.addProperty("padding", "2px 6px");
+        style.addProperty("padding", "6px");
         addStyle(style);
 
         style = new Style(".", StyleName.FooterToolbar);
