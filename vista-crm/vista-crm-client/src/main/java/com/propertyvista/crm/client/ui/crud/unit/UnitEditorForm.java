@@ -14,10 +14,15 @@
 package com.propertyvista.crm.client.ui.crud.unit;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -25,20 +30,31 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
@@ -80,8 +96,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     protected void onPopulate() {
         super.onPopulate();
 
-        setupFloorplanCombo(getValue().belongsTo());
-
         get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
         get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
     }
@@ -101,15 +115,12 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         int row = -1;
         FormFlexPanel left = new FormFlexPanel();
 
-        CComponent<?, ?> buildingComp;
-        if (isEditable()) {
-            buildingComp = new CEntityLabel<Building>();
-        } else {
-            buildingComp = new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class));
-        }
+        CComponent<?, ?> buildingComp = isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(
+                AppPlaceEntityMapper.resolvePlace(Building.class));
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().belongsTo(), buildingComp), 20).build());
 
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
+        CComponent<?, ?> floorplanComp = isEditable() ? new FloorplanSelectorHyperlink() : new CEntityLabel<Floorplan>();
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), floorplanComp), 20).build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatus()), 20).build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
 
@@ -178,15 +189,62 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         return new CrmScrollPanel(main);
     }
 
-    private void setupFloorplanCombo(Building building) {
-        // restrict floorplan combo here to current building:
-        CComponent<Floorplan, ?> comp = get(proto().floorplan());
-        if (isEditable() && comp instanceof CEntityComboBox<?>) {
-            @SuppressWarnings("unchecked")
-            CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
-            combo.resetCriteria(); // reload options with new criteria...
-            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), building));
-            combo.retriveOptions(null);
+    private static class FloorplanSelectorDialog extends EntitySelectorTableDialog<Floorplan> {
+
+        private static final List<ColumnDescriptor> COLUMNS;
+
+        static {
+            Floorplan proto = EntityFactory.getEntityPrototype(Floorplan.class);
+            COLUMNS = Arrays.asList(//@formatter:off                    
+                    new MemberColumnDescriptor.Builder(proto.name()).build(),
+                    new MemberColumnDescriptor.Builder(proto.bedrooms()).build(),
+                    new MemberColumnDescriptor.Builder(proto.bathrooms()).build(),
+                    new MemberColumnDescriptor.Builder(proto.dens()).build(),
+                    new MemberColumnDescriptor.Builder(proto.description()).build()
+            );//    
         }
+
+        private final AsyncCallback<Floorplan> onSelectedCallback;
+
+        public FloorplanSelectorDialog(Key ownerBuildingPk, AsyncCallback<Floorplan> onSelectedCallback) {
+            super(Floorplan.class, false, new LinkedList<Floorplan>(), i18n.tr("Select Floorplan"));
+            setParentFiltering(ownerBuildingPk);
+            this.onSelectedCallback = onSelectedCallback;
+        }
+
+        @Override
+        public boolean onClickOk() {            
+            onSelectedCallback.onSuccess(getSelectedItems().get(0));
+            return true;
+        }
+
+        @Override
+        protected List<ColumnDescriptor> defineColumnDescriptors() {            
+            return COLUMNS;
+        }
+
+        @Override
+        protected AbstractListService<Floorplan> getSelectService() {
+            return GWT.<SelectFloorplanListService> create(SelectFloorplanListService.class);
+        }
+    }
+    
+    private class FloorplanSelectorHyperlink extends CEntitySelectorHyperlink<Floorplan> {
+        
+        @Override
+        protected AppPlace getTargetPlace() {
+            return null;
+        }
+
+        @Override
+        protected AbstractEntitySelectorDialog<Floorplan> getSelectorDialog() {
+            return new FloorplanSelectorDialog(UnitEditorForm.this.getValue().belongsTo().getPrimaryKey(), new DefaultAsyncCallback<Floorplan>() {
+                @Override
+                public void onSuccess(Floorplan result) {
+                   get(UnitEditorForm.this.proto().floorplan()).setValue(result);                    
+                }
+            });
+        }
+        
     }
 }
