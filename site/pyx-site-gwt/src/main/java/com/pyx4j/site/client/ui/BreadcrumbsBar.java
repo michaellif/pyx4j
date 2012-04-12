@@ -20,6 +20,8 @@
  */
 package com.pyx4j.site.client.ui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -45,7 +47,16 @@ public class BreadcrumbsBar extends HorizontalPanel {
         clear();
 
         if (breadcrumbTrail != null) {
-            for (int i = 0; i < breadcrumbTrail.size(); i++) {
+            // filter out breadcrumbs that don't have associated place
+            List<IEntity> filteredTrail = new ArrayList<IEntity>(breadcrumbTrail.size());
+            for (IEntity breadcrumb : breadcrumbTrail) {
+                if (AppPlaceEntityMapper.resolvePlace(breadcrumb.getInstanceValueClass()) != null) {
+                    filteredTrail.add(breadcrumb);
+                }
+            }
+
+            // build UI representation of the trail
+            for (int i = 0; i < filteredTrail.size(); i++) {
                 IEntity breadcrumb = breadcrumbTrail.get(i);
                 add(new BreadcrumbAnchor(breadcrumb).asWidget());
                 if (i < breadcrumbTrail.size() - 1) {
