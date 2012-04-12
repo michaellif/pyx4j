@@ -24,7 +24,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillPrintService;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -34,7 +34,7 @@ public class BillViewerActivity extends CrmViewerActivity<BillDTO> implements Bi
 
     @SuppressWarnings("unchecked")
     public BillViewerActivity(Place place) {
-        super(place, TenantViewFactory.instance(BillViewerView.class), (AbstractCrudService<BillDTO>) GWT.create(BillCrudService.class));
+        super(place, LeaseViewFactory.instance(BillViewerView.class), (AbstractCrudService<BillDTO>) GWT.create(BillCrudService.class));
     }
 
     @Override

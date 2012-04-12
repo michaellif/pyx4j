@@ -36,18 +36,18 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.Tenant.Role;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.ValidationUtils;
+import com.propertyvista.dto.LeaseDTO;
 
-class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
+public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
 
     static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
 
-    private final CEntityEditor<? extends Lease> parent;
+    private final CEntityEditor<? extends LeaseDTO> lease;
 
-    public TenantInLeaseFolder(CEntityEditor<? extends Lease> parent, boolean modifiable) {
+    public TenantInLeaseFolder(CEntityEditor<? extends LeaseDTO> parent, boolean modifiable) {
         super(Tenant.class, modifiable);
-        this.parent = parent;
+        this.lease = parent;
         setOrderable(false);
     }
 
@@ -64,7 +64,7 @@ class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
                         } else {
                             for (Customer tenant : getSelectedItems()) {
                                 Tenant newTenantInLease = EntityFactory.create(Tenant.class);
-                                newTenantInLease.leaseV().setPrimaryKey(parent.getValue().version().getPrimaryKey());
+                                newTenantInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
                                 newTenantInLease.customer().set(tenant);
                                 if (!isApplicantPresent()) {
                                     newTenantInLease.role().setValue(Role.Applicant);

@@ -22,7 +22,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.ClientViewFactory;
 import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
@@ -32,7 +32,7 @@ public class PersonScreeningEditorActivity extends EditorActivityBase<PersonScre
 
     @SuppressWarnings("unchecked")
     public PersonScreeningEditorActivity(CrudAppPlace place) {
-        super(place, TenantViewFactory.instance(PersonScreeningEditorView.class), (AbstractCrudService<PersonScreening>) GWT
+        super(place, ClientViewFactory.instance(PersonScreeningEditorView.class), (AbstractCrudService<PersonScreening>) GWT
                 .create(PersonScreeningCrudService.class), PersonScreening.class);
     }
 

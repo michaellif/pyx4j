@@ -64,6 +64,9 @@ import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActiv
 import com.propertyvista.crm.client.activity.crud.lease.LeaseEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseViewerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationEditorActivity;
+import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationListerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.guarantor.GuarantorEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.guarantor.GuarantorListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.guarantor.GuarantorViewerActivity;
@@ -462,6 +465,19 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case lister:
                             activity = new LeaseListerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Tenants.LeaseApplication) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new LeaseApplicationEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new LeaseApplicationViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new LeaseApplicationListerActivity(crudPlace);
                             break;
                         }
 

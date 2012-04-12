@@ -32,17 +32,17 @@ import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseDTO;
 
-class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
+public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
 
     static final I18n i18n = I18n.get(GuarantorInLeaseFolder.class);
 
-    private final CEntityEditor<? extends Lease> parent;
+    private final CEntityEditor<? extends LeaseDTO> lease;
 
-    public GuarantorInLeaseFolder(CEntityEditor<? extends Lease> parent, boolean modifiable) {
+    public GuarantorInLeaseFolder(CEntityEditor<? extends LeaseDTO> parent, boolean modifiable) {
         super(Guarantor.class, modifiable);
-        this.parent = parent;
+        this.lease = parent;
         setOrderable(false);
     }
 
@@ -59,7 +59,7 @@ class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
                         } else {
                             for (Customer tenant : getSelectedItems()) {
                                 Guarantor newTenantInLease = EntityFactory.create(Guarantor.class);
-                                newTenantInLease.leaseV().setPrimaryKey(parent.getValue().version().getPrimaryKey());
+                                newTenantInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
                                 newTenantInLease.customer().set(tenant);
                                 newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
                                 addItem(newTenantInLease);

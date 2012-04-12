@@ -35,8 +35,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
+import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
@@ -59,7 +58,7 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
 
     @SuppressWarnings("unchecked")
     public LeaseViewerActivity(Place place) {
-        super(place, TenantViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
+        super(place, LeaseViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
 
         billLister = new ListerActivityBase<BillDTO>(place, ((LeaseViewerView) view).getBillListerView(),
                 (AbstractCrudService<BillDTO>) GWT.create(BillCrudService.class), BillDTO.class);
@@ -106,16 +105,6 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     // Actions:
 
     @Override
-    public void startApplication() {
-        ((LeaseCrudService) service).startApplication(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
-            }
-        }, entityId);
-    }
-
-    @Override
     public void startBilling() {
         GWT.<BillingExecutionService> create(BillingExecutionService.class).startBilling(new DefaultAsyncCallback<String>() {
 
@@ -134,16 +123,6 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
             }
         }, entityId);
 
-    }
-
-    @Override
-    public void applicationAction(LeaseApplicationActionDTO action) {
-        ((LeaseCrudService) service).applicationAction(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
-            }
-        }, action);
     }
 
     @Override

@@ -11,22 +11,25 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.lease;
+package com.propertyvista.crm.client.activity.crud.lease.application;
 
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorView;
+import com.propertyvista.crm.client.activity.crud.lease.LeaseEditorActivityBase;
+import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
-import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LeaseApplicationDTO;
 
-public class LeaseEditorActivity extends LeaseEditorActivityBase<LeaseDTO> implements LeaseEditorView.Presenter {
+public class LeaseApplicationEditorActivity extends LeaseEditorActivityBase<LeaseApplicationDTO> implements LeaseApplicationEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public LeaseEditorActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(LeaseEditorView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class), LeaseDTO.class);
+    public LeaseApplicationEditorActivity(CrudAppPlace place) {
+        super(place, LeaseViewFactory.instance(LeaseApplicationEditorView.class),
+                (AbstractCrudService<LeaseApplicationDTO>) GWT.create(LeaseCrudService.class), LeaseApplicationDTO.class);
     }
+
 }

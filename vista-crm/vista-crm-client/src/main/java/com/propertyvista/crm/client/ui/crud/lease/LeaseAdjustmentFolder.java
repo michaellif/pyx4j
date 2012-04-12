@@ -35,16 +35,16 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
 
     private final List<LeaseAdjustment> populatedValues = new LinkedList<LeaseAdjustment>();
 
-    private final CEntityEditor<LeaseDTO> lease;
+    private final CEntityEditor<? extends Lease> lease;
 
-    public LeaseAdjustmentFolder(boolean modifyable, CEntityEditor<LeaseDTO> lease) {
+    public LeaseAdjustmentFolder(boolean modifyable, CEntityEditor<? extends Lease> lease) {
         super(LeaseAdjustment.class, modifyable);
         this.lease = lease;
     }

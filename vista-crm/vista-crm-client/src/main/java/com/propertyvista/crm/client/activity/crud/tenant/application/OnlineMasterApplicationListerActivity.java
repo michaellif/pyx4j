@@ -20,7 +20,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.lease.application.online.OnlineMasterApplicationCrudService;
 import com.propertyvista.dto.OnlineMasterApplicationDTO;
 
@@ -28,7 +28,7 @@ public class OnlineMasterApplicationListerActivity extends ListerActivityBase<On
 
     @SuppressWarnings("unchecked")
     public OnlineMasterApplicationListerActivity(Place place) {
-        super(place, TenantViewFactory.instance(OnlineMasterApplicationListerView.class), (AbstractCrudService<OnlineMasterApplicationDTO>) GWT
+        super(place, LeaseViewFactory.instance(OnlineMasterApplicationListerView.class), (AbstractCrudService<OnlineMasterApplicationDTO>) GWT
                 .create(OnlineMasterApplicationCrudService.class), OnlineMasterApplicationDTO.class);
     }
 }

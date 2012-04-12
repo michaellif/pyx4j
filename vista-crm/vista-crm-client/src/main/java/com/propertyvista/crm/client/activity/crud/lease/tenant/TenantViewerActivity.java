@@ -29,7 +29,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.ClientViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
 import com.propertyvista.crm.rpc.services.lease.participants.TenantCrudService;
@@ -44,7 +44,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
     @SuppressWarnings("unchecked")
     public TenantViewerActivity(Place place) {
-        super(place, TenantViewFactory.instance(TenantViewerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class));
+        super(place, ClientViewFactory.instance(TenantViewerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class));
 
         screeningLister = new ListerActivityBase<PersonScreening>(place, ((TenantViewerView) view).getScreeningListerView(),
                 (AbstractCrudService<PersonScreening>) GWT.create(PersonScreeningCrudService.class), PersonScreening.class);

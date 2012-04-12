@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.PastTenantListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.ClientViewFactory;
 import com.propertyvista.crm.rpc.services.lease.participants.TenantCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TenantDTO;
@@ -31,7 +31,7 @@ public class PastTenantListerActivity extends ListerActivityBase<TenantDTO> {
 
     @SuppressWarnings("unchecked")
     public PastTenantListerActivity(Place place) {
-        super(place, TenantViewFactory.instance(PastTenantListerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class),
+        super(place, ClientViewFactory.instance(PastTenantListerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class),
                 TenantDTO.class);
 
         // filter out just current tenants:

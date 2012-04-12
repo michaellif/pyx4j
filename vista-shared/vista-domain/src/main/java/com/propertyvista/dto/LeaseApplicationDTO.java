@@ -7,18 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2012-04-12
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease;
+package com.propertyvista.dto;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.dto.LeaseDTO;
+@Transient
+public interface LeaseApplicationDTO extends LeaseDTO {
 
-public interface LeaseEditorView extends IEditorView<LeaseDTO> {
-
-    interface Presenter extends IEditorView.Presenter, LeaseEditorPresenterBase {
-    }
 }

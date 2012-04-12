@@ -62,6 +62,8 @@ public interface LeaseApplication extends IEntity {
     @Detached
     MasterOnlineApplication onlineApplication();
 
+    IPrimitive<Status> status();
+
     Employee decidedBy();
 
     IPrimitive<LogicalDate> decisionDate();

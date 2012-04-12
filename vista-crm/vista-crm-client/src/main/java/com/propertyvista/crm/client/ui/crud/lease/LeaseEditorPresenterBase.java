@@ -7,18 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2012-04-12
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import java.math.BigDecimal;
 
-import com.propertyvista.dto.LeaseDTO;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface LeaseEditorView extends IEditorView<LeaseDTO> {
+import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 
-    interface Presenter extends IEditorView.Presenter, LeaseEditorPresenterBase {
-    }
+public interface LeaseEditorPresenterBase {
+
+    void setSelectedUnit(AptUnit selected);
+
+    void setSelectedService(ProductItem serviceItem);
+
+    void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 }

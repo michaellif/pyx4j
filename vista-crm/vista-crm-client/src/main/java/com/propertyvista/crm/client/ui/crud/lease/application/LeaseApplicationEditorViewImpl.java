@@ -11,14 +11,17 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease;
+package com.propertyvista.crm.client.ui.crud.lease.application;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.dto.LeaseApplicationDTO;
 
-import com.propertyvista.dto.LeaseDTO;
+public class LeaseApplicationEditorViewImpl extends CrmEditorViewImplBase<LeaseApplicationDTO> implements LeaseApplicationEditorView {
 
-public interface LeaseEditorView extends IEditorView<LeaseDTO> {
-
-    interface Presenter extends IEditorView.Presenter, LeaseEditorPresenterBase {
+    public LeaseApplicationEditorViewImpl() {
+        super(CrmSiteMap.Tenants.Lease.class);
+        setForm(new LeaseApplicationEditorForm());
     }
+
 }

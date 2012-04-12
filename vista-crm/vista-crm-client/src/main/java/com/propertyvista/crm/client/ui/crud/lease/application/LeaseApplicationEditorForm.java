@@ -11,13 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease;
+package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import java.io.Serializable;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -45,6 +44,14 @@ import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.lease.BillableItemEditor;
+import com.propertyvista.crm.client.ui.crud.lease.BillableItemFolder;
+import com.propertyvista.crm.client.ui.crud.lease.ConcessionFolder;
+import com.propertyvista.crm.client.ui.crud.lease.GuarantorInLeaseFolder;
+import com.propertyvista.crm.client.ui.crud.lease.LeaseAdjustmentFolder;
+import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorPresenterBase;
+import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorView;
+import com.propertyvista.crm.client.ui.crud.lease.TenantInLeaseFolder;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -53,21 +60,20 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
-import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.dto.LeaseApplicationDTO;
 
-public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
+public class LeaseApplicationEditorForm extends CrmEntityForm<LeaseApplicationDTO> {
 
-    private static final I18n i18n = I18n.get(LeaseEditorForm.class);
+    private static final I18n i18n = I18n.get(LeaseApplicationEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
-    public LeaseEditorForm() {
+    public LeaseApplicationEditorForm() {
         this(false);
     }
 
-    public LeaseEditorForm(boolean viewMode) {
-        super(LeaseDTO.class, viewMode);
+    public LeaseApplicationEditorForm(boolean viewMode) {
+        super(LeaseApplicationDTO.class, viewMode);
     }
 
     @Override
@@ -77,12 +83,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
         tabPanel.add(createGuarantorsTab(), i18n.tr("Guarantors"));
         tabPanel.add(createServiceAgreementTab(), i18n.tr("Charges"));
-        if (!VistaTODO.removedForProduction) {
-            tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
-            tabPanel.setLastTabDisabled(isEditable());
-            tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
-            tabPanel.setLastTabDisabled(isEditable());
-        }
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
@@ -199,7 +199,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 return new UnitSelectorDialog() {
                     @Override
                     protected void setFilters(List<PropertyCriterion> filters) {
-                        LeaseDTO currentValue = LeaseEditorForm.this.getValue();
+                        LeaseApplicationDTO currentValue = LeaseApplicationEditorForm.this.getValue();
                         if (!currentValue.leaseFrom().isNull() && !currentValue.leaseTo().isNull() && filters != null) {
                             // filter out already leased units (null) and not available by date:
                             filters.add(PropertyCriterion.ne(proto()._availableForRent(), (Serializable) null));
@@ -269,7 +269,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private Widget createServiceAgreementTab() {
         FormFlexPanel main = new FormFlexPanel();
-        LeaseEditorPresenterBase editorPresenter = (isEditable() ? (LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter() : null);
+        LeaseEditorPresenterBase editorPresenter = (isEditable() ? (LeaseApplicationEditorView.Presenter) ((LeaseApplicationEditorView) getParentView())
+                .getPresenter() : null);
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));

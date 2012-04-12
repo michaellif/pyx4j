@@ -54,8 +54,9 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
+import com.propertyvista.dto.LeaseDTO;
 
-class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
+public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
     private static final I18n i18n = I18n.get(BillableItemEditor.class);
 
@@ -63,18 +64,21 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
 
-    private final LeaseEditorForm form;
+    private final CEntityEditor<? extends LeaseDTO> lease;
+
+    private final LeaseEditorPresenterBase editorPresenter;
 
     private boolean isService = false;
 
-    public BillableItemEditor(LeaseEditorForm form, boolean isService) {
-        this(form);
+    public BillableItemEditor(CEntityEditor<? extends LeaseDTO> lease, LeaseEditorPresenterBase editorPresenter, boolean isService) {
+        this(lease, editorPresenter);
         this.isService = isService;
     }
 
-    public BillableItemEditor(LeaseEditorForm form) {
+    public BillableItemEditor(CEntityEditor<? extends LeaseDTO> lease, LeaseEditorPresenterBase editorPresenter) {
         super(BillableItem.class);
-        this.form = form;
+        this.lease = lease;
+        this.editorPresenter = editorPresenter;
     }
 
     @Override
@@ -95,12 +99,13 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
             @Override
             protected EntitySelectorListDialog<ProductItem> getSelectorDialog() {
-                return new EntitySelectorListDialog<ProductItem>(i18n.tr("Service Item Selection"), false, form.getValue().selectedServiceItems()) {
+                return new EntitySelectorListDialog<ProductItem>(i18n.tr("Service Item Selection"), false, lease.getValue().selectedServiceItems()) {
                     @Override
                     public boolean onClickOk() {
                         List<ProductItem> selectedItems = getSelectedItems();
                         if (!selectedItems.isEmpty()) {
-                            ((LeaseEditorView.Presenter) ((LeaseEditorView) form.getParentView()).getPresenter()).setSelectedService(selectedItems.get(0));
+//                            ((LeaseEditorView.Presenter) ((LeaseEditorView) lease.getParentView()).getPresenter()).setSelectedService(selectedItems.get(0));
+                            editorPresenter.setSelectedService(selectedItems.get(0));
                             return true;
                         } else {
                             return false;
@@ -119,7 +124,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
                     @Override
                     public void show() {
-                        if (form.getValue().selectedBuilding() == null || form.getValue().selectedBuilding().isNull()) {
+                        if (lease.getValue().selectedBuilding() == null || lease.getValue().selectedBuilding().isNull()) {
                             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Unit First"));
                         } else {
                             super.show();
@@ -219,7 +224,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         if (isEditable()) {
             get(proto().item()).setViewable(false);
             if (isService) {
-                get(proto().item()).setEditable(form.getValue().approvalDate().isNull());
+                get(proto().item()).setEditable(lease.getValue().approvalDate().isNull());
             } else {
                 get(proto().item()).setEditable(false);
             }
@@ -289,7 +294,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
         @Override
         protected void removeItem(CEntityFolderItem<BillableItemAdjustment> item) {
-            if (!form.getValue().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
+            if (!lease.getValue().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
                 item.getValue().expirationDate().setValue(new LogicalDate());
                 item.setValue(item.getValue(), false);
                 item.setEditable(false);
@@ -306,7 +311,7 @@ class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 @Override
                 public void onPropertyChange(PropertyChangeEvent event) {
                     if (event.getPropertyName() == PropertyName.repopulated) {
-                        if (isAddable() && !form.getValue().approvalDate().isNull()) {
+                        if (isAddable() && !lease.getValue().approvalDate().isNull()) {
                             LogicalDate value = item.getValue().expirationDate().getValue();
                             if ((value != null) && !value.after(TimeUtils.today())) {
                                 item.setViewable(true);

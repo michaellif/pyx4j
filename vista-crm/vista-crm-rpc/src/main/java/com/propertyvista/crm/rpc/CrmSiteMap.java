@@ -180,6 +180,11 @@ public class CrmSiteMap implements SiteMap {
         public static class Lease extends CRMCrudAppPlace {
         }
 
+        @PlaceProperties(caption = "Lease Application")
+        @NavigationItem(navigLabel = "Lease Applications")
+        public static class LeaseApplication extends CRMCrudAppPlace {
+        }
+
         @PlaceProperties(caption = "Bill")
         @NavigationItem(navigLabel = "Bills")
         public static class Bill extends CRMCrudAppPlace {
@@ -190,8 +195,8 @@ public class CrmSiteMap implements SiteMap {
         public static class Payment extends CRMCrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Application")
-        @NavigationItem(navigLabel = "Applications")
+        @PlaceProperties(caption = "Online Application")
+        @NavigationItem(navigLabel = "Online Applications")
         public static class OnlineMasterApplication extends CRMCrudAppPlace {
         }
 

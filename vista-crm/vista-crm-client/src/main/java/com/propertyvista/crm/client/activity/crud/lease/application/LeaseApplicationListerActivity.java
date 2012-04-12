@@ -7,28 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.tenant.application;
+package com.propertyvista.crm.client.activity.crud.lease.application;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
-import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
-import com.propertyvista.crm.rpc.services.lease.application.online.OnlineApplicationCrudService;
-import com.propertyvista.dto.OnlineApplicationDTO;
+import com.propertyvista.crm.rpc.services.lease.application.LeaseApplicationCrudService;
+import com.propertyvista.dto.LeaseApplicationDTO;
 
-public class ApplicationViewerActivity extends CrmViewerActivity<OnlineApplicationDTO> implements ApplicationViewerView.Presenter {
+public class LeaseApplicationListerActivity extends ListerActivityBase<LeaseApplicationDTO> {
 
     @SuppressWarnings("unchecked")
-    public ApplicationViewerActivity(Place place) {
-        super(place, LeaseViewFactory.instance(ApplicationViewerView.class), (AbstractCrudService<OnlineApplicationDTO>) GWT
-                .create(OnlineApplicationCrudService.class));
+    public LeaseApplicationListerActivity(Place place) {
+        super(place, LeaseViewFactory.instance(LeaseApplicationListerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
+                .create(LeaseApplicationCrudService.class), LeaseApplicationDTO.class);
     }
 }

@@ -13,33 +13,21 @@
  */
 package com.propertyvista.crm.rpc.services.lease;
 
-import java.math.BigDecimal;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseCrudService extends AbstractVersionedCrudService<LeaseDTO> {
-
-    void setSelectededUnit(AsyncCallback<AptUnit> callback, Key unitId);
-
-    void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
+public interface LeaseCrudService extends LeaseCrudServiceBase<LeaseDTO> {
 
     // TODO Move to new Service  LeaseOperationService
-    void startApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
-
-    void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO);
 
     void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut);
 

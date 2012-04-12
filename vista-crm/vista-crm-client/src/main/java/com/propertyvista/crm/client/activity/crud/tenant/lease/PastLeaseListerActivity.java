@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lease.PastLeaseListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
@@ -31,7 +31,7 @@ public class PastLeaseListerActivity extends ListerActivityBase<LeaseDTO> {
 
     @SuppressWarnings("unchecked")
     public PastLeaseListerActivity(Place place) {
-        super(place, TenantViewFactory.instance(PastLeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class), LeaseDTO.class);
+        super(place, LeaseViewFactory.instance(PastLeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class), LeaseDTO.class);
 
         LeaseDTO proto = EntityFactory.getEntityPrototype(LeaseDTO.class);
         addPreDefinedFilter(PropertyCriterion.in(proto.version().status(), Lease.Status.former()));

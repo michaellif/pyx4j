@@ -27,13 +27,13 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.concession.Concessi
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.dto.LeaseDTO;
 
-class ConcessionFolder extends VistaBoxFolder<Concession> {
+public class ConcessionFolder extends VistaBoxFolder<Concession> {
 
     private static final I18n i18n = I18n.get(ConcessionFolder.class);
 
-    private final CEntityEditor<LeaseDTO> lease;
+    private final CEntityEditor<? extends LeaseDTO> lease;
 
-    public ConcessionFolder(boolean modifyable, CEntityEditor<LeaseDTO> lease) {
+    public ConcessionFolder(boolean modifyable, CEntityEditor<? extends LeaseDTO> lease) {
         super(Concession.class, modifyable);
         this.lease = lease;
     }

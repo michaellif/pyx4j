@@ -63,8 +63,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     private final Button sendMail;
 
-    private final Button onlineApplication;
-
     private final Button runBill;
 
     private final Button notice;
@@ -100,14 +98,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             }
         });
         addHeaderToolbarTwoItem(sendMail.asWidget());
-
-        onlineApplication = new Button(i18n.tr("Start Online Application"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) presenter).startApplication();
-            }
-        });
-        addHeaderToolbarTwoItem(onlineApplication.asWidget());
 
         runBill = new Button(i18n.tr("Run Bill"), new ClickHandler() {
             @Override
@@ -171,7 +161,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         cancelNotice.setVisible(false);
         evict.setVisible(false);
         cancelEvict.setVisible(false);
-        onlineApplication.setVisible(false);
         sendMail.setVisible(false);
         runBill.setVisible(false);
         super.reset();
@@ -195,7 +184,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             CompletionType completion = value.version().completion().getValue();
 
             sendMail.setVisible(!value.unit().isNull());
-            onlineApplication.setVisible(status == Status.Created);
             if (ApplicationMode.isDevelopment()) {
                 runBill.setVisible(status == Status.Active);
             } else {
