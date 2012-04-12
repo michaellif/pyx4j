@@ -189,7 +189,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         return new CrmScrollPanel(main);
     }
 
-    private static class FloorplanSelectorDialog extends EntitySelectorTableDialog<Floorplan> {
+    private static class BuildingBoundFloorplanSelectorDialog extends EntitySelectorTableDialog<Floorplan> {
 
         private static final List<ColumnDescriptor> COLUMNS;
 
@@ -208,7 +208,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         private final AsyncCallback<Floorplan> onSelectedCallback;
 
-        public FloorplanSelectorDialog(Key ownerBuildingPk, AsyncCallback<Floorplan> onSelectedCallback) {
+        public BuildingBoundFloorplanSelectorDialog(Key ownerBuildingPk, AsyncCallback<Floorplan> onSelectedCallback) {
             super(Floorplan.class, false, new LinkedList<Floorplan>(), i18n.tr("Select Floorplan"));
             setParentFiltering(ownerBuildingPk);
             this.onSelectedCallback = onSelectedCallback;
@@ -240,7 +240,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         @Override
         protected AbstractEntitySelectorDialog<Floorplan> getSelectorDialog() {
-            return new FloorplanSelectorDialog(UnitEditorForm.this.getValue().belongsTo().getPrimaryKey(), new DefaultAsyncCallback<Floorplan>() {
+            return new BuildingBoundFloorplanSelectorDialog(UnitEditorForm.this.getValue().belongsTo().getPrimaryKey(), new DefaultAsyncCallback<Floorplan>() {
                 @Override
                 public void onSuccess(Floorplan result) {
                    get(UnitEditorForm.this.proto().floorplan()).setValue(result);                    
