@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,13 +30,11 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -150,27 +147,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         get(proto().info()._bedrooms()).setViewable(true);
         get(proto().info()._bathrooms()).setViewable(true);
 
-        // restrict floorplan combo here to any free :
-        CComponent<Floorplan, ?> comp = get(proto().floorplan());
-        if (isEditable() && comp instanceof CEntityComboBox<?>) {
-            @SuppressWarnings("unchecked")
-            CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
-            combo.resetCriteria();
-            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), (Serializable) null));
-            combo.addValueChangeHandler(new ValueChangeHandler<Floorplan>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Floorplan> event) {
-                    if (event.getValue() != null) {
-                        get(proto().info()._bedrooms()).setValue(event.getValue().bedrooms().getValue());
-                        get(proto().info()._bathrooms()).setValue(event.getValue().bathrooms().getValue());
-                    } else {
-                        get(proto().info()._bedrooms()).setValue(null);
-                        get(proto().info()._bathrooms()).setValue(null);
-                    }
-                }
-            });
-        }
-
         // form main panel from those two:
         FormFlexPanel main = new FormFlexPanel();
         main.setWidget(0, 0, left);
@@ -204,7 +180,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                     new MemberColumnDescriptor.Builder(proto.halfBath()).build(),
                     new MemberColumnDescriptor.Builder(proto.dens()).build(),
                     new MemberColumnDescriptor.Builder(proto.description(), false).build()
-            );//    
+            );//@formatter:on    
         }
 
         private final AsyncCallback<Floorplan> onSelectedCallback;
@@ -216,13 +192,13 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         }
 
         @Override
-        public boolean onClickOk() {            
+        public boolean onClickOk() {
             onSelectedCallback.onSuccess(getSelectedItems().get(0));
             return true;
         }
 
         @Override
-        protected List<ColumnDescriptor> defineColumnDescriptors() {            
+        protected List<ColumnDescriptor> defineColumnDescriptors() {
             return COLUMNS;
         }
 
@@ -231,9 +207,24 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             return GWT.<SelectFloorplanListService> create(SelectFloorplanListService.class);
         }
     }
-    
+
     private class FloorplanSelectorHyperlink extends CEntitySelectorHyperlink<Floorplan> {
-        
+
+        public FloorplanSelectorHyperlink() {
+            addValueChangeHandler(new ValueChangeHandler<Floorplan>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Floorplan> event) {
+                    if (event.getValue() != null) {
+                        get(UnitEditorForm.this.proto().info()._bedrooms()).setValue(event.getValue().bedrooms().getValue());
+                        get(UnitEditorForm.this.proto().info()._bathrooms()).setValue(event.getValue().bathrooms().getValue());
+                    } else {
+                        get(UnitEditorForm.this.proto().info()._bedrooms()).setValue(null);
+                        get(UnitEditorForm.this.proto().info()._bathrooms()).setValue(null);
+                    }
+                }
+            });
+        }
+
         @Override
         protected AppPlace getTargetPlace() {
             return null;
@@ -244,10 +235,10 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             return new BuildingBoundFloorplanSelectorDialog(UnitEditorForm.this.getValue().belongsTo().getPrimaryKey(), new DefaultAsyncCallback<Floorplan>() {
                 @Override
                 public void onSuccess(Floorplan result) {
-                   get(UnitEditorForm.this.proto().floorplan()).setValue(result);                    
+                    get(UnitEditorForm.this.proto().floorplan()).setValue(result);
                 }
             });
         }
-        
+
     }
 }
