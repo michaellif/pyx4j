@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.tenant.lease.LeaseCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseListerActivity extends ListerActivityBase<LeaseDTO> {

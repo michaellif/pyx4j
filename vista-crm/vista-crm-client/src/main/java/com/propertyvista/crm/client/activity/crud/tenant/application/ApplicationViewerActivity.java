@@ -21,7 +21,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.tenant.application.OnlineApplicationCrudService;
+import com.propertyvista.crm.rpc.services.lease.application.online.OnlineApplicationCrudService;
 import com.propertyvista.dto.OnlineApplicationDTO;
 
 public class ApplicationViewerActivity extends CrmViewerActivity<OnlineApplicationDTO> implements ApplicationViewerView.Presenter {

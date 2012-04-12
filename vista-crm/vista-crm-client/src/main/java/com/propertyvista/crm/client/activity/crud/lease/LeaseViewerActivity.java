@@ -40,7 +40,7 @@ import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.crm.rpc.services.tenant.lease.LeaseCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.tenant.Tenant;
