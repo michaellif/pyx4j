@@ -112,10 +112,13 @@ import com.propertyvista.crm.client.activity.crud.settings.tax.LeaseAdjustmentRe
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.FutureTenantListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.PastTenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.application.OnlineMasterApplicationListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.application.OnlineMasterApplicationViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lease.PastLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.screening.EquifaxResultViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.screening.PersonScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.screening.PersonScreeningViewerActivity;
@@ -385,6 +388,13 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
+                    } else if (place instanceof CrmSiteMap.Marketing.FutureTenant) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new FutureTenantListerActivity(crudPlace);
+                            break;
+                        }
+
                         // - Tenant-related:
                     } else if (place instanceof CrmSiteMap.Tenants.Tenant) {
                         switch (crudPlace.getType()) {
@@ -492,6 +502,20 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case editor:
                             activity = new MaintenanceRequestEditorActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Tenants.PastTenant) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new PastTenantListerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Tenants.PastLease) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new PastLeaseListerActivity(crudPlace);
                             break;
                         }
 

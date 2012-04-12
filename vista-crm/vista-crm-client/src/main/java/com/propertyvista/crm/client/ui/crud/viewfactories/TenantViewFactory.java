@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -36,6 +36,8 @@ import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantListerView;
 import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.PastTenantListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.PastTenantListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerView;
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerView;
@@ -44,6 +46,8 @@ import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterAppli
 import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.PastLeaseListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.PastLeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.EquifaxResultViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.EquifaxResultViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEditorView;
@@ -96,6 +100,13 @@ public class TenantViewFactory extends ViewFactoryBase {
 
             } else if (EquifaxResultViewerView.class.equals(type)) {
                 map.put(type, new EquifaxResultViewerViewImpl());
+
+            } else if (PastTenantListerView.class.equals(type)) {
+                map.put(type, new PastTenantListerViewImpl());
+
+            } else if (PastLeaseListerView.class.equals(type)) {
+                map.put(type, new PastLeaseListerViewImpl());
+
             }
         }
         @SuppressWarnings("unchecked")

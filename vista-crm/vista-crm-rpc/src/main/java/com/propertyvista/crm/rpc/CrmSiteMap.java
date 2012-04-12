@@ -205,6 +205,17 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Maintenance Requests")
         public static class MaintenanceRequest extends CRMCrudAppPlace {
         }
+
+        @PlaceProperties(caption = "Past Tenant")
+        @NavigationItem(navigLabel = "Past Tenants")
+        public static class PastTenant extends CRMCrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Past Lease")
+        @NavigationItem(navigLabel = "Past Leases")
+        public static class PastLease extends CRMCrudAppPlace {
+        }
+
     }
 
     public static class Marketing extends AppPlace {
@@ -229,6 +240,11 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Showing")
         @NavigationItem(navigLabel = "Showings")
         public static class Showing extends CRMCrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Future Tenant")
+        @NavigationItem(navigLabel = "Future Tenants")
+        public static class FutureTenant extends CRMCrudAppPlace {
         }
     }
 
