@@ -48,6 +48,7 @@ public interface BillableItem extends IEntity {
     @OrderBy(BillableItemAdjustment.OrderId.class)
     IList<BillableItemAdjustment> adjustments();
 
+    @Owned
     BillableItemExtraData extraData();
 
     @Format("MM/dd/yyyy")

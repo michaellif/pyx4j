@@ -30,6 +30,8 @@ public interface OccupancyFacade {
     @Deprecated
     public static final boolean TODO = true;
 
+    //void setupNewUnit(Key unitId);
+
     /**
      * Applied to {@link Status#vacant}: convert's it to offMarket
      * 

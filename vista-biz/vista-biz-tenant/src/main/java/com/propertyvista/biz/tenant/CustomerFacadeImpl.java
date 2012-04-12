@@ -13,6 +13,6 @@
  */
 package com.propertyvista.biz.tenant;
 
-public abstract class TenantFacadeImpl implements TenantFacade {
+public abstract class CustomerFacadeImpl implements CustomerFacade {
 
 }

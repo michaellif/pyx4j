@@ -13,13 +13,15 @@
  */
 package com.propertyvista.biz.tenant;
 
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 
-public interface TenantFacade {
+public interface CustomerFacade {
 
     void persistTenant(Tenant tenant);
 
     void persistGuarantor(Guarantor guarantor);
 
+    String createLoginToken(Customer customer);
 }

@@ -97,13 +97,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     protected void persist(Lease dbo, DTO in) {
         boolean isApproveFinal = dbo.saveAction().getValue() == SaveAction.saveAsFinal;
 
-        // save extra data:
-        for (BillableItem item : dbo.version().leaseProducts().featureItems()) {
-            if (!item.extraData().isNull()) {
-                Persistence.service().merge(item.extraData());
-            }
-        }
-
         updateAdjustments(dbo);
 
         new LeaseManager().save(dbo);
