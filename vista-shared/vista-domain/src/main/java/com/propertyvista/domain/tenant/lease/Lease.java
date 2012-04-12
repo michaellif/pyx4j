@@ -26,7 +26,6 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
@@ -178,10 +177,8 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @MemberColumn(name = "leaseType")
     IPrimitive<Service.Type> type();
 
-    @Owner
     @NotNull
     @Detached
-    @JoinColumn
     @ToString(index = 2)
     @Caption(name = "Selected Unit")
     AptUnit unit();
