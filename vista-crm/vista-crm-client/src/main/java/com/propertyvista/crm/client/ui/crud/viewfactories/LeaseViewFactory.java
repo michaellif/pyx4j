@@ -24,6 +24,8 @@ import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.PastLeaseListerView;
+import com.propertyvista.crm.client.ui.crud.lease.PastLeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationEditorView;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerView;
@@ -38,8 +40,6 @@ import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterAppli
 import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.lease.PastLeaseListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.lease.PastLeaseListerViewImpl;
 
 public class LeaseViewFactory extends ViewFactoryBase {
 

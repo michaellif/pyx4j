@@ -28,6 +28,8 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceEdit
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceViewerView;
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.tenant.FutureTenantListerView;
+import com.propertyvista.crm.client.ui.crud.customer.tenant.FutureTenantListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentEditorView;
 import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentListerView;
@@ -46,8 +48,6 @@ import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingListerView;
 import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingViewerView;
 import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.FutureTenantListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.FutureTenantListerViewImpl;
 
 public class MarketingViewFactory extends ViewFactoryBase {
 
