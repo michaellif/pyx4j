@@ -45,7 +45,7 @@ public abstract class CrudAppPlace extends AppPlace {
     }
 
     public CrudAppPlace() {
-        setType(Type.lister);
+        this(Type.lister);
     }
 
     public CrudAppPlace(Type type) {
@@ -89,6 +89,7 @@ public abstract class CrudAppPlace extends AppPlace {
         if (parentID != null) {
             placeArg(ARG_NAME_PARENT_ID, parentID.toString());
         }
+        setStable(false);
         return (CrudAppPlace) placeArg(ARG_NAME_ID, ARG_VALUE_NEW);
     }
 
@@ -96,6 +97,7 @@ public abstract class CrudAppPlace extends AppPlace {
         if (parentClass != null) {
             placeArg(ARG_NAME_PARENT_CLASS, parentClass.getName());
         }
+        setStable(false);
         return formNewItemPlace(parentID);
     }
 
