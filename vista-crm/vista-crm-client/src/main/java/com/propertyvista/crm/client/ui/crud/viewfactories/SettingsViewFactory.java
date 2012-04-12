@@ -16,6 +16,12 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentListerView;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewer;
@@ -58,12 +64,6 @@ import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.lease.payment.PaymentViewerViewImpl;
 
 public class SettingsViewFactory extends ViewFactoryBase {
 
