@@ -16,12 +16,18 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.guarantor.GuarantorEditorView;
+import com.propertyvista.crm.client.ui.crud.lease.guarantor.GuarantorEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.guarantor.GuarantorListerView;
+import com.propertyvista.crm.client.ui.crud.lease.guarantor.GuarantorListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.guarantor.GuarantorViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.guarantor.GuarantorViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantEditorView;
+import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantListerView;
+import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.tenant.TenantViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerView;
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerView;
@@ -44,12 +50,6 @@ import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEdit
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorViewerViewImpl;
 
 public class TenantViewFactory extends ViewFactoryBase {
 

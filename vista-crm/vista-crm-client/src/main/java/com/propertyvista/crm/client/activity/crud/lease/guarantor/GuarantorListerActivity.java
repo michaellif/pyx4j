@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.tenant.screening.guarantor;
+package com.propertyvista.crm.client.activity.crud.lease.guarantor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorListerView;
+import com.propertyvista.crm.client.ui.crud.lease.guarantor.GuarantorListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.tenant.screening.GuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;

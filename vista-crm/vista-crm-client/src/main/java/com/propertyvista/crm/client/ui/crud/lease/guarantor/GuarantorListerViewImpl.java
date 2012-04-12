@@ -7,18 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor;
+package com.propertyvista.crm.client.ui.crud.lease.guarantor;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
-
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.GuarantorDTO;
 
-public interface GuarantorEditorView extends IEditorView<GuarantorDTO> {
+public class GuarantorListerViewImpl extends CrmListerViewImplBase<GuarantorDTO> implements GuarantorListerView {
 
-    interface Presenter extends IEditorView.Presenter {
+    public GuarantorListerViewImpl() {
+        super(CrmSiteMap.Tenants.Guarantor.class);
+        setLister(new GuarantorLister());
     }
 }

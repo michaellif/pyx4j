@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.tenant.lease.bill;
+package com.propertyvista.crm.client.activity.crud.lease;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;

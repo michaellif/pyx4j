@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant;
+package com.propertyvista.crm.client.ui.crud.lease.tenant;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;

@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor;
+package com.propertyvista.crm.client.ui.crud.lease.guarantor;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;

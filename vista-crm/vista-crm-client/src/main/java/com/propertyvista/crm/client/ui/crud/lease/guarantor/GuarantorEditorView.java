@@ -11,18 +11,14 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant;
+package com.propertyvista.crm.client.ui.crud.lease.guarantor;
 
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.dto.GuarantorDTO;
 
-public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> implements TenantEditorView {
-    private static final I18n i18n = I18n.get(TenantEditorViewImpl.class);
+public interface GuarantorEditorView extends IEditorView<GuarantorDTO> {
 
-    public TenantEditorViewImpl() {
-        super(CrmSiteMap.Tenants.Tenant.class, new TenantEditorForm());
+    interface Presenter extends IEditorView.Presenter {
     }
 }

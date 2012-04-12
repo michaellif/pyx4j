@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.tenant.lease;
+package com.propertyvista.crm.client.activity.crud.lease;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

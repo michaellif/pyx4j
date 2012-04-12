@@ -11,16 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant;
+package com.propertyvista.crm.client.ui.crud.lease.tenant;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+
 import com.propertyvista.dto.TenantDTO;
 
-public class TenantListerViewImpl extends CrmListerViewImplBase<TenantDTO> implements TenantListerView {
+public interface TenantListerView extends IListerView<TenantDTO> {
 
-    public TenantListerViewImpl() {
-        super(CrmSiteMap.Tenants.Tenant.class);
-        setLister(new TenantLister());
-    }
 }

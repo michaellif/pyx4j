@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant;
+package com.propertyvista.crm.client.ui.crud.lease.guarantor;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -25,28 +25,28 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.dto.GuarantorDTO;
 
-public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> implements TenantViewerView {
+public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO> implements GuarantorViewerView {
 
-    private final static I18n i18n = I18n.get(TenantViewerViewImpl.class);
+    private final static I18n i18n = I18n.get(GuarantorViewerViewImpl.class);
 
     private final IListerView<PersonScreening> screeningLister;
 
     private final Button passwordAction;
 
-    public TenantViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Tenant.class);
+    public GuarantorViewerViewImpl() {
+        super(CrmSiteMap.Tenants.Guarantor.class);
 
         screeningLister = new ListerInternalViewImplBase<PersonScreening>(new PersonScreeningLister());
 
         //set main form here:
-        setForm(new TenantEditorForm(true));
+        setForm(new GuarantorEditorForm(true));
 
         passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((TenantViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().customer().user().getPrimaryKey(), getForm().getValue()
+                ((GuarantorViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().user().getPrimaryKey(), getForm().getValue()
                         .customer().person().getStringView());
             }
         });
@@ -59,11 +59,11 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
     }
 
     @Override
-    public void populate(TenantDTO value) {
+    public void populate(GuarantorDTO value) {
         super.populate(value);
 
-        // Disable password change button for tenants with no associated user principal
-        if (value != null & !value.customer().user().isNull()) {
+        // Disable password change button for guarantors with no associated user principal
+        if (value != null & !value.user().isNull()) {
             passwordAction.setVisible(true);
         } else {
             passwordAction.setVisible(false);
