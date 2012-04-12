@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.tenant;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -55,6 +56,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createContactsTab(), i18n.tr("Contacts"));
+        tabPanel.add(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
+        tabPanel.setLastTabDisabled(isEditable());
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;

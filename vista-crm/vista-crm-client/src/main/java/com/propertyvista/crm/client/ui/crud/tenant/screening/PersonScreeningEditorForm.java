@@ -44,9 +44,7 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.misc.BusinessRules;
 
 public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
@@ -54,8 +52,6 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
     private static final I18n i18n = I18n.get(PersonScreeningEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
-
-    private Widget guarantorsTabWidget;
 
     private final FormFlexPanel previousAddress = new FormFlexPanel() {
         @Override
@@ -83,7 +79,6 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         tabPanel.add(createlegalQuestionsTab(), proto().legalQuestions().getMeta().getCaption());
         tabPanel.add(createIncomesTab(), i18n.tr("Incomes"));
         tabPanel.add(createAssetsTab(), i18n.tr("Assets"));
-        guarantorsTabWidget = createGuarantorsTab();
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
@@ -104,17 +99,6 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         super.onPopulate();
 
         enablePreviousAddress();
-
-        // add/remove guarantors tab depends of screened person:
-        if (getValue().screene().getInstanceValueClass().equals(Customer.class)) {
-            if (tabPanel.getWidgetIndex(guarantorsTabWidget) < 0) {
-                tabPanel.add(guarantorsTabWidget, i18n.tr("Guarantors"));
-            }
-        } else if (getValue().screene().getInstanceValueClass().equals(Guarantor.class)) {
-            if (tabPanel.getWidgetIndex(guarantorsTabWidget) >= 0) {
-                tabPanel.remove(guarantorsTabWidget);
-            }
-        }
     }
 
     @Override
@@ -246,13 +230,5 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         main.setWidget(0, 0, inject(proto().assets(), new PersonalAssetFolder(isEditable())));
 
         return new CrmScrollPanel(main);
-    }
-
-    private Widget createGuarantorsTab() {
-        FormFlexPanel main = new FormFlexPanel();
-
-        main.setWidget(0, 0, inject(proto().guarantors(), new PersonGuarantorFolder(isEditable())));
-
-        return new ScrollPanel(main);
     }
 }
