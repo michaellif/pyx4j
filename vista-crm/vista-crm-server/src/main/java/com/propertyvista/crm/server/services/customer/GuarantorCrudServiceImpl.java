@@ -11,11 +11,11 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.lease.participants;
+package com.propertyvista.crm.server.services.customer;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 
-import com.propertyvista.crm.rpc.services.lease.participants.GuarantorCrudService;
+import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.dto.GuarantorDTO;
 

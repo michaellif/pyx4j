@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.lease.participants;
+package com.propertyvista.crm.rpc.services.customer;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 

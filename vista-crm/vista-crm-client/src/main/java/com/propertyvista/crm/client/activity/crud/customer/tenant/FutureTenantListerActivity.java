@@ -23,7 +23,7 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.customer.tenant.FutureTenantListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
-import com.propertyvista.crm.rpc.services.lease.participants.TenantCrudService;
+import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TenantDTO;
 

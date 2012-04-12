@@ -11,13 +11,13 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.lease.participants;
+package com.propertyvista.crm.server.services.customer;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 
-import com.propertyvista.crm.rpc.services.lease.participants.TenantCrudService;
+import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
