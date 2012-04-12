@@ -13,14 +13,22 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
+import java.util.EnumSet;
+
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceLister extends ListerBase<Service> {
+
+    private final static I18n i18n = I18n.get(ServiceLister.class);
 
     public ServiceLister() {
         super(Service.class, false, true);
@@ -38,4 +46,41 @@ public class ServiceLister extends ListerBase<Service> {
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
         return super.updateCriteria(criteria);
     }
+
+    @Override
+    protected void onItemNew() {
+        new CreateNewServiceDialog().show();
+    }
+
+    private class CreateNewServiceDialog extends SelectEnumDialog<Service.Type> implements OkCancelOption {
+
+        public CreateNewServiceDialog() {
+            super(i18n.tr("Select Service Type"), EnumSet.allOf(Service.Type.class));
+        }
+
+        @Override
+        public boolean onClickOk() {
+            Service newService = EntityFactory.create(Service.class);
+            newService.version().type().setValue(getSelectedType());
+            newService.catalog().setPrimaryKey(getPresenter().getParent());
+            getPresenter().editNew(getItemOpenPlaceClass(), newService);
+            return true;
+        }
+
+        @Override
+        public boolean onClickCancel() {
+            return true;
+        }
+
+        @Override
+        public String defineWidth() {
+            return "250px";
+        }
+
+        @Override
+        public String defineHeight() {
+            return "100px";
+        }
+    }
+
 }
