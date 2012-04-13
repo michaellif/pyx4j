@@ -32,6 +32,8 @@ import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryView;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsView;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseReviewView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseReviewViewImpl;
 
 public class WizardStepsViewFactory extends ViewFactoryBase {
 
@@ -53,7 +55,12 @@ public class WizardStepsViewFactory extends ViewFactoryBase {
                 map.put(type, new PaymentViewImpl());
             } else if (CompletionView.class.equals(type)) {
                 map.put(type, new CompletionViewImpl());
+
+                // Welcome Wizard Steps
+            } else if (LeaseReviewView.class.equals(type)) {
+                map.put(type, new LeaseReviewViewImpl());
             }
+
         }
 
         @SuppressWarnings("unchecked")

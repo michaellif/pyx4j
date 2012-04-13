@@ -98,4 +98,32 @@ public class PtSiteMap implements SiteMap {
     @PlaceProperties(caption = "")
     public static class GenericMessage extends AppPlace {
     }
+
+    // FIXME this is map of Mockup Move-In AKA Welcome AKA Wizard for approved tenants, needs review for real implementation    
+    public static class ApprovedTenantWizard extends AppPlace {
+
+        @NavigationItem(navigLabel = "Review and Sign Lease")
+        @PlaceProperties(caption = "Review Lease")
+        public static class ReviewLease extends AppPlace implements WizardStepPlace {
+
+        }
+
+        @NavigationItem(navigLabel = "Move-In Schedule")
+        @PlaceProperties(caption = "Move-In Schedule")
+        public static class MoveInSchedule extends AppPlace implements WizardStepPlace {
+
+        }
+
+        @NavigationItem(navigLabel = "Insurance")
+        @PlaceProperties(caption = "Insurance")
+        public static class Insurance extends AppPlace implements WizardStepPlace {
+
+        }
+
+        @NavigationItem(navigLabel = "Completetion")
+        @PlaceProperties(caption = "Completetion")
+        public static class CompletetionMessage extends AppPlace {
+
+        }
+    }
 }

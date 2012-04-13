@@ -7,22 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 24, 2011
- * @author vlads
+ * Created on Apr 13, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.misc;
+package com.propertyvista.portal.rpc.ptapp.welcomewizard;
 
-public interface VistaTODO {
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-    public final static boolean enableWelcomeWizardDemoMode = true;
+import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
+import com.propertyvista.portal.domain.ptapp.IAgree;
 
-    public static boolean removedForProduction = false;
+@Transient
+public interface LeaseReviewDTO extends IEntity {
 
-    // e.g. person().name()
-    public final boolean entityAsStringQueryCriteria = true;
+    IPrimitive<String> leaseTerms();
 
-    /** joins with conditions */
-    public final boolean complextQueryCriteria = true;
+    IAgree isAgreed();
+
+    DigitalSignature signature();
 
 }

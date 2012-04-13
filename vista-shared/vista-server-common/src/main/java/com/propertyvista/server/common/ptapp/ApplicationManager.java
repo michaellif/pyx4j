@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.common.ptapp;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -50,6 +51,7 @@ import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.ApplicationStatusDTO;
 import com.propertyvista.dto.ApplicationStatusDTO.Role;
 import com.propertyvista.dto.OnlineMasterApplicationStatusDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.security.AccessKey;
@@ -332,25 +334,38 @@ public class ApplicationManager {
 
     private static List<ApplicationWizardStep> createApplicationProgress(OnlineApplication application, TenantUserHolder tenant, VistaTenantBehavior behaviour) {
         List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
-        progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-        progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            for (Class<? extends AppPlace> place : Arrays.<Class<? extends AppPlace>> asList(//@formatter:off
+                        PtSiteMap.ApprovedTenantWizard.ReviewLease.class,
+                        PtSiteMap.ApprovedTenantWizard.MoveInSchedule.class,
+                        PtSiteMap.ApprovedTenantWizard.Insurance.class,
+                        PtSiteMap.ApprovedTenantWizard.CompletetionMessage.class
+                    )) {//@formatter:on
+                progress.add(createWizardStep(place, ApplicationWizardStep.Status.notVisited));
+            }
+            progress.get(0).status().setValue(ApplicationWizardStep.Status.latest);
+
+        } else {
+            progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
+            progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
+            progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
+            progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
 // TODO : Charges and Payment steps are closed (removed) so far...        
-        if (false) {
-            progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
-        }
-        progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
+            if (false) {
+                progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
+            }
+            progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
 // TODO : Charges and Payment steps are closed (removed) so far...        
-        if (false) {
-            switch (behaviour) {
-            case ProspectiveApplicant:
-                progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-            case ProspectiveCoApplicant:
-                if (isTenantInSplitCharge(application, tenant)) {
+            if (false) {
+                switch (behaviour) {
+                case ProspectiveApplicant:
                     progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
+                case ProspectiveCoApplicant:
+                    if (isTenantInSplitCharge(application, tenant)) {
+                        progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
+                    }
+                    break;
                 }
-                break;
             }
         }
         progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));

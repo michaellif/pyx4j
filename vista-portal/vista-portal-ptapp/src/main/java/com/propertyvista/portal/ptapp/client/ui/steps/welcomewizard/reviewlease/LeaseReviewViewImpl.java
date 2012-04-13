@@ -7,22 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 24, 2011
- * @author vlads
+ * Created on Apr 13, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.misc;
+package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease;
 
-public interface VistaTODO {
+import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
+import com.propertyvista.portal.rpc.ptapp.welcomewizard.LeaseReviewDTO;
 
-    public final static boolean enableWelcomeWizardDemoMode = true;
+public class LeaseReviewViewImpl extends WizardStepViewImpl<LeaseReviewDTO, LeaseReviewPresenter> {
 
-    public static boolean removedForProduction = false;
-
-    // e.g. person().name()
-    public final boolean entityAsStringQueryCriteria = true;
-
-    /** joins with conditions */
-    public final boolean complextQueryCriteria = true;
+    public LeaseReviewViewImpl() {
+        super(new LeaseReviewForm());
+    }
 
 }
