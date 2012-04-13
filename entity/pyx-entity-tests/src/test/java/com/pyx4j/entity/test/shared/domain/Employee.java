@@ -42,10 +42,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @Table(prefix = "test")
 public interface Employee extends IEntity {
 
-    public static int DECLARED_MEMBERS = 18;
+    public static int DECLARED_MEMBERS = 17;
 
     public static String[] MEMBERS_ORDER = new String[] { "firstName", "from", "reliable", "holidays", "rating", "flagByte", "flagShort", "flagDouble",
-            "salary", "employmentStatus", "accessStatus", "tasks", "tasksSorted", "department", "manager", "homeAddress", "workAddress", "image" };
+            "salary", "employmentStatus", "accessStatus", "tasks", "tasksSorted", "department", "manager", "homeAddress", "workAddress" };
 
     @I18n
     public static enum EmploymentStatus {
@@ -109,7 +109,5 @@ public interface Employee extends IEntity {
     @Owned
     @EmbeddedEntity
     Address workAddress();
-
-    IPrimitive<byte[]> image();
 
 }

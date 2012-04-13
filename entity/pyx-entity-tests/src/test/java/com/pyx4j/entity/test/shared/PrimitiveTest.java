@@ -27,6 +27,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
+import com.pyx4j.entity.test.shared.domain.EmployeePhoto;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.rpc.ComplexPrimitive;
@@ -131,7 +132,7 @@ public class PrimitiveTest extends InitializerTestBase {
     }
 
     public void testBlob() {
-        Employee emp = EntityFactory.create(Employee.class);
+        EmployeePhoto emp = EntityFactory.create(EmployeePhoto.class);
         assertNull("Initial value", emp.image().getValue());
         assertEquals("Class of Value", byte[].class, emp.image().getValueClass());
         byte[] value = new byte[] { 1, 2, 3 };

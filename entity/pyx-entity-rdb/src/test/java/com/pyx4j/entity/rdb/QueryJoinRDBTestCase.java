@@ -232,6 +232,35 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         emp.tasks().add(task);
 
         srv.persist(emp);
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().tasks().$().description(), searchBy));
+
+            List<Employee> emps = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, emps.size());
+            Assert.assertEquals("PK Value", emps.get(0).getPrimaryKey(), emp.getPrimaryKey());
+        }
+    }
+
+    public void testOneToManyQueryCriteriaDistinct() {
+        String setId = uniqueString();
+        String searchBy = uniqueString();
+
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue(uniqueString());
+        emp.workAddress().streetName().setValue(setId);
+
+        Task task1 = EntityFactory.create(Task.class);
+        task1.description().setValue(searchBy);
+        emp.tasks().add(task1);
+
+        Task task2 = EntityFactory.create(Task.class);
+        task2.description().setValue(searchBy);
+        emp.tasks().add(task2);
+
+        srv.persist(emp);
+
         {
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().tasks().$().description(), searchBy));

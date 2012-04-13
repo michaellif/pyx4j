@@ -21,23 +21,17 @@
 package com.pyx4j.entity.test.server;
 
 import java.util.Iterator;
-import java.util.List;
 
 import junit.framework.Assert;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
-import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOneToManyParent;
-import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOneToManyPlmChildA;
-import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOneToManyPlmChildB;
 
 public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
 
@@ -319,81 +313,4 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
         assertTrue("contains(3)", task2.oldStatus().contains(Status.SUSPENDED));
     }
 
-    public void testOwnedPolymorphismInSingleTable() {
-        // TODO fix for GAE
-        if (false) {
-            // setup
-            BidirectionalOneToManyParent papa1 = EntityFactory.create(BidirectionalOneToManyParent.class);
-
-            BidirectionalOneToManyPlmChildA a1ofPapa1 = EntityFactory.create(BidirectionalOneToManyPlmChildA.class);
-            a1ofPapa1.valueA().setValue("a1");
-            a1ofPapa1.value().setValue("a");
-
-            BidirectionalOneToManyPlmChildA a2ofPapa1 = EntityFactory.create(BidirectionalOneToManyPlmChildA.class);
-            a2ofPapa1.valueA().setValue("a2");
-            a2ofPapa1.value().setValue("x");
-
-            BidirectionalOneToManyPlmChildB b1ofPapa1 = EntityFactory.create(BidirectionalOneToManyPlmChildB.class);
-            b1ofPapa1.valueB().setValue("b1");
-            b1ofPapa1.value().setValue("b");
-
-            BidirectionalOneToManyPlmChildB b2ofPapa1 = EntityFactory.create(BidirectionalOneToManyPlmChildB.class);
-            b2ofPapa1.valueB().setValue("b2");
-            b2ofPapa1.value().setValue("x");
-
-            papa1.value().setValue("papa1");
-            papa1.children().add(a1ofPapa1);
-            papa1.children().add(b1ofPapa1);
-            papa1.children().add(a2ofPapa1);
-            papa1.children().add(b2ofPapa1);
-
-            srv.persist(papa1);
-
-            BidirectionalOneToManyParent papa2 = EntityFactory.create(BidirectionalOneToManyParent.class);
-            BidirectionalOneToManyPlmChildA a1OfPapa2 = EntityFactory.create(BidirectionalOneToManyPlmChildA.class);
-            a1OfPapa2.valueA().setValue("a1");
-            a1OfPapa2.value().setValue("y");
-
-            papa2.value().setValue("papa2");
-            papa2.children().add(a1OfPapa2);
-
-            srv.persist(papa2);
-
-            {
-                // test retrieval of owned polymorphic children        
-                BidirectionalOneToManyParent papaFromDB = srv.retrieve(BidirectionalOneToManyParent.class, papa1.getPrimaryKey());
-                assertNotNull("we must retrieve something", papaFromDB);
-
-                srv.retrieveMember(papaFromDB.children());
-                assertEquals("assert list size", 4, papaFromDB.children().size());
-
-                assertEquals(BidirectionalOneToManyPlmChildA.class, papaFromDB.children().get(0).getInstanceValueClass());
-                assertEquals(BidirectionalOneToManyPlmChildB.class, papaFromDB.children().get(1).getInstanceValueClass());
-                assertEquals(BidirectionalOneToManyPlmChildA.class, papaFromDB.children().get(2).getInstanceValueClass());
-                assertEquals(BidirectionalOneToManyPlmChildB.class, papaFromDB.children().get(3).getInstanceValueClass());
-            }
-
-            // TODO
-            if (false) {
-                // test search
-                EntityQueryCriteria<BidirectionalOneToManyParent> criteria = EntityQueryCriteria.create(BidirectionalOneToManyParent.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().children().$().value(), "x"));
-                List<BidirectionalOneToManyParent> papas = srv.query(criteria);
-
-                assertNotNull(papas);
-                assertEquals(1, papas.size());
-                assertEquals("papa1", papas.get(0).value().getValue());
-
-                criteria = EntityQueryCriteria.create(BidirectionalOneToManyParent.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().children().$().value(), "a1"));
-                criteria.desc(criteria.proto().value());
-                papas = srv.query(criteria);
-
-                assertNotNull(papas);
-                assertEquals(2, papas.size());
-                assertEquals("papa2", papas.get(0).value().getValue());
-                assertEquals("papa1", papas.get(1).value().getValue());
-            }
-        }
-    }
 }

@@ -338,7 +338,7 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     boolean addDistinct() {
-        return sortAddDistinct;
+        return sortAddDistinct || queryJoin.addDistinct;
     }
 
     String getSQL(String mainTableSqlName) {

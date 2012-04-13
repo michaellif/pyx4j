@@ -23,7 +23,7 @@ package com.pyx4j.entity.test.shared.domain.ownership.polymorphic;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@DiscriminatorValue(value = "BidirectionalOneToManyPolymorphicChildB")
+@DiscriminatorValue(value = "BidirectionalOneToManyPlmChildB")
 public interface BidirectionalOneToManyPlmChildB extends BidirectionalOneToManyPlmChild {
 
     IPrimitive<String> valueB();

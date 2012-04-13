@@ -14,25 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 12, 2012
- * @author ArtyomB
+ * Created on Apr 13, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.ownership.polymorphic;
+package com.pyx4j.entity.test.shared.domain;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
-public interface BidirectionalOneToManyParent extends IEntity {
+public interface EmployeePhoto extends IEntity {
 
-    IPrimitive<String> value();
+    IPrimitive<String> name();
 
-    @Owned
-    @Detached
-    IList<BidirectionalOneToManyPlmChild> children();
+    IPrimitive<byte[]> image();
+
 }

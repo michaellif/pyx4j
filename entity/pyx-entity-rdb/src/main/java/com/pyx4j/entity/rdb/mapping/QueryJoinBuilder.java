@@ -90,6 +90,8 @@ class QueryJoinBuilder {
 
     private int nowParameters = 0;
 
+    boolean addDistinct = false;
+
     QueryJoinBuilder(PersistenceContext persistenceContext, Mappings mappings, EntityOperationsMeta operationsMeta, String mainTableSqlAlias,
             VersionedCriteria versionedCriteria) {
         this.persistenceContext = persistenceContext;
@@ -227,12 +229,17 @@ class QueryJoinBuilder {
                 condition.append(")");
 
             }
-            if (usedInSort && (memberOper instanceof MemberCollectionOperationsMeta)) {
-                MemberCollectionOperationsMeta memberCollectionDataOper = (MemberCollectionOperationsMeta) memberOper;
-                condition.append(" AND ");
-                condition.append(memberJoin.alias).append('.').append(memberCollectionDataOper.sqlOrderColumnName());
-                condition.append(" = ");
-                condition.append(" 0 ");
+
+            if ((memberOper instanceof MemberCollectionOperationsMeta) && (!addDistinct)) {
+                if (usedInSort) {
+                    MemberCollectionOperationsMeta memberCollectionDataOper = (MemberCollectionOperationsMeta) memberOper;
+                    condition.append(" AND ");
+                    condition.append(memberJoin.alias).append('.').append(memberCollectionDataOper.sqlOrderColumnName());
+                    condition.append(" = ");
+                    condition.append(" 0 ");
+                } else {
+                    addDistinct = true;
+                }
             }
 
             memberJoin.condition = condition.toString();
@@ -257,6 +264,12 @@ class QueryJoinBuilder {
             condition.append(memberJoin.alias).append('.').append(dialect.getNamingConvention().sqlIdColumnName());
             condition.append(" = ");
             condition.append(collectionJoin.alias).append('.').append(memberOper.sqlValueName());
+
+            if (usedInSort) {
+                // TODO Select only first in collection
+            } else {
+                addDistinct = true;
+            }
 
             memberJoin.condition = condition.toString();
         }

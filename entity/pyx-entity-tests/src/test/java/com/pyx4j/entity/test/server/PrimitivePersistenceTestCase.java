@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
+import com.pyx4j.entity.test.shared.domain.EmployeePhoto;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.temporal.Schedule;
 import com.pyx4j.geo.GeoPoint;
@@ -289,23 +290,23 @@ public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
     }
 
     public void testBlob() {
-        Employee emp = EntityFactory.create(Employee.class);
-        emp.firstName().setValue(uniqueString());
+        EmployeePhoto empPhoto = EntityFactory.create(EmployeePhoto.class);
+        empPhoto.name().setValue("1");
         byte[] value = new byte[] { 1, 2, 3 };
-        emp.image().setValue(value);
+        empPhoto.image().setValue(value);
 
-        srv.persist(emp);
-        Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
-        Assert.assertNotNull("retrieve by PK " + emp.getPrimaryKey(), emp2);
+        srv.persist(empPhoto);
+        EmployeePhoto emp2 = srv.retrieve(EmployeePhoto.class, empPhoto.getPrimaryKey());
+        Assert.assertNotNull("retrieve by PK " + empPhoto.getPrimaryKey(), emp2);
         assertEquals("Class of Value", byte[].class, emp2.image().getValueClass());
         assertEquals("Class of Value", byte[].class, emp2.image().getValue().getClass());
         for (int i = 0; i < value.length; i++) {
             assertEquals("Value " + i, value[i], emp2.image().getValue()[i]);
         }
 
-        emp.image().setValue(null);
-        srv.persist(emp);
-        emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        empPhoto.image().setValue(null);
+        srv.persist(empPhoto);
+        emp2 = srv.retrieve(EmployeePhoto.class, empPhoto.getPrimaryKey());
         assertNull("Erase Blob value Value", emp2.image().getValue());
     }
 
