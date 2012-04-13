@@ -24,6 +24,8 @@ import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.test.shared.domain.ownership.cascade.BidirectionalOneToManyNCPChild;
+import com.pyx4j.entity.test.shared.domain.ownership.cascade.BidirectionalOneToManyNCPParent;
 import com.pyx4j.entity.test.shared.domain.ownership.cascade.BidirectionalOneToOneNCPParent;
 
 public abstract class CascadeTestCase extends AssociationMappingTestCase {
@@ -48,7 +50,7 @@ public abstract class CascadeTestCase extends AssociationMappingTestCase {
         o.child().testId().setValue(testId);
         o.child().name().setValue(childName);
 
-        // Try Save owner without parent
+        // Try Save owner without child
         boolean saved = false;
         try {
             srvSave(o, testCaseMethod);
@@ -84,6 +86,64 @@ public abstract class CascadeTestCase extends AssociationMappingTestCase {
             Assert.assertEquals("data did not changed", childName, parent.child().name().getValue());
         }
 
+    }
+
+    public void testBidirectionalOneToManyNCPersist() {
+        testBidirectionalOneToManyNCSave(TestCaseMethod.Persist);
+    }
+
+    public void testBidirectionalOneToManyNCMerge() {
+        testBidirectionalOneToManyNCSave(TestCaseMethod.Merge);
+    }
+
+    public void testBidirectionalOneToManyNCSave(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+        BidirectionalOneToManyNCPParent o = EntityFactory.create(BidirectionalOneToManyNCPParent.class);
+        o.testId().setValue(testId);
+        o.name().setValue(uniqueString());
+        o.children().add(EntityFactory.create(BidirectionalOneToManyNCPChild.class));
+        o.children().add(EntityFactory.create(BidirectionalOneToManyNCPChild.class));
+
+        o.children().get(0).testId().setValue(testId);
+        String child0Name = "c0-" + uniqueString();
+        o.children().get(0).name().setValue(child0Name);
+
+        o.children().get(1).testId().setValue(testId);
+        String child1Name = "c1-" + uniqueString();
+        o.children().get(1).name().setValue(child1Name);
+
+        // Save owner without children
+        srvSave(o, testCaseMethod);
+
+        Assert.assertNull("children id Not Assigned", o.children().get(0).getPrimaryKey());
+        Assert.assertNull("children id Not Assigned", o.children().get(1).getPrimaryKey());
+
+        // Save children
+        srvSave(o.children().get(0), testCaseMethod);
+        srvSave(o.children().get(1), testCaseMethod);
+
+        // Get Parent and see that Child is retrieved, then verify values
+        {
+            BidirectionalOneToManyNCPParent parent = srv.retrieve(BidirectionalOneToManyNCPParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("correct data retrieved", o.name(), parent.name());
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.children().getAttachLevel());
+            Assert.assertEquals("child data size", o.children().size(), parent.children().size());
+            Assert.assertEquals("correct data retrieved", o.children().get(0).name(), parent.children().get(0).name());
+            Assert.assertEquals("correct data retrieved", o.children().get(1).name(), parent.children().get(1).name());
+            for (BidirectionalOneToManyNCPChild child : o.children()) {
+                Assert.assertEquals("correct data retrieved", o.id(), child.parent().id());
+                Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+            }
+        }
+
+        // Try update child
+        o.children().get(1).name().setValue("u1-" + uniqueString());
+        srvSave(o, testCaseMethod);
+        {
+            BidirectionalOneToManyNCPParent parent = srv.retrieve(BidirectionalOneToManyNCPParent.class, o.getPrimaryKey());
+            Assert.assertEquals("data did not changed", child1Name, parent.children().get(1).name().getValue());
+        }
     }
 
 }
