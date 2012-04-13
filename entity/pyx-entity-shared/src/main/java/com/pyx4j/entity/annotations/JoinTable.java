@@ -39,14 +39,12 @@ public @interface JoinTable {
 
     Class<? extends IEntity> value();
 
-    boolean cascade() default false;
-
     /**
      * The operations that must be cascaded to the target of the association.
      * 
      * By default no operations are cascaded.
      */
-    CascadeType[] cascadeTODO() default {};
+    CascadeType[] cascade() default {};
 
     /**
      * Optional, Should match value of @JoinColumn when defined.

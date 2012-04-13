@@ -34,7 +34,7 @@ public interface BRefReadOwner extends IEntity {
 
     IPrimitive<String> name();
 
-    @JoinTable(value = BRefReadChild.class, cascade = false)
+    @JoinTable(value = BRefReadChild.class)
     @OrderBy(BRefReadChild.SortColumnId.class)
     IList<BRefReadChild> children();
 }

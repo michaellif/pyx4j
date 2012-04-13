@@ -29,6 +29,7 @@ import java.util.List;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.CascadeType;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -70,6 +71,8 @@ public class MemberMetaImpl implements MemberMeta {
     private final boolean ownedRelationships;
 
     public final boolean cascadePersist;
+
+    public final boolean cascadeDelete;
 
     private final boolean owner;
 
@@ -193,12 +196,47 @@ public class MemberMetaImpl implements MemberMeta {
         owner = (method.getAnnotation(Owner.class) != null);
         assert (!(owner == true && ownedRelationships == true));
 
-        JoinTable joinTable = method.getAnnotation(JoinTable.class);
-        if (joinTable != null) {
-            cascadePersist = joinTable.cascade();
+        boolean cascadePersist = false;
+        boolean cascadeDelete = false;
+        if (aOwned != null) {
+            for (CascadeType ct : aOwned.cascade()) {
+                switch (ct) {
+                case ALL:
+                    cascadePersist = true;
+                    cascadeDelete = true;
+                    break;
+                case PERSIST:
+                    cascadePersist = true;
+                    break;
+                case DELETE:
+                    cascadeDelete = true;
+                    break;
+                }
+            }
         } else {
-            cascadePersist = true;
+            JoinTable joinTable = method.getAnnotation(JoinTable.class);
+            if (joinTable != null) {
+                for (CascadeType ct : joinTable.cascade()) {
+                    switch (ct) {
+                    case ALL:
+                        cascadePersist = true;
+                        cascadeDelete = true;
+                        break;
+                    case PERSIST:
+                        cascadePersist = true;
+                        break;
+                    case DELETE:
+                        cascadeDelete = true;
+                        break;
+                    }
+                }
+            } else {
+                cascadePersist = false;
+                cascadeDelete = false;
+            }
         }
+        this.cascadePersist = cascadePersist;
+        this.cascadeDelete = cascadeDelete;
 
         Detached detachedAnnotation = method.getAnnotation(Detached.class);
         if (detachedAnnotation == null) {
@@ -267,6 +305,11 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public boolean isCascadePersist() {
         return cascadePersist;
+    }
+
+    @Override
+    public boolean isCascadeDelete() {
+        return cascadeDelete;
     }
 
     @Override

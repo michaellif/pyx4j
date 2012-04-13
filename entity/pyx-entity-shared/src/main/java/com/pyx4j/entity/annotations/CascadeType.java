@@ -38,6 +38,7 @@ public enum CascadeType {
 
     /**
      * Cascade remove operations
+     * TODO DELETE without PERSIST is not implemented.
      */
     DELETE
 }

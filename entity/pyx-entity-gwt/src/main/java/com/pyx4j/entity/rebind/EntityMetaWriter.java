@@ -40,6 +40,7 @@ import com.google.gwt.user.rebind.SourceWriter;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.CascadeType;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -412,10 +413,42 @@ public class EntityMetaWriter {
             data.owner = (method.getAnnotation(Owner.class) != null);
             assert (!(data.owner == true && data.ownedRelationships == true));
 
-            data.cascadePersist = true;
-            JoinTable joinTable = method.getAnnotation(JoinTable.class);
-            if (joinTable != null) {
-                data.cascadePersist = joinTable.cascade();
+            if (aOwned != null) {
+                for (CascadeType ct : aOwned.cascade()) {
+                    switch (ct) {
+                    case ALL:
+                        data.cascadePersist = true;
+                        data.cascadeDelete = true;
+                        break;
+                    case PERSIST:
+                        data.cascadePersist = true;
+                        break;
+                    case DELETE:
+                        data.cascadeDelete = true;
+                        break;
+                    }
+                }
+            } else {
+                JoinTable joinTable = method.getAnnotation(JoinTable.class);
+                if (joinTable != null) {
+                    for (CascadeType ct : joinTable.cascade()) {
+                        switch (ct) {
+                        case ALL:
+                            data.cascadePersist = true;
+                            data.cascadeDelete = true;
+                            break;
+                        case PERSIST:
+                            data.cascadePersist = true;
+                            break;
+                        case DELETE:
+                            data.cascadeDelete = true;
+                            break;
+                        }
+                    }
+                } else {
+                    data.cascadePersist = false;
+                    data.cascadeDelete = false;
+                }
             }
 
             Indexed indexedAnnotation = method.getAnnotation(Indexed.class);

@@ -89,6 +89,8 @@ public interface MemberMeta {
 
     public boolean isCascadePersist();
 
+    public boolean isCascadeDelete();
+
     /**
      * @see com.pyx4j.entity.annotations.Owner
      */

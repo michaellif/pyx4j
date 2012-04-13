@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.join;
 
+import com.pyx4j.entity.annotations.CascadeType;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -33,7 +34,7 @@ public interface AccPrincipalEdit extends IEntity {
 
     IPrimitive<String> name();
 
-    @JoinTable(value = AccSubjectPrincipal.class, cascade = true)
+    @JoinTable(value = AccSubjectPrincipal.class, cascade = CascadeType.ALL)
     ISet<AccSubject> subjects();
 
 }

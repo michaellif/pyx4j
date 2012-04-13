@@ -36,7 +36,7 @@ public interface BRefPolyReadOwner2 extends IEntity, BRefPolyReadAbstractOwner {
 
     IPrimitive<String> name();
 
-    @JoinTable(value = BRefPolyReadChild.class, cascade = false)
+    @JoinTable(value = BRefPolyReadChild.class)
     @OrderBy(BRefPolyReadChild.SortColumnId.class)
     IList<BRefPolyReadChild> children();
 }

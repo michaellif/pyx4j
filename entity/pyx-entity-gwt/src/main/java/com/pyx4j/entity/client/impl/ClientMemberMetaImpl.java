@@ -155,6 +155,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     }
 
     @Override
+    public boolean isCascadeDelete() {
+        return data.cascadeDelete;
+    }
+
+    @Override
     public boolean isOwner() {
         return data.owner;
     }

@@ -35,7 +35,7 @@ public interface OneToOneIntermediateReadOwner extends IEntity {
     IPrimitive<String> name();
 
     @Owned
-    @JoinTable(value = OneToOneIntermediateReadJoin.class, cascade = false)
+    @JoinTable(value = OneToOneIntermediateReadJoin.class)
     @Detached
     OneToOneIntermediateReadChild child();
 

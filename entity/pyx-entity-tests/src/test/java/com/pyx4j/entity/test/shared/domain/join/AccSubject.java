@@ -36,6 +36,6 @@ public interface AccSubject extends IEntity {
     IPrimitive<String> name();
 
     @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = AccSubjectPrincipal.class, cascade = false)
+    @JoinTable(value = AccSubjectPrincipal.class)
     ISet<AccPrincipal> access();
 }

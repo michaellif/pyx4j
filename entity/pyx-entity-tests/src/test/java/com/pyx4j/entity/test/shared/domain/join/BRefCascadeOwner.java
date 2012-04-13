@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.join;
 
+import com.pyx4j.entity.annotations.CascadeType;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
@@ -36,7 +37,7 @@ public interface BRefCascadeOwner extends IEntity {
     IPrimitive<String> name();
 
     @Owned
-    @JoinTable(value = BRefCascadeChild.class, cascade = true)
+    @JoinTable(value = BRefCascadeChild.class, cascade = CascadeType.ALL)
     @OrderBy(BRefCascadeChild.SortColumnId.class)
     IList<BRefCascadeChild> children();
 }

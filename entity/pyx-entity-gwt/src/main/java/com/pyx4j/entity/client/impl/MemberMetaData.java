@@ -37,6 +37,8 @@ public class MemberMetaData {
 
     public boolean cascadePersist;
 
+    public boolean cascadeDelete;
+
     public boolean owner;
 
     public boolean embedded;
