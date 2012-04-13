@@ -15,7 +15,7 @@ package com.propertyvista.misc;
 
 public interface VistaTODO {
 
-    public final static boolean enableWelcomeWizardDemoMode = true;
+    public final static boolean enableWelcomeWizardDemoMode = false;
 
     public static boolean removedForProduction = false;
 
