@@ -25,6 +25,7 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -51,6 +52,17 @@ public class EntityFactory {
 
     public static <T extends IEntity> T create(Class<T> entityClass) {
         return impl.create(entityClass, null, null);
+    }
+
+    /**
+     * Create shell entity that has only class information and primary key.
+     * isValueDetached() will return true for such entity.
+     */
+    public static <T extends IEntity> T createIdentityStub(Class<T> entityClass, Key privareKey) {
+        T entity = create(entityClass);
+        entity.setPrimaryKey(privareKey);
+        entity.setValueDetached();
+        return entity;
     }
 
     public static <T extends IEntity> T create(Class<T> entityClass, IObject<?> parent, String fieldName) {
