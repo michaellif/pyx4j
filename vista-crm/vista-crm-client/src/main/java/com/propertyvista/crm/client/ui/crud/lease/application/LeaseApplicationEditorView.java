@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorPresenterBase;
+import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorPresenterBase;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public interface LeaseApplicationEditorView extends IEditorView<LeaseApplicationDTO> {
