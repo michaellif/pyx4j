@@ -52,7 +52,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
 
     @Override
     protected EntityListCriteria<LeaseApplicationDTO> updateCriteria(EntityListCriteria<LeaseApplicationDTO> criteria) {
-        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+        criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
         criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.draft()));
         return super.updateCriteria(criteria);
     }
