@@ -100,10 +100,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
     private void saveCustomers(Lease lease) {
         // TODO Manage customer for PTAPP 
         for (Tenant tenant : lease.version().tenants()) {
-            Persistence.service().merge(tenant.customer());
+            if (!tenant.customer().isValueDetached()) {
+                Persistence.service().merge(tenant.customer());
+            }
         }
         for (Guarantor guarantor : lease.version().guarantors()) {
-            Persistence.service().merge(guarantor.customer());
+            if (!guarantor.customer().isValueDetached()) {
+                Persistence.service().merge(guarantor.customer());
+            }
         }
     }
 
