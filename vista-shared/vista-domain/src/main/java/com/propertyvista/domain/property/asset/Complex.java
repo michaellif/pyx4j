@@ -48,7 +48,7 @@ public interface Complex extends PolicyNode {
     DashboardMetadata dashboard();
 
     @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = Building.class, cascade = false)
+    @JoinTable(value = Building.class)
     @OrderBy(Building.OrderInComplexId.class)
     IList<Building> buildings();
 

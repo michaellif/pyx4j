@@ -67,6 +67,6 @@ public interface Customer extends IEntity, PersonScreeningHolder, TenantUserHold
      */
     @RpcTransient
     @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = Tenant.class, cascade = false)
+    @JoinTable(value = Tenant.class)
     ISet<Tenant> _tenantInLease();
 }

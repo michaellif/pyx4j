@@ -96,7 +96,7 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder<Iden
 
     @Detached
     @Length(2)
-    @JoinTable(value = PersonGuarantor.class, cascade = false)
+    @JoinTable(value = PersonGuarantor.class)
     @OrderBy(PersonGuarantor.OrderInGuarantee.class)
     IList<PersonGuarantor> guarantors();
 

@@ -116,7 +116,7 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
 
     @RpcTransient
     @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = CrmUserBuildings.class, cascade = false)
+    @JoinTable(value = CrmUserBuildings.class)
     ISet<CrmUser> userAccess();
 
     @Timestamp
