@@ -44,6 +44,20 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
+    public void setupNewUnit(AptUnit unit) {
+        // if the unit is new, create a new occupancy for it and
+        AptUnitOccupancySegment vacant = EntityFactory.create(AptUnitOccupancySegment.class);
+        vacant.unit().set(unit);
+        vacant.status().setValue(Status.vacant);
+        vacant.dateFrom().setValue(new LogicalDate());
+        vacant.dateTo().setValue(OccupancyFacade.MAX_DATE);
+        Persistence.service().persist(vacant);
+
+        //??
+        scopeAvailable(unit.getPrimaryKey());
+    }
+
+    @Override
     public void scopeAvailable(Key unitPk) {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
         List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, now);

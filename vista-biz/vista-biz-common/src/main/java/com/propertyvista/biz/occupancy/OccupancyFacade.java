@@ -16,6 +16,7 @@ package com.propertyvista.biz.occupancy;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
@@ -30,7 +31,7 @@ public interface OccupancyFacade {
     @Deprecated
     public static final boolean TODO = true;
 
-    //void setupNewUnit(Key unitId);
+    void setupNewUnit(AptUnit unit);
 
     /**
      * Applied to {@link Status#vacant}: convert's it to offMarket

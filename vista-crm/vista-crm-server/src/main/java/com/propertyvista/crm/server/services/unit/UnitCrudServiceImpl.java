@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -31,8 +30,6 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.AptUnitServicePriceDTO;
 
@@ -89,20 +86,9 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     @Override
     protected void persist(AptUnit dbo, AptUnitDTO in) {
         boolean isNewUnit = dbo.id().isNull();
-
-        // TODO is this part of OccupancyFacade
-        if (isNewUnit && OccupancyFacade.TODO) {
-            // if the unit is new, create a new occupancy for it and
-            AptUnitOccupancySegment vacant = EntityFactory.create(AptUnitOccupancySegment.class);
-            vacant.status().setValue(Status.vacant);
-            vacant.dateFrom().setValue(new LogicalDate());
-            vacant.dateTo().setValue(OccupancyFacade.MAX_DATE);
-            dbo._AptUnitOccupancySegment().add(vacant);
-
-        }
         super.persist(dbo, in);
         if (isNewUnit) {
-            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(dbo.getPrimaryKey());
+            ServerSideFactory.create(OccupancyFacade.class).setupNewUnit((AptUnit) dbo.createIdentityStub());
         }
     }
 
