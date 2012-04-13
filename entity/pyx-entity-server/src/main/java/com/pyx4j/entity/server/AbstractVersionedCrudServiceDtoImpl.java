@@ -77,11 +77,15 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
         }, entityId, retrieveTraget);
     }
 
+    protected void saveAsFinal(E entity) {
+        Persistence.secureSave(entity);
+    }
+
     @Override
     public void approveFinal(AsyncCallback<VoidSerializable> callback, Key entityId) {
         E entity = Persistence.secureRetrieve(entityClass, entityId.asDraftKey());
         entity.saveAction().setValue(SaveAction.saveAsFinal);
-        Persistence.secureSave(entity);
+        saveAsFinal(entity);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
