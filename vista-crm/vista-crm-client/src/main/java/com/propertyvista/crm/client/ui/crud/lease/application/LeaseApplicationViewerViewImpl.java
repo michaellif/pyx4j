@@ -33,6 +33,9 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
     public LeaseApplicationViewerViewImpl() {
         super(CrmSiteMap.Tenants.LeaseApplication.class);
 
+        //set main form here:
+        setForm(new LeaseApplicationEditorForm(true));
+
         onlineApplication = new Button(i18n.tr("Start Online Application"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

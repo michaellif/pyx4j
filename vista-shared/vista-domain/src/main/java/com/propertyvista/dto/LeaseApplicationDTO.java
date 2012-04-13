@@ -16,10 +16,10 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 
 @Transient
-@ExtendsDBO(Lease.class)
+@ExtendsDBO(LeaseApplication.class)
 public interface LeaseApplicationDTO extends LeaseDTO {
 
 }
