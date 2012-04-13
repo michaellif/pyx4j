@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,30 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on 2012-04-13
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.annotations;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
- * Maps to javax.persistence.OneToOne or javax.persistence.OneToMany with CascadeType.ALL
+ * Defines the set of operations that are propagated to the associated entity.
+ * The value cascade=ALL is equivalent to cascade={PERSIST,REMOVE}.
  */
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Owned {
-
-    boolean forceCreation() default false;
+public enum CascadeType {
 
     /**
-     * The operations that must be cascaded to the target of the association.
-     * 
-     * By default All operations are cascaded.
+     * Cascade all operations
      */
-    CascadeType[] cascade() default { CascadeType.ALL };
+    ALL,
+
+    /**
+     * Cascade persist/merge operations
+     */
+    PERSIST,
+
+    /**
+     * Cascade remove operations
+     */
+    DELETE
 }

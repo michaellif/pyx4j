@@ -42,6 +42,13 @@ public @interface JoinTable {
     boolean cascade() default false;
 
     /**
+     * The operations that must be cascaded to the target of the association.
+     * 
+     * By default no operations are cascaded.
+     */
+    CascadeType[] cascadeTODO() default {};
+
+    /**
      * Optional, Should match value of @JoinColumn when defined.
      * By default Entity class match is used. Or first column of the same type with @JoinColumn annotation without value.
      */
