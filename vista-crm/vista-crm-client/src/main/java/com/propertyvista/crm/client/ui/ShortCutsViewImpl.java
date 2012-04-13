@@ -35,6 +35,8 @@ import com.propertyvista.crm.client.activity.NavigFolder;
 
 public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView {
 
+    public static int MAX_SHORTCUT_LENGTH = 20;
+
     public static String DEFAULT_STYLE_PREFIX = "vistaCrm_ShortCuts";
 
     public static enum StyleSuffix implements IStyleName {
@@ -124,14 +126,25 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
         public NavigItem(AppPlace place, IEntity value) {
             this.place = place;
 
-            Anchor anchor = new Anchor("<i>" + AppSite.getHistoryMapper().getPlaceInfo(place).getCaption()
-                    + (value != null ? ": </i>" + value.getStringView() : "</i>"), true);
+            String label = null;
+            String typeLabel = AppSite.getHistoryMapper().getPlaceInfo(place).getCaption();
+            if (typeLabel.length() > MAX_SHORTCUT_LENGTH) {
+                label = "<i>" + typeLabel.substring(0, MAX_SHORTCUT_LENGTH) + "...</i>";
+            } else {
+                String viewLabel = value != null ? value.getStringView() : "";
+                viewLabel = viewLabel.length() + typeLabel.length() > MAX_SHORTCUT_LENGTH ? viewLabel.substring(0, MAX_SHORTCUT_LENGTH - typeLabel.length())
+                        + "..." : viewLabel;
+                label = "<i>" + typeLabel + ":</i> " + viewLabel;
+            }
+
+            Anchor anchor = new Anchor(label, true);
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     AppSite.getPlaceController().goTo(NavigItem.this.place);
                 }
             });
+            anchor.setTitle(AppSite.getHistoryMapper().getPlaceInfo(place).getCaption() + (value != null ? ": " + value.getStringView() : ""));
 
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Item);
             setWidget(anchor);
