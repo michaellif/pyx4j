@@ -28,26 +28,26 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceEdit
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceViewerView;
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.lead.LeadEditorView;
+import com.propertyvista.crm.client.ui.crud.customer.lead.LeadEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.lead.LeadListerView;
+import com.propertyvista.crm.client.ui.crud.customer.lead.LeadListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.lead.LeadViewerView;
+import com.propertyvista.crm.client.ui.crud.customer.lead.LeadViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentEditorView;
+import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerView;
+import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentViewerView;
+import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingEditorView;
+import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerView;
+import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingViewerView;
+import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.FutureTenantListerView;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.FutureTenantListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentEditorView;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentListerView;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentViewerView;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadEditorView;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadListerView;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadViewerView;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingEditorView;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingListerView;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingViewerView;
-import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingViewerViewImpl;
 
 public class MarketingViewFactory extends ViewFactoryBase {
 
