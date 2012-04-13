@@ -261,15 +261,18 @@ public class EntityOperationsMeta {
 
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
-                    if (memberMeta.isOwnedRelationships()) {
+                    if (memberMeta.isCascadePersist()) {
                         if (joinInfo == null) {
                             cascadePersistMembers.add(member);
                         } else {
                             cascadePersistMembersSecondPass.add(member);
                         }
-                        cascadeDeleteMembers.add(member);
                     } else if (memberMeta.getAnnotation(Reference.class) != null) {
                         cascadePersistMembers.add(member);
+                    }
+
+                    if (memberMeta.isCascadeDelete()) {
+                        cascadeDeleteMembers.add(member);
                     }
                     switch (memberMeta.getAttachLevel()) {
                     case ToStringMembers:
