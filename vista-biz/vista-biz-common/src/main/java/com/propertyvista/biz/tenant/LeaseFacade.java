@@ -24,6 +24,8 @@ public interface LeaseFacade {
 
     void persistLease(Lease lease);
 
+    void saveAsFinal(Lease lease);
+
     void createMasterOnlineApplication(Key leaseId);
 
     void approveApplication(Key leaseId);

@@ -78,6 +78,8 @@ public class LeaseManager {
         return lease;
     }
 
+    @Deprecated
+    // This implementation already moved to LeaseFacade 
     public Lease save(Lease lease) {
         boolean isNewLease = (lease.getPrimaryKey() == null);
         boolean isUnitChanged = isNewLease;

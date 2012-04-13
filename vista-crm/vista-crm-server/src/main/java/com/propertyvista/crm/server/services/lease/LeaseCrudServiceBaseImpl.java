@@ -21,8 +21,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -30,8 +30,6 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
@@ -39,8 +37,6 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
-import com.propertyvista.server.common.util.LeaseManager;
-import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
 public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractVersionedCrudServiceDtoImpl<Lease, DTO> implements
         LeaseCrudServiceBase<DTO> {
@@ -95,30 +91,24 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
     @Override
     protected void persist(Lease dbo, DTO in) {
-        boolean isApproveFinal = dbo.saveAction().getValue() == SaveAction.saveAsFinal;
+        throw new Error("Facade should be used");
+    }
 
+    @Override
+    protected void create(Lease entity, DTO dto) {
+        updateAdjustments(entity);
+        ServerSideFactory.create(LeaseFacade.class).createLease(entity);
+    }
+
+    @Override
+    protected void save(Lease dbo, DTO in) {
         updateAdjustments(dbo);
+        ServerSideFactory.create(LeaseFacade.class).persistLease(dbo);
+    }
 
-        new LeaseManager().save(dbo);
-
-        int no = 0;
-        for (Tenant item : dbo.version().tenants()) {
-            item.leaseV().set(dbo.version());
-            item.orderInLease().setValue(no++);
-            Persistence.service().merge(item);
-        }
-
-        no = 0;
-        for (Guarantor item : dbo.version().guarantors()) {
-            item.leaseV().set(dbo.version());
-            item.orderInLease().setValue(no++);
-            Persistence.service().merge(item);
-        }
-
-        // update unit rent price here:
-        if (isApproveFinal) {
-            ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(in);
-        }
+    @Override
+    protected void saveAsFinal(Lease entity) {
+        ServerSideFactory.create(LeaseFacade.class).saveAsFinal(entity);
     }
 
     private void updateAdjustments(Lease lease) {
