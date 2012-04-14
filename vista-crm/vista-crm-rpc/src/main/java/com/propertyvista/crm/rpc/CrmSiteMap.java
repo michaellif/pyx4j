@@ -195,14 +195,6 @@ public class CrmSiteMap implements SiteMap {
         public static class Payment extends CRMCrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Online Application")
-        @NavigationItem(navigLabel = "Online Applications")
-        public static class OnlineMasterApplication extends CRMCrudAppPlace {
-        }
-
-        public static class Application extends CRMCrudAppPlace {
-        }
-
         public static class EquifaxResult extends CRMCrudAppPlace {
         }
 

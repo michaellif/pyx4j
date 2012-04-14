@@ -121,10 +121,6 @@ import com.propertyvista.crm.client.activity.crud.settings.tax.LeaseAdjustmentRe
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxViewerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationListerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationViewerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.application.OnlineMasterApplicationListerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.application.OnlineMasterApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitItemEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitItemViewerActivity;
@@ -478,26 +474,6 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case lister:
                             activity = new LeaseApplicationListerActivity(crudPlace);
-                            break;
-                        }
-
-                    } else if (place instanceof CrmSiteMap.Tenants.OnlineMasterApplication) {
-                        switch (crudPlace.getType()) {
-                        case viewer:
-                            activity = new OnlineMasterApplicationViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new OnlineMasterApplicationListerActivity(crudPlace);
-                            break;
-                        }
-
-                    } else if (place instanceof CrmSiteMap.Tenants.Application) {
-                        switch (crudPlace.getType()) {
-                        case viewer:
-                            activity = new ApplicationViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new ApplicationListerActivity(crudPlace);
                             break;
                         }
 

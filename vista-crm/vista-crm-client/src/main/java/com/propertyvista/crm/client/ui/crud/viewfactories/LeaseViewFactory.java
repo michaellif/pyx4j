@@ -32,14 +32,6 @@ import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationLi
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.application.OnlineMasterApplicationViewerViewImpl;
 
 public class LeaseViewFactory extends ViewFactoryBase {
 
@@ -64,16 +56,6 @@ public class LeaseViewFactory extends ViewFactoryBase {
 
             } else if (BillViewerView.class.equals(type)) {
                 map.put(type, new BillViewerViewImpl());
-
-            } else if (OnlineMasterApplicationListerView.class.equals(type)) {
-                map.put(type, new OnlineMasterApplicationListerViewImpl());
-            } else if (OnlineMasterApplicationViewerView.class.equals(type)) {
-                map.put(type, new OnlineMasterApplicationViewerViewImpl());
-
-            } else if (ApplicationListerView.class.equals(type)) {
-                map.put(type, new ApplicationListerViewImpl());
-            } else if (ApplicationViewerView.class.equals(type)) {
-                map.put(type, new ApplicationViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

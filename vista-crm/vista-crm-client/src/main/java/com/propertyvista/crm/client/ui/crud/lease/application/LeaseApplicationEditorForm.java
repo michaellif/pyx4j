@@ -27,7 +27,6 @@ import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
 import com.propertyvista.common.client.ui.components.folders.ApplicationStatusFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorFormBase;
-import com.propertyvista.crm.client.ui.crud.tenant.application.TenantApprovalFolder;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;

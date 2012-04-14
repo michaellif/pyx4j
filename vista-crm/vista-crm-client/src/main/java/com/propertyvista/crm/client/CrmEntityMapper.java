@@ -69,8 +69,6 @@ import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.EquifaxResult;
 
 public class CrmEntityMapper {
@@ -100,8 +98,6 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(LeaseApplication.class, CrmSiteMap.Tenants.LeaseApplication.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Locker.class, CrmSiteMap.Properties.Locker.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(MasterOnlineApplication.class, CrmSiteMap.Tenants.OnlineMasterApplication.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(OnlineApplication.class, CrmSiteMap.Tenants.Application.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(PaymentRecord.class, CrmSiteMap.Tenants.Payment.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(PersonScreening.class, CrmSiteMap.Tenants.Screening.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Customer.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.arrowGreyLeft());

@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.application;
+package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import java.util.ArrayList;
 import java.util.List;
