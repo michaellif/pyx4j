@@ -39,7 +39,7 @@ import com.propertyvista.domain.security.TenantUserHolder;
 public interface Customer extends IEntity, PersonScreeningHolder, TenantUserHolder {
 
     @NotNull
-    IPrimitive<String> tenantId();
+    IPrimitive<String> customerId();
 
     @Override
     @ToString(index = 0)

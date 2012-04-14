@@ -247,7 +247,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
     }
 
     public void persistTenant(Customer tenant) {
-        tenant.tenantId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.tenant));
+        tenant.customerId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.tenant));
         Persistence.service().persist(tenant);
     }
 

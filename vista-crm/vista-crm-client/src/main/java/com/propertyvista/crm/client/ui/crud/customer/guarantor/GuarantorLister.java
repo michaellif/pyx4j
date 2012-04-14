@@ -14,30 +14,34 @@
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorLister extends ListerBase<GuarantorDTO> {
 
+    protected static final I18n i18n = I18n.get(GuarantorLister.class);
+
     public GuarantorLister() {
         super(GuarantorDTO.class, false, false);
 
-        // TODO: currently we use just person tenant, so we'll display more data for them:
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().displayName()));
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type()));
-
         setColumnDescriptors(//@formatter:off
-            new Builder(proto().id()).build(),
+            new Builder(proto().customer().customerId(), false).build(),
+            
             new Builder(proto().customer().person().name()).searchable(false).build(),
             new Builder(proto().customer().person().name().firstName(), false).build(),
             new Builder(proto().customer().person().name().lastName(), false).build(),
             new Builder(proto().customer().person().sex()).build(),
             new Builder(proto().customer().person().birthDate()).build(),
+            
             new Builder(proto().customer().person().homePhone()).build(),
             new Builder(proto().customer().person().mobilePhone()).build(),
             new Builder(proto().customer().person().workPhone()).build(),
-            new Builder(proto().customer().person().email()).title("E-mail address").build()
+            new Builder(proto().customer().person().email()).title("E-mail address").build(),
+            
+            new Builder(proto().leaseV().holder()).columnTitle(i18n.tr("Lease")).searchable(false).build(),
+            new Builder(proto().leaseV().holder().leaseId()).searchableOnly().build()
         );//@formatter:on
     }
 }

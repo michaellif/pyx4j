@@ -51,7 +51,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     @Override
     protected void persist(Tenant dbo, TenantDTO in) {
         if (dbo.id().isNull() && IdAssignmentSequenceUtil.needsGeneratedId(IdTarget.tenant)) {
-            dbo.customer().tenantId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.tenant));
+            dbo.customer().customerId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.tenant));
         }
         super.persist(dbo, in);
     }
