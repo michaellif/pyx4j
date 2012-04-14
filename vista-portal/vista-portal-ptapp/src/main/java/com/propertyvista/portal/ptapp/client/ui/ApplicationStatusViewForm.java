@@ -35,7 +35,7 @@ public class ApplicationStatusViewForm extends CEntityDecoratableEditor<OnlineMa
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().progress()), 5).labelWidth(20).build());
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, inject(proto().individualApplications(), new ApplicationStatusFolder(isEditable())));
+        main.setWidget(++row, 0, inject(proto().individualApplications(), new ApplicationStatusFolder()));
 
         return main;
     }

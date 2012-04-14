@@ -48,11 +48,15 @@ public class LeaseApplicationEditorForm extends LeaseEditorFormBase<LeaseApplica
         createCommonContent();
 
         tabPanel.add(createInfoTab(), i18n.tr("Information"));
+        tabPanel.setLastTabDisabled(true);
         tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
+        tabPanel.setLastTabDisabled(true);
 
 // TODO: should be hidden until back end implementation:   
 //      tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
+//        tabPanel.setLastTabDisabled(true);
         tabPanel.add(createAppStatustab(), i18n.tr("Online Status Details"));
+        tabPanel.setLastTabDisabled(true);
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
@@ -80,7 +84,7 @@ public class LeaseApplicationEditorForm extends LeaseEditorFormBase<LeaseApplica
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 if (member instanceof TenantInfoDTO) {
-                    return new InfoViewForm();
+                    return new InfoViewForm(true);
                 }
                 return super.create(member);
             }
@@ -93,7 +97,7 @@ public class LeaseApplicationEditorForm extends LeaseEditorFormBase<LeaseApplica
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 if (member instanceof TenantFinancialDTO) {
-                    return new FinancialViewForm();
+                    return new FinancialViewForm(true);
                 }
                 return super.create(member);
             }
@@ -126,12 +130,13 @@ public class LeaseApplicationEditorForm extends LeaseEditorFormBase<LeaseApplica
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().onlineApplication().status(), new CEnumLabel()), 15).labelWidth(20)
-                .build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().onlineApplication().status()), 15).labelWidth(20).build());
+        get(proto().leaseApplication().onlineApplication().status()).setViewable(true);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().masterApplicationStatus().progress()), 5).labelWidth(20).build());
+        get(proto().masterApplicationStatus().progress()).setViewable(true);
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder(isEditable())));
+        main.setWidget(++row, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder()));
 
         return new CrmScrollPanel(main);
     }

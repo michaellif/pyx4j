@@ -133,7 +133,7 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 };
 
             }
-        }), 20).build());
+        }), 30).build());
 
         get(proto().item()).setViewable(!isService);
 
