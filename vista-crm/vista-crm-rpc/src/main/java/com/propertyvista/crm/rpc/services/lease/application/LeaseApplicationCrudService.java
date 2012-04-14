@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.lease.application;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -20,11 +22,16 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public interface LeaseApplicationCrudService extends LeaseCrudServiceBase<LeaseApplicationDTO> {
 
     void startOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
+
+    void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId);
+
+    void inviteUsers(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users);
 
     void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO);
 }

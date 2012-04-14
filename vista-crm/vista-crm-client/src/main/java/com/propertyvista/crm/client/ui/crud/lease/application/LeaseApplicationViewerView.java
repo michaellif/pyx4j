@@ -13,9 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
+import java.util.List;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public interface LeaseApplicationViewerView extends IViewerView<LeaseApplicationDTO> {
@@ -23,6 +28,10 @@ public interface LeaseApplicationViewerView extends IViewerView<LeaseApplication
     interface Presenter extends IViewerView.Presenter {
 
         void startOnlineApplication();
+
+        void retrieveUsers(AsyncCallback<List<ApplicationUserDTO>> callback);
+
+        void inviteUsers(List<ApplicationUserDTO> users);
 
         void applicationAction(LeaseApplicationActionDTO action);
     }

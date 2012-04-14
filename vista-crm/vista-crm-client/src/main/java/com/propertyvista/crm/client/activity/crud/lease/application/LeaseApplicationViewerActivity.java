@@ -13,8 +13,12 @@
  */
 package com.propertyvista.crm.client.activity.crud.lease.application;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.i18n.shared.I18n;
@@ -26,6 +30,7 @@ import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationVi
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.application.LeaseApplicationCrudService;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class LeaseApplicationViewerActivity extends CrmViewerActivity<LeaseApplicationDTO> implements LeaseApplicationViewerView.Presenter {
@@ -48,6 +53,27 @@ public class LeaseApplicationViewerActivity extends CrmViewerActivity<LeaseAppli
                 populate();
             }
         }, entityId);
+    }
+
+    @Override
+    public void retrieveUsers(final AsyncCallback<List<ApplicationUserDTO>> callback) {
+        ((LeaseApplicationCrudService) service).retrieveUsers(new DefaultAsyncCallback<Vector<ApplicationUserDTO>>() {
+            @Override
+            public void onSuccess(Vector<ApplicationUserDTO> result) {
+                callback.onSuccess(result);
+            }
+        }, entityId);
+    }
+
+    @Override
+    public void inviteUsers(List<ApplicationUserDTO> users) {
+        Vector<ApplicationUserDTO> vector = new Vector<ApplicationUserDTO>(users);
+        ((LeaseApplicationCrudService) service).inviteUsers(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, entityId, vector);
     }
 
     @Override

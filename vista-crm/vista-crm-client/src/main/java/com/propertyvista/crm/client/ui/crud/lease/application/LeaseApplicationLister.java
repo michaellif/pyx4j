@@ -22,6 +22,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
 
@@ -31,21 +32,35 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
         super(LeaseApplicationDTO.class, false, true);
 
         setColumnDescriptors(//@formatter:off
-            new Builder(proto().unit().belongsTo().propertyCode()).build(),
-            new Builder(proto().unit()).build(),
             new Builder(proto().leaseId()).build(),
             new Builder(proto().type()).build(),
-            new Builder(proto().version().status()).build(),
-            new Builder(proto().version().completion()).build(),
+            
+            new Builder(proto().unit().belongsTo().propertyCode()).build(),
+            new Builder(proto().unit()).build(),
+            
+            new Builder(proto().leaseApplication().status(), true).build(),
+            
             new Builder(proto().leaseFrom()).build(),
             new Builder(proto().leaseTo()).build(),
+            
             new Builder(proto().version().expectedMoveIn()).build(),
             new Builder(proto().version().expectedMoveOut(), false).build(),
             new Builder(proto().version().actualMoveIn(), false).build(),
             new Builder(proto().version().actualMoveOut(), false).build(),
             new Builder(proto().version().moveOutNotice(), false).build(),
-            new Builder(proto().approvalDate(), false).build(),
+            
             new Builder(proto().createDate(), false).build(),
+            
+            new Builder(proto().mainApplicant()).sortable(!VistaTODO.complextQueryCriteria).build(),
+            
+
+            new Builder(proto().leaseApplication().equifaxApproval().percenrtageApproved(), false).build(),
+            new Builder(proto().leaseApplication().equifaxApproval().suggestedDecision(), false).build(),
+
+            new Builder(proto().numberOfOccupants(), false).sortable(false).title(i18n.tr("Occupants")).build(),
+            new Builder(proto().numberOfCoApplicants(), true).sortable(false).title(i18n.tr("Applicants")).build(),
+            new Builder(proto().numberOfGuarantors(), true).sortable(false).title(i18n.tr("Guarantors")).build(),
+            
             new Builder(proto().version().tenants()).build()
         );//@formatter:on
     }

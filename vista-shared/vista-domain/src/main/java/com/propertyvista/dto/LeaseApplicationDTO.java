@@ -13,13 +13,31 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 
 @Transient
 @ExtendsDBO(LeaseApplication.class)
 public interface LeaseApplicationDTO extends LeaseDTO {
 
+    OnlineMasterApplicationStatusDTO masterApplicationStatus();
+
+    IList<TenantFinancialDTO> tenantFinancials();
+
+    IList<TenantInfoDTO> tenantInfo();
+
+    IPrimitive<Integer> numberOfOccupants();
+
+    @Caption(name = "Number Of Co-Applicants")
+    IPrimitive<Integer> numberOfCoApplicants();
+
+    IPrimitive<Integer> numberOfGuarantors();
+
+    Customer mainApplicant();
 }
