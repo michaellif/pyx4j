@@ -24,11 +24,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
+import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
+import com.propertyvista.domain.financial.billing.InvoiceDeposit;
+import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge.ProductType;
+import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.dto.BillDTO;
 
 public class BillingUtils {
 
@@ -61,5 +71,52 @@ public class BillingUtils {
             }
         }
         return items;
+    }
+
+    public static void populateDto(Bill bill, BillDTO dto) {
+        for (InvoiceLineItem lineItem : bill.lineItems()) {
+            // *** Current Bill list values ***
+            // charges
+            if (lineItem instanceof InvoiceProductCharge) {
+                InvoiceProductCharge charge = (InvoiceProductCharge) lineItem;
+                ProductType prodType = charge.productType().getValue();
+                if (ProductType.recurringFeature.equals(prodType)) {
+                    // Additional recurring charges
+                    dto.recurringProductCharges().add(charge);
+                } else if (ProductType.oneTimeFeature.equals(prodType)) {
+                    // One-time charges
+                    dto.onetimeProductCharges().add(charge);
+                }
+                //} else if (lineItem instanceof InvoiceProductCredit) {
+                // Credit(s)
+            } else if (lineItem instanceof InvoiceDeposit) {
+                // Deposit(s)
+                dto.deposits().add((InvoiceDeposit) lineItem);
+            }
+            // *** Last Bill list values
+            else if (lineItem instanceof InvoiceDepositRefund) {
+                // Deposit refund(s)
+                dto.depositRefunds().add((InvoiceDepositRefund) lineItem);
+            } else if (lineItem instanceof InvoiceAccountCharge) {
+                // Immediate adjustment charges
+                dto.acntAdjustmentCharges().add((InvoiceAccountCharge) lineItem);
+            } else if (lineItem instanceof InvoiceAccountCredit) {
+                // Immediate adjustment credits
+                dto.acntAdjustmentCredits().add((InvoiceAccountCredit) lineItem);
+            } else if (lineItem instanceof InvoiceWithdrawal) {
+                // Withdrawals(s)
+                dto.withdrawals().add((InvoiceWithdrawal) lineItem);
+            } else if (lineItem instanceof InvoicePayment) {
+                PaymentStatus status = ((InvoicePayment) lineItem).paymentRecord().paymentStatus().getValue();
+                if (PaymentStatus.Rejected.equals(status)) {
+                    // Rejected payment(s)
+                    dto.rejectedPayments().add((InvoicePayment) lineItem);
+                } else {
+                    // Payment(s)
+                    dto.payments().add((InvoicePayment) lineItem);
+                }
+
+            }
+        }
     }
 }

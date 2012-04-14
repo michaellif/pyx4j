@@ -24,6 +24,7 @@ import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.server.financial.billing.BillingFacade;
+import com.propertyvista.server.financial.billing.BillingUtils;
 
 public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDTO> implements BillCrudService {
 
@@ -41,6 +42,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDT
         // load detached entities:
         Persistence.service().retrieve(dto.lineItems());
         Persistence.service().retrieve(dto.billingAccount());
+        BillingUtils.populateDto(entity, dto);
     }
 
     @Override

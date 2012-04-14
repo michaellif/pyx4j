@@ -66,11 +66,16 @@ public class BillEditorForm extends CrmEntityForm<BillDTO> {
         main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billStatus()), 10).build());
         main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 15).build());
 
-        main.setH1(++row, 0, 2, i18n.tr("Values"));
-        row2 = row;
+        main.setH1(++row, 0, 2, i18n.tr("Last Bill"));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().previousBalanceAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentReceivedAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositRefundAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().immediateAdjustments()), 10).build());
 
+        main.setH1(++row, 0, 2, i18n.tr("Current Bill"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceCharge()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recurringFeatureCharges()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recurringProductCharges(), new FeatureChargesFolder()), 30).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().oneTimeFeatureCharges()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalAdjustments()), 10).build());
 
@@ -79,12 +84,6 @@ public class BillEditorForm extends CrmEntityForm<BillDTO> {
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes()), 10).build());
-
-        // second column:
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().previousBalanceAmount()), 10).build());
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().paymentReceivedAmount()), 10).build());
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().depositRefundAmount()), 10).build());
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().immediateAdjustments()), 10).build());
 
         // Dues: 
         main.setHR(++row, 0, 2);
