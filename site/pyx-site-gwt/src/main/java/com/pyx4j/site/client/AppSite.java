@@ -28,7 +28,6 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -44,6 +43,7 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
+import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -85,12 +85,15 @@ public abstract class AppSite implements EntryPoint {
             }
 
             @Override
-            public void confirm(String message, Command onConfirmed) {
+            public void confirm(String message, ConfirmDecline confirmDecline) {
                 log.debug("We show JS confirm {}", message);
                 if (Window.confirm(message)) {
-                    onConfirmed.execute();
+                    confirmDecline.onConfirmed();
+                } else {
+                    confirmDecline.onDeclined();
                 }
             }
+
         });
     }
 

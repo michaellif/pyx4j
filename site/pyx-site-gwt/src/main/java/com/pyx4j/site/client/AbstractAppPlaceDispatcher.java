@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -34,6 +33,7 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SigningOutPlace;
+import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 
 public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
@@ -119,10 +119,12 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
     }
 
     @Override
-    public void confirm(String message, Command onConfirmed) {
+    public void confirm(String message, ConfirmDecline confirmDecline) {
         log.debug("We show JS confirm {}", message);
         if (Window.confirm(message)) {
-            onConfirmed.execute();
+            confirmDecline.onConfirmed();
+        } else {
+            confirmDecline.onDeclined();
         }
     }
 

@@ -37,6 +37,7 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class AppPlaceHistoryHandler {
+
     private static final Logger log = Logger.getLogger(AppPlaceHistoryHandler.class.getName());
 
     /**
@@ -93,6 +94,8 @@ public class AppPlaceHistoryHandler {
     private AppPlaceContorller placeController;
 
     private AppPlace defaultPlace = AppPlace.NOWHERE;
+
+    private String lastStablePlaceToken = "";
 
     /**
      * Create a new PlaceHistoryHandler with a {@link DefaultHistorian}. The
@@ -155,6 +158,7 @@ public class AppPlaceHistoryHandler {
                 if (newPlace.isStable()) {
                     historian.newItem(tokenForPlace(newPlace), false);
                 }
+                lastStablePlaceToken = historian.getToken();
             }
         });
 
@@ -175,6 +179,13 @@ public class AppPlaceHistoryHandler {
                 historyReg.removeHandler();
             }
         };
+    }
+
+    /*
+     * Internal function to restore history state of the last recorded App place.
+     */
+    void restoreStableHistoryToken() {
+        historian.newItem(lastStablePlaceToken, false);
     }
 
     /**

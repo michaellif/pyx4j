@@ -73,15 +73,43 @@ public class MessageDialog extends Dialog {
     }
 
     public static void confirm(String title, String text, final Command onConfirmed) {
+        confirm(title, text, onConfirmed, null);
+    }
+
+    /**
+     * Better use variation of this function with ConfirmDecline
+     */
+    public static void confirm(String title, String text, final Command onConfirmed, final Command onDeclined) {
         show(title, text, Dialog.Type.Confirm, new YesNoOption() {
             @Override
             public boolean onClickYes() {
-                onConfirmed.execute();
+                if (onConfirmed != null) {
+                    onConfirmed.execute();
+                }
                 return true;
             }
 
             @Override
             public boolean onClickNo() {
+                if (onDeclined != null) {
+                    onDeclined.execute();
+                }
+                return true;
+            }
+        });
+    }
+
+    public static void confirm(String title, String text, final ConfirmDecline confirmDecline) {
+        show(title, text, Dialog.Type.Confirm, new YesNoOption() {
+            @Override
+            public boolean onClickYes() {
+                confirmDecline.onConfirmed();
+                return true;
+            }
+
+            @Override
+            public boolean onClickNo() {
+                confirmDecline.onDeclined();
                 return true;
             }
         });
@@ -122,19 +150,4 @@ public class MessageDialog extends Dialog {
         });
     }
 
-    public static void confirm(String title, String text, final Command onConfirmed, final Command onRefuted) {
-        show(title, text, Dialog.Type.Confirm, new YesNoOption() {
-            @Override
-            public boolean onClickYes() {
-                onConfirmed.execute();
-                return true;
-            }
-
-            @Override
-            public boolean onClickNo() {
-                onRefuted.execute();
-                return true;
-            }
-        });
-    }
 }

@@ -27,7 +27,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceChangeRequestEvent;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
@@ -36,6 +35,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 
 public final class AppPlaceContorller extends PlaceController {
 
@@ -104,11 +104,19 @@ public final class AppPlaceContorller extends PlaceController {
             public void onSuccess(final AppPlace result) {
                 String warning = confirmGoTo(result);
                 if (warning != null) {
-                    dispatcher.confirm(warning, new Command() {
+                    dispatcher.confirm(warning, new ConfirmDecline() {
 
                         @Override
-                        public void execute() {
+                        public void onConfirmed() {
                             sureGoTo(result);
+
+                        }
+
+                        @Override
+                        public void onDeclined() {
+                            // In case we pressed a back or forward while navigating inside the application we need to restore the history token
+                            // We should not fire event since application state change did not happened 
+                            AppSite.getHistoryHandler().restoreStableHistoryToken();
                         }
                     });
                 } else {
