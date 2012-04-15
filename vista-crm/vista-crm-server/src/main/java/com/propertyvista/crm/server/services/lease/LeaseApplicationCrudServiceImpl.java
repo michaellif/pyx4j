@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.lease.application;
+package com.propertyvista.crm.server.services.lease;
 
 import java.util.Vector;
 
@@ -26,8 +26,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
-import com.propertyvista.crm.rpc.services.lease.application.LeaseApplicationCrudService;
-import com.propertyvista.crm.server.services.lease.LeaseCrudServiceBaseImpl;
+import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Guarantor;

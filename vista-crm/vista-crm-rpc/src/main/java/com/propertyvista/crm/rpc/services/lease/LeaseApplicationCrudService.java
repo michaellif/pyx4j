@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.lease.application;
+package com.propertyvista.crm.rpc.services.lease;
 
 import java.util.Vector;
 
@@ -21,7 +21,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
-import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 

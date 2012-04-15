@@ -29,7 +29,7 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
-import com.propertyvista.crm.rpc.services.lease.application.LeaseApplicationCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
