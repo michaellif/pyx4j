@@ -30,7 +30,7 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication.Status;
 
 @Transient
-public interface ApplicationStatusDTO extends IEntity {
+public interface OnlineApplicationStatusDTO extends IEntity {
 
     @I18n
     @XmlType(name = "PersonRole")

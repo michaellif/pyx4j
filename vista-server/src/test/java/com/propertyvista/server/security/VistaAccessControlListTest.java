@@ -40,7 +40,6 @@ import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
@@ -161,7 +160,6 @@ public class VistaAccessControlListTest {
         assertEntityPermission(false, ApplicationDocumentFile.class, null);
         assertEntityPermission(false, TenantInLeaseListDTO.class, null);
         assertEntityPermission(false, Tenant.class, null);
-        assertEntityPermission(false, PetsDTO.class, null);
         assertEntityPermission(false, TenantFinancialDTO.class, null);
         assertEntityPermission(false, Charges.class, null);
         assertEntityPermission(false, Summary.class, null);
@@ -181,7 +179,6 @@ public class VistaAccessControlListTest {
         assertEntityPermission(true, ApplicationDocumentFile.class, application);
         assertEntityPermission(true, TenantInLeaseListDTO.class, application);
         assertEntityPermission(true, Tenant.class, application);
-        assertEntityPermission(true, PetsDTO.class, application);
         assertEntityPermission(true, TenantFinancialDTO.class, application);
         assertEntityPermission(true, Charges.class, application);
         assertEntityPermission(true, Summary.class, application);
@@ -192,7 +189,6 @@ public class VistaAccessControlListTest {
         assertEntityPermission(false, ApplicationDocumentFile.class, application2);
         assertEntityPermission(false, TenantInLeaseListDTO.class, application2);
         assertEntityPermission(false, Tenant.class, application2);
-        assertEntityPermission(false, PetsDTO.class, application2);
         assertEntityPermission(false, TenantFinancialDTO.class, application2);
         assertEntityPermission(false, Charges.class, application2);
         assertEntityPermission(false, Summary.class, application2);

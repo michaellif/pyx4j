@@ -48,8 +48,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.dto.ApplicationStatusDTO;
-import com.propertyvista.dto.ApplicationStatusDTO.Role;
+import com.propertyvista.dto.OnlineApplicationStatusDTO;
+import com.propertyvista.dto.OnlineApplicationStatusDTO.Role;
 import com.propertyvista.dto.OnlineMasterApplicationStatusDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -274,7 +274,7 @@ public class ApplicationManager {
                 Persistence.service().retrieve(app);
             }
 
-            ApplicationStatusDTO status = EntityFactory.create(ApplicationStatusDTO.class);
+            OnlineApplicationStatusDTO status = EntityFactory.create(OnlineApplicationStatusDTO.class);
 
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), app.user()));

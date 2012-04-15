@@ -18,12 +18,12 @@ import java.util.List;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 
-import com.propertyvista.dto.ApplicationStatusDTO;
+import com.propertyvista.dto.OnlineApplicationStatusDTO;
 
-public class ApplicationStatusFolder extends VistaTableFolder<ApplicationStatusDTO> {
+public class ApplicationStatusFolder extends VistaTableFolder<OnlineApplicationStatusDTO> {
 
     public ApplicationStatusFolder() {
-        super(ApplicationStatusDTO.class, false);
+        super(OnlineApplicationStatusDTO.class, false);
     }
 
     @Override

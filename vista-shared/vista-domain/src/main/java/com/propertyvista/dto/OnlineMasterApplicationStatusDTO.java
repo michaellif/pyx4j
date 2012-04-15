@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface OnlineMasterApplicationStatusDTO extends IEntity {
 
-    IList<ApplicationStatusDTO> individualApplications();
+    IList<OnlineApplicationStatusDTO> individualApplications();
 
     /**
      * Completed steps/total steps in %
