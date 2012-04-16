@@ -20,10 +20,10 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
-@ExtendsDBO(LeaseApplication.class)
+@ExtendsDBO(Lease.class)
 public interface LeaseApplicationDTO extends LeaseDTO {
 
     OnlineMasterApplicationStatusDTO masterApplicationStatus();

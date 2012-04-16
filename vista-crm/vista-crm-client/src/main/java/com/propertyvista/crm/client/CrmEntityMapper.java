@@ -68,12 +68,18 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.EquifaxResult;
 
 public class CrmEntityMapper {
 
     public static void init() {
+        // DTO mappings:
+        AppPlaceEntityMapper.register(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class, CrmImages.INSTANCE.arrowGreyLeft());
+        AppPlaceEntityMapper.register(LeaseApplicationDTO.class, CrmSiteMap.Tenants.LeaseApplication.class, CrmImages.INSTANCE.arrowGreyLeft());
+
+        // DBO mappings:
         AppPlaceEntityMapper.register(AptUnit.class, CrmSiteMap.Properties.Unit.class, CrmImages.INSTANCE.unitsNormal());
         AppPlaceEntityMapper.register(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class, CrmImages.INSTANCE.unitsNormal());
         AppPlaceEntityMapper.register(Boiler.class, CrmSiteMap.Properties.Boiler.class, CrmImages.INSTANCE.arrowGreyLeft());
@@ -95,7 +101,6 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(EquifaxResult.class, CrmSiteMap.Tenants.EquifaxResult.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Guarantor.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Lease.class, CrmSiteMap.Tenants.Lease.class, CrmImages.INSTANCE.arrowGreyLeft());
-        AppPlaceEntityMapper.register(LeaseApplication.class, CrmSiteMap.Tenants.LeaseApplication.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(Locker.class, CrmSiteMap.Properties.Locker.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, CrmImages.INSTANCE.arrowGreyLeft());
         AppPlaceEntityMapper.register(PaymentRecord.class, CrmSiteMap.Tenants.Payment.class, CrmImages.INSTANCE.arrowGreyLeft());
