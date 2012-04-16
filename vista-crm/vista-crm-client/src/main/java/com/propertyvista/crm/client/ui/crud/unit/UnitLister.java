@@ -13,13 +13,21 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
+import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.BuildingDTO;
 
 public class UnitLister extends ListerBase<AptUnitDTO> {
 
@@ -52,18 +60,30 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
 
     @Override
     protected void onItemNew() {
-        new BuildingSelectorDialog() {
-            @Override
-            public boolean onClickOk() {
-                if (!getSelectedItems().isEmpty()) {
-                    AptUnitDTO newUnit = EntityFactory.create(AptUnitDTO.class);
-                    newUnit.belongsTo().set(getSelectedItems().get(0));
-                    getPresenter().editNew(getItemOpenPlaceClass(), newUnit);
-                    return true;
-                } else {
-                    return false;
+        Key parentBuildingPk = getPresenter().getParent();
+        if (parentBuildingPk == null) {
+            new BuildingSelectorDialog() {
+                @Override
+                public boolean onClickOk() {
+                    if (!getSelectedItems().isEmpty()) {
+                        AptUnitDTO newUnit = EntityFactory.create(AptUnitDTO.class);
+                        newUnit.belongsTo().set(getSelectedItems().get(0));
+                        getPresenter().editNew(getItemOpenPlaceClass(), newUnit);
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
-            }
-        }.show();
+            }.show();
+        } else {
+            GWT.<BuildingCrudService> create(BuildingCrudService.class).retrieve(new DefaultAsyncCallback<BuildingDTO>() {
+                @Override
+                public void onSuccess(BuildingDTO result) {
+                    AptUnitDTO newUnit = EntityFactory.create(AptUnitDTO.class);
+                    newUnit.belongsTo().set(result.duplicate(Building.class));
+                    getPresenter().editNew(getItemOpenPlaceClass(), newUnit);
+                }
+            }, parentBuildingPk, RetrieveTraget.View);
+        }
     }
 }
