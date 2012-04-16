@@ -18,6 +18,8 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
@@ -90,7 +92,7 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
 
     private boolean isApplicantPresent() {
         for (Tenant til : getValue()) {
-            if (Role.Applicant == til.role().getValue()) {
+            if (til.role().getValue() == Role.Applicant) {
                 return true;
             }
         }
@@ -107,12 +109,11 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
 
     private class TenantInLeaseEditor extends CEntityDecoratableEditor<Tenant> {
 
-        private boolean applicant;
-
         public TenantInLeaseEditor() {
             super(Tenant.class);
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public IsWidget createContent() {
             FormFlexPanel main = new FormFlexPanel();
@@ -127,7 +128,7 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role(), new CComboBox<Role>()), 15).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentage()), 5).build());
 
@@ -136,6 +137,15 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+
+            if (isEditable()) {
+                ((CComboBox<Role>) get(proto().role())).addValueChangeHandler(new ValueChangeHandler<Tenant.Role>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Role> event) {
+                        get(proto().relationship()).setVisible(event.getValue() != Role.Applicant);
+                    }
+                });
+            }
 
             main.getColumnFormatter().setWidth(0, "60%");
             main.getColumnFormatter().setWidth(1, "40%");
@@ -147,13 +157,15 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
         protected void onPopulate() {
             super.onPopulate();
 
-            applicant = (getValue().role().getValue() == Role.Applicant);
+            boolean applicant = (getValue().role().getValue() == Role.Applicant);
             if (applicant) {
                 get(proto().role()).setViewable(true);
                 get(proto().relationship()).setVisible(false);
-            } else if (get(proto().role()) instanceof CComboBox) {
+            } else if (isEditable()) {
                 Collection<Tenant.Role> roles = EnumSet.allOf(Tenant.Role.class);
-                roles.remove(Tenant.Role.Applicant);
+                if (getValue().role().getValue() != null) { // if not new entity creation...
+                    roles.remove(Tenant.Role.Applicant);
+                }
                 ((CComboBox<Role>) get(proto().role())).setOptions(roles);
             }
 
@@ -177,4 +189,5 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
         }
         return tenants;
     }
+
 }
