@@ -18,13 +18,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
-import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
-import com.propertyvista.domain.financial.billing.InvoiceDeposit;
-import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
-import com.propertyvista.domain.financial.billing.InvoicePayment;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
-import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
@@ -42,19 +37,19 @@ public interface BillDTO extends Bill {
 
 //    IList<InvoiceProductCredit> productCreditLineItems();
 
-    IList<InvoiceDeposit> depositLineItems();
+    IList<InvoiceLineItem> depositLineItems();
 
     // Last Bill charges and payments
-    IList<InvoiceDepositRefund> depositRefundLineItems();
+    IList<InvoiceLineItem> depositRefundLineItems();
 
-    IList<InvoiceAccountCredit> accountCreditLineItems();
+    IList<InvoiceLineItem> accountCreditLineItems();
 
-    IList<InvoiceAccountCharge> accountChargeLineItems();
+    IList<InvoiceLineItem> accountChargeLineItems();
 
-    IList<InvoiceWithdrawal> withdrawalLineItems();
+    IList<InvoiceLineItem> withdrawalLineItems();
 
-    IList<InvoicePayment> rejectedPaymentLineItems();
+    IList<InvoiceLineItem> rejectedPaymentLineItems();
 
-    IList<InvoicePayment> paymentLineItems();
+    IList<InvoiceLineItem> paymentLineItems();
 
 }
