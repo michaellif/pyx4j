@@ -27,6 +27,7 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
+import com.propertyvista.biz.communication.mail.MessageTemplates;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
@@ -36,7 +37,6 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.TenantUserCredential;

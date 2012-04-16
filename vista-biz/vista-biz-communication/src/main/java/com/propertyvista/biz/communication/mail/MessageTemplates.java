@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.mail;
+package com.propertyvista.biz.communication.mail;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -32,6 +33,12 @@ import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
+import com.propertyvista.biz.communication.mail.template.EmailTemplateRootObjectLoader;
+import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestAdminT;
+import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -43,12 +50,6 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.common.mail.templates.EmailTemplateManager;
-import com.propertyvista.server.common.mail.templates.EmailTemplateRootObjectLoader;
-import com.propertyvista.server.common.mail.templates.model.EmailTemplateContext;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestAdminT;
-import com.propertyvista.server.common.policy.PolicyManager;
-import com.propertyvista.server.common.util.VistaDeployment;
 
 public class MessageTemplates {
 
@@ -69,7 +70,7 @@ public class MessageTemplates {
      */
 
     public static EmailTemplate getEmailTemplate(EmailTemplateType type, PolicyNode policyNode) {
-        EmailTemplatesPolicy policy = PolicyManager.obtainEffectivePolicy(policyNode, EmailTemplatesPolicy.class).duplicate();
+        EmailTemplatesPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, EmailTemplatesPolicy.class).duplicate();
         return fetchEmailTemplate(type, policy);
     }
 

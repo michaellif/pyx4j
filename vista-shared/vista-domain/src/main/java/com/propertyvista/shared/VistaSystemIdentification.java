@@ -7,24 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 2, 2012
- * @author stanp
+ * Created on 2012-03-30
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.mail.templates.model;
+package com.propertyvista.shared;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
+public enum VistaSystemIdentification {
 
-@Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface LeaseT extends IEntity {
+    development,
 
-    IPrimitive<String> ApplicantName();
+    staging,
 
-    IPrimitive<String> StartDate();
+    production
 
-    IPrimitive<String> StartDateWeekDay();
 }

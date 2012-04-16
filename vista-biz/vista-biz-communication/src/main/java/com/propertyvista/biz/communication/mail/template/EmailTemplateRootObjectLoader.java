@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.server.common.mail.templates;
+package com.propertyvista.biz.communication.mail.template;
 
 import java.text.SimpleDateFormat;
 
@@ -22,6 +22,16 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
+import com.propertyvista.biz.communication.mail.template.model.BuildingT;
+import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
+import com.propertyvista.biz.communication.mail.template.model.LeaseT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
+import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
+import com.propertyvista.biz.communication.mail.template.model.TenantT;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -33,16 +43,6 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.server.common.mail.templates.model.ApplicationT;
-import com.propertyvista.server.common.mail.templates.model.BuildingT;
-import com.propertyvista.server.common.mail.templates.model.EmailTemplateContext;
-import com.propertyvista.server.common.mail.templates.model.LeaseT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestProspectT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestTenantT;
-import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
-import com.propertyvista.server.common.mail.templates.model.TenantT;
-import com.propertyvista.server.common.util.VistaDeployment;
 
 public class EmailTemplateRootObjectLoader {
 

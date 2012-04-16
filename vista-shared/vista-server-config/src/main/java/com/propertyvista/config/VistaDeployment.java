@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.util;
+package com.propertyvista.config;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
@@ -20,12 +20,11 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.PmcDnsName;
 import com.propertyvista.domain.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.portal.rpc.VistaSystemIdentification;
 import com.propertyvista.server.domain.admin.Pmc;
+import com.propertyvista.shared.VistaSystemIdentification;
 
 public class VistaDeployment {
 

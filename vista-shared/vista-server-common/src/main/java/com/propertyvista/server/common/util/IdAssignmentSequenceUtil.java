@@ -15,16 +15,17 @@ package com.propertyvista.server.common.util;
 
 import java.security.InvalidParameterException;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
-import com.propertyvista.server.common.policy.PolicyManager;
 import com.propertyvista.server.domain.IdAssignmentSequence;
 
 public class IdAssignmentSequenceUtil {
@@ -33,7 +34,8 @@ public class IdAssignmentSequenceUtil {
             'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
     public static boolean needsGeneratedId(IdAssignmentItem.IdTarget target) {
-        IdAssignmentPolicy policy = PolicyManager.obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class), IdAssignmentPolicy.class);
+        IdAssignmentPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
+                IdAssignmentPolicy.class);
 
         if (policy == null) {
             throw new InvalidParameterException("Node OrganizationPoliciesNode has no : " + IdAssignmentPolicy.TO_STRING_ATTR + " assigned");
@@ -56,7 +58,8 @@ public class IdAssignmentSequenceUtil {
     }
 
     public static String getId(IdAssignmentItem.IdTarget target) {
-        IdAssignmentPolicy policy = PolicyManager.obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class), IdAssignmentPolicy.class);
+        IdAssignmentPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
+                IdAssignmentPolicy.class);
 
         if (policy == null) {
             throw new InvalidParameterException("Node OrganizationPoliciesNode has no : " + IdAssignmentPolicy.TO_STRING_ATTR + " assigned");

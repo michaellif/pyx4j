@@ -17,11 +17,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.policies.emailtemplates.EmailTemplateTypeDTO;
 import com.propertyvista.domain.policy.policies.emailtemplates.EmailTemplateTypesDTO;
-import com.propertyvista.server.common.mail.templates.EmailTemplateManager;
 
 public class EmailTemplateManagerServiceImpl implements EmailTemplateManagerService {
 

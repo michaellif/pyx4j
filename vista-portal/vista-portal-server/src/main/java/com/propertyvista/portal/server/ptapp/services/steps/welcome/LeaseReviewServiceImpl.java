@@ -20,8 +20,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Concession.Term;
@@ -42,7 +44,6 @@ import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcome.LeaseReviewService;
 import com.propertyvista.portal.rpc.ptapp.welcomewizard.LeaseReviewDTO;
 import com.propertyvista.portal.server.ptapp.services.util.LegalStuffUtils;
-import com.propertyvista.server.common.policy.PolicyManager;
 
 public class LeaseReviewServiceImpl implements LeaseReviewService {
 
@@ -97,7 +98,8 @@ public class LeaseReviewServiceImpl implements LeaseReviewService {
 
         IAgree agreeHolder = EntityFactory.create(IAgree.class);
         agreeHolder.person().set(tenant.customer().person());
-        LeaseTermsPolicy leaseTermsPolicy = PolicyManager.obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class), LeaseTermsPolicy.class);
+        LeaseTermsPolicy leaseTermsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                EntityFactory.create(OrganizationPoliciesNode.class), LeaseTermsPolicy.class);
         for (LegalTermsDescriptor legalTerms : leaseTermsPolicy.tenantSummaryTerms()) {
             LegalTermsDescriptorDTO legalTermsDTO = LegalStuffUtils.formLegalTerms(legalTerms);
             legalTermsDTO.agrees().add(agreeHolder.duplicate(IAgree.class));

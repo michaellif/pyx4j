@@ -27,6 +27,16 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.biz.communication.mail.MessageTemplates;
+import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
+import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
+import com.propertyvista.biz.communication.mail.template.model.BuildingT;
+import com.propertyvista.biz.communication.mail.template.model.LeaseT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
+import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
@@ -52,15 +62,6 @@ import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.server.common.mail.MessageTemplates;
-import com.propertyvista.server.common.mail.templates.model.ApplicationT;
-import com.propertyvista.server.common.mail.templates.model.BuildingT;
-import com.propertyvista.server.common.mail.templates.model.LeaseT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestProspectT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestTenantT;
-import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
-import com.propertyvista.server.common.util.VistaDeployment;
 
 public class EmailTemplateManagerTest extends VistaDBTestBase {
 

@@ -50,6 +50,12 @@
         
         <dependency>
             <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-policy</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.propertyvista</groupId>
             <artifactId>vista-domain-srv</artifactId>
             <version>${project.version}</version>
         </dependency>

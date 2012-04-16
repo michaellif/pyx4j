@@ -7,31 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-03-28
- * @author vlads
+ * Created on Feb 2, 2012
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.server.common.mail.templates.model;
+package com.propertyvista.biz.communication.mail.template.model;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface EmailTemplateRoot extends IEntity {
+public interface PasswordRequestAdminT extends IEntity {
 
-    PortalLinksT portalLinks();
+    IPrimitive<String> RequestorName();
 
-    PasswordRequestT passwordRequest();
-
-    PasswordRequestCrmT passwordRequestCrm();
-
-    TenantT tenant();
-
-    BuildingT building();
-
-    ApplicationT lpplication();
-
-    LeaseT lease();
+    IPrimitive<String> PasswordResetUrl();
 }

@@ -7,18 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-03-30
+ * Created on 2012-04-04
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc;
+package com.propertyvista.biz.policy;
 
-public enum VistaSystemIdentification {
+import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 
-    development,
+public interface PolicyFacade {
 
-    staging,
-
-    production
+    <POLICY extends Policy> POLICY obtainEffectivePolicy(PolicyNode node, final Class<POLICY> policyClass);
 
 }

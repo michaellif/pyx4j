@@ -11,12 +11,18 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.server.common.mail.templates.model;
+package com.propertyvista.biz.communication.mail.template.model;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PasswordRequestTenantT extends PasswordRequestT {
+public interface PasswordRequestT extends IEntity {
+
+    IPrimitive<String> RequestorName();
+
+    IPrimitive<String> PasswordResetUrl();
 }

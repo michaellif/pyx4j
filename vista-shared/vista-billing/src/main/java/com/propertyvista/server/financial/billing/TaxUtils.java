@@ -19,11 +19,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.tax.Tax;
@@ -31,7 +33,6 @@ import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.server.common.policy.PolicyManager;
 
 public class TaxUtils {
 
@@ -75,7 +76,7 @@ public class TaxUtils {
 
     private static List<Tax> retrieveTaxesForProductItemType(ProductItemType productItemType, Building building) {
 
-        ProductTaxPolicy productTaxPolicy = PolicyManager.obtainEffectivePolicy(building, ProductTaxPolicy.class);
+        ProductTaxPolicy productTaxPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProductTaxPolicy.class);
 
         ProductTaxPolicyItem productTaxPolicyItem = null;
         {

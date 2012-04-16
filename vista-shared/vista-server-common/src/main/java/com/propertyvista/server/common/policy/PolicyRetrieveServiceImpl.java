@@ -15,6 +15,9 @@ package com.propertyvista.server.common.policy;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
@@ -27,7 +30,7 @@ public abstract class PolicyRetrieveServiceImpl implements PolicyRetrieveService
         if (policyProto == null) {
             throw new Error("A policy prototype was not provided");
         }
-        callback.onSuccess(PolicyManager.obtainEffectivePolicy(node, (Class<Policy>) policyProto.getValueClass()));
+        callback.onSuccess(ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, (Class<Policy>) policyProto.getValueClass()));
     }
 
 }

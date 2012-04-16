@@ -19,8 +19,8 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.portal.rpc.DeploymentConsts;
-import com.propertyvista.server.common.util.VistaDeployment;
 
 public class VistaServerSideConfigurationProd extends VistaServerSideConfiguration {
 

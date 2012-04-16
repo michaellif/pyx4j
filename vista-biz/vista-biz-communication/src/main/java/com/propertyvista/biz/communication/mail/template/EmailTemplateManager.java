@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.mail.templates;
+package com.propertyvista.biz.communication.mail.template;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,14 +34,14 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
+import com.propertyvista.biz.communication.mail.template.model.BuildingT;
+import com.propertyvista.biz.communication.mail.template.model.LeaseT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
+import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.server.common.mail.templates.model.ApplicationT;
-import com.propertyvista.server.common.mail.templates.model.BuildingT;
-import com.propertyvista.server.common.mail.templates.model.LeaseT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestProspectT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestTenantT;
-import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
 
 public class EmailTemplateManager {
 

@@ -57,6 +57,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.security.rpc.AuthenticationService;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
@@ -71,7 +72,6 @@ import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.SignInPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
-import com.propertyvista.server.common.util.VistaDeployment;
 
 public class PMSiteApplication extends AuthenticatedWebApplication {
 

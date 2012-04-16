@@ -7,16 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 2, 2012
- * @author stanp
+ * Created on 2012-04-04
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.mail.templates.model;
+package com.propertyvista.biz.policy;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.i18n.annotations.I18n;
+import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 
-@Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PasswordRequestProspectT extends PasswordRequestT {
+public class PolicyFacadeImpl implements PolicyFacade {
+
+    @Override
+    public <POLICY extends Policy> POLICY obtainEffectivePolicy(PolicyNode node, final Class<POLICY> policyClass) {
+        return PolicyManager.obtainEffectivePolicy(node, policyClass);
+    }
+
 }

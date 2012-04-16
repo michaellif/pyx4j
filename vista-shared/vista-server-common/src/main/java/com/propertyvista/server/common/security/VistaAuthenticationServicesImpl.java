@@ -53,10 +53,10 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
+import com.propertyvista.biz.communication.mail.MessageTemplates;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.server.common.mail.MessageTemplates;
-import com.propertyvista.server.common.util.VistaDeployment;
 import com.propertyvista.server.domain.security.AbstractUserCredential;
 
 public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U>> extends

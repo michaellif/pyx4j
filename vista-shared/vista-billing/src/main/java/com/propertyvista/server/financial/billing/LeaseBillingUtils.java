@@ -15,14 +15,16 @@ package com.propertyvista.server.financial.billing;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.server.common.policy.PolicyManager;
 
 public class LeaseBillingUtils {
 
     public static BigDecimal calculateLatePaymentFee(BigDecimal amount, BigDecimal monthlyRent, Building building) {
-        LeaseBillingPolicy leaseBillingPolicy = PolicyManager.obtainEffectivePolicy(building, LeaseBillingPolicy.class);
+        LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, LeaseBillingPolicy.class);
 
         return calculateLatePaymentFee(leaseBillingPolicy, amount, monthlyRent);
     }

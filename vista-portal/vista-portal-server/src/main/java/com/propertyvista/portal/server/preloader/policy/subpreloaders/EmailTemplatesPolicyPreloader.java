@@ -23,18 +23,18 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
+import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
+import com.propertyvista.biz.communication.mail.template.model.BuildingT;
+import com.propertyvista.biz.communication.mail.template.model.LeaseT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
+import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
+import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
-import com.propertyvista.server.common.mail.templates.EmailTemplateManager;
-import com.propertyvista.server.common.mail.templates.model.ApplicationT;
-import com.propertyvista.server.common.mail.templates.model.BuildingT;
-import com.propertyvista.server.common.mail.templates.model.LeaseT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestCrmT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestProspectT;
-import com.propertyvista.server.common.mail.templates.model.PasswordRequestTenantT;
-import com.propertyvista.server.common.mail.templates.model.PortalLinksT;
 
 public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<EmailTemplatesPolicy> {
 

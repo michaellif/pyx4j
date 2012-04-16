@@ -11,12 +11,12 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.mail.templates.converter;
+package com.propertyvista.biz.communication.mail.template.converter;
 
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
+import com.propertyvista.biz.communication.mail.template.model.BuildingT;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.server.common.mail.templates.model.BuildingT;
 
 public class BuildingTConvertor extends EntityDtoBinder<Building, BuildingT> {
 

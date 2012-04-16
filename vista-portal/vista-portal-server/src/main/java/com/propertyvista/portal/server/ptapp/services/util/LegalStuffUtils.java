@@ -15,20 +15,22 @@ package com.propertyvista.portal.server.ptapp.services.util;
 
 import java.util.Locale;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.server.I18nManager;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.server.common.policy.PolicyManager;
 
 public class LegalStuffUtils {
 
     public static LeaseTermsPolicy retrieveLegalTermsPolicy() {
-        LeaseTermsPolicy termsPolicy = (LeaseTermsPolicy) PolicyManager.obtainEffectivePolicy(PtAppContext.getCurrentUserLease().unit(), LeaseTermsPolicy.class);
+        LeaseTermsPolicy termsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(PtAppContext.getCurrentUserLease().unit(),
+                LeaseTermsPolicy.class);
         if (termsPolicy == null) {
             throw new Error("There is no Legal Policy!?.");
         }

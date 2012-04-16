@@ -19,7 +19,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
-import com.propertyvista.server.common.util.VistaDeployment;
+import com.propertyvista.config.VistaDeployment;
 
 public class GwtInclude extends Panel {
 

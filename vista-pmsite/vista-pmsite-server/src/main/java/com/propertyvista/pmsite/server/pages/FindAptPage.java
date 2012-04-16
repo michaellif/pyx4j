@@ -21,11 +21,11 @@ import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaPanel;
-import com.propertyvista.server.common.util.VistaDeployment;
 
 public class FindAptPage extends BasePage {
 

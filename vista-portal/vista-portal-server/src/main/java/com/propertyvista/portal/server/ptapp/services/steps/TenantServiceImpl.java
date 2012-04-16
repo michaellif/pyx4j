@@ -22,11 +22,13 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.security.shared.SecurityViolationException;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -40,7 +42,6 @@ import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceIm
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.portal.server.ptapp.util.ChargesServerCalculation;
-import com.propertyvista.server.common.policy.PolicyManager;
 import com.propertyvista.server.common.util.TenantConverter;
 
 public class TenantServiceImpl extends ApplicationEntityServiceImpl implements TenantService {
@@ -78,8 +79,8 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
                 existingTenants.remove(idx);
                 Persistence.service().retrieve(tenantInLease);
                 if (!EntityGraph.memebersEquals(tenantInApplication.customer().person().name(), tenantInLease.customer().person().name(), tenantInApplication
-                        .customer().person().name().firstName(), tenantInApplication.customer().person().name().middleName(), tenantInApplication.customer().person()
-                        .name().lastName())) {
+                        .customer().person().name().firstName(), tenantInApplication.customer().person().name().middleName(), tenantInApplication.customer()
+                        .person().name().lastName())) {
                     tenantInApplication.changeStatus().setValue(TenantInLeaseDTO.ChangeStatus.Updated);
                 }
             }
@@ -136,7 +137,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             tenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }
 
-        MiscPolicy miscPolicy = PolicyManager.obtainEffectivePolicy(lease.unit(), MiscPolicy.class);
+        MiscPolicy miscPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), MiscPolicy.class);
         if (miscPolicy == null) {
             throw new Error("There is no MiscPolicy for the Unit!?.");
         }
