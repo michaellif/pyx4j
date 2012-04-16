@@ -7,18 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 8, 2012
+ * Created on Apr 16, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.server.financial.billing.print;
+package com.propertyvista.server.financial.billing;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.BillDTO;
 
-public interface BillData extends IEntity {
+public class BillConverter extends EntityDtoBinder<Bill, BillDTO> {
 
-    BillDTO bill();
+    public BillConverter() {
+        super(Bill.class, BillDTO.class);
+    }
 
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 }

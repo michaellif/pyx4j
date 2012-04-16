@@ -24,6 +24,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.server.financial.billing.BillingUtils;
 import com.propertyvista.server.financial.billing.print.BillPrint;
 
 public class BillPrintDeferredProcess implements IDeferredProcess {
@@ -47,7 +48,7 @@ public class BillPrintDeferredProcess implements IDeferredProcess {
         if (!compleate) {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             try {
-                BillPrint.printBill(bill, bos);
+                BillPrint.printBill(BillingUtils.createBillDto(bill), bos);
                 Downloadable billPrint = new Downloadable(bos.toByteArray(), Downloadable.getContentType(DownloadFormat.PDF));
                 String fileName = "Bill.pdf";
                 if (!canceled) {

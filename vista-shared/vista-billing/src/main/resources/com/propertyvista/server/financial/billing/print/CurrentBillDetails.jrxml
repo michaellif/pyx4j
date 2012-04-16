@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bill1" pageWidth="400" pageHeight="842" columnWidth="380" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="0" scriptletClass="com.propertyvista.server.financial.billing.print.BillPrintScriptlet">
 	<property name="ireport.zoom" value="1.7715610000000057"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="336"/>
+	<property name="ireport.y" value="0"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
 	<field name="pastDueAmount" class="java.math.BigDecimal"/>
 	<field name="totalDueAmount" class="java.math.BigDecimal"/>
@@ -20,10 +20,7 @@
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="lineItems" class="com.pyx4j.entity.shared.IList"/>
-	<variable name="serviceCharges" class="java.util.List">
-		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getServiceCharges($F{lineItems})]]></variableExpression>
-		<initialValueExpression><![CDATA[]]></initialValueExpression>
-	</variable>
+	<field name="serviceChargeLineItems" class="com.pyx4j.entity.shared.IList"/>
 	<variable name="featureOneTimeCharges" class="java.util.List">
 		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getFeatureOneTimeCharges($F{lineItems})]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
@@ -75,7 +72,7 @@
 		<band height="23">
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{serviceCharges})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{serviceChargeLineItems})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.financial.billing.print.ProductCharge")]]></subreportExpression>
 			</subreport>
 		</band>

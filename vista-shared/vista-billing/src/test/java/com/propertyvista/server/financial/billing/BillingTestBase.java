@@ -131,7 +131,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
         if (printBill) {
             try {
-                BillPrint.printBill(bill, new FileOutputStream(billFileName(bill)));
+                BillPrint.printBill(BillingUtils.createBillDto(bill), new FileOutputStream(billFileName(bill)));
                 DataDump.dump("bill", bill);
                 DataDump.dump("lease", lease);
             } catch (FileNotFoundException e) {

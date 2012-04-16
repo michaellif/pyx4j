@@ -30,6 +30,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.dto.BillDTO;
 
 public class BillPrint {
 
@@ -45,7 +46,7 @@ public class BillPrint {
         return new JasperReportModel(BillPrint.class.getPackage().getName() + ".Bill", Arrays.asList(new BillData[] { billData }), parameters);
     }
 
-    public static void printBill(Bill bill, OutputStream pdf) {
+    public static void printBill(BillDTO bill, OutputStream pdf) {
 
         Persistence.service().retrieve(bill.lineItems());
         for (InvoiceLineItem lineItem : bill.lineItems()) {

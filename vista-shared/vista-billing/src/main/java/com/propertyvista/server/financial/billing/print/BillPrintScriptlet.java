@@ -54,17 +54,6 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         return "";
     }
 
-    public List<InvoiceProductCharge> getServiceCharges(IList<InvoiceLineItem> lineItems) {
-        List<InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, InvoiceProductCharge.class);
-        List<InvoiceProductCharge> filteredCharges = new ArrayList<InvoiceProductCharge>();
-        for (InvoiceProductCharge charge : charges) {
-            if (InvoiceProductCharge.ProductType.service.equals(charge.productType().getValue())) {
-                filteredCharges.add(charge);
-            }
-        }
-        return filteredCharges;
-    }
-
     public List<InvoiceProductCharge> getFeatureRecurringCharges(IList<InvoiceLineItem> lineItems) {
         List<InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, InvoiceProductCharge.class);
         List<InvoiceProductCharge> filteredCharges = new ArrayList<InvoiceProductCharge>();

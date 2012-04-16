@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
@@ -73,47 +75,59 @@ public class BillingUtils {
         return items;
     }
 
-    public static void populateDto(Bill bill, BillDTO dto) {
+    public static BillDTO createBillDto(Bill bill) {
+        Persistence.service().retrieve(bill.lineItems());
+        Persistence.service().retrieve(bill.billingAccount());
+        BillDTO billDTO = new BillConverter().createDTO(bill);
+
+        enhanceBillDto(bill, billDTO);
+        return billDTO;
+    }
+
+    public static void enhanceBillDto(Bill bill, BillDTO dto) {
         for (InvoiceLineItem lineItem : bill.lineItems()) {
             // *** Current Bill list values ***
             // charges
             if (lineItem instanceof InvoiceProductCharge) {
                 InvoiceProductCharge charge = (InvoiceProductCharge) lineItem;
                 ProductType prodType = charge.productType().getValue();
-                if (ProductType.recurringFeature.equals(prodType)) {
+                if (ProductType.service.equals(prodType)) {
                     // Additional recurring charges
-                    dto.recurringProductCharges().add(charge);
+                    dto.serviceChargeLineItems().add(charge);
+                } else if (ProductType.recurringFeature.equals(prodType)) {
+                    // Additional recurring charges
+                    dto.recurringFeatureChargeLineItems().add(charge);
                 } else if (ProductType.oneTimeFeature.equals(prodType)) {
                     // One-time charges
-                    dto.onetimeProductCharges().add(charge);
+                    dto.onetimeFeatureChargeLineItems().add(charge);
                 }
                 //} else if (lineItem instanceof InvoiceProductCredit) {
                 // Credit(s)
             } else if (lineItem instanceof InvoiceDeposit) {
                 // Deposit(s)
-                dto.deposits().add((InvoiceDeposit) lineItem);
+                dto.depositLineItems().add((InvoiceDeposit) lineItem);
             }
             // *** Last Bill list values
             else if (lineItem instanceof InvoiceDepositRefund) {
                 // Deposit refund(s)
-                dto.depositRefunds().add((InvoiceDepositRefund) lineItem);
+                dto.depositRefundLineItems().add((InvoiceDepositRefund) lineItem);
             } else if (lineItem instanceof InvoiceAccountCharge) {
                 // Immediate adjustment charges
-                dto.acntAdjustmentCharges().add((InvoiceAccountCharge) lineItem);
+                dto.accountChargeLineItems().add((InvoiceAccountCharge) lineItem);
             } else if (lineItem instanceof InvoiceAccountCredit) {
                 // Immediate adjustment credits
-                dto.acntAdjustmentCredits().add((InvoiceAccountCredit) lineItem);
+                dto.accountCreditLineItems().add((InvoiceAccountCredit) lineItem);
             } else if (lineItem instanceof InvoiceWithdrawal) {
                 // Withdrawals(s)
-                dto.withdrawals().add((InvoiceWithdrawal) lineItem);
+                dto.withdrawalLineItems().add((InvoiceWithdrawal) lineItem);
             } else if (lineItem instanceof InvoicePayment) {
                 PaymentStatus status = ((InvoicePayment) lineItem).paymentRecord().paymentStatus().getValue();
                 if (PaymentStatus.Rejected.equals(status)) {
                     // Rejected payment(s)
-                    dto.rejectedPayments().add((InvoicePayment) lineItem);
+                    dto.rejectedPaymentLineItems().add((InvoicePayment) lineItem);
                 } else {
                     // Payment(s)
-                    dto.payments().add((InvoicePayment) lineItem);
+                    dto.paymentLineItems().add((InvoicePayment) lineItem);
                 }
 
             }

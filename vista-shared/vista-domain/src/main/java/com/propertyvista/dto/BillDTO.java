@@ -33,26 +33,28 @@ public interface BillDTO extends Bill {
 
     Lease lease();
 
+    IList<InvoiceProductCharge> serviceChargeLineItems();
+
     // Current Bill charges
-    IList<InvoiceProductCharge> recurringProductCharges();
+    IList<InvoiceProductCharge> recurringFeatureChargeLineItems();
 
-    IList<InvoiceProductCharge> onetimeProductCharges();
+    IList<InvoiceProductCharge> onetimeFeatureChargeLineItems();
 
-//    IList<InvoiceProductCredit> productCredits();
+//    IList<InvoiceProductCredit> productCreditLineItems();
 
-    IList<InvoiceDeposit> deposits();
+    IList<InvoiceDeposit> depositLineItems();
 
     // Last Bill charges and payments
-    IList<InvoiceDepositRefund> depositRefunds();
+    IList<InvoiceDepositRefund> depositRefundLineItems();
 
-    IList<InvoiceAccountCredit> acntAdjustmentCredits();
+    IList<InvoiceAccountCredit> accountCreditLineItems();
 
-    IList<InvoiceAccountCharge> acntAdjustmentCharges();
+    IList<InvoiceAccountCharge> accountChargeLineItems();
 
-    IList<InvoiceWithdrawal> withdrawals();
+    IList<InvoiceWithdrawal> withdrawalLineItems();
 
-    IList<InvoicePayment> rejectedPayments();
+    IList<InvoicePayment> rejectedPaymentLineItems();
 
-    IList<InvoicePayment> payments();
+    IList<InvoicePayment> paymentLineItems();
 
 }
