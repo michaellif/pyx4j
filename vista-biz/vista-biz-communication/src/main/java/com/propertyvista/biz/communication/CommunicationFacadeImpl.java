@@ -20,25 +20,25 @@ import com.propertyvista.domain.tenant.Tenant;
 public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
-    public void sendPasswordRetrievalProspect(Customer customer) {
+    public void sendProspectPasswordRetrievalToken(Customer customer) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void sendApplicationCreatedApplicant(Tenant tenant) {
+    public void sendApplicantApplicationInvitation(Tenant tenant) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void sendApplicationCreatedCoApplicant(Tenant tenant) {
+    public void sendCoApplicantApplicationInvitation(Tenant tenant) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void sendApplicationCreatedGuarantor(Guarantor guarantor) {
+    public void sendGuarantorApplicationInvitation(Guarantor guarantor) {
         // TODO Auto-generated method stub
 
     }
@@ -56,7 +56,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendPasswordRetrievalTenant(Customer customer) {
+    public void sendTenantPasswordRetrievalToken(Customer customer) {
         // TODO Auto-generated method stub
 
     }

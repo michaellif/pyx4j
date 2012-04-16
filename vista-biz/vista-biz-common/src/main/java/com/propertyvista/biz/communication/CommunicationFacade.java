@@ -24,22 +24,22 @@ import com.propertyvista.domain.tenant.Tenant;
  */
 public interface CommunicationFacade {
 
-    void sendPasswordRetrievalProspect(Customer customer);
+    void sendProspectPasswordRetrievalToken(Customer customer);
 
-    void sendApplicationCreatedApplicant(Tenant tenant);
+    void sendTenantPasswordRetrievalToken(Customer customer);
 
-    void sendApplicationCreatedCoApplicant(Tenant tenant);
+    void sendApplicantApplicationInvitation(Tenant tenant);
 
-    void sendApplicationCreatedGuarantor(Guarantor guarantor);
+    void sendCoApplicantApplicationInvitation(Tenant tenant);
+
+    void sendGuarantorApplicationInvitation(Guarantor guarantor);
 
     void sendApplicationStatus(Tenant tenant);
 
     void sendTenantInvitation(Tenant tenant);
 
-    void sendPasswordRetrievalTenant(Customer customer);
-
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 
-    //void sendEmployyMessage(EmployeeMessageType employeeMessageType, Employee employee);
+    //void sendEmployeeMessage(EmployeeMessageType employeeMessageType, Employee employee);
 
 }

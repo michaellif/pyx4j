@@ -53,7 +53,7 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.biz.communication.mail.MessageTemplates;
+import com.propertyvista.biz.communication.MessageTemplates;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.communication.mail;
+package com.propertyvista.biz.communication;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class MessageTemplates {
 
     private final static Logger log = LoggerFactory.getLogger(MessageTemplates.class);
 
-    public static String getSender() {
+    private static String getSender() {
         return ServerSideConfiguration.instance().getApplicationEmailSender();
     }
 
@@ -69,7 +69,7 @@ public class MessageTemplates {
      * @return
      */
 
-    public static EmailTemplate getEmailTemplate(EmailTemplateType type, PolicyNode policyNode) {
+    private static EmailTemplate getEmailTemplate(EmailTemplateType type, PolicyNode policyNode) {
         EmailTemplatesPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, EmailTemplatesPolicy.class).duplicate();
         return fetchEmailTemplate(type, policy);
     }

@@ -34,7 +34,7 @@ import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.biz.communication.mail.MessageTemplates;
+import com.propertyvista.biz.communication.MessageTemplates;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
