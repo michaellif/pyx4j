@@ -39,7 +39,7 @@ public class AppPlaceEntityMapper {
     }
 
     public static CrudAppPlace resolvePlace(Class<? extends IEntity> type, Key id) {
-        AppPlaceData data = map.get(EntityFactory.getEntityMeta(type).getDBOClass());
+        AppPlaceData data = retrievePlaceData(type);
         if (data != null) {
             CrudAppPlace place = AppSite.getHistoryMapper().createPlace(data.placeClass);
             if (id != null) {
@@ -57,7 +57,7 @@ public class AppPlaceEntityMapper {
     }
 
     public static Class<? extends CrudAppPlace> resolvePlaceClass(Class<? extends IEntity> type) {
-        AppPlaceData data = map.get(EntityFactory.getEntityMeta(type).getDBOClass());
+        AppPlaceData data = retrievePlaceData(type);
         if (data != null) {
             return data.placeClass;
         } else {
@@ -66,7 +66,7 @@ public class AppPlaceEntityMapper {
     }
 
     public static ImageResource resolveImageResource(Class<? extends IEntity> type) {
-        AppPlaceData data = map.get(EntityFactory.getEntityMeta(type).getDBOClass());
+        AppPlaceData data = retrievePlaceData(type);
         if (data != null) {
             return data.image;
         } else {
@@ -75,7 +75,6 @@ public class AppPlaceEntityMapper {
     }
 
     static class AppPlaceData {
-
         Class<? extends CrudAppPlace> placeClass;
 
         ImageResource image;
@@ -86,4 +85,12 @@ public class AppPlaceEntityMapper {
         }
     }
 
+    // internals:
+    private static AppPlaceData retrievePlaceData(Class<? extends IEntity> type) {
+        AppPlaceData data = map.get(type);
+        if (data == null) {
+            data = map.get(EntityFactory.getEntityMeta(type).getDBOClass());
+        }
+        return data;
+    }
 }
