@@ -120,10 +120,5 @@ public class PtSiteMap implements SiteMap {
 
         }
 
-        @NavigationItem(navigLabel = "Completetion")
-        @PlaceProperties(caption = "Completetion")
-        public static class CompletetionMessage extends AppPlace {
-
-        }
     }
 }

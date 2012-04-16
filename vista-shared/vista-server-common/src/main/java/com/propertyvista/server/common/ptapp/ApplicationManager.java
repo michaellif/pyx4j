@@ -338,8 +338,7 @@ public class ApplicationManager {
             for (Class<? extends AppPlace> place : Arrays.<Class<? extends AppPlace>> asList(//@formatter:off
                         PtSiteMap.ApprovedTenantWizard.ReviewLease.class,
                         PtSiteMap.ApprovedTenantWizard.MoveInSchedule.class,
-                        PtSiteMap.ApprovedTenantWizard.Insurance.class,
-                        PtSiteMap.ApprovedTenantWizard.CompletetionMessage.class
+                        PtSiteMap.ApprovedTenantWizard.Insurance.class                        
                     )) {//@formatter:on
                 progress.add(createWizardStep(place, ApplicationWizardStep.Status.notVisited));
             }
