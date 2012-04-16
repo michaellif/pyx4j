@@ -142,6 +142,8 @@ public class LeaseManager {
         return lease;
     }
 
+    // This implementation already moved to LeaseFacade 
+    @Deprecated
     public Lease notice(Key leaseId, LogicalDate noticeDay, LogicalDate moveOutDay) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         if (lease == null) {
@@ -162,6 +164,8 @@ public class LeaseManager {
         return lease;
     }
 
+    // This implementation already moved to LeaseFacade 
+    @Deprecated
     public Lease cancelNotice(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         if (lease == null) {
@@ -181,6 +185,8 @@ public class LeaseManager {
         return lease;
     }
 
+    // This implementation already moved to LeaseFacade 
+    @Deprecated
     public Lease evict(Key leaseId, LogicalDate evictionDay, LogicalDate moveOutDay) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         if (lease == null) {
@@ -200,6 +206,8 @@ public class LeaseManager {
         return lease;
     }
 
+    // This implementation already moved to LeaseFacade 
+    @Deprecated
     public Lease cancelEvict(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         if (lease == null) {
@@ -219,6 +227,8 @@ public class LeaseManager {
         return lease;
     }
 
+    // This implementation already moved to LeaseFacade 
+    @Deprecated
     public Lease approveApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         lease.version().status().setValue(Status.Approved);
@@ -240,6 +250,8 @@ public class LeaseManager {
         return lease;
     }
 
+    // This implementation already moved to LeaseFacade 
+    @Deprecated
     public Lease declineApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         //lease.version().status().setValue(Status.Declined);
@@ -252,6 +264,8 @@ public class LeaseManager {
         return lease;
     }
 
+    // This implementation already moved to LeaseFacade 
+    @Deprecated
     public Lease cancelApplication(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         //lease.version().status().setValue(Status.ApplicationCancelled);
@@ -265,6 +279,8 @@ public class LeaseManager {
         return lease;
     }
 
+    // This implementation already moved to LeaseFacade 
+    @Deprecated
     private void updateApplicationReferencesToFinalVersionOfLase(Lease lease) {
         // update reference to first version of Lease in MasterApplication and Applications
         EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
@@ -280,6 +296,8 @@ public class LeaseManager {
         }
     }
 
+    // This implementation already moved to LeaseFacade 
+    @Deprecated
     public Lease activate(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         // set lease status to active ONLY if first (latest till now) bill is confirmed: 
@@ -306,6 +324,8 @@ public class LeaseManager {
         return lease;
     }
 
+    // This implementation already moved to LeaseFacade 
+    @Deprecated
     public Lease complete(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         lease.version().actualLeaseTo().setValue(timeContextProvider.getTimeContext());
@@ -316,6 +336,8 @@ public class LeaseManager {
         return lease;
     }
 
+    // This implementation already moved to LeaseFacade 
+    @Deprecated
     public Lease close(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         lease.version().status().setValue(Status.Closed);

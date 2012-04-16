@@ -19,18 +19,31 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.server.financial.billing.BillingFacade;
 import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
 public class LeaseFacadeImpl implements LeaseFacade {
+
+    private static final I18n i18n = I18n.get(LeaseFacadeImpl.class);
 
     @Override
     public void createLease(Lease lease) {
@@ -113,6 +126,21 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
+    private void updateApplicationReferencesToFinalVersionOfLase(Lease lease) {
+        // update reference to first version of Lease in MasterApplication and Applications
+        EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease.getPrimaryKey().asDraftKey()));
+        MasterOnlineApplication ma = Persistence.service().retrieve(criteria);
+        if (ma != null) {
+            ma.lease().set(lease);
+            Persistence.service().retrieve(ma.applications());
+            for (OnlineApplication app : ma.applications()) {
+                app.lease().set(lease);
+            }
+            Persistence.service().persist(ma);
+        }
+    }
+
     @Override
     public void createMasterOnlineApplication(Key leaseId) {
         // TODO Auto-generated method stub
@@ -121,25 +149,89 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public void approveApplication(Key leaseId) {
-        // TODO Auto-generated method stub
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
 
+        lease.version().status().setValue(Lease.Status.Approved);
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
+        lease.approvalDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+
+        // finalize approved leases while saving:
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.secureSave(lease);
+
+        updateApplicationReferencesToFinalVersionOfLase(lease);
+
+        ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
+
+        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
+
+        if (!VistaTODO.removedForProduction) {
+            ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+        }
     }
 
     @Override
     public void declineApplication(Key leaseId) {
-        // TODO Auto-generated method stub
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+        // TODO Review the status
+        lease.version().status().setValue(Lease.Status.Closed);
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.Declined);
+
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+
+        Persistence.secureSave(lease);
+
+        updateApplicationReferencesToFinalVersionOfLase(lease);
+
+        ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
 
     }
 
     @Override
     public void cancelApplication(Key leaseId) {
-        // TODO Auto-generated method stub
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+        // TODO Review the status
+        lease.version().status().setValue(Lease.Status.Closed);
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.Cancelled);
+
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+
+        Persistence.secureSave(lease);
+
+        updateApplicationReferencesToFinalVersionOfLase(lease);
+
+        ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
 
     }
 
+    // TODO review code here
     @Override
     public void activate(Key leaseId) {
-        // TODO Auto-generated method stub
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+        // set lease status to active ONLY if first (latest till now) bill is confirmed: 
+        if (VistaTODO.removedForProduction
+                || ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() == Bill.BillStatus.Confirmed) {
+
+            lease.version().status().setValue(Status.Active);
+
+            lease.saveAction().setValue(SaveAction.saveAsFinal);
+            Persistence.secureSave(lease);
+
+            ServerSideFactory.create(UnitTurnoverAnalysisFacade.class).propagateLeaseActivationToTurnoverReport(lease);
+
+            //TODO move to LeadFacad
+            // update Lead state (if present)
+            EntityQueryCriteria<Lead> criteria = new EntityQueryCriteria<Lead>(Lead.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseId));
+
+            Lead lead = Persistence.service().retrieve(criteria);
+            if (lead != null) {
+                lead.status().setValue(Lead.Status.rented);
+                Persistence.service().persist(lead);
+            }
+        } else {
+            throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
+        }
 
     }
 
@@ -185,14 +277,22 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public void complete(Key leaseId) {
-        // TODO Auto-generated method stub
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+        lease.version().actualLeaseTo().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        lease.version().status().setValue(Status.Completed);
+
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.secureSave(lease);
 
     }
 
     @Override
     public void close(Key leaseId) {
-        // TODO Auto-generated method stub
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+        lease.version().status().setValue(Status.Closed);
 
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.secureSave(lease);
     }
 
 }
