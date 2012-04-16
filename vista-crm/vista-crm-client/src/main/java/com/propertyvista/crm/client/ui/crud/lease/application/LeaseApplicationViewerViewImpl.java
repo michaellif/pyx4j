@@ -33,7 +33,6 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -88,7 +87,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                 ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
                     @Override
                     public void onSuccess(List<ApplicationUserDTO> result) {
-                        new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants To Send An Invitation To"), true, result,
+                        new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result,
                                 new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
                                     @Override
                                     public String format(ApplicationUserDTO enntity) {
@@ -121,30 +120,35 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
         checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new EntitySelectorListDialog<Tenant>(i18n.tr("Select Tenants To Check"), true, form.getValue().version().tenants(),
-                        new EntitySelectorListDialog.Formatter<Tenant>() {
+                ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
+                    @Override
+                    public void onSuccess(List<ApplicationUserDTO> result) {
+                        new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants/Guarantors To Check"), true, result,
+                                new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
+                                    @Override
+                                    public String format(ApplicationUserDTO enntity) {
+                                        return enntity.getStringView();
+                                    }
+                                }) {
+
                             @Override
-                            public String format(Tenant enntity) {
-                                return enntity.customer().person().name().getStringView();
+                            public boolean onClickOk() {
+                                // TODO make the credit check happen
+                                return true;
                             }
-                        }) {
 
-                    @Override
-                    public boolean onClickOk() {
-                        // TODO make the credit check happen
-                        return true;
-                    }
+                            @Override
+                            public String defineWidth() {
+                                return "350px";
+                            }
 
-                    @Override
-                    public String defineWidth() {
-                        return "350px";
+                            @Override
+                            public String defineHeight() {
+                                return "100px";
+                            }
+                        }.show();
                     }
-
-                    @Override
-                    public String defineHeight() {
-                        return "100px";
-                    }
-                }.show();
+                });
             }
         });
         addHeaderToolbarTwoItem(checkAction.asWidget());
@@ -169,30 +173,35 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
             moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    new EntitySelectorListDialog<Tenant>(i18n.tr("Select Tenants To Acquire Info"), true, form.getValue().version().tenants(),
-                            new EntitySelectorListDialog.Formatter<Tenant>() {
+                    ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
+                        @Override
+                        public void onSuccess(List<ApplicationUserDTO> result) {
+                            new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result,
+                                    new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
+                                        @Override
+                                        public String format(ApplicationUserDTO enntity) {
+                                            return enntity.getStringView();
+                                        }
+                                    }) {
+
                                 @Override
-                                public String format(Tenant enntity) {
-                                    return enntity.customer().person().name().getStringView();
+                                public boolean onClickOk() {
+                                    // TODO make the credit check happen
+                                    return true;
                                 }
-                            }) {
 
-                        @Override
-                        public boolean onClickOk() {
-                            // TODO make the credit check happen
-                            return true;
-                        }
+                                @Override
+                                public String defineWidth() {
+                                    return "350px";
+                                }
 
-                        @Override
-                        public String defineWidth() {
-                            return "350px";
+                                @Override
+                                public String defineHeight() {
+                                    return "100px";
+                                }
+                            }.show();
                         }
-
-                        @Override
-                        public String defineHeight() {
-                            return "100px";
-                        }
-                    }.show();
+                    });
                 }
             });
             addHeaderToolbarTwoItem(moreInfoAction.asWidget());
