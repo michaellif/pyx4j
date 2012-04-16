@@ -20,8 +20,12 @@
  */
 package com.pyx4j.server.mail;
 
+
 public interface IMailService {
 
     public MailDeliveryStatus send(MailMessage mailMessage);
 
+    public boolean isDisabled();
+
+    public void setDisabled(boolean disabled);
 }

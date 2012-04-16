@@ -55,6 +55,18 @@ class SMTPMailServiceImpl implements IMailService {
 
     private final static Logger log = LoggerFactory.getLogger(SMTPMailServiceImpl.class);
 
+    private static boolean disabled = false;
+
+    @Override
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    @Override
+    public void setDisabled(boolean disabled) {
+        SMTPMailServiceImpl.disabled = disabled;
+    }
+
     @Override
     public MailDeliveryStatus send(MailMessage mailMessage) {
 
