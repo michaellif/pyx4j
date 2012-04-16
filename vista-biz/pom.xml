@@ -22,6 +22,7 @@
         <module>vista-biz-tenant</module>
         <module>vista-biz-occupancy</module>
         <module>vista-biz-communication</module>
+        <module>vista-biz-policy</module>
     </modules>
 
 </project>
