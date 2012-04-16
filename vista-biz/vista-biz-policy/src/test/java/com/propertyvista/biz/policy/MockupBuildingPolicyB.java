@@ -11,11 +11,16 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.policy;
+package com.propertyvista.biz.policy;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IPrimitive;
 
-@DiscriminatorValue("FooB")
-public interface FooB extends AbstractFoo {
+import com.propertyvista.domain.policy.framework.Policy;
+
+@DiscriminatorValue("MockupBuildingPolicyB")
+public interface MockupBuildingPolicyB extends Policy {
+
+    IPrimitive<Integer> value();
 
 }

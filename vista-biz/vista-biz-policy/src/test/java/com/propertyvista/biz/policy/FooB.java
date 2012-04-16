@@ -11,13 +11,11 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.policy;
+package com.propertyvista.biz.policy;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IPrimitive;
 
-@DiscriminatorValue("FooA")
-public interface FooA extends AbstractFoo {
+@DiscriminatorValue("FooB")
+public interface FooB extends AbstractFoo {
 
-    IPrimitive<Integer> fooAVal();
 }
