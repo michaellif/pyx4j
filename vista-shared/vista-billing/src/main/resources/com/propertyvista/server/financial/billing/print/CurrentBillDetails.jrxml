@@ -21,18 +21,8 @@
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="lineItems" class="com.pyx4j.entity.shared.IList"/>
 	<field name="serviceChargeLineItems" class="com.pyx4j.entity.shared.IList"/>
-	<variable name="featureOneTimeCharges" class="java.util.List">
-		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getFeatureOneTimeCharges($F{lineItems})]]></variableExpression>
-		<initialValueExpression><![CDATA[]]></initialValueExpression>
-	</variable>
-	<variable name="featureRecurringCharges" class="java.util.List">
-		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getFeatureRecurringCharges($F{lineItems})]]></variableExpression>
-		<initialValueExpression><![CDATA[]]></initialValueExpression>
-	</variable>
-	<variable name="billPayments" class="java.util.List">
-		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getPayments($F{lineItems})]]></variableExpression>
-		<initialValueExpression><![CDATA[]]></initialValueExpression>
-	</variable>
+	<field name="recurringFeatureChargeLineItems" class="com.pyx4j.entity.shared.IList"/>
+	<field name="onetimeFeatureChargeLineItems" class="com.pyx4j.entity.shared.IList"/>
 	<variable name="leaseAdjustments" class="java.util.List">
 		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getPendingLeaseAdjustment($F{lineItems})]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
@@ -99,7 +89,7 @@
 			</line>
 		</band>
 		<band height="30">
-			<printWhenExpression><![CDATA[$V{featureRecurringCharges}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{recurringFeatureChargeLineItems}.size()>0]]></printWhenExpression>
 			<staticText>
 				<reportElement x="0" y="5" width="380" height="20"/>
 				<textElement verticalAlignment="Middle">
@@ -109,15 +99,15 @@
 			</staticText>
 		</band>
 		<band height="23">
-			<printWhenExpression><![CDATA[$V{featureRecurringCharges}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{recurringFeatureChargeLineItems}.size()>0]]></printWhenExpression>
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{featureRecurringCharges})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{recurringFeatureChargeLineItems})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.financial.billing.print.ProductCharge")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="33">
-			<printWhenExpression><![CDATA[$V{featureRecurringCharges}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{recurringFeatureChargeLineItems}.size()>0]]></printWhenExpression>
 			<textField>
 				<reportElement x="280" y="8" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -140,7 +130,7 @@
 			</line>
 		</band>
 		<band height="30">
-			<printWhenExpression><![CDATA[$V{featureOneTimeCharges}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{onetimeFeatureChargeLineItems}.size()>0]]></printWhenExpression>
 			<staticText>
 				<reportElement x="0" y="5" width="380" height="20"/>
 				<textElement verticalAlignment="Middle">
@@ -150,15 +140,15 @@
 			</staticText>
 		</band>
 		<band height="23">
-			<printWhenExpression><![CDATA[$V{featureOneTimeCharges}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{onetimeFeatureChargeLineItems}.size()>0]]></printWhenExpression>
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{featureOneTimeCharges})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{onetimeFeatureChargeLineItems})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.financial.billing.print.ProductCharge")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="33">
-			<printWhenExpression><![CDATA[$V{featureOneTimeCharges}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{onetimeFeatureChargeLineItems}.size()>0]]></printWhenExpression>
 			<textField>
 				<reportElement x="280" y="8" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -230,7 +220,7 @@
 		<band height="23">
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{billPayments})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{leaseAdjustments})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.financial.billing.print.LineItem")]]></subreportExpression>
 			</subreport>
 		</band>
@@ -268,7 +258,7 @@
 		<band height="23">
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{billPayments})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{leaseAdjustments})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.financial.billing.print.LineItem")]]></subreportExpression>
 			</subreport>
 		</band>
@@ -306,7 +296,7 @@
 		<band height="23">
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{billPayments})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($V{leaseAdjustments})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.server.financial.billing.print.LineItem")]]></subreportExpression>
 			</subreport>
 		</band>

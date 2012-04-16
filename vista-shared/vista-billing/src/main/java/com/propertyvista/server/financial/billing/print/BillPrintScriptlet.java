@@ -27,7 +27,6 @@ import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
-import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.server.financial.billing.BillingUtils;
 
@@ -52,28 +51,6 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
             }
         }
         return "";
-    }
-
-    public List<InvoiceProductCharge> getFeatureRecurringCharges(IList<InvoiceLineItem> lineItems) {
-        List<InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, InvoiceProductCharge.class);
-        List<InvoiceProductCharge> filteredCharges = new ArrayList<InvoiceProductCharge>();
-        for (InvoiceProductCharge charge : charges) {
-            if (InvoiceProductCharge.ProductType.recurringFeature.equals(charge.productType().getValue())) {
-                filteredCharges.add(charge);
-            }
-        }
-        return filteredCharges;
-    }
-
-    public List<InvoiceProductCharge> getFeatureOneTimeCharges(IList<InvoiceLineItem> lineItems) {
-        List<InvoiceProductCharge> charges = BillingUtils.getLineItemsForType(lineItems, InvoiceProductCharge.class);
-        List<InvoiceProductCharge> filteredCharges = new ArrayList<InvoiceProductCharge>();
-        for (InvoiceProductCharge charge : charges) {
-            if (InvoiceProductCharge.ProductType.oneTimeFeature.equals(charge.productType().getValue())) {
-                filteredCharges.add(charge);
-            }
-        }
-        return filteredCharges;
     }
 
     public List<InvoicePayment> getPayments(IList<InvoiceLineItem> lineItems) {
