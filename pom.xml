@@ -160,6 +160,7 @@
 
     <modules>
         <module>vista-biz</module>
+        <module>vista-dev</module>
         <module>vista-portal</module>
         <module>vista-shared</module>
         <module>vista-admin</module>
@@ -169,7 +170,6 @@
         <module>vista-pmsite</module>
         <module>vista-server</module>
         <module>vista-i18n-catalog</module>
-        <!--module>vista-tester</module-->
     </modules>
 
     <properties>
