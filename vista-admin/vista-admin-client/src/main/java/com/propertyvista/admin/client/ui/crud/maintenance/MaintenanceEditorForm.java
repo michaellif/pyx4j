@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
-import com.propertyvista.portal.rpc.VistaSystemIdentification;
+import com.propertyvista.shared.VistaSystemIdentification;
 
 public class MaintenanceEditorForm extends AdminEntityForm<SystemMaintenanceState> {
 
