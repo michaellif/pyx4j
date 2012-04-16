@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.mail.templates;
+package com.propertyvista.biz.communication;
 
 import java.io.File;
 import java.io.FileNotFoundException;

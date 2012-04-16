@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.server.common.mail.templates;
+package com.propertyvista.biz.communication;
 
 import java.text.SimpleDateFormat;
 
