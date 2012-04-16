@@ -21,8 +21,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
@@ -30,8 +28,6 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.PersonGuarantor;
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -86,7 +82,7 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
 
     @Override
     public void startOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        Lease lease = Persistence.secureRetrieveDraft(dboClass, entityId);
+        Lease lease = Persistence.service().retrieve(dboClass, entityId.asDraftKey());
         MasterOnlineApplication ma = ApplicationManager.createMasterApplication(lease);
         ApplicationManager.sendMasterApplicationEmail(ma);
         Persistence.service().commit();
@@ -95,7 +91,7 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
 
     @Override
     public void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId) {
-        Lease lease = Persistence.service().retrieve(dboClass, entityId);
+        Lease lease = Persistence.service().retrieve(dboClass, entityId.asDraftKey());
         if ((lease == null) || (lease.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }
@@ -103,39 +99,31 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
         Vector<ApplicationUserDTO> users = new Vector<ApplicationUserDTO>();
 
         Persistence.service().retrieve(lease.version().tenants());
-        for (Tenant tenantInLease : lease.version().tenants()) {
-            Persistence.service().retrieve(tenantInLease);
-            switch (tenantInLease.role().getValue()) {
+        for (Tenant tenant : lease.version().tenants()) {
+            Persistence.service().retrieve(tenant);
+            switch (tenant.role().getValue()) {
             case Applicant:
             case CoApplicant:
-                ApplicationUserDTO tenant = EntityFactory.create(ApplicationUserDTO.class);
+                ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
 
-                tenant.person().set(tenantInLease.customer().person());
-                tenant.user().set(tenantInLease.customer());
-                tenant.userType().setValue(tenantInLease.role().getValue() == Role.Applicant ? ApplicationUser.Applicant : ApplicationUser.CoApplicant);
+                user.person().set(tenant.customer().person());
+                user.user().set(tenant.customer());
+                user.userType().setValue(tenant.role().getValue() == Role.Applicant ? ApplicationUser.Applicant : ApplicationUser.CoApplicant);
 
-                users.add(tenant);
+                users.add(user);
             }
         }
 
         Persistence.service().retrieve(lease.version().guarantors());
-        for (Guarantor tenantInLease : lease.version().guarantors()) {
-            Persistence.service().retrieve(tenantInLease);
-            EntityQueryCriteria<PersonScreening> criteriaPS = EntityQueryCriteria.create(PersonScreening.class);
-            criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.customer()));
-            PersonScreening tenantScreenings = Persistence.service().retrieve(criteriaPS);
-            if (tenantScreenings != null) {
-                Persistence.service().retrieve(tenantScreenings.guarantors());
-                for (PersonGuarantor pg : tenantScreenings.guarantors()) {
-                    ApplicationUserDTO guarantor = EntityFactory.create(ApplicationUserDTO.class);
+        for (Guarantor guarantor : lease.version().guarantors()) {
+            Persistence.service().retrieve(guarantor);
+            ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
 
-                    guarantor.person().set(pg.guarantor().customer().person());
-                    guarantor.user().set(pg.guarantor());
-                    guarantor.userType().setValue(ApplicationUser.Guarantor);
+            user.person().set(guarantor.customer().person());
+            user.user().set(guarantor);
+            user.userType().setValue(ApplicationUser.Guarantor);
 
-                    users.add(guarantor);
-                }
-            }
+            users.add(user);
         }
 
         callback.onSuccess(users);
@@ -143,7 +131,7 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
 
     @Override
     public void inviteUsers(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users) {
-        Lease lease = Persistence.service().retrieve(dboClass, entityId);
+        Lease lease = Persistence.service().retrieve(dboClass, entityId.asDraftKey());
         if ((lease == null) || (lease.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }
