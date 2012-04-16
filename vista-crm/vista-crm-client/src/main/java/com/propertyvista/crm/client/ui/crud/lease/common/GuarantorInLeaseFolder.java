@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -32,6 +33,7 @@ import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.LeaseDTO;
 
 public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
@@ -99,7 +101,12 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
 
             int row = -1;
 
-            main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"))));
+            main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Tenant.class) {
+                @Override
+                public Key getLinkKey() {
+                    return GuarantorInLeaseEditor.this.getValue().getPrimaryKey();
+                }
+            }));
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 

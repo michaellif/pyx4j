@@ -14,27 +14,62 @@
 package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.client.ui.CEntityHyperlink;
+import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.person.Name;
 
 public class NameEditor extends CEntityDecoratableEditor<Name> {
 
-    private final CLabel viewComp = new CLabel();
+    private final CComponent<Name, ?> viewComp;
 
     private final String customViewLabel;
+
+    private final CrudAppPlace linkPlace;
 
     public NameEditor() {
         this(null);
     }
 
     public NameEditor(String customViewLabel) {
+        this(customViewLabel, null);
+    }
+
+    public NameEditor(String customViewLabel, Class<? extends IEntity> linkType) {
         super(Name.class);
         this.customViewLabel = customViewLabel;
+
+        linkPlace = (linkType != null ? AppPlaceEntityMapper.resolvePlace(linkType) : null);
+        if (linkPlace != null) {
+            viewComp = new CEntityHyperlink<Name>(new Command() {
+                @Override
+                public void execute() {
+                    if (getLinkKey() != null) {
+                        AppSite.getPlaceController().goTo(linkPlace.formViewerPlace(getLinkKey()));
+                    }
+                }
+            });
+        } else {
+            viewComp = new CEntityLabel<Name>();
+        }
+    }
+
+    /**
+     * overwrite to supply real entity key for hyperlink
+     */
+    public Key getLinkKey() {
+        return getValue().getPrimaryKey();
     }
 
     @Override
@@ -62,7 +97,7 @@ public class NameEditor extends CEntityDecoratableEditor<Name> {
         super.onPopulate();
 
         if (!isEditable()) {
-            viewComp.setValue(getValue().getStringView());
+            viewComp.setValue(getValue());
         }
     }
 }

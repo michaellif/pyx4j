@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -117,13 +118,18 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-
-            main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"))));
+            main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
+                @Override
+                public Key getLinkKey() {
+                    return TenantInLeaseEditor.this.getValue().getPrimaryKey();
+                }
+            }));
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 15).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentage()), 5).build());
 
             row = -1; // second column
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
