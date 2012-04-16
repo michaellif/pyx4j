@@ -42,9 +42,11 @@ public interface BillDTO extends Bill {
     // Last Bill charges and payments
     IList<InvoiceLineItem> depositRefundLineItems();
 
-    IList<InvoiceLineItem> accountCreditLineItems();
+    //Both Debit and Credit types of Lease Adjustments
+    IList<InvoiceLineItem> immediateAdjustmentLineItems();
 
-    IList<InvoiceLineItem> accountChargeLineItems();
+    //
+    IList<InvoiceLineItem> pendingAdjustmentLineItems();
 
     IList<InvoiceLineItem> withdrawalLineItems();
 

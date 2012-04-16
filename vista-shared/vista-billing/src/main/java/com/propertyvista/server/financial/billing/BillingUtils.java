@@ -113,10 +113,10 @@ public class BillingUtils {
                 dto.depositRefundLineItems().add((InvoiceDepositRefund) lineItem);
             } else if (lineItem instanceof InvoiceAccountCharge) {
                 // Immediate adjustment charges
-                dto.accountChargeLineItems().add((InvoiceAccountCharge) lineItem);
+                dto.pendingAdjustmentLineItems().add((InvoiceAccountCharge) lineItem);
             } else if (lineItem instanceof InvoiceAccountCredit) {
                 // Immediate adjustment credits
-                dto.accountCreditLineItems().add((InvoiceAccountCredit) lineItem);
+                dto.immediateAdjustmentLineItems().add((InvoiceAccountCredit) lineItem);
             } else if (lineItem instanceof InvoiceWithdrawal) {
                 // Withdrawals(s)
                 dto.withdrawalLineItems().add((InvoiceWithdrawal) lineItem);
