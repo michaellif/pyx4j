@@ -54,13 +54,9 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             } else {
                 add(new BuildingPreloader());
             }
-            // TODO move to if in pmcData
-            //if (false) {
-            add(new PtPreloader());
-            add(new PreloadTenants());
-            //} else {
-//            add(new LeasePreloader());
-            //}
+
+            add(new LeasePreloader());
+            add(new PreloadNewTenantsAndLeads());
         }
 
         //DEMO Different data for different PMC

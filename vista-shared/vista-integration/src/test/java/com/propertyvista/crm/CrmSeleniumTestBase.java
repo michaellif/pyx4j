@@ -13,16 +13,12 @@
  */
 package com.propertyvista.crm;
 
-import com.propertvista.generator.PTGenerator;
-
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.selenium.D;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.selenium.SeleniumTestBase;
 
-import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.unit.VistaDevLogin;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
@@ -43,8 +39,6 @@ public class CrmSeleniumTestBase extends SeleniumTestBase {
     }
 
     protected void login() {
-        PTGenerator generator = new PTGenerator(VistaDevPreloadConfig.createTest());
-        TenantUser user = generator.createUser(1);
         selenium.type(D.id(proto(AuthenticationRequest.class).email()), "pm001@pyx4j.com");
         selenium.type(D.id(proto(AuthenticationRequest.class).password()), "pm001@pyx4j.com");
         selenium.click(CrudDebugId.Criteria_Submit);

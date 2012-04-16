@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.preloader.util;
 
 import java.util.List;
+import java.util.Random;
 
 import com.propertvista.generator.util.RandomUtil;
 
@@ -42,7 +43,94 @@ import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.common.util.LeaseManager.TimeContextProvider;
 import com.propertyvista.server.financial.billing.BillingFacade;
 
+//TODO refactor this to use LeaseFacade 
 public class LeaseLifecycleSim {
+
+    private final static Random RND = new Random(1);
+
+    private static final long MIN_RESERVE_TIME = 0L;
+
+    private static final long MAX_RESERVE_TIME = 1000L * 60L * 60L * 24L * 60L; // 60 days
+
+    private static final long MIN_LEASE_TERM = 1000L * 60L * 60L * 24L * 365L; // approx 1 Year
+
+    private static final long MAX_LEASE_TERM = 1000L * 60L * 60L * 24L * 365L * 5L; // approx 5 Years
+
+    private static final long MIN_NOTICE_TERM = 1000L * 60L * 60L * 24L * 31L;
+
+    private static final long MAX_NOTICE_TERM = 1000L * 60L * 60L * 24L * 60L;
+
+    private static final long MIN_AVAILABLE = 0;
+
+    private static final long MAX_AVAILABLE = 1000L * 60L * 60L * 24L * 30L;
+
+    public void createLeaseLifeCycle(Lease lease) {
+        LogicalDate now = new LogicalDate();
+        LogicalDate simStart = new LogicalDate(Math.max(lease.unit()._availableForRent().getValue().getTime(), new LogicalDate(2008 - 1900, 1, 1).getTime()));
+        LogicalDate eventDate = add(simStart, random(MIN_AVAILABLE, MAX_AVAILABLE));
+        LogicalDate leaseFrom = add(eventDate, random(MIN_RESERVE_TIME, MAX_RESERVE_TIME));
+        LogicalDate expectedMoveIn = leaseFrom;
+        LogicalDate leaseTo = add(leaseFrom, random(MIN_LEASE_TERM, MAX_LEASE_TERM));
+
+        //lease = newLease(eventDate, RandomUtil.randomLetters(8), unit, leaseFrom, leaseTo, expectedMoveIn, PaymentFrequency.Monthly, tenant);
+        Persistence.service().merge(lease);
+
+        do {
+            if (eventDate.after(now)) {
+                break;
+            }
+
+            eventDate = new LogicalDate(random(eventDate.getTime(), lease.leaseFrom().getValue().getTime()));
+            if (eventDate.after(now)) {
+                break;
+            }
+            lease = approveApplication(lease.getPrimaryKey(), eventDate);
+
+            eventDate = lease.leaseFrom().getValue();
+            if (eventDate.after(now)) {
+                break;
+            }
+            lease = activate(lease.getPrimaryKey(), eventDate);
+
+            if (false) {
+                // Maintenance Requests
+//                for (MaintenanceRequest req : generator.createMntRequests(config().numMntRequests)) {
+//                    req.submitted().setValue(new LogicalDate(random(lease.leaseFrom().getValue().getTime(), lease.leaseTo().getValue().getTime())));
+//                    req.issueClassification().set(RandomUtil.random(issues));
+//                    req.tenant().set(tenant);
+//                    Persistence.service().persist(req);
+//                }
+            }
+
+            eventDate = new LogicalDate(Math.max(lease.leaseFrom().getValue().getTime(),
+                    lease.leaseTo().getValue().getTime() - random(MIN_NOTICE_TERM, MAX_NOTICE_TERM)));
+            if (eventDate.after(now)) {
+                break;
+            }
+            lease = notice(lease.getPrimaryKey(), eventDate, lease.leaseTo().getValue());
+
+            eventDate = lease.leaseTo().getValue();
+            if (eventDate.after(now)) {
+                break;
+            }
+            lease = complete(lease.getPrimaryKey(), lease.leaseTo().getValue());
+
+        } while (false);
+
+    }
+
+    private long random(long min, long max) {
+        assert min <= max;
+        if (max == min) {
+            return min;
+        } else {
+            return min + Math.abs(RND.nextLong()) % (max - min);
+        }
+    }
+
+    private LogicalDate add(LogicalDate date, long term) {
+        return new LogicalDate(date.getTime() + term);
+    }
 
     public Lease newLease(final LogicalDate eventDate, String leaseId, AptUnit unit, LogicalDate leaseFrom, LogicalDate leaseTo, LogicalDate expectedMoveIn,
             PaymentFrequency paymentFrequency, Customer tenant) {

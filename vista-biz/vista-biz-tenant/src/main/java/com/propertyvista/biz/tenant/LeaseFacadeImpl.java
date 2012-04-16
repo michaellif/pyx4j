@@ -165,7 +165,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
 
-        if (!VistaTODO.removedForProduction) {
+        if (false && !VistaTODO.removedForProduction) {
             ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         }
     }
