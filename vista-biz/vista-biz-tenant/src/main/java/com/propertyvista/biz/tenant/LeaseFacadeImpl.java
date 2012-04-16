@@ -18,6 +18,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.tenant.Guarantor;
@@ -36,6 +37,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         // Create Application by default
+        lease.leaseApplication().set(EntityFactory.create(LeaseApplication.class));
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Draft);
 
         saveCustomers(lease);
