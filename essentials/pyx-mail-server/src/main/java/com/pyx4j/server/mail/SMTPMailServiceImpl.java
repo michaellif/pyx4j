@@ -69,6 +69,9 @@ class SMTPMailServiceImpl implements IMailService {
 
     @Override
     public MailDeliveryStatus send(MailMessage mailMessage) {
+        if (disabled) {
+            return MailDeliveryStatus.Success;
+        }
 
         Properties mailProperties = new Properties();
 
