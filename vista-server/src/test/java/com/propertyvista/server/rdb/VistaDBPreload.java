@@ -20,6 +20,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
@@ -36,11 +37,12 @@ public class VistaDBPreload {
         NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
         try {
             Lifecycle.startElevatedUserContext();
+            Mail.getMailService().setDisabled(true);
             log.info(conf.getDataPreloaders().preloadAll());
         } finally {
+            Mail.getMailService().setDisabled(false);
             Lifecycle.endElevatedUserContext();
         }
         log.info("Total time: " + TimeUtils.secSince(start));
     }
-
 }

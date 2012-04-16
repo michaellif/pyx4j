@@ -52,6 +52,7 @@ import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -165,6 +166,7 @@ public class DBResetServlet extends HttpServlet {
                     } else {
                         Persistence.service().startBackgroundProcessTransaction();
                         Lifecycle.startElevatedUserContext();
+                        Mail.getMailService().setDisabled(true);
                         try {
                             if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
                                 SchedulerHelper.shutdown();
@@ -242,6 +244,7 @@ public class DBResetServlet extends HttpServlet {
                             log.error("", t);
                             throw new Error(t);
                         } finally {
+                            Mail.getMailService().setDisabled(false);
                             Lifecycle.endElevatedUserContext();
                             Persistence.service().endTransaction();
                         }

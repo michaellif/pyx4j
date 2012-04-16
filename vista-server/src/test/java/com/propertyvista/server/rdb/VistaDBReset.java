@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
@@ -74,9 +75,11 @@ public class VistaDBReset {
 
             try {
                 Lifecycle.startElevatedUserContext();
+                Mail.getMailService().setDisabled(true);
                 log.info(preloaders.preloadAll());
                 Persistence.service().commit();
             } finally {
+                Mail.getMailService().setDisabled(false);
                 Lifecycle.endElevatedUserContext();
             }
 
