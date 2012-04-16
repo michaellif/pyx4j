@@ -13,7 +13,8 @@
  */
 package com.propertyvista.server.common.breadcurmbs;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
@@ -23,33 +24,74 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 
+import com.propertyvista.domain.tenant.lease.Lease;
+
 public class BreadcrumbsHelper {
 
     public List<IEntity> breadcrumbTrail(IEntity targetEntity) {
-
-        final LinkedList<IEntity> trail = new LinkedList<IEntity>();
-
         IEntity startFromTarget = Persistence.service().retrieve(EntityFactory.resolveDBOClass(targetEntity), targetEntity.getPrimaryKey());
-
-        EntityGraph.applyToOwners(startFromTarget, new ApplyMethod() {
-
-            @Override
-            public boolean apply(IEntity owner) {
-                if (owner.getPrimaryKey() == null) {
-                    // Breaks on non existent owner 
-                    return false;
-                }
-                if (owner.isValueDetached()) {
-                    Persistence.service().retrieve(owner);
-                }
-                IEntity toStringOnlyEntity = owner.duplicate();
-                toStringOnlyEntity.setAttachLevel(AttachLevel.ToStringMembers);
-                trail.addFirst(toStringOnlyEntity);
-                return true;
-            }
-
-        });
+        List<IEntity> trail = getOwners(startFromTarget);
+        Collections.reverse(trail);
         return trail;
     }
 
+    private static class OwnersItterator implements ApplyMethod {
+
+        final List<IEntity> owners;
+
+        IEntity lastTrailEntity;
+
+        public OwnersItterator(List<IEntity> owners) {
+            this.owners = owners;
+        }
+
+        @Override
+        public boolean apply(IEntity owner) {
+            if (owner.getPrimaryKey() == null) {
+                // Breaks on non existent owner 
+                return false;
+            }
+            if (owner.isValueDetached()) {
+                Persistence.service().retrieve(owner);
+            }
+            lastTrailEntity = owner;
+            IEntity toStringOnlyEntity = owner.duplicate();
+            toStringOnlyEntity.setAttachLevel(AttachLevel.ToStringMembers);
+            owners.add(toStringOnlyEntity);
+            return true;
+        }
+    }
+
+    private static List<IEntity> getgetOwnersAndThis(IEntity startFromTarget) {
+        List<IEntity> trail = new ArrayList<IEntity>();
+        if (startFromTarget.getPrimaryKey() != null) {
+            if (startFromTarget.isValueDetached()) {
+                Persistence.service().retrieve(startFromTarget);
+            }
+            IEntity toStringOnlyEntity = startFromTarget.duplicate();
+            toStringOnlyEntity.setAttachLevel(AttachLevel.ToStringMembers);
+            trail.add(toStringOnlyEntity);
+
+            trail.addAll(getOwners(startFromTarget));
+        }
+        return trail;
+    }
+
+    private static List<IEntity> getOwners(IEntity startFromTarget) {
+        final List<IEntity> trail = new ArrayList<IEntity>();
+
+        OwnersItterator iter = new OwnersItterator(trail);
+        EntityGraph.applyToOwners(startFromTarget, iter);
+
+        // Special case for no business owned
+        if (startFromTarget instanceof Lease) {
+            trail.addAll(getgetOwnersAndThis(((Lease) startFromTarget).unit()));
+        }
+
+        if (iter.lastTrailEntity instanceof Lease) {
+            trail.addAll(getgetOwnersAndThis(((Lease) iter.lastTrailEntity).unit()));
+        }
+
+        return trail;
+    }
 }
