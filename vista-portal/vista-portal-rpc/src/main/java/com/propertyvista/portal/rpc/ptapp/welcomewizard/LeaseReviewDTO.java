@@ -14,19 +14,10 @@
 package com.propertyvista.portal.rpc.ptapp.welcomewizard;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
-import com.propertyvista.portal.domain.ptapp.IAgree;
+import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 
 @Transient
-public interface LeaseReviewDTO extends IEntity {
-
-    IPrimitive<String> leaseTerms();
-
-    IAgree isAgreed();
-
-    DigitalSignature signature();
+public interface LeaseReviewDTO extends SummaryDTO {
 
 }

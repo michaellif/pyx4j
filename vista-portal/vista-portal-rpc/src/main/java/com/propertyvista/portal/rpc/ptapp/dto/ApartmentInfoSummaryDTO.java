@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
 public interface ApartmentInfoSummaryDTO extends IEntity {
+
     IPrimitive<String> floorplan();
 
     IPrimitive<String> address();

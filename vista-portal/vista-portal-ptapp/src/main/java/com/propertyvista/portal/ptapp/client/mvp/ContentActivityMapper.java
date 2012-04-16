@@ -19,6 +19,7 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.ptapp.client.activity.ApplicationStatusActivity;
 import com.propertyvista.portal.ptapp.client.activity.GenericMessageActivity;
 import com.propertyvista.portal.ptapp.client.activity.LoginActivity;
@@ -26,6 +27,7 @@ import com.propertyvista.portal.ptapp.client.activity.LoginWithTokenActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordChangeActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordResetActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordResetRequestActivity;
+import com.propertyvista.portal.ptapp.client.activity.seps.welcome.LeaseReviewActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ApartmentActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ChargesActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.CompletionActivity;
@@ -70,10 +72,19 @@ public class ContentActivityMapper implements ActivityMapper {
             return new PaymentActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Completion) {
             return new CompletionActivity((AppPlace) place);
-// other places:
+
+            // other places:
         } else if (place instanceof PtSiteMap.ApplicationStatus) {
             return new ApplicationStatusActivity((AppPlace) place);
         }
+
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            // FIXME: mock up wizard steps for approved clients
+            if (place instanceof PtSiteMap.ApprovedTenantWizard.ReviewLease) {
+                return new LeaseReviewActivity();
+            }
+        }
+
         //TODO what to do on other place
         return null;
     }
