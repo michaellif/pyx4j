@@ -58,8 +58,8 @@ import com.propertyvista.portal.ptapp.client.ui.steps.summary.SignatureFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.TenantViewFolder;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoSummaryDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.LeaseReviewDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
-import com.propertyvista.portal.rpc.ptapp.welcomewizard.LeaseReviewDTO;
 
 public class LeaseReviewForm extends CEntityDecoratableEditor<LeaseReviewDTO> {
 

@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 13, 2012
+ * Created on Apr 16, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -16,16 +16,17 @@ package com.propertyvista.portal.ptapp.client.activity.seps.welcome;
 import com.google.gwt.core.client.GWT;
 
 import com.propertyvista.portal.ptapp.client.activity.steps.WizardStepActivity;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseReviewPresenter;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseReviewView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInSchedulePresenter;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInScheduleView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.LeaseReviewDTO;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcome.LeaseReviewService;
+import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.MoveInScheduleDTO;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcome.MoveInScheduleService;
 
-public class LeaseReviewActivity extends WizardStepActivity<LeaseReviewDTO, LeaseReviewPresenter> implements LeaseReviewPresenter {
+public class MoveInScheduleActivity extends WizardStepActivity<MoveInScheduleDTO, MoveInSchedulePresenter> {
 
-    public LeaseReviewActivity() {
-        super(WizardStepsViewFactory.instance(LeaseReviewView.class), LeaseReviewDTO.class, GWT.<LeaseReviewService> create(LeaseReviewService.class));
+    public MoveInScheduleActivity() {
+        super(WizardStepsViewFactory.instance(MoveInScheduleView.class), MoveInScheduleDTO.class, GWT
+                .<MoveInScheduleService> create(MoveInScheduleService.class));
     }
 
 }

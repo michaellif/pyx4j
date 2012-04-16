@@ -28,6 +28,7 @@ import com.propertyvista.portal.ptapp.client.activity.PasswordChangeActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordResetActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordResetRequestActivity;
 import com.propertyvista.portal.ptapp.client.activity.seps.welcome.LeaseReviewActivity;
+import com.propertyvista.portal.ptapp.client.activity.seps.welcome.MoveInScheduleActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ApartmentActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ChargesActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.CompletionActivity;
@@ -82,6 +83,8 @@ public class ContentActivityMapper implements ActivityMapper {
             // FIXME: mock up wizard steps for approved clients
             if (place instanceof PtSiteMap.ApprovedTenantWizard.ReviewLease) {
                 return new LeaseReviewActivity();
+            } else if (place instanceof PtSiteMap.ApprovedTenantWizard.MoveInSchedule) {
+                return new MoveInScheduleActivity();
             }
         }
 

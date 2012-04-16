@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.rpc.ptapp.services.steps.welcome;
 
+import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.LeaseReviewDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.AbstractWizardService;
-import com.propertyvista.portal.rpc.ptapp.welcomewizard.LeaseReviewDTO;
 
 public interface LeaseReviewService extends AbstractWizardService<LeaseReviewDTO> {
 

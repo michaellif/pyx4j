@@ -11,11 +11,13 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease;
+package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
 
-import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepView;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.LeaseReviewDTO;
+import com.pyx4j.entity.annotations.Transient;
 
-public interface LeaseReviewView extends WizardStepView<LeaseReviewDTO, LeaseReviewPresenter> {
+import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
+
+@Transient
+public interface LeaseReviewDTO extends SummaryDTO {
 
 }

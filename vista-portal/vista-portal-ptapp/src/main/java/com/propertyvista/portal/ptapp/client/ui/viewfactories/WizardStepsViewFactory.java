@@ -16,6 +16,7 @@ package com.propertyvista.portal.ptapp.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ApartmentView;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ApartmentViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesView;
@@ -32,6 +33,8 @@ import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryView;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsView;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInScheduleView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInScheduleViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseReviewView;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseReviewViewImpl;
 
@@ -55,10 +58,13 @@ public class WizardStepsViewFactory extends ViewFactoryBase {
                 map.put(type, new PaymentViewImpl());
             } else if (CompletionView.class.equals(type)) {
                 map.put(type, new CompletionViewImpl());
-
-                // Welcome Wizard Steps
-            } else if (LeaseReviewView.class.equals(type)) {
-                map.put(type, new LeaseReviewViewImpl());
+            }
+            if (VistaTODO.enableWelcomeWizardDemoMode) {
+                if (LeaseReviewView.class.equals(type)) {
+                    map.put(type, new LeaseReviewViewImpl());
+                } else if (MoveInScheduleView.class.equals(type)) {
+                    map.put(type, new MoveInScheduleViewImpl());
+                }
             }
 
         }

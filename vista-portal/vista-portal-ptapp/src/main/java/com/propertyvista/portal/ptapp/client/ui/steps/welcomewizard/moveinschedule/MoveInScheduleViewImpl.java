@@ -7,17 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 13, 2012
+ * Created on Apr 16, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.welcomewizard;
+package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule;
 
-import com.pyx4j.entity.annotations.Transient;
+import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
+import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.MoveInScheduleDTO;
 
-import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
+public class MoveInScheduleViewImpl extends WizardStepViewImpl<MoveInScheduleDTO, MoveInSchedulePresenter> implements MoveInScheduleView {
 
-@Transient
-public interface LeaseReviewDTO extends SummaryDTO {
+    public MoveInScheduleViewImpl() {
+        super(new MoveInScheduleForm());
+    }
 
 }
