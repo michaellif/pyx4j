@@ -33,6 +33,8 @@ import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryView;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsView;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.InsuranceView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.InsuranceViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInScheduleView;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInScheduleViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseReviewView;
@@ -64,6 +66,8 @@ public class WizardStepsViewFactory extends ViewFactoryBase {
                     map.put(type, new LeaseReviewViewImpl());
                 } else if (MoveInScheduleView.class.equals(type)) {
                     map.put(type, new MoveInScheduleViewImpl());
+                } else if (InsuranceView.class.equals(type)) {
+                    map.put(type, new InsuranceViewImpl());
                 }
             }
 
