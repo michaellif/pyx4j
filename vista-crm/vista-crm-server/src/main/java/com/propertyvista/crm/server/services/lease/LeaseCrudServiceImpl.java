@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -26,17 +27,18 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.common.util.LeaseManager;
 import com.propertyvista.server.domain.security.TenantUserCredential;
 
 public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> implements LeaseCrudService {
@@ -47,14 +49,14 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
 
     @Override
     public void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
-        new LeaseManager().notice(entityId, date, moveOut);
+        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(entityId, CompletionType.Notice, date, moveOut);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
     public void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        new LeaseManager().cancelNotice(entityId);
+        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(entityId);
         Persistence.service().commit();
         callback.onSuccess(null);
 
@@ -62,14 +64,14 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
 
     @Override
     public void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
-        new LeaseManager().evict(entityId, date, moveOut);
+        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(entityId, CompletionType.Eviction, date, moveOut);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
     public void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        new LeaseManager().cancelEvict(entityId);
+        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(entityId);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

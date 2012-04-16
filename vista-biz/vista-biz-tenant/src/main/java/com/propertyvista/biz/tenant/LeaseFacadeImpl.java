@@ -18,7 +18,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.tenant.Guarantor;
@@ -26,6 +26,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
@@ -37,7 +38,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         // Create Application by default
-        lease.leaseApplication().set(EntityFactory.create(LeaseApplication.class));
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Draft);
 
         saveCustomers(lease);
@@ -145,14 +145,42 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public void createCompletionEvent(Key leaseId, CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay) {
-        // TODO Auto-generated method stub
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+        if (lease == null) {
+            throw new IllegalStateException("lease " + leaseId + " was not found");
+        }
+        if (lease.version().status().getValue() != Status.Active) {
+            throw new IllegalStateException("lease " + leaseId + " must be " + Status.Active + " in order to perform Completion");
+        }
+
+        lease.version().completion().setValue(completionType);
+        lease.version().moveOutNotice().setValue(noticeDay);
+        lease.version().expectedMoveOut().setValue(moveOutDay);
+
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.secureSave(lease);
+
+        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
 
     }
 
     @Override
     public void cancelCompletionEvent(Key leaseId) {
-        // TODO Auto-generated method stub
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+        if (lease == null) {
+            throw new IllegalStateException("lease " + leaseId + " was not found");
+        }
+        if (lease.version().completion().isNull()) {
+            throw new IllegalStateException("lease " + leaseId + " must have notice in order to perform 'cancelNotice'");
+        }
+        lease.version().completion().setValue(null);
+        lease.version().moveOutNotice().setValue(null);
+        lease.version().expectedMoveOut().setValue(null);
 
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.secureSave(lease);
+
+        ServerSideFactory.create(OccupancyFacade.class).cancelEndLease(lease.unit().getPrimaryKey());
     }
 
     @Override

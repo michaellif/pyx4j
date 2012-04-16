@@ -43,6 +43,7 @@ import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.financial.billing.BillingFacade;
 import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
+@Deprecated
 public class LeaseManager {
 
     private static final I18n i18n = I18n.get(LeaseManager.class);

@@ -27,8 +27,12 @@ import com.propertyvista.misc.VistaDevPreloadConfig;
 
 public class LeaseGenerator extends PTGenerator {
 
+    private final TenantsGenerator tenantsGenerator;
+
     public LeaseGenerator(VistaDevPreloadConfig config) {
         super(config);
+        // TODO configure properly
+        tenantsGenerator = new TenantsGenerator(1);
     }
 
     public Lease createLease(AptUnit unit) {
@@ -59,7 +63,7 @@ public class LeaseGenerator extends PTGenerator {
 
     private void addTenants(Lease lease) {
         Tenant tenantInLease = EntityFactory.create(Tenant.class);
-        tenantInLease.customer().set(new TenantsGenerator(1).createTenant());
+        tenantInLease.customer().set(tenantsGenerator.createTenant());
         tenantInLease.role().setValue(Role.Applicant);
         lease.version().tenants().add(tenantInLease);
     }
