@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -94,6 +95,36 @@ public class BuildingImporter extends ImportPersister {
 
             }
         }
+        return messages;
+    }
+
+    public List<String> verifyExists(BuildingIO buildingIO, MediaConfig mediaConfig) { //used for Update Data, units have to exist as no new ones are created
+
+        List<String> messages = new Vector<String>();
+        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
+        if (buildingIO.propertyCode().isNull()) {
+            buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().externalId(), buildingIO.externalId().getValue()));
+        } else {
+            buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
+        }
+
+        List<Building> buildings = Persistence.service().query(buildingCriteria);
+        if (buildings.size() == 0) {
+            messages.add("Building '" + buildingIO.propertyCode().getValue() + "' with externalId '" + buildingIO.externalId().getValue() + "' not found");
+        }
+
+        IList<AptUnitIO> u = buildingIO.units();
+        for (AptUnitIO unitIO : u) {
+            String number = AptUnitConverter.trimUnitNumber(unitIO.number().getValue());
+            EntityQueryCriteria<AptUnit> unitCriteria = EntityQueryCriteria.create(AptUnit.class);
+            unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().info().number(), number));
+            List<AptUnit> units = Persistence.service().query(unitCriteria);
+
+            if (units.size() == 0) {
+                messages.add("Unit '" + unitIO.number() + "' not found.");
+            }
+        }
+
         return messages;
     }
 

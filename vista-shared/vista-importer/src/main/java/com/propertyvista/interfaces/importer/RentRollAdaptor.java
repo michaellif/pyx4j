@@ -45,12 +45,17 @@ import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.csv.XLSLoad;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 
 public class RentRollAdaptor implements ImportAdapter {
+
+    private boolean isInComplex = false; //if in complex, unitNumber "1-A" splits into building = building(b1), unit A. Otherwise it's unit 1-A
+
+    private static final I18n i18n = I18n.get(RentRollAdaptor.class);
 
     public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01", "nrp02", "nrp03", "nrp04",
             "nrp05", "nrp06", "current/notice/vacant residents", "nrp-02", "roof1", "roof2", "roof3", "roof4")); // add erroneous "apt numbers" here (lower case)
@@ -172,7 +177,7 @@ public class RentRollAdaptor implements ImportAdapter {
         try {
             return new BigDecimal(nf.parse(money).doubleValue());
         } catch (ParseException e) {
-            throw new Error(e);
+            throw new Error(i18n.tr("Please make sure all your Rent Roll values are in proper numeric format"));
         }
 
     }
@@ -197,12 +202,14 @@ public class RentRollAdaptor implements ImportAdapter {
 
     private BuildingIO getBuildingForUnitNumber(String externalId, String unitNumber) {
         if (unitNumber.contains("-")) {
+            isInComplex = true;
             String[] t = unitNumber.split("-");
 
             try {
                 Integer.parseInt(t[0]);
             } catch (NumberFormatException e) {
-                throw new Error("Illegal building number: " + e);
+                isInComplex = false;
+                return null;
             }
 
             String newexternalId = externalId + "(b" + t[0] + ")";
@@ -222,9 +229,12 @@ public class RentRollAdaptor implements ImportAdapter {
         Iterator<BuildingIO> it = verifiedBuildings.iterator();
         while (it.hasNext()) {
             for (AptUnitIO u : it.next().units()) {
+                String s = u.number().getValue();
                 if (u.number().getValue().contains("-")) {
-                    String[] t = u.number().getValue().split("-");
-                    u.number().setValue(t[1]); // sets proper unit number, removes t[0] (building number) from it
+                    if (isInComplex) {
+                        String[] t = u.number().getValue().split("-");
+                        u.number().setValue(t[1]); // sets proper unit number, removes t[0] (building number) from it
+                    }
                 }
             }
         }

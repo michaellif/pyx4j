@@ -118,6 +118,10 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
             if (!importDTO.type().getValue().equals(PmcImportDTO.ImportType.updateUnitAvailability)) {
                 List<String> messages = new Vector<String>();
                 for (BuildingIO building : importIO.buildings()) {
+                    if (importDTO.type().getValue().equals(PmcImportDTO.ImportType.updateData)) {
+                        messages.addAll(new BuildingImporter().verifyExists(building, mediaConfig));
+                    }
+
                     messages.addAll(new BuildingImporter().verify(building, mediaConfig));
                     count++;
                     process.status().setProgress(count);
