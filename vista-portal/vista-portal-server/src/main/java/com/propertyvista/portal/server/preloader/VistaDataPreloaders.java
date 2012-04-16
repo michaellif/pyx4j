@@ -59,7 +59,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             add(new PtPreloader());
             add(new PreloadTenants());
             //} else {
-            add(new LeasePreloader());
+//            add(new LeasePreloader());
             //}
         }
 
