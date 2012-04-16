@@ -13,17 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead;
 
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.tenant.lead.Guest;
 
@@ -54,18 +52,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            if (isEditable()) {
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 10).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 20).build());
-            } else {
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Person")).build());
-                get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-                get(proto().person().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
-                main.setBR(++row, 0, 1);
-            }
-
+            main.setWidget(++row, 0, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 20).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());

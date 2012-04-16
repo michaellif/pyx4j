@@ -13,13 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -29,13 +27,13 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
@@ -108,18 +106,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         main.setBR(++row, 0, 1);
 
-        if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 5).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().maidenName()), 20).build());
-        } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Employee")).build());
-            get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-            get(proto().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
-        }
-
+        main.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Employee"))));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sex()), 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
 

@@ -159,3 +159,4 @@ highrise
 admin
 floorplan
 versioned
+hyperlink
