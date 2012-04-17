@@ -29,7 +29,7 @@
             <artifactId>vista-biz-common</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-server-config</artifactId>
@@ -54,6 +54,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-policy</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <scope>test</scope>
@@ -65,6 +72,12 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
