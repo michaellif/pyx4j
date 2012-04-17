@@ -21,25 +21,18 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.server.mail.Mail;
-import com.pyx4j.server.mail.MailDeliveryStatus;
-import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.biz.communication.MessageTemplates;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
-import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.domain.security.TenantUserCredential;
 
 public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> implements LeaseCrudService {
 
@@ -78,7 +71,6 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
 
     @Override
     public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<Tenant> tenants, EmailTemplateType emailType) {
-        Lease lease = Persistence.secureRetrieveDraft(Lease.class, entityId);
         for (Tenant tenant : tenants) {
             tenant = Persistence.service().retrieve(Tenant.class, tenant.getPrimaryKey());
             TenantUser user = tenant.customer().user();
@@ -93,15 +85,7 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
                 ApplicationManager.ensureProspectiveTenantUser(tenant.customer(), tenant.customer().person(), VistaTenantBehavior.TenantSecondary);
                 break;
             }
-
-            String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
-            if (token == null) {
-                throw new UserRuntimeException("Invalid user account");
-            }
-            MailMessage m = MessageTemplates.createTenantInvitationEmail(user, lease, emailType, token);
-            if (MailDeliveryStatus.Success != Mail.send(m)) {
-                throw new UserRuntimeException("Mail delivery failed: " + user.email().getValue());
-            }
+            ServerSideFactory.create(CommunicationFacade.class).sendTenantInvitation(tenant);
         }
         callback.onSuccess(null);
     }

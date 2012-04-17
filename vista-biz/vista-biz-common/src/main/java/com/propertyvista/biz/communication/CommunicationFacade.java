@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.communication;
 
+import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -24,6 +26,13 @@ import com.propertyvista.domain.tenant.Tenant;
  */
 public interface CommunicationFacade {
 
+    void sendAdminPasswordRetrievalToken(AdminUser user);
+
+    void sendCrmPasswordRetrievalToken(CrmUser user);
+
+    /**
+     * customer may be Guarantor as well
+     */
     void sendProspectPasswordRetrievalToken(Customer customer);
 
     void sendTenantPasswordRetrievalToken(Customer customer);

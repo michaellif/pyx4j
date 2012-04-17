@@ -27,7 +27,6 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.biz.communication.MessageTemplates;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
@@ -58,8 +57,8 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
@@ -137,21 +136,21 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         type = EmailTemplateType.PasswordRetrievalTenant;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createPasswordResetEmail(VistaBasicBehavior.TenantPortal, mainAplt.customer().user(), token);
+        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, mainAplt.customer().user(), token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
         type = EmailTemplateType.PasswordRetrievalProspect;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createPasswordResetEmail(VistaBasicBehavior.ProspectiveApp, mainAplt.customer().user(), token);
+        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, mainAplt.customer().user(), token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
         type = EmailTemplateType.PasswordRetrievalCrm;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createPasswordResetEmail(VistaBasicBehavior.CRM, crmUser, token);
+        email = MessageTemplates.createCrmPasswordResetEmail(crmUser, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);

@@ -29,20 +29,17 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.mail.Mail;
-import com.pyx4j.server.mail.MailDeliveryStatus;
-import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.biz.communication.MessageTemplates;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
-import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.TenantUserHolder;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
@@ -55,7 +52,6 @@ import com.propertyvista.dto.OnlineApplicationStatusDTO.Role;
 import com.propertyvista.dto.OnlineMasterApplicationStatusDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.domain.security.TenantUserCredential;
@@ -112,9 +108,9 @@ public class ApplicationManager {
         for (Tenant tenantInLease : mapp.lease().version().tenants()) {
             if (Tenant.Role.Applicant == tenantInLease.role().getValue()) {
                 Persistence.service().retrieve(tenantInLease.customer().user());
-                sendInvitationEmail(tenantInLease.customer().user(), mapp.lease(), EmailTemplateType.ApplicationCreatedApplicant);
 
-                //mapp.status().setValue(OnlineMasterApplication.Status.Invited);
+                ServerSideFactory.create(CommunicationFacade.class).sendApplicantApplicationInvitation(tenantInLease);
+
                 Persistence.service().persist(mapp);
 
                 mapp.lease().version().status().setValue(Lease.Status.ApplicationInProgress);
@@ -128,13 +124,8 @@ public class ApplicationManager {
         Persistence.service().retrieve(lease.version().tenants());
         for (Tenant tenantInLease : lease.version().tenants()) {
             OnlineApplication test = tenantInLease.application();
-            if (test.getValue() == null) { //co-applicants have no dedicated application
-                return;
-            }
-            MailMessage m = MessageTemplates.createApplicationStatusEmail(tenantInLease, isApproved ? EmailTemplateType.ApplicationApproved
-                    : EmailTemplateType.ApplicationDeclined);
-            if (MailDeliveryStatus.Success != Mail.send(m)) {
-                throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+            if (!test.isNull()) { //co-applicants have no dedicated application
+                ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenantInLease);
             }
         }
     }
@@ -245,21 +236,22 @@ public class ApplicationManager {
         if (application.lease().isValueDetached()) {
             Persistence.service().retrieve(application.lease());
         }
-
+        Tenant tenant1 = null;
+        Guarantor guarantor = null;
         switch (behaviour) {
         case ProspectiveApplicant:
-            sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedApplicant);
+            ServerSideFactory.create(CommunicationFacade.class).sendApplicantApplicationInvitation(tenant1);
             break;
         case ProspectiveCoApplicant:
-            sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedCoApplicant);
+            ServerSideFactory.create(CommunicationFacade.class).sendCoApplicantApplicationInvitation(tenant1);
             break;
         case Guarantor:
-            sendInvitationEmail(application.user(), application.lease(), EmailTemplateType.ApplicationCreatedGuarantor);
+            ServerSideFactory.create(CommunicationFacade.class).sendGuarantorApplicationInvitation(guarantor);
             break;
         }
 
         // update app status:
-        //application.status().setValue(OnlineMasterApplication.Status.Invited);
+        application.status().setValue(OnlineApplication.Status.Invited);
         Persistence.service().persist(application);
         return application;
     }
@@ -421,14 +413,4 @@ public class ApplicationManager {
         return !(tenantInLease.percentage().isNull() || tenantInLease.percentage().getValue() == 0);
     }
 
-    private static void sendInvitationEmail(TenantUser user, Lease lease, EmailTemplateType emailTemplateType) {
-        String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
-        if (token == null) {
-            throw new UserRuntimeException("Invalid user account");
-        }
-        MailMessage m = MessageTemplates.createTenantInvitationEmail(user, lease, emailTemplateType, token);
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
-    }
 }

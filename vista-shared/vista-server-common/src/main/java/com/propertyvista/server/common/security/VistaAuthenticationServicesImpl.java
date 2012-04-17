@@ -49,11 +49,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
-import com.pyx4j.server.mail.Mail;
-import com.pyx4j.server.mail.MailDeliveryStatus;
-import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.biz.communication.MessageTemplates;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
@@ -65,6 +61,9 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     private final static Logger log = LoggerFactory.getLogger(VistaAuthenticationServicesImpl.class);
 
     private static final I18n i18n = I18n.get(VistaAuthenticationServicesImpl.class);
+
+    // Used to confuse hacker and void giving exact reason why we failed.
+    protected final String GENERIC_FAILED_MESSAGE = "Invalid User Account";
 
     protected final Class<U> userClass;
 
@@ -267,9 +266,10 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         callback.onSuccess(createAuthenticationResponse(null));
     }
 
+    protected abstract void sendPasswordRetrievalToken(U user);
+
     @Override
     public void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
-        final String GENERIC_FAILED_MESSAGE = "Invalid User Account";
 
         if (!validEmailAddress(request.email().getValue())) {
             throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
@@ -287,20 +287,8 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         }
         U user = users.get(0);
 
-        String token = AccessKey.createAccessToken(user, credentialClass, 1);
-        // TODO do we need this commit? AccessKey now has it's own...
-        Persistence.service().commit();
-        if (token == null) {
-            throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
-        }
-
-        MailMessage m = MessageTemplates.createPasswordResetEmail(getApplicationBehavior(), user, token);
-
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
-
-        log.debug("pwd change token {} is sent to {}", token, user.email().getValue());
+        sendPasswordRetrievalToken(user);
+        log.debug("pwd change token is sent to {}", user.email().getValue());
         callback.onSuccess(new VoidSerializable());
     }
 

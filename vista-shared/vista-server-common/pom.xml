@@ -32,30 +32,6 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-tenant</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-occupancy</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-communication</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-policy</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.propertyvista</groupId>
             <artifactId>vista-domain-srv</artifactId>
             <version>${project.version}</version>
         </dependency>

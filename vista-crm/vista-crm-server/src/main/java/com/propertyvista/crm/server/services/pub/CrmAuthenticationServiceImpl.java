@@ -17,9 +17,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.Behavior;
 
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.server.security.BuildingDatasetAccessBuilder;
 import com.propertyvista.domain.security.CrmRole;
@@ -68,6 +70,11 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
                 addAllBehaviors(behaviors, role.roles(), processed);
             }
         }
+    }
+
+    @Override
+    protected void sendPasswordRetrievalToken(CrmUser user) {
+        ServerSideFactory.create(CommunicationFacade.class).sendCrmPasswordRetrievalToken(user);
     }
 
 }

@@ -13,52 +13,145 @@
  */
 package com.propertyvista.biz.communication;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.server.mail.Mail;
+import com.pyx4j.server.mail.MailDeliveryStatus;
+import com.pyx4j.server.mail.MailMessage;
+
+import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.common.security.AccessKey;
+import com.propertyvista.server.domain.security.AdminUserCredential;
+import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.server.domain.security.TenantUserCredential;
 
 public class CommunicationFacadeImpl implements CommunicationFacade {
 
-    @Override
-    public void sendProspectPasswordRetrievalToken(Customer customer) {
-        // TODO Auto-generated method stub
+    private static final I18n i18n = I18n.get(CommunicationFacadeImpl.class);
 
-    }
+    final static String GENERIC_FAILED_MESSAGE = "Invalid User Account";
 
     @Override
     public void sendApplicantApplicationInvitation(Tenant tenant) {
-        // TODO Auto-generated method stub
-
+        sendInvitationEmail(tenant.customer().user(), tenant.leaseV().holder(), EmailTemplateType.ApplicationCreatedApplicant);
     }
 
     @Override
     public void sendCoApplicantApplicationInvitation(Tenant tenant) {
-        // TODO Auto-generated method stub
-
+        sendInvitationEmail(tenant.customer().user(), tenant.leaseV().holder(), EmailTemplateType.ApplicationCreatedCoApplicant);
     }
 
     @Override
     public void sendGuarantorApplicationInvitation(Guarantor guarantor) {
-        // TODO Auto-generated method stub
+        sendInvitationEmail(guarantor.customer().user(), guarantor.leaseV().holder(), EmailTemplateType.ApplicationCreatedGuarantor);
+    }
 
+    private static void sendInvitationEmail(TenantUser user, Lease lease, EmailTemplateType emailTemplateType) {
+        String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
+        if (token == null) {
+            throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
+        }
+        MailMessage m = MessageTemplates.createTenantInvitationEmail(user, lease, emailTemplateType, token);
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
     }
 
     @Override
     public void sendApplicationStatus(Tenant tenant) {
-        // TODO Auto-generated method stub
+        EmailTemplateType emailType;
+        switch (tenant.leaseV().holder().leaseApplication().status().getValue()) {
+        case Approved:
+            emailType = EmailTemplateType.ApplicationApproved;
+            break;
+        case Declined:
+            emailType = EmailTemplateType.ApplicationDeclined;
+            break;
+        default:
+            return;
+        }
+        MailMessage m = MessageTemplates.createApplicationStatusEmail(tenant, emailType);
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
 
     }
 
     @Override
     public void sendTenantInvitation(Tenant tenant) {
-        // TODO Auto-generated method stub
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, tenant.leaseV().holder().getPrimaryKey());
+        TenantUser user = tenant.customer().user();
+        if (user.isValueDetached()) {
+            Persistence.service().retrieve(user);
+        }
 
+        String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
+        if (token == null) {
+            throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
+        }
+
+        EmailTemplateType emailType = EmailTemplateType.TenantInvitation;
+
+        MailMessage m = MessageTemplates.createTenantInvitationEmail(user, lease, emailType, token);
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException("Mail delivery failed: " + user.email().getValue());
+        }
+    }
+
+    @Override
+    public void sendProspectPasswordRetrievalToken(Customer customer) {
+        String token = AccessKey.createAccessToken(customer.user(), TenantUserCredential.class, 1);
+        if (token == null) {
+            throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
+        }
+        MailMessage m = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, customer.user(), token);
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
     }
 
     @Override
     public void sendTenantPasswordRetrievalToken(Customer customer) {
-        // TODO Auto-generated method stub
+        String token = AccessKey.createAccessToken(customer.user(), TenantUserCredential.class, 1);
+        if (token == null) {
+            throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
+        }
+        MailMessage m = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, customer.user(), token);
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
+    }
 
+    @Override
+    public void sendAdminPasswordRetrievalToken(AdminUser user) {
+        String token = AccessKey.createAccessToken(user, AdminUserCredential.class, 1);
+        if (token == null) {
+            throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
+        }
+        MailMessage m = MessageTemplates.createAdminPasswordResetEmail(user, token);
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
+    }
+
+    @Override
+    public void sendCrmPasswordRetrievalToken(CrmUser user) {
+        String token = AccessKey.createAccessToken(user, CrmUserCredential.class, 1);
+        if (token == null) {
+            throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
+        }
+        MailMessage m = MessageTemplates.createCrmPasswordResetEmail(user, token);
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
     }
 
 }

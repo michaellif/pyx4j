@@ -15,14 +15,19 @@ package com.propertyvista.portal.server.ptapp.services;
 
 import java.util.Set;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.Behavior;
 
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -30,6 +35,8 @@ import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.TenantUserCredential;
 
 public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<TenantUser, TenantUserCredential> implements PtAuthenticationService {
+
+    private static final I18n i18n = I18n.get(PtAuthenticationServiceImpl.class);
 
     public PtAuthenticationServiceImpl() {
         super(TenantUser.class, TenantUserCredential.class);
@@ -62,6 +69,29 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
         // set application in context here:
         PtAppContext.setCurrentUserApplication(application);
         return sessionToken;
+    }
+
+    @Override
+    protected void sendPasswordRetrievalToken(TenantUser user) {
+        {
+            // See if active Application exists
+            EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
+            OnlineApplication application = Persistence.service().retrieve(criteria);
+            if (application == null) {
+                throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
+            }
+        }
+
+        {
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
+            Customer customer = Persistence.service().retrieve(criteria);
+            if (customer == null) {
+                throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
+            }
+            ServerSideFactory.create(CommunicationFacade.class).sendProspectPasswordRetrievalToken(customer);
+        }
     }
 
 }

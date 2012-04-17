@@ -15,6 +15,7 @@ package com.propertyvista.config.tests;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.server.mail.Mail;
 
 public class VistaTestDBSetup {
 
@@ -30,6 +31,7 @@ public class VistaTestDBSetup {
             }
             initOnce = new VistaTestsServerSideConfiguration(testOnMySQL);
             ServerSideConfiguration.setInstance(initOnce);
+            Mail.getMailService().setDisabled(true);
         }
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
     }

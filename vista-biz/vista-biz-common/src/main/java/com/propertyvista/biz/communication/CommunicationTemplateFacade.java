@@ -7,19 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-04-04
+ * Created on Apr 17, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.tenant;
+package com.propertyvista.biz.communication;
 
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
+import java.util.Set;
 
-public interface CustomerFacade {
+import com.propertyvista.domain.communication.EmailTemplateType;
 
-    void persistTenant(Tenant tenant);
+public interface CommunicationTemplateFacade {
 
-    void persistGuarantor(Guarantor guarantor);
+    public Set<String> getTemplateDataObjectSelection(EmailTemplateType template);
 
 }

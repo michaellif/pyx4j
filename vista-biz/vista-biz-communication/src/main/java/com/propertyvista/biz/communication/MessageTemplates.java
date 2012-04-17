@@ -142,64 +142,89 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createPasswordResetEmail(VistaBasicBehavior application, AbstractUser user, String token) {
+    public static MailMessage createCustomerPasswordResetEmail(EmailTemplateType templateType, AbstractUser user, String token) {
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         context.accessToken().setValue(token);
         context.user().set(user);
 
         ArrayList<IEntity> data = new ArrayList<IEntity>();
         EmailTemplate emailTemplate = null;
-        if (application != VistaBasicBehavior.Admin) {
-            // get company policy node
-            EntityQueryCriteria<OrganizationPoliciesNode> nodeCrit = EntityQueryCriteria.create(OrganizationPoliciesNode.class);
-            PolicyNode policyNode = Persistence.service().retrieve(nodeCrit);
 
-            EmailTemplateType templateType = null;
+        // get company policy node
+        EntityQueryCriteria<OrganizationPoliciesNode> nodeCrit = EntityQueryCriteria.create(OrganizationPoliciesNode.class);
+        PolicyNode policyNode = Persistence.service().retrieve(nodeCrit);
+        // get building policy node form the first available TenantInLease entry
+        EntityQueryCriteria<Tenant> tilCrit = EntityQueryCriteria.create(Tenant.class);
+        tilCrit.add(PropertyCriterion.eq(tilCrit.proto().customer().user(), user));
 
-            switch (application) {
-            case CRM:
-                templateType = EmailTemplateType.PasswordRetrievalCrm;
-                break;
-            case ProspectiveApp:
-            case TenantPortal:
-                if (application.equals(VistaBasicBehavior.ProspectiveApp)) {
-                    templateType = EmailTemplateType.PasswordRetrievalProspect;
-                } else {
-                    templateType = EmailTemplateType.PasswordRetrievalTenant;
-                }
-                // get building policy node form the first available TenantInLease entry
-                EntityQueryCriteria<Tenant> tilCrit = EntityQueryCriteria.create(Tenant.class);
-                tilCrit.add(PropertyCriterion.eq(tilCrit.proto().customer().user(), user));
-                Tenant til = Persistence.service().retrieve(tilCrit);
-                if (til != null) {
-                    Persistence.service().retrieve(til.leaseV());
-                    Persistence.service().retrieve(til.leaseV().holder());
-                    Persistence.service().retrieve(til.leaseV().holder().unit());
-                    Persistence.service().retrieve(til.leaseV().holder().unit().belongsTo());
-                    Building bldNode = til.leaseV().holder().unit().belongsTo();
-                    if (bldNode != null && !bldNode.isNull()) {
-                        policyNode = bldNode;
-                    }
-                }
-                break;
-            default:
-                throw new Error("Not implemented behavior");
+        // TODO Fix this!
+        Tenant til = Persistence.service().retrieve(tilCrit);
+        if (til != null) {
+            Persistence.service().retrieve(til.leaseV());
+            Persistence.service().retrieve(til.leaseV().holder());
+            Persistence.service().retrieve(til.leaseV().holder().unit());
+            Persistence.service().retrieve(til.leaseV().holder().unit().belongsTo());
+            Building bldNode = til.leaseV().holder().unit().belongsTo();
+            if (bldNode != null && !bldNode.isNull()) {
+                policyNode = bldNode;
             }
-
-            emailTemplate = getEmailTemplate(templateType, policyNode);
-            for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(templateType)) {
-                data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
-            }
-        } else {
-            // Admin template
-            emailTemplate = emailTemplatePasswordRetrievalAdmin();
-            PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
-            pwdReqT.RequestorName().set(user.name());
-            pwdReqT.PasswordResetUrl().setValue(
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Admin, true), AdminSiteMap.LoginWithToken.class,
-                            AuthenticationService.AUTH_TOKEN_ARG, token));
-            data.add(pwdReqT);
         }
+
+        emailTemplate = getEmailTemplate(templateType, policyNode);
+        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(templateType)) {
+            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+        }
+
+        MailMessage email = new MailMessage();
+        email.setTo(user.email().getValue());
+        email.setSender(getSender());
+        // set email subject and body from the template
+        email.setSubject(emailTemplate.subject().getValue());
+        email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
+
+        return email;
+    }
+
+    public static MailMessage createCrmPasswordResetEmail(AbstractUser user, String token) {
+        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+        context.accessToken().setValue(token);
+        context.user().set(user);
+
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        // get company policy node
+        EntityQueryCriteria<OrganizationPoliciesNode> nodeCrit = EntityQueryCriteria.create(OrganizationPoliciesNode.class);
+        PolicyNode policyNode = Persistence.service().retrieve(nodeCrit);
+
+        EmailTemplate emailTemplate = getEmailTemplate(EmailTemplateType.PasswordRetrievalCrm, policyNode);
+        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(EmailTemplateType.PasswordRetrievalCrm)) {
+            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+        }
+
+        MailMessage email = new MailMessage();
+        email.setTo(user.email().getValue());
+        email.setSender(getSender());
+        // set email subject and body from the template
+        email.setSubject(emailTemplate.subject().getValue());
+        email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
+
+        return email;
+    }
+
+    public static MailMessage createAdminPasswordResetEmail(AbstractUser user, String token) {
+        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+        context.accessToken().setValue(token);
+        context.user().set(user);
+
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+
+        EmailTemplate emailTemplate = emailTemplatePasswordRetrievalAdmin();
+        PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
+        pwdReqT.RequestorName().set(user.name());
+        pwdReqT.PasswordResetUrl().setValue(
+                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Admin, true), AdminSiteMap.LoginWithToken.class,
+                        AuthenticationService.AUTH_TOKEN_ARG, token));
+        data.add(pwdReqT);
+
         MailMessage email = new MailMessage();
         email.setTo(user.email().getValue());
         email.setSender(getSender());

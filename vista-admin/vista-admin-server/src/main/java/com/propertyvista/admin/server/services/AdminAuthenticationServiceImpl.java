@@ -15,9 +15,11 @@ package com.propertyvista.admin.server.services;
 
 import java.util.Set;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.domain.security.VistaBasicBehavior;
@@ -50,6 +52,11 @@ public class AdminAuthenticationServiceImpl extends VistaAuthenticationServicesI
         behaviors.addAll(userCredential.behaviors());
         // TODO remove after preload fixed
         behaviors.add(VistaAdminBehavior.SystemAdmin);
+    }
+
+    @Override
+    protected void sendPasswordRetrievalToken(AdminUser user) {
+        ServerSideFactory.create(CommunicationFacade.class).sendAdminPasswordRetrievalToken(user);
     }
 
 }
