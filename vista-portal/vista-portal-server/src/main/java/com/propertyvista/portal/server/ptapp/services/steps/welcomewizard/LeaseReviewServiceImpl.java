@@ -29,7 +29,6 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Concession.Term;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.person.Name.Prefix;
-import com.propertyvista.domain.person.Person.Sex;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
@@ -75,12 +74,7 @@ public class LeaseReviewServiceImpl implements LeaseReviewService {
         mockupLeaseReview.selectedUnit().includedUtilities().add(product);
 
         TenantInLeaseDTO tenant = mockupLeaseReview.tenantList().tenants().$();
-        tenant.customer().person().name().namePrefix().setValue(Prefix.Mr);
-        tenant.customer().person().name().firstName().setValue("Frodo");
-        tenant.customer().person().name().lastName().setValue("Baggins");
-        tenant.customer().person().email().setValue("frodob@shire.net");
-        tenant.customer().person().birthDate().setValue(new LogicalDate(1997 - 1900, 1, 1));
-        tenant.customer().person().sex().setValue(Sex.Male);
+        tenant.customer().person().set(WelcomeWizardDemoData.applicantsPerson());
         tenant.relationship().setValue(PersonRelationship.Son);
         tenant.role().setValue(Role.Applicant);
         mockupLeaseReview.tenantList().tenants().add(tenant);
