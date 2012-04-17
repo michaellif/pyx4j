@@ -25,14 +25,15 @@ public interface InsuranceDTO extends IEntity {
 
     enum InsuranceOptions {
 
-        @Translate(value = "I already have insurance")
-        alreadyHaveInsurance,
-
         @Translate(value = "I want to purchace new insurance policy")
         wantToBuyInsurance,
 
-        @Translate(value = "I was born lucky (don't need insurance)")
-        dontNeedInsurance;
+        @Translate(value = "I already have insurance")
+        alreadyHaveInsurance
+
+//        @Translate(value = "I was born lucky (don't need insurance)")
+//        dontNeedInsurance
+        ;
 
         @Override
         public String toString() {
@@ -47,5 +48,5 @@ public interface InsuranceDTO extends IEntity {
     PurchaseInsuranceDTO purchaseInsurance();
 
     @EmbeddedEntity
-    ExisitingInsuranceDTO existingInsurance();
+    ExistingInsurance existingInsurance();
 }

@@ -13,14 +13,11 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-@Transient
-public interface ExisitingInsuranceDTO extends IEntity {
+import com.propertyvista.domain.media.ApplicationDocument;
 
-    IPrimitive<String> company();
+@DiscriminatorValue("InsuranceCertificate")
+public interface InsuranceCertificate extends ApplicationDocument {
 
-    IPrimitive<String> policyNumber();
 }

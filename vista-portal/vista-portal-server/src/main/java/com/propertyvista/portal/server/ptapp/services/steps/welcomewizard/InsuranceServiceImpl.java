@@ -68,6 +68,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
         insurance.purchaseInsurance().personalDisclaimerTerms().add(personalDisclaimerDescriptor);
 
+        insurance.existingInsurance().documents().add(insurance.existingInsurance().documents().$());
         callback.onSuccess(insurance);
     }
 
