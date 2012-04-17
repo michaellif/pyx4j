@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Image;
 
@@ -37,6 +38,8 @@ public class DataTransfer extends JavaScriptObject {
 
     public static final String TYPE_URL = "text/uri-list";
 
+    public static final String TYPE_FILES = "Files";
+
     protected DataTransfer() {
     }
 
@@ -45,7 +48,7 @@ public class DataTransfer extends JavaScriptObject {
     }
 
     private native String getDropEffectN() /*-{
-        return this.dropEffect;
+		return this.dropEffect;
     }-*/;
 
     public final void setDropEffect(DropEffect dropEffect) {
@@ -53,7 +56,7 @@ public class DataTransfer extends JavaScriptObject {
     }
 
     private native void setDropEffectN(String dropEffect) /*-{
-        this.dropEffect = dropEffect;
+		this.dropEffect = dropEffect;
     }-*/;
 
     public final DragEffect getEffectAllowed() {
@@ -71,7 +74,7 @@ public class DataTransfer extends JavaScriptObject {
     }
 
     private native String getEffectAllowedN() /*-{
-        return this.effectAllowed;
+		return this.effectAllowed;
     }-*/;
 
     public final void setEffectAllowed(DragEffect effectAllowed) {
@@ -79,26 +82,39 @@ public class DataTransfer extends JavaScriptObject {
     }
 
     private native void setEffectAllowedN(String effectAllowed) /*-{
-        this.effectAllowed = effectAllowed;
+		this.effectAllowed = effectAllowed;
     }-*/;
+
+    public final String[] getTypes() {
+        JsArrayString a = jsGetTypes();
+        String r[] = new String[a.length()];
+        for (int i = 0; i < a.length(); i++) {
+            r[i] = a.get(i);
+        }
+        return r;
+    }
 
     /**
      * Warning: This method is not supported in IE!
      */
-    public final native String[] getTypes() /*-{
-        return this.types;
+    public final native JsArrayString jsGetTypes() /*-{
+		var a = new Array();
+		for ( var i = 0; i < this.types.length; i++) {
+			a[i] = this.types[i];
+		}
+		return a;
     }-*/;
 
     public final native String getData(String format) /*-{
-        return this.getData(format);
+		return this.getData(format);
     }-*/;
 
     public final native void setData(String format, String data) /*-{
-        this.setData(format, data);
+		this.setData(format, data);
     }-*/;
 
     public final native void clearData(String format) /*-{
-        this.clearData(format);
+		this.clearData(format);
     }-*/;
 
     public final void setDragImage(Image image, int x, int y) {
@@ -106,7 +122,11 @@ public class DataTransfer extends JavaScriptObject {
     }
 
     public final native void setDragImageN(Element elt, int x, int y) /*-{
-        this.setDragImage(elt, x, y);
+		this.setDragImage(elt, x, y);
+    }-*/;
+
+    public final native JsFileList files() /*-{
+		return this.files;
     }-*/;
 
     public final String toDebugString() {

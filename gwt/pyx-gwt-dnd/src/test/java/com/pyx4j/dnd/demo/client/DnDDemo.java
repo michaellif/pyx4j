@@ -44,6 +44,7 @@ import com.pyx4j.dnd.client.DragStartEvent;
 import com.pyx4j.dnd.client.DragStartHandler;
 import com.pyx4j.dnd.client.DropEvent;
 import com.pyx4j.dnd.client.DropHandler;
+import com.pyx4j.dnd.client.JsFileList;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
@@ -123,7 +124,17 @@ public class DnDDemo implements EntryPoint {
                             }
                             lable.setText(t);
                         } else {
-                            lable.setText(event.getDataTransfer().getData(DataTransfer.TYPE_TEXT));
+                            String t = event.getDataTransfer().getData(DataTransfer.TYPE_TEXT);
+                            if (t == null) {
+                                JsFileList files = event.getDataTransfer().files();
+                                if (files != null) {
+                                    t = "";
+                                    for (int f = 0; f < files.length(); f++) {
+                                        t += files.get(f).getName() + "\n";
+                                    }
+                                }
+                            }
+                            lable.setText(t);
                         }
                     } else {
                         lable.setText("--no data--");
