@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.OrderBy;
@@ -86,8 +88,13 @@ public interface BillingAccount extends IEntity {
     IPrimitive<ProrationMethod> prorationMethod();
 
     IPrimitive<Integer> billingPeriodStartDate();
+
     //Should have deposit value field
 
     // atb report
 
+    /**
+     * for newly created/converted existing leases:
+     */
+    IPrimitive<BigDecimal> initialBalance();
 }

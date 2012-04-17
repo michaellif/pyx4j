@@ -13,13 +13,21 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
+import java.math.BigDecimal;
 import java.util.EnumSet;
+
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.SelectionModel;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
@@ -65,6 +73,7 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
     @Override
     protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
+        // TODO : set all that stuff in CRUD service:
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
         criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
         return super.updateCriteria(criteria);
@@ -72,26 +81,48 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
     @Override
     protected void onItemNew() {
-        new SelectLeaseTypeDialog().show();
+        new ExistingLeaseDataDialog().show();
     }
 
-    private LeaseDTO createNewLease(Service.Type leaseType) {
+    private LeaseDTO createNewLease(Service.Type leaseType, BigDecimal balance) {
         LeaseDTO newLease = EntityFactory.create(LeaseDTO.class);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         newLease.version().status().setValue(Lease.Status.Created);
         newLease.type().setValue(leaseType);
+        newLease.billingAccount().initialBalance().setValue(balance);
         return newLease;
     }
 
-    private class SelectLeaseTypeDialog extends SelectEnumDialog<Service.Type> implements OkCancelOption {
+    private class ExistingLeaseDataDialog extends SelectEnumDialog<Service.Type> implements OkCancelOption {
 
-        public SelectLeaseTypeDialog() {
-            super(i18n.tr("Select Lease Type"), EnumSet.allOf(Service.Type.class));
+        private CMoneyField balance;
+
+        public ExistingLeaseDataDialog() {
+            super(i18n.tr("Enter Lease Data"), EnumSet.allOf(Service.Type.class));
+        }
+
+        @Override
+        protected <E extends Enum<E>> Widget initBody(SelectionModel<E> selectionModel, EnumSet<E> values, String height) {
+            VerticalPanel body = new VerticalPanel();
+
+            body.add(new HTML(i18n.tr("Lease Type:")));
+            body.add(super.initBody(selectionModel, values, height));
+
+            HorizontalPanel balance = new HorizontalPanel();
+            balance.add(new HTML(i18n.tr("Current balance:")));
+            balance.add((this.balance = new CMoneyField()).asWidget());
+            balance.setCellWidth(this.balance.asWidget(), "100px");
+            balance.setWidth("100%");
+            body.add(balance);
+
+            body.setWidth("100%");
+            body.setSpacing(4);
+            return body;
         }
 
         @Override
         public boolean onClickOk() {
-            getPresenter().editNew(getItemOpenPlaceClass(), createNewLease(getSelectedType()));
+            getPresenter().editNew(getItemOpenPlaceClass(), createNewLease(getSelectedType(), balance.getValue()));
             return true;
         }
 
@@ -109,6 +140,5 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
         public String defineWidth() {
             return "300px";
         }
-
     }
 }
