@@ -45,7 +45,6 @@ import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -204,7 +203,7 @@ public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntit
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItems().isEmpty()) {
-                            ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
+                            ((LeaseEditorPresenterBase) ((IEditorView<DTO>) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
                         }
                         return !getSelectedItems().isEmpty();
                     }

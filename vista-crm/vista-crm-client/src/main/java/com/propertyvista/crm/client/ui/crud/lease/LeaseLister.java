@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.lease;
 
 import java.util.EnumSet;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -78,7 +77,6 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
     private LeaseDTO createNewLease(Service.Type leaseType) {
         LeaseDTO newLease = EntityFactory.create(LeaseDTO.class);
-        newLease.createDate().setValue(new LogicalDate());
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         newLease.version().status().setValue(Lease.Status.Created);
         newLease.type().setValue(leaseType);
