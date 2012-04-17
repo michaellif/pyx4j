@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services.steps.welcome;
+package com.propertyvista.portal.server.ptapp.services.steps.welcomewizard;
 
 import java.math.BigDecimal;
 import java.util.Date;

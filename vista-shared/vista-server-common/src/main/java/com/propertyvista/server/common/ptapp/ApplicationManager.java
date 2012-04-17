@@ -109,7 +109,7 @@ public class ApplicationManager {
             if (Tenant.Role.Applicant == tenantInLease.role().getValue()) {
                 Persistence.service().retrieve(tenantInLease.customer().user());
 
-                ServerSideFactory.create(CommunicationFacade.class).sendApplicantApplicationInvitation(tenantInLease);
+//                ServerSideFactory.create(CommunicationFacade.class).sendApplicantApplicationInvitation(tenantInLease);
 
                 Persistence.service().persist(mapp);
 

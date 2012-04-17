@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services.steps.welcome;
+package com.propertyvista.portal.server.ptapp.services.steps.welcomewizard;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

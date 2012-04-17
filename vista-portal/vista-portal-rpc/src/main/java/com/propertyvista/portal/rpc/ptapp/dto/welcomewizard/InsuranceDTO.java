@@ -13,9 +13,11 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
@@ -23,7 +25,14 @@ public interface InsuranceDTO extends IEntity {
 
     enum InsuranceOptions {
 
-        alreadyHaveInsurance, wantToBuyInsurance, dontNeedInsurance;
+        @Translate(value = "I already have insurance")
+        alreadyHaveInsurance,
+
+        @Translate(value = "I want to purchace new insurance policy")
+        wantToBuyInsurance,
+
+        @Translate(value = "I was born lucky (don't need insurance)")
+        dontNeedInsurance;
 
         @Override
         public String toString() {
@@ -34,7 +43,9 @@ public interface InsuranceDTO extends IEntity {
 
     IPrimitive<InsuranceOptions> insuranceType();
 
+    @EmbeddedEntity
     PurchaseInsuranceDTO purchaseInsurance();
 
+    @EmbeddedEntity
     ExisitingInsuranceDTO existingInsurance();
 }

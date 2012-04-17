@@ -11,13 +11,14 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services.steps.welcome;
+package com.propertyvista.portal.server.ptapp.services.steps.welcomewizard;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.InsuranceService;
 
@@ -25,7 +26,9 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     @Override
     public void retrieve(AsyncCallback<InsuranceDTO> callback, Key tenantId) {
-        callback.onSuccess(EntityFactory.create(InsuranceDTO.class));
+        InsuranceDTO insurance = EntityFactory.create(InsuranceDTO.class);
+        insurance.purchaseInsurance().paymentMethod().type().setValue(PaymentType.Echeck);
+        callback.onSuccess(insurance);
     }
 
     @Override

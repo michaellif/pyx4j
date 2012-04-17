@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -21,6 +22,7 @@ import com.propertyvista.domain.payment.PaymentMethod;
 @Transient
 public interface PurchaseInsuranceDTO extends IEntity {
 
+    @EmbeddedEntity
     PaymentMethod paymentMethod();
 
 }

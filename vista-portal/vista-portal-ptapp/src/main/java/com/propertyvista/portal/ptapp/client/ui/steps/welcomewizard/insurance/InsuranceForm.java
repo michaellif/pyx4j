@@ -15,6 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -40,8 +41,9 @@ public class InsuranceForm extends CEntityDecoratableEditor<InsuranceDTO> {
 
         CRadioGroupEnum<InsuranceDTO.InsuranceOptions> insuranceOption = new CRadioGroupEnum<InsuranceDTO.InsuranceOptions>(
                 InsuranceDTO.InsuranceOptions.class, Layout.VERTICAL);
+
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceType(), insuranceOption)).build());
+        content.setWidget(++row, 0, inject(proto().insuranceType(), insuranceOption));
         get(proto().insuranceType()).addValueChangeHandler(new ValueChangeHandler<InsuranceDTO.InsuranceOptions>() {
             @Override
             public void onValueChange(ValueChangeEvent<InsuranceOptions> event) {
@@ -52,6 +54,7 @@ public class InsuranceForm extends CEntityDecoratableEditor<InsuranceDTO> {
                 }
             }
         });
+        content.setWidget(++row, 0, new HTML("&nbsp")); // separator
         content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new PurchaseInsuranceForm()));
         get(proto().purchaseInsurance()).setVisible(false);
         content.setWidget(++row, 0, inject(proto().existingInsurance(), new ExistingInsuranceForm()));
