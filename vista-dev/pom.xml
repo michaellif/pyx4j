@@ -18,6 +18,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>vista-dev-generator</module>
         <module>vista-dev-preloader</module>
     </modules>
 

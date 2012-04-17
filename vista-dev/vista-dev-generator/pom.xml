@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-generator</artifactId>
-    <name>vista-generator</name>
+    <artifactId>vista-dev-generator</artifactId>
+    <name>vista-dev-generator</name>
 
     <dependencies>
 
