@@ -281,22 +281,22 @@ public class DBResetServlet extends HttpServlet {
         }
     }
 
-    private void preloadPmc(HttpServletRequest req, StringBuilder buf, String demoPmcName, ResetType type) {
+    private void preloadPmc(HttpServletRequest req, StringBuilder buf, String pmcName, ResetType type) {
         long pmcStart = System.currentTimeMillis();
         NamespaceManager.setNamespace(Pmc.adminNamespace);
         EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), demoPmcName));
+        criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), pmcName));
         Persistence.service().delete(criteria);
 
         Pmc pmc = EntityFactory.create(Pmc.class);
-        pmc.name().setValue(demoPmcName + " Demo");
-        pmc.dnsName().setValue(demoPmcName);
+        pmc.name().setValue(pmcName + " Demo");
+        pmc.dnsName().setValue(pmcName);
 
         Persistence.service().persist(pmc);
         Persistence.service().commit();
 
-        NamespaceManager.setNamespace(demoPmcName);
-        buf.append("\n--- Preload  " + demoPmcName + " ---\n");
+        NamespaceManager.setNamespace(pmcName);
+        buf.append("\n--- Preload  " + pmcName + " ---\n");
         if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
             RDBUtils.ensureNamespace();
             // TODO Hack for non implemented SeparateSchemas DML 
@@ -326,6 +326,10 @@ public class DBResetServlet extends HttpServlet {
         default:
             cfg = VistaDevPreloadConfig.createDefault();
         }
+        if (pmcName.equals(DemoPmc.star.name())) {
+            cfg.numPotentialTenants = 0;
+            cfg.numTenants = 0;
+        }
         setPreloadConfigParameter(req, cfg);
         preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
 
@@ -353,8 +357,8 @@ public class DBResetServlet extends HttpServlet {
         }
         CacheService.reset();
 
-        log.info("Preloaded PMC '{}' {}", demoPmcName, TimeUtils.secSince(pmcStart));
-        buf.append("Preloaded PMC '" + demoPmcName + "' " + TimeUtils.secSince(pmcStart));
+        log.info("Preloaded PMC '{}' {}", pmcName, TimeUtils.secSince(pmcStart));
+        buf.append("Preloaded PMC '" + pmcName + "' " + TimeUtils.secSince(pmcStart));
     }
 
     private void setPreloadConfigParameter(HttpServletRequest req, VistaDevPreloadConfig cfg) {
