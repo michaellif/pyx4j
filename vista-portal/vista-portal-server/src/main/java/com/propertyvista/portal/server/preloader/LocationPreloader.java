@@ -19,10 +19,10 @@ import java.util.List;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
+import com.propertyvista.biz.preloader.LocationsGenerator;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.server.common.generator.LocationsGenerator;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class LocationPreloader extends AbstractDataPreloader {

@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.server.common.generator;
+package com.propertyvista.biz.preloader;
 
 import java.util.HashMap;
 import java.util.List;

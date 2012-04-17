@@ -58,6 +58,13 @@
             <artifactId>vista-dev-preloader</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+	    <!--  TODO remove -->
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-preloader</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
