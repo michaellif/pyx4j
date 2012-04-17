@@ -39,7 +39,6 @@ import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.financial.billing.BillingFacade;
 import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
@@ -118,17 +117,6 @@ public class LeaseManager {
         }
 
         Persistence.secureSave(lease);
-
-        // always create application for new lease (check if exist for others): 
-        if (isNewLease || lease.application().isNull()) {
-            try {
-                ApplicationManager.createMasterApplication(lease);
-            } catch (Exception e) {
-                // ok, it seems there is no main applicant still...
-                if (!isNewLease)
-                    throw new Error(e);
-            }
-        }
 
         if (isUnitChanged) {
             if (doUnreserve) {

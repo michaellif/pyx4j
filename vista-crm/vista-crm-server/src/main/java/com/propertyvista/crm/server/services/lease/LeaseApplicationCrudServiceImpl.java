@@ -19,10 +19,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -82,9 +84,7 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
 
     @Override
     public void startOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        Lease lease = Persistence.service().retrieve(dboClass, entityId.asDraftKey());
-        MasterOnlineApplication ma = ApplicationManager.createMasterApplication(lease);
-        ApplicationManager.sendMasterApplicationEmail(ma);
+        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(entityId);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

@@ -17,6 +17,8 @@ import com.pyx4j.security.shared.Behavior;
 
 public enum VistaTenantBehavior implements Behavior {
 
+    ApplicationSelectionRequired,
+
     Prospective,
 
     ProspectiveApplicant,
@@ -36,6 +38,8 @@ public enum VistaTenantBehavior implements Behavior {
     GuarantorSubmitted /* is as well ProspectiveSubmitted see VistaPortalAccessControlList */,
 
     // Application Approved - > Portal
+
+    LeaseSelectionRequired,
 
     Tenant,
 

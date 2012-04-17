@@ -143,8 +143,21 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public void createMasterOnlineApplication(Key leaseId) {
-        // TODO Auto-generated method stub
+        Lease lease = Persistence.retrieveDraft(Lease.class, leaseId.asDraftKey());
 
+        // Verify the status
+        if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
+            throw new UserRuntimeException("Invalid Lease State");
+        }
+        if (LeaseApplication.Status.Draft != lease.leaseApplication().status().getValue()) {
+            throw new UserRuntimeException("Invalid Application State");
+        }
+
+        ServerSideFactory.create(OnlineApplicationFacade.class).createMasterOnlineApplication(lease.leaseApplication().onlineApplication());
+
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.OnlineApplicationInProgress);
+        lease.version().status().setValue(Lease.Status.ApplicationInProgress);
+        Persistence.service().persist(lease);
     }
 
     @Override

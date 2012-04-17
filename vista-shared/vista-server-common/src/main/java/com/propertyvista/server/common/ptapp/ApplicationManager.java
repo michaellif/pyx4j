@@ -56,6 +56,8 @@ import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.domain.security.TenantUserCredential;
 
+// This class is in moving to OnlineApplicationFacade
+@Deprecated
 public class ApplicationManager {
 
     private static final I18n i18n = I18n.get(ApplicationManager.class);
@@ -100,24 +102,6 @@ public class ApplicationManager {
         // oops:
         Persistence.service().delete(mapp);
         throw new UserRuntimeException("Main applicant not found");
-    }
-
-    public static void sendMasterApplicationEmail(MasterOnlineApplication mapp) {
-        Persistence.service().retrieve(mapp.lease());
-        Persistence.service().retrieve(mapp.lease().version().tenants());
-        for (Tenant tenantInLease : mapp.lease().version().tenants()) {
-            if (Tenant.Role.Applicant == tenantInLease.role().getValue()) {
-                Persistence.service().retrieve(tenantInLease.customer().user());
-
-//                ServerSideFactory.create(CommunicationFacade.class).sendApplicantApplicationInvitation(tenantInLease);
-
-                Persistence.service().persist(mapp);
-
-                mapp.lease().version().status().setValue(Lease.Status.ApplicationInProgress);
-                Persistence.service().merge(mapp.lease());
-                break;
-            }
-        }
     }
 
     public static void sendApproveDeclineApplicationEmail(Lease lease, boolean isApproved) {
