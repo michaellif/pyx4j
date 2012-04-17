@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.pub;
+package com.propertyvista.crm.rpc.services.breadcrumbs;
 
 import java.util.Vector;
 

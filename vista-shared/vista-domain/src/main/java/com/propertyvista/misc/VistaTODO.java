@@ -18,7 +18,7 @@ public interface VistaTODO {
     /**
      * Set <code>true</code> to let PtApp show a demo wizard for approved tenants
      */
-    public final static boolean enableWelcomeWizardDemoMode = false;
+    public final static boolean enableWelcomeWizardDemoMode = true;
 
     public static boolean removedForProduction = false;
 

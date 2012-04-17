@@ -11,20 +11,23 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.breadcrumbs;
+package com.propertyvista.crm.server.services.breadcrumbs;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@DiscriminatorValue("Level2B")
-public interface Level2B extends Level3Holder {
+@DiscriminatorValue("Level2A")
+public interface Level2A extends IEntity, Level3Holder {
 
     @Owner
     @NotNull
@@ -34,11 +37,12 @@ public interface Level2B extends Level3Holder {
     @JoinColumn
     Level1 belongsTo();
 
-    IPrimitive<String> name();
+    @Override
+    @Owned
+    IList<Level3> owned3s();
 
     IPrimitive<Integer> value();
 
     @OrderColumn
     IPrimitive<Integer> orderIndex();
-
 }

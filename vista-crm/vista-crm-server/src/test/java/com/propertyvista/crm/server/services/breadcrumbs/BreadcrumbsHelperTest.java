@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.breadcrumbs;
+package com.propertyvista.crm.server.services.breadcrumbs;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.server.common.breadcurmbs.BreadcrumbsHelper;
+import com.propertyvista.crm.server.services.breadcrumbs.BreadcrumbsHelper;
 
 public class BreadcrumbsHelperTest {
 

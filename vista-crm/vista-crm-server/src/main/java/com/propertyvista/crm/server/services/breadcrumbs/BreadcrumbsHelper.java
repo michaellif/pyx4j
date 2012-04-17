@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.breadcurmbs;
+package com.propertyvista.crm.server.services.breadcrumbs;
 
 import java.util.ArrayList;
 import java.util.Collections;

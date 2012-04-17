@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.VersionSelectorDialog;
-import com.propertyvista.crm.rpc.services.pub.BreadcrumbsService;
+import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 
 public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
 

@@ -11,20 +11,20 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.breadcrumbs;
+package com.propertyvista.crm.server.services.breadcrumbs;
 
-import com.pyx4j.entity.annotations.Owned;
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Level1 extends IEntity {
+import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 
-    IPrimitive<String> name();
+public class BreadcrumbsServiceImpl implements BreadcrumbsService {
 
-    @Owned
-    IList<Level2A> owned2As();
-
-    @Owned
-    IList<Level2B> owned2Bs();
+    @Override
+    public void obtainBreadcrumbTrail(AsyncCallback<Vector<IEntity>> callback, IEntity entity) {
+        callback.onSuccess(new Vector<IEntity>(new BreadcrumbsHelper().breadcrumbTrail(entity)));
+    }
 }

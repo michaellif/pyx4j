@@ -7,19 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 18, 2011
- * @author michaellif
+ * Created on Apr 3, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto;
+package com.propertyvista.crm.server.services.breadcrumbs;
 
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-@Transient
-public interface BreadcrumbTrailDTO extends IEntity {
+public interface Level1 extends IEntity {
 
-    IList<BreadcrumbDTO> breadcrumbs();
+    IPrimitive<String> name();
 
+    @Owned
+    IList<Level2A> owned2As();
+
+    @Owned
+    IList<Level2B> owned2Bs();
 }
