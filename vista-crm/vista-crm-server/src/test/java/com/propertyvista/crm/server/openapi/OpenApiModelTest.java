@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.openapi;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Vector;
 
 import javax.xml.bind.JAXBException;
 
@@ -25,9 +26,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertvista.generator.BuildingsGenerator;
-import com.propertvista.generator.MediaGenerator;
-
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -42,6 +41,7 @@ import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
 import com.propertyvista.crm.server.openapi.model.MediaRS;
 import com.propertyvista.crm.server.openapi.model.util.Converter;
+import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -72,8 +72,9 @@ public class OpenApiModelTest {
 
     @Test
     public void testConvert() {
-        BuildingsGenerator generator = new BuildingsGenerator(0);
-        List<Building> buildings = generator.createBuildings(10);
+        //BuildingsGenerator generator = new BuildingsGenerator(0);
+        List<Building> buildings = new Vector<Building>();
+        //= generator.createBuildings(10);
 
         for (Building building : buildings) {
             BuildingRS buildingRS = Converter.convertBuilding(building);
@@ -95,8 +96,8 @@ public class OpenApiModelTest {
     @Test
     public void testXmlBuildingsMarshall() throws Exception {
 
-        BuildingsGenerator generator = new BuildingsGenerator(0);
-        List<Building> buildings = generator.createBuildings(1);
+        List<Building> buildings = new Vector<Building>();
+        //BuildingsGenerator generator = new BuildingsGenerator(0);
 
         BuildingsRS buildingsRS = new BuildingsRS();
         for (Building building : buildings) {
@@ -105,10 +106,15 @@ public class OpenApiModelTest {
             log.info("building date {}", buildingRS.info.structureBuildYear);
             buildingsRS.buildings.add(buildingRS);
 
-            Floorplan floorplan = generator.createFloorplan();
+            Floorplan floorplan = EntityFactory.create(Floorplan.class);
+            // generator.createFloorplan();
             FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
             buildingRS.floorplans.add(floorplanRS);
-            MediaRS mediaRS = Converter.convertMedia(MediaGenerator.createMedia());
+
+            Media media = EntityFactory.create(Media.class);
+            // MediaGenerator.createMedia()
+
+            MediaRS mediaRS = Converter.convertMedia(media);
             floorplanRS.medias.add(mediaRS);
         }
         String xml = MarshallUtil.marshall(buildingsRS);

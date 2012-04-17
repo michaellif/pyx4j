@@ -33,6 +33,12 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
+            <artifactId>vista-dev-preloader</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
             <artifactId>vista-admin-server</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -112,7 +118,7 @@
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>

@@ -8,7 +8,7 @@
 
     <parent>
         <groupId>com.propertyvista</groupId>
-        <artifactId>vista</artifactId>
+        <artifactId>vista-dev</artifactId>
         <version>1.0.3-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>

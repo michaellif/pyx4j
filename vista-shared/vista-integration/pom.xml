@@ -32,7 +32,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-generator</artifactId>
+            <artifactId>vista-dev-generator</artifactId>
             <version>${project.version}</version>
         </dependency>
 

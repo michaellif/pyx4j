@@ -40,7 +40,7 @@
             <artifactId>vista-admin-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-domain-srv</artifactId>
@@ -55,7 +55,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-generator</artifactId>
+            <artifactId>vista-dev-preloader</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -70,7 +70,7 @@
             <artifactId>vista-payment</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-billing</artifactId>

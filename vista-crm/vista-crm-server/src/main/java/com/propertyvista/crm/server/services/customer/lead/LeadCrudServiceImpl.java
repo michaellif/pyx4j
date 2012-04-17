@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -118,8 +117,8 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
 
             LeaseManager lm = new LeaseManager();
             // TODO get
-            Lease lease = lm.create(RandomUtil.randomLetters(10), lead.leaseType().getValue(), Persistence.service().retrieve(AptUnit.class, unitId), lead
-                    .moveInDate().getValue(), new LogicalDate(leaseEnd));
+            Lease lease = lm.create("MZ", lead.leaseType().getValue(), Persistence.service().retrieve(AptUnit.class, unitId), lead.moveInDate().getValue(),
+                    new LogicalDate(leaseEnd));
             lease.version().expectedMoveIn().setValue(lead.moveInDate().getValue());
 
             boolean asApplicant = true;
