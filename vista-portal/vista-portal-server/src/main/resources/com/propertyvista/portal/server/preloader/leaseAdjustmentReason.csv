@@ -1,24 +1,24 @@
-name,glCode.codeId,,
-Admin Expenses,,,
-Commissions,,,
-Maintenance Fees,,,
-Maintenance Labor,,,
-Legal Expenses,,,
-Security,,,
-Repairs Material,6245,,
-Management Fee,,,
-Rental Deposit,5905,,
-Late Fee,5910,,
-NSF Fees,5920,,
-Application Fee,5931,,
-Tenant Improvements,5960,,
-Good Will - general,6590,,
-Move In Charges,5940,,
-Move Out Charges,5941,,
-Deposit Forfeit,5950,,
-Marketing And Promotion,,,
-Billing Adjustment,6590,,
-Misc Labor,,,
-Misc Material,,,
-Misc Generic(no tax),,,
-Misc Generic(tax included),,,
+name,glCode.codeId
+Admin Expenses,
+Commissions,
+Maintenance Fees,
+Maintenance Labor,
+Legal Expenses,
+Security,
+Repairs Material,6245
+Management Fee,
+Rental Deposit,5905
+Late Fee,5910
+NSF Fees,5920
+Application Fee,5931
+Tenant Improvements,5960
+Good Will - general,6590
+Move In Charges,5940
+Move Out Charges,5941
+Deposit Forfeit,5950
+Marketing And Promotion,
+Billing Adjustment,6590
+Misc Labor,
+Misc Material,
+Misc Generic(no tax),
+Misc Generic(tax included),
