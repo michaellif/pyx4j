@@ -51,7 +51,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private final MemberMetaData data;
 
-    private boolean indexed;
+    private final boolean indexed;
 
     private EditorType editorType;
 
@@ -76,6 +76,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.data.cascadePersist = cascadePersist;
         this.data.owner = owner;
         this.data.embedded = embedded;
+        this.indexed = indexed;
         this.data.objectClass = objectClass;
         this.data.objectClassType = objectClassType;
         this.caption = caption;
