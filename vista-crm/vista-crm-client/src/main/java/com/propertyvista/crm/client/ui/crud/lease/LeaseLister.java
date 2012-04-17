@@ -16,6 +16,9 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import java.math.BigDecimal;
 import java.util.EnumSet;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -99,24 +102,34 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
         public ExistingLeaseDataDialog() {
             super(i18n.tr("Enter Lease Data"), EnumSet.allOf(Service.Type.class));
+            getOkButton().setEnabled(false);
         }
 
         @Override
         protected <E extends Enum<E>> Widget initBody(SelectionModel<E> selectionModel, EnumSet<E> values, String height) {
+            this.balance = new CMoneyField();
+            this.balance.addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<BigDecimal> event) {
+                    getOkButton().setEnabled(event.getValue() != null);
+                }
+            });
+
             VerticalPanel body = new VerticalPanel();
 
             body.add(new HTML(i18n.tr("Lease Type:")));
             body.add(super.initBody(selectionModel, values, height));
 
             HorizontalPanel balance = new HorizontalPanel();
-            balance.add(new HTML(i18n.tr("Current balance:")));
-            balance.add((this.balance = new CMoneyField()).asWidget());
+            balance.add(new HTML(i18n.tr("Initial balance:")));
+            balance.add(this.balance.asWidget());
             balance.setCellWidth(this.balance.asWidget(), "100px");
+            balance.getElement().getStyle().setPaddingTop(6, Unit.PX);
+            balance.getElement().getStyle().setPaddingBottom(2, Unit.PX);
             balance.setWidth("100%");
             body.add(balance);
 
             body.setWidth("100%");
-            body.setSpacing(4);
             return body;
         }
 
@@ -133,7 +146,7 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
         @Override
         public String defineHeight() {
-            return "100px";
+            return "80px";
         };
 
         @Override
