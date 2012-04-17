@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.services.steps.welcome;
+package com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard;
 
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.AbstractWizardService;

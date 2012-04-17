@@ -328,9 +328,11 @@ public class ApplicationManager {
         List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
         if (VistaTODO.enableWelcomeWizardDemoMode) {
             for (Class<? extends AppPlace> place : Arrays.<Class<? extends AppPlace>> asList(//@formatter:off
-                        PtSiteMap.ApprovedTenantWizard.ReviewLease.class,
-                        PtSiteMap.ApprovedTenantWizard.MoveInSchedule.class,
-                        PtSiteMap.ApprovedTenantWizard.Insurance.class                        
+                        PtSiteMap.WelcomeWizard.ReviewLease.class,
+                        PtSiteMap.WelcomeWizard.MoveInSchedule.class,
+                        PtSiteMap.WelcomeWizard.Insurance.class,
+                        PtSiteMap.WelcomeWizard.Completion.class
+                        
                     )) {//@formatter:on
                 progress.add(createWizardStep(place, ApplicationWizardStep.Status.notVisited));
             }
@@ -358,8 +360,8 @@ public class ApplicationManager {
                     break;
                 }
             }
+            progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
         }
-        progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
         return progress;
     }
 

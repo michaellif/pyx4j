@@ -100,7 +100,7 @@ public class PtSiteMap implements SiteMap {
     }
 
     // FIXME this is map of Mockup Move-In AKA Welcome AKA Wizard for approved tenants, needs review for real implementation    
-    public static class ApprovedTenantWizard extends AppPlace {
+    public static class WelcomeWizard extends AppPlace {
 
         @NavigationItem(navigLabel = "Review and Sign Lease")
         @PlaceProperties(caption = "Review Lease")
@@ -120,5 +120,10 @@ public class PtSiteMap implements SiteMap {
 
         }
 
+        @NavigationItem(navigLabel = "Completion")
+        @PlaceProperties(caption = "Completion")
+        public static class Completion extends AppPlace implements WizardStepPlace {
+
+        }
     }
 }

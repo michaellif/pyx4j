@@ -19,7 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcome.InsuranceService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.InsuranceService;
 
 public class InsuranceServiceImpl implements InsuranceService {
 

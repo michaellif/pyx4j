@@ -19,7 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.MoveInScheduleDTO;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcome.MoveInScheduleService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.MoveInScheduleService;
 
 public class MoveInScheduleServiceImpl implements MoveInScheduleService {
 

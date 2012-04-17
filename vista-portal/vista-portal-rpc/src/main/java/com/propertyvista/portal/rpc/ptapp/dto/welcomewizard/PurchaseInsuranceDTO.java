@@ -7,15 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 16, 2012
+ * Created on Apr 17, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.services.steps.welcome;
+package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
 
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.MoveInScheduleDTO;
-import com.propertyvista.portal.rpc.ptapp.services.steps.AbstractWizardService;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 
-public interface MoveInScheduleService extends AbstractWizardService<MoveInScheduleDTO> {
+import com.propertyvista.domain.payment.PaymentMethod;
+
+@Transient
+public interface PurchaseInsuranceDTO extends IEntity {
+
+    PaymentMethod paymentMethod();
 
 }

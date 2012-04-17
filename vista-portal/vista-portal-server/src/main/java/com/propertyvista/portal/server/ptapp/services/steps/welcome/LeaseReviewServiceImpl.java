@@ -42,7 +42,7 @@ import com.propertyvista.portal.domain.ptapp.IAgree;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.LeaseReviewDTO;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcome.LeaseReviewService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.LeaseReviewService;
 import com.propertyvista.portal.server.ptapp.services.util.LegalStuffUtils;
 
 public class LeaseReviewServiceImpl implements LeaseReviewService {

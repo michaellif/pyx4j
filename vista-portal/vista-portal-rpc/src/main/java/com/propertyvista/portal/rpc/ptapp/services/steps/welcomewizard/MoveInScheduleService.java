@@ -7,15 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 13, 2012
+ * Created on Apr 16, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.services.steps.welcome;
+package com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard;
 
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.LeaseReviewDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.MoveInScheduleDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.AbstractWizardService;
 
-public interface LeaseReviewService extends AbstractWizardService<LeaseReviewDTO> {
+public interface MoveInScheduleService extends AbstractWizardService<MoveInScheduleDTO> {
 
 }

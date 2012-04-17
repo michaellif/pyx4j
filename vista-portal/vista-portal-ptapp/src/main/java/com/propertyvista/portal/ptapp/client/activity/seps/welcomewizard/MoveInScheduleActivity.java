@@ -11,22 +11,25 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.activity.seps.welcome;
+package com.propertyvista.portal.ptapp.client.activity.seps.welcomewizard;
 
 import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.ptapp.client.activity.steps.WizardStepActivity;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInSchedulePresenter;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInScheduleView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.MoveInScheduleDTO;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcome.MoveInScheduleService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.MoveInScheduleService;
 
 public class MoveInScheduleActivity extends WizardStepActivity<MoveInScheduleDTO, MoveInSchedulePresenter> {
 
-    public MoveInScheduleActivity() {
+    public MoveInScheduleActivity(AppPlace place) {
         super(WizardStepsViewFactory.instance(MoveInScheduleView.class), MoveInScheduleDTO.class, GWT
                 .<MoveInScheduleService> create(MoveInScheduleService.class));
+        withPlace(place);
     }
 
 }

@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 16, 2012
+ * Created on Apr 17, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -16,25 +16,11 @@ package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
-public interface InsuranceDTO extends IEntity {
+public interface ExisitingInsuranceDTO extends IEntity {
 
-    enum InsuranceOptions {
+    IPrimitive<String> company();
 
-        alreadyHaveInsurance, wantToBuyInsurance, dontNeedInsurance;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        };
-
-    }
-
-    IPrimitive<InsuranceOptions> insuranceType();
-
-    PurchaseInsuranceDTO purchaseInsurance();
-
-    ExisitingInsuranceDTO existingInsurance();
+    IPrimitive<String> policyNumber();
 }

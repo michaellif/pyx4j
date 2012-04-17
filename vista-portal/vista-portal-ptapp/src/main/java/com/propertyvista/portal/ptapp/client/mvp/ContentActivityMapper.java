@@ -27,9 +27,9 @@ import com.propertyvista.portal.ptapp.client.activity.LoginWithTokenActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordChangeActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordResetActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordResetRequestActivity;
-import com.propertyvista.portal.ptapp.client.activity.seps.welcome.InsuranceActivity;
-import com.propertyvista.portal.ptapp.client.activity.seps.welcome.LeaseReviewActivity;
-import com.propertyvista.portal.ptapp.client.activity.seps.welcome.MoveInScheduleActivity;
+import com.propertyvista.portal.ptapp.client.activity.seps.welcomewizard.InsuranceActivity;
+import com.propertyvista.portal.ptapp.client.activity.seps.welcomewizard.LeaseReviewActivity;
+import com.propertyvista.portal.ptapp.client.activity.seps.welcomewizard.MoveInScheduleActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ApartmentActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ChargesActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.CompletionActivity;
@@ -82,12 +82,15 @@ public class ContentActivityMapper implements ActivityMapper {
 
         if (VistaTODO.enableWelcomeWizardDemoMode) {
             // FIXME: mock up wizard steps for approved clients
-            if (place instanceof PtSiteMap.ApprovedTenantWizard.ReviewLease) {
-                return new LeaseReviewActivity();
-            } else if (place instanceof PtSiteMap.ApprovedTenantWizard.MoveInSchedule) {
-                return new MoveInScheduleActivity();
-            } else if (place instanceof PtSiteMap.ApprovedTenantWizard.Insurance) {
-                return new InsuranceActivity();
+            AppPlace appPlace = (AppPlace) place;
+            if (place instanceof PtSiteMap.WelcomeWizard.ReviewLease) {
+                return new LeaseReviewActivity(appPlace);
+            } else if (place instanceof PtSiteMap.WelcomeWizard.MoveInSchedule) {
+                return new MoveInScheduleActivity(appPlace);
+            } else if (place instanceof PtSiteMap.WelcomeWizard.Insurance) {
+                return new InsuranceActivity(appPlace);
+            } else if (place instanceof PtSiteMap.WelcomeWizard.Completion) {
+                return new CompletionActivity(appPlace);
             }
         }
 
