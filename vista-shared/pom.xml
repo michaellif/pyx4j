@@ -30,7 +30,6 @@
         <module>vista-equifax-gen</module>
         <module>vista-equifax</module>
         <module>vista-payment</module>
-        <module>vista-billing</module>
         <module>vista-integration</module>
     </modules>
 
