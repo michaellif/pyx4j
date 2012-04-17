@@ -18,14 +18,15 @@ import java.util.List;
 import com.propertvista.generator.TenantsGenerator;
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.TenantUser;
@@ -34,7 +35,6 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
-import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
 
 public class PreloadNewTenantsAndLeads extends BaseVistaDevDataPreloader {
 
@@ -62,7 +62,8 @@ public class PreloadNewTenantsAndLeads extends BaseVistaDevDataPreloader {
             // Update user name
             user.name().setValue(tenant.person().name().getStringView());
             Persistence.service().persist(user);
-            persistTenant(tenant);
+            ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenant);
+            Persistence.service().persist(tenant);
         }
 
         List<Floorplan> floorplans = Persistence.service().query(EntityQueryCriteria.create(Floorplan.class));
@@ -104,11 +105,6 @@ public class PreloadNewTenantsAndLeads extends BaseVistaDevDataPreloader {
         StringBuilder sb = new StringBuilder();
         sb.append("Created ").append(config().numTenants).append(" tenants");
         return sb.toString();
-    }
-
-    public void persistTenant(Customer tenant) {
-        tenant.customerId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.tenant));
-        Persistence.service().persist(tenant);
     }
 
 }

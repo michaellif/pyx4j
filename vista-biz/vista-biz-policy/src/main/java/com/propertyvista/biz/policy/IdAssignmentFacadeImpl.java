@@ -11,7 +11,7 @@
  * @author igor
  * @version $Id$
  */
-package com.propertyvista.server.common.util;
+package com.propertyvista.biz.policy;
 
 import java.security.InvalidParameterException;
 
@@ -21,19 +21,58 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.server.domain.IdAssignmentSequence;
 
-public class IdAssignmentSequenceUtil {
+public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
 
     private static char[] codes = { '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
             'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
-    public static boolean needsGeneratedId(IdAssignmentItem.IdTarget target) {
+    @Override
+    public void assignId(Building building) {
+        if (needsGeneratedId(IdTarget.propertyCode)) {
+            building.propertyCode().setValue(getId(IdTarget.propertyCode));
+        }
+    }
+
+    @Override
+    public void assignId(Lead lead) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void assignId(MasterOnlineApplication masterOnlineApplication) {
+        if (needsGeneratedId(IdTarget.application)) {
+            masterOnlineApplication.onlineApplicationId().setValue(getId(IdTarget.application));
+        }
+    }
+
+    @Override
+    public void assignId(Customer customer) {
+        if (customer.id().isNull() && needsGeneratedId(IdTarget.tenant)) {
+            customer.customerId().setValue(getId(IdTarget.tenant));
+        }
+    }
+
+    @Override
+    public void assignId(Lease lease) {
+        if (needsGeneratedId(IdTarget.lease)) {
+            lease.leaseId().setValue(getId(IdTarget.lease));
+        }
+    }
+
+    private static boolean needsGeneratedId(IdAssignmentItem.IdTarget target) {
         IdAssignmentPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 IdAssignmentPolicy.class);
 
@@ -57,7 +96,7 @@ public class IdAssignmentSequenceUtil {
         return targetItem.type().getValue() == IdAssignmentType.generatedNumber || targetItem.type().getValue() == IdAssignmentType.generatedAlphaNumeric;
     }
 
-    public static String getId(IdAssignmentItem.IdTarget target) {
+    private static String getId(IdAssignmentItem.IdTarget target) {
         IdAssignmentPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 IdAssignmentPolicy.class);
 

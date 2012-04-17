@@ -26,6 +26,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -55,10 +56,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         saveCustomers(lease);
 
-        //TODO
-//      if (lease.id().isNull() && IdAssignmentSequenceUtil.needsGeneratedId(IdTarget.lease)) {
-//          lease.leaseId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.lease));
-//      }
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease);
 
         Persistence.service().merge(lease);
 
@@ -116,11 +114,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // TODO Manage customer for PTAPP 
         for (Tenant tenant : lease.version().tenants()) {
             if (!tenant.customer().isValueDetached()) {
+                ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenant.customer());
                 Persistence.service().merge(tenant.customer());
             }
         }
         for (Guarantor guarantor : lease.version().guarantors()) {
             if (!guarantor.customer().isValueDetached()) {
+                ServerSideFactory.create(IdAssignmentFacade.class).assignId(guarantor.customer());
                 Persistence.service().merge(guarantor.customer());
             }
         }

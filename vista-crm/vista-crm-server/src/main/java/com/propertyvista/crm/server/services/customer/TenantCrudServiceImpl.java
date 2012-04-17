@@ -18,10 +18,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
-import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
 
 public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, TenantDTO> implements TenantCrudService {
 
@@ -50,9 +48,6 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
 
     @Override
     protected void persist(Tenant dbo, TenantDTO in) {
-        if (dbo.id().isNull() && IdAssignmentSequenceUtil.needsGeneratedId(IdTarget.tenant)) {
-            dbo.customer().customerId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.tenant));
-        }
         super.persist(dbo, in);
     }
 }

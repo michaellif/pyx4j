@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.building;
 
 import java.util.List;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -22,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.geo.GeoPoint;
 
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
@@ -29,12 +31,10 @@ import com.propertyvista.domain.GeoLocation.LongitudeType;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
-import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
 
 public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building, BuildingDTO> implements BuildingCrudService {
 
@@ -124,8 +124,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             }
         }
 
-        if (dbo.id().isNull() && IdAssignmentSequenceUtil.needsGeneratedId(IdTarget.propertyCode)) {
-            dbo.propertyCode().setValue(IdAssignmentSequenceUtil.getId(IdTarget.propertyCode));
+        if (dbo.id().isNull()) {
+            ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
         }
 
         Persistence.service().merge(dbo);

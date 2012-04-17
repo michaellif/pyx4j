@@ -27,9 +27,9 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -113,8 +113,8 @@ public class LeaseManager {
             }
         }
 
-        if (lease.id().isNull() && IdAssignmentSequenceUtil.needsGeneratedId(IdTarget.lease)) {
-            lease.leaseId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.lease));
+        if (lease.id().isNull()) {
+            ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease);
         }
 
         Persistence.secureSave(lease);

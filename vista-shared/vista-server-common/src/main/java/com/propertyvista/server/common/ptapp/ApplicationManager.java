@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -35,9 +36,9 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.biz.communication.MessageTemplates;
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.TenantUserHolder;
 import com.propertyvista.domain.security.VistaTenantBehavior;
@@ -57,7 +58,6 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
-import com.propertyvista.server.common.util.IdAssignmentSequenceUtil;
 import com.propertyvista.server.domain.security.TenantUserCredential;
 
 public class ApplicationManager {
@@ -73,8 +73,8 @@ public class ApplicationManager {
         MasterOnlineApplication mapp = EntityFactory.create(MasterOnlineApplication.class);
         mapp.lease().set(lease);
         mapp.status().setValue(MasterOnlineApplication.Status.Incomplete);
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(mapp);
 
-        mapp.onlineApplicationId().setValue(IdAssignmentSequenceUtil.getId(IdTarget.application));
         Persistence.service().persist(mapp);
 
         Persistence.service().retrieve(lease.version().tenants());
