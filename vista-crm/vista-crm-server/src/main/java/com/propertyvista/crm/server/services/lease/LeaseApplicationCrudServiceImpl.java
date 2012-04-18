@@ -56,7 +56,9 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
         super.enhanceRetrieved(in, dto);
 
         enhanceListRetrieved(in, dto);
-        dto.masterApplicationStatus().set(ApplicationManager.calculateStatus(in.leaseApplication().onlineApplication()));
+
+        Persistence.service().retrieve(dto.leaseApplication().onlineApplication());
+        dto.masterApplicationStatus().set(ApplicationManager.calculateStatus(dto.leaseApplication().onlineApplication()));
     }
 
     @Override

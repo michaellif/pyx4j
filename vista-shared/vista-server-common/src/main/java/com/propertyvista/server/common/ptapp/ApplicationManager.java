@@ -251,6 +251,7 @@ public class ApplicationManager {
             }
 
             OnlineApplicationStatusDTO status = EntityFactory.create(OnlineApplicationStatusDTO.class);
+            status.progress().setValue(0d);
 
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), app.user()));
