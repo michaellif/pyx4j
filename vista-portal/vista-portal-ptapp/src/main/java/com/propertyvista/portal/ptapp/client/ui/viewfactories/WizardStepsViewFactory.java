@@ -68,6 +68,8 @@ public class WizardStepsViewFactory extends ViewFactoryBase {
                     map.put(type, new MoveInScheduleViewImpl());
                 } else if (InsuranceView.class.equals(type)) {
                     map.put(type, new InsuranceViewImpl());
+                } else if (com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.completion.CompletionView.class.equals(type)) {
+                    map.put(type, new com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.completion.CompletionViewImpl());
                 }
             }
 

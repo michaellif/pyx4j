@@ -23,19 +23,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.RadioGroup.Layout;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.c.NewPaymentMethodForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.LeaseTemsFolder;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.ExistingInsurance;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO.InsuranceOptions;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO;
 
 public class InsuranceForm extends CEntityDecoratableEditor<InsuranceDTO> {
@@ -55,24 +52,21 @@ public class InsuranceForm extends CEntityDecoratableEditor<InsuranceDTO> {
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
 
-        CRadioGroupEnum<InsuranceDTO.InsuranceOptions> insuranceOption = new CRadioGroupEnum<InsuranceDTO.InsuranceOptions>(
-                InsuranceDTO.InsuranceOptions.class, Layout.VERTICAL);
-
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().insuranceType(), insuranceOption));
-        get(proto().insuranceType()).addValueChangeHandler(new ValueChangeHandler<InsuranceDTO.InsuranceOptions>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<InsuranceOptions> event) {
-                InsuranceDTO.InsuranceOptions insuranceOption = event.getValue();
-                if (insuranceOption != null) {
-                    get(proto().purchaseInsurance()).setVisible(insuranceOption == InsuranceOptions.wantToBuyInsurance);
-                    get(proto().existingInsurance()).setVisible(insuranceOption == InsuranceOptions.alreadyHaveInsurance);
-                }
-            }
-        });
         content.setWidget(++row, 0, new HTML("&nbsp")); // separator
         content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new PurchaseInsuranceForm()));
-        get(proto().purchaseInsurance()).setVisible(false);
+        get(proto().purchaseInsurance()).setVisible(true);
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().alreadyHaveInsurance())).build());
+        get(proto().alreadyHaveInsurance()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().purchaseInsurance()).setVisible(!event.getValue());
+                get(proto().existingInsurance()).setVisible(event.getValue());
+            }
+        });
+
         content.setWidget(++row, 0, inject(proto().existingInsurance(), new ExistingInsuranceForm()));
         get(proto().existingInsurance()).setVisible(false);
 

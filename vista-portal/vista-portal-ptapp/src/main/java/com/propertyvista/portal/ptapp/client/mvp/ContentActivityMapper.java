@@ -27,9 +27,6 @@ import com.propertyvista.portal.ptapp.client.activity.LoginWithTokenActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordChangeActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordResetActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordResetRequestActivity;
-import com.propertyvista.portal.ptapp.client.activity.seps.welcomewizard.InsuranceActivity;
-import com.propertyvista.portal.ptapp.client.activity.seps.welcomewizard.LeaseReviewActivity;
-import com.propertyvista.portal.ptapp.client.activity.seps.welcomewizard.MoveInScheduleActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ApartmentActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ChargesActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.CompletionActivity;
@@ -38,6 +35,9 @@ import com.propertyvista.portal.ptapp.client.activity.steps.InfoActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.PaymentActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.SummaryActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.TenantsActivity;
+import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.InsuranceActivity;
+import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.LeaseReviewActivity;
+import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.MoveInScheduleActivity;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class ContentActivityMapper implements ActivityMapper {
@@ -90,7 +90,7 @@ public class ContentActivityMapper implements ActivityMapper {
             } else if (place instanceof PtSiteMap.WelcomeWizard.Insurance) {
                 return new InsuranceActivity(appPlace);
             } else if (place instanceof PtSiteMap.WelcomeWizard.Completion) {
-                return new CompletionActivity(appPlace);
+                return new com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.CompletionActivity(appPlace);
             }
         }
 

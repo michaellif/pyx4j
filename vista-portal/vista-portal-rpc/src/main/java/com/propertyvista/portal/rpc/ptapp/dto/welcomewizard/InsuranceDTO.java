@@ -13,36 +13,17 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.Translate;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
 public interface InsuranceDTO extends IEntity {
 
-    enum InsuranceOptions {
-
-        @Translate(value = "I want to purchace new insurance policy")
-        wantToBuyInsurance,
-
-        @Translate(value = "I already have insurance")
-        alreadyHaveInsurance
-
-//        @Translate(value = "I was born lucky (don't need insurance)")
-//        dontNeedInsurance
-        ;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        };
-
-    }
-
-    IPrimitive<InsuranceOptions> insuranceType();
+    @Caption(name = "I (We) Already Have Tenant Insurance")
+    IPrimitive<Boolean> alreadyHaveInsurance();
 
     @EmbeddedEntity
     PurchaseInsuranceDTO purchaseInsurance();

@@ -30,7 +30,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
 public class CompletionViewImpl extends FlowPanel implements CompletionView {
@@ -44,12 +43,6 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
         HTML titleHtml = new HTML(HtmlUtils.h3(i18n.tr("Congratulation! You have successfully completed your application!")));
         main.add(titleHtml);
         main.setCellHorizontalAlignment(titleHtml, HasHorizontalAlignment.ALIGN_CENTER);
-
-        HTML messageHtml = new HTML(PortalResources.INSTANCE.completionMessage().getText());
-        messageHtml.setWidth("50em");
-        messageHtml.getElement().getStyle().setMarginTop(1, Unit.EM);
-        main.add(messageHtml);
-        main.setCellHorizontalAlignment(messageHtml, HasHorizontalAlignment.ALIGN_CENTER);
 
         HorizontalPanel actions = new HorizontalPanel();
 

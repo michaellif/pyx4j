@@ -41,6 +41,7 @@ import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.OnlineApplicationStatusDTO;
 import com.propertyvista.dto.OnlineApplicationStatusDTO.Role;
 import com.propertyvista.dto.OnlineMasterApplicationStatusDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
@@ -62,14 +63,15 @@ public class ApplicationManager {
     }
 
     public static void makeApplicationCompleted(OnlineApplication application) {
-        application.status().setValue(OnlineApplication.Status.Submitted);
-        Persistence.service().persist(application);
+        if (!VistaTODO.enableWelcomeWizardDemoMode) {
+            application.status().setValue(OnlineApplication.Status.Submitted);
+            Persistence.service().persist(application);
 
-        CustomerUser user = application.user();
-        CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, user.getPrimaryKey());
-        boolean isApplicant = false;
-        boolean isCoApplicant = false;
-        boolean isGuarantor = false;
+            CustomerUser user = application.user();
+            CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, user.getPrimaryKey());
+            boolean isApplicant = false;
+            boolean isCoApplicant = false;
+            boolean isGuarantor = false;
 
 //        boolean isApplicant = credential.behaviors().contains(VistaCustomerBehavior.ProspectiveApplicant);
 //        boolean isCoApplicant = credential.behaviors().contains(VistaCustomerBehavior.ProspectiveCoApplicant);
@@ -85,60 +87,61 @@ public class ApplicationManager {
 //            credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmittedCoApplicant);
 //        }
 
-        Persistence.service().persist(credential);
-        if (Context.isUserLoggedIn() && user.getPrimaryKey().equals(VistaContext.getCurrentUserPrimaryKey())) {
-            Context.getVisit().setAclRevalidationRequired();
-            Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
-        }
-
-        MasterOnlineApplication ma = application.masterOnlineApplication();
-        Persistence.service().retrieve(ma);
-        Persistence.service().retrieve(ma.lease());
-        boolean allApplicationsSubmited = false;
-
-        // Invite Guarantors:
-        if (!isGuarantor) {
-            EntityQueryCriteria<Tenant> criteriaTL = EntityQueryCriteria.create(Tenant.class);
-            criteriaTL.add(PropertyCriterion.eq(criteriaTL.proto().application(), application));
-            Tenant tenantInLease = Persistence.service().retrieve(criteriaTL);
-
-            EntityQueryCriteria<PersonScreening> criteriaPS = EntityQueryCriteria.create(PersonScreening.class);
-            criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.customer()));
-            PersonScreening tenantScreenings = Persistence.service().retrieve(criteriaPS);
-
-            Persistence.service().retrieve(tenantScreenings.guarantors());
-            for (PersonGuarantor personGuarantor : tenantScreenings.guarantors()) {
-                inviteUser(ma, personGuarantor.guarantor(), personGuarantor.guarantor().customer().person(), VistaCustomerBehavior.Guarantor);
+            Persistence.service().persist(credential);
+            if (Context.isUserLoggedIn() && user.getPrimaryKey().equals(VistaContext.getCurrentUserPrimaryKey())) {
+                Context.getVisit().setAclRevalidationRequired();
+                Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
             }
-        }
 
-        // Invite CoApplicants:
-        if (isApplicant) {
-            Persistence.service().retrieve(ma.lease().version().tenants());
-            for (Tenant tenantInLease : ma.lease().version().tenants()) {
-                if ((Tenant.Role.CoApplicant == tenantInLease.role().getValue() && (!tenantInLease.takeOwnership().isBooleanTrue()))) {
-                    tenantInLease.application().set(
-                            inviteUser(ma, tenantInLease.customer(), tenantInLease.customer().person(), VistaCustomerBehavior.ProspectiveCoApplicant));
-                    Persistence.service().persist(tenantInLease);
+            MasterOnlineApplication ma = application.masterOnlineApplication();
+            Persistence.service().retrieve(ma);
+            Persistence.service().retrieve(ma.lease());
+            boolean allApplicationsSubmited = false;
+
+            // Invite Guarantors:
+            if (!isGuarantor) {
+                EntityQueryCriteria<Tenant> criteriaTL = EntityQueryCriteria.create(Tenant.class);
+                criteriaTL.add(PropertyCriterion.eq(criteriaTL.proto().application(), application));
+                Tenant tenantInLease = Persistence.service().retrieve(criteriaTL);
+
+                EntityQueryCriteria<PersonScreening> criteriaPS = EntityQueryCriteria.create(PersonScreening.class);
+                criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.customer()));
+                PersonScreening tenantScreenings = Persistence.service().retrieve(criteriaPS);
+
+                Persistence.service().retrieve(tenantScreenings.guarantors());
+                for (PersonGuarantor personGuarantor : tenantScreenings.guarantors()) {
+                    inviteUser(ma, personGuarantor.guarantor(), personGuarantor.guarantor().customer().person(), VistaCustomerBehavior.Guarantor);
                 }
             }
-        } else {
-            allApplicationsSubmited = true;
-            Persistence.service().retrieve(ma.applications());
-            for (OnlineApplication app : ma.applications()) {
-                if (!app.status().getValue().equals(MasterOnlineApplication.Status.Submitted)) {
-                    allApplicationsSubmited = false;
-                    break;
+
+            // Invite CoApplicants:
+            if (isApplicant) {
+                Persistence.service().retrieve(ma.lease().version().tenants());
+                for (Tenant tenantInLease : ma.lease().version().tenants()) {
+                    if ((Tenant.Role.CoApplicant == tenantInLease.role().getValue() && (!tenantInLease.takeOwnership().isBooleanTrue()))) {
+                        tenantInLease.application().set(
+                                inviteUser(ma, tenantInLease.customer(), tenantInLease.customer().person(), VistaCustomerBehavior.ProspectiveCoApplicant));
+                        Persistence.service().persist(tenantInLease);
+                    }
+                }
+            } else {
+                allApplicationsSubmited = true;
+                Persistence.service().retrieve(ma.applications());
+                for (OnlineApplication app : ma.applications()) {
+                    if (!app.status().getValue().equals(MasterOnlineApplication.Status.Submitted)) {
+                        allApplicationsSubmited = false;
+                        break;
+                    }
                 }
             }
-        }
 
-        if (allApplicationsSubmited) {
-            //ma.status().setValue(OnlineMasterApplication.Status.PendingDecision);
-            Persistence.service().persist(ma);
-            for (OnlineApplication app : ma.applications()) {
-                //app.status().setValue(OnlineMasterApplication.Status.PendingDecision);
-                Persistence.service().persist(app);
+            if (allApplicationsSubmited) {
+                //ma.status().setValue(OnlineMasterApplication.Status.PendingDecision);
+                Persistence.service().persist(ma);
+                for (OnlineApplication app : ma.applications()) {
+                    //app.status().setValue(OnlineMasterApplication.Status.PendingDecision);
+                    Persistence.service().persist(app);
+                }
             }
         }
     }
