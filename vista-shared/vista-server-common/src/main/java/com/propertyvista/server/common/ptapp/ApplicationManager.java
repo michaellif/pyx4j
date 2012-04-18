@@ -24,8 +24,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.server.contexts.Context;
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.person.Person;
@@ -38,7 +36,6 @@ import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.OnlineApplicationStatusDTO;
@@ -254,13 +251,6 @@ public class ApplicationManager {
         return maStatus;
     }
 
-    private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {
-        ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
-        ws.placeId().setValue(AppPlaceInfo.getPlaceId(place));
-        ws.status().setValue(status);
-        return ws;
-    }
-
     // internals:
 
     public static CustomerUser ensureProspectiveTenantUser(TenantUserHolder tenant, Person person, VistaCustomerBehavior behavior) {
@@ -297,16 +287,6 @@ public class ApplicationManager {
             Persistence.service().persist(credential);
         }
         return tenant.user();
-    }
-
-    public static boolean isTenantInSplitCharge(OnlineApplication application, TenantUserHolder tenant) {
-        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-// TODO: make sure we get user from necessary application (if he participate in more than one):         
-//        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), tenant));
-        Tenant tenantInLease = Persistence.service().retrieve(criteria);
-
-        return !(tenantInLease.percentage().isNull() || tenantInLease.percentage().getValue() == 0);
     }
 
 }
