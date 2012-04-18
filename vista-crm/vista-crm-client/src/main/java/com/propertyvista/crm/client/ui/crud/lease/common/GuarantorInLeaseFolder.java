@@ -33,7 +33,6 @@ import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.LeaseDTO;
 
 public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
@@ -101,7 +100,7 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
 
             int row = -1;
 
-            main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Tenant.class) {
+            main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
                 @Override
                 public Key getLinkKey() {
                     return GuarantorInLeaseEditor.this.getValue().getPrimaryKey();
