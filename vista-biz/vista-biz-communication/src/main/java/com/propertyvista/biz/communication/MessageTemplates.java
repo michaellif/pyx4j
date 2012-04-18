@@ -50,6 +50,7 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class MessageTemplates {
 
@@ -92,7 +93,7 @@ public class MessageTemplates {
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         // populate context properties required by template type
-        context.tenantInLease().set(tenantInLease);
+        context.leaseParticipant().set(tenantInLease);
 
         ArrayList<IEntity> data = new ArrayList<IEntity>();
         for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
@@ -114,19 +115,23 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createTenantInvitationEmail(TenantUser tenantUser, Lease lease, EmailTemplateType emailType, String token) {
+    public static MailMessage createTenantInvitationEmail(LeaseParticipant leaseParticipant, EmailTemplateType emailType, String token) {
+        Lease lease = Persistence.retrieveDraft(Lease.class, leaseParticipant.leaseV().holder().getPrimaryKey());
+        TenantUser user = Persistence.service().retrieve(TenantUser.class, leaseParticipant.customer().user().getPrimaryKey());
+
         // get building policy node
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().belongsTo());
         Building building = lease.unit().belongsTo();
         if (building == null || building.isNull()) {
-            throw new Error("No building node found");
+            throw new Error("No building found");
         }
         EmailTemplate emailTemplate = getEmailTemplate(emailType, building);
         // create required data context
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
-        context.user().set(tenantUser);
+        context.user().set(user);
         context.lease().set(lease);
+        context.leaseParticipant().set(leaseParticipant);
         context.accessToken().setValue(token);
         // load data objects for template variable lookup
         ArrayList<IEntity> data = new ArrayList<IEntity>();
@@ -134,7 +139,7 @@ public class MessageTemplates {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
         MailMessage email = new MailMessage();
-        email.setTo(tenantUser.email().getValue());
+        email.setTo(user.email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
         email.setSubject(emailTemplate.subject().getValue());

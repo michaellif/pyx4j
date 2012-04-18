@@ -27,7 +27,7 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.AdminUserCredential;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -41,25 +41,25 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendApplicantApplicationInvitation(Tenant tenant) {
-        sendInvitationEmail(tenant.customer().user(), tenant.leaseV().holder(), EmailTemplateType.ApplicationCreatedApplicant);
+        sendInvitationEmail(tenant, EmailTemplateType.ApplicationCreatedApplicant);
     }
 
     @Override
     public void sendCoApplicantApplicationInvitation(Tenant tenant) {
-        sendInvitationEmail(tenant.customer().user(), tenant.leaseV().holder(), EmailTemplateType.ApplicationCreatedCoApplicant);
+        sendInvitationEmail(tenant, EmailTemplateType.ApplicationCreatedCoApplicant);
     }
 
     @Override
     public void sendGuarantorApplicationInvitation(Guarantor guarantor) {
-        sendInvitationEmail(guarantor.customer().user(), guarantor.leaseV().holder(), EmailTemplateType.ApplicationCreatedGuarantor);
+        sendInvitationEmail(guarantor, EmailTemplateType.ApplicationCreatedGuarantor);
     }
 
-    private static void sendInvitationEmail(TenantUser user, Lease lease, EmailTemplateType emailTemplateType) {
-        String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
+    private static void sendInvitationEmail(LeaseParticipant leaseParticipant, EmailTemplateType emailTemplateType) {
+        String token = AccessKey.createAccessToken(leaseParticipant.customer().user(), TenantUserCredential.class, 10);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
-        MailMessage m = MessageTemplates.createTenantInvitationEmail(user, lease, emailTemplateType, token);
+        MailMessage m = MessageTemplates.createTenantInvitationEmail(leaseParticipant, emailTemplateType, token);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
@@ -87,7 +87,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantInvitation(Tenant tenant) {
-        Lease lease = Persistence.secureRetrieveDraft(Lease.class, tenant.leaseV().holder().getPrimaryKey());
         TenantUser user = tenant.customer().user();
         if (user.isValueDetached()) {
             Persistence.service().retrieve(user);
@@ -100,7 +99,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
         EmailTemplateType emailType = EmailTemplateType.TenantInvitation;
 
-        MailMessage m = MessageTemplates.createTenantInvitationEmail(user, lease, emailType, token);
+        MailMessage m = MessageTemplates.createTenantInvitationEmail(tenant, emailType, token);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException("Mail delivery failed: " + user.email().getValue());
         }

@@ -42,6 +42,7 @@ import com.propertyvista.biz.communication.mail.template.model.PasswordRequestPr
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
 import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.misc.VistaTODO;
 
 public class EmailTemplateManager {
 
@@ -118,7 +119,9 @@ public class EmailTemplateManager {
                 final String value = getVarValue(varName, data);
                 if (value == null) {
                     log.error("Missing data value of {} in {}", varName, data);
-                    throw new UserRuntimeException("Missing data value of ${" + varName + "}");
+                    if (!VistaTODO.vladsLeaseMigration) {
+                        throw new UserRuntimeException("Missing data value of ${" + varName + "}");
+                    }
                 } else {
                     buffer.append(value);
                 }

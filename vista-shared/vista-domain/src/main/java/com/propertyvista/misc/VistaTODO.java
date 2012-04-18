@@ -22,6 +22,8 @@ public interface VistaTODO {
 
     public static boolean removedForProduction = false;
 
+    public static boolean vladsLeaseMigration = true;
+
     // e.g. person().name()
     public final boolean entityAsStringQueryCriteria = true;
 

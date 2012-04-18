@@ -38,8 +38,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.site.SiteDescriptor;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -94,22 +94,17 @@ public class EmailTemplateRootObjectLoader {
             t.PasswordResetUrl().setValue(getCrmAccessUrl(token));
         } else if (tObj instanceof TenantT) {
             TenantT t = (TenantT) tObj;
-            Tenant tenantInLease = context.tenantInLease();
-            if (tenantInLease.isNull()) {
+            if (context.leaseParticipant().isNull()) {
                 throw new Error("TenantInLease should be provided in context");
             }
-            if (tenantInLease.customer().user().isValueDetached()) {
-                Persistence.service().retrieve(tenantInLease.customer().user());
-            }
-            t.Name().set(tenantInLease.customer().user().name());
+            t.Name().setValue(context.leaseParticipant().customer().person().name().getStringView());
         } else if (tObj instanceof BuildingT) {
             BuildingT t = (BuildingT) tObj;
             Building bld = null;
             if (!context.lease().isNull()) {
                 bld = getBuilding(context.lease());
-            } else if (!context.tenantInLease().isNull()) {
-                Tenant tenantInLease = context.tenantInLease();
-                Lease lease = getLease(tenantInLease);
+            } else if (!context.leaseParticipant().isNull()) {
+                Lease lease = getLease(context.leaseParticipant());
                 bld = getBuilding(lease);
             }
             if (bld == null) {
@@ -141,13 +136,12 @@ public class EmailTemplateRootObjectLoader {
             ApplicationT t = (ApplicationT) tObj;
             OnlineApplication app = null;
             AbstractUser user = null;
-            if (!context.tenantInLease().isNull()) {
-                Tenant tenantInLease = context.tenantInLease();
-                app = getApplication(tenantInLease);
-                if (tenantInLease.customer().user().isValueDetached()) {
-                    Persistence.service().retrieve(tenantInLease.customer().user());
+            if (!context.leaseParticipant().isNull()) {
+                app = getApplication(context.leaseParticipant());
+                if (context.leaseParticipant().customer().user().isValueDetached()) {
+                    Persistence.service().retrieve(context.leaseParticipant().customer().user());
                 }
-                user = tenantInLease.customer().user();
+                user = context.leaseParticipant().customer().user();
             } else if (!context.lease().isNull() && !context.user().isNull()) {
                 app = getApplication(context.user(), context.lease());
                 user = context.user();
@@ -162,17 +156,12 @@ public class EmailTemplateRootObjectLoader {
             }
         } else if (tObj instanceof LeaseT) {
             LeaseT t = (LeaseT) tObj;
-            Tenant tenantInLease = context.tenantInLease();
-            if (tenantInLease.isNull()) {
-                throw new Error("TenantInLease should be provided in context");
+            if (context.lease().isNull()) {
+                context.lease().set(getLease(context.leaseParticipant()));
             }
-            Lease lease = getLease(tenantInLease);
-            if (tenantInLease.customer().user().isValueDetached()) {
-                Persistence.service().retrieve(tenantInLease.customer().user());
-            }
-            t.ApplicantName().set(tenantInLease.customer().user().name());
-            t.StartDate().setValue(lease.leaseFrom().getStringView());
-            t.StartDateWeekDay().setValue(new SimpleDateFormat("EEEE").format(lease.leaseFrom().getValue()));
+            t.ApplicantName().setValue(context.leaseParticipant().customer().person().name().getStringView());
+            t.StartDate().setValue(context.lease().leaseFrom().getStringView());
+            t.StartDateWeekDay().setValue(new SimpleDateFormat("EEEE").format(context.lease().leaseFrom().getValue()));
         }
         return tObj;
     }
@@ -194,7 +183,7 @@ public class EmailTemplateRootObjectLoader {
                 + AuthenticationService.AUTH_TOKEN_ARG + '=' + token;
     }
 
-    private static OnlineApplication getApplication(Tenant tenantInLease) {
+    private static OnlineApplication getApplication(LeaseParticipant tenantInLease) {
         if (tenantInLease == null || tenantInLease.isNull()) {
             throw new Error("Context cannot be null");
         }
@@ -223,8 +212,8 @@ public class EmailTemplateRootObjectLoader {
         return app;
     }
 
-    private static Lease getLease(Tenant tenantInLease) {
-        if (tenantInLease == null) {
+    private static Lease getLease(LeaseParticipant tenantInLease) {
+        if (tenantInLease.isNull()) {
             throw new Error("Context cannot be null");
         }
 
@@ -240,7 +229,7 @@ public class EmailTemplateRootObjectLoader {
     }
 
     private static Building getBuilding(Lease lease) {
-        if (lease == null) {
+        if (lease.isNull()) {
             throw new Error("Context cannot be null");
         }
         if (lease.unit().isValueDetached()) {

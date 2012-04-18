@@ -20,7 +20,9 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
@@ -33,6 +35,7 @@ import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.TenantUserHolder;
 
 @DiscriminatorValue("Tenant")
@@ -40,6 +43,13 @@ public interface Customer extends IEntity, PersonScreeningHolder, TenantUserHold
 
     @NotNull
     IPrimitive<String> customerId();
+
+    @Override
+    @NotNull
+    @ReadOnly
+    @Detached
+    @MemberColumn(name = "user_id")
+    TenantUser user();
 
     @Override
     @ToString(index = 0)

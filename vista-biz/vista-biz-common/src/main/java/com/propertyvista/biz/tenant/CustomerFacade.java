@@ -13,13 +13,10 @@
  */
 package com.propertyvista.biz.tenant;
 
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Customer;
 
 public interface CustomerFacade {
 
-    void persistTenant(Tenant tenant);
-
-    void persistGuarantor(Guarantor guarantor);
+    void persistCustomer(Customer customer);
 
 }

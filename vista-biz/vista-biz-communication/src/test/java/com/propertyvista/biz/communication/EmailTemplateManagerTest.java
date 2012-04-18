@@ -157,21 +157,21 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         type = EmailTemplateType.TenantInvitation;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createTenantInvitationEmail(mainAplt.customer().user(), lease, type, token);
+        email = MessageTemplates.createTenantInvitationEmail(mainAplt, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
         type = EmailTemplateType.ApplicationCreatedApplicant;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createTenantInvitationEmail(mainAplt.customer().user(), lease, type, token);
+        email = MessageTemplates.createTenantInvitationEmail(mainAplt, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
         type = EmailTemplateType.ApplicationCreatedCoApplicant;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createTenantInvitationEmail(coAplt.customer().user(), lease, type, token);
+        email = MessageTemplates.createTenantInvitationEmail(coAplt, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
