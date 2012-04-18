@@ -58,7 +58,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         // load detached entities:
         Persistence.service().retrieve(dto.version().tenants());
         Persistence.service().retrieve(dto.version().guarantors());
-        Persistence.service().retrieve(dto.application());
+        Persistence.service().retrieve(dto.leaseApplication().onlineApplication());
 //        Persistence.service().retrieve(dto.documents());
         if (!dto.unit().isNull()) {
             // fill selected building by unit:

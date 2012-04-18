@@ -147,11 +147,12 @@ public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntit
             main.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().application(),
-                            new CEntityCrudHyperlink<MasterOnlineApplication>(AppPlaceEntityMapper.resolvePlace(MasterOnlineApplication.class))), 20).build());
+                    new DecoratorBuilder(inject(proto().leaseApplication().onlineApplication(), new CEntityCrudHyperlink<MasterOnlineApplication>(
+                            AppPlaceEntityMapper.resolvePlace(MasterOnlineApplication.class))), 20).build());
 
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().application(), new CEntityLabel<MasterOnlineApplication>()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().onlineApplication(), new CEntityLabel<MasterOnlineApplication>()),
+                    20).build());
         }
 
         // Lease dates:

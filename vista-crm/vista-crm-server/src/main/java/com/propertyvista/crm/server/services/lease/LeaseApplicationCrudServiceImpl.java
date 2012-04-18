@@ -167,7 +167,7 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
         Lease lease = Persistence.service().retrieve(Lease.class, actionDTO.leasePk().getValue());
 
         // TODO this is wrong!
-        Status currentStatus = lease.application().status().getValue();
+        Status currentStatus = lease.leaseApplication().onlineApplication().status().getValue();
 
         //TODO set status base on action.
         lease.leaseApplication().decidedBy().set(CrmAppContext.getCurrentUserEmployee());

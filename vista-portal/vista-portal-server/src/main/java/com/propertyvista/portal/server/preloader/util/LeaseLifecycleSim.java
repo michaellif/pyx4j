@@ -161,9 +161,9 @@ public class LeaseLifecycleSim {
         lease.version().status().setValue(Status.ApplicationInProgress);
         Persistence.secureSave(lease);
 
-        Persistence.service().retrieve(lease.application());
-        lease.application().status().setValue(com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication.Status.Incomplete);
-        Persistence.service().merge(lease.application());
+        Persistence.service().retrieve(lease.leaseApplication().onlineApplication());
+        lease.leaseApplication().onlineApplication().status().setValue(com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication.Status.Incomplete);
+        Persistence.service().merge(lease.leaseApplication().onlineApplication());
 
         return lease;
     }

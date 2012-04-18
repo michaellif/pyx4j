@@ -46,7 +46,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 
 @ToStringFormat("{0}, {1}, {2}, {3}")
 public interface Lease extends IVersionedEntity<LeaseV> {
@@ -212,10 +211,6 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();
-
-    @Detached
-    @Deprecated
-    MasterOnlineApplication application();
 
     @Owned
     LeaseApplication leaseApplication();
