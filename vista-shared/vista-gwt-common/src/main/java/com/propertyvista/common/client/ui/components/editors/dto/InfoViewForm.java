@@ -132,7 +132,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             main.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-            main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
+            main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable())));
         }
 
         addValidations();

@@ -59,7 +59,7 @@ public class PersonalInfoForm extends CEntityDecoratableEditor<ResidentDTO> {
         //Emergency Contacts
         container.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
 
-        container.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
+        container.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable())));
         container.getCellFormatter().getElement(row, 0).getStyle().setPadding(10, Unit.PX);
         return container;
     }

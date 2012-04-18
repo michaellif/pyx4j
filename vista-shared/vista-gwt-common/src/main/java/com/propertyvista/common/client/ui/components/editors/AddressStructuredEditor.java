@@ -37,9 +37,9 @@ public class AddressStructuredEditor extends AddressStructuredEditorImpl<Address
     public IsWidget createContent() {
         FormFlexPanel main = internalCreateContent();
 
-        main.setWidth("100%");
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
+        main.setWidth("100%");
 
         return main;
     }

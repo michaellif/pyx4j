@@ -94,7 +94,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     private Widget createContactsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
+        main.setWidget(0, 0, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable())));
 
         return new CrmScrollPanel(main);
     }
