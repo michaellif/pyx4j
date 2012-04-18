@@ -39,7 +39,6 @@ import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
-import com.propertyvista.crm.rpc.services.customer.TenantInLeaseCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantPasswordChangeService;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
@@ -181,10 +180,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ShowingCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Customer.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(TenantCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Tenant.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(TenantInLeaseCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(TenantCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(PersonScreening.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PersonScreeningCrudService.class));
