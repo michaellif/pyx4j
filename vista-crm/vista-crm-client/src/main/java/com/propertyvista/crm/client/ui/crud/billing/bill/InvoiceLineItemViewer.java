@@ -65,14 +65,14 @@ public class InvoiceLineItemViewer extends CEntityViewer<InvoiceLineItemDetailsD
             content.setWidget(0, 0, header);
             content.setWidget(0, 1, itemTotal);
             content.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-            if (value.details() != null && value.details().size() > 0) {
+            if (value.lineItems() != null && value.lineItems().size() > 0) {
                 // details
                 details.setWidth("100%");
                 details.getElement().getStyle().setProperty("paddingLeft", "20px");
                 details.getColumnFormatter().setWidth(0, "20%");
                 details.getColumnFormatter().setWidth(2, "20%");
                 int row = 0;
-                for (InvoiceLineItem item : value.details()) {
+                for (InvoiceLineItem item : value.lineItems()) {
                     if (item instanceof InvoiceProductCharge) {
                         InvoiceProductCharge productCharge = (InvoiceProductCharge) item;
                         InvoiceSubLineItem charge = productCharge.chargeSubLineItem();

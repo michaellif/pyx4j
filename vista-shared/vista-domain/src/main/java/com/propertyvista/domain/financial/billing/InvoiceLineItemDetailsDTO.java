@@ -26,5 +26,5 @@ public interface InvoiceLineItemDetailsDTO extends IEntity {
     @Format("#0.00")
     IPrimitive<BigDecimal> total();
 
-    IList<InvoiceLineItem> details();
+    IList<InvoiceLineItem> lineItems();
 }
