@@ -34,6 +34,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         if (customer.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(customer);
         }
+        Persistence.service().retrieve(customer.user());
         customer.user().name().setValue(customer.person().name().getStringView());
         customer.user().email().setValue(customer.person().email().getValue());
         if (customer.user().getPrimaryKey() != null) {
