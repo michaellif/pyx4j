@@ -35,7 +35,6 @@ import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implements TenantViewerView.Presenter {
@@ -70,7 +69,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     public void onPopulateSuccess(TenantDTO result) {
         super.onPopulateSuccess(result);
 
-        screeningLister.setParent(result.customer().getPrimaryKey(), Tenant.class);
+        screeningLister.setParent(result.customer().getPrimaryKey());
         screeningLister.populate();
     }
 
