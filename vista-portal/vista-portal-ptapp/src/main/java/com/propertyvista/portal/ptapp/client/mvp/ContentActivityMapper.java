@@ -20,6 +20,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.portal.ptapp.client.activity.ApplicationSelectionActivity;
 import com.propertyvista.portal.ptapp.client.activity.ApplicationStatusActivity;
 import com.propertyvista.portal.ptapp.client.activity.GenericMessageActivity;
 import com.propertyvista.portal.ptapp.client.activity.LoginActivity;
@@ -78,6 +79,8 @@ public class ContentActivityMapper implements ActivityMapper {
             // other places:
         } else if (place instanceof PtSiteMap.ApplicationStatus) {
             return new ApplicationStatusActivity((AppPlace) place);
+        } else if (place instanceof PtSiteMap.ApplicationSelectionRequired) {
+            return new ApplicationSelectionActivity();
         }
 
         if (VistaTODO.enableWelcomeWizardDemoMode) {
