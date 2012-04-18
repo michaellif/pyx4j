@@ -16,6 +16,7 @@ package com.propertyvista.biz.tenant;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeaseFacade {
@@ -28,11 +29,11 @@ public interface LeaseFacade {
 
     void createMasterOnlineApplication(Key leaseId);
 
-    void approveApplication(Key leaseId);
+    void approveApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 
-    void declineApplication(Key leaseId);
+    void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 
-    void cancelApplication(Key leaseId);
+    void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 
     void activate(Key leaseId);
 

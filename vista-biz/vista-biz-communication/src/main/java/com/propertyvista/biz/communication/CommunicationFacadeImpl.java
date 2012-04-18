@@ -66,7 +66,9 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendApplicationStatus(Tenant tenant) {
+    public void sendApplicationStatus(Tenant tenantId) {
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
+        Persistence.service().retrieve(tenant.leaseV());
         EmailTemplateType emailType;
         switch (tenant.leaseV().holder().leaseApplication().status().getValue()) {
         case Approved:
@@ -76,7 +78,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
             emailType = EmailTemplateType.ApplicationDeclined;
             break;
         default:
-            return;
+            throw new IllegalArgumentException();
         }
         MailMessage m = MessageTemplates.createApplicationStatusEmail(tenant, emailType);
         if (MailDeliveryStatus.Success != Mail.send(m)) {

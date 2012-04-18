@@ -33,7 +33,6 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.OnlineApplicationStatusDTO;
@@ -49,16 +48,6 @@ import com.propertyvista.server.domain.security.CustomerUserCredential;
 public class ApplicationManager {
 
     private static final I18n i18n = I18n.get(ApplicationManager.class);
-
-    public static void sendApproveDeclineApplicationEmail(Lease lease, boolean isApproved) {
-        Persistence.service().retrieve(lease.version().tenants());
-        for (Tenant tenantInLease : lease.version().tenants()) {
-            OnlineApplication test = tenantInLease.application();
-            if (!test.isNull()) { //co-applicants have no dedicated application
-                ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenantInLease);
-            }
-        }
-    }
 
     public static void makeApplicationCompleted(OnlineApplication application) {
         if (!VistaTODO.enableWelcomeWizardDemoMode) {

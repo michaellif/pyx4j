@@ -55,7 +55,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             // Create normal Active Lease first for Shortcut users
             if (true || i < DemoData.UserType.TENANT.getDefaultMax()) {
                 ServerSideFactory.create(LeaseFacade.class).createLease(lease);
-                ServerSideFactory.create(LeaseFacade.class).approveApplication(lease.getPrimaryKey());
+                ServerSideFactory.create(LeaseFacade.class).approveApplication(lease, null, null);
                 //TODO
                 // ServerSideFactory.create(LeaseFacade.class).activate(lease.getPrimaryKey());
             } else {

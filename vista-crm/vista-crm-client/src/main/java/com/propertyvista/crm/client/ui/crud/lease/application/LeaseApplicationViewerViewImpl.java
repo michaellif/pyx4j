@@ -289,7 +289,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
 
         public LeaseApplicationActionDTO updateValue(Action status) {
             LeaseApplicationActionDTO action = EntityFactory.create(LeaseApplicationActionDTO.class);
-            action.setPrimaryKey(form.getValue().getPrimaryKey());
+            action.leaseId().set(form.getValue().createIdentityStub());
             action.decisionReason().setValue(reason.getValue());
             action.action().setValue(status);
             return action;

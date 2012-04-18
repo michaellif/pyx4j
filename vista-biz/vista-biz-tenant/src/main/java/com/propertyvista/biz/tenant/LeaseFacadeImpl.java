@@ -24,9 +24,11 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -158,12 +160,15 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void approveApplication(Key leaseId) {
-        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+    public void approveApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
 
         lease.version().status().setValue(Lease.Status.Approved);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
         lease.approvalDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        lease.leaseApplication().decidedBy().set(decidedBy);
+        lease.leaseApplication().decisionReason().setValue(decisionReason);
+        lease.leaseApplication().decisionDate().setValue(new LogicalDate());
 
         // finalize approved leases while saving:
         lease.saveAction().setValue(SaveAction.saveAsFinal);
@@ -178,14 +183,25 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (false && !VistaTODO.removedForProduction) {
             ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         }
+
+        if (!lease.leaseApplication().onlineApplication().isNull()) {
+            for (Tenant tenant : lease.version().tenants()) {
+                if (!tenant.application().isNull()) { //co-applicants have no dedicated application
+                    ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenant);
+                }
+            }
+        }
     }
 
     @Override
-    public void declineApplication(Key leaseId) {
-        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+    public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
         // TODO Review the status
         lease.version().status().setValue(Lease.Status.Closed);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Declined);
+        lease.leaseApplication().decidedBy().set(decidedBy);
+        lease.leaseApplication().decisionReason().setValue(decisionReason);
+        lease.leaseApplication().decisionDate().setValue(new LogicalDate());
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
 
@@ -194,15 +210,26 @@ public class LeaseFacadeImpl implements LeaseFacade {
         updateApplicationReferencesToFinalVersionOfLase(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
+
+        if (!lease.leaseApplication().onlineApplication().isNull()) {
+            for (Tenant tenant : lease.version().tenants()) {
+                if (!tenant.application().isNull()) { //co-applicants have no dedicated application
+                    ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenant);
+                }
+            }
+        }
 
     }
 
     @Override
-    public void cancelApplication(Key leaseId) {
-        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
+    public void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
         // TODO Review the status
         lease.version().status().setValue(Lease.Status.Closed);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Cancelled);
+        lease.leaseApplication().decidedBy().set(decidedBy);
+        lease.leaseApplication().decisionReason().setValue(decisionReason);
+        lease.leaseApplication().decisionDate().setValue(new LogicalDate());
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
 
@@ -211,7 +238,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         updateApplicationReferencesToFinalVersionOfLase(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
-
     }
 
     // TODO review code here
