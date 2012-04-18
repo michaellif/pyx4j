@@ -13,13 +13,12 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.domain.financial.billing.InvoiceLineItemDetailsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
@@ -28,30 +27,40 @@ public interface BillDTO extends Bill {
 
     Lease lease();
 
-    IList<InvoiceProductCharge> serviceChargeLineItems();
+    @Caption(name = "Service Charges")
+    InvoiceLineItemDetailsDTO serviceChargeLineItems();
 
     // Current Bill charges
-    IList<InvoiceProductCharge> recurringFeatureChargeLineItems();
+    @Caption(name = "Product Charges")
+    InvoiceLineItemDetailsDTO recurringFeatureChargeLineItems();
 
-    IList<InvoiceProductCharge> onetimeFeatureChargeLineItems();
+    @Caption(name = "One-Time Product Charges")
+    InvoiceLineItemDetailsDTO onetimeFeatureChargeLineItems();
 
 //    IList<InvoiceProductCredit> productCreditLineItems();
 
-    IList<InvoiceLineItem> depositLineItems();
+    @Caption(name = "Deposits")
+    InvoiceLineItemDetailsDTO depositLineItems();
 
     // Last Bill charges and payments
-    IList<InvoiceLineItem> depositRefundLineItems();
+    @Caption(name = "Deposit Refunds")
+    InvoiceLineItemDetailsDTO depositRefundLineItems();
 
     //Both Debit and Credit types of Lease Adjustments
-    IList<InvoiceLineItem> immediateAdjustmentLineItems();
+    @Caption(name = "Immediate Adjustments")
+    InvoiceLineItemDetailsDTO immediateAdjustmentLineItems();
 
-    //
-    IList<InvoiceLineItem> pendingAdjustmentLineItems();
+    // Debit and credit combined
+    @Caption(name = "Pending Adjustments")
+    InvoiceLineItemDetailsDTO pendingAdjustmentLineItems();
 
-    IList<InvoiceLineItem> withdrawalLineItems();
+    @Caption(name = "Withdrawals")
+    InvoiceLineItemDetailsDTO withdrawalLineItems();
 
-    IList<InvoiceLineItem> rejectedPaymentLineItems();
+    @Caption(name = "Rejected Payments")
+    InvoiceLineItemDetailsDTO rejectedPaymentLineItems();
 
-    IList<InvoiceLineItem> paymentLineItems();
+    @Caption(name = "Payments Received")
+    InvoiceLineItemDetailsDTO paymentLineItems();
 
 }

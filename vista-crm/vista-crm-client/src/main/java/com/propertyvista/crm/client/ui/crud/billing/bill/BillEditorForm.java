@@ -68,18 +68,17 @@ public class BillEditorForm extends CrmEntityForm<BillDTO> {
 
         main.setH1(++row, 0, 2, i18n.tr("Last Bill"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().previousBalanceAmount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentReceivedAmount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositRefundAmount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().immediateAdjustments()), 10).build());
+        main.setWidget(++row, 0, inject(proto().paymentLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().immediateAdjustmentLineItems(), new InvoiceLineItemViewer()));
 
         main.setH1(++row, 0, 2, i18n.tr("Current Bill"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceCharge()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recurringFeatureCharges()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recurringFeatureChargeLineItems(), new FeatureChargesFolder()), 30).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().oneTimeFeatureCharges()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalAdjustments()), 10).build());
+        main.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().pendingAdjustmentLineItems(), new InvoiceLineItemViewer()));
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositAmount()), 10).build());
+        main.setWidget(++row, 0, inject(proto().depositLineItems(), new InvoiceLineItemViewer()));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credits()), 10).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount()), 10).build());
