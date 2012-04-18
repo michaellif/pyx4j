@@ -25,7 +25,7 @@ import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.GuarantorFinancialService;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
-import com.propertyvista.server.common.util.PersonGuarantorRetriever;
+import com.propertyvista.server.common.util.GuarantorInLeaseRetriever;
 import com.propertyvista.server.common.util.TenantConverter;
 
 public class GuarantorFinancialServiceImpl extends ApplicationEntityServiceImpl implements GuarantorFinancialService {
@@ -35,15 +35,15 @@ public class GuarantorFinancialServiceImpl extends ApplicationEntityServiceImpl 
     @Override
     public void retrieve(AsyncCallback<TenantFinancialDTO> callback, Key tenantId) {
         log.debug("Retrieving financial for tenant {}", tenantId);
-        callback.onSuccess(retrieveData(new PersonGuarantorRetriever(tenantId, true)));
+        callback.onSuccess(retrieveData(new GuarantorInLeaseRetriever(tenantId, true)));
     }
 
     @Override
     public void save(AsyncCallback<TenantFinancialDTO> callback, TenantFinancialDTO entity) {
         log.debug("Saving tenantFinancial {}", entity);
 
-        PersonGuarantorRetriever tr = new PersonGuarantorRetriever(entity.getPrimaryKey(), true);
-        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.tenantScreening);
+        GuarantorInLeaseRetriever tr = new GuarantorInLeaseRetriever(entity.getPrimaryKey(), true);
+        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.personScreening);
 
         tr.saveScreening();
 
@@ -56,9 +56,9 @@ public class GuarantorFinancialServiceImpl extends ApplicationEntityServiceImpl 
 //        callback.onSuccess(retrieveData(tr));
     }
 
-    public TenantFinancialDTO retrieveData(PersonGuarantorRetriever tr) {
-        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
-        dto.setPrimaryKey(tr.personGuarantor.getPrimaryKey());
+    public TenantFinancialDTO retrieveData(GuarantorInLeaseRetriever tr) {
+        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.personScreening);
+        dto.setPrimaryKey(tr.guarantorInLease.getPrimaryKey());
         dto.person().set(tr.getPerson());
         return dto;
     }

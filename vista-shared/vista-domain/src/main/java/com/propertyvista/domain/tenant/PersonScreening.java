@@ -20,9 +20,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -93,12 +91,6 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder<Iden
     @Detached
     @Length(3)
     IList<PersonalAsset> assets();
-
-    @Detached
-    @Length(2)
-    @JoinTable(value = PersonGuarantor.class)
-    @OrderBy(PersonGuarantor.OrderInGuarantee.class)
-    IList<PersonGuarantor> guarantors();
 
     //=============== Approval =============//
 

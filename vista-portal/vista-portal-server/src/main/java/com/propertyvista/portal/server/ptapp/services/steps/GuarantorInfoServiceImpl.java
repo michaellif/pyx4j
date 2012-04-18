@@ -24,7 +24,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.GuarantorInfoService;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
-import com.propertyvista.server.common.util.PersonGuarantorRetriever;
+import com.propertyvista.server.common.util.GuarantorInLeaseRetriever;
 import com.propertyvista.server.common.util.TenantConverter;
 
 public class GuarantorInfoServiceImpl implements GuarantorInfoService {
@@ -34,23 +34,23 @@ public class GuarantorInfoServiceImpl implements GuarantorInfoService {
     @Override
     public void retrieve(AsyncCallback<TenantInfoDTO> callback, Key tenantId) {
         log.debug("Retrieving Info for tenant {}", tenantId);
-        callback.onSuccess(retrieveData(new PersonGuarantorRetriever(tenantId)));
+        callback.onSuccess(retrieveData(new GuarantorInLeaseRetriever(tenantId)));
     }
 
     @Override
     public void save(AsyncCallback<TenantInfoDTO> callback, TenantInfoDTO entity) {
         log.debug("Saving Tenant Info {}", entity);
 
-        PersonGuarantorRetriever tr = new PersonGuarantorRetriever(entity.getPrimaryKey());
+        GuarantorInLeaseRetriever tr = new GuarantorInLeaseRetriever(entity.getPrimaryKey());
         new TenantConverter.Guarantor2TenantInfo().copyDTOtoDBO(entity, tr.getGuarantor());
-        new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(entity, tr.tenantScreening);
+        new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(entity, tr.personScreening);
 
         tr.saveTenant();
         tr.saveScreening();
 
         entity = new TenantConverter.Guarantor2TenantInfo().createDTO(tr.getGuarantor());
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, entity);
-        entity.setPrimaryKey(tr.personGuarantor.getPrimaryKey());
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.personScreening, entity);
+        entity.setPrimaryKey(tr.guarantorInLease.getPrimaryKey());
 
         DigitalSignatureMgr.reset(tr.getGuarantor().customer());
         Persistence.service().commit();
@@ -61,10 +61,10 @@ public class GuarantorInfoServiceImpl implements GuarantorInfoService {
 //        callback.onSuccess(retrieveData(tr));
     }
 
-    public TenantInfoDTO retrieveData(PersonGuarantorRetriever tr) {
+    public TenantInfoDTO retrieveData(GuarantorInLeaseRetriever tr) {
         TenantInfoDTO dto = new TenantConverter.Guarantor2TenantInfo().createDTO(tr.getGuarantor());
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, dto);
-        dto.setPrimaryKey(tr.personGuarantor.getPrimaryKey());
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.personScreening, dto);
+        dto.setPrimaryKey(tr.guarantorInLease.getPrimaryKey());
         return dto;
     }
 }

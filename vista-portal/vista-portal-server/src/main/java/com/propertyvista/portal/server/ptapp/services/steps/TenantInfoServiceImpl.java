@@ -43,13 +43,13 @@ public class TenantInfoServiceImpl implements TenantInfoService {
 
         TenantInLeaseRetriever tr = new TenantInLeaseRetriever(entity.getPrimaryKey());
         new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(entity, tr.getTenant());
-        new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(entity, tr.tenantScreening);
+        new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(entity, tr.personScreening);
 
         tr.saveTenant();
         tr.saveScreening();
 
         entity = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, entity);
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.personScreening, entity);
         entity.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
 
         DigitalSignatureMgr.reset(tr.getTenant());
@@ -63,7 +63,7 @@ public class TenantInfoServiceImpl implements TenantInfoService {
 
     public TenantInfoDTO retrieveData(TenantInLeaseRetriever tr) {
         TenantInfoDTO dto = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, dto);
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.personScreening, dto);
         dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
         return dto;
     }

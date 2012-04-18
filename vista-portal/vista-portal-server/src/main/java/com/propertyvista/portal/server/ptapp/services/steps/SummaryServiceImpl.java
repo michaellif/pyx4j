@@ -54,7 +54,6 @@ import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceIm
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.services.util.LegalStuffUtils;
 import com.propertyvista.portal.server.report.SummaryReport;
-import com.propertyvista.server.common.util.PersonGuarantorRetriever;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -128,10 +127,12 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         if (SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             GuarantorInfoServiceImpl gis = new GuarantorInfoServiceImpl();
             GuarantorFinancialServiceImpl gfs = new GuarantorFinancialServiceImpl();
-            PersonGuarantorRetriever gr = new PersonGuarantorRetriever(PtAppContext.retrieveCurrentUserGuarantor());
 
-            summary.tenantsWithInfo().add(gis.retrieveData(gr));
-            summary.tenantFinancials().add(gfs.retrieveData(gr));
+            // TODO: rethink:
+//            PersonGuarantorRetriever gr = new PersonGuarantorRetriever(PtAppContext.retrieveCurrentUserCustomer());
+//
+//            summary.tenantsWithInfo().add(gis.retrieveData(gr));
+//            summary.tenantFinancials().add(gfs.retrieveData(gr));
         }
 
         // Legal stuff:

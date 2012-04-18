@@ -92,7 +92,6 @@ public class TenantConverter {
             bind(dtoProto.incomes(), dboProto.incomes());
 //            bind(dtoProto.incomes2(), dboProto.incomes2());
             bind(dtoProto.assets(), dboProto.assets());
-            bind(dtoProto.guarantors(), dboProto.guarantors());
             bind(dtoProto.equifaxApproval(), dboProto.equifaxApproval());
         }
     }

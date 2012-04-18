@@ -32,8 +32,6 @@ import com.propertyvista.domain.security.TenantUserHolder;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.PersonGuarantor;
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
@@ -98,21 +96,22 @@ public class ApplicationManager {
             Persistence.service().retrieve(ma.lease());
             boolean allApplicationsSubmited = false;
 
-            // Invite Guarantors:
-            if (!isGuarantor) {
-                EntityQueryCriteria<Tenant> criteriaTL = EntityQueryCriteria.create(Tenant.class);
-                criteriaTL.add(PropertyCriterion.eq(criteriaTL.proto().application(), application));
-                Tenant tenantInLease = Persistence.service().retrieve(criteriaTL);
-
-                EntityQueryCriteria<PersonScreening> criteriaPS = EntityQueryCriteria.create(PersonScreening.class);
-                criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.customer()));
-                PersonScreening tenantScreenings = Persistence.service().retrieve(criteriaPS);
-
-                Persistence.service().retrieve(tenantScreenings.guarantors());
-                for (PersonGuarantor personGuarantor : tenantScreenings.guarantors()) {
-                    inviteUser(ma, personGuarantor.guarantor(), personGuarantor.guarantor().customer().person(), VistaCustomerBehavior.Guarantor);
-                }
-            }
+// TODO rethink!
+//            // Invite Guarantors:
+//            if (!isGuarantor) {
+//                EntityQueryCriteria<Tenant> criteriaTL = EntityQueryCriteria.create(Tenant.class);
+//                criteriaTL.add(PropertyCriterion.eq(criteriaTL.proto().application(), application));
+//                Tenant tenantInLease = Persistence.service().retrieve(criteriaTL);
+//
+//                EntityQueryCriteria<PersonScreening> criteriaPS = EntityQueryCriteria.create(PersonScreening.class);
+//                criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.customer()));
+//                PersonScreening tenantScreenings = Persistence.service().retrieve(criteriaPS);
+//
+//                Persistence.service().retrieve(tenantScreenings.guarantors());
+//                for (PersonGuarantor personGuarantor : tenantScreenings.guarantors()) {
+//                    inviteUser(ma, personGuarantor.guarantor(), personGuarantor.guarantor().customer().person(), VistaCustomerBehavior.Guarantor);
+//                }
+//            }
 
             // Invite CoApplicants:
             if (isApplicant) {
@@ -214,13 +213,14 @@ public class ApplicationManager {
                 status.person().set(tenant.person().name());
                 status.role().setValue(Role.Tenant);
             } else {
-                EntityQueryCriteria<PersonGuarantor> criteria1 = EntityQueryCriteria.create(PersonGuarantor.class);
-                criteria1.add(PropertyCriterion.eq(criteria1.proto().guarantor().user(), app.user()));
-                PersonGuarantor guarantor = Persistence.service().retrieve(criteria1);
-                if (guarantor != null) {
-                    status.person().set(guarantor.guarantor().customer().person().name());
-                    status.role().setValue(Role.Guarantor);
-                }
+// TODO rethink!
+//                EntityQueryCriteria<PersonGuarantor> criteria1 = EntityQueryCriteria.create(PersonGuarantor.class);
+//                criteria1.add(PropertyCriterion.eq(criteria1.proto().guarantor().user(), app.user()));
+//                PersonGuarantor guarantor = Persistence.service().retrieve(criteria1);
+//                if (guarantor != null) {
+//                    status.person().set(guarantor.guarantor().customer().person().name());
+//                    status.role().setValue(Role.Guarantor);
+//                }
             }
 
             //status.status().setValue(app.status().getValue());

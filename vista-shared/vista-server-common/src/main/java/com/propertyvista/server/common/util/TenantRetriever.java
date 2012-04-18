@@ -28,13 +28,13 @@ import com.propertyvista.domain.tenant.PersonScreening;
 
 public class TenantRetriever {
 
-    public Class<? extends Customer> tenantClass;
+    public Class<? extends Customer> customerClass;
 
     private Customer screeningHolder;
 
-    public PersonScreening tenantScreening;
+    public PersonScreening personScreening;
 
-    public List<PersonScreening> tenantScreenings;
+    public List<PersonScreening> personScreenings;
 
     private final boolean financial;
 
@@ -44,7 +44,7 @@ public class TenantRetriever {
     }
 
     public TenantRetriever(Class<? extends Customer> tenantClass, boolean financial) {
-        this.tenantClass = tenantClass;
+        this.customerClass = tenantClass;
         this.financial = financial;
     }
 
@@ -58,29 +58,28 @@ public class TenantRetriever {
     }
 
     // Manipulation:
-    public void retrieve(Key tenantId) {
-        screeningHolder = Persistence.service().retrieve(tenantClass, tenantId);
+    public void retrieve(Key customerId) {
+        screeningHolder = Persistence.service().retrieve(customerClass, customerId);
         if (screeningHolder != null) {
             EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().screene(), screeningHolder));
-            tenantScreenings = Persistence.service().query(criteria);
-            if (tenantScreenings != null && !tenantScreenings.isEmpty()) {
-                tenantScreening = tenantScreenings.get(tenantScreenings.size() - 1); // use last screenings
+            personScreenings = Persistence.service().query(criteria);
+            if (personScreenings != null && !personScreenings.isEmpty()) {
+                personScreening = personScreenings.get(personScreenings.size() - 1); // use last screenings
             } else {
-                tenantScreening = EntityFactory.create(PersonScreening.class);
+                personScreening = EntityFactory.create(PersonScreening.class);
             }
 
-            if (!tenantScreening.isEmpty()) {
-                Persistence.service().retrieve(tenantScreening.documents());
+            if (!personScreening.isEmpty()) {
+                Persistence.service().retrieve(personScreening.documents());
                 if (financial) {
-                    Persistence.service().retrieve(tenantScreening.incomes());
-                    Persistence.service().retrieve(tenantScreening.assets());
-                    Persistence.service().retrieve(tenantScreening.guarantors());
-                    Persistence.service().retrieve(tenantScreening.equifaxApproval());
+                    Persistence.service().retrieve(personScreening.incomes());
+                    Persistence.service().retrieve(personScreening.assets());
+                    Persistence.service().retrieve(personScreening.equifaxApproval());
                 }
             } else {
                 // newly created - set belonging to tenant:
-                tenantScreening.screene().set(screeningHolder);
+                personScreening.screene().set(screeningHolder);
             }
 
             if (screeningHolder instanceof Customer) {
@@ -101,7 +100,7 @@ public class TenantRetriever {
         if (screeningHolder instanceof Customer) {
             return screeningHolder;
         } else {
-            throw new Error(tenantClass.getName() + " object stored!");
+            throw new Error(customerClass.getName() + " object stored!");
         }
     }
 
@@ -109,7 +108,7 @@ public class TenantRetriever {
         if (screeningHolder instanceof Guarantor) {
             return (Guarantor) screeningHolder;
         } else {
-            throw new Error(tenantClass.getName() + " object stored!");
+            throw new Error(customerClass.getName() + " object stored!");
         }
     }
 
@@ -118,17 +117,16 @@ public class TenantRetriever {
     }
 
     public void saveScreening() {
-        Persistence.service().merge(tenantScreening);
+        Persistence.service().merge(personScreening);
 
         // save detached entities:
         if (!financial) {
-            Persistence.service().merge(tenantScreening.documents());
+            Persistence.service().merge(personScreening.documents());
         }
 
         if (financial) {
-            Persistence.service().merge(tenantScreening.incomes());
-            Persistence.service().merge(tenantScreening.assets());
-            Persistence.service().merge(tenantScreening.guarantors());
+            Persistence.service().merge(personScreening.incomes());
+            Persistence.service().merge(personScreening.assets());
         }
     }
 }

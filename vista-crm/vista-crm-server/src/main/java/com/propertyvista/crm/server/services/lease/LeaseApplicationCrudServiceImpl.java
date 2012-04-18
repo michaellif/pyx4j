@@ -199,12 +199,12 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
     // internal helpers:
     private TenantInfoDTO createTenantInfoDTO(TenantInLeaseRetriever tr) {
         TenantInfoDTO tiDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, tiDTO);
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.personScreening, tiDTO);
         return tiDTO;
     }
 
     private TenantFinancialDTO createTenantFinancialDTO(TenantInLeaseRetriever tr) {
-        TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
+        TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.personScreening);
         tfDTO.person().set(tr.getPerson());
         return tfDTO;
     }

@@ -26,16 +26,13 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.components.folders.PersonGuarantorFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.dto.TenantFinancialDTO;
 
 public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialDTO> {
@@ -81,12 +78,6 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
         main.setH1(++row, 0, 1, proto().assets().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().assets(), new PersonalAssetFolder(isShowEditable())));
         main.setWidget(++row, 0, new HTML());
-
-        if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
-            main.setH1(++row, 0, 1, proto().guarantors().getMeta().getCaption(), adjust);
-            main.setWidget(++row, 0, inject(proto().guarantors(), new PersonGuarantorFolder(isShowEditable())));
-            main.setWidget(++row, 0, new HTML());
-        }
 
         return main;
     }

@@ -14,7 +14,6 @@
 package com.propertyvista.portal.server.ptapp.services.steps;
 
 import java.util.List;
-import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +23,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.tenant.PersonGuarantor;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.util.TenantConverter;
@@ -48,24 +49,26 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
 
         // TODO: check new/deleted PersonalGuarantor and correct Guarantors accordingly!..
 
+        Lease lease = PtAppContext.retrieveCurrentUserLease();
+        List<Guarantor> currentGuarantors = lease.version().guarantors();
+
         TenantInLeaseRetriever tr = new TenantInLeaseRetriever(entity.getPrimaryKey(), true);
-        List<PersonGuarantor> currentGuarantors = new Vector<PersonGuarantor>(tr.tenantScreening.guarantors());
+        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.personScreening);
 
-        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.tenantScreening);
-
-        for (PersonGuarantor pg : tr.tenantScreening.guarantors()) {
+        for (Guarantor pg : entity.guarantors()) {
             int idx = currentGuarantors.indexOf(pg);
             if (idx >= 0) {
                 currentGuarantors.remove(idx);
             } else {
                 // new item - perform initialization:
-                pg.guarantee().set(tr.tenantScreening);
-                Persistence.service().merge(pg.guarantor());
+                pg.tenant().set(tr.tenantInLease);
+                pg.leaseV().set(lease.version());
+                Persistence.service().merge(pg);
             }
         }
 
         // remove deleted guarantors:
-        for (PersonGuarantor orphan : currentGuarantors) {
+        for (Guarantor orphan : currentGuarantors) {
             Persistence.service().delete(orphan);
         }
 
@@ -81,7 +84,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     }
 
     public TenantFinancialDTO retrieveData(TenantInLeaseRetriever tr) {
-        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
+        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.personScreening);
         dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
         dto.person().set(tr.getPerson());
 

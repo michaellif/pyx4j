@@ -32,7 +32,6 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
@@ -109,16 +108,16 @@ public class ApplicationProgressMgr extends ApplicationManager {
         createPersonDataSteps(application, tenant.person(), outer.getPrimaryKey());
     }
 
-    public static void createGurantorDataSteps(OnlineApplication application, Guarantor guarantor) {
+    public static void createGurantorDataSteps(OnlineApplication application, Customer guarantor) {
 
-        EntityQueryCriteria<PersonGuarantor> criteria = EntityQueryCriteria.create(PersonGuarantor.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().guarantor(), guarantor));
-        PersonGuarantor outer = Persistence.service().retrieve(criteria);
+        EntityQueryCriteria<Guarantor> criteria = EntityQueryCriteria.create(Guarantor.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), guarantor));
+        Guarantor outer = Persistence.service().retrieve(criteria);
         if (outer == null) {
             throw new Error("PersonGuarantor for '" + guarantor.getStringView() + "' not found");
         }
 
-        createPersonDataSteps(application, guarantor.customer().person(), outer.getPrimaryKey());
+        createPersonDataSteps(application, guarantor.person(), outer.getPrimaryKey());
     }
 
     public static void createPersonDataSteps(OnlineApplication application, Person person, Key stepID) {

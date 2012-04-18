@@ -36,7 +36,6 @@ public class PersonScreeningCrudServiceImpl extends AbstractCrudServiceImpl<Pers
         Persistence.service().retrieve(dto.documents());
         Persistence.service().retrieve(dto.incomes());
         Persistence.service().retrieve(dto.assets());
-        Persistence.service().retrieve(dto.guarantors());
     }
 
 }
