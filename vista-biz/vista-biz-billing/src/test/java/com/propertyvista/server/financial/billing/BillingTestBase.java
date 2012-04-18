@@ -129,7 +129,9 @@ abstract class BillingTestBase extends VistaDBTestBase {
 
         Persistence.service().commit();
 
-        if (printBill) {
+        //TODO
+        //if (printBill) {
+        if (false) {
             try {
                 BillPrint.printBill(BillingUtils.createBillDto(bill), new FileOutputStream(billFileName(bill)));
                 DataDump.dump("bill", bill);
