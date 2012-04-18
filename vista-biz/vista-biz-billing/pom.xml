@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-billing</artifactId>
-    <name>vista-billing</name>
+    <artifactId>vista-biz-billing</artifactId>
+    <name>vista-biz-billing</name>
 
     <dependencies>
 

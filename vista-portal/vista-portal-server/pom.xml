@@ -58,7 +58,7 @@
             <artifactId>vista-dev-preloader</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
 	    <!--  TODO remove -->
         <dependency>
             <groupId>com.propertyvista</groupId>
@@ -70,7 +70,7 @@
             <artifactId>vista-biz-communication</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-importer</artifactId>
@@ -85,7 +85,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-billing</artifactId>
+            <artifactId>vista-biz-billing</artifactId>
             <version>${project.version}</version>
         </dependency>
 
