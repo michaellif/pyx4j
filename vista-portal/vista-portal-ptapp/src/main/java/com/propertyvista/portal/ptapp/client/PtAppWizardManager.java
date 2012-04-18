@@ -30,7 +30,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep.Status;
@@ -124,7 +124,7 @@ public class PtAppWizardManager {
     }
 
     private boolean isStepNavigable(AppPlace place) {
-        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveSubmitted)) {
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveSubmitted)) {
             return (place instanceof PtSiteMap.ApplicationStatus) || (place instanceof PtSiteMap.Completion);
         } else {
             for (ApplicationWizardStep step : application.steps()) {
@@ -146,7 +146,7 @@ public class PtAppWizardManager {
     }
 
     protected void obtainPlace(AsyncCallback<AppPlace> callback) {
-        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveSubmitted)) {
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveSubmitted)) {
             callback.onSuccess(new PtSiteMap.ApplicationStatus());
         } else {
             forwardByApplicationProgress(callback);

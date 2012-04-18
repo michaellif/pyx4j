@@ -13,10 +13,12 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 
+import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
@@ -33,7 +35,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     }
 
     @Override
-    protected void enhanceRetrieved(Tenant in, TenantDTO dto) {
+    protected void enhanceRetrieved(Tenant entity, TenantDTO dto) {
         // load detached data:
         Persistence.service().retrieve(dto.customer().emergencyContacts());
         Persistence.service().retrieve(dto.leaseV());
@@ -41,13 +43,14 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     }
 
     @Override
-    protected void enhanceListRetrieved(Tenant in, TenantDTO dto) {
+    protected void enhanceListRetrieved(Tenant entity, TenantDTO dto) {
         Persistence.service().retrieve(dto.leaseV());
         Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
     }
 
     @Override
-    protected void persist(Tenant dbo, TenantDTO in) {
-        super.persist(dbo, in);
+    protected void persist(Tenant entity, TenantDTO in) {
+        ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
+        super.persist(entity, in);
     }
 }

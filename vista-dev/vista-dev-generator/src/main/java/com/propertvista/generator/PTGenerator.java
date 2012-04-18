@@ -50,7 +50,7 @@ import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
@@ -104,9 +104,9 @@ public class PTGenerator {
         this.config = config;
     }
 
-    public TenantUser createUser(int number) {
+    public CustomerUser createUser(int number) {
         String email = DemoData.UserType.PTENANT.getEmail(number);
-        TenantUser user = EntityFactory.create(TenantUser.class);
+        CustomerUser user = EntityFactory.create(CustomerUser.class);
         user.name().setValue(email.substring(0, email.indexOf('@')));
         user.email().setValue(email);
         return user;
@@ -118,7 +118,7 @@ public class PTGenerator {
      * @param selectedUnit
      * @return <code>null</code> if selectedUnit is not avaialble for rent, otherwise a generated application summary
      */
-    public ApplicationSummaryGDO createSummary(TenantUser user, AptUnit selectedUnit) {
+    public ApplicationSummaryGDO createSummary(CustomerUser user, AptUnit selectedUnit) {
         ApplicationSummaryGDO summary = EntityFactory.create(ApplicationSummaryGDO.class);
 
         createTenantList(user, summary.tenants());
@@ -345,7 +345,7 @@ public class PTGenerator {
         return address;
     }
 
-    private void createTenantList(TenantUser user, IList<TenantSummaryGDO> list) {
+    private void createTenantList(CustomerUser user, IList<TenantSummaryGDO> list) {
         int maxTenants = config.numTenantsInLease;
         if (Math.abs(this.seed) > 1000) {
             maxTenants = 1 + RandomUtil.randomInt(5);
@@ -357,7 +357,7 @@ public class PTGenerator {
         }
     }
 
-    private TenantSummaryGDO createTenantSummary(TenantUser user, int index) {
+    private TenantSummaryGDO createTenantSummary(CustomerUser user, int index) {
         TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);
 
         // Tenant as person, first to have the same random names

@@ -27,14 +27,14 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
-import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.server.common.security.VistaContext;
+import com.propertyvista.portal.server.security.VistaCustomerContext;
 
-public class PtAppContext extends VistaContext {
+public class PtAppContext extends VistaCustomerContext {
 
     private final static Logger log = LoggerFactory.getLogger(PtAppContext.class);
 
@@ -54,13 +54,13 @@ public class PtAppContext extends VistaContext {
         return attr;
     }
 
-    public static TenantUser getCurrentUser() {
+    public static CustomerUser getCurrentUser() {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
         }
-        TenantUser user = EntityFactory.create(TenantUser.class);
+        CustomerUser user = EntityFactory.create(CustomerUser.class);
         user.setPrimaryKey(v.getUserVisit().getPrincipalPrimaryKey());
         user.name().setValue(v.getUserVisit().getName());
         user.email().setValue(v.getUserVisit().getEmail());
@@ -80,25 +80,26 @@ public class PtAppContext extends VistaContext {
         return key;
     }
 
-    public static OnlineApplication getCurrentUserApplication() {
+    public static OnlineApplication retrieveCurrentUserApplication() {
         return Persistence.service().retrieve(OnlineApplication.class, getCurrentUserApplicationPrimaryKey());
     }
 
+    @Deprecated
     public static Key getCurrentUserLeasePrimaryKey() {
-        return PtAppContext.getCurrentUserApplication().lease().getPrimaryKey();
+        return PtAppContext.retrieveCurrentUserApplication().lease().getPrimaryKey();
     }
 
-    public static Lease getCurrentUserLease() {
-        return Persistence.service().retrieve(Lease.class, PtAppContext.getCurrentUserApplication().lease().getPrimaryKey().asDraftKey());
+    public static Lease retrieveCurrentUserLease() {
+        return Persistence.service().retrieve(Lease.class, getCurrentUserLeaseIdStub().getPrimaryKey().asDraftKey());
     }
 
-    public static Customer getCurrentUserTenant() {
+    public static Customer retrieveCurrentUserCustomer() {
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtAppContext.getCurrentUser()));
         return Persistence.service().retrieve(criteria);
     }
 
-    public static Guarantor getCurrentUserGuarantor() {
+    public static Guarantor retrieveCurrentUserGuarantor() {
         EntityQueryCriteria<Guarantor> criteria = EntityQueryCriteria.create(Guarantor.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtAppContext.getCurrentUser()));
         return Persistence.service().retrieve(criteria);

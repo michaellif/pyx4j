@@ -70,14 +70,14 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
     }
 
     public Charges retrieveData() {
-        Lease lease = PtAppContext.getCurrentUserLease();
+        Lease lease = PtAppContext.retrieveCurrentUserLease();
         Persistence.service().retrieve(lease.version().tenants());
 
         Charges charges = retrieveApplicationEntity(Charges.class);
         if (charges == null) {
             log.debug("Creating new charges");
             charges = EntityFactory.create(Charges.class);
-            charges.application().set(PtAppContext.getCurrentUserApplication());
+            charges.application().set(PtAppContext.retrieveCurrentUserApplication());
             ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.version().tenants());
         }
 

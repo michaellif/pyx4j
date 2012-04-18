@@ -23,12 +23,13 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@Deprecated
 public interface TenantUserHolder extends IEntity {
 
     @NotNull
     @ReadOnly
     @Detached
     @MemberColumn(name = "user_id")
-    TenantUser user();
+    CustomerUser user();
 
 }

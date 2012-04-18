@@ -31,7 +31,7 @@ public class ApplicationEntityServiceImpl {
 
     public static <E extends IEntity & IBoundToApplication> void saveApplicationEntity(E entity) {
         // app specific security stuff
-        final OnlineApplication application = PtAppContext.getCurrentUserApplication();
+        final OnlineApplication application = PtAppContext.retrieveCurrentUserApplication();
         if ((!entity.application().isNull()) && (!entity.application().equals(application))) {
             throw new SecurityViolationException("Permission denied");
         }
@@ -49,12 +49,12 @@ public class ApplicationEntityServiceImpl {
 
     protected <T extends IBoundToApplication> T retrieveApplicationEntity(Class<T> clazz) {
         EntityQueryCriteria<T> criteria = EntityQueryCriteria.create(clazz);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.retrieveCurrentUserApplication()));
         return Persistence.secureRetrieve(criteria);
     }
 
     protected <T extends IBoundToApplication> void retrieveApplicationEntity(T entity) {
-        retrieveApplicationEntity(entity, PtAppContext.getCurrentUserApplication());
+        retrieveApplicationEntity(entity, PtAppContext.retrieveCurrentUserApplication());
     }
 
     protected <T extends IBoundToApplication> void retrieveApplicationEntity(T entity, OnlineApplication application) {

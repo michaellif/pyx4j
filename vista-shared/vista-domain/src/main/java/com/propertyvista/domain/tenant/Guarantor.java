@@ -13,12 +13,15 @@
  */
 package com.propertyvista.domain.tenant;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.TenantUserHolder;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
@@ -28,8 +31,10 @@ public interface Guarantor extends LeaseParticipant, TenantUserHolder {
     @Override
     @NotNull
     @ReadOnly
-    @ToString(index = 0)
-    Customer customer();
+    @Detached
+    @MemberColumn(name = "user_id")
+    @Deprecated
+    CustomerUser user();
 
     @NotNull
     @ToString(index = 1)

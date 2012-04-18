@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.financial.FinancialView;
 import com.propertyvista.portal.ptapp.client.ui.steps.financial.FinancialViewPresenter;
@@ -37,7 +37,7 @@ public class FinancialActivity extends WizardStepWithSubstepsActivity<TenantFina
     @SuppressWarnings("unchecked")
     private static AbstractWizardService<TenantFinancialDTO> createaService() {
 
-        if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             return (AbstractWizardService<TenantFinancialDTO>) GWT.create(GuarantorFinancialService.class);
         } else {
             return (AbstractWizardService<TenantFinancialDTO>) GWT.create(TenantFinancialService.class);

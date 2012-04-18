@@ -17,16 +17,16 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
-import com.propertyvista.server.domain.security.TenantUserCredential;
+import com.propertyvista.server.domain.security.CustomerUserCredential;
 
-public class PortalPasswordResetServiceImpl extends VistaPasswordResetServiceImpl<TenantUserCredential> implements PortalPasswordResetService {
+public class PortalPasswordResetServiceImpl extends VistaPasswordResetServiceImpl<CustomerUserCredential> implements PortalPasswordResetService {
 
     public PortalPasswordResetServiceImpl() {
-        super(TenantUserCredential.class);
+        super(CustomerUserCredential.class);
     }
 
     @Override
-    protected AuthenticationResponse authenticate(TenantUserCredential credentials) {
+    protected AuthenticationResponse authenticate(CustomerUserCredential credentials) {
         return new PortalAuthenticationServiceImpl().authenticate(credentials);
     }
 

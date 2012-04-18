@@ -89,7 +89,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         boolean callFireDemo = false;
         if (callFireDemo) {
             EntityQueryCriteria<TenantInLeaseListDTO> criteria = EntityQueryCriteria.create(TenantInLeaseListDTO.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.retrieveCurrentUserApplication()));
             CampaignManager.fireEvent(CampaignTrigger.ApplicationCompleated, Persistence.secureRetrieve(criteria));
         }
 
@@ -108,7 +108,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        TenantRetriever r = new TenantRetriever(Customer.class, PtAppContext.getCurrentUserTenant().getPrimaryKey());
+        TenantRetriever r = new TenantRetriever(Customer.class, PtAppContext.retrieveCurrentUserCustomer().getPrimaryKey());
         callback.onSuccess(r.tenantScreening.currentAddress().duplicate(AddressStructured.class));
     }
 }

@@ -20,14 +20,20 @@ import java.util.Vector;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
@@ -59,7 +65,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         app.status().setValue(OnlineApplication.Status.Invited);
         app.steps().addAll(createApplicantApplicationProgress());
 
-        app.belongsTo().set(masterOnlineApplication);
+        app.masterOnlineApplication().set(masterOnlineApplication);
+        app.customer().set(tenant.customer());
         Persistence.service().persist(app);
 
         tenant.application().set(app);
@@ -67,8 +74,64 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public List<OnlineApplication> getOnlineApplications(TenantUser customerUser) {
-        // TODO Auto-generated method stub
+    public List<OnlineApplication> getOnlineApplications(CustomerUser customerUser) {
+        Customer customer;
+        {
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), customerUser));
+            customer = Persistence.service().retrieve(criteria);
+            if (customer == null) {
+                return null;
+            }
+        }
+
+        {
+            // See if active Application exists
+            EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
+            return Persistence.service().query(criteria);
+        }
+    }
+
+    @Override
+    public VistaCustomerBehavior getOnlineApplicationBehavior(OnlineApplication application) {
+        MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(MasterOnlineApplication.class,
+                application.masterOnlineApplication().getPrimaryKey());
+
+        Lease lease = Persistence.retrieveDraft(Lease.class, masterOnlineApplication.leaseApplication().lease().getPrimaryKey());
+        for (Tenant tenant : lease.version().tenants()) {
+            Persistence.service().retrieve(tenant);
+            if (application.customer().equals(tenant.customer())) {
+
+                switch (tenant.role().getValue()) {
+                case Applicant:
+                    if (application.status().getValue() == OnlineApplication.Status.Submitted) {
+                        return VistaCustomerBehavior.ProspectiveSubmittedApplicant;
+                    } else {
+                        return VistaCustomerBehavior.ProspectiveApplicant;
+                    }
+                case CoApplicant:
+                    if (application.status().getValue() == OnlineApplication.Status.Submitted) {
+                        return VistaCustomerBehavior.ProspectiveSubmittedCoApplicant;
+                    } else {
+                        return VistaCustomerBehavior.ProspectiveCoApplicant;
+                    }
+                default:
+                    return null;
+                }
+            }
+        }
+        for (Guarantor guarantor : lease.version().guarantors()) {
+            Persistence.service().retrieve(guarantor);
+            if (application.customer().equals(guarantor.customer())) {
+                if (application.status().getValue() == OnlineApplication.Status.Submitted) {
+                    return VistaCustomerBehavior.GuarantorSubmitted;
+                } else {
+                    return VistaCustomerBehavior.Guarantor;
+                }
+            }
+        }
+
         return null;
     }
 

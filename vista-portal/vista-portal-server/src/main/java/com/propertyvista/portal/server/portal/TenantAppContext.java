@@ -25,27 +25,27 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.server.common.security.VistaContext;
+import com.propertyvista.portal.server.security.VistaCustomerContext;
 
 /**
  * This may be an optimization point for future.
  */
-public class TenantAppContext extends VistaContext {
+public class TenantAppContext extends VistaCustomerContext {
 
     private final static Logger log = LoggerFactory.getLogger(TenantAppContext.class);
 
     private static final I18n i18n = I18n.get(TenantAppContext.class);
 
-    public static TenantUser getCurrentUser() {
+    public static CustomerUser getCurrentUser() {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
         }
-        TenantUser user = EntityFactory.create(TenantUser.class);
+        CustomerUser user = EntityFactory.create(CustomerUser.class);
         user.setPrimaryKey(v.getUserVisit().getPrincipalPrimaryKey());
         user.name().setValue(v.getUserVisit().getName());
         user.email().setValue(v.getUserVisit().getEmail());

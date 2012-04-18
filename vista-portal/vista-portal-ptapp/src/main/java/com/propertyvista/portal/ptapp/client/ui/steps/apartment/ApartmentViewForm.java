@@ -31,7 +31,7 @@ import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.components.UtilityFolder;
@@ -75,7 +75,7 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
 
     @Override
     public IsWidget createContent() {
-        boolean modifiable = SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant);
+        boolean modifiable = SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant);
 
         FormFlexPanel main = new FormFlexPanel();
 

@@ -39,11 +39,11 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.security.TenantUserCredential;
+import com.propertyvista.server.domain.security.CustomerUserCredential;
 
 public class ActivationServiceImpl extends ApplicationEntityServiceImpl implements ActivationService {
 
@@ -95,16 +95,16 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         }
 
         final CrmUser userMeta = EntityFactory.create(CrmUser.class);
-        EntityQueryCriteria<TenantUser> criteria = new EntityQueryCriteria<TenantUser>(TenantUser.class);
+        EntityQueryCriteria<CustomerUser> criteria = new EntityQueryCriteria<CustomerUser>(CustomerUser.class);
 
         criteria.add(PropertyCriterion.eq(userMeta.email(), token.email));
-        List<TenantUser> users = Persistence.service().query(criteria);
+        List<CustomerUser> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
         }
-        TenantUser user = users.get(0);
+        CustomerUser user = users.get(0);
 
-        TenantUserCredential cr = Persistence.service().retrieve(TenantUserCredential.class, user.getPrimaryKey());
+        CustomerUserCredential cr = Persistence.service().retrieve(CustomerUserCredential.class, user.getPrimaryKey());
         if (cr == null) {
             throw new RuntimeExceptionSerializable(i18n.tr("Invalid User Account. Please Contact Support"));
         }

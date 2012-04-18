@@ -29,7 +29,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
@@ -52,7 +52,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
             return false;
         }
 
-        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant)) {
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant)) {
             //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
             if (tenant.role().getValue() == Tenant.Role.Applicant) {
                 return true;
@@ -61,7 +61,7 @@ public class ApplicationProgressMgr extends ApplicationManager {
                 return false;
             }
             return (TimeUtils.isOlderThan(tenant.customer().person().birthDate().getValue(), 18));
-        } else if (tenant.customer().equals(PtAppContext.getCurrentUserTenant())) {
+        } else if (tenant.customer().equals(PtAppContext.retrieveCurrentUserCustomer())) {
             return true; // allow just his/her data...
         }
         return false;

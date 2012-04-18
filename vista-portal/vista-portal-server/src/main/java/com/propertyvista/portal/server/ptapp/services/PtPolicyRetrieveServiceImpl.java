@@ -27,8 +27,8 @@ public class PtPolicyRetrieveServiceImpl extends PolicyRetrieveServiceImpl imple
 
     @Override
     public void obtainEffectivePolicy(AsyncCallback<Policy> callback, PolicyNode node, Policy policyProto) {
-        if (policyProto instanceof TenantsAccessiblePolicy) {
-            throw new SecurityViolationException("Permission denied");
+        if (!(policyProto instanceof TenantsAccessiblePolicy)) {
+            throw new SecurityViolationException("Permission denied" + policyProto.getEntityMeta().getEntityClass());
         }
         super.obtainEffectivePolicy(callback, node, policyProto);
     }

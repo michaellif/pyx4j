@@ -48,8 +48,8 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     }
 
     @Override
-    protected void addBehaviors(CrmUserCredential userCredential, Set<Behavior> behaviors) {
-
+    protected Set<Behavior> getBehaviors(CrmUserCredential userCredential) {
+        Set<Behavior> behaviors = new HashSet<Behavior>();
         addAllBehaviors(behaviors, userCredential.roles(), new HashSet<CrmRole>());
 
         if (userCredential.accessAllBuildings().isBooleanTrue()) {
@@ -59,6 +59,7 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
             BuildingDatasetAccessBuilder.updateAccessList(userCredential.user());
         }
 
+        return behaviors;
     }
 
     private void addAllBehaviors(Set<Behavior> behaviors, Collection<CrmRole> roles, Set<CrmRole> processed) {

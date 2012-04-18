@@ -29,7 +29,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 /**
@@ -60,13 +61,18 @@ public interface OnlineApplication extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    MasterOnlineApplication belongsTo();
+    MasterOnlineApplication masterOnlineApplication();
+
+    @NotNull
+    @ReadOnly
+    Customer customer();
 
     @NotNull
     @ReadOnly
     @Detached
     @MemberColumn(name = "user_id")
-    TenantUser user();
+    @Deprecated
+    CustomerUser user();
 
     @Detached
     @Versioned

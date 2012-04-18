@@ -13,8 +13,10 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 
+import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.dto.GuarantorDTO;
@@ -28,5 +30,11 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
     @Override
     protected void bind() {
         bindCompleateDBO();
+    }
+
+    @Override
+    protected void persist(Guarantor entity, GuarantorDTO dto) {
+        ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
+        super.persist(entity, dto);
     }
 }

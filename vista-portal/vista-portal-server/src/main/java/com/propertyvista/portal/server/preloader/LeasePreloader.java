@@ -79,7 +79,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
 
             ServerSideFactory.create(LeaseFacade.class).createLease(lease);
-            //ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease.getPrimaryKey());
+            ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease.getPrimaryKey());
         }
 
         StringBuilder b = new StringBuilder();

@@ -20,6 +20,7 @@ import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
@@ -38,6 +39,8 @@ public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
         if (targetPlace instanceof PtSiteMap.PasswordChange) {
             callback.onSuccess(Boolean.TRUE);
+        } else if (targetPlace instanceof PtSiteMap.ApplicationSelectionRequired) {
+            callback.onSuccess(Boolean.TRUE);
         } else {
             PtAppSite.getWizardManager().isPlaceNavigable(targetPlace, callback);
         }
@@ -52,6 +55,8 @@ public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     protected AppPlace specialForward(AppPlace newPlace) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired)) {
             return new PtSiteMap.PasswordReset();
+        } else if (SecurityController.checkBehavior(VistaCustomerBehavior.ApplicationSelectionRequired)) {
+            return new PtSiteMap.ApplicationSelectionRequired();
         } else {
             return null;
         }

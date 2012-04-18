@@ -37,7 +37,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
@@ -93,7 +93,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         if (summary == null) {
             log.info("Creating new Summary for appl {}", PtAppContext.getCurrentUserApplicationPrimaryKey());
             summary = EntityFactory.create(Summary.class);
-            summary.application().set(PtAppContext.getCurrentUserApplication());
+            summary.application().set(PtAppContext.retrieveCurrentUserApplication());
         } else {
             Persistence.service().retrieve(summary.application());
         }
@@ -110,7 +110,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         TenantInfoServiceImpl tis = new TenantInfoServiceImpl();
         TenantFinancialServiceImpl tfs = new TenantFinancialServiceImpl();
 
-        Lease lease = PtAppContext.getCurrentUserLease();
+        Lease lease = PtAppContext.retrieveCurrentUserLease();
         Persistence.service().retrieve(lease.version().tenants());
         for (Tenant tenantInLease : lease.version().tenants()) {
             Persistence.service().retrieve(tenantInLease);
@@ -125,10 +125,10 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         }
 
         // fill guarantor data if relevant:
-        if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             GuarantorInfoServiceImpl gis = new GuarantorInfoServiceImpl();
             GuarantorFinancialServiceImpl gfs = new GuarantorFinancialServiceImpl();
-            PersonGuarantorRetriever gr = new PersonGuarantorRetriever(PtAppContext.getCurrentUserGuarantor());
+            PersonGuarantorRetriever gr = new PersonGuarantorRetriever(PtAppContext.retrieveCurrentUserGuarantor());
 
             summary.tenantsWithInfo().add(gis.retrieveData(gr));
             summary.tenantFinancials().add(gfs.retrieveData(gr));
@@ -157,7 +157,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
         // fill Lease Terms:
         IList<LegalTermsDescriptor> legalTerms;
-        if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             legalTerms = LegalStuffUtils.retrieveLegalTermsPolicy().guarantorSummaryTerms();
         } else {
             legalTerms = LegalStuffUtils.retrieveLegalTermsPolicy().tenantSummaryTerms();

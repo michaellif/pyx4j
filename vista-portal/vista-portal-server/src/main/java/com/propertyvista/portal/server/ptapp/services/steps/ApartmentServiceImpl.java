@@ -59,7 +59,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public void save(AsyncCallback<ApartmentInfoDTO> callback, ApartmentInfoDTO entity) {
         // update agreed items:
-        Lease lease = PtAppContext.getCurrentUserLease();
+        Lease lease = PtAppContext.retrieveCurrentUserLease();
         for (Iterator<BillableItem> iter = lease.version().leaseProducts().featureItems().iterator(); iter.hasNext();) {
             BillableItem item = iter.next();
             if (item.item().type().isInstanceOf(FeatureItemType.class)) {
@@ -95,7 +95,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         Persistence.service().merge(lease);
 
         // wizard state correction:
-        ApplicationProgressMgr.invalidateChargesStep(PtAppContext.getCurrentUserApplication());
+        ApplicationProgressMgr.invalidateChargesStep(PtAppContext.retrieveCurrentUserApplication());
         DigitalSignatureMgr.resetAll();
         Persistence.service().commit();
 
@@ -106,7 +106,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     public ApartmentInfoDTO retrieveData() {
-        Lease lease = PtAppContext.getCurrentUserLease();
+        Lease lease = PtAppContext.retrieveCurrentUserLease();
         if (!Persistence.service().retrieve(lease.unit())) {
             throw new Error("There is no Unit selected!?.");
         }

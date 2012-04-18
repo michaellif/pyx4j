@@ -27,8 +27,8 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.dto.LeaseDTO;
@@ -73,16 +73,16 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
     public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<Tenant> tenants, EmailTemplateType emailType) {
         for (Tenant tenant : tenants) {
             tenant = Persistence.service().retrieve(Tenant.class, tenant.getPrimaryKey());
-            TenantUser user = tenant.customer().user();
+            CustomerUser user = tenant.customer().user();
             if (user.isValueDetached()) {
                 Persistence.service().retrieve(user);
             }
             switch (tenant.role().getValue()) {
             case Applicant:
-                ApplicationManager.ensureProspectiveTenantUser(tenant.customer(), tenant.customer().person(), VistaTenantBehavior.TenantPrimary);
+                ApplicationManager.ensureProspectiveTenantUser(tenant.customer(), tenant.customer().person(), VistaCustomerBehavior.TenantPrimary);
                 break;
             case CoApplicant:
-                ApplicationManager.ensureProspectiveTenantUser(tenant.customer(), tenant.customer().person(), VistaTenantBehavior.TenantSecondary);
+                ApplicationManager.ensureProspectiveTenantUser(tenant.customer(), tenant.customer().person(), VistaCustomerBehavior.TenantSecondary);
                 break;
             }
             ServerSideFactory.create(CommunicationFacade.class).sendTenantInvitation(tenant);

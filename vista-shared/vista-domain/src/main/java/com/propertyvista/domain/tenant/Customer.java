@@ -35,11 +35,11 @@ import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.TenantUserHolder;
 
 @DiscriminatorValue("Tenant")
-public interface Customer extends IEntity, PersonScreeningHolder, TenantUserHolder {
+public interface Customer extends IEntity, TenantUserHolder {
 
     @NotNull
     IPrimitive<String> customerId();
@@ -49,16 +49,14 @@ public interface Customer extends IEntity, PersonScreeningHolder, TenantUserHold
     @ReadOnly
     @Detached
     @MemberColumn(name = "user_id")
-    TenantUser user();
+    CustomerUser user();
 
-    @Override
     @ToString(index = 0)
     @EmbeddedEntity
     Person person();
 
     @Owned
-// TODO : commented because of strange behavior of with @Owned - entities duplicated on loading/saving...  
-//    @Detached
+    @Detached
     @Length(3)
     IList<EmergencyContact> emergencyContacts();
 
@@ -67,7 +65,6 @@ public interface Customer extends IEntity, PersonScreeningHolder, TenantUserHold
 
     // ----------------------------------------------------
     // parent <-> child relationship:
-    @Override
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<PersonScreening> _PersonScreenings();

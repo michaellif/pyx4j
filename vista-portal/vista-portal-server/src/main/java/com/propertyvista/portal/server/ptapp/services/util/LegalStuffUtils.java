@@ -29,7 +29,7 @@ import com.propertyvista.portal.server.ptapp.PtAppContext;
 public class LegalStuffUtils {
 
     public static LeaseTermsPolicy retrieveLegalTermsPolicy() {
-        LeaseTermsPolicy termsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(PtAppContext.getCurrentUserLease().unit(),
+        LeaseTermsPolicy termsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(PtAppContext.retrieveCurrentUserLease().unit(),
                 LeaseTermsPolicy.class);
         if (termsPolicy == null) {
             throw new Error("There is no Legal Policy!?.");

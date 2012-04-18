@@ -55,9 +55,9 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
     @Override
     public void save(AsyncCallback<TenantInApplicationListDTO> callback, TenantInApplicationListDTO tenants) {
-        OnlineApplication application = PtAppContext.getCurrentUserApplication();
+        OnlineApplication application = PtAppContext.retrieveCurrentUserApplication();
 
-        Lease lease = PtAppContext.getCurrentUserLease();
+        Lease lease = PtAppContext.retrieveCurrentUserLease();
         Persistence.service().retrieve(lease.version().tenants());
 
         List<Tenant> existingTenants = new Vector<Tenant>(lease.version().tenants());
@@ -128,7 +128,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
     }
 
     public TenantInApplicationListDTO retrieveData() {
-        Lease lease = PtAppContext.getCurrentUserLease();
+        Lease lease = PtAppContext.retrieveCurrentUserLease();
         Persistence.service().retrieve(lease.version().tenants());
 
         TenantInApplicationListDTO tenants = EntityFactory.create(TenantInApplicationListDTO.class);

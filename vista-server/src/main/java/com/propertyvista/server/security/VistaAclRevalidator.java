@@ -44,6 +44,6 @@ public class VistaAclRevalidator implements AclRevalidator {
         } else {
             return null;
         }
-        return authenticationServices.getCurrentBehaviours(principalPrimaryKey);
+        return authenticationServices.getCurrentBehaviours(principalPrimaryKey, currentBehaviours);
     }
 }

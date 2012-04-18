@@ -35,7 +35,7 @@ import com.propertyvista.common.client.ui.components.folders.PersonGuarantorFold
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.dto.TenantFinancialDTO;
 
 public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialDTO> {
@@ -82,7 +82,7 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
         main.setWidget(++row, 0, inject(proto().assets(), new PersonalAssetFolder(isShowEditable())));
         main.setWidget(++row, 0, new HTML());
 
-        if (!SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+        if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             main.setH1(++row, 0, 1, proto().guarantors().getMeta().getCaption(), adjust);
             main.setWidget(++row, 0, inject(proto().guarantors(), new PersonGuarantorFolder(isShowEditable())));
             main.setWidget(++row, 0, new HTML());

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.common.security;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -78,7 +79,9 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
     protected abstract Behavior getPasswordChangeRequiredBehavior();
 
-    protected abstract void addBehaviors(E userCredential, Set<Behavior> behaviors);
+    protected Set<Behavior> getBehaviors(E userCredential) {
+        return Collections.emptySet();
+    }
 
     @Override
     public void obtainRecaptchaPublicKey(AsyncCallback<String> callback) {
@@ -220,25 +223,36 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             visit.setEmail(user.email().getValue());
             return Lifecycle.beginSession(visit, behaviors);
         } else {
-            return beginSession(user, cr);
+            Set<Behavior> behaviors = new HashSet<Behavior>();
+            behaviors.addAll(getBehaviors(cr));
+            return beginSession(user, behaviors);
         }
     }
 
-    public Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey) {
+    protected boolean isDynamicBehaviours() {
+        return false;
+    }
+
+    public final Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours) {
         E userCredential = Persistence.service().retrieve(credentialClass, principalPrimaryKey);
         if ((userCredential == null) || (!userCredential.enabled().isBooleanTrue())) {
             return null;
+        } else if (isDynamicBehaviours()) {
+            return currentBehaviours;
+        } else {
+            Set<Behavior> behaviors = new HashSet<Behavior>();
+            behaviors.addAll(getBehaviors(userCredential));
+            behaviors.add(getApplicationBehavior());
+            return behaviors;
         }
-        Set<Behavior> behaviors = new HashSet<Behavior>();
-        behaviors.add(getApplicationBehavior());
-        addBehaviors(userCredential, behaviors);
-        return behaviors;
     }
 
-    public AuthenticationResponse authenticate(E credentials) {
+    public final AuthenticationResponse authenticate(E credentials) {
         U user = Persistence.service().retrieve(userClass, credentials.getPrimaryKey());
         // Try to begin Session
-        String sessionToken = beginSession(user, credentials);
+        Set<Behavior> behaviors = new HashSet<Behavior>();
+        behaviors.addAll(getBehaviors(credentials));
+        String sessionToken = beginSession(user, behaviors);
         if (!SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior())) {
             Lifecycle.endSession();
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
@@ -246,9 +260,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         return createAuthenticationResponse(sessionToken);
     }
 
-    protected String beginSession(AbstractUser user, E userCredential) {
-        Set<Behavior> behaviors = new HashSet<Behavior>();
-        addBehaviors(userCredential, behaviors);
+    protected String beginSession(U user, Set<Behavior> behaviors) {
         if (behaviors.isEmpty()) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
@@ -261,7 +273,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
     @Override
     @IgnoreSessionToken
-    public void logout(AsyncCallback<AuthenticationResponse> callback) {
+    public final void logout(AsyncCallback<AuthenticationResponse> callback) {
         Lifecycle.endSession();
         callback.onSuccess(createAuthenticationResponse(null));
     }
@@ -269,7 +281,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     protected abstract void sendPasswordRetrievalToken(U user);
 
     @Override
-    public void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
+    public final void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
 
         if (!validEmailAddress(request.email().getValue())) {
             throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
@@ -293,7 +305,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     }
 
     @Override
-    public AuthenticationResponse createAuthenticationResponse(String sessionToken) {
+    public final AuthenticationResponse createAuthenticationResponse(String sessionToken) {
         AuthenticationResponse ar = super.createAuthenticationResponse(sessionToken);
 
         String baseUrl = VistaDeployment.getBaseApplicationURL(getApplicationBehavior(), true);

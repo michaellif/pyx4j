@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.info.InfoView;
 import com.propertyvista.portal.ptapp.client.ui.steps.info.InfoViewPresenter;
@@ -37,7 +37,7 @@ public class InfoActivity extends WizardStepWithSubstepsActivity<TenantInfoDTO, 
     @SuppressWarnings("unchecked")
     private static AbstractWizardService<TenantInfoDTO> createaService() {
 
-        if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             return (AbstractWizardService<TenantInfoDTO>) GWT.create(GuarantorInfoService.class);
         } else {
             return (AbstractWizardService<TenantInfoDTO>) GWT.create(TenantInfoService.class);

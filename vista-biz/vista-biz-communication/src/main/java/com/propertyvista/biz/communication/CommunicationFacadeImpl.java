@@ -23,7 +23,7 @@ import com.pyx4j.server.mail.MailMessage;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -31,7 +31,7 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.AdminUserCredential;
 import com.propertyvista.server.domain.security.CrmUserCredential;
-import com.propertyvista.server.domain.security.TenantUserCredential;
+import com.propertyvista.server.domain.security.CustomerUserCredential;
 
 public class CommunicationFacadeImpl implements CommunicationFacade {
 
@@ -55,7 +55,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     private static void sendInvitationEmail(LeaseParticipant leaseParticipant, EmailTemplateType emailTemplateType) {
-        String token = AccessKey.createAccessToken(leaseParticipant.customer().user(), TenantUserCredential.class, 10);
+        String token = AccessKey.createAccessToken(leaseParticipant.customer().user(), CustomerUserCredential.class, 10);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
@@ -87,12 +87,12 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantInvitation(Tenant tenant) {
-        TenantUser user = tenant.customer().user();
+        CustomerUser user = tenant.customer().user();
         if (user.isValueDetached()) {
             Persistence.service().retrieve(user);
         }
 
-        String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
+        String token = AccessKey.createAccessToken(user, CustomerUserCredential.class, 10);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
@@ -107,7 +107,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendProspectPasswordRetrievalToken(Customer customer) {
-        String token = AccessKey.createAccessToken(customer.user(), TenantUserCredential.class, 1);
+        String token = AccessKey.createAccessToken(customer.user(), CustomerUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
@@ -119,7 +119,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantPasswordRetrievalToken(Customer customer) {
-        String token = AccessKey.createAccessToken(customer.user(), TenantUserCredential.class, 1);
+        String token = AccessKey.createAccessToken(customer.user(), CustomerUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }

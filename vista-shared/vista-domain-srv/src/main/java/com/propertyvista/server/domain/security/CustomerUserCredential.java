@@ -15,16 +15,13 @@ package com.propertyvista.server.domain.security;
 
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.CustomerUser;
 
 @RpcBlacklist
-@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = TenantUser.class)
+@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = CustomerUser.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface TenantUserCredential extends AbstractUserCredential<TenantUser> {
+public interface CustomerUserCredential extends AbstractUserCredential<CustomerUser> {
 
-    IPrimitiveSet<VistaTenantBehavior> behaviors();
 }

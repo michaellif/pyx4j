@@ -40,6 +40,7 @@ import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
  */
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@Deprecated
 public interface IBoundToApplication extends IEntity {
 
     @NotNull

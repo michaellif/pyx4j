@@ -15,7 +15,8 @@ package com.propertyvista.biz.tenant;
 
 import java.util.List;
 
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
@@ -27,7 +28,9 @@ public interface OnlineApplicationFacade {
      */
     void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication);
 
-    List<OnlineApplication> getOnlineApplications(TenantUser customerUser);
+    List<OnlineApplication> getOnlineApplications(CustomerUser customerUser);
+
+    VistaCustomerBehavior getOnlineApplicationBehavior(OnlineApplication application);
 
     void submitOnlineApplication(OnlineApplication application);
 

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.server.services;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -48,10 +49,12 @@ public class AdminAuthenticationServiceImpl extends VistaAuthenticationServicesI
     }
 
     @Override
-    protected void addBehaviors(AdminUserCredential userCredential, Set<Behavior> behaviors) {
+    protected Set<Behavior> getBehaviors(AdminUserCredential userCredential) {
+        Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.addAll(userCredential.behaviors());
         // TODO remove after preload fixed
         behaviors.add(VistaAdminBehavior.SystemAdmin);
+        return behaviors;
     }
 
     @Override

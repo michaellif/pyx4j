@@ -31,14 +31,13 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsState;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @ToStringFormat("{0} - {1}, {2}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface Tenant extends IBoundToApplication, LeaseParticipant {
+public interface Tenant extends LeaseParticipant {
 
     @I18n
     @XmlType(name = "TenantRole")

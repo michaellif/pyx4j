@@ -26,7 +26,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication.Status;
 
 @Transient
@@ -48,7 +48,7 @@ public interface OnlineApplicationStatusDTO extends IEntity {
 
     IPrimitive<Status> status();
 
-    TenantUser user();
+    CustomerUser user();
 
     /**
      * Tenant/Guarantor

@@ -23,8 +23,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
@@ -46,7 +46,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
     @Override
     public void getApplication(AsyncCallback<OnlineApplication> callback) {
 
-        TenantUser currentUser = PtAppContext.getCurrentUser();
+        CustomerUser currentUser = PtAppContext.getCurrentUser();
         log.debug("Asking for current application for current user {}", currentUser);
 
 // TODO what was it for?
@@ -75,7 +75,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 //            }
 //        }
 
-        OnlineApplication application = PtAppContext.getCurrentUserApplication();
+        OnlineApplication application = PtAppContext.retrieveCurrentUserApplication();
         if (application == null) {
             throw new UserRuntimeException(i18n.tr("You have no applications assigned"));
         }
@@ -87,21 +87,21 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         if (application.status().getValue() == OnlineApplication.Status.Incomplete) {
             application.status().setValue(OnlineApplication.Status.Incomplete);
             Persistence.service().persist(application);
-            Persistence.service().retrieve(application.belongsTo());
-            if (application.belongsTo().status().getValue() == MasterOnlineApplication.Status.Incomplete) {
-                application.belongsTo().status().setValue(MasterOnlineApplication.Status.Incomplete);
-                Persistence.service().persist(application.belongsTo());
+            Persistence.service().retrieve(application.masterOnlineApplication());
+            if (application.masterOnlineApplication().status().getValue() == MasterOnlineApplication.Status.Incomplete) {
+                application.masterOnlineApplication().status().setValue(MasterOnlineApplication.Status.Incomplete);
+                Persistence.service().persist(application.masterOnlineApplication());
             }
         }
 
         // update application state: 
-        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveCoApplicant)) {
-            Customer person = PtAppContext.getCurrentUserTenant();
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveCoApplicant)) {
+            Customer person = PtAppContext.retrieveCurrentUserCustomer();
 
             DigitalSignatureMgr.update(application, person);
             ApplicationProgressMgr.createTenantDataSteps(application, person);
-        } else if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
-            Guarantor person = PtAppContext.getCurrentUserGuarantor();
+        } else if (SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
+            Guarantor person = PtAppContext.retrieveCurrentUserGuarantor();
 
             DigitalSignatureMgr.update(application, person.customer());
             ApplicationProgressMgr.createGurantorDataSteps(application, person);
@@ -114,7 +114,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
     @Override
     public void getApplicationProgress(AsyncCallback<OnlineApplication> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep currentSubstep) {
-        OnlineApplication application = PtAppContext.getCurrentUserApplication();
+        OnlineApplication application = PtAppContext.retrieveCurrentUserApplication();
 
         if (currentStep != null) {
             int idx = application.steps().indexOf(currentStep);

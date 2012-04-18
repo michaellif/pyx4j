@@ -46,7 +46,7 @@ import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.AbstractUser;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -101,7 +101,7 @@ public class MessageTemplates {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
         MailMessage email = new MailMessage();
-        TenantUser user = tenantInLease.customer().user();
+        CustomerUser user = tenantInLease.customer().user();
         if (user.isValueDetached()) {
             Persistence.service().retrieve(tenantInLease.customer().user());
         }
@@ -117,7 +117,7 @@ public class MessageTemplates {
 
     public static MailMessage createTenantInvitationEmail(LeaseParticipant leaseParticipant, EmailTemplateType emailType, String token) {
         Lease lease = Persistence.retrieveDraft(Lease.class, leaseParticipant.leaseV().holder().getPrimaryKey());
-        TenantUser user = Persistence.service().retrieve(TenantUser.class, leaseParticipant.customer().user().getPrimaryKey());
+        CustomerUser user = Persistence.service().retrieve(CustomerUser.class, leaseParticipant.customer().user().getPrimaryKey());
 
         // get building policy node
         Persistence.service().retrieve(lease.unit());

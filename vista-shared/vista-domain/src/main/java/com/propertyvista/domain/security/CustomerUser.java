@@ -15,8 +15,7 @@ package com.propertyvista.domain.security;
 
 import com.pyx4j.entity.annotations.Caption;
 
-//TODO rename CustomerUser
 @Caption(name = "User")
-public interface TenantUser extends AbstractUser {
+public interface CustomerUser extends AbstractUser {
 
 }

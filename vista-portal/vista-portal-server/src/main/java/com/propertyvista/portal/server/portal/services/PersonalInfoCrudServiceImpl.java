@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
@@ -37,7 +37,7 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
     @Override
     public void retrieve(AsyncCallback<ResidentDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
         try {
-            TenantUser currentUser = TenantAppContext.getCurrentUser();
+            CustomerUser currentUser = TenantAppContext.getCurrentUser();
             // find associated tenant entry
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
@@ -63,7 +63,7 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
     @Override
     public void save(AsyncCallback<ResidentDTO> callback, ResidentDTO dto) {
         try {
-            TenantUser currentUser = TenantAppContext.getCurrentUser();
+            CustomerUser currentUser = TenantAppContext.getCurrentUser();
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
             Customer tenant = Persistence.service().retrieve(criteria);

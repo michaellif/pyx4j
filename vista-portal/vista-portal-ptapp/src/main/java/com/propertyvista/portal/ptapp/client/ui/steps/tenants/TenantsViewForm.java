@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 
 public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
@@ -38,7 +38,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
     @Override
     public IsWidget createContent() {
-        boolean modifiable = SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant);
+        boolean modifiable = SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant);
 
         FormFlexPanel main = new FormFlexPanel();
 

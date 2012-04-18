@@ -15,7 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui.steps.charges;
 
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
 
@@ -27,7 +27,7 @@ public class ChargesViewImpl extends WizardStepViewImpl<Charges, ChargesViewPres
 
     @Override
     protected String actionName() {
-        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant)) {
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant)) {
             return super.actionName();
         } else {
             return i18n.tr("Continue");
@@ -36,7 +36,7 @@ public class ChargesViewImpl extends WizardStepViewImpl<Charges, ChargesViewPres
 
     @Override
     protected void doAction() {
-        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant)) {
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant)) {
             super.doAction();
         } else {
             nextAction();

@@ -47,7 +47,7 @@ import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
 
@@ -142,7 +142,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().filedBankruptcy()), 10, 54).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
 
-        if (!SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+        if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             main.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
             main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isShowEditable(), true)));
         }
@@ -204,7 +204,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         // ------------------------------------------------------------------------------------------------
 
-        if (!SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+        if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
                 @Override

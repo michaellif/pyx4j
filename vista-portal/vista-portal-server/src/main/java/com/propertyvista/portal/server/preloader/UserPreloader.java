@@ -31,41 +31,39 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
-import com.propertyvista.server.domain.security.TenantUserCredential;
+import com.propertyvista.server.domain.security.CustomerUserCredential;
 
 public class UserPreloader extends BaseVistaDevDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(UserPreloader.class);
 
-    static TenantUser createTenantUser(String name, String email, String password, VistaTenantBehavior... behaviors) {
+    static CustomerUser createTenantUser(String name, String email, String password) {
         if (!ApplicationMode.isDevelopment()) {
-            EntityQueryCriteria<TenantUser> criteria = EntityQueryCriteria.create(TenantUser.class);
+            EntityQueryCriteria<CustomerUser> criteria = EntityQueryCriteria.create(CustomerUser.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
-            List<TenantUser> users = Persistence.service().query(criteria);
+            List<CustomerUser> users = Persistence.service().query(criteria);
             if (users.size() != 0) {
                 log.debug("User already exists");
                 return users.get(0);
             }
         }
-        TenantUser user = EntityFactory.create(TenantUser.class);
+        CustomerUser user = EntityFactory.create(CustomerUser.class);
 
         user.name().setValue(name);
         user.email().setValue(email);
 
         Persistence.service().persist(user);
 
-        TenantUserCredential credential = EntityFactory.create(TenantUserCredential.class);
+        CustomerUserCredential credential = EntityFactory.create(CustomerUserCredential.class);
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
         credential.credential().setValue(PasswordEncryptor.encryptPassword(email));
         credential.enabled().setValue(Boolean.TRUE);
-        credential.behaviors().addAll(Arrays.asList(behaviors));
 
         Persistence.service().persist(credential);
 

@@ -13,17 +13,25 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.security.TenantUserCredential;
+import com.propertyvista.server.domain.security.CustomerUserCredential;
 
 public class CustomerFacadeImpl implements CustomerFacade {
 
@@ -46,7 +54,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
             }
             Persistence.service().persist(customer.user());
 
-            TenantUserCredential credential = EntityFactory.create(TenantUserCredential.class);
+            CustomerUserCredential credential = EntityFactory.create(CustomerUserCredential.class);
             credential.setPrimaryKey(customer.user().getPrimaryKey());
             credential.user().set(customer.user());
             if (ApplicationMode.isDevelopment()) {
@@ -59,4 +67,38 @@ public class CustomerFacadeImpl implements CustomerFacade {
         Persistence.service().merge(customer);
     }
 
+    @Override
+    public List<Lease> getActiveLeases(CustomerUser customerUser) {
+        Customer customer;
+        {
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), customerUser));
+            customer = Persistence.service().retrieve(criteria);
+            if (customer == null) {
+                return null;
+            }
+        }
+
+        List<Lease> leases = new ArrayList<Lease>();
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().version().tenants().$().customer(), customer));
+            leases.addAll(Persistence.service().query(criteria));
+        }
+        // TODO guarantors portal not supported for now
+        if (false) {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().version().guarantors().$().customer(), customer));
+            leases.addAll(Persistence.service().query(criteria));
+        }
+        return leases;
+    }
+
+    @Override
+    public VistaCustomerBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease) {
+        // TODO implement TenantSecondary and Guarantor
+        return VistaCustomerBehavior.TenantPrimary;
+    }
 }

@@ -29,7 +29,7 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -55,7 +55,7 @@ public class PreloadNewTenantsAndLeads extends BaseVistaDevDataPreloader {
 
         for (int i = 1; i <= config().numUnAssigendTenants; i++) {
             String email = DemoData.UserType.NEW_TENANT.getEmail(i);
-            TenantUser user = UserPreloader.createTenantUser(email, email, null);
+            CustomerUser user = UserPreloader.createTenantUser(email, email, null);
             Customer tenant = generator.createTenant();
             tenant.person().email().setValue(email);
             tenant.user().set(user);

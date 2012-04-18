@@ -36,7 +36,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.charges.ChargeLineList;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
@@ -56,7 +56,7 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         super(Charges.class);
         setViewable(true);
 
-        this.editable = !viewMode && SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant);
+        this.editable = !viewMode && SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant);
         if (editable) {
             addValueChangeHandler(new ValueChangeHandler<Charges>() {
                 @Override

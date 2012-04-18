@@ -15,13 +15,13 @@ package com.propertyvista.portal.server.portal.services;
 
 import com.propertyvista.portal.rpc.portal.services.TenantPasswordChangeUserService;
 import com.propertyvista.server.common.security.VistaUserSelfPasswordChangeServiceImpl;
-import com.propertyvista.server.domain.security.TenantUserCredential;
+import com.propertyvista.server.domain.security.CustomerUserCredential;
 
-public class TenantPasswordChangeUserServiceImpl extends VistaUserSelfPasswordChangeServiceImpl<TenantUserCredential> implements
+public class TenantPasswordChangeUserServiceImpl extends VistaUserSelfPasswordChangeServiceImpl<CustomerUserCredential> implements
         TenantPasswordChangeUserService {
 
     public TenantPasswordChangeUserServiceImpl() {
-        super(TenantUserCredential.class);
+        super(CustomerUserCredential.class);
     }
 
 }

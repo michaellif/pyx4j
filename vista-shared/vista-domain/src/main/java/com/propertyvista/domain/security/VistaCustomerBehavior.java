@@ -15,7 +15,7 @@ package com.propertyvista.domain.security;
 
 import com.pyx4j.security.shared.Behavior;
 
-public enum VistaTenantBehavior implements Behavior {
+public enum VistaCustomerBehavior implements Behavior {
 
     ApplicationSelectionRequired,
 

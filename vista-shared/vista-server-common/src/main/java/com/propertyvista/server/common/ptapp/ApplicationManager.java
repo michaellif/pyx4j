@@ -13,10 +13,6 @@
  */
 package com.propertyvista.server.common.ptapp;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Vector;
-
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -26,18 +22,16 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
-import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.TenantUserHolder;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
@@ -50,59 +44,15 @@ import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.OnlineApplicationStatusDTO;
 import com.propertyvista.dto.OnlineApplicationStatusDTO.Role;
 import com.propertyvista.dto.OnlineMasterApplicationStatusDTO;
-import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
-import com.propertyvista.server.domain.security.TenantUserCredential;
+import com.propertyvista.server.domain.security.CustomerUserCredential;
 
 // This class is in moving to OnlineApplicationFacade
 @Deprecated
 public class ApplicationManager {
 
     private static final I18n i18n = I18n.get(ApplicationManager.class);
-
-    public static MasterOnlineApplication createMasterApplication(Lease lease) {
-        if (!lease.application().isNull()) {
-            Persistence.service().retrieve(lease.application());
-            return lease.application();
-        }
-
-        MasterOnlineApplication mapp = EntityFactory.create(MasterOnlineApplication.class);
-        mapp.lease().set(lease);
-        mapp.status().setValue(MasterOnlineApplication.Status.Incomplete);
-        ServerSideFactory.create(IdAssignmentFacade.class).assignId(mapp);
-
-        Persistence.service().persist(mapp);
-
-        Persistence.service().retrieve(lease.version().tenants());
-        for (Tenant tenantInLease : lease.version().tenants()) {
-            if (Tenant.Role.Applicant == tenantInLease.role().getValue()) {
-                OnlineApplication app = EntityFactory.create(OnlineApplication.class);
-                app.belongsTo().set(mapp);
-                app.status().setValue(OnlineApplication.Status.Invited);
-                app.steps().addAll(ApplicationManager.createApplicationProgress(app, tenantInLease.customer(), VistaTenantBehavior.ProspectiveApplicant));
-                app.user().set(
-                        ensureProspectiveTenantUser(tenantInLease.customer(), tenantInLease.customer().person(), VistaTenantBehavior.ProspectiveApplicant));
-                app.lease().set(mapp.lease());
-                Persistence.service().persist(app);
-
-                tenantInLease.application().set(app);
-                Persistence.service().persist(tenantInLease);
-
-                lease.application().set(mapp);
-                Persistence.service().merge(lease);
-
-                mapp.applications().add(app);
-                Persistence.service().merge(mapp);
-                return mapp;
-            }
-        }
-
-        // oops:
-        Persistence.service().delete(mapp);
-        throw new UserRuntimeException("Main applicant not found");
-    }
 
     public static void sendApproveDeclineApplicationEmail(Lease lease, boolean isApproved) {
         Persistence.service().retrieve(lease.version().tenants());
@@ -118,21 +68,25 @@ public class ApplicationManager {
         application.status().setValue(OnlineApplication.Status.Submitted);
         Persistence.service().persist(application);
 
-        TenantUser user = application.user();
-        TenantUserCredential credential = Persistence.service().retrieve(TenantUserCredential.class, user.getPrimaryKey());
-        boolean isApplicant = credential.behaviors().contains(VistaTenantBehavior.ProspectiveApplicant);
-        boolean isCoApplicant = credential.behaviors().contains(VistaTenantBehavior.ProspectiveCoApplicant);
-        boolean isGuarantor = credential.behaviors().contains(VistaTenantBehavior.Guarantor);
+        CustomerUser user = application.user();
+        CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, user.getPrimaryKey());
+        boolean isApplicant = false;
+        boolean isCoApplicant = false;
+        boolean isGuarantor = false;
 
-        credential.behaviors().clear();
-        credential.behaviors().add(VistaTenantBehavior.ProspectiveSubmitted);
-        if (isApplicant) {
-            credential.behaviors().add(VistaTenantBehavior.ProspectiveSubmittedApplicant);
-        } else if (isGuarantor) {
-            credential.behaviors().add(VistaTenantBehavior.GuarantorSubmitted);
-        } else if (isCoApplicant) {
-            credential.behaviors().add(VistaTenantBehavior.ProspectiveSubmittedCoApplicant);
-        }
+//        boolean isApplicant = credential.behaviors().contains(VistaCustomerBehavior.ProspectiveApplicant);
+//        boolean isCoApplicant = credential.behaviors().contains(VistaCustomerBehavior.ProspectiveCoApplicant);
+//        boolean isGuarantor = credential.behaviors().contains(VistaCustomerBehavior.Guarantor);
+//
+//        credential.behaviors().clear();
+//        credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmitted);
+//        if (isApplicant) {
+//            credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmittedApplicant);
+//        } else if (isGuarantor) {
+//            credential.behaviors().add(VistaCustomerBehavior.GuarantorSubmitted);
+//        } else if (isCoApplicant) {
+//            credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmittedCoApplicant);
+//        }
 
         Persistence.service().persist(credential);
         if (Context.isUserLoggedIn() && user.getPrimaryKey().equals(VistaContext.getCurrentUserPrimaryKey())) {
@@ -140,7 +94,7 @@ public class ApplicationManager {
             Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
         }
 
-        MasterOnlineApplication ma = application.belongsTo();
+        MasterOnlineApplication ma = application.masterOnlineApplication();
         Persistence.service().retrieve(ma);
         Persistence.service().retrieve(ma.lease());
         boolean allApplicationsSubmited = false;
@@ -157,7 +111,7 @@ public class ApplicationManager {
 
             Persistence.service().retrieve(tenantScreenings.guarantors());
             for (PersonGuarantor personGuarantor : tenantScreenings.guarantors()) {
-                inviteUser(ma, personGuarantor.guarantor(), personGuarantor.guarantor().customer().person(), VistaTenantBehavior.Guarantor);
+                inviteUser(ma, personGuarantor.guarantor(), personGuarantor.guarantor().customer().person(), VistaCustomerBehavior.Guarantor);
             }
         }
 
@@ -167,7 +121,7 @@ public class ApplicationManager {
             for (Tenant tenantInLease : ma.lease().version().tenants()) {
                 if ((Tenant.Role.CoApplicant == tenantInLease.role().getValue() && (!tenantInLease.takeOwnership().isBooleanTrue()))) {
                     tenantInLease.application().set(
-                            inviteUser(ma, tenantInLease.customer(), tenantInLease.customer().person(), VistaTenantBehavior.ProspectiveCoApplicant));
+                            inviteUser(ma, tenantInLease.customer(), tenantInLease.customer().person(), VistaCustomerBehavior.ProspectiveCoApplicant));
                     Persistence.service().persist(tenantInLease);
                 }
             }
@@ -192,7 +146,7 @@ public class ApplicationManager {
         }
     }
 
-    public static OnlineApplication inviteUser(MasterOnlineApplication ma, TenantUserHolder tenant, Person person, VistaTenantBehavior behaviour) {
+    public static OnlineApplication inviteUser(MasterOnlineApplication ma, TenantUserHolder tenant, Person person, VistaCustomerBehavior behaviour) {
         OnlineApplication application = null;
         for (OnlineApplication app : ma.applications()) {
             Persistence.service().retrieve(app);
@@ -204,10 +158,10 @@ public class ApplicationManager {
         if (application == null) {
             application = EntityFactory.create(OnlineApplication.class);
 
-            application.belongsTo().set(ma);
+            application.masterOnlineApplication().set(ma);
             application.lease().set(ma.lease());
             //application.status().setValue(OnlineMasterApplication.Status.Created);
-            application.steps().addAll(ApplicationManager.createApplicationProgress(application, tenant, behaviour));
+            //application.steps().addAll(ApplicationManager.createApplicationProgress(application, tenant, behaviour));
             application.user().set(ensureProspectiveTenantUser(tenant, person, behaviour));
 
             Persistence.service().persist(application);
@@ -309,49 +263,8 @@ public class ApplicationManager {
 
     // internals:
 
-    private static List<ApplicationWizardStep> createApplicationProgress(OnlineApplication application, TenantUserHolder tenant, VistaTenantBehavior behaviour) {
-        List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
-        if (VistaTODO.enableWelcomeWizardDemoMode) {
-            for (Class<? extends AppPlace> place : Arrays.<Class<? extends AppPlace>> asList(//@formatter:off
-                        PtSiteMap.WelcomeWizard.ReviewLease.class,
-                        PtSiteMap.WelcomeWizard.MoveInSchedule.class,
-                        PtSiteMap.WelcomeWizard.Insurance.class,
-                        PtSiteMap.WelcomeWizard.Completion.class
-                        
-                    )) {//@formatter:on
-                progress.add(createWizardStep(place, ApplicationWizardStep.Status.notVisited));
-            }
-            progress.get(0).status().setValue(ApplicationWizardStep.Status.latest);
-
-        } else {
-            progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-            progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
-            progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
-            progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
-// TODO : Charges and Payment steps are closed (removed) so far...        
-            if (false) {
-                progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
-            }
-            progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
-// TODO : Charges and Payment steps are closed (removed) so far...        
-            if (false) {
-                switch (behaviour) {
-                case ProspectiveApplicant:
-                    progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-                case ProspectiveCoApplicant:
-                    if (isTenantInSplitCharge(application, tenant)) {
-                        progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-                    }
-                    break;
-                }
-            }
-            progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
-        }
-        return progress;
-    }
-
-    public static TenantUser ensureProspectiveTenantUser(TenantUserHolder tenant, Person person, VistaTenantBehavior behavior) {
-        TenantUser user = tenant.user();
+    public static CustomerUser ensureProspectiveTenantUser(TenantUserHolder tenant, Person person, VistaCustomerBehavior behavior) {
+        CustomerUser user = tenant.user();
         if (user.getPrimaryKey() == null) {
             if (person.email().isNull()) {
                 throw new UnRecoverableRuntimeException(i18n.tr("Can't create application user for tenant  {0} without e-mail address", person.name()
@@ -362,7 +275,7 @@ public class ApplicationManager {
             Persistence.service().persist(user);
             Persistence.service().persist(tenant);
 
-            TenantUserCredential credential = EntityFactory.create(TenantUserCredential.class);
+            CustomerUserCredential credential = EntityFactory.create(CustomerUserCredential.class);
             credential.setPrimaryKey(user.getPrimaryKey());
 
             credential.user().set(user);
@@ -371,11 +284,9 @@ public class ApplicationManager {
             }
             credential.enabled().setValue(Boolean.TRUE);
             // TODO tenant can be guarantor in other applications.
-            credential.behaviors().clear();
-            credential.behaviors().add(behavior);
             Persistence.service().persist(credential);
         } else {
-            TenantUserCredential credential = Persistence.service().retrieve(TenantUserCredential.class, user.getPrimaryKey());
+            CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, user.getPrimaryKey());
             credential.setPrimaryKey(user.getPrimaryKey());
             credential.user().set(user);
             if (ApplicationMode.isDevelopment()) {
@@ -383,8 +294,6 @@ public class ApplicationManager {
             }
             credential.enabled().setValue(Boolean.TRUE);
             // TODO tenant can be guarantor in other applications.
-            credential.behaviors().clear();
-            credential.behaviors().add(behavior);
             Persistence.service().persist(credential);
         }
         return tenant.user();

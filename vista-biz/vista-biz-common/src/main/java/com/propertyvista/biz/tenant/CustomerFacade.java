@@ -13,10 +13,18 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.util.List;
+
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface CustomerFacade {
 
     void persistCustomer(Customer customer);
 
+    List<Lease> getActiveLeases(CustomerUser customerUser);
+
+    VistaCustomerBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease);
 }

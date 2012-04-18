@@ -28,7 +28,7 @@ import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.Tenant.Role;
@@ -147,13 +147,13 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
             }
             switch (user.userType().getValue()) {
             case Applicant:
-                ApplicationManager.inviteUser(app, user.user(), user.person(), VistaTenantBehavior.ProspectiveApplicant);
+                ApplicationManager.inviteUser(app, user.user(), user.person(), VistaCustomerBehavior.ProspectiveApplicant);
                 break;
             case CoApplicant:
-                ApplicationManager.inviteUser(app, user.user(), user.person(), VistaTenantBehavior.ProspectiveCoApplicant);
+                ApplicationManager.inviteUser(app, user.user(), user.person(), VistaCustomerBehavior.ProspectiveCoApplicant);
                 break;
             case Guarantor:
-                ApplicationManager.inviteUser(app, user.user(), user.person(), VistaTenantBehavior.Guarantor);
+                ApplicationManager.inviteUser(app, user.user(), user.person(), VistaCustomerBehavior.Guarantor);
                 break;
             }
         }

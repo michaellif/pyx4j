@@ -39,7 +39,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
@@ -82,9 +82,9 @@ public class ApplicationDocumentServlet extends HttpServlet {
 
     private void assertAccessRights(final ApplicationDocumentFile doc) {
         final Boolean[] isAccessRightsFound = new Boolean[] { false };
-        if (SecurityController.checkAnyBehavior(VistaTenantBehavior.Prospective, VistaTenantBehavior.ProspectiveSubmitted,
-                VistaTenantBehavior.ProspectiveApplicant, VistaTenantBehavior.ProspectiveSubmittedApplicant, VistaTenantBehavior.ProspectiveCoApplicant,
-                VistaTenantBehavior.ProspectiveSubmittedCoApplicant, VistaTenantBehavior.Guarantor, VistaTenantBehavior.GuarantorSubmitted)) {
+        if (SecurityController.checkAnyBehavior(VistaCustomerBehavior.Prospective, VistaCustomerBehavior.ProspectiveSubmitted,
+                VistaCustomerBehavior.ProspectiveApplicant, VistaCustomerBehavior.ProspectiveSubmittedApplicant, VistaCustomerBehavior.ProspectiveCoApplicant,
+                VistaCustomerBehavior.ProspectiveSubmittedCoApplicant, VistaCustomerBehavior.Guarantor, VistaCustomerBehavior.GuarantorSubmitted)) {
             EntityGraph.applyToOwners(doc, new ApplyMethod() {
                 @Override
                 public boolean apply(IEntity entity) {

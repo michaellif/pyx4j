@@ -36,19 +36,19 @@ public class PtSiteMap implements SiteMap {
     public static class LoginWithToken extends AppPlace implements PublicPlace {
     }
 
-    @PlaceProperties(caption = "Application Form")
     public static class PasswordResetRequest extends AppPlace implements PublicPlace {
     }
 
     public static class SigningOut extends AppPlace implements SigningOutPlace {
     }
 
-    @PlaceProperties(caption = "Application Form")
     public static class PasswordReset extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Application Form")
     public static class PasswordChange extends AppPlace {
+    }
+
+    public static class ApplicationSelectionRequired extends AppPlace {
     }
 
     @NavigationItem(navigLabel = "Apartment")
