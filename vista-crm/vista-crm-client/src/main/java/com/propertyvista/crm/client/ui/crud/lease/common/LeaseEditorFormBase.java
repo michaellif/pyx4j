@@ -75,7 +75,7 @@ public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntit
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
         tabPanel.add(createGuarantorsTab(), i18n.tr("Guarantors"));
-        tabPanel.add(createServiceAgreementTab(), i18n.tr("Charges"));
+        tabPanel.add(createChargesTab(), i18n.tr("Charges"));
 
         return tabPanel;
     }
@@ -260,18 +260,18 @@ public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntit
         return new CrmScrollPanel(main);
     }
 
-    private Widget createServiceAgreementTab() {
+    private Widget createChargesTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         @SuppressWarnings("unchecked")
-        LeaseEditorPresenterBase editorPresenter = (isEditable() ? (LeaseEditorPresenterBase) ((IEditorView<DTO>) getParentView()).getPresenter() : null);
+        IEditorView<DTO> leaseEditorView = (isEditable() ? (IEditorView<DTO>) getParentView() : null);
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, editorPresenter, true)));
+        main.setWidget(++row, 0, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseEditorView, true)));
 
         main.setH1(++row, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, editorPresenter)));
+        main.setWidget(++row, 0, inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseEditorView)));
 
         main.setH1(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));

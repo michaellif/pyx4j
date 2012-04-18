@@ -46,7 +46,6 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
 
         screeningLister = new ListerActivityBase<PersonScreening>(place, ((GuarantorViewerView) view).getScreeningListerView(),
                 (AbstractCrudService<PersonScreening>) GWT.create(PersonScreeningCrudService.class), PersonScreening.class);
-
     }
 
     @Override

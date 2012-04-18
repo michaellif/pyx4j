@@ -35,6 +35,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
@@ -66,19 +67,19 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
     private final CEntityEditor<? extends LeaseDTO> lease;
 
-    private final LeaseEditorPresenterBase editorPresenter;
+    private final IEditorView<? extends LeaseDTO> leaseEditorView;
 
     private boolean isService = false;
 
-    public BillableItemEditor(CEntityEditor<? extends LeaseDTO> lease, LeaseEditorPresenterBase editorPresenter, boolean isService) {
-        this(lease, editorPresenter);
+    public BillableItemEditor(CEntityEditor<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView, boolean isService) {
+        this(lease, leaseEditorView);
         this.isService = isService;
     }
 
-    public BillableItemEditor(CEntityEditor<? extends LeaseDTO> lease, LeaseEditorPresenterBase editorPresenter) {
+    public BillableItemEditor(CEntityEditor<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView) {
         super(BillableItem.class);
         this.lease = lease;
-        this.editorPresenter = editorPresenter;
+        this.leaseEditorView = leaseEditorView;
     }
 
     @Override
@@ -104,8 +105,7 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                     public boolean onClickOk() {
                         List<ProductItem> selectedItems = getSelectedItems();
                         if (!selectedItems.isEmpty()) {
-//                            ((LeaseEditorView.Presenter) ((LeaseEditorView) lease.getParentView()).getPresenter()).setSelectedService(selectedItems.get(0));
-                            editorPresenter.setSelectedService(selectedItems.get(0));
+                            ((LeaseEditorPresenterBase) leaseEditorView.getPresenter()).setSelectedService(selectedItems.get(0));
                             return true;
                         } else {
                             return false;

@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -47,12 +48,12 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
     private final CEntityEditor<? extends LeaseDTO> lease;
 
-    private final LeaseEditorPresenterBase editorPresenter;
+    private final IEditorView<? extends LeaseDTO> leaseEditorView;
 
-    public BillableItemFolder(boolean modifyable, CEntityEditor<? extends LeaseDTO> lease, LeaseEditorPresenterBase editorPresenter) {
+    public BillableItemFolder(boolean modifyable, CEntityEditor<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView) {
         super(BillableItem.class, modifyable);
         this.lease = lease;
-        this.editorPresenter = editorPresenter;
+        this.leaseEditorView = leaseEditorView;
     }
 
     @Override
@@ -145,7 +146,7 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof BillableItem) {
-            return new BillableItemEditor(lease, editorPresenter);
+            return new BillableItemEditor(lease, leaseEditorView);
         }
         return super.create(member);
     }
