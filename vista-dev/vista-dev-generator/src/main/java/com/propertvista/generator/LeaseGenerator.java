@@ -20,6 +20,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -27,12 +29,12 @@ import com.propertyvista.misc.VistaDevPreloadConfig;
 
 public class LeaseGenerator extends PTGenerator {
 
-    private final TenantsGenerator tenantsGenerator;
+    private final CustomerGenerator customerGenerator;
 
     public LeaseGenerator(VistaDevPreloadConfig config) {
         super(config);
         // TODO configure properly
-        tenantsGenerator = new TenantsGenerator(1);
+        customerGenerator = new CustomerGenerator();
     }
 
     public Lease createLease(AptUnit unit) {
@@ -62,9 +64,19 @@ public class LeaseGenerator extends PTGenerator {
     }
 
     private void addTenants(Lease lease) {
-        Tenant tenantInLease = EntityFactory.create(Tenant.class);
-        tenantInLease.customer().set(tenantsGenerator.createTenant());
-        tenantInLease.role().setValue(Role.Applicant);
-        lease.version().tenants().add(tenantInLease);
+        Tenant mainTenant = EntityFactory.create(Tenant.class);
+        mainTenant.customer().set(customerGenerator.createCustomer());
+        mainTenant.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
+        // TODO Add Screening
+        mainTenant.role().setValue(Role.Applicant);
+        lease.version().tenants().add(mainTenant);
+
+        Guarantor guarantor1 = EntityFactory.create(Guarantor.class);
+        guarantor1.customer().set(customerGenerator.createCustomer());
+        guarantor1.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
+        // TODO Add Screening
+        guarantor1.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
+        guarantor1.tenant().set(mainTenant);
+        lease.version().guarantors().add(guarantor1);
     }
 }
