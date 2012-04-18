@@ -53,7 +53,6 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
@@ -492,12 +491,12 @@ public class PTGenerator {
             for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
                 Guarantor guarantor = EntityFactory.create(Guarantor.class);
                 guarantor.customer().person().set(CommonsGenerator.createPerson());
-                PersonGuarantor personGuarantor = EntityFactory.create(PersonGuarantor.class);
-                personGuarantor.guarantor().set(guarantor);
-                personGuarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
-                screening.guarantors().add(personGuarantor);
-
-                tenantSummary.guarantorScreening().add(createScreening(guarantor.customer(), application, null));
+//                PersonGuarantor personGuarantor = EntityFactory.create(PersonGuarantor.class);
+//                personGuarantor.guarantor().set(guarantor);
+//                personGuarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
+//                screening.guarantors().add(personGuarantor);
+//
+//                tenantSummary.guarantorScreening().add(createScreening(guarantor.customer(), application, null));
             }
         }
     }
