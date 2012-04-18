@@ -48,15 +48,15 @@ public class LeaseApplicationEditorForm extends LeaseEditorFormBase<LeaseApplica
         createCommonContent();
 
         tabPanel.add(createInfoTab(), i18n.tr("Information"));
-        tabPanel.setLastTabDisabled(true);
+        tabPanel.setLastTabDisabled(isEditable());
         tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
-        tabPanel.setLastTabDisabled(true);
+        tabPanel.setLastTabDisabled(isEditable());
 
 // TODO: should be hidden until back end implementation:   
 //      tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
 //        tabPanel.setLastTabDisabled(true);
         tabPanel.add(createAppStatustab(), i18n.tr("Online Status Details"));
-        tabPanel.setLastTabDisabled(true);
+        tabPanel.setLastTabDisabled(isEditable());
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;

@@ -160,3 +160,4 @@ admin
 floorplan
 versioned
 hyperlink
+equifax

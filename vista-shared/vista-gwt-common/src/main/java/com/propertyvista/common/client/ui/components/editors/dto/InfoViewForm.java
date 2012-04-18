@@ -16,7 +16,6 @@ package com.propertyvista.common.client.ui.components.editors.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -24,7 +23,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityEditor;
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -39,6 +37,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.common.client.ui.components.IdUploaderFolder;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
@@ -46,7 +45,6 @@ import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
@@ -56,8 +54,6 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
     private static final I18n i18n = I18n.get(InfoViewForm.class);
 
     private final FormFlexPanel previousAddress;
-
-    private boolean ptAppMode = false;
 
     private IdUploaderFolder fileUpload;
 
@@ -73,13 +69,13 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         };
     }
 
-    public InfoViewForm(boolean ptAppMode) {
+    public InfoViewForm(boolean viewMode) {
         this();
-        this.ptAppMode = ptAppMode;
-    }
 
-    public boolean isShowEditable() {
-        return (super.isEditable() && !ptAppMode);
+        if (viewMode) {
+            setEditable(false);
+            setViewable(true);
+        }
     }
 
     @Override
@@ -88,15 +84,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Contact Details"));
-        if (isShowEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 20).build());
-        } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Person")).build());
-            get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-        }
+        main.setWidget(++row, 0, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().sex()), 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().birthDate(), new CDateLabel()), 9).build());
 
@@ -144,7 +132,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             main.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-            main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isShowEditable(), true)));
+            main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
         }
 
         addValidations();
@@ -245,7 +233,6 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
                 long limit2 = date.getTime() - 2678400000L;
                 return (date == null || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationFailure(message);
             }
-
         });
     }
 }
