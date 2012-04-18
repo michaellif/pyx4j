@@ -31,10 +31,13 @@ public class LeaseGenerator extends PTGenerator {
 
     private final CustomerGenerator customerGenerator;
 
+    private final ScreeningGenerator screeningGenerator;
+
     public LeaseGenerator(VistaDevPreloadConfig config) {
         super(config);
         // TODO configure properly
         customerGenerator = new CustomerGenerator();
+        screeningGenerator = new ScreeningGenerator();
     }
 
     public Lease createLease(AptUnit unit) {
@@ -67,14 +70,13 @@ public class LeaseGenerator extends PTGenerator {
         Tenant mainTenant = EntityFactory.create(Tenant.class);
         mainTenant.customer().set(customerGenerator.createCustomer());
         mainTenant.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
-        // TODO Add Screening
+        mainTenant.customer()._PersonScreenings().add(screeningGenerator.createScreening());
         mainTenant.role().setValue(Role.Applicant);
         lease.version().tenants().add(mainTenant);
 
         Guarantor guarantor1 = EntityFactory.create(Guarantor.class);
         guarantor1.customer().set(customerGenerator.createCustomer());
-        guarantor1.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
-        // TODO Add Screening
+        guarantor1.customer()._PersonScreenings().add(screeningGenerator.createScreening());
         guarantor1.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
         guarantor1.tenant().set(mainTenant);
         lease.version().guarantors().add(guarantor1);
