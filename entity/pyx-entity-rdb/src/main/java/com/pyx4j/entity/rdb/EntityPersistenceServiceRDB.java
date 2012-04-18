@@ -1134,7 +1134,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private <T extends IEntity> void cascadeRetrieveMember(T entity, AttachLevel attachLevel, MemberOperationsMeta member) {
         MemberMeta memberMeta = member.getMemberMeta();
         // Do not retrieve Owner, since already retrieved
-        if ((entity.getOwner() != null) && (memberMeta.isOwner())) {
+        if ((entity.getOwner() != null) && (memberMeta.isOwner()) && entity.getOwner().isInstanceOf((Class<? extends IEntity>) memberMeta.getValueClass())) {
             return;
         }
         AttachLevel retriveAttachLevel = attachLevel;
