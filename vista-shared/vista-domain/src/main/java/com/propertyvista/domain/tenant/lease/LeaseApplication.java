@@ -58,7 +58,7 @@ public interface LeaseApplication extends IEntity {
     @JoinColumn
     Lease lease();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached
     MasterOnlineApplication onlineApplication();
 
