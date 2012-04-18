@@ -173,7 +173,7 @@ public class ScreeningGenerator {
 
     private Collection<PersonalAsset> createAssets(int minAssets) {
         List<PersonalAsset> assets = new ArrayList<PersonalAsset>();
-        for (int i = 0; i < minAssets + RandomUtil.randomInt(3); i++) {
+        for (int i = 0; i < 1 + minAssets + RandomUtil.randomInt(3); i++) {
             PersonalAsset asset = EntityFactory.create(PersonalAsset.class);
 
             asset.assetType().setValue(RandomUtil.random(AssetType.values()));
