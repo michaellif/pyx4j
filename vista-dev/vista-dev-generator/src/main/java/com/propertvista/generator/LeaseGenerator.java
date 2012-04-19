@@ -24,6 +24,7 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -95,6 +96,14 @@ public class LeaseGenerator extends PTGenerator {
             tenant.takeOwnership().setValue(RandomUtil.randomBoolean());
 
             lease.version().tenants().add(tenant);
+        }
+    }
+
+    public static void attachDocumentData(Lease lease) {
+        for (Tenant tenant : lease.version().tenants()) {
+            for (PersonScreening screening : tenant.customer()._PersonScreenings()) {
+                ScreeningGenerator.attachDocumentData(screening);
+            }
         }
     }
 }

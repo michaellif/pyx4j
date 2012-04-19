@@ -19,9 +19,11 @@ import java.util.Set;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.server.common.security.VistaSystemPermission;
 import com.propertyvista.shared.adapters.ApplicationDocumentUploadedBlobSecurityAdapter;
 
 public class ApplicationDocumentUploadedBlobSecurityAdapterImpl implements ApplicationDocumentUploadedBlobSecurityAdapter {
@@ -40,6 +42,11 @@ public class ApplicationDocumentUploadedBlobSecurityAdapterImpl implements Appli
 
     @Override
     public boolean allowModifications(ApplicationDocumentFile entity, MemberMeta meta, Object valueOrig, Object valueNew) {
+        // Used during data preload
+        if (SecurityController.checkPermission(new VistaSystemPermission())) {
+            return true;
+        }
+
         @SuppressWarnings("unchecked")
         Set<Key> userUploadeKeys = (Set<Key>) Context.getVisit().getAttribute(LIST_SESSION_ATTRIBUTE);
         if (userUploadeKeys == null) {

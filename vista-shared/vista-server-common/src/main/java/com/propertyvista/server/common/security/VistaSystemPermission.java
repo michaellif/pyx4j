@@ -7,32 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 10, 2012
+ * Created on Apr 19, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.security;
+package com.propertyvista.server.common.security;
 
-import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.BasicPermission;
 
-public enum VistaBasicBehavior implements Behavior {
+@SuppressWarnings("serial")
+public class VistaSystemPermission extends BasicPermission {
 
-    System,
-
-    CRM,
-
-    CRMPasswordChangeRequired,
-
-    ProspectiveApp,
-
-    ProspectiveAppPasswordChangeRequired,
-
-    TenantPortal,
-
-    TenantPortalPasswordChangeRequired,
-
-    Admin,
-
-    AdminPasswordChangeRequired,
+    public VistaSystemPermission() {
+        super("*");
+    }
 
 }

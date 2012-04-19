@@ -47,6 +47,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             AptUnit unit = aptUnitSource.next();
             Lease lease = generator.createLease(unit);
+            LeaseGenerator.attachDocumentData(lease);
 
             if (i < DemoData.UserType.TENANT.getDefaultMax()) {
                 Tenant mainTenant = lease.version().tenants().get(0);
@@ -78,6 +79,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             AptUnit unit = aptUnitSource.next();
             Lease lease = generator.createLease(unit);
+            LeaseGenerator.attachDocumentData(lease);
 
             //Set users that can login using UI
             if (i < DemoData.UserType.PTENANT.getDefaultMax()) {

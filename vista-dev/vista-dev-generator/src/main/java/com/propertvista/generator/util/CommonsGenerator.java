@@ -33,8 +33,6 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
-import com.propertyvista.domain.ref.Province;
-import com.propertyvista.server.common.reference.SharedData;
 
 public class CommonsGenerator {
 
@@ -171,18 +169,17 @@ public class CommonsGenerator {
     }
 
     public static AddressStructured createAddress() {
-        boolean useNewAddress = true;
-        if (useNewAddress) {
-            if (adresses == null) {
-                adresses = EntityCSVReciver.create(AddressStructured.class).loadFile(IOUtils.resourceFileName("address-struct.csv", CommonsGenerator.class));
-            }
-            return adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
-        } else {
-            return createAddressWrong();
+        if (adresses == null) {
+            adresses = EntityCSVReciver.create(AddressStructured.class).loadFile(IOUtils.resourceFileName("address-struct.csv", CommonsGenerator.class));
         }
+        AddressStructured addressStructured = adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
+        if (addressStructured.streetType().isNull()) {
+            addressStructured.streetType().setValue(StreetType.other);
+        }
+        return addressStructured;
     }
 
-    public static AddressStructured createAddressWrong() {
+    public static AddressStructured createRandomAddress() {
         AddressStructured address = EntityFactory.create(AddressStructured.class);
 
         address.suiteNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
@@ -196,9 +193,8 @@ public class CommonsGenerator {
         address.city().setValue(RandomUtil.random(PreloadData.CITIES));
         address.county().setValue("");
 
-        Province province = RandomUtil.random(SharedData.getProvinces());
-        address.province().set(province);
-        address.country().set(province.country());
+        address.province().code().setValue(RandomUtil.random(PreloadData.PROVINCES));
+        address.country().name().setValue("Canada");
 
         // for now we support only two countries
         if (address.country().name().getValue().toLowerCase().startsWith("c")) {

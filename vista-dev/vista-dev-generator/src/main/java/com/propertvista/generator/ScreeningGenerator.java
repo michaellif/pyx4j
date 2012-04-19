@@ -13,22 +13,34 @@
  */
 package com.propertvista.generator;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
+
 import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.media.ProofOfEmploymentDocument;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
@@ -36,13 +48,23 @@ import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class ScreeningGenerator {
+
+    private List<IdentificationDocumentType> identificationDocumentTypes;
+
+    ScreeningGenerator() {
+
+    }
 
     PersonScreening createScreening() {
         PersonScreening screening = EntityFactory.create(PersonScreening.class);
 
         // Documents
+        for (int i = 0; i < 2 + RandomUtil.randomInt(2); i++) {
+            screening.documents().add(createIdentificationDocument());
+        }
 
         // Address
         screening.currentAddress().set(createPriorAddress());
@@ -79,7 +101,7 @@ public class ScreeningGenerator {
     private PriorAddress createPriorAddress() {
         PriorAddress address = EntityFactory.create(PriorAddress.class);
 
-        address.set(CommonsGenerator.createAddress().duplicate(PriorAddress.class));
+        address.set(CommonsGenerator.createRandomAddress().duplicate(PriorAddress.class));
 
         address.moveInDate().setValue(RandomUtil.randomLogicalDate(2009, 2011));
         address.moveOutDate().setValue(RandomUtil.randomLogicalDate(2011, 2013));
@@ -117,14 +139,14 @@ public class ScreeningGenerator {
             PersonalIncome income = EntityFactory.create(PersonalIncome.class);
             income.incomeSource().setValue(IncomeSource.fulltime);
             income.employer().set(createEmployer());
-            // TODO Add documents
+            income.documents().add(createProofOfEmploymentDocument());
             incomes.add(income);
         }
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             PersonalIncome income = EntityFactory.create(PersonalIncome.class);
             income.incomeSource().setValue(IncomeSource.selfemployed);
             income.selfEmployed().set(createSelfEmployed());
-            // TODO Add documents
+            income.documents().add(createProofOfEmploymentDocument());
             incomes.add(income);
         }
 
@@ -184,4 +206,64 @@ public class ScreeningGenerator {
         }
         return assets;
     }
+
+    private IdentificationDocument createIdentificationDocument() {
+        IdentificationDocument document = EntityFactory.create(IdentificationDocument.class);
+        document.idNumber().setValue(RandomUtil.randomLetters(10));
+        if (identificationDocumentTypes == null) {
+            identificationDocumentTypes = Persistence.service().query(EntityQueryCriteria.create(IdentificationDocumentType.class));
+        }
+        document.idType().set(RandomUtil.random(identificationDocumentTypes));
+        document.documentPages().add(createDocumentPage("doc-security" + RandomUtil.randomInt(3) + ".jpg"));
+        return document;
+    }
+
+    private ProofOfEmploymentDocument createProofOfEmploymentDocument() {
+        ProofOfEmploymentDocument document = EntityFactory.create(ProofOfEmploymentDocument.class);
+        document.description().setValue("proof of employment document " + RandomUtil.randomLetters(10));
+        document.documentPages().add(createDocumentPage("doc-income" + RandomUtil.randomInt(3) + ".jpg"));
+        return document;
+    }
+
+    public ApplicationDocumentFile createDocumentPage(String fileName) {
+        ApplicationDocumentFile applicationDocument = EntityFactory.create(ApplicationDocumentFile.class);
+        applicationDocument.fileName().setValue(fileName);
+        return applicationDocument;
+    }
+
+    public static void attachDocumentData(PersonScreening screening) {
+        for (ApplicationDocument document : screening.documents()) {
+            attachDocumentData(document);
+        }
+        for (PersonalIncome income : screening.incomes()) {
+            for (ApplicationDocument document : income.documents()) {
+                attachDocumentData(document);
+            }
+        }
+    }
+
+    private static void attachDocumentData(ApplicationDocument document) {
+        for (ApplicationDocumentFile applicationDocument : document.documentPages()) {
+            String fileName = applicationDocument.fileName().getValue();
+            ApplicationDocumentBlob applicationDocumentData;
+            try {
+                byte[] data = IOUtils.getBinaryResource("pt-docs/" + fileName, ScreeningGenerator.class);
+                if (data == null) {
+                    throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
+                }
+                String contentType = MimeMap.getContentType(FilenameUtils.getExtension(fileName));
+                applicationDocumentData = EntityFactory.create(ApplicationDocumentBlob.class);
+                applicationDocumentData.data().setValue(data);
+                applicationDocumentData.contentType().setValue(contentType);
+
+            } catch (IOException e) {
+                throw new Error("Failed to read the file [" + fileName + "]", e);
+            }
+
+            Persistence.service().persist(applicationDocumentData);
+            applicationDocument.fileSize().setValue(applicationDocumentData.data().getValue().length);
+            applicationDocument.blobKey().set(applicationDocumentData.id());
+        }
+    }
+
 }

@@ -13,14 +13,10 @@
  */
 package com.propertyvista.portal.server.report;
 
-import java.io.IOException;
-
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Test;
-
-import com.propertvista.generator.PTGenerator;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.report.test.ReportsTestBase;
@@ -93,13 +89,6 @@ public class SummaryReportTest extends ReportsTestBase {
         DataDump.dump("test-summary", summary);
         return dto;
 
-    }
-
-    private static SummaryDTO retreiveSummaryTodo() throws IOException {
-        PTGenerator generator = new PTGenerator(VistaDevPreloadConfig.createTest());
-        // Application application = generator.createApplication(PTGenerator.createUser());
-        SummaryDTO summary = null;//TODOgenerator.createSummary(application, null);
-        return summary;
     }
 
     @Test
