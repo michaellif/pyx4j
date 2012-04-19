@@ -82,12 +82,14 @@ public class LeaseGenerator extends PTGenerator {
         mainTenant.customer().set(customerGenerator.createCustomer());
         mainTenant.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
         mainTenant.customer()._PersonScreenings().add(screeningGenerator.createScreening());
+        mainTenant.screening().set(mainTenant.customer()._PersonScreenings().iterator().next());
         mainTenant.role().setValue(Role.Applicant);
         lease.version().tenants().add(mainTenant);
 
         Guarantor guarantor = EntityFactory.create(Guarantor.class);
         guarantor.customer().set(customerGenerator.createCustomer());
-        guarantor.customer()._PersonScreenings().add(screeningGenerator.createScreening());
+        guarantor.screening().set(screeningGenerator.createScreening());
+        guarantor.customer()._PersonScreenings().add(guarantor.screening());
         guarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
         guarantor.tenant().set(mainTenant);
         lease.version().guarantors().add(guarantor);
@@ -97,7 +99,8 @@ public class LeaseGenerator extends PTGenerator {
             Tenant tenant = EntityFactory.create(Tenant.class);
             tenant.customer().set(customerGenerator.createCustomer());
             tenant.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
-            tenant.customer()._PersonScreenings().add(screeningGenerator.createScreening());
+            tenant.screening().set(screeningGenerator.createScreening());
+            tenant.customer()._PersonScreenings().add(tenant.screening());
 
             tenant.role().setValue(RandomUtil.random(EnumSet.of(Tenant.Role.CoApplicant, Tenant.Role.Dependent)));
             tenant.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));

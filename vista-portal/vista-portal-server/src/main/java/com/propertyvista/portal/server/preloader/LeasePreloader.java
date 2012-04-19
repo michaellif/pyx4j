@@ -54,7 +54,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     dualTenantCustomer = mainTenant.customer();
                 }
             } else if (i == DemoData.UserType.TENANT.getDefaultMax()) {
-                lease.version().tenants().get(0).customer().set(dualTenantCustomer);
+                Tenant mainTenant = lease.version().tenants().get(0);
+                mainTenant.customer().set(dualTenantCustomer);
+                mainTenant.screening().set(mainTenant.customer()._PersonScreenings().iterator().next());
             }
 
             // Create normal Active Lease first for Shortcut users
@@ -98,7 +100,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     tenant.takeOwnership().setValue(false);
                 }
             } else if (i == DemoData.UserType.PTENANT.getDefaultMax()) {
-                lease.version().tenants().get(0).customer().set(dualPotentialCustomer);
+                Tenant mainTenant = lease.version().tenants().get(0);
+                mainTenant.customer().set(dualPotentialCustomer);
+                mainTenant.screening().set(mainTenant.customer()._PersonScreenings().iterator().next());
             }
 
             ServerSideFactory.create(LeaseFacade.class).createLease(lease);

@@ -55,6 +55,7 @@ public interface LeaseParticipant extends IEntity {
     @Detached
     OnlineApplication application();
 
+    @Detached
     PersonScreening screening();
 
 }
