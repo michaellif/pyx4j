@@ -15,6 +15,8 @@ package com.propertyvista.crm.server.services.customer;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
@@ -30,6 +32,19 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
     @Override
     protected void bind() {
         bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(Guarantor entity, GuarantorDTO dto) {
+        // load detached data:
+        Persistence.service().retrieve(dto.leaseV());
+        Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
+    }
+
+    @Override
+    protected void enhanceListRetrieved(Guarantor entity, GuarantorDTO dto) {
+        Persistence.service().retrieve(dto.leaseV());
+        Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
     }
 
     @Override
