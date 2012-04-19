@@ -74,7 +74,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         }
 
         Customer dualPotentialCustomer = null;
-        for (int i = 0; i <= config().numPotentialTenants; i++) {
+        for (int i = 0; i < config().numPotentialTenants; i++) {
 
             AptUnit unit = aptUnitSource.next();
             Lease lease = generator.createLease(unit);
