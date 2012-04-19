@@ -203,13 +203,13 @@ public class CrmSiteMap implements SiteMap {
         public static class MaintenanceRequest extends CRMCrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Past Tenant")
-        @NavigationItem(navigLabel = "Past Tenants")
+        @PlaceProperties(caption = "Former Tenant")
+        @NavigationItem(navigLabel = "Former Tenants")
         public static class PastTenant extends CRMCrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Past Lease")
-        @NavigationItem(navigLabel = "Past Leases")
+        @PlaceProperties(caption = "Former Lease")
+        @NavigationItem(navigLabel = "Former Leases")
         public static class PastLease extends CRMCrudAppPlace {
         }
 
