@@ -52,7 +52,6 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -300,25 +299,6 @@ public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntit
             public ValidationFailure isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
                 if (value != null) {
                     return (value.isEmpty() ? new ValidationFailure(i18n.tr("At least one tenant should be selected!")) : null);
-                }
-                return null;
-            }
-        });
-
-        get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<Tenant>>() {
-            @Override
-            public ValidationFailure isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
-                if (value != null) {
-                    boolean applicant = false;
-                    for (Tenant item : value) {
-                        if (applicant) {
-                            if (item.role().getValue() == Role.Applicant) {
-                                return new ValidationFailure(i18n.tr("Just one applicant could be selected!"));
-                            }
-                        } else {
-                            applicant = (item.role().getValue() == Role.Applicant);
-                        }
-                    }
                 }
                 return null;
             }

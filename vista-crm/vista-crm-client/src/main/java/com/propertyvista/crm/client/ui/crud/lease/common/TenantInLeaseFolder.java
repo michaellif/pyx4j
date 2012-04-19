@@ -26,11 +26,15 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
@@ -108,6 +112,43 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
             return new TenantInLeaseEditor();
         }
         return super.create(member);
+    }
+
+    @Override
+    public void addValidations() {
+
+        this.addValueValidator(new EditableValueValidator<List<Tenant>>() {
+            @Override
+            public ValidationFailure isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
+                if (value != null) {
+                    boolean applicant = false;
+                    for (Tenant item : value) {
+                        if (applicant) {
+                            if (item.role().getValue() == Role.Applicant) {
+                                return new ValidationFailure(i18n.tr("Just one applicant could be selected!"));
+                            }
+                        } else {
+                            applicant = (item.role().getValue() == Role.Applicant);
+                        }
+                    }
+                }
+                return null;
+            }
+        });
+
+        this.addValueValidator(new EditableValueValidator<IList<Tenant>>() {
+            @Override
+            public ValidationFailure isValid(CComponent<IList<Tenant>, ?> component, IList<Tenant> value) {
+                int totalPrc = 0;
+                for (Tenant item : value) {
+                    Integer p = item.percentage().getValue();
+                    if (p != null) {
+                        totalPrc += p.intValue();
+                    }
+                }
+                return totalPrc == 100 ? null : new ValidationFailure(i18n.tr("Sum Of All Percentages Should be equal to 100%"));
+            }
+        });
     }
 
     private class TenantInLeaseEditor extends CEntityDecoratableEditor<Tenant> {
@@ -190,6 +231,25 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
                 CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());
                 combo.resetCriteria();
                 combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().customer()));
+            }
+        }
+
+// TODO : implement percent recalculation logic         
+//        @Override
+//        protected void propagateValue(Tenant entity, boolean fireEvent, boolean populate) {
+//            super.propagateValue(entity, fireEvent, populate);
+//            if ((getValue().role().getValue() == Role.Applicant)) {
+//                get(proto().percentage()).setEditable(false);
+//                get(proto().percentage()).setViewable(true);
+//            }
+//        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void addValidations() {
+            CComponent<Integer, ?> prc = get(proto().percentage());
+            if (prc instanceof CNumberField) {
+                ((CNumberField<Integer>) prc).setRange(0, 100);
             }
         }
 
