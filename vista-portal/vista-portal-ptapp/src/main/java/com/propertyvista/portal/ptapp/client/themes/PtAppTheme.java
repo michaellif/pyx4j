@@ -17,6 +17,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
@@ -56,6 +57,7 @@ public class PtAppTheme extends VistaTheme {
         });
         addTheme(new DefaultDatePickerTheme());
         addTheme(new DefaultDialogTheme());
+        addTheme(new DefaultDataTableTheme());
         addTheme(new DefaultCCOmponentsTheme());
 
         addTheme(new PtAppSitePanelTheme());
@@ -358,4 +360,5 @@ public class PtAppTheme extends VistaTheme {
         style.addProperty("height", "20em");
         addStyle(style);
     }
+
 }

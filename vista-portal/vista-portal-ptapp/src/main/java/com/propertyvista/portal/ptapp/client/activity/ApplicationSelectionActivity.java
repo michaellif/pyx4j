@@ -16,6 +16,7 @@ package com.propertyvista.portal.ptapp.client.activity;
 import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -24,16 +25,18 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.ptapp.client.ui.ApplicationSelectionView;
+import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
 
 public class ApplicationSelectionActivity extends AbstractActivity implements ApplicationSelectionView.Presenter {
 
-    private ApplicationSelectionService service;
+    private final ApplicationSelectionService service;
 
-    private ApplicationSelectionView view;
+    private final ApplicationSelectionView view;
 
     public ApplicationSelectionActivity() {
-        super();
+        view = PtAppViewFactory.instance(ApplicationSelectionView.class);
+        service = GWT.<ApplicationSelectionService> create(ApplicationSelectionService.class);
     }
 
     @Override

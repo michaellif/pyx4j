@@ -48,6 +48,8 @@ public class PtSiteMap implements SiteMap {
     public static class PasswordChange extends AppPlace {
     }
 
+    @NavigationItem(navigLabel = "Please Select an Application")
+    @PlaceProperties(caption = "Please Select an Application")
     public static class ApplicationSelectionRequired extends AppPlace {
     }
 

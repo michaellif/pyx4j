@@ -25,6 +25,8 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.common.client.ui.components.security.PasswordResetViewImpl;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
+import com.propertyvista.portal.ptapp.client.ui.ApplicationSelectionView;
+import com.propertyvista.portal.ptapp.client.ui.ApplicationSelectionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.ApplicationStatusView;
 import com.propertyvista.portal.ptapp.client.ui.ApplicationStatusViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.CaptionView;
@@ -75,6 +77,9 @@ public class PtAppViewFactory extends ViewFactoryBase {
                 map.put(type, new LoginViewImpl());
             } else if (LoginWithTokenView.class.equals(type)) {
                 map.put(type, new LoginWithTokenViewImpl());
+
+            } else if (ApplicationSelectionView.class.equals(type)) {
+                map.put(type, new ApplicationSelectionViewImpl());
 
             } else if (PasswordResetRequestView.class.equals(type)) {
                 map.put(type, new PasswordResetRequestViewImpl());
