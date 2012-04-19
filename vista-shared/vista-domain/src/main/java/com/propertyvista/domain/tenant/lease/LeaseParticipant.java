@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 
 @AbstractEntity
@@ -53,5 +54,7 @@ public interface LeaseParticipant extends IEntity {
     @Indexed
     @Detached
     OnlineApplication application();
+
+    PersonScreening screening();
 
 }
