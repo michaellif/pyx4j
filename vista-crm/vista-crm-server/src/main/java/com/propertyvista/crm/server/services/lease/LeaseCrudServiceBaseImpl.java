@@ -69,10 +69,16 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             syncBuildingProductCatalog(dto.selectedBuilding());
         }
 
+        // Need this for navigation
+        Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
+
         // calculate price adjustments:
         PriceCalculationHelpers.calculateChargeItemAdjustments(dto.version().leaseProducts().serviceItem());
         for (BillableItem item : dto.version().leaseProducts().featureItems()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(item);
+
+            // Need this for navigation
+            Persistence.service().retrieve(item.item().product());
         }
 
         for (Tenant item : dto.version().tenants()) {

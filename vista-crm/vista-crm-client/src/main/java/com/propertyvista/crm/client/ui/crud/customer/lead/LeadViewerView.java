@@ -24,7 +24,6 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeadViewerView extends IViewerView<Lead> {
 
@@ -41,7 +40,7 @@ public interface LeadViewerView extends IViewerView<Lead> {
 
     IListerView<Appointment> getAppointmentsListerView();
 
-    public void onLeaseConvertionSuccess(Lease result);
+    public void onLeaseConvertionSuccess();
 
     // may return TRUE in case of processed event and no need to re-throw the exception further.
     // FALSE - re-throws the exception (new UnrecoverableClientError(caught)).

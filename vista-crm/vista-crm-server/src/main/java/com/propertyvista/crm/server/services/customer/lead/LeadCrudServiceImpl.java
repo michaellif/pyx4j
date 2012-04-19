@@ -13,35 +13,26 @@
  */
 package com.propertyvista.crm.server.services.customer.lead;
 
-import java.io.Serializable;
-import java.util.Date;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.tenant.LeadFacade;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
-import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.domain.tenant.lead.Showing;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.common.util.LeaseManager;
 
 public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implements LeadCrudService {
 
@@ -94,62 +85,15 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    public void convertToLease(AsyncCallback<Lease> callback, Key leadId, Key unitId) {
-        Lead lead = Persistence.service().retrieve(entityClass, leadId);
-        if (!lead.lease().isNull()) {
-            callback.onFailure(new UserRuntimeException("The Lead is converted to Lease already!"));
-        } else {
-            Date leaseEnd = null;
-            switch (lead.leaseTerm().getValue()) {
-            case months6:
-                leaseEnd = DateUtils.monthAdd(lead.moveInDate().getValue(), 6 + 1);
-                break;
-            case months12:
-                leaseEnd = DateUtils.monthAdd(lead.moveInDate().getValue(), 12 + 1);
-                break;
-            case months18:
-                leaseEnd = DateUtils.monthAdd(lead.moveInDate().getValue(), 18 + 1);
-                break;
-            case other:
-                leaseEnd = DateUtils.monthAdd(lead.moveInDate().getValue(), 12 + 1);
-                break;
-            }
-
-            LeaseManager lm = new LeaseManager();
-            // TODO get
-            Lease lease = lm.create("MZ", lead.leaseType().getValue(), Persistence.service().retrieve(AptUnit.class, unitId), lead.moveInDate().getValue(),
-                    new LogicalDate(leaseEnd));
-            lease.version().expectedMoveIn().setValue(lead.moveInDate().getValue());
-
-            boolean asApplicant = true;
-            for (Guest guest : lead.guests()) {
-                Customer tenant = EntityFactory.create(Customer.class);
-                tenant.person().set(guest.person());
-                Persistence.service().persist(tenant);
-
-                Tenant tenantInLease = EntityFactory.create(Tenant.class);
-                tenantInLease.customer().set(tenant);
-                tenantInLease.role().setValue(asApplicant ? Tenant.Role.Applicant : Tenant.Role.CoApplicant);
-                lease.version().tenants().add(tenantInLease);
-                asApplicant = false;
-            }
-
-            lm.save(lease);
-
-            // mark Lead as converted:
-            lead.lease().set(lease);
-            Persistence.secureSave(lead);
-
-            Persistence.service().commit();
-            callback.onSuccess(lease);
-        }
+    public void convertToLease(AsyncCallback<VoidSerializable> callback, Key leadId, Key unitId) {
+        ServerSideFactory.create(LeadFacade.class).convertToApplication(leadId, EntityFactory.createIdentityStub(AptUnit.class, unitId));
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override
-    public void close(AsyncCallback<Serializable> callback, Key leadId) {
-        Lead lead = Persistence.service().retrieve(entityClass, leadId);
-        lead.status().setValue(Status.closed);
-        Persistence.secureSave(lead);
+    public void close(AsyncCallback<VoidSerializable> callback, Key leadId) {
+        ServerSideFactory.create(LeadFacade.class).close(leadId);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

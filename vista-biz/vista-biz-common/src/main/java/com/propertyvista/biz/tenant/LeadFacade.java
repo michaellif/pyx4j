@@ -15,6 +15,7 @@ package com.propertyvista.biz.tenant;
 
 import com.pyx4j.commons.Key;
 
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public interface LeadFacade {
@@ -23,7 +24,7 @@ public interface LeadFacade {
 
     void persistLead(Lead lead);
 
-    void convertToApplication(Key leadId);
+    void convertToApplication(Key leadId, AptUnit unitId);
 
     void close(Key leadId);
 

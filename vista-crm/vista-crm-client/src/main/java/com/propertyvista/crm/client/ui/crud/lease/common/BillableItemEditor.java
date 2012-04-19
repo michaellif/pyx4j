@@ -49,6 +49,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
@@ -90,9 +91,12 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item(), new CEntitySelectorHyperlink<ProductItem>() {
             @Override
             protected AppPlace getTargetPlace() {
-                //TODO make it working
-                if (false) {
-                    return AppPlaceEntityMapper.resolvePlace(ProductItem.class, getValue().product().getPrimaryKey());
+                if (getValue().product().isInstanceOf(Service.ServiceV.class)) {
+                    Service service = ((Service.ServiceV) getValue().product().cast()).holder();
+                    return AppPlaceEntityMapper.resolvePlace(Service.class, service.getPrimaryKey());
+                } else if (getValue().product().isInstanceOf(Feature.FeatureV.class)) {
+                    Feature feature = ((Feature.FeatureV) getValue().product().cast()).holder();
+                    return AppPlaceEntityMapper.resolvePlace(Feature.class, feature.getPrimaryKey());
                 } else {
                     return null;
                 }

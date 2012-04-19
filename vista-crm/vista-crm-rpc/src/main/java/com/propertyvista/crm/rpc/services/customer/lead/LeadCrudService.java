@@ -13,18 +13,17 @@
  */
 package com.propertyvista.crm.rpc.services.customer.lead;
 
-import java.io.Serializable;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeadCrudService extends AbstractCrudService<Lead> {
 
@@ -32,7 +31,7 @@ public interface LeadCrudService extends AbstractCrudService<Lead> {
 
     void getInterestedUnits(AsyncCallback<Vector<AptUnit>> callback, Key leadId);
 
-    void convertToLease(AsyncCallback<Lease> callback, Key leadId, Key unitId);
+    void convertToLease(AsyncCallback<VoidSerializable> callback, Key leadId, Key unitId);
 
-    void close(AsyncCallback<Serializable> callback, Key leadId);
+    void close(AsyncCallback<VoidSerializable> callback, Key leadId);
 }

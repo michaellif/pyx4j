@@ -35,7 +35,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.Status;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements LeadViewerView {
 
@@ -109,7 +108,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
     }
 
     @Override
-    public void onLeaseConvertionSuccess(Lease result) {
+    public void onLeaseConvertionSuccess() {
         MessageDialog.info(i18n.tr("Information"), i18n.tr("Conversion is succeeded!"));
         convertAction.setVisible(false);
     }

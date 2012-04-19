@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.crud.customer.lead;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
@@ -25,8 +24,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
@@ -39,11 +38,8 @@ import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadViewerView.Presenter {
-
-    private final static I18n i18n = I18n.get(LeadViewerActivity.class);
 
     private final IListerView.Presenter<Appointment> appointmentsLister;
 
@@ -68,10 +64,10 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
 
     @Override
     public void convertToLease(Key unitId) {
-        ((LeadCrudService) service).convertToLease(new AsyncCallback<Lease>() {
+        ((LeadCrudService) service).convertToLease(new AsyncCallback<VoidSerializable>() {
             @Override
-            public void onSuccess(Lease result) {
-                onLeaseConvertionSuccess(result);
+            public void onSuccess(VoidSerializable result) {
+                onLeaseConvertionSuccess();
             }
 
             @Override
@@ -81,8 +77,8 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
         }, entityId, unitId);
     }
 
-    public void onLeaseConvertionSuccess(Lease result) {
-        ((LeadViewerView) view).onLeaseConvertionSuccess(result);
+    public void onLeaseConvertionSuccess() {
+        ((LeadViewerView) view).onLeaseConvertionSuccess();
     }
 
     protected void onConvertionFail(Throwable caught) {
@@ -112,9 +108,9 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
 
     @Override
     public void close() {
-        ((LeadCrudService) service).close(new DefaultAsyncCallback<Serializable>() {
+        ((LeadCrudService) service).close(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
-            public void onSuccess(Serializable result) {
+            public void onSuccess(VoidSerializable result) {
                 populate();
             }
         }, entityId);
