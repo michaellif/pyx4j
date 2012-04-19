@@ -13,8 +13,12 @@
  */
 package com.propertyvista.domain.security;
 
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.security.shared.Behavior;
 
+@I18n
 public enum VistaCustomerBehavior implements Behavior {
 
     ApplicationSelectionRequired,
@@ -25,26 +29,37 @@ public enum VistaCustomerBehavior implements Behavior {
 
     ProspectiveCoApplicant,
 
+    @Translate(value = "Guarantor")
     Guarantor /* is as well Prospective see VistaPortalAccessControlList */,
 
     //-- Application Submitted 
-
+    @Translate(value = "Applicant")
     ProspectiveSubmitted,
 
+    @Translate(value = "Applicant")
     ProspectiveSubmittedApplicant,
 
+    @Translate(value = "Co Applicant")
     ProspectiveSubmittedCoApplicant,
 
+    @Translate(value = "Guarantor")
     GuarantorSubmitted /* is as well ProspectiveSubmitted see VistaPortalAccessControlList */,
 
     // Application Approved - > Portal
 
     LeaseSelectionRequired,
 
+    @Translate(value = "Tenant")
     Tenant,
 
+    @Translate(value = "Tenant")
     TenantPrimary,
 
-    TenantSecondary
+    @Translate(value = "Tenant")
+    TenantSecondary;
 
+    @Override
+    public String toString() {
+        return I18nEnum.toString(this);
+    };
 }

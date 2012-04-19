@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.commons.lang.NotImplementedException;
@@ -20,10 +21,16 @@ import org.apache.commons.lang.NotImplementedException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
@@ -36,9 +43,31 @@ public class ApplicationSelectionServiceImpl implements ApplicationSelectionServ
     }
 
     @Override
-    public void getApplications(AsyncCallback<Vector<OnlineApplication>> callback) {
-        callback.onSuccess(new Vector<OnlineApplication>(ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(
-                PtAppContext.getCurrentUser())));
+    public void getApplications(AsyncCallback<Vector<OnlineApplicationDTO>> callback) {
+        OnlineApplicationFacade appFacade = ServerSideFactory.create(OnlineApplicationFacade.class);
+
+        List<OnlineApplication> applications = appFacade.getOnlineApplications(PtAppContext.getCurrentUser());
+        Vector<OnlineApplicationDTO> applicationsView = new Vector<OnlineApplicationDTO>();
+
+        for (OnlineApplication application : applications) {
+            applicationsView.add(onlineApplicationView(application, appFacade));
+        }
+
+        callback.onSuccess(applicationsView);
     }
 
+    private OnlineApplicationDTO onlineApplicationView(OnlineApplication application, OnlineApplicationFacade appFacade) {
+        OnlineApplicationDTO view = EntityFactory.create(OnlineApplicationDTO.class);
+
+        view.onlineApplicationIdStub().set(application.createIdentityStub());
+        view.role().setValue(appFacade.getOnlineApplicationBehavior(application));
+        Persistence.service().retrieveMember(application.masterOnlineApplication());
+        AptUnit unit = Persistence.service().retrieve(AptUnit.class, application.masterOnlineApplication().leaseApplication().lease().unit().getPrimaryKey());
+        view.unit().set(unit.duplicate());
+        view.unit().setAttachLevel(AttachLevel.ToStringMembers);
+
+        Building building = Persistence.service().retrieve(Building.class, unit.belongsTo().getPrimaryKey(), AttachLevel.ToStringMembers);
+        view.building().set(building);
+        return view;
+    }
 }

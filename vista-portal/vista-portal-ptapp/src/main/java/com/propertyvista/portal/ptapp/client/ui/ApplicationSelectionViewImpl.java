@@ -33,6 +33,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationDTO;
 
 public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
 
@@ -57,17 +58,17 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
         final Button approveSelectionButton = new Button(i18n.tr("Continue"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                OnlineApplication selectedApplication = lister.getSelectedItem();
+                OnlineApplicationDTO selectedApplication = lister.getSelectedItem();
 
                 if (selectedApplication != null) {
-                    presenter.selectApplication(selectedApplication.<OnlineApplication> createIdentityStub());
+                    presenter.selectApplication(selectedApplication.onlineApplicationIdStub().<OnlineApplication> detach());
                 }
             }
         });
         approveSelectionButton.setEnabled(false);
-        lister.addItemSelectionHandler(new ItemSelectionHandler<OnlineApplication>() {
+        lister.addItemSelectionHandler(new ItemSelectionHandler<OnlineApplicationDTO>() {
             @Override
-            public void onSelect(OnlineApplication selectedItem) {
+            public void onSelect(OnlineApplicationDTO selectedItem) {
                 approveSelectionButton.setEnabled(selectedItem != null);
             }
         });
@@ -85,7 +86,7 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
     }
 
     @Override
-    public void setApplications(Vector<OnlineApplication> applications) {
+    public void setApplications(Vector<OnlineApplicationDTO> applications) {
         lister.setDataSource(new OnlineApplicationDataSource(applications));
         lister.obtain(0);
     }
@@ -95,22 +96,24 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
         this.presenter = presenter;
     }
 
-    private class ApplicationsLister extends BasicLister<OnlineApplication> {
+    private class ApplicationsLister extends BasicLister<OnlineApplicationDTO> {
 
         public ApplicationsLister() {
-            super(OnlineApplication.class, false, false);
+            super(OnlineApplicationDTO.class, false, false);
             setSelectable(true);
             setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().status()).build()                    
+                    new MemberColumnDescriptor.Builder(proto().role()).build(),
+                    new MemberColumnDescriptor.Builder(proto().building()).build(),
+                    new MemberColumnDescriptor.Builder(proto().unit()).build()                    
             );//@formatter:on
 
         }
     }
 
-    private static class OnlineApplicationDataSource extends ListerDataSource<OnlineApplication> {
+    private static class OnlineApplicationDataSource extends ListerDataSource<OnlineApplicationDTO> {
 
-        public OnlineApplicationDataSource(Vector<OnlineApplication> applications) {
-            super(OnlineApplication.class, new InMemeoryListService<OnlineApplication>(applications));
+        public OnlineApplicationDataSource(Vector<OnlineApplicationDTO> applications) {
+            super(OnlineApplicationDTO.class, new InMemeoryListService<OnlineApplicationDTO>(applications));
         }
 
     }

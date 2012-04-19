@@ -22,6 +22,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationDTO;
 
 /**
  * 
@@ -29,7 +30,7 @@ import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
  */
 public interface ApplicationSelectionService extends IService {
 
-    void getApplications(AsyncCallback<Vector<OnlineApplication>> callback);
+    void getApplications(AsyncCallback<Vector<OnlineApplicationDTO>> callback);
 
     /** set the chosen application as a working context for the PtApp */
     void setApplicationContext(AsyncCallback<VoidSerializable> callback, OnlineApplication applicationStub);

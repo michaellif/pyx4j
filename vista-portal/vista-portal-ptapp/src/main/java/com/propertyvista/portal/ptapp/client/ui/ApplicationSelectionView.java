@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationDTO;
 
 public interface ApplicationSelectionView extends IsWidget {
 
@@ -29,7 +30,7 @@ public interface ApplicationSelectionView extends IsWidget {
 
     }
 
-    void setApplications(Vector<OnlineApplication> applications);
+    void setApplications(Vector<OnlineApplicationDTO> applications);
 
     void setPresenter(Presenter presenter);
 

@@ -26,6 +26,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.ptapp.client.ui.ApplicationSelectionView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
+import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
 
 public class ApplicationSelectionActivity extends AbstractActivity implements ApplicationSelectionView.Presenter {
@@ -43,16 +44,16 @@ public class ApplicationSelectionActivity extends AbstractActivity implements Ap
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         view.setPresenter(this);
-        view.setApplications(new Vector<OnlineApplication>(1));
+        view.setApplications(new Vector<OnlineApplicationDTO>(1));
         populate();
     }
 
     @Override
     public void populate() {
-        service.getApplications(new DefaultAsyncCallback<Vector<OnlineApplication>>() {
+        service.getApplications(new DefaultAsyncCallback<Vector<OnlineApplicationDTO>>() {
 
             @Override
-            public void onSuccess(Vector<OnlineApplication> applications) {
+            public void onSuccess(Vector<OnlineApplicationDTO> applications) {
                 view.setApplications(applications);
             }
 
