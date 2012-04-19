@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.propertvista.generator.LeaseGenerator;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -32,8 +29,6 @@ import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSim;
 
 public class LeasePreloader extends BaseVistaDevDataPreloader {
 
-    private final static Logger log = LoggerFactory.getLogger(LeasePreloader.class);
-
     @Override
     public String create() {
         int numCreated = 0;
@@ -48,6 +43,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             AptUnit unit = aptUnitSource.next();
             Lease lease = generator.createLease(unit);
             LeaseGenerator.attachDocumentData(lease);
+            LeaseGenerator.assigneLeaseProducts(lease);
 
             if (i < DemoData.UserType.TENANT.getDefaultMax()) {
                 Tenant mainTenant = lease.version().tenants().get(0);
