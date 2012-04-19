@@ -53,8 +53,8 @@ public class EmergencyContactEditor extends CEntityDecoratableEditor<EmergencyCo
         main.setWidget(2, 0, inject(proto().address(), new AddressStructuredEditor(true)));
         main.getFlexCellFormatter().setColSpan(2, 0, 2);
 
-        main.getColumnFormatter().setWidth(0, "60%");
-        main.getColumnFormatter().setWidth(1, "40%");
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
         main.setWidth("100%");
 
         return main;

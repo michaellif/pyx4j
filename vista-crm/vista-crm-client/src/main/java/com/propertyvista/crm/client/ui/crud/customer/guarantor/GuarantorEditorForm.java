@@ -80,9 +80,9 @@ public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
 
-        main.setBR(++row, 0, 1);
-
         if (!isEditable()) {
+            main.setBR(++row, 0, 1);
+
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV(), new CLeaseHyperlink()), 35).customLabel(i18n.tr("Lease")).build());
         }
 
