@@ -32,7 +32,7 @@ public class DemoData {
 
         PCOAPPLICANT("c", 6),
 
-        TENANT("t", 3),
+        TENANT("t", 4),
 
         NEW_TENANT("n", 10),
 

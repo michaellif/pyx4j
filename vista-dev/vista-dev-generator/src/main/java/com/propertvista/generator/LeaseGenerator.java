@@ -13,6 +13,8 @@
  */
 package com.propertvista.generator;
 
+import java.util.EnumSet;
+
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.LogicalDate;
@@ -74,11 +76,25 @@ public class LeaseGenerator extends PTGenerator {
         mainTenant.role().setValue(Role.Applicant);
         lease.version().tenants().add(mainTenant);
 
-        Guarantor guarantor1 = EntityFactory.create(Guarantor.class);
-        guarantor1.customer().set(customerGenerator.createCustomer());
-        guarantor1.customer()._PersonScreenings().add(screeningGenerator.createScreening());
-        guarantor1.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
-        guarantor1.tenant().set(mainTenant);
-        lease.version().guarantors().add(guarantor1);
+        Guarantor guarantor = EntityFactory.create(Guarantor.class);
+        guarantor.customer().set(customerGenerator.createCustomer());
+        guarantor.customer()._PersonScreenings().add(screeningGenerator.createScreening());
+        guarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
+        guarantor.tenant().set(mainTenant);
+        lease.version().guarantors().add(guarantor);
+
+        int maxTenants = RandomUtil.randomInt(4);//config.numTenantsInLease;
+        for (int t = 0; t < maxTenants; t++) {
+            Tenant tenant = EntityFactory.create(Tenant.class);
+            tenant.customer().set(customerGenerator.createCustomer());
+            tenant.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
+            tenant.customer()._PersonScreenings().add(screeningGenerator.createScreening());
+
+            tenant.role().setValue(RandomUtil.random(EnumSet.of(Tenant.Role.CoApplicant, Tenant.Role.Dependent)));
+            tenant.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
+            tenant.takeOwnership().setValue(RandomUtil.randomBoolean());
+
+            lease.version().tenants().add(tenant);
+        }
     }
 }

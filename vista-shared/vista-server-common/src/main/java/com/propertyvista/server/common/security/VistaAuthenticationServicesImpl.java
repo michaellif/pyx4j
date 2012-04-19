@@ -79,8 +79,22 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
     protected abstract Behavior getPasswordChangeRequiredBehavior();
 
+    protected abstract void sendPasswordRetrievalToken(U user);
+
     protected Set<Behavior> getBehaviors(E userCredential) {
         return Collections.emptySet();
+    }
+
+    protected boolean honorSystemState() {
+        return true;
+    }
+
+    protected boolean isDynamicBehaviours() {
+        return false;
+    }
+
+    protected boolean isSessionValid() {
+        return SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior());
     }
 
     @Override
@@ -103,15 +117,11 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         assertClientSystemInfo(clientSystemInfo);
         // Try to begin Session
         String sessionToken = beginSession(request);
-        if (!SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior())) {
+        if (!isSessionValid()) {
             Lifecycle.endSession();
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         callback.onSuccess(createAuthenticationResponse(sessionToken));
-    }
-
-    protected boolean honorSystemState() {
-        return true;
     }
 
     @Override
@@ -225,12 +235,9 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         } else {
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.addAll(getBehaviors(cr));
+            behaviors.add(getApplicationBehavior());
             return beginSession(user, behaviors);
         }
-    }
-
-    protected boolean isDynamicBehaviours() {
-        return false;
     }
 
     public final Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours) {
@@ -252,8 +259,9 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         // Try to begin Session
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.addAll(getBehaviors(credentials));
+        behaviors.add(getApplicationBehavior());
         String sessionToken = beginSession(user, behaviors);
-        if (!SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior())) {
+        if (!isSessionValid()) {
             Lifecycle.endSession();
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
@@ -261,10 +269,10 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     }
 
     protected String beginSession(U user, Set<Behavior> behaviors) {
-        if (behaviors.isEmpty()) {
+        // Only default ApplicationBehavior assigned is error. User have no roles
+        if (behaviors.isEmpty() || ((behaviors.size() == 1) && (behaviors.contains(getApplicationBehavior())))) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
-        behaviors.add(getApplicationBehavior());
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         visit.setEmail(user.email().getValue());
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);
@@ -277,8 +285,6 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         Lifecycle.endSession();
         callback.onSuccess(createAuthenticationResponse(null));
     }
-
-    protected abstract void sendPasswordRetrievalToken(U user);
 
     @Override
     public final void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {

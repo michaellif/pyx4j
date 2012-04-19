@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
@@ -63,6 +64,11 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
     }
 
     @Override
+    protected boolean isSessionValid() {
+        return SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior(), VistaCustomerBehavior.LeaseSelectionRequired);
+    }
+
+    @Override
     public String beginSession(CustomerUser user, Set<Behavior> behaviors) {
         Set<Behavior> actualBehaviors = new HashSet<Behavior>();
         Lease selectedLease = null;
@@ -78,6 +84,7 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
         } else if (leases.size() == 1) {
             selectedLease = leases.get(0);
             actualBehaviors.add(ServerSideFactory.create(CustomerFacade.class).getLeaseBehavior(user, selectedLease));
+            actualBehaviors.addAll(behaviors);
         } else {
             actualBehaviors.add(VistaCustomerBehavior.LeaseSelectionRequired);
         }

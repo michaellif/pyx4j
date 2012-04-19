@@ -23,6 +23,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
@@ -60,6 +61,12 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
     }
 
     @Override
+    protected boolean isSessionValid() {
+        return SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior(),
+                VistaCustomerBehavior.ApplicationSelectionRequired);
+    }
+
+    @Override
     public String beginSession(CustomerUser user, Set<Behavior> behaviors) {
         Set<Behavior> actualBehaviors = new HashSet<Behavior>();
         OnlineApplication selectedApplication = null;
@@ -83,6 +90,7 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
                 }
             }
             actualBehaviors.add(behavior);
+            actualBehaviors.addAll(behaviors);
         } else {
             actualBehaviors.add(VistaCustomerBehavior.ApplicationSelectionRequired);
         }
