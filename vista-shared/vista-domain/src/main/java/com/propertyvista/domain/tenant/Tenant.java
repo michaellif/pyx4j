@@ -35,7 +35,7 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsState;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
-@ToStringFormat("{0} - {1}, {2}")
+@ToStringFormat("{0} - {1}{2,choice,null#|!null#, {2}}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface Tenant extends LeaseParticipant {
 
