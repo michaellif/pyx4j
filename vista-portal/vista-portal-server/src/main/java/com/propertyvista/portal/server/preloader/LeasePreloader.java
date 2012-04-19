@@ -66,7 +66,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 //TODO
                 // ServerSideFactory.create(LeaseFacade.class).activate(lease.getPrimaryKey());
             } else {
-                leaseSim.createLeaseLifeCycle(lease);
+                leaseSim.generateRandomLeaseLifeCycle(lease);
             }
 
             numCreated++;
