@@ -206,12 +206,6 @@ public class SimpleMessageFormat {
                 formatedArg = SimpleDateFormatImpl.formatTime(formatStyle, (Date) arg);
             } else if (formatType.equals("choice")) {
                 String[] choices = formatStyle.split("\\|");
-                Double selectorValue = null;
-                if (arg == null) {
-                    selectorValue = Double.NaN;
-                } else {
-                    selectorValue = toDouble(arg);
-                }
                 String prevResult = null;
                 for (String choice : choices) {
                     int comparatorIdx = choice.indexOf('#');
@@ -219,7 +213,7 @@ public class SimpleMessageFormat {
                         String choiceValueText = choice.substring(0, comparatorIdx);
                         String choiceResult = choice.substring(comparatorIdx + 1, choice.length());
                         if (choiceValueText.equals("null")) {
-                            if (arg == null) {
+                            if (isNull(arg)) {
                                 formatedArg = choiceResult;
                                 break;
                             } else {
@@ -227,7 +221,7 @@ public class SimpleMessageFormat {
                                 continue;
                             }
                         } else if (choiceValueText.equals("!null")) {
-                            if (arg != null) {
+                            if (!isNull(arg)) {
                                 formatedArg = choiceResult;
                                 break;
                             } else {
@@ -237,10 +231,10 @@ public class SimpleMessageFormat {
                         }
 
                         double choiceValue = Double.valueOf(choiceValueText).doubleValue();
-                        if (selectorValue == choiceValue) {
+                        if (toDouble(arg) == choiceValue) {
                             formatedArg = choiceResult;
                             break;
-                        } else if (selectorValue < choiceValue) {
+                        } else if (toDouble(arg) < choiceValue) {
                             formatedArg = (prevResult == null ? choiceResult : prevResult);
                             break;
                         } else {
@@ -252,7 +246,7 @@ public class SimpleMessageFormat {
                         if (comparatorIdx > 0) {
                             double choiceValue = Double.valueOf(choice.substring(0, comparatorIdx)).doubleValue();
                             String choiceResult = choice.substring(comparatorIdx + 1, choice.length());
-                            if (selectorValue <= choiceValue) {
+                            if (toDouble(arg) <= choiceValue) {
                                 formatedArg = (prevResult == null ? choiceResult : prevResult);
                                 break;
                             } else {
@@ -277,8 +271,14 @@ public class SimpleMessageFormat {
         return formatedArg.toString();
     }
 
+    private static boolean isNull(Object arg) {
+        return (arg == null) || (arg == "");
+    }
+
     private static double toDouble(Object value) {
-        if (value instanceof Number) {
+        if (value == null) {
+            return Double.NaN;
+        } else if (value instanceof Number) {
             return ((Number) value).doubleValue();
         } else if (value instanceof Boolean) {
             return (value == Boolean.TRUE) ? 1 : 0;

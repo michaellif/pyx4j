@@ -91,9 +91,15 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("9", pattern10x, 9);
         assertMessageFormat("10 or more", pattern10x, 10);
 
+        // Boolean
         assertMessageFormat("Yes", "{0,choice,0#No|1#Yes}", Boolean.TRUE);
         assertMessageFormat("No", "{0,choice,null#May|0#No|1#Yes}", Boolean.FALSE);
         assertMessageFormat("May", "{0,choice,null#May|0#No|1#Yes}", (Boolean) null);
+
+        // Strings
+        assertMessageFormat("A", "{0}{1,choice,null#|!null#, {1}}", "A", null);
+        assertMessageFormat("A", "{0}{1,choice,null#|!null#, {1}}", "A", "");
+        assertMessageFormat("A, B", "{0}{1,choice,null#|!null#, {1}}", "A", "B");
 
         String pattern = "{0,choice,-1#is negative|0#is zero or fraction|1#is one|1.0<is 1+|2#is two|3<is more than 3}";
         assertMessageFormat("is negative", pattern, -2);
