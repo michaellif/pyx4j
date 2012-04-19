@@ -22,6 +22,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -38,15 +39,25 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 
-public class LeaseGenerator extends PTGenerator {
+public class LeaseGenerator extends DataGenerator {
 
     private final CustomerGenerator customerGenerator;
 
     private final ScreeningGenerator screeningGenerator;
 
+    protected static final long MAX_CREATE_WAIT = 1000L * 60L * 60L * 24L * 30L;
+
+    protected static final long MAX_RESERVED_DURATION = 1000L * 60L * 60L * 24L * 30L;
+
+    protected static final long MAX_LEASE_DURATION = 1000L * 60L * 60L * 24L * 365L * 3L;
+
+    protected static final long MIN_LEASE_DURATION = 1000L * 60L * 60L * 24L * 365L;
+
+    private final VistaDevPreloadConfig config;
+
     public LeaseGenerator(VistaDevPreloadConfig config) {
-        super(config);
-        // TODO configure properly
+        this.config = config;
+        setRandomSeed(config.leaseGenerationSeed);
         customerGenerator = new CustomerGenerator();
         screeningGenerator = new ScreeningGenerator();
     }
@@ -58,10 +69,10 @@ public class LeaseGenerator extends PTGenerator {
 
         LogicalDate effectiveAvailableForRent = new LogicalDate(Math.max(unit._availableForRent().getValue().getTime(), RandomUtil
                 .randomLogicalDate(2012, 2012).getTime()));
-        LogicalDate createdDate = new LogicalDate(effectiveAvailableForRent.getTime() + Math.abs(rnd.nextLong()) % MAX_CREATE_WAIT);
+        LogicalDate createdDate = new LogicalDate(effectiveAvailableForRent.getTime() + Math.abs(random().nextLong()) % MAX_CREATE_WAIT);
 
-        LogicalDate leaseFrom = new LogicalDate(createdDate.getTime() + Math.abs(rnd.nextLong()) % MAX_RESERVED_DURATION);
-        LogicalDate leaseTo = new LogicalDate(Math.max(new LogicalDate().getTime(), leaseFrom.getTime()) + MIN_LEASE_DURATION + Math.abs(rnd.nextLong())
+        LogicalDate leaseFrom = new LogicalDate(createdDate.getTime() + Math.abs(random().nextLong()) % MAX_RESERVED_DURATION);
+        LogicalDate leaseTo = new LogicalDate(Math.max(new LogicalDate().getTime(), leaseFrom.getTime()) + MIN_LEASE_DURATION + Math.abs(random().nextLong())
                 % (MAX_LEASE_DURATION - MIN_LEASE_DURATION));
         LogicalDate expectedMoveIn = leaseFrom; // for simplicity's sake
 
@@ -94,7 +105,7 @@ public class LeaseGenerator extends PTGenerator {
         guarantor.tenant().set(mainTenant);
         lease.version().guarantors().add(guarantor);
 
-        int maxTenants = RandomUtil.randomInt(4);//config.numTenantsInLease;
+        int maxTenants = RandomUtil.randomInt(config.numTenantsInLease);
         for (int t = 0; t < maxTenants; t++) {
             Tenant tenant = EntityFactory.create(Tenant.class);
             tenant.customer().set(customerGenerator.createCustomer());
