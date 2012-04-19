@@ -30,6 +30,7 @@ public class CaptionViewImpl extends SimplePanel implements CaptionView {
 
     public CaptionViewImpl() {
         setStyleName(DEFAULT_STYLE_PREFIX);
+        setWidth("100%");
         captionLabel = new Label();
         captionLabel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
         setWidget(captionLabel);

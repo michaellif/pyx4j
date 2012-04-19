@@ -76,6 +76,7 @@ public class PtAppSitePanel extends FlowPanel {
 
         DisplayPanel captionDisplayPanel = new DisplayPanel();
         captionDisplayPanel.setStyleName(PtAppSitePanelTheme.StyleName.SitePanelCaption.name());
+        captionDisplayPanel.setWidth("100%");
         captionDisplayPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         caption2navigPanel.add(captionDisplayPanel);
 
