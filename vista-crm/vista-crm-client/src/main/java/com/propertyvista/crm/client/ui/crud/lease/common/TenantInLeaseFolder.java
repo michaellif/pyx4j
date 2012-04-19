@@ -118,25 +118,27 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
         public IsWidget createContent() {
             FormFlexPanel main = new FormFlexPanel();
 
+            FormFlexPanel left = new FormFlexPanel();
             int row = -1;
-            main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
+            left.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
                 @Override
                 public Key getLinkKey() {
                     return TenantInLeaseEditor.this.getValue().getPrimaryKey();
                 }
             }));
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role(), new CComboBox<Role>()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentage()), 5).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role(), new CComboBox<Role>()), 15).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentage()), 5).build());
 
-            row = -1; // second column
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+            FormFlexPanel right = new FormFlexPanel();
+            row = -1;
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
 
             if (isEditable()) {
                 ((CComboBox<Role>) get(proto().role())).addValueChangeHandler(new ValueChangeHandler<Tenant.Role>() {
@@ -146,6 +148,10 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
                     }
                 });
             }
+
+            // assemble main panel:
+            main.setWidget(0, 0, left);
+            main.setWidget(0, 1, right);
 
             main.getColumnFormatter().setWidth(0, "60%");
             main.getColumnFormatter().setWidth(1, "40%");

@@ -33,6 +33,7 @@ import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.LeaseDTO;
 
 public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
@@ -98,27 +99,32 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
         public IsWidget createContent() {
             FormFlexPanel main = new FormFlexPanel();
 
+            FormFlexPanel left = new FormFlexPanel();
             int row = -1;
-
-            main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
+            left.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Tenant.class) {
                 @Override
                 public Key getLinkKey() {
                     return GuarantorInLeaseEditor.this.getValue().getPrimaryKey();
                 }
             }));
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
 
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
+            FormFlexPanel right = new FormFlexPanel();
+            row = -1;
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
 
-            row = -1; // second column
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+            // assemble main panel:
+            main.setWidget(0, 0, left);
+            main.setWidget(0, 1, right);
 
             main.getColumnFormatter().setWidth(0, "60%");
             main.getColumnFormatter().setWidth(1, "40%");
+
             return main;
         }
     }
