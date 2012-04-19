@@ -91,7 +91,6 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
-
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 25).build());
 
         main.setH1(++row, 0, 1, i18n.tr("Identification Documents"));

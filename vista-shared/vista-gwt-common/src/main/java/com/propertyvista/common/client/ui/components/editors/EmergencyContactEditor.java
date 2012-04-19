@@ -33,11 +33,11 @@ public class EmergencyContactEditor extends CEntityDecoratableEditor<EmergencyCo
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
+        FormFlexPanel left = new FormFlexPanel();
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Person"))));
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, inject(proto().address(), new AddressStructuredEditor(true)));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        left.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Person"))));
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sex()), 7).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
 
         FormFlexPanel right = new FormFlexPanel();
         row = -1;
@@ -46,10 +46,15 @@ public class EmergencyContactEditor extends CEntityDecoratableEditor<EmergencyCo
         right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
         right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
 
+        // assemble main panel:
+        main.setWidget(0, 0, left);
         main.setWidget(0, 1, right);
+        main.setHR(1, 0, 2);
+        main.setWidget(2, 0, inject(proto().address(), new AddressStructuredEditor(true)));
+        main.getFlexCellFormatter().setColSpan(2, 0, 2);
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(0, "60%");
+        main.getColumnFormatter().setWidth(1, "40%");
         main.setWidth("100%");
 
         return main;
