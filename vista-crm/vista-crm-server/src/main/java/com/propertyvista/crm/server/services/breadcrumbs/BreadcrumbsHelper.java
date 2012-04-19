@@ -21,9 +21,14 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BreadcrumbsHelper {
@@ -33,6 +38,12 @@ public class BreadcrumbsHelper {
         List<IEntity> trail = getOwners(startFromTarget);
         Collections.reverse(trail);
         return trail;
+    }
+
+    private static IEntity toStringDuplicate(IEntity entity) {
+        IEntity toStringOnlyEntity = entity.duplicate();
+        toStringOnlyEntity.setAttachLevel(AttachLevel.ToStringMembers);
+        return toStringOnlyEntity;
     }
 
     private static class OwnersItterator implements ApplyMethod {
@@ -55,9 +66,7 @@ public class BreadcrumbsHelper {
                 Persistence.service().retrieve(owner);
             }
             lastTrailEntity = owner;
-            IEntity toStringOnlyEntity = owner.duplicate();
-            toStringOnlyEntity.setAttachLevel(AttachLevel.ToStringMembers);
-            owners.add(toStringOnlyEntity);
+            owners.add(toStringDuplicate(owner));
             return true;
         }
     }
@@ -68,10 +77,7 @@ public class BreadcrumbsHelper {
             if (startFromTarget.isValueDetached()) {
                 Persistence.service().retrieve(startFromTarget);
             }
-            IEntity toStringOnlyEntity = startFromTarget.duplicate();
-            toStringOnlyEntity.setAttachLevel(AttachLevel.ToStringMembers);
-            trail.add(toStringOnlyEntity);
-
+            trail.add(toStringDuplicate(startFromTarget));
             trail.addAll(getOwners(startFromTarget));
         }
         return trail;
@@ -80,13 +86,38 @@ public class BreadcrumbsHelper {
     private static List<IEntity> getOwners(IEntity startFromTarget) {
         final List<IEntity> trail = new ArrayList<IEntity>();
 
-        OwnersItterator iter = new OwnersItterator(trail);
-        EntityGraph.applyToOwners(startFromTarget, iter);
-
         // Special case for no business owned
+        if (startFromTarget instanceof PersonScreening) {
+            {
+                EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().screening(), startFromTarget));
+                Tenant tenant = Persistence.service().retrieve(criteria);
+                if (tenant != null) {
+                    Persistence.service().retrieve(tenant.leaseV());
+                    startFromTarget = tenant.leaseV().holder();
+                    trail.add(toStringDuplicate(tenant));
+                    trail.add(toStringDuplicate(startFromTarget));
+                }
+            }
+            if (startFromTarget instanceof PersonScreening) {
+                EntityQueryCriteria<Guarantor> criteria = EntityQueryCriteria.create(Guarantor.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().screening(), startFromTarget));
+                Guarantor guarantor = Persistence.service().retrieve(criteria);
+                if (guarantor != null) {
+                    Persistence.service().retrieve(guarantor.leaseV());
+                    startFromTarget = guarantor.leaseV().holder();
+                    trail.add(toStringDuplicate(guarantor));
+                    trail.add(toStringDuplicate(startFromTarget));
+                }
+            }
+        }
+
         if (startFromTarget instanceof Lease) {
             trail.addAll(getgetOwnersAndThis(((Lease) startFromTarget).unit()));
         }
+
+        OwnersItterator iter = new OwnersItterator(trail);
+        EntityGraph.applyToOwners(startFromTarget, iter);
 
         if (iter.lastTrailEntity instanceof Lease) {
             trail.addAll(getgetOwnersAndThis(((Lease) iter.lastTrailEntity).unit()));
