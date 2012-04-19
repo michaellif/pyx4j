@@ -155,6 +155,7 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
 
             main.getColumnFormatter().setWidth(0, "60%");
             main.getColumnFormatter().setWidth(1, "40%");
+
             return main;
         }
 
