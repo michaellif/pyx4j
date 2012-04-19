@@ -53,10 +53,19 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
             int row = -1;
             main.setWidget(++row, 0, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 20).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
+
+            FormFlexPanel right = new FormFlexPanel();
+            row = -1;
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 25).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
+
+            main.setWidget(0, 1, right);
+
+            main.getColumnFormatter().setWidth(0, "50%");
+            main.getColumnFormatter().setWidth(1, "50%");
+            main.setWidth("100%");
 
             return main;
         }
