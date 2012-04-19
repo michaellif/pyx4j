@@ -16,21 +16,16 @@ package com.propertyvista.crm.client.ui.crud.customer.tenant;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -38,11 +33,9 @@ import com.propertyvista.common.client.ui.components.folders.EmergencyContactFol
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.LeaseApplicationDTO;
-import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
@@ -98,21 +91,10 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
         main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV().holder(), new CEntityHyperlink<Lease>(new Command() {
-            @Override
-            public void execute() {
-                if (getValue().leaseV().holder().getPrimaryKey() != null) {
-                    CrudAppPlace place;
-                    if (getValue().leaseV().status().getValue().isDraft()) {
-                        place = AppPlaceEntityMapper.resolvePlace(LeaseApplicationDTO.class);
-                    } else {
-                        place = AppPlaceEntityMapper.resolvePlace(LeaseDTO.class);
-                    }
-                    AppSite.getPlaceController().goTo(place.formViewerPlace(getValue().leaseV().holder().getPrimaryKey()));
-                }
-            }
-        })), 35).customLabel(i18n.tr("Lease")).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 10).build());
+        if (!isEditable()) {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV(), new CLeaseHyperlink()), 35).customLabel(i18n.tr("Lease")).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 10).build());
+        }
 
         return new CrmScrollPanel(main);
     }

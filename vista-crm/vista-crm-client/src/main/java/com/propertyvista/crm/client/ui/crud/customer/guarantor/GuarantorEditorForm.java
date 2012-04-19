@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -27,8 +26,8 @@ import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
@@ -83,7 +82,9 @@ public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
 
         main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV().holder(), new CEntityLabel<Lease>()), 35).customLabel(i18n.tr("Lease")).build());
+        if (!isEditable()) {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV(), new CLeaseHyperlink()), 35).customLabel(i18n.tr("Lease")).build());
+        }
 
         return new CrmScrollPanel(main);
     }
