@@ -20,10 +20,12 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.CEntityViewer;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceLineItemDetailsDTO;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
@@ -40,20 +42,20 @@ public class InvoiceLineItemViewer extends CEntityViewer<InvoiceLineItemDetailsD
 
     @Override
     public IsWidget createContent(InvoiceLineItemDetailsDTO value) {
-        FlexTable content = new FlexTable();
+        VerticalPanel content = new VerticalPanel();
         content.setWidth("100%");
         content.getElement().getStyle().setProperty("paddingLeft", "20px");
-        content.getColumnFormatter().setWidth(1, "20%");
         if (value != null && !value.total().isNull()) {
-            // header
-            HorizontalPanel header = new HorizontalPanel();
-            header.setHeight("28px");
-//            header.setStyleName(BillingTheme.StyleName.BillingLineItem.name());
+            // entry
+            HorizontalPanel entry = new HorizontalPanel();
+            entry.setHeight("28px");
+            entry.setWidth("100%");
+            entry.setStyleName(BillingTheme.StyleName.BillingLineItem.name());
             HTML caption = new HTML(value.getMeta().getCaption());
             caption.getElement().getStyle().setProperty("fontSize", "16px");
             buttonExpand.getElement().getStyle().setProperty("paddingLeft", "20px");
-            header.add(caption);
-            header.add(buttonExpand);
+            entry.add(caption);
+            entry.add(buttonExpand);
             buttonExpand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -62,9 +64,9 @@ public class InvoiceLineItemViewer extends CEntityViewer<InvoiceLineItemDetailsD
             });
             // total
             itemTotal.setText(value.total().getStringView());
-            content.setWidget(0, 0, header);
-            content.setWidget(0, 1, itemTotal);
-            content.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT);
+            itemTotal.setStyleName(BillingTheme.StyleName.BillingLineItemAmount.name());
+            entry.add(itemTotal);
+            content.add(entry);
             if (value.lineItems() != null && value.lineItems().size() > 0) {
                 // details
                 details.setWidth("100%");
@@ -88,8 +90,7 @@ public class InvoiceLineItemViewer extends CEntityViewer<InvoiceLineItemDetailsD
                     }
                 }
                 addTotalRecord(row++, value.getMeta().getCaption(), value.total().getStringView());
-                content.getFlexCellFormatter().setColSpan(1, 0, 2);
-                content.setWidget(1, 0, details);
+                content.add(details);
             } else {
                 buttonExpand.setVisible(false);
             }

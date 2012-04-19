@@ -31,10 +31,10 @@ public interface BillDTO extends Bill {
     InvoiceLineItemDetailsDTO serviceChargeLineItems();
 
     // Current Bill charges
-    @Caption(name = "Product Charges")
+    @Caption(name = "Feature Charges")
     InvoiceLineItemDetailsDTO recurringFeatureChargeLineItems();
 
-    @Caption(name = "One-Time Product Charges")
+    @Caption(name = "One-Time Feature Charges")
     InvoiceLineItemDetailsDTO onetimeFeatureChargeLineItems();
 
 //    IList<InvoiceProductCredit> productCreditLineItems();
