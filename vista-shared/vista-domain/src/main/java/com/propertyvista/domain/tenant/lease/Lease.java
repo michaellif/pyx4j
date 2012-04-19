@@ -177,7 +177,6 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     IPrimitive<Service.Type> type();
 
     @NotNull
-    @Detached
     @ToString(index = 2)
     @Caption(name = "Selected Unit")
     AptUnit unit();
