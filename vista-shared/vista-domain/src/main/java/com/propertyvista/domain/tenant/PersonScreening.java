@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -55,6 +56,7 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder<Iden
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createDate();
 
+    @ToString(index = 0)
     @Format("MM/dd/yyyy")
     @Timestamp(Update.Updated)
     IPrimitive<LogicalDate> updateDate();

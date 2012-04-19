@@ -21,6 +21,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
@@ -30,6 +31,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
@@ -70,6 +73,14 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         PriceCalculationHelpers.calculateChargeItemAdjustments(dto.version().leaseProducts().serviceItem());
         for (BillableItem item : dto.version().leaseProducts().featureItems()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(item);
+        }
+
+        for (Tenant item : dto.version().tenants()) {
+            Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
+        }
+
+        for (Guarantor item : dto.version().guarantors()) {
+            Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
     }
 
