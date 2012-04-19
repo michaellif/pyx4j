@@ -846,7 +846,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                     if (!adapter.allowModifications(entity, memberMeta, null, value)) {
                         log.error("Forbidden change -> [{}]", value);
-                        throw new Error("Forbidden change '" + memberMeta.getCaption() + " of '" + entity.getEntityMeta().getCaption() + "'");
+                        throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
                     }
                 }
             }
