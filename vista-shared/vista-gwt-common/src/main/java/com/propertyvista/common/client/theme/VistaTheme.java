@@ -162,11 +162,13 @@ public class VistaTheme extends Theme {
     protected void initMenuBarStyles() {
         Style style = new Style(".gwt-MenuBar");
         style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
         style.addProperty("color", ThemeColors.foreground, 0.2);
         addStyle(style);
 
         style = new Style(".gwt-MenuItem");
         style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
         style.addProperty("background-color", ThemeColors.foreground, 0.2);
         style.addProperty("background", "transparent");
         style.addProperty("color", "#E5F0E1");
@@ -176,6 +178,7 @@ public class VistaTheme extends Theme {
         style = new Style(".gwt-MenuItem-selected");
         style.addProperty("background", ThemeColors.foreground, 0.8);
         style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
         style.addProperty("text-decoration", "underline");
         style.addProperty("background", "transparent");
         addStyle(style);
@@ -234,6 +237,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-TabLayoutPanelTab");
+        style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("height", "2em");
         style.addProperty("line-height", "2em");
