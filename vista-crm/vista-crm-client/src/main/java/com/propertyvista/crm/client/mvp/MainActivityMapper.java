@@ -820,17 +820,18 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
                         // Reports:
-                    } else if (place instanceof CrmSiteMap.Report) {
-                        activity = new ReportViewActivity(place);
                     } else if (place instanceof CrmSiteMap.Report.Management) {
                         activity = new ReportManagementActivity(place);
                         // Dashboards:
-                    } else if (place instanceof CrmSiteMap.Dashboard) {
-                        activity = new DashboardViewActivity(place);
                     } else if (place instanceof CrmSiteMap.Dashboard.Management) {
                         activity = new DashboardManagementActivity(place);
 
                     } // CRUD APP PLACE IF ENDS HERE
+
+                } else if (place instanceof CrmSiteMap.Report) {
+                    activity = new ReportViewActivity(place);
+                } else if (place instanceof CrmSiteMap.Dashboard) {
+                    activity = new DashboardViewActivity(place);
 
                 } else if (place instanceof CrmSiteMap.PasswordChange) {
                     activity = new PasswordChangeActivity(place);
