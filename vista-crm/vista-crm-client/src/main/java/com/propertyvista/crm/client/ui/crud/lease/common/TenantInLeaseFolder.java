@@ -139,14 +139,17 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
         this.addValueValidator(new EditableValueValidator<IList<Tenant>>() {
             @Override
             public ValidationFailure isValid(CComponent<IList<Tenant>, ?> component, IList<Tenant> value) {
-                int totalPrc = 0;
-                for (Tenant item : value) {
-                    Integer p = item.percentage().getValue();
-                    if (p != null) {
-                        totalPrc += p.intValue();
+                if (value != null) {
+                    int totalPrc = 0;
+                    for (Tenant item : value) {
+                        Integer p = item.percentage().getValue();
+                        if (p != null) {
+                            totalPrc += p.intValue();
+                        }
                     }
+                    return (totalPrc == 100 ? null : new ValidationFailure(i18n.tr("Sum Of All Percentages Should be equal to 100%")));
                 }
-                return totalPrc == 100 ? null : new ValidationFailure(i18n.tr("Sum Of All Percentages Should be equal to 100%"));
+                return null;
             }
         });
     }
@@ -208,6 +211,8 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
         @Override
         protected void onPopulate() {
             super.onPopulate();
+
+            get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
 
             boolean applicant = (getValue().role().getValue() == Role.Applicant);
             if (applicant) {

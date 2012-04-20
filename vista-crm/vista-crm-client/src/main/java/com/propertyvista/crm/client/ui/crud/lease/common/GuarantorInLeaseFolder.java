@@ -135,6 +135,8 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
         protected void onPopulate() {
             super.onPopulate();
 
+            get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
+
             if (get(proto().screening()) instanceof CEntityComboBox<?>) {
                 @SuppressWarnings("unchecked")
                 CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());

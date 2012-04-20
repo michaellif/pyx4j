@@ -56,6 +56,12 @@ public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
     }
 
     @Override
+    protected void onPopulate() {
+        super.onPopulate();
+        get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
+    }
+
+    @Override
     public void setActiveTab(int index) {
         tabPanel.selectTab(index);
     }
@@ -91,8 +97,6 @@ public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
 
     @Override
     public void addValidations() {
-        get(proto().customer().person().email()).setMandatory(true);
         new PastDateValidation(get(proto().customer().person().birthDate()));
-
     }
 }

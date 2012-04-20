@@ -65,6 +65,12 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     }
 
     @Override
+    protected void onPopulate() {
+        super.onPopulate();
+        get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
+    }
+
+    @Override
     public void setActiveTab(int index) {
         tabPanel.selectTab(index);
     }
@@ -109,8 +115,6 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
     @Override
     public void addValidations() {
-        get(proto().customer().person().email()).setMandatory(true);
-
         get(proto().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
             @Override
