@@ -29,4 +29,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ReadOnly {
 
+    /**
+     * Allow to modify null value
+     */
+    boolean allowOverrideNull() default false;
 }

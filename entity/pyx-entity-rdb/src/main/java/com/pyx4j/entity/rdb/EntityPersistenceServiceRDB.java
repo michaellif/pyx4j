@@ -738,9 +738,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             if (!EqualsHelper.equals(lastValue, value)) {
                 updated = true;
-                if (memberMeta.getAnnotation(ReadOnly.class) != null) {
-                    log.error("Changing readonly property [{}] -> [{}]", lastValue, value);
-                    throw new Error("Changing readonly property '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
+                ReadOnly readOnly = memberMeta.getAnnotation(ReadOnly.class);
+                if (readOnly != null) {
+                    if (!((lastValue == null) && (readOnly.allowOverrideNull()))) {
+                        log.error("Changing readonly property [{}] -> [{}]", lastValue, value);
+                        throw new Error("Changing readonly property '" + memberMeta.getFieldName() + "' of " + entity.getEntityMeta().getCaption());
+                    }
                 }
                 MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
                 if (memberColumn != null && memberColumn.modificationAdapters() != null) {
