@@ -180,6 +180,34 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
     }
 
+    public void testOneToOneOwnedPolymorphismInSigleTable() {
+        String testId = uniqueString();
+
+        // setup 
+        UnidirectionalOneToOnePlmParent parentA = EntityFactory.create(UnidirectionalOneToOnePlmParent.class);
+        parentA.testId().setValue(testId);
+        parentA.name().setValue("parentA");
+
+        UnidirectionalOneToOnePlmChildA childA = EntityFactory.create(UnidirectionalOneToOnePlmChildA.class);
+        childA.testId().setValue(testId);
+        childA.name().setValue("A");
+
+        parentA.child().set(childA);
+        srv.persist(childA);
+
+        UnidirectionalOneToOnePlmParent parentB = EntityFactory.create(UnidirectionalOneToOnePlmParent.class);
+        parentB.testId().setValue(testId);
+        parentB.name().setValue("parentB");
+
+        UnidirectionalOneToOnePlmChildB childB = EntityFactory.create(UnidirectionalOneToOnePlmChildB.class);
+        childB.testId().setValue(testId);
+        childB.name().setValue("B");
+
+        parentB.child().set(childB);
+        srv.persist(parentB);
+
+    }
+
     public void testOwnedPolymorphismInSingleTable() {
         String testId = uniqueString();
 

@@ -20,6 +20,10 @@
  */
 package com.pyx4j.forms.client.validators.password;
 
+import static com.pyx4j.forms.client.validators.password.PasswordStrengthAssessmentUtils.LOWERCASE_LETTERS;
+import static com.pyx4j.forms.client.validators.password.PasswordStrengthAssessmentUtils.NUMBERS;
+import static com.pyx4j.forms.client.validators.password.PasswordStrengthAssessmentUtils.UPPERCASE_LETTERS;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -101,6 +105,10 @@ public class DefaultPasswordStrengthRule implements PasswordStrengthRule {
             return PasswordStrengthVerdict.Weak;
         }
 
+        if (PasswordStrengthAssessmentUtils.middleNumbersOrSymbols(password) == 0) {
+            return PasswordStrengthVerdict.Weak;
+        }
+
         boolean hasDictionary = false;
         for (String dictionaryWord : dictionary) {
             if (word.contains(dictionaryWord)) {
@@ -112,15 +120,43 @@ public class DefaultPasswordStrengthRule implements PasswordStrengthRule {
         }
         // We eliminated the obvious cases of Weak passwords
 
+        int consecutive = PasswordStrengthAssessmentUtils.consecutive(UPPERCASE_LETTERS, password)
+                + PasswordStrengthAssessmentUtils.consecutive(LOWERCASE_LETTERS, password) + PasswordStrengthAssessmentUtils.consecutive(NUMBERS, password);
+        int repeated = PasswordStrengthAssessmentUtils.repeated(password);
+        double passwordValue = passwordLength * 13 - consecutive * 4 - repeated * 4;
+
+        double valueCoefficient;
+
         //TODO The code below does not suggest if the the password is actually Good or Strong.
-        if (!hasDictionary) {
-            if ((countCharacterClass == 4) && (passwordLength >= 8)) {
-                return PasswordStrengthVerdict.Strong;
-            } else {
-                return PasswordStrengthVerdict.Good;
-            }
+        if (hasDictionary) {
+            return PasswordStrengthVerdict.Weak;
+        } else if ((countCharacterClass == 4) && (passwordLength >= 8)) {
+            valueCoefficient = 1.0;
+        } else {
+            valueCoefficient = 0.8;
         }
 
-        return PasswordStrengthVerdict.Fair;
+        // normalize
+        if (passwordValue > 100) {
+            passwordValue = 100;
+        } else if (passwordValue < 0) {
+            passwordValue = 0;
+        }
+
+        // perform discretization
+        passwordValue *= valueCoefficient;
+
+        if (passwordValue < 10) {
+            return PasswordStrengthVerdict.Invalid;
+        } else if (passwordValue < 30) {
+            return PasswordStrengthVerdict.Weak;
+        } else if (passwordValue < 50) {
+            return PasswordStrengthVerdict.Fair;
+        } else if (passwordValue < 70) {
+            return PasswordStrengthVerdict.Good;
+        } else {
+            return PasswordStrengthVerdict.Strong;
+        }
+
     }
 }
