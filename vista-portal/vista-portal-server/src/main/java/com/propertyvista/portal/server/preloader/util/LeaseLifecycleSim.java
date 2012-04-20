@@ -78,6 +78,7 @@ public class LeaseLifecycleSim {
                 if (eventDate.after(now)) {
                     break;
                 }
+                //updateLease(lease);
                 save(lease, eventDate);
 
                 // approve application
@@ -146,6 +147,7 @@ public class LeaseLifecycleSim {
             Persistence.service().setTransactionSystemTime(eventDate);
             Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
             BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
+            billing.runBilling(lease);
             billing.confirmBill(billing.getLatestBill(lease));
         }
         leaseFacade(eventDate).activate(leaseId);
