@@ -17,18 +17,18 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Tooltip;
 
+import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.shared.CompiledLocale;
 
@@ -53,6 +53,10 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
     private final CHyperlink login;
 
     private final CHyperlink passwordChange;
+
+    MenuBar languageMenu;
+
+    MenuBar languages;
 
     private final HorizontalPanel locales;
 
@@ -107,7 +111,17 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
         locales = new HorizontalPanel();
         locales.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
-        topLinksPanel.add(locales);
+
+        languageMenu = new MenuBar();
+        languageMenu.setAutoOpen(false);
+        languageMenu.setAnimationEnabled(false);
+        languageMenu.setFocusOnHoverEnabled(true);
+        languages = new MenuBar(true);
+        MenuItem item = new MenuItem(ClentNavigUtils.getCurrentLocale().toString(), languages);
+        languageMenu.addItem(item);
+        languageMenu.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+
+        topLinksPanel.add(languageMenu);
     }
 
     @Override
@@ -133,21 +147,16 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     @Override
     public void setAvailableLocales(List<CompiledLocale> localeList) {
-        locales.clear();
+        languages.clearItems();
         for (final CompiledLocale compiledLocale : localeList) {
-            CHyperlink link = new CHyperlink(null, new Command() {
+            Command changeLanguage = new Command() {
                 @Override
                 public void execute() {
                     presenter.setLocale(compiledLocale);
                 }
-            });
-            link.setValue(compiledLocale.getLanguage());
-            locales.add(link);
-            Tooltip.tooltip(link.getWidget(), LocaleInfo.getLocaleNativeDisplayName(compiledLocale.name()));
-            locales.add(new Label("/"));
-        }
-        if (locales.getWidgetCount() > 0) {
-            locales.remove(locales.getWidgetCount() - 1);
+            };
+            MenuItem item = new MenuItem(compiledLocale.getNativeDisplayName(), changeLanguage);
+            languages.addItem(item);
         }
     }
 }
