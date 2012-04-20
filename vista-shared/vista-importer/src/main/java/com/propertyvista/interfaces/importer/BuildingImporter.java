@@ -163,7 +163,7 @@ public class BuildingImporter extends ImportPersister {
                 //FloorplanAmenity
                 {
                     List<FloorplanAmenity> items = new Vector<FloorplanAmenity>();
-                    for (AmenityIO iIO : buildingIO.amenities()) {
+                    for (AmenityIO iIO : floorplanIO.amenities()) {
                         FloorplanAmenity i = new FloorplanAmenityConverter().createDBO(iIO);
                         i.belongsTo().set(floorplan);
                         items.add(i);

@@ -99,7 +99,7 @@ public interface FloorplanAmenity extends Amenity {
 
         wheelChair,
 
-        wdHookup, //yuriyl what is this?
+        wdHookup,
 
         windowCoverings,
 
