@@ -42,26 +42,27 @@ public class CustomerFacadeImpl implements CustomerFacade {
         if (customer.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(customer);
         }
-        Persistence.service().retrieve(customer.user());
-        customer.user().name().setValue(customer.person().name().getStringView());
-        customer.user().email().setValue(customer.person().email().getValue());
-        if (customer.user().getPrimaryKey() != null) {
-            Persistence.service().merge(customer.user());
-        } else {
-            if (customer.person().email().isNull()) {
-                throw new UnRecoverableRuntimeException(i18n.tr("Can't create application user for tenant  {0} without e-mail address", customer.person()
-                        .name().getStringView()));
-            }
-            Persistence.service().persist(customer.user());
+        if (!customer.user().isNull() && customer.person().email().isNull()) {
+            throw new UnRecoverableRuntimeException(i18n.tr("Can't remove e-mail address for {0} ", customer.person().name().getStringView()));
+        }
+        if (!customer.person().email().isNull()) {
+            Persistence.service().retrieve(customer.user());
+            customer.user().name().setValue(customer.person().name().getStringView());
+            customer.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(customer.person().email().getValue()));
+            if (customer.user().getPrimaryKey() != null) {
+                Persistence.service().merge(customer.user());
+            } else {
+                Persistence.service().persist(customer.user());
 
-            CustomerUserCredential credential = EntityFactory.create(CustomerUserCredential.class);
-            credential.setPrimaryKey(customer.user().getPrimaryKey());
-            credential.user().set(customer.user());
-            if (ApplicationMode.isDevelopment()) {
-                credential.credential().setValue(PasswordEncryptor.encryptPassword(customer.user().email().getValue()));
+                CustomerUserCredential credential = EntityFactory.create(CustomerUserCredential.class);
+                credential.setPrimaryKey(customer.user().getPrimaryKey());
+                credential.user().set(customer.user());
+                if (ApplicationMode.isDevelopment()) {
+                    credential.credential().setValue(PasswordEncryptor.encryptPassword(customer.user().email().getValue()));
+                }
+                credential.enabled().setValue(Boolean.TRUE);
+                Persistence.service().persist(credential);
             }
-            credential.enabled().setValue(Boolean.TRUE);
-            Persistence.service().persist(credential);
         }
 
         Persistence.service().merge(customer);
