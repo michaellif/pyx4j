@@ -36,19 +36,18 @@ import com.pyx4j.entity.shared.ISet;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.TenantUserHolder;
 
 @DiscriminatorValue("Tenant")
-public interface Customer extends IEntity, TenantUserHolder {
+public interface Customer extends IEntity {
 
     @NotNull
     IPrimitive<String> customerId();
 
-    @Override
     @NotNull
-    @ReadOnly
+    @ReadOnly(allowOverrideNull = true)
     @Detached
     @MemberColumn(name = "user_id")
+    @Owned(cascade = {})
     CustomerUser user();
 
     @ToString(index = 0)

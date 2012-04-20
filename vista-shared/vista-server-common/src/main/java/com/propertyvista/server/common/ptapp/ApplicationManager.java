@@ -108,7 +108,8 @@ public class ApplicationManager {
                 for (Tenant tenantInLease : ma.lease().version().tenants()) {
                     if ((Tenant.Role.CoApplicant == tenantInLease.role().getValue() && (!tenantInLease.takeOwnership().isBooleanTrue()))) {
                         tenantInLease.application().set(
-                                inviteUser(ma, tenantInLease.customer(), tenantInLease.customer().person(), VistaCustomerBehavior.ProspectiveCoApplicant));
+                                inviteUser(ma, null/* tenantInLease.customer() */, tenantInLease.customer().person(),
+                                        VistaCustomerBehavior.ProspectiveCoApplicant));
                         Persistence.service().persist(tenantInLease);
                     }
                 }
