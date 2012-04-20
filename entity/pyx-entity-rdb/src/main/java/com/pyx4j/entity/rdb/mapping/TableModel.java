@@ -743,7 +743,7 @@ public class TableModel {
         }
     }
 
-    public <T extends IEntity> ResultSetIterator<T> queryIterable(final PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> ResultSetIterator<T> queryIterable(final PersistenceContext persistenceContext, final EntityQueryCriteria<T> criteria) {
         String sql = null;
         QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
         PreparedStatement stmt = null;
@@ -798,6 +798,9 @@ public class TableModel {
                 T entity = (T) EntityFactory.create(entityMeta.getEntityClass());
                 try {
                     entity.setPrimaryKey(new Key(rs.getLong(dialect.getNamingConvention().sqlIdColumnName())));
+                    if (criteria.getVersionedCriteria() == VersionedCriteria.onlyDraft) {
+                        entity.setPrimaryKey(entity.getPrimaryKey().asDraftKey());
+                    }
                     retrieveValues(rs, entity);
                 } catch (SQLException e) {
                     log.error("{} SQL select error", tableName, e);
