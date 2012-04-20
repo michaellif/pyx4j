@@ -22,6 +22,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
@@ -43,6 +44,8 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
+    private static final I18n i18n = I18n.get(OnlineApplicationFacadeImpl.class);
+
     @Override
     public void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication) {
         masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Incomplete);
@@ -52,6 +55,9 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         for (Tenant tenant : masterOnlineApplication.leaseApplication().lease().version().tenants()) {
             Persistence.service().retrieve(tenant);
             if (Tenant.Role.Applicant == tenant.role().getValue()) {
+                if (tenant.customer().user().isNull()) {
+                    throw new UserRuntimeException(i18n.tr("Primary applicant must have an e-mail to start Online Application."));
+                }
                 createOnlineApplication(masterOnlineApplication, tenant);
                 ServerSideFactory.create(CommunicationFacade.class).sendApplicantApplicationInvitation(tenant);
                 return;
