@@ -13,6 +13,8 @@
  */
 package com.propertyvista.server.common.security;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +58,7 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
 
         credentials.accessKey().setValue(null);
         credentials.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+        credentials.credentialUpdated().setValue(new Date());
         credentials.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
         Persistence.service().persist(credentials);
         Persistence.service().commit();
