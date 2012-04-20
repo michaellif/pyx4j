@@ -275,7 +275,7 @@ public class CrmSiteMap implements SiteMap {
     }
 
     @PlaceProperties(caption = "Report")
-    public static class Report extends CRMCrudAppPlace {
+    public static class Report extends AppPlace {
 
         @PlaceProperties(caption = "Reports")
         @NavigationItem(navigLabel = "Manage Reports")
