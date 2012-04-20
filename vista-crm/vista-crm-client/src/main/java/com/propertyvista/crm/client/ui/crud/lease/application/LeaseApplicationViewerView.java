@@ -15,21 +15,18 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import java.util.List;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
+import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerPresenterBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public interface LeaseApplicationViewerView extends IViewerView<LeaseApplicationDTO> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewerView.Presenter, LeaseViewerPresenterBase {
 
         void startOnlineApplication();
-
-        void retrieveUsers(AsyncCallback<List<ApplicationUserDTO>> callback);
 
         void inviteUsers(List<ApplicationUserDTO> users);
 

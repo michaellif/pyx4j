@@ -30,6 +30,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -46,10 +47,10 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.version.LeaseVersionService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -88,13 +89,18 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         sendMail = new Button(i18n.tr("Send Mail..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new SendMailBox(form.getValue().version().tenants()) {
+                ((LeaseViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
                     @Override
-                    public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) presenter).sendMail(getSelectedItems(), getEmailType());
-                        return true;
+                    public void onSuccess(List<ApplicationUserDTO> result) {
+                        new SendMailBox(result) {
+                            @Override
+                            public boolean onClickOk() {
+                                ((LeaseViewerView.Presenter) presenter).sendMail(getSelectedItems(), getEmailType());
+                                return true;
+                            }
+                        }.show();
                     }
-                }.show();
+                });
             }
         });
         addHeaderToolbarTwoItem(sendMail.asWidget());
@@ -283,15 +289,15 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         }
     }
 
-    private abstract class SendMailBox extends EntitySelectorListDialog<Tenant> {
+    private abstract class SendMailBox extends EntitySelectorListDialog<ApplicationUserDTO> {
 
         private CComboBox<EmailTemplateType> emailType;
 
-        public SendMailBox(List<Tenant> tenants) {
-            super(i18n.tr("Send Mail"), true, tenants, new EntitySelectorListDialog.Formatter<Tenant>() {
+        public SendMailBox(List<ApplicationUserDTO> tenants) {
+            super(i18n.tr("Send Mail"), true, tenants, new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
                 @Override
-                public String format(Tenant entity) {
-                    return entity.customer().person().name().getStringView();
+                public String format(ApplicationUserDTO entity) {
+                    return entity.person().name().getStringView();
                 }
             });
 
@@ -299,7 +305,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         }
 
         @Override
-        protected Widget initBody(boolean isMultiselectAllowed, List<Tenant> data) {
+        protected Widget initBody(boolean isMultiselectAllowed, List<ApplicationUserDTO> data) {
             VerticalPanel body = new VerticalPanel();
             body.add(new HTML(i18n.tr("Select Tenants:")));
             body.add(super.initBody(isMultiselectAllowed, data));

@@ -22,7 +22,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseCrudService extends LeaseCrudServiceBase<LeaseDTO> {
@@ -37,5 +37,5 @@ public interface LeaseCrudService extends LeaseCrudServiceBase<LeaseDTO> {
 
     void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId);
 
-    void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<Tenant> tenants, EmailTemplateType emailType);
+    void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users, EmailTemplateType emailType);
 }

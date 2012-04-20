@@ -21,16 +21,17 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 
@@ -70,23 +71,36 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
     }
 
     @Override
-    public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<Tenant> tenants, EmailTemplateType emailType) {
-        for (Tenant tenant : tenants) {
-            tenant = Persistence.service().retrieve(Tenant.class, tenant.getPrimaryKey());
-            CustomerUser user = tenant.customer().user();
-            if (user.isValueDetached()) {
-                Persistence.service().retrieve(user);
+    public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users, EmailTemplateType emailType) {
+        Lease lease = Persistence.service().retrieve(dboClass, entityId.asDraftKey());
+        if ((lease == null) || (lease.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
+        }
+
+        MasterOnlineApplication app = lease.leaseApplication().onlineApplication();
+        Persistence.service().retrieve(app);
+
+        for (ApplicationUserDTO user : users) {
+            if (user.user().isValueDetached()) {
+                Persistence.service().retrieve(user.user());
             }
-            switch (tenant.role().getValue()) {
+            switch (user.userType().getValue()) {
             case Applicant:
-                ApplicationManager.ensureProspectiveTenantUser(tenant.customer(), tenant.customer().person(), VistaCustomerBehavior.TenantPrimary);
+                ApplicationManager.ensureProspectiveTenantUser(user.user(), user.person(), VistaCustomerBehavior.TenantPrimary);
                 break;
             case CoApplicant:
-                ApplicationManager.ensureProspectiveTenantUser(tenant.customer(), tenant.customer().person(), VistaCustomerBehavior.TenantSecondary);
+                ApplicationManager.ensureProspectiveTenantUser(user.user(), user.person(), VistaCustomerBehavior.TenantSecondary);
+                break;
+            case Guarantor:
+                ApplicationManager.ensureProspectiveTenantUser(user.user(), user.person(), VistaCustomerBehavior.Guarantor);
                 break;
             }
-            ServerSideFactory.create(CommunicationFacade.class).sendTenantInvitation(tenant);
+// TODO : implement            
+//            ServerSideFactory.create(CommunicationFacade.class).sendCustomerMessage(user.user());
         }
+
+        Persistence.service().commit();
         callback.onSuccess(null);
     }
+
 }

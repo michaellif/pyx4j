@@ -14,6 +14,7 @@
 package com.propertyvista.crm.rpc.services.lease;
 
 import java.math.BigDecimal;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -22,6 +23,7 @@ import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseCrudServiceBase<DTO extends LeaseDTO> extends AbstractVersionedCrudService<DTO> {
@@ -29,4 +31,6 @@ public interface LeaseCrudServiceBase<DTO extends LeaseDTO> extends AbstractVers
     void setSelectededUnit(AsyncCallback<AptUnit> callback, Key unitId);
 
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
+
+    void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId);
 }

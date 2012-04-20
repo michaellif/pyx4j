@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.lease;
 
 import java.math.BigDecimal;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -22,6 +23,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
@@ -33,11 +35,14 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.dto.ApplicationUserDTO.ApplicationUser;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
@@ -55,12 +60,9 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
     @Override
     protected void enhanceRetrieved(Lease in, DTO dto) {
-        Persistence.service().retrieve(dto.unit());
-        Persistence.service().retrieve(dto.unit().belongsTo());
+        enhanceRetrievedCommon(in, dto);
 
         // load detached entities:
-        Persistence.service().retrieve(dto.version().tenants());
-        Persistence.service().retrieve(dto.version().guarantors());
         Persistence.service().retrieve(dto.leaseApplication().onlineApplication());
 //        Persistence.service().retrieve(dto.documents());
         if (!dto.unit().isNull()) {
@@ -92,16 +94,20 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
     @Override
     protected void enhanceListRetrieved(Lease in, DTO dto) {
-        Persistence.service().retrieve(dto.unit());
-        Persistence.service().retrieve(dto.unit().belongsTo());
+        enhanceRetrievedCommon(in, dto);
 
         // TODO this should be part of EntityQueryCriteria.finalizedOrDraft
         if (in.version().isNull()) {
             Lease draft = Persistence.service().retrieve(entityClass, in.getPrimaryKey().asDraftKey());
             dto.version().set(draft.version());
         }
+    }
 
-        // place here versioned detached item retrieve: 
+    private void enhanceRetrievedCommon(Lease in, DTO dto) {
+        // load detached entities:
+        Persistence.service().retrieve(dto.unit());
+        Persistence.service().retrieve(dto.unit().belongsTo());
+
         Persistence.service().retrieve(dto.version().tenants());
         Persistence.service().retrieve(dto.version().guarantors());
     }
@@ -216,5 +222,45 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     @Override
     public void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item) {
         callback.onSuccess(PriceCalculationHelpers.calculateChargeItemAdjustments(item));
+    }
+
+    @Override
+    public void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId) {
+        Lease lease = Persistence.service().retrieve(dboClass, entityId.asDraftKey());
+        if ((lease == null) || (lease.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
+        }
+
+        Vector<ApplicationUserDTO> users = new Vector<ApplicationUserDTO>();
+
+        Persistence.service().retrieve(lease.version().tenants());
+        for (Tenant tenant : lease.version().tenants()) {
+            Persistence.service().retrieve(tenant);
+            switch (tenant.role().getValue()) {
+            case Applicant:
+            case CoApplicant:
+                ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
+
+                user.person().set(tenant.customer().person());
+                user.user().set(tenant.customer());
+                user.userType().setValue(tenant.role().getValue() == Role.Applicant ? ApplicationUser.Applicant : ApplicationUser.CoApplicant);
+
+                users.add(user);
+            }
+        }
+
+        Persistence.service().retrieve(lease.version().guarantors());
+        for (Guarantor guarantor : lease.version().guarantors()) {
+            Persistence.service().retrieve(guarantor);
+            ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
+
+            user.person().set(guarantor.customer().person());
+            user.user().set(guarantor);
+            user.userType().setValue(ApplicationUser.Guarantor);
+
+            users.add(user);
+        }
+
+        callback.onSuccess(users);
     }
 }

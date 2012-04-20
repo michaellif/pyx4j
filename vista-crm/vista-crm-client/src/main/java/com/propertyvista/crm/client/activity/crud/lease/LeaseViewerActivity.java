@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -32,8 +31,9 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
@@ -42,11 +42,11 @@ import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
 
-public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements LeaseViewerView.Presenter {
+public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> implements LeaseViewerView.Presenter {
 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
 
@@ -57,7 +57,7 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     private LeaseDTO currentValue;
 
     @SuppressWarnings("unchecked")
-    public LeaseViewerActivity(Place place) {
+    public LeaseViewerActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
 
         billLister = new ListerActivityBase<BillDTO>(place, ((LeaseViewerView) view).getBillListerView(),
@@ -166,12 +166,13 @@ public class LeaseViewerActivity extends CrmViewerActivity<LeaseDTO> implements 
     }
 
     @Override
-    public void sendMail(List<Tenant> tenants, EmailTemplateType emailType) {
+    public void sendMail(List<ApplicationUserDTO> users, EmailTemplateType emailType) {
         ((LeaseCrudService) service).sendMail(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, entityId, new Vector<Tenant>(tenants), emailType);
+        }, entityId, new Vector<ApplicationUserDTO>(users), emailType);
     }
+
 }
