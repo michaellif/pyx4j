@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -37,6 +36,7 @@ import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.converter.MediaConverter;
 import com.propertyvista.interfaces.importer.model.AmenityIO;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
+import com.propertyvista.interfaces.importer.model.AptUnitOccupancyIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
@@ -196,18 +196,14 @@ public class BuildingImporter extends ImportPersister {
                         i.floorplan().set(floorplan);
                         items.add(i);
 
-                        AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
-                        i._AptUnitOccupancySegment().add(occupancySegment);
-                        occupancySegment.unit().set(i);
-
-                        if (i._availableForRent().isNull()) {
-                            occupancySegment.dateFrom().setValue(OccupancyFacade.MIN_DATE);
-                            occupancySegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
-                            occupancySegment.status().setValue(AptUnitOccupancySegment.Status.offMarket);
-                        } else {
-                            occupancySegment.dateFrom().setValue(i._availableForRent().getValue());
-                            occupancySegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
-                            occupancySegment.status().setValue(AptUnitOccupancySegment.Status.available);
+                        for (AptUnitOccupancyIO occupancyIO : aptUnitIO.AptUnitOccupancySegment()) {
+                            AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
+                            occupancySegment.dateFrom().setValue(occupancyIO.dateFrom().getValue());
+                            occupancySegment.dateTo().setValue(occupancyIO.dateTo().getValue());
+                            occupancySegment.status().setValue(occupancyIO.status().getValue());
+                            occupancySegment.offMarket().setValue(occupancyIO.offMarket().getValue());
+                            i._AptUnitOccupancySegment().add(occupancySegment);
+                            occupancySegment.unit().set(i);
                         }
 
                     }

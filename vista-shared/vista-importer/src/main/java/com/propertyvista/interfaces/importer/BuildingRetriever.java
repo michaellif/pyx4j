@@ -31,7 +31,9 @@ import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.interfaces.importer.converter.AptUnitConverter;
+import com.propertyvista.interfaces.importer.converter.AptUnitOccupancyConverter;
 import com.propertyvista.interfaces.importer.converter.BuildingAmenityConverter;
 import com.propertyvista.interfaces.importer.converter.BuildingConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanAmenityConverter;
@@ -39,6 +41,8 @@ import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.converter.MediaConverter;
 import com.propertyvista.interfaces.importer.converter.ParkingConverter;
+import com.propertyvista.interfaces.importer.model.AptUnitIO;
+import com.propertyvista.interfaces.importer.model.AptUnitOccupancyIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
@@ -114,8 +118,18 @@ public class BuildingRetriever {
             {
                 EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
-                for (AptUnit u : Persistence.service().query(criteria)) {
-                    floorplanIO.units().add(new AptUnitConverter().createDTO(u));
+                for (AptUnit unit : Persistence.service().query(criteria)) {
+                    AptUnitIO aptUnitIO = new AptUnitConverter().createDTO(unit);
+                    floorplanIO.units().add(aptUnitIO);
+
+                    //Get Occupancy
+
+                    EntityQueryCriteria<AptUnitOccupancySegment> occupancyCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+                    occupancyCriteria.add(PropertyCriterion.eq(occupancyCriteria.proto().unit(), unit));
+                    for (AptUnitOccupancySegment occupancy : Persistence.service().query(occupancyCriteria)) {
+                        AptUnitOccupancyIO occupancyIO = new AptUnitOccupancyConverter().createDTO(occupancy);
+                        aptUnitIO.AptUnitOccupancySegment().add(occupancyIO);
+                    }
                 }
             }
 

@@ -16,12 +16,16 @@ package com.propertyvista.interfaces.importer.model;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
@@ -45,5 +49,9 @@ public interface AptUnitIO extends IEntity {
     IPrimitive<BigDecimal> marketRent();
 
     IPrimitive<LogicalDate> availableForRent();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<AptUnitOccupancyIO> AptUnitOccupancySegment();
 
 }
