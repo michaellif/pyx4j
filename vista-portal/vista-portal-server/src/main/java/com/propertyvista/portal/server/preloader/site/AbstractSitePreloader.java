@@ -38,6 +38,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
+import com.propertyvista.domain.site.LayoutModule;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
@@ -168,6 +169,29 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             }
         }
 
+        // home page layout modules
+        {
+            // news
+            LayoutModule module = EntityFactory.create(LayoutModule.class);
+            module.moduleType().setValue(LayoutModule.ModuleType.news);
+            module.layoutArea().setValue(LayoutModule.LayoutArea.narrow);
+            module.name().setValue("News");
+            site.homepageModules().add(module);
+            // news
+            module = EntityFactory.create(LayoutModule.class);
+            module.moduleType().setValue(LayoutModule.ModuleType.featured);
+            module.layoutArea().setValue(LayoutModule.LayoutArea.wide);
+            module.name().setValue("Featured Apartments");
+            site.homepageModules().add(module);
+            // news
+            module = EntityFactory.create(LayoutModule.class);
+            module.moduleType().setValue(LayoutModule.ModuleType.testimonials);
+            module.layoutArea().setValue(LayoutModule.LayoutArea.wide);
+            module.name().setValue("Testimonials");
+            site.homepageModules().add(module);
+        }
+
+        // site pages
         {
             final String caption = "Find an Apartment";
             PageDescriptor page = createPage(caption, PageDescriptor.Type.findApartment);

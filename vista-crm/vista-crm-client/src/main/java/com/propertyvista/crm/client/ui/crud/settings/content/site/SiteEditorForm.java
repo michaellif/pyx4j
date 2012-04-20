@@ -100,6 +100,9 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         main.setH1(row++, 0, 1, proto().socialLinks().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
 
+        main.setH1(row++, 0, 1, proto().homepageModules().getMeta().getCaption());
+        main.setWidget(row++, 0, inject(proto().homepageModules(), new LayoutModuleFolder(isEditable())));
+
         main.setH1(row++, 0, 1, proto().childPages().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
 
