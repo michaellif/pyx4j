@@ -297,7 +297,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             super(i18n.tr("Send Mail"), true, tenants, new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
                 @Override
                 public String format(ApplicationUserDTO entity) {
-                    return entity.person().name().getStringView();
+                    return entity.getStringView();
                 }
             });
 

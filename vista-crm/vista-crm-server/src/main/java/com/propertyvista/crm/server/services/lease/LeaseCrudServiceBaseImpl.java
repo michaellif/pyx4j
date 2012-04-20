@@ -43,14 +43,18 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.ApplicationUserDTO.ApplicationUser;
+import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
 public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractVersionedCrudServiceDtoImpl<Lease, DTO> implements
         LeaseCrudServiceBase<DTO> {
 
+    private final boolean isApplication;
+
     protected LeaseCrudServiceBaseImpl(Class<DTO> dtoClass) {
         super(Lease.class, dtoClass);
+        isApplication = dtoClass.equals(LeaseApplicationDTO.class);
     }
 
     @Override
@@ -97,10 +101,10 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         enhanceRetrievedCommon(in, dto);
 
         // TODO this should be part of EntityQueryCriteria.finalizedOrDraft
-        if (in.version().isNull()) {
-            Lease draft = Persistence.service().retrieve(entityClass, in.getPrimaryKey().asDraftKey());
-            dto.version().set(draft.version());
-        }
+//        if (in.version().isNull()) {
+//            Lease draft = Persistence.service().retrieve(entityClass, in.getPrimaryKey().asDraftKey());
+//            dto.version().set(draft.version());
+//        }
     }
 
     private void enhanceRetrievedCommon(Lease in, DTO dto) {
@@ -226,7 +230,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
     @Override
     public void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId) {
-        Lease lease = Persistence.service().retrieve(dboClass, entityId.asDraftKey());
+        Lease lease = Persistence.service().retrieve(dboClass, (isApplication ? entityId.asDraftKey() : entityId));
         if ((lease == null) || (lease.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }
