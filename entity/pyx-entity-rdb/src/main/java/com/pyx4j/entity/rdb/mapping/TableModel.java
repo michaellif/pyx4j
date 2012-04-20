@@ -56,6 +56,7 @@ import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18n;
@@ -719,6 +720,9 @@ public class TableModel {
                 @SuppressWarnings("unchecked")
                 T entity = (T) EntityFactory.create(entityMeta.getEntityClass());
                 entity.setPrimaryKey(new Key(rs.getLong(dialect.getNamingConvention().sqlIdColumnName())));
+                if (criteria.getVersionedCriteria() == VersionedCriteria.onlyDraft) {
+                    entity.setPrimaryKey(entity.getPrimaryKey().asDraftKey());
+                }
                 if ((dialect.isMultitenantSharedSchema())
                         && !rs.getString(dialect.getNamingConvention().sqlNameSpaceColumnName()).equals(NamespaceManager.getNamespace())) {
                     throw new RuntimeException("namespace access error");
