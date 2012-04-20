@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
@@ -83,18 +84,16 @@ public class LeadFacadeImpl implements LeadFacade {
 
         boolean asApplicant = true;
         for (Guest guest : lead.guests()) {
-            Customer tenant = EntityFactory.create(Customer.class);
-            tenant.person().set(guest.person());
-            Persistence.service().persist(tenant);
+            Customer customer = EntityFactory.create(Customer.class);
+            customer.person().set(guest.person());
 
             Tenant tenantInLease = EntityFactory.create(Tenant.class);
-            tenantInLease.customer().set(tenant);
+            tenantInLease.customer().set(customer);
             tenantInLease.role().setValue(asApplicant ? Tenant.Role.Applicant : Tenant.Role.CoApplicant);
             lease.version().tenants().add(tenantInLease);
             asApplicant = false;
         }
-
-        //lm.save(lease);
+        ServerSideFactory.create(LeaseFacade.class).createLease(lease);
 
         // mark Lead as converted:
         lead.lease().set(lease);
