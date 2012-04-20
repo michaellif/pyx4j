@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -92,6 +93,14 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 ((LeaseViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
                     @Override
                     public void onSuccess(List<ApplicationUserDTO> result) {
+                        // clear out customers without e-mail:
+                        Iterator<ApplicationUserDTO> it = result.iterator();
+                        while (it.hasNext()) {
+                            ApplicationUserDTO item = it.next();
+                            if (item.person().email().isNull()) {
+                                it.remove();
+                            }
+                        }
                         new SendMailBox(result) {
                             @Override
                             public boolean onClickOk() {
