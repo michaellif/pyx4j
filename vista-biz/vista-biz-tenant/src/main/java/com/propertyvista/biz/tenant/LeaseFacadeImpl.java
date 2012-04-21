@@ -25,6 +25,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
@@ -41,8 +43,6 @@ import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.server.financial.billing.BillingFacade;
-import com.propertyvista.server.financial.productcatalog.ProductCatalogFacade;
 
 public class LeaseFacadeImpl implements LeaseFacade {
 

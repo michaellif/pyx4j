@@ -27,11 +27,11 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.billing.InvoiceLineItemDetailsDTO;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceSubLineItem;
+import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 
-public class InvoiceLineItemViewer extends CEntityViewer<InvoiceLineItemDetailsDTO> {
+public class InvoiceLineItemViewer extends CEntityViewer<InvoiceLineItemGroupDTO> {
     private final Anchor buttonExpand = new Anchor("");
 
     private final HTML itemTotal = new HTML();
@@ -41,7 +41,7 @@ public class InvoiceLineItemViewer extends CEntityViewer<InvoiceLineItemDetailsD
     private boolean expanded = false;
 
     @Override
-    public IsWidget createContent(InvoiceLineItemDetailsDTO value) {
+    public IsWidget createContent(InvoiceLineItemGroupDTO value) {
         VerticalPanel content = new VerticalPanel();
         content.setWidth("100%");
         content.getElement().getStyle().setProperty("paddingLeft", "20px");

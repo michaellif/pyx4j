@@ -18,7 +18,6 @@ import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.InvoiceLineItemDetailsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
@@ -28,39 +27,39 @@ public interface BillDTO extends Bill {
     Lease lease();
 
     @Caption(name = "Service Charges")
-    InvoiceLineItemDetailsDTO serviceChargeLineItems();
+    InvoiceLineItemGroupDTO serviceChargeLineItems();
 
     // Current Bill charges
     @Caption(name = "Feature Charges")
-    InvoiceLineItemDetailsDTO recurringFeatureChargeLineItems();
+    InvoiceLineItemGroupDTO recurringFeatureChargeLineItems();
 
     @Caption(name = "One-Time Feature Charges")
-    InvoiceLineItemDetailsDTO onetimeFeatureChargeLineItems();
+    InvoiceLineItemGroupDTO onetimeFeatureChargeLineItems();
 
 //    IList<InvoiceProductCredit> productCreditLineItems();
 
     @Caption(name = "Deposits")
-    InvoiceLineItemDetailsDTO depositLineItems();
+    InvoiceLineItemGroupDTO depositLineItems();
 
     // Last Bill charges and payments
     @Caption(name = "Deposit Refunds")
-    InvoiceLineItemDetailsDTO depositRefundLineItems();
+    InvoiceLineItemGroupDTO depositRefundLineItems();
 
     //Both Debit and Credit types of Lease Adjustments
     @Caption(name = "Immediate Adjustments")
-    InvoiceLineItemDetailsDTO immediateAdjustmentLineItems();
+    InvoiceLineItemGroupDTO immediateAdjustmentLineItems();
 
     // Debit and credit combined
     @Caption(name = "Pending Adjustments")
-    InvoiceLineItemDetailsDTO pendingAdjustmentLineItems();
+    InvoiceLineItemGroupDTO pendingAdjustmentLineItems();
 
     @Caption(name = "Withdrawals")
-    InvoiceLineItemDetailsDTO withdrawalLineItems();
+    InvoiceLineItemGroupDTO withdrawalLineItems();
 
     @Caption(name = "Rejected Payments")
-    InvoiceLineItemDetailsDTO rejectedPaymentLineItems();
+    InvoiceLineItemGroupDTO rejectedPaymentLineItems();
 
     @Caption(name = "Payments Received")
-    InvoiceLineItemDetailsDTO paymentLineItems();
+    InvoiceLineItemGroupDTO paymentLineItems();
 
 }

@@ -20,11 +20,11 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.BillDTO;
-import com.propertyvista.server.financial.billing.BillingFacade;
-import com.propertyvista.server.financial.billing.BillingUtils;
 
 public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDTO> implements BillCrudService {
 

@@ -36,7 +36,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.BillingAccount;
 
 @AbstractEntity
-@Inheritance
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 public interface InvoiceLineItem extends IEntity {
 
     //TODO See BillingAccount 
