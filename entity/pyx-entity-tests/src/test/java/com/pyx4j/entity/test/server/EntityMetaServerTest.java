@@ -24,11 +24,29 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.test.shared.InitializerTestBase;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SBase;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete1;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete1Ext;
 
 public class EntityMetaServerTest extends InitializerTestBase {
 
     public void testPersistenceName() {
         EntityMeta empMeta = EntityFactory.getEntityMeta(Employee.class);
         assertEquals("PersistenceName", "testEmployee", empMeta.getPersistenceName());
+    }
+
+    public void testPerstableSuperClass() {
+        {
+            EntityMeta empMeta = EntityFactory.getEntityMeta(SBase.class);
+            assertEquals("Self", null, empMeta.getPerstableSuperClass());
+        }
+        {
+            EntityMeta empMeta = EntityFactory.getEntityMeta(SConcrete1.class);
+            assertEquals("Direct Super", SBase.class, empMeta.getPerstableSuperClass());
+        }
+        {
+            EntityMeta empMeta = EntityFactory.getEntityMeta(SConcrete1Ext.class);
+            assertEquals("Direct Super", SBase.class, empMeta.getPerstableSuperClass());
+        }
     }
 }

@@ -35,9 +35,9 @@ import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete3AssignedPKEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceNotOwnerEntity;
-import com.pyx4j.entity.test.shared.domain.inherit.single.SBaseEntity;
-import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete2Entity;
-import com.pyx4j.entity.test.shared.domain.inherit.single.SReferenceEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SBase;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete2;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SReference;
 
 public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
@@ -453,18 +453,18 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
     private void testSingleTable(TestCaseMethod testCaseMethod) {
         String testId = uniqueString();
 
-        SConcrete2Entity ent = EntityFactory.create(SConcrete2Entity.class);
+        SConcrete2 ent = EntityFactory.create(SConcrete2.class);
         ent.testId().setValue(testId);
         ent.nameC2().setValue("c2:" + uniqueString());
         ent.nameB1().setValue("b1:" + uniqueString());
 
         srvSave(ent, testCaseMethod);
 
-        SBaseEntity entr = srv.retrieve(SBaseEntity.class, ent.getPrimaryKey());
+        SBase entr = srv.retrieve(SBase.class, ent.getPrimaryKey());
 
-        Assert.assertEquals("Proper instance", SConcrete2Entity.class, entr.getInstanceValueClass());
+        Assert.assertEquals("Proper instance", SConcrete2.class, entr.getInstanceValueClass());
 
-        SConcrete2Entity ent2r = entr.cast();
+        SConcrete2 ent2r = entr.cast();
 
         Assert.assertEquals("Proper value", ent.nameB1().getValue(), ent2r.nameB1().getValue());
         Assert.assertEquals("Proper value", ent.nameC2().getValue(), ent2r.nameC2().getValue());
@@ -481,23 +481,23 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
     private void testSingleTableMemeber(TestCaseMethod testCaseMethod) {
         String testId = uniqueString();
 
-        SReferenceEntity ent = EntityFactory.create(SReferenceEntity.class);
+        SReference ent = EntityFactory.create(SReference.class);
         ent.testId().setValue(testId);
 
-        SConcrete2Entity ent2 = EntityFactory.create(SConcrete2Entity.class);
+        SConcrete2 ent2 = EntityFactory.create(SConcrete2.class);
         ent2.nameC2().setValue("c2:" + uniqueString());
         ent2.nameB1().setValue("b1:" + uniqueString());
         ent.reference().set(ent2);
 
         srvSave(ent, testCaseMethod);
 
-        SReferenceEntity entr = srv.retrieve(SReferenceEntity.class, ent.getPrimaryKey());
+        SReference entr = srv.retrieve(SReference.class, ent.getPrimaryKey());
 
         Assert.assertFalse("Value retrieved", entr.reference().isValueDetached());
 
-        Assert.assertEquals("Proper instance", SConcrete2Entity.class, entr.reference().getInstanceValueClass());
+        Assert.assertEquals("Proper instance", SConcrete2.class, entr.reference().getInstanceValueClass());
 
-        SConcrete2Entity ent2r = entr.reference().cast();
+        SConcrete2 ent2r = entr.reference().cast();
 
         Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r.nameB1().getValue());
         Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r.nameC2().getValue());

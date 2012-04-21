@@ -157,11 +157,18 @@ public class EntityMetaImpl implements EntityMeta {
 
     private Class<? extends IEntity> findSingeTableInheritance(Class<? extends IEntity> clazz) {
         for (Class<?> superClasses : clazz.getInterfaces()) {
-            Inheritance inheritance = superClasses.getAnnotation(Inheritance.class);
-            if ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE)) {
+            if (IEntity.class.isAssignableFrom(superClasses)) {
                 @SuppressWarnings("unchecked")
                 Class<? extends IEntity> superEntityClasses = (Class<? extends IEntity>) superClasses;
-                return superEntityClasses;
+                Inheritance inheritance = superClasses.getAnnotation(Inheritance.class);
+                if ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE)) {
+                    return superEntityClasses;
+                } else {
+                    Class<? extends IEntity> perstableSuperClass = findSingeTableInheritance(superEntityClasses);
+                    if (perstableSuperClass != null) {
+                        return perstableSuperClass;
+                    }
+                }
             }
         }
         return null;

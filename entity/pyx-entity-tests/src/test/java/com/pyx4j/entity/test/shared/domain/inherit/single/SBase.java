@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @Table(prefix = "test")
-public interface SBaseEntity extends IEntity {
+public interface SBase extends IEntity {
 
     IPrimitive<String> testId();
 

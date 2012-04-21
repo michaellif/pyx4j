@@ -14,18 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 9, 2011
+ * Created on 2011-01-04
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.inherit.single;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@DiscriminatorValue("C1")
-public interface SConcrete1Entity extends SBaseEntity {
+@Table(prefix = "test")
+public interface SReference extends IEntity {
 
-    IPrimitive<String> nameC1();
+    IPrimitive<String> testId();
 
+    IPrimitive<String> name();
+
+    @Owned
+    @MemberColumn(name = "rf")
+    SBase reference();
+
+    @Owned
+    IList<SBase> references();
 }
