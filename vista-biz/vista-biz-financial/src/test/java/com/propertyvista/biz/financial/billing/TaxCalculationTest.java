@@ -19,15 +19,13 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.financial.billing.TaxUtils;
+import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.tax.Tax;
 
-public class TaxCalculationTest extends TestCase {
+public class TaxCalculationTest extends VistaDBTestBase {
 
     public void testRegularTaxCalculation() {
         List<Tax> taxes = new ArrayList<Tax>();

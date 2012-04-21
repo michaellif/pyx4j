@@ -27,11 +27,9 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.BillingAccount;
@@ -62,13 +60,6 @@ public interface InvoiceLineItem extends IEntity {
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
-
-    @Owned
-    IList<InvoiceChargeTax> taxes();
-
-    @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> taxTotal();
 
     interface OrderId extends ColumnId {
 

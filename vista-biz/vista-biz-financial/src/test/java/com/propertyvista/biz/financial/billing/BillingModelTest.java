@@ -17,14 +17,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import junit.framework.TestCase;
-
 import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 
+import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class BillingModelTest extends TestCase {
+public class BillingModelTest extends VistaDBTestBase {
 
     public void testCreateBillingModel() throws FileNotFoundException {
         XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "bill-model.xsd")), true, Bill.class);

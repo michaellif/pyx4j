@@ -16,13 +16,10 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 import java.text.ParseException;
 
-import junit.framework.TestCase;
-
-import com.propertyvista.biz.financial.billing.BillingException;
-import com.propertyvista.biz.financial.billing.ProrationUtils;
+import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.BillingAccount;
 
-public class ProrationTest extends TestCase {
+public class ProrationTest extends VistaDBTestBase {
 
     public void testProration() throws ParseException {
 
