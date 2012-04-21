@@ -85,7 +85,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-billing</artifactId>
+            <artifactId>vista-biz-financial</artifactId>
             <version>${project.version}</version>
         </dependency>
 
