@@ -62,14 +62,19 @@ public interface BillingAccount extends IEntity {
     @Detached(level = AttachLevel.Detached)
     ISet<Bill> bills();
 
+    /**
+     * Immediate InvoiceLineItems are kept here between billing runs. Approved billing cleans this set.
+     * 
+     * @return
+     */
     @Detached
     ISet<InvoiceLineItem> interimLineItems();
 
-    //TODO when VladS will provide deletion of polymorphic entities 
-    //@Owned
-    //@Detached(level = AttachLevel.Detached)
-    //ISet<_InvoiceLineItem> lineItems();
-
+    /**
+     * Counter for all (including failed) bills for given lease
+     * 
+     * @return
+     */
     IPrimitive<Integer> billCounter();
 
     IPrimitive<Double> total();

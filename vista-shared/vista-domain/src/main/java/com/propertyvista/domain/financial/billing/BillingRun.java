@@ -16,6 +16,7 @@ package com.propertyvista.domain.financial.billing;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -23,6 +24,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
+@Table(prefix = "billing")
 public interface BillingRun extends IEntity {
 
     @I18n

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -22,6 +23,7 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
  * Defines bill day and billing period, for now created by request
  * 
  */
+@Table(prefix = "billing")
 public interface BillingCycle extends IEntity {
 
     IPrimitive<PaymentFrequency> paymentFrequency();

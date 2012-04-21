@@ -26,17 +26,19 @@ public class ARPaymentProcessor extends AbstractProcessor {
     private static final I18n i18n = I18n.get(ARPaymentProcessor.class);
 
     void postPayment(PaymentRecord paymentRecord) {
+
+        Persistence.service().retrieve(paymentRecord.billingAccount());
+        Persistence.service().retrieve(paymentRecord.billingAccount().interimLineItems());
+
         InvoicePayment payment = EntityFactory.create(InvoicePayment.class);
         payment.paymentRecord().set(paymentRecord);
         payment.amount().setValue(paymentRecord.amount().getValue());
+        payment.billingAccount().set(paymentRecord.billingAccount());
 
         payment.description().setValue(i18n.tr("Payment Received - Thank You"));
         payment.fromDate().setValue(paymentRecord.receivedDate().getValue());
 
         Persistence.service().persist(payment);
-
-        Persistence.service().retrieve(paymentRecord.billingAccount());
-        Persistence.service().retrieve(paymentRecord.billingAccount().interimLineItems());
 
         paymentRecord.billingAccount().interimLineItems().add(payment);
 

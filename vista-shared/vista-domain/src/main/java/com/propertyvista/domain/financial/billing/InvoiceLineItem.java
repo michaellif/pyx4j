@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -37,10 +38,9 @@ import com.propertyvista.domain.financial.BillingAccount;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
+@Table(prefix = "billing")
 public interface InvoiceLineItem extends IEntity {
 
-    //TODO See BillingAccount 
-    //@Owner
     @Detached
     @NotNull
     @Indexed
@@ -48,14 +48,8 @@ public interface InvoiceLineItem extends IEntity {
     BillingAccount billingAccount();
 
     @Detached
+    @JoinColumn
     Bill bill();
-
-    interface OrderId extends ColumnId {
-
-    }
-
-    @OrderColumn(OrderId.class)
-    IPrimitive<Integer> orderId();
 
     IPrimitive<String> description();
 
@@ -75,4 +69,11 @@ public interface InvoiceLineItem extends IEntity {
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> taxTotal();
+
+    interface OrderId extends ColumnId {
+
+    }
+
+    @OrderColumn(OrderId.class)
+    IPrimitive<Integer> orderId();
 }

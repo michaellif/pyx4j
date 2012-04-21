@@ -1,4 +1,5 @@
 package com.propertyvista.domain.financial.billing;
+
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
@@ -12,7 +13,6 @@ package com.propertyvista.domain.financial.billing;
  * @author michaellif
  * @version $Id$
  */
-
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 

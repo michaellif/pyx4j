@@ -15,9 +15,7 @@ package com.propertyvista.domain.financial.billing;
  */
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
 
-@Inheritance
 @AbstractEntity
 public interface InvoiceDebit extends InvoiceLineItem {
 
