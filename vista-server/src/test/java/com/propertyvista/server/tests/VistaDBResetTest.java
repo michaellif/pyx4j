@@ -49,7 +49,7 @@ public class VistaDBResetTest extends VistaDBTestBase {
                 Assert.fail("DTO Object " + className + "  should be @Transient");
             }
 
-            if (allTables.containsKey(meta.getPersistenceName())) {
+            if ((meta.getPerstableSuperClass() == null) && allTables.containsKey(meta.getPersistenceName())) {
                 System.err.println("IEntity " + className + " has the same table name as " + allTables.get(meta.getPersistenceName()));
                 Assert.fail("IEntity " + className + " has the same table name as " + allTables.get(meta.getPersistenceName()));
             }
