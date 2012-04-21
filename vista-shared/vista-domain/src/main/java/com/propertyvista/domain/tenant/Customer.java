@@ -16,7 +16,6 @@ package com.propertyvista.domain.tenant;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
@@ -37,7 +36,6 @@ import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.CustomerUser;
 
-@DiscriminatorValue("Tenant")
 public interface Customer extends IEntity {
 
     @NotNull
