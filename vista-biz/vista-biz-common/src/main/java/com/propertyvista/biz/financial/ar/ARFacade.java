@@ -13,7 +13,11 @@
  */
 package com.propertyvista.biz.financial.ar;
 
+import java.util.List;
+
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public interface ARFacade {
@@ -23,5 +27,7 @@ public interface ARFacade {
     void rejectPayment(PaymentRecord payment);
 
     void postImmediateAdjustment(LeaseAdjustment adjustment);
+
+    List<InvoiceLineItem> getInvoiceLineItems(Lease lease);
 
 }

@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing;
+package com.propertyvista.biz.financial;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,8 +36,9 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.financial.billing.BillingLifecycle;
+import com.propertyvista.biz.financial.billing.BillingTestUtils;
 import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.financial.billing.SysDateManager;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
 import com.propertyvista.biz.financial.preload.BuildingDataModel;
 import com.propertyvista.biz.financial.preload.LeaseAdjustmentReasonDataModel;
@@ -64,7 +65,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
-abstract class BillingTestBase extends VistaDBTestBase {
+public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected LeaseDataModel leaseDataModel;
 
@@ -146,7 +147,7 @@ abstract class BillingTestBase extends VistaDBTestBase {
     }
 
     protected static void setSysDate(String dateStr) {
-        BillingLifecycle.setSysDate(BillingTestUtils.getDate(dateStr));
+        SysDateManager.setSysDate(BillingTestUtils.getDate(dateStr));
 
         if (dateStr == null) {
             Persistence.service().setTransactionSystemTime(new Date());

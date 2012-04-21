@@ -13,8 +13,11 @@
  */
 package com.propertyvista.biz.financial.ar;
 
-import com.propertyvista.biz.financial.ar.ARFacade;
+import java.util.List;
+
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class ARFacadeImpl implements ARFacade {
@@ -32,6 +35,12 @@ public class ARFacadeImpl implements ARFacade {
     @Override
     public void postImmediateAdjustment(LeaseAdjustment adjustment) {
         new ARLeaseAdjustmentProcessor().postImmediateAdjustment(adjustment);
+    }
+
+    @Override
+    public List<InvoiceLineItem> getInvoiceLineItems(Lease lease) {
+        //TODO
+        return null;
     }
 
 }

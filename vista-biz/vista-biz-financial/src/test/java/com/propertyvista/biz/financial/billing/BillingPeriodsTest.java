@@ -22,11 +22,12 @@ package com.propertyvista.biz.financial.billing;
 
 import java.text.ParseException;
 
+import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.billing.BillingException;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class BillingPeriodsTest extends BillingTestBase {
+public class BillingPeriodsTest extends FinancialTestBase {
 
     public void testSequentialBillingRunWithGlobalBillingPeriodStartDate() throws ParseException {
         preloadData();

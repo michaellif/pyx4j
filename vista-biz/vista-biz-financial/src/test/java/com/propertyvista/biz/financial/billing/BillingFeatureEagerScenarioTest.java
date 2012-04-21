@@ -20,13 +20,14 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class BillingFeatureEagerScenarioTest extends BillingTestBase {
+public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
     public void testSequentialBillingRun() {
         preloadData();
