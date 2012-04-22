@@ -16,13 +16,14 @@ package com.propertyvista.common.client.ui.components.login;
 import java.util.Arrays;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.forms.client.events.NValueChangeEvent;
+import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -127,13 +128,14 @@ public class PasswordEditorForm extends CEntityDecoratableEditor<PasswordChangeR
 
         get(proto().newPassword()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().newPasswordConfirm())));
 
-        get(proto().newPassword()).addValueChangeHandler(new ValueChangeHandler<String>() {
+        ((CTextFieldBase<?, ?>) get(proto().newPassword())).addNValueChangeHandler(new NValueChangeHandler<String>() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<String> event) {
+            public void onNValueChange(NValueChangeEvent<String> event) {
                 passwordStrengthWidget.ratePassword(event.getValue());
             }
         });
+
         get(proto().newPassword()).addValueValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
     }
 
