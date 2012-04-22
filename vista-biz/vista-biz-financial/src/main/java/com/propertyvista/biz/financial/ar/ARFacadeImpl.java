@@ -39,8 +39,16 @@ public class ARFacadeImpl implements ARFacade {
 
     @Override
     public List<InvoiceLineItem> getInvoiceLineItems(Lease lease) {
-        //TODO
-        return null;
+        return ARInvoiceManager.getInvoiceLineItems(lease);
     }
 
+    @Override
+    public List<InvoiceLineItem> getNotCoveredDebitInvoiceLineItems(Lease lease) {
+        return ARInvoiceManager.getNotCoveredDebitInvoiceLineItems(lease);
+    }
+
+    @Override
+    public List<InvoiceLineItem> getNotExhaustedCreditInvoiceLineItems(Lease lease) {
+        return ARInvoiceManager.getNotExhaustedCreditInvoiceLineItems(lease);
+    }
 }

@@ -57,6 +57,8 @@ public interface InvoiceLineItem extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> toDate();
 
+    IPrimitive<Boolean> posted();
+
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
