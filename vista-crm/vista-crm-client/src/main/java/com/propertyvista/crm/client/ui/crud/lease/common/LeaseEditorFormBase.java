@@ -52,7 +52,6 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.LeaseDTO;
 
 public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntityForm<DTO> {
@@ -142,17 +141,6 @@ public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntit
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().status(), new CEnumLabel())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().completion(), new CEnumLabel())).build());
-        if (!isEditable()) {
-            main.setWidget(
-                    ++row,
-                    0,
-                    new DecoratorBuilder(inject(proto().leaseApplication().onlineApplication(), new CEntityCrudHyperlink<MasterOnlineApplication>(
-                            AppPlaceEntityMapper.resolvePlace(MasterOnlineApplication.class))), 20).build());
-
-        } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().onlineApplication(), new CEntityLabel<MasterOnlineApplication>()),
-                    20).build());
-        }
 
         // Lease dates:
         main.setBR(++row, 0, 1);
