@@ -64,7 +64,7 @@ public class DefaultPasswordStrengthRule implements PasswordStrengthRule {
 
     @Override
     public PasswordStrengthVerdict getPasswordVerdict(String password) {
-        if (password == null) {
+        if (password == null || password.length() == 0) {
             return null;
         }
         int passwordLength = password.length();

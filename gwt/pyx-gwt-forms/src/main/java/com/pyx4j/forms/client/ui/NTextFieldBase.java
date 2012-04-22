@@ -22,9 +22,12 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
@@ -49,6 +52,13 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
     protected void onEditorCreate() {
         super.onEditorCreate();
         setWatermark(getCComponent().getWatermark());
+        getEditor().addKeyUpHandler(new KeyUpHandler() {
+
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                NValueChangeEvent.fire(getCComponent(), getEditor().getText());
+            }
+        });
     }
 
     @Override
@@ -61,6 +71,7 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
                 getEditor().setText(newValue);
             }
         }
+        NValueChangeEvent.fire(getCComponent(), newValue);
     }
 
     @Override
@@ -83,4 +94,5 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
             ((WatermarkComponent) getEditor()).setWatermark(watermark);
         }
     }
+
 }

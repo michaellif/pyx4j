@@ -24,11 +24,16 @@ import java.text.ParseException;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.forms.client.events.HasNValueChangeHandlers;
+import com.pyx4j.forms.client.events.NValueChangeEvent;
+import com.pyx4j.forms.client.events.NValueChangeHandler;
 
-public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<DATA>> extends CTextComponent<DATA, WIDGET> implements IAcceptText {
+public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<DATA>> extends CTextComponent<DATA, WIDGET> implements IAcceptText,
+        HasNValueChangeHandlers<String> {
 
     private IFormat<DATA> format;
 
@@ -88,4 +93,11 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
         return value1 != null && value1 == value2;
     }
 
+    /**
+     * Native component value change event handler, (Real Time) as opposite to CComponent
+     */
+    @Override
+    public HandlerRegistration addNValueChangeHandler(NValueChangeHandler<String> handler) {
+        return addHandler(handler, NValueChangeEvent.getType());
+    }
 }
