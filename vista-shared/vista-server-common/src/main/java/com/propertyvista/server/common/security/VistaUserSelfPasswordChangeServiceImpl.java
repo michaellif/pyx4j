@@ -64,7 +64,9 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
         }
-
+        if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), credential.credential().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
+        }
         credential.accessKey().setValue(null);
         credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
         credential.credentialUpdated().setValue(new Date());
@@ -74,5 +76,4 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
         log.info("password changed by user {} {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
         callback.onSuccess(null);
     }
-
 }
