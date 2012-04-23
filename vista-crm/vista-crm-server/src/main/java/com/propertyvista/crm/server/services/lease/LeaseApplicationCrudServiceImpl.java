@@ -99,11 +99,19 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
     public void inviteUsers(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users) {
         CommunicationFacade commFacade = ServerSideFactory.create(CommunicationFacade.class);
 
-        // check that all lease participants have an associated user entity (email)
+        // check that we can send the e-mail before we actually try to send email
         for (ApplicationUserDTO user : users) {
+            // check that all lease participants have an associated user entity (email)            
             if (user.leaseParticipant().customer().user().isNull()) {
                 throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseParticipant()
                         .customer().person().name().getStringView()));
+            }
+
+            // check that selected guarantors/co-applicants have online-applications
+            if (user.leaseParticipant().application().isNull()) {
+                throw new UserRuntimeException(
+                        i18n.tr("Failed to invite users, application invitation for {0} can be sent only after the main applicant will have finished his own applicaiton",
+                                user.leaseParticipant().customer().person().name().getStringView()));
             }
         }
 
