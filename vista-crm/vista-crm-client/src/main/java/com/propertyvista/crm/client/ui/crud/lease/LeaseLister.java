@@ -28,7 +28,6 @@ import com.google.gwt.view.client.SelectionModel;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.i18n.shared.I18n;
@@ -76,14 +75,11 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
 
     @Override
     protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
-
         switch (getVersionDisplayMode()) {
         case displayDraft:
-            criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
             criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.currentNew()));
             break;
         case displayFinal:
-            criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
             criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
             break;
         }

@@ -17,16 +17,14 @@ import java.util.EnumSet;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
+import com.propertyvista.common.client.ui.components.VersionedLister;
 import com.propertyvista.domain.financial.offering.Service;
 
-public class ServiceLister extends ListerBase<Service> {
+public class ServiceLister extends VersionedLister<Service> {
 
     private final static I18n i18n = I18n.get(ServiceLister.class);
 
@@ -39,12 +37,6 @@ public class ServiceLister extends ListerBase<Service> {
             new MemberColumnDescriptor.Builder(proto().version().type()).build(),
             new MemberColumnDescriptor.Builder(proto().version().name()).build()
         );//@formatter:on
-    }
-
-    @Override
-    protected EntityListCriteria<Service> updateCriteria(EntityListCriteria<Service> criteria) {
-        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-        return super.updateCriteria(criteria);
     }
 
     @Override

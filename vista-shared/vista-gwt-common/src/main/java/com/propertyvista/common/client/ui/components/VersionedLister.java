@@ -17,6 +17,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -67,4 +69,16 @@ public class VersionedLister<E extends IEntity> extends ListerBase<E> {
         getPresenter().populate();
     }
 
+    @Override
+    protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
+        switch (getVersionDisplayMode()) {
+        case displayDraft:
+            criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+            break;
+        case displayFinal:
+            criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+            break;
+        }
+        return super.updateCriteria(criteria);
+    }
 }
