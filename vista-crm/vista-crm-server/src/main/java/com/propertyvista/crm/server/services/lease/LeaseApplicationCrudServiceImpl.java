@@ -21,18 +21,19 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -42,6 +43,8 @@ import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseApplicationDTO> implements LeaseApplicationCrudService {
+
+    private final static I18n i18n = I18n.get(LeaseApplicationCrudServiceImpl.class);
 
     public LeaseApplicationCrudServiceImpl() {
         super(LeaseApplicationDTO.class);
@@ -94,28 +97,30 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
 
     @Override
     public void inviteUsers(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users) {
-        Lease lease = Persistence.service().retrieve(dboClass, entityId.asDraftKey());
-        if ((lease == null) || (lease.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
+        CommunicationFacade commFacade = ServerSideFactory.create(CommunicationFacade.class);
+
+        // check that all lease participants have an associated user entity (email)
+        for (ApplicationUserDTO user : users) {
+            if (user.leaseParticipant().customer().user().isNull()) {
+                new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseParticipant().customer()
+                        .person().name().getStringView()));
+            }
         }
 
-        MasterOnlineApplication app = lease.leaseApplication().onlineApplication();
-        Persistence.service().retrieve(app);
-
         for (ApplicationUserDTO user : users) {
-            if (user.user().isValueDetached()) {
-                Persistence.service().retrieve(user.user());
-            }
-            switch (user.userType().getValue()) {
-            case Applicant:
-                ApplicationManager.inviteUser(app, user.user(), user.person(), VistaCustomerBehavior.ProspectiveApplicant);
-                break;
-            case CoApplicant:
-                ApplicationManager.inviteUser(app, user.user(), user.person(), VistaCustomerBehavior.ProspectiveCoApplicant);
-                break;
-            case Guarantor:
-                ApplicationManager.inviteUser(app, user.user(), user.person(), VistaCustomerBehavior.Guarantor);
-                break;
+            if (user.leaseParticipant().isInstanceOf(Tenant.class)) {
+                Tenant tenant = user.leaseParticipant().duplicate(Tenant.class);
+                if (tenant.role().getValue() == Role.Applicant) {
+                    commFacade.sendApplicantApplicationInvitation(tenant);
+                } else if (tenant.role().getValue() == Role.CoApplicant) {
+                    commFacade.sendCoApplicantApplicationInvitation(tenant);
+                } else {
+                    throw new Error("It's unknown what to do with tenant role " + tenant.role().getValue() + " in this context");
+                }
+                commFacade.sendTenantInvitation(tenant);
+            } else if (user.leaseParticipant().isInstanceOf(Guarantor.class)) {
+                Guarantor guarantor = user.leaseParticipant().duplicate(Guarantor.class);
+                commFacade.sendGuarantorApplicationInvitation(guarantor);
             }
         }
 

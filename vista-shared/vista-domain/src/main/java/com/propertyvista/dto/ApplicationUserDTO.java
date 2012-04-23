@@ -15,20 +15,15 @@ package com.propertyvista.dto;
 
 import javax.xml.bind.annotation.XmlType;
 
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @Transient
-@ToStringFormat("{0}, {1}")
 public interface ApplicationUserDTO extends IEntity {
 
     @I18n(context = "Application User")
@@ -43,16 +38,8 @@ public interface ApplicationUserDTO extends IEntity {
         }
     }
 
-    @ToString(index = 0)
     LeaseParticipant leaseParticipant();
 
-    @ToString(index = 1)
     IPrimitive<ApplicationUser> userType();
 
-    @Deprecated
-    @ToString(index = 4)
-    Person person();
-
-    @Deprecated
-    CustomerUser user();
 }

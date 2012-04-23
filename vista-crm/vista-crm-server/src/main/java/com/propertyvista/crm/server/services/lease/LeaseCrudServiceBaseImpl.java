@@ -238,15 +238,14 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         Vector<ApplicationUserDTO> users = new Vector<ApplicationUserDTO>();
 
         Persistence.service().retrieve(lease.version().tenants());
+
         for (Tenant tenant : lease.version().tenants()) {
             Persistence.service().retrieve(tenant);
             switch (tenant.role().getValue()) {
             case Applicant:
             case CoApplicant:
                 ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
-
-                user.person().set(tenant.customer().person());
-                user.user().set(tenant.customer().user());
+                user.leaseParticipant().set(tenant);
                 user.userType().setValue(tenant.role().getValue() == Role.Applicant ? ApplicationUser.Applicant : ApplicationUser.CoApplicant);
 
                 users.add(user);
@@ -258,8 +257,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             Persistence.service().retrieve(guarantor);
             ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
 
-            user.person().set(guarantor.customer().person());
-            user.user().set(guarantor.customer().user());
+            user.leaseParticipant().set(guarantor);
             user.userType().setValue(ApplicationUser.Guarantor);
 
             users.add(user);

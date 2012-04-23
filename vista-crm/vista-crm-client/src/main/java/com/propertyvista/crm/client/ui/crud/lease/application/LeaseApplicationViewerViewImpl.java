@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.i18n.shared.I18n;
@@ -90,8 +91,12 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                         new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result,
                                 new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
                                     @Override
-                                    public String format(ApplicationUserDTO enntity) {
-                                        return enntity.getStringView();
+                                    public String format(ApplicationUserDTO entity) {
+                                        return SimpleMessageFormat.format(//@formatter:off
+                                            "{0}, {1}",
+                                            entity.leaseParticipant().customer().person().name().getStringView(),
+                                            entity.userType().getStringView()
+                                    );//@formatter:on
                                     }
                                 }) {
 

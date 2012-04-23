@@ -1,6 +1,6 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
  * you entered into with Property Vista Software Inc.
@@ -19,23 +19,29 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.server.common.ptapp.ApplicationManager;
 
 public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> implements LeaseCrudService {
+
+    private final static I18n i18n = I18n.get(LeaseCrudServiceImpl.class);
 
     public LeaseCrudServiceImpl() {
         super(LeaseDTO.class);
@@ -80,27 +86,35 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
         MasterOnlineApplication app = lease.leaseApplication().onlineApplication();
         Persistence.service().retrieve(app);
 
+        // check that all lease participants have an associated user entity (email)
         for (ApplicationUserDTO user : users) {
-            if (user.user().isValueDetached()) {
-                Persistence.service().retrieve(user.user());
+            if (user.leaseParticipant().customer().user().isNull()) {
+                new UserRuntimeException(i18n.tr("'Send Email' operation failed, email of lease participant {0} was not found", user.leaseParticipant()
+                        .customer().person().name().getStringView()));
             }
-            switch (user.userType().getValue()) {
-            case Applicant:
-                ApplicationManager.ensureProspectiveTenantUser(user.user(), user.person(), VistaCustomerBehavior.TenantPrimary);
-                break;
-            case CoApplicant:
-                ApplicationManager.ensureProspectiveTenantUser(user.user(), user.person(), VistaCustomerBehavior.TenantSecondary);
-                break;
-            case Guarantor:
-                ApplicationManager.ensureProspectiveTenantUser(user.user(), user.person(), VistaCustomerBehavior.Guarantor);
-                break;
+        }
+
+        if (emailType == EmailTemplateType.TenantInvitation) {
+            // check that selected users can be used for this template
+            for (ApplicationUserDTO user : users) {
+                if (user.leaseParticipant().isInstanceOf(Guarantor.class)) {
+                    new UserRuntimeException(i18n.tr("'Send Mail' operation failed: can't send {0} for Guarantor", EmailTemplateType.TenantInvitation));
+                }
             }
-// TODO : implement            
-//            ServerSideFactory.create(CommunicationFacade.class).sendCustomerMessage(user.user());
+
+            // send e-mails
+            CommunicationFacade commFacade = ServerSideFactory.create(CommunicationFacade.class);
+            for (ApplicationUserDTO user : users) {
+                if (user.leaseParticipant().isInstanceOf(Tenant.class)) {
+                    Tenant tenant = user.leaseParticipant().duplicate(Tenant.class);
+                    commFacade.sendTenantInvitation(tenant);
+                }
+            }
+        } else {
+            new Error(SimpleMessageFormat.format("sending mails for {0} is not yet implemented", emailType));
         }
 
         Persistence.service().commit();
         callback.onSuccess(null);
     }
-
 }

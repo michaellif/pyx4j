@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.lease;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -26,6 +25,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -92,14 +93,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 ((LeaseViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
                     @Override
                     public void onSuccess(List<ApplicationUserDTO> result) {
-                        // clear out customers without e-mail:
-                        Iterator<ApplicationUserDTO> it = result.iterator();
-                        while (it.hasNext()) {
-                            ApplicationUserDTO item = it.next();
-                            if (item.person().email().isNull()) {
-                                it.remove();
-                            }
-                        }
                         new SendMailBox(result) {
                             @Override
                             public boolean onClickOk() {
@@ -171,12 +164,12 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     @Override
     public void reset() {
-        sendMail.setVisible(false);
-        runBill.setVisible(false);
         notice.setVisible(false);
         cancelNotice.setVisible(false);
         evict.setVisible(false);
         cancelEvict.setVisible(false);
+        sendMail.setVisible(false);
+        runBill.setVisible(false);
         super.reset();
     }
 
@@ -186,24 +179,27 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         Status status = value.version().status().getValue();
 
+        // disable editing for completed/closed leases:
+        getEditButton().setVisible(status != Status.Closed);
+        // tweak finalizing availability:
+        if (getFinalizeButton().isVisible()) {
+            getFinalizeButton().setVisible(!value.unit().isNull() && (status == Status.Approved || status == Status.Active || status == Status.Completed));
+        }
+
         // set buttons state:
         if (!value.unit().isNull()) {
             CompletionType completion = value.version().completion().getValue();
 
-            sendMail.setVisible(true);
-            runBill.setVisible(status.isCurrent());
+            sendMail.setVisible(!value.unit().isNull());
+            if (ApplicationMode.isDevelopment()) {
+                runBill.setVisible(status == Status.Active);
+            } else {
+                runBill.setVisible(false); // close for production!..
+            }
             notice.setVisible(status == Status.Active && completion == null);
             cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
             evict.setVisible(status == Status.Active && completion == null);
             cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
-        }
-
-        // disable editing for completed/closed leases:
-        getEditButton().setVisible(!status.isFormer());
-
-        // tweak finalizing availability:
-        if (getFinalizeButton().isVisible()) {
-            getFinalizeButton().setVisible(!value.unit().isNull() && status.isCurrent());
         }
     }
 
@@ -298,11 +294,15 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         private CComboBox<EmailTemplateType> emailType;
 
-        public SendMailBox(List<ApplicationUserDTO> tenants) {
-            super(i18n.tr("Send Mail"), true, tenants, new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
+        public SendMailBox(List<ApplicationUserDTO> applicationUsers) {
+            super(i18n.tr("Send Mail"), true, applicationUsers, new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
                 @Override
                 public String format(ApplicationUserDTO entity) {
-                    return entity.getStringView();
+                    return SimpleMessageFormat.format(//@formatter:off
+                            "{0}, {1}",
+                            entity.leaseParticipant().customer().person().name().getStringView(),
+                            entity.userType().getStringView()
+                    );//@formatter:on
                 }
             });
 
