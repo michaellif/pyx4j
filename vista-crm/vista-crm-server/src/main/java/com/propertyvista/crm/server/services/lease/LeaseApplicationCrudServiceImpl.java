@@ -102,8 +102,8 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
         // check that all lease participants have an associated user entity (email)
         for (ApplicationUserDTO user : users) {
             if (user.leaseParticipant().customer().user().isNull()) {
-                new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseParticipant().customer()
-                        .person().name().getStringView()));
+                throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseParticipant()
+                        .customer().person().name().getStringView()));
             }
         }
 

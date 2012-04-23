@@ -89,7 +89,7 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
         // check that all lease participants have an associated user entity (email)
         for (ApplicationUserDTO user : users) {
             if (user.leaseParticipant().customer().user().isNull()) {
-                new UserRuntimeException(i18n.tr("'Send Email' operation failed, email of lease participant {0} was not found", user.leaseParticipant()
+                throw new UserRuntimeException(i18n.tr("''Send Email'' operation failed, email of lease participant {0} was not found", user.leaseParticipant()
                         .customer().person().name().getStringView()));
             }
         }
@@ -98,7 +98,8 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
             // check that selected users can be used for this template
             for (ApplicationUserDTO user : users) {
                 if (user.leaseParticipant().isInstanceOf(Guarantor.class)) {
-                    new UserRuntimeException(i18n.tr("'Send Mail' operation failed: can't send {0} for Guarantor", EmailTemplateType.TenantInvitation));
+                    throw new UserRuntimeException(i18n.tr("''Send Mail'' operation failed: can''t send \"{0}\" for Guarantor",
+                            EmailTemplateType.TenantInvitation));
                 }
             }
 
