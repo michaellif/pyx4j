@@ -87,9 +87,9 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
 
     private LeaseApplicationDTO createNewLease(Service.Type leaseType) {
         LeaseApplicationDTO newLease = EntityFactory.create(LeaseApplicationDTO.class);
-        newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        newLease.version().status().setValue(Lease.Status.Created);
         newLease.type().setValue(leaseType);
+        newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        newLease.version().status().setValue(Lease.Status.ApplicationInProgress);
         return newLease;
     }
 

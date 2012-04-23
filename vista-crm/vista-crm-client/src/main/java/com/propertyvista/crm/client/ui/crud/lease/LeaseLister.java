@@ -32,16 +32,16 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
+import com.propertyvista.common.client.ui.components.VersionedLister;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.dto.LeaseDTO;
 
-public class LeaseLister extends ListerBase<LeaseDTO> {
+public class LeaseLister extends VersionedLister<LeaseDTO> {
 
     private final static I18n i18n = I18n.get(LeaseLister.class);
 
@@ -76,9 +76,17 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
     @Override
     protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
-        // TODO : set all that stuff in CRUD service:
-        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-        criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
+
+        switch (getVersionDisplayMode()) {
+        case displayDraft:
+            criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+            criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.currentNew()));
+            break;
+        case displayFinal:
+            criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+            criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
+            break;
+        }
         return super.updateCriteria(criteria);
     }
 
@@ -89,10 +97,10 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
     private LeaseDTO createNewLease(Service.Type leaseType, BigDecimal balance) {
         LeaseDTO newLease = EntityFactory.create(LeaseDTO.class);
-        newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        newLease.version().status().setValue(Lease.Status.Created);
         newLease.type().setValue(leaseType);
+        newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         newLease.billingAccount().initialBalance().setValue(balance);
+        newLease.version().status().setValue(Lease.Status.Created);
         return newLease;
     }
 
