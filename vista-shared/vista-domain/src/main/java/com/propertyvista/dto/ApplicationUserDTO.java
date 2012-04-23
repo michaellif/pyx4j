@@ -25,6 +25,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @Transient
 @ToStringFormat("{0}, {1}")
@@ -42,11 +43,16 @@ public interface ApplicationUserDTO extends IEntity {
         }
     }
 
+    @ToString(index = 0)
+    LeaseParticipant leaseParticipant();
+
     @ToString(index = 1)
     IPrimitive<ApplicationUser> userType();
 
-    @ToString(index = 0)
+    @Deprecated
+    @ToString(index = 4)
     Person person();
 
+    @Deprecated
     CustomerUser user();
 }
