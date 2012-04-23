@@ -76,14 +76,17 @@ public class PasswordEditorForm extends CEntityDecoratableEditor<PasswordChangeR
         if (type.equals(Type.CHANGE)) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15).build());
             main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+            main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(1., Unit.EM);
         }
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).build());
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        main.setWidget(row, 1, passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule));
-        main.getFlexCellFormatter().setHorizontalAlignment(row, 1, HasHorizontalAlignment.ALIGN_LEFT);
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth(15).labelWidth(15).build());
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+        main.setWidget(++row, 0, passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule));
+        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
         if (type.equals(Type.CHANGE)) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn())).componentWidth(15).labelWidth(15).build());
             main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
