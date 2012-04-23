@@ -79,7 +79,7 @@ public class PtSiteMap implements SiteMap {
     }
 
     @NavigationItem(navigLabel = "Summary")
-    @PlaceProperties(caption = "Summary")
+    @PlaceProperties(caption = "Application/Offer To Lease Summary")
     public static class Summary extends AppPlace implements WizardStepPlace {
     }
 
