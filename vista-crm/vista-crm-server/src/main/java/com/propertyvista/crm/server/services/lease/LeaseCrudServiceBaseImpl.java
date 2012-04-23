@@ -246,7 +246,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
                 ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
 
                 user.person().set(tenant.customer().person());
-                user.user().set(tenant.customer());
+                user.user().set(tenant.customer().user());
                 user.userType().setValue(tenant.role().getValue() == Role.Applicant ? ApplicationUser.Applicant : ApplicationUser.CoApplicant);
 
                 users.add(user);
@@ -259,7 +259,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
 
             user.person().set(guarantor.customer().person());
-            user.user().set(guarantor);
+            user.user().set(guarantor.customer().user());
             user.userType().setValue(ApplicationUser.Guarantor);
 
             users.add(user);

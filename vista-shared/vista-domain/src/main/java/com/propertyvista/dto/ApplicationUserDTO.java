@@ -24,7 +24,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.security.TenantUserHolder;
+import com.propertyvista.domain.security.CustomerUser;
 
 @Transient
 @ToStringFormat("{0}, {1}")
@@ -48,5 +48,5 @@ public interface ApplicationUserDTO extends IEntity {
     @ToString(index = 0)
     Person person();
 
-    TenantUserHolder user();
+    CustomerUser user();
 }

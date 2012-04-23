@@ -28,7 +28,6 @@ import com.pyx4j.server.contexts.Context;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.TenantUserHolder;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
@@ -135,11 +134,11 @@ public class ApplicationManager {
         }
     }
 
-    public static OnlineApplication inviteUser(MasterOnlineApplication ma, TenantUserHolder tenant, Person person, VistaCustomerBehavior behaviour) {
+    public static OnlineApplication inviteUser(MasterOnlineApplication ma, CustomerUser user, Person person, VistaCustomerBehavior behaviour) {
         OnlineApplication application = null;
         for (OnlineApplication app : ma.applications()) {
             Persistence.service().retrieve(app);
-            if (app.user().equals(tenant.user())) {
+            if (app.user().equals(user)) {
                 application = app;
             }
         }
@@ -151,7 +150,7 @@ public class ApplicationManager {
             application.lease().set(ma.lease());
             //application.status().setValue(OnlineMasterApplication.Status.Created);
             //application.steps().addAll(ApplicationManager.createApplicationProgress(application, tenant, behaviour));
-            application.user().set(ensureProspectiveTenantUser(tenant, person, behaviour));
+            application.user().set(ensureProspectiveTenantUser(user, person, behaviour));
 
             Persistence.service().persist(application);
             ma.applications().add(application);
@@ -246,8 +245,7 @@ public class ApplicationManager {
 
     // internals:
 
-    public static CustomerUser ensureProspectiveTenantUser(TenantUserHolder tenant, Person person, VistaCustomerBehavior behavior) {
-        CustomerUser user = tenant.user();
+    public static CustomerUser ensureProspectiveTenantUser(CustomerUser user, Person person, VistaCustomerBehavior behavior) {
         if (user.getPrimaryKey() == null) {
             if (person.email().isNull()) {
                 throw new UnRecoverableRuntimeException(i18n.tr("Can't create application user for tenant  {0} without e-mail address", person.name()
@@ -256,7 +254,6 @@ public class ApplicationManager {
             user.name().setValue(person.name().getStringView());
             user.email().setValue(person.email().getValue());
             Persistence.service().persist(user);
-            Persistence.service().persist(tenant);
 
             CustomerUserCredential credential = EntityFactory.create(CustomerUserCredential.class);
             credential.setPrimaryKey(user.getPrimaryKey());
@@ -279,7 +276,7 @@ public class ApplicationManager {
             // TODO tenant can be guarantor in other applications.
             Persistence.service().persist(credential);
         }
-        return tenant.user();
+        return user;
     }
 
 }
