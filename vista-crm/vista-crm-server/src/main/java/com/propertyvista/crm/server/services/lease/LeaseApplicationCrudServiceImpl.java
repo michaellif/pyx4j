@@ -117,7 +117,6 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
                 } else {
                     throw new Error("It's unknown what to do with tenant role " + tenant.role().getValue() + " in this context");
                 }
-                commFacade.sendTenantInvitation(tenant);
             } else if (user.leaseParticipant().isInstanceOf(Guarantor.class)) {
                 Guarantor guarantor = user.leaseParticipant().duplicate(Guarantor.class);
                 commFacade.sendGuarantorApplicationInvitation(guarantor);
