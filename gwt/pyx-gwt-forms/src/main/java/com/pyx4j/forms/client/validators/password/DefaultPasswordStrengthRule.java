@@ -48,8 +48,12 @@ public class DefaultPasswordStrengthRule implements PasswordStrengthRule {
 
     public void setDictionary(Collection<String> dictionary) {
         this.dictionary.clear();
-        for (String word : dictionary) {
-            this.dictionary.addAll(split(word));
+        for (String words : dictionary) {
+            for (String word : split(words)) {
+                if (word.length() > 2) {
+                    this.dictionary.add(word);
+                }
+            }
         }
     }
 
