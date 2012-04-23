@@ -264,6 +264,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
             cancelAction.setVisible(status != Status.Cancelled);
         }
 
+        // disable editing for approved/closed leases:
         getEditButton().setVisible(status.isDraft());
     }
 

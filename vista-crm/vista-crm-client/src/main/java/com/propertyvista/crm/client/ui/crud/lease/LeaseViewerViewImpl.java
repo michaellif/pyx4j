@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -172,12 +171,12 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     @Override
     public void reset() {
+        sendMail.setVisible(false);
+        runBill.setVisible(false);
         notice.setVisible(false);
         cancelNotice.setVisible(false);
         evict.setVisible(false);
         cancelEvict.setVisible(false);
-        sendMail.setVisible(false);
-        runBill.setVisible(false);
         super.reset();
     }
 
@@ -187,27 +186,24 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         Status status = value.version().status().getValue();
 
-        // disable editing for completed/closed leases:
-        getEditButton().setVisible(status != Status.Closed);
-        // tweak finalizing availability:
-        if (getFinalizeButton().isVisible()) {
-            getFinalizeButton().setVisible(!value.unit().isNull() && (status == Status.Approved || status == Status.Active || status == Status.Completed));
-        }
-
         // set buttons state:
         if (!value.unit().isNull()) {
             CompletionType completion = value.version().completion().getValue();
 
-            sendMail.setVisible(!value.unit().isNull());
-            if (ApplicationMode.isDevelopment()) {
-                runBill.setVisible(status == Status.Active);
-            } else {
-                runBill.setVisible(false); // close for production!..
-            }
+            sendMail.setVisible(true);
+            runBill.setVisible(status == Status.Active);
             notice.setVisible(status == Status.Active && completion == null);
             cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
             evict.setVisible(status == Status.Active && completion == null);
             cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
+        }
+
+        // disable editing for completed/closed leases:
+        getEditButton().setVisible(!status.isFormer());
+
+        // tweak finalizing availability:
+        if (getFinalizeButton().isVisible()) {
+            getFinalizeButton().setVisible(!value.unit().isNull() && status.isCurrent());
         }
     }
 
