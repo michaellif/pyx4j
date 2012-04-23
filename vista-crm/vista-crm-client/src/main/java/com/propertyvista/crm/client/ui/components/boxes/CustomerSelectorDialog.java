@@ -25,7 +25,7 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
-import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
+import com.propertyvista.crm.rpc.services.selections.SelectCustomerListService;
 import com.propertyvista.domain.tenant.Customer;
 
 public abstract class CustomerSelectorDialog extends EntitySelectorTableDialog<Customer> {
@@ -65,6 +65,6 @@ public abstract class CustomerSelectorDialog extends EntitySelectorTableDialog<C
 
     @Override
     protected AbstractListService<Customer> getSelectService() {
-        return GWT.<AbstractListService<Customer>> create(SelectTenantListService.class);
+        return GWT.<SelectCustomerListService> create(SelectCustomerListService.class);
     }
 }

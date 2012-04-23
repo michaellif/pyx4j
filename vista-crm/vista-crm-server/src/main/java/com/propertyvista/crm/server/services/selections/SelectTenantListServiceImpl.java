@@ -14,19 +14,43 @@
 package com.propertyvista.crm.server.services.selections;
 
 import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
-import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Customer> implements SelectTenantListService {
+public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Tenant> implements SelectTenantListService {
 
     public SelectTenantListServiceImpl() {
-        super(Customer.class);
+        super(Tenant.class);
     }
 
     @Override
     protected void bind() {
         bind(dtoProto.id(), dboProto.id());
         bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceListCriteria(EntityListCriteria<Tenant> dbCriteria, EntityListCriteria<Tenant> dtoCriteria) {
+        super.enhanceListCriteria(dbCriteria, dtoCriteria);
+
+        // filter out just current tenants:
+        Tenant proto = EntityFactory.getEntityPrototype(Tenant.class);
+        dbCriteria.add(PropertyCriterion.in(proto.leaseV().status(), Lease.Status.current()));
+        // and current lease version only:
+        dbCriteria.add(PropertyCriterion.isNotNull(proto.leaseV().fromDate()));
+        dbCriteria.add(PropertyCriterion.isNull(proto.leaseV().toDate()));
+    }
+
+    @Override
+    protected void enhanceListRetrieved(Tenant entity, Tenant dto) {
+        Persistence.service().retrieve(dto.leaseV());
+        Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
     }
 }
