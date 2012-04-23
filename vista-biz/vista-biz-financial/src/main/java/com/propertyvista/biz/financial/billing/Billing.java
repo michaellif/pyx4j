@@ -148,66 +148,60 @@ class Billing {
 
         Bill bill = EntityFactory.create(Bill.class);
         try {
-            Persistence.service().startTransaction();
-            try {
-                bill.billStatus().setValue(Bill.BillStatus.Running);
-                bill.billingAccount().set(billingAccount);
+            bill.billStatus().setValue(Bill.BillStatus.Running);
+            bill.billingAccount().set(billingAccount);
 
-                bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
-                bill.billingRun().set(billingRun);
+            bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
+            bill.billingRun().set(billingRun);
 
-                Bill previousBill = BillingLifecycle.getLatestConfirmedBill(billingAccount.lease());
-                bill.previousBill().set(previousBill);
+            Bill previousBill = BillingLifecycle.getLatestConfirmedBill(billingAccount.lease());
+            bill.previousBill().set(previousBill);
 
-                Persistence.service().persist(bill);
+            Persistence.service().persist(bill);
 
-                bill.draft().setValue(Status.Created.equals(billingAccount.lease().version().status().getValue()));
+            bill.draft().setValue(Status.Created.equals(billingAccount.lease().version().status().getValue()));
 
-                if (Status.Approved.equals(billingAccount.lease().version().status().getValue())) {// first bill should be issued
-                    bill.billType().setValue(Bill.BillType.First);
-                    bill.billingPeriodStartDate().setValue(billingAccount.lease().leaseFrom().getValue());
+            if (Status.Approved.equals(billingAccount.lease().version().status().getValue())) {// first bill should be issued
+                bill.billType().setValue(Bill.BillType.First);
+                bill.billingPeriodStartDate().setValue(billingAccount.lease().leaseFrom().getValue());
 
-                    if (billingAccount.lease().leaseTo().isNull()
-                            || (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
-                        bill.billingPeriodEndDate().setValue(billingRun.billingPeriodEndDate().getValue());
-                    } else if (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) >= 0) {
-                        bill.billingPeriodEndDate().setValue(billingAccount.lease().leaseTo().getValue());
-                    } else {
-                        throw new BillingException("Lease already ended");
-                    }
-
-                } else if (Status.Completed.equals(billingAccount.lease().version().status().getValue())) {// final bill should be issued
-                    bill.billType().setValue(Bill.BillType.Final);
+                if (billingAccount.lease().leaseTo().isNull()
+                        || (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
+                    bill.billingPeriodEndDate().setValue(billingRun.billingPeriodEndDate().getValue());
+                } else if (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) >= 0) {
+                    bill.billingPeriodEndDate().setValue(billingAccount.lease().leaseTo().getValue());
                 } else {
-                    bill.billType().setValue(Bill.BillType.Regular);
-
-                    if (BillingLifecycle.getSysDate().compareTo(billingRun.executionTargetDate().getValue()) < 0) {
-                        throw new BillingException("Regular billing can't run before target execution date");
-                    }
-
-                    bill.billingPeriodStartDate().setValue(billingRun.billingPeriodStartDate().getValue());
-
-                    if (billingAccount.lease().leaseTo().isNull()
-                            || (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
-                        bill.billingPeriodEndDate().setValue(billingRun.billingPeriodEndDate().getValue());
-                    } else if (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) >= 0) {
-                        bill.billingPeriodEndDate().setValue(billingAccount.lease().leaseTo().getValue());
-                    } else {
-                        throw new BillingException("Lease already ended");
-                    }
+                    throw new BillingException("Lease already ended");
                 }
 
-                new Billing(bill).run();
-                bill.billStatus().setValue(Bill.BillStatus.Finished);
-            } catch (Throwable e) {
-                log.error("Bill run error", e);
-                bill.billStatus().setValue(Bill.BillStatus.Failed);
+            } else if (Status.Completed.equals(billingAccount.lease().version().status().getValue())) {// final bill should be issued
+                bill.billType().setValue(Bill.BillType.Final);
+            } else {
+                bill.billType().setValue(Bill.BillType.Regular);
+
+                if (BillingLifecycle.getSysDate().compareTo(billingRun.executionTargetDate().getValue()) < 0) {
+                    throw new BillingException("Regular billing can't run before target execution date");
+                }
+
+                bill.billingPeriodStartDate().setValue(billingRun.billingPeriodStartDate().getValue());
+
+                if (billingAccount.lease().leaseTo().isNull()
+                        || (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodEndDate().getValue()) >= 0)) {
+                    bill.billingPeriodEndDate().setValue(billingRun.billingPeriodEndDate().getValue());
+                } else if (billingAccount.lease().leaseTo().getValue().compareTo(billingRun.billingPeriodStartDate().getValue()) >= 0) {
+                    bill.billingPeriodEndDate().setValue(billingAccount.lease().leaseTo().getValue());
+                } else {
+                    throw new BillingException("Lease already ended");
+                }
             }
-            Persistence.service().persist(bill);
-            Persistence.service().commit();
-        } finally {
-            Persistence.service().endTransaction();
+
+            new Billing(bill).run();
+            bill.billStatus().setValue(Bill.BillStatus.Finished);
+        } catch (Throwable e) {
+            log.error("Bill run error", e);
+            bill.billStatus().setValue(Bill.BillStatus.Failed);
         }
+        Persistence.service().persist(bill);
 
     }
 }

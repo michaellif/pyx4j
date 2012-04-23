@@ -66,20 +66,27 @@ public class BillingLifecycle {
         Persistence.service().persist(billingAccount);
         Persistence.service().commit();
 
-        runBilling(billingRun);
+        runBilling(billingRun, false);
 
         return billingRun;
     }
 
-    static BillingRun runBilling(Building building, PaymentFrequency paymentFrequency, Integer billingDay, LogicalDate billingPeriodStartDate) {
+    static BillingRun runBilling(Building building, PaymentFrequency paymentFrequency, LogicalDate billingPeriodStartDate) {
         //TODO
+
+        // runBilling(billingRun, true);
+
         return null;
     }
 
-    private static void runBilling(BillingRun billingRun) {
+    private static void runBilling(BillingRun billingRun, boolean manageTransactions) {
         billingRun.status().setValue(BillingRunStatus.Running);
         billingRun.executionDate().setValue(new LogicalDate());
         Persistence.service().persist(billingRun);
+
+        if (manageTransactions) {
+            Persistence.service().commit();
+        }
 
         EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().currentBillingRun(), billingRun));
@@ -87,11 +94,17 @@ public class BillingLifecycle {
         try {
             for (BillingAccount billingAccount : billingAccounts) {
                 Billing.createBill(billingRun, billingAccount);
+                if (manageTransactions) {
+                    Persistence.service().commit();
+                }
             }
 
             billingRun.status().setValue(BillingRunStatus.Finished);
             Persistence.service().persist(billingRun);
-            Persistence.service().commit();
+
+            if (manageTransactions) {
+                Persistence.service().commit();
+            }
 
         } catch (Throwable e) {
             Persistence.service().rollback();
@@ -105,8 +118,10 @@ public class BillingLifecycle {
 
             billingRun.status().setValue(BillingRunStatus.Erred);
             Persistence.service().persist(billingRun);
-            Persistence.service().commit();
 
+            if (manageTransactions) {
+                Persistence.service().commit();
+            }
         }
     }
 
