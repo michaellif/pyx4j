@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import java.util.EnumSet;
+
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
@@ -36,7 +38,7 @@ public interface LeaseApplication extends IEntity {
     @XmlType(name = "LeaseApplicationStatus")
     public enum Status {
 
-        Draft, // Mapped to Lease status Created and ApplicationInProgress
+        Created, // Mapped to Lease status Created and ApplicationInProgress
 
         OnlineApplicationInProgress,
 
@@ -51,6 +53,34 @@ public interface LeaseApplication extends IEntity {
         @Override
         public String toString() {
             return I18nEnum.toString(this);
+        }
+
+        // state sets:
+
+        public static EnumSet<Status> draft() {
+            return EnumSet.of(Created, OnlineApplicationInProgress, PendingDecision);
+        }
+
+        public static EnumSet<Status> current() {
+            return EnumSet.of(Approved);
+        }
+
+        public static EnumSet<Status> former() {
+            return EnumSet.of(Approved, Declined, Cancelled);
+        }
+
+        // states:
+
+        public boolean isDraft() {
+            return draft().contains(this);
+        }
+
+        public boolean isCurrent() {
+            return current().contains(this);
+        }
+
+        public boolean isFormer() {
+            return former().contains(this);
         }
     }
 

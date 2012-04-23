@@ -54,7 +54,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         // Create Application by default
-        lease.leaseApplication().status().setValue(LeaseApplication.Status.Draft);
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
 
         saveCustomers(lease);
 
@@ -148,7 +148,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
             throw new UserRuntimeException("Invalid Lease State");
         }
-        if (LeaseApplication.Status.Draft != lease.leaseApplication().status().getValue()) {
+        if (LeaseApplication.Status.Created != lease.leaseApplication().status().getValue()) {
             throw new UserRuntimeException("Invalid Application State");
         }
 

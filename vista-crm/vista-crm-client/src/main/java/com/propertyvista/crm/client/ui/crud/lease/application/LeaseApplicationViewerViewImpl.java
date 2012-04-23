@@ -255,14 +255,16 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
 
         // set buttons state:
         if (!value.unit().isNull()) {
-            onlineApplication.setVisible(status != Status.OnlineApplicationInProgress);
-            inviteAction.setVisible(status != Status.Cancelled);
-            checkAction.setVisible(status != Status.Cancelled);
-            approveAction.setVisible(status != Status.Cancelled);
-            moreInfoAction.setVisible(status != Status.Cancelled);
-            declineAction.setVisible(status != Status.Cancelled);
+            onlineApplication.setVisible(status.isDraft() && status != Status.OnlineApplicationInProgress);
+            inviteAction.setVisible(status == Status.OnlineApplicationInProgress);
+            checkAction.setVisible(status.isDraft());
+            approveAction.setVisible(status.isDraft());
+            moreInfoAction.setVisible(status.isDraft() && status != Status.Created);
+            declineAction.setVisible(status.isDraft());
             cancelAction.setVisible(status != Status.Cancelled);
         }
+
+        getEditButton().setVisible(status.isDraft());
     }
 
     private abstract class ActionBox extends OkCancelDialog {

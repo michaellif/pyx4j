@@ -89,12 +89,12 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
         // states:
 
-        public boolean isCurrent() {
-            return current().contains(this);
-        }
-
         public boolean isDraft() {
             return draft().contains(this);
+        }
+
+        public boolean isCurrent() {
+            return current().contains(this);
         }
 
         public boolean isFormer() {
