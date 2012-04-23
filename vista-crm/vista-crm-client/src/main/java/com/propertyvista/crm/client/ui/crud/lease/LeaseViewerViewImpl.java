@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -178,7 +177,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         super.populate(value);
 
         Status status = value.version().status().getValue();
-        
+
         // set buttons state:
         if (!value.unit().isNull()) {
             CompletionType completion = value.version().completion().getValue();
