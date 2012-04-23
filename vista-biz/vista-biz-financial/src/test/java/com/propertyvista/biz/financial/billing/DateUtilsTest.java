@@ -13,12 +13,9 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import com.propertyvista.biz.financial.billing.DateRange;
-import com.propertyvista.biz.financial.billing.DateUtils;
+import com.propertyvista.config.tests.VistaDBTestBase;
 
-import junit.framework.TestCase;
-
-public class DateUtilsTest extends TestCase {
+public class DateUtilsTest extends VistaDBTestBase {
 
     public void testOverlap() {
         {

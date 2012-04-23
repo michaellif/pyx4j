@@ -15,6 +15,10 @@ package com.propertyvista.biz.financial.ar;
 
 import java.util.List;
 
+import com.pyx4j.entity.server.Persistence;
+
+import com.propertyvista.domain.financial.billing.InvoiceCredit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -24,7 +28,11 @@ public class ARInvoiceManager {
 
         invoiceLineItem.posted().setValue(true);
 
-        ARCreditDebitLinkManager.updateCreditDebitLinks(invoiceLineItem);
+        if (invoiceLineItem.isAssignableFrom(InvoiceCredit.class)) {
+            ARCreditDebitLinkManager.consumeCredit((InvoiceCredit) invoiceLineItem);
+        } else if (invoiceLineItem.isAssignableFrom(InvoiceDebit.class)) {
+            ARCreditDebitLinkManager.coverDebit((InvoiceDebit) invoiceLineItem);
+        }
 
         //TODO VladS?
 //        Persistence.service().persist(invoiceLineItem);
@@ -42,8 +50,9 @@ public class ARInvoiceManager {
         return null;
     }
 
-    static List<InvoiceLineItem> getNotExhaustedCreditInvoiceLineItems(Lease lease) {
+    static List<InvoiceLineItem> getNotConsumedCreditInvoiceLineItems(Lease lease) {
         //TODO
         return null;
     }
+
 }

@@ -32,5 +32,5 @@ public interface ARFacade {
 
     List<InvoiceLineItem> getNotCoveredDebitInvoiceLineItems(Lease lease);
 
-    List<InvoiceLineItem> getNotExhaustedCreditInvoiceLineItems(Lease lease);
+    List<InvoiceLineItem> getNotConsumedCreditInvoiceLineItems(Lease lease);
 }

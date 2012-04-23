@@ -16,6 +16,9 @@ package com.propertyvista.biz.financial.ar;
 import java.util.List;
 
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.InvoiceCredit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -48,7 +51,24 @@ public class ARFacadeImpl implements ARFacade {
     }
 
     @Override
-    public List<InvoiceLineItem> getNotExhaustedCreditInvoiceLineItems(Lease lease) {
-        return ARInvoiceManager.getNotExhaustedCreditInvoiceLineItems(lease);
+    public List<InvoiceLineItem> getNotConsumedCreditInvoiceLineItems(Lease lease) {
+        return ARInvoiceManager.getNotConsumedCreditInvoiceLineItems(lease);
     }
+
+    public void consumeCredit(InvoiceCredit credit) {
+        ARCreditDebitLinkManager.consumeCredit(credit);
+    }
+
+    public void consumeCredit(InvoiceCredit credit, List<InvoiceDebit> debits) {
+        ARCreditDebitLinkManager.consumeCredit(credit, debits);
+    }
+
+    public void coverDebit(InvoiceDebit debit) {
+        ARCreditDebitLinkManager.coverDebit(debit);
+    }
+
+    public void coverDebit(InvoiceDebit debit, List<InvoiceCredit> credits) {
+        ARCreditDebitLinkManager.coverDebit(debit, credits);
+    }
+
 }

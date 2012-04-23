@@ -16,16 +16,14 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import junit.framework.TestCase;
-
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.financial.billing.LeaseBillingUtils;
+import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.MaxTotalFeeType;
 
-public class LeaseBillingCalculationTest extends TestCase {
+public class LeaseBillingCalculationTest extends VistaDBTestBase {
 
     public void testZeroAmountOwning() {
         LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);

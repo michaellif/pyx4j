@@ -18,7 +18,6 @@ import java.text.ParseException;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.financial.billing.BillingCycleManger;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
