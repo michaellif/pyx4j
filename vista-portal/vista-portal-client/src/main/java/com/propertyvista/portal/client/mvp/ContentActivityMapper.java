@@ -31,6 +31,7 @@ import com.propertyvista.portal.client.activity.NewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
+import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivity;
 import com.propertyvista.portal.client.activity.login.RedirectToLoginPageActivity;
@@ -80,6 +81,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new RedirectToLoginPageActivity(place);
                 } else if (place instanceof PortalSiteMap.LoginWithToken) {
                     activity = new LoginWithTokenActivity(place);
+                } else if (place instanceof PortalSiteMap.LeaseContextSelection) {
+                    activity = new LeaseContextSelectionActivity();
                 } else if (place instanceof PortalSiteMap.PasswordResetRequest) {
                     activity = new PasswordResetRequestActivity(place);
                 } else if (place instanceof PortalSiteMap.PasswordReset) {

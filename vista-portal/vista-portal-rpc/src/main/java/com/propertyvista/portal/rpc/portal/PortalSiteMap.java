@@ -32,6 +32,9 @@ public class PortalSiteMap implements SiteMap {
     public static class LoginWithToken extends AppPlace {
     }
 
+    public static class LeaseContextSelection extends AppPlace {
+    }
+
     public static class PasswordResetRequest extends AppPlace {
     }
 
