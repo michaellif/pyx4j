@@ -7,31 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 15, 2012
- * @author vlads
+ * Created on Mar 1, 2012
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.biz.financial.ar;
 
-import java.util.List;
+import java.math.BigDecimal;
 
-import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionLogDTO;
 
-public interface ARFacade {
+public class TransactionLogTester extends Tester {
 
-    void postPayment(PaymentRecord payment);
+    private final TransactionLogDTO transactionLog;
 
-    void rejectPayment(PaymentRecord payment);
+    public TransactionLogTester(Lease lease) {
+        transactionLog = ARFinancialTransactionManager.getTransactionLog(lease);
+    }
 
-    void postImmediateAdjustment(LeaseAdjustment adjustment);
+    public TransactionLogTester currentAmount(BigDecimal amount) {
+        assertEquals("Total current amount", amount, transactionLog.total().current().getValue());
+        return this;
+    }
 
-    List<InvoiceLineItem> getNotCoveredDebitInvoiceLineItems(Lease lease);
-
-    List<InvoiceLineItem> getNotConsumedCreditInvoiceLineItems(Lease lease);
-
-    TransactionLogDTO getTransactionLog(Lease lease);
 }

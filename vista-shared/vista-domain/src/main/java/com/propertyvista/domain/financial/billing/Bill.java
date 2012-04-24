@@ -13,21 +13,18 @@
  */
 package com.propertyvista.domain.financial.billing;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
@@ -106,59 +103,7 @@ public interface Bill extends IEntity {
     @ReadOnly
     BillingRun billingRun();
 
-    @Detached
-    @OrderBy(InvoiceLineItem.OrderId.class)
-    IList<InvoiceLineItem> lineItems();
-
-    /**
-     * The total amount due from the previous bill.
-     */
-    IPrimitive<BigDecimal> previousBalanceAmount();
-
-    /**
-     * The total amount of payments received since the previous bill, up to the current
-     * Bill day.
-     */
-    IPrimitive<BigDecimal> paymentReceivedAmount();
-
-    IPrimitive<BigDecimal> depositRefundAmount();
-
-    IPrimitive<BigDecimal> immediateAdjustments();
-
-    /**
-     * pastDueAmount = previousBalanceAmount - paymentReceivedAmount - depositRefundAmount -
-     * immediateAdjustments
-     */
-    IPrimitive<BigDecimal> pastDueAmount();
-
-    IPrimitive<BigDecimal> serviceCharge();
-
-    IPrimitive<BigDecimal> recurringFeatureCharges();
-
-    IPrimitive<BigDecimal> oneTimeFeatureCharges();
-
-    /**
-     * 
-     * It includes all feature/service adjustments as well as lease adjustments
-     * 
-     */
-    IPrimitive<BigDecimal> totalAdjustments();
-
-    IPrimitive<BigDecimal> depositAmount();
-
-    IPrimitive<BigDecimal> credits();
-
-    /**
-     * currentAmount = pastDueAmount + serviceCharge + recurringFeatureCharges +
-     * oneTimeFeatureCharges + totalAdjustments - depositPaidAmount
-     */
-    IPrimitive<BigDecimal> currentAmount();
-
-    IPrimitive<BigDecimal> taxes();
-
-    /**
-     * totalDueAmount = currentAmount + taxes
-     */
-    IPrimitive<BigDecimal> totalDueAmount();
+    @EmbeddedEntity
+    Invoice invoice();
 
 }

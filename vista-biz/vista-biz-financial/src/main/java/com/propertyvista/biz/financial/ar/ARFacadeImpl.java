@@ -16,12 +16,12 @@ package com.propertyvista.biz.financial.ar;
 import java.util.List;
 
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.dto.TransactionLogDTO;
 
 public class ARFacadeImpl implements ARFacade {
 
@@ -41,18 +41,18 @@ public class ARFacadeImpl implements ARFacade {
     }
 
     @Override
-    public List<InvoiceLineItem> getInvoiceLineItems(Lease lease) {
-        return ARInvoiceManager.getInvoiceLineItems(lease);
+    public TransactionLogDTO getTransactionLog(Lease lease) {
+        return ARFinancialTransactionManager.getTransactionLog(lease);
     }
 
     @Override
     public List<InvoiceLineItem> getNotCoveredDebitInvoiceLineItems(Lease lease) {
-        return ARInvoiceManager.getNotCoveredDebitInvoiceLineItems(lease);
+        return ARFinancialTransactionManager.getNotCoveredDebitInvoiceLineItems(lease);
     }
 
     @Override
     public List<InvoiceLineItem> getNotConsumedCreditInvoiceLineItems(Lease lease) {
-        return ARInvoiceManager.getNotConsumedCreditInvoiceLineItems(lease);
+        return ARFinancialTransactionManager.getNotConsumedCreditInvoiceLineItems(lease);
     }
 
     public void consumeCredit(InvoiceCredit credit) {

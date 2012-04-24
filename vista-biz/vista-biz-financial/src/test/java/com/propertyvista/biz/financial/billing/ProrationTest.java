@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 import java.text.ParseException;
 
+import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.BillingAccount;
 
@@ -24,28 +25,28 @@ public class ProrationTest extends VistaDBTestBase {
     public void testProration() throws ParseException {
 
         assertEquals("Prorate 23/02/2012", new BigDecimal("0.241379"),
-                ProrationUtils.prorate(BillingTestUtils.getDate("23-Feb-2012"), BillingTestUtils.getDate("29-Feb-2012"), BillingAccount.ProrationMethod.Actual));
+                ProrationUtils.prorate(FinancialTestsUtils.getDate("23-Feb-2012"), FinancialTestsUtils.getDate("29-Feb-2012"), BillingAccount.ProrationMethod.Actual));
         assertEquals("Prorate 23/03/2012", new BigDecimal("0.290323"),
-                ProrationUtils.prorate(BillingTestUtils.getDate("23-Mar-2012"), BillingTestUtils.getDate("31-Mar-2012"), BillingAccount.ProrationMethod.Actual));
+                ProrationUtils.prorate(FinancialTestsUtils.getDate("23-Mar-2012"), FinancialTestsUtils.getDate("31-Mar-2012"), BillingAccount.ProrationMethod.Actual));
         assertEquals("Prorate 23/04/2012", new BigDecimal("0.266667"),
-                ProrationUtils.prorate(BillingTestUtils.getDate("23-Apr-2012"), BillingTestUtils.getDate("30-Apr-2012"), BillingAccount.ProrationMethod.Actual));
+                ProrationUtils.prorate(FinancialTestsUtils.getDate("23-Apr-2012"), FinancialTestsUtils.getDate("30-Apr-2012"), BillingAccount.ProrationMethod.Actual));
 
-        assertEquals("Prorate 23/02/2012", new BigDecimal("0.241379"), ProrationUtils.prorate(BillingTestUtils.getDate("23-Feb-2012"),
-                BillingTestUtils.getDate("29-Feb-2012"), BillingAccount.ProrationMethod.Standard));
-        assertEquals("Prorate 23/03/2012", new BigDecimal("0.300000"), ProrationUtils.prorate(BillingTestUtils.getDate("23-Mar-2012"),
-                BillingTestUtils.getDate("31-Mar-2012"), BillingAccount.ProrationMethod.Standard));
-        assertEquals("Prorate 23/04/2012", new BigDecimal("0.266667"), ProrationUtils.prorate(BillingTestUtils.getDate("23-Apr-2012"),
-                BillingTestUtils.getDate("30-Apr-2012"), BillingAccount.ProrationMethod.Standard));
+        assertEquals("Prorate 23/02/2012", new BigDecimal("0.241379"), ProrationUtils.prorate(FinancialTestsUtils.getDate("23-Feb-2012"),
+                FinancialTestsUtils.getDate("29-Feb-2012"), BillingAccount.ProrationMethod.Standard));
+        assertEquals("Prorate 23/03/2012", new BigDecimal("0.300000"), ProrationUtils.prorate(FinancialTestsUtils.getDate("23-Mar-2012"),
+                FinancialTestsUtils.getDate("31-Mar-2012"), BillingAccount.ProrationMethod.Standard));
+        assertEquals("Prorate 23/04/2012", new BigDecimal("0.266667"), ProrationUtils.prorate(FinancialTestsUtils.getDate("23-Apr-2012"),
+                FinancialTestsUtils.getDate("30-Apr-2012"), BillingAccount.ProrationMethod.Standard));
 
         assertEquals("Prorate 23/02/2012", new BigDecimal("0.230137"),
-                ProrationUtils.prorate(BillingTestUtils.getDate("23-Feb-2012"), BillingTestUtils.getDate("29-Feb-2012"), BillingAccount.ProrationMethod.Annual));
+                ProrationUtils.prorate(FinancialTestsUtils.getDate("23-Feb-2012"), FinancialTestsUtils.getDate("29-Feb-2012"), BillingAccount.ProrationMethod.Annual));
         assertEquals("Prorate 23/03/2012", new BigDecimal("0.295890"),
-                ProrationUtils.prorate(BillingTestUtils.getDate("23-Mar-2012"), BillingTestUtils.getDate("31-Mar-2012"), BillingAccount.ProrationMethod.Annual));
+                ProrationUtils.prorate(FinancialTestsUtils.getDate("23-Mar-2012"), FinancialTestsUtils.getDate("31-Mar-2012"), BillingAccount.ProrationMethod.Annual));
         assertEquals("Prorate 23/04/2012", new BigDecimal("0.263014"),
-                ProrationUtils.prorate(BillingTestUtils.getDate("23-Apr-2012"), BillingTestUtils.getDate("30-Apr-2012"), BillingAccount.ProrationMethod.Annual));
+                ProrationUtils.prorate(FinancialTestsUtils.getDate("23-Apr-2012"), FinancialTestsUtils.getDate("30-Apr-2012"), BillingAccount.ProrationMethod.Annual));
 
         try {
-            ProrationUtils.prorate(BillingTestUtils.getDate("23-Feb-2012"), BillingTestUtils.getDate("23-Mar-2012"), BillingAccount.ProrationMethod.Actual);
+            ProrationUtils.prorate(FinancialTestsUtils.getDate("23-Feb-2012"), FinancialTestsUtils.getDate("23-Mar-2012"), BillingAccount.ProrationMethod.Actual);
             assertTrue("Prorate more than month didn't fail", false);
         } catch (BillingException e) {
         }

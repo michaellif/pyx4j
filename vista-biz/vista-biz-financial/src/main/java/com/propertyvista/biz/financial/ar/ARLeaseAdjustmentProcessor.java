@@ -43,7 +43,7 @@ public class ARLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProcessor
 
             Persistence.service().persist(adjustment.billingAccount());
 
-            ARInvoiceManager.postInvoiceLineItem(lineItem);
+            ARFinancialTransactionManager.postInvoiceLineItem(lineItem);
 
         }
 

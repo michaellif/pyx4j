@@ -44,7 +44,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         super.tearDown();
     }
 
-    public void testSequentialBillingRun() {
+    public void testScenario() {
 
         setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1);
         addServiceAdjustment("-25", AdjustmentType.monetary, ExecutionType.inLease);

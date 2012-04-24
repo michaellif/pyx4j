@@ -7,27 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 15, 2012
- * @author stanp
+ * Created on Apr 23, 2012
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.dto;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-
 @Transient
-public interface InvoiceLineItemGroupDTO extends IEntity {
+public interface AgingBucketsDTO extends IEntity {
 
-    @Format("#0.00")
-    IPrimitive<BigDecimal> total();
+    IPrimitive<BigDecimal> current();
 
-    IList<InvoiceLineItem> lineItems();
+    IPrimitive<BigDecimal> bucket30();
+
+    IPrimitive<BigDecimal> bucket60();
+
+    IPrimitive<BigDecimal> bucket90();
 }

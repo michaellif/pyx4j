@@ -11,14 +11,14 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing;
+package com.propertyvista.biz.financial;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import com.pyx4j.commons.LogicalDate;
 
-public class BillingTestUtils {
+public class FinancialTestsUtils {
 
     public static LogicalDate getDate(String date) {
         if (date == null) {

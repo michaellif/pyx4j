@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.billing;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.AbstractLeaseAdjustmentProcessor;
+import com.propertyvista.domain.financial.billing.Invoice;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -96,14 +97,15 @@ public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProc
     }
 
     private void addCharge(InvoiceAccountCharge charge) {
-        billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(charge.amount().getValue()));
-        billing.getNextPeriodBill().lineItems().add(charge);
-        billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(charge.taxTotal().getValue()));
+        Invoice invoice = billing.getNextPeriodBill().invoice();
+        invoice.totalAdjustments().setValue(invoice.totalAdjustments().getValue().add(charge.amount().getValue()));
+        invoice.lineItems().add(charge);
+        invoice.taxes().setValue(invoice.taxes().getValue().add(charge.taxTotal().getValue()));
     }
 
     private void addCredit(InvoiceAccountCredit credit) {
-        billing.getNextPeriodBill().totalAdjustments().setValue(billing.getNextPeriodBill().totalAdjustments().getValue().add(credit.amount().getValue()));
-        billing.getNextPeriodBill().lineItems().add(credit);
+        Invoice invoice = billing.getNextPeriodBill().invoice();
+        invoice.totalAdjustments().setValue(invoice.totalAdjustments().getValue().add(credit.amount().getValue()));
+        invoice.lineItems().add(credit);
     }
-
 }

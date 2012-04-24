@@ -17,7 +17,8 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.financial.FinancialTestsUtils;
+import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
@@ -91,37 +92,37 @@ public class BillTester extends Tester {
     }
 
     public BillTester serviceCharge(String value) {
-        assertEquals("Service Charge", new BigDecimal(value), bill.serviceCharge().getValue());
+        assertEquals("Service Charge", new BigDecimal(value), bill.invoice().serviceCharge().getValue());
         return this;
     }
 
     public BillTester recurringFeatureCharges(String value) {
-        assertEquals("Recurring Feature Charges", new BigDecimal(value), bill.recurringFeatureCharges().getValue());
+        assertEquals("Recurring Feature Charges", new BigDecimal(value), bill.invoice().recurringFeatureCharges().getValue());
         return this;
     }
 
     public BillTester oneTimeFeatureCharges(String value) {
-        assertEquals("One Time Feature Charges", new BigDecimal(value), bill.oneTimeFeatureCharges().getValue());
+        assertEquals("One Time Feature Charges", new BigDecimal(value), bill.invoice().oneTimeFeatureCharges().getValue());
         return this;
     }
 
     public BillTester taxes(String value) {
-        assertEquals("Taxes", new BigDecimal(value), bill.taxes().getValue());
+        assertEquals("Taxes", new BigDecimal(value), bill.invoice().taxes().getValue());
         return this;
     }
 
     public BillTester paymentReceivedAmount(String value) {
-        assertEquals("Payment Received Amount", new BigDecimal(value), bill.paymentReceivedAmount().getValue());
+        assertEquals("Payment Received Amount", new BigDecimal(value), bill.invoice().paymentReceivedAmount().getValue());
         return this;
     }
 
     public BillTester depositAmount(String value) {
-        assertEquals("Deposit Amount", new BigDecimal(value), bill.depositAmount().getValue());
+        assertEquals("Deposit Amount", new BigDecimal(value), bill.invoice().depositAmount().getValue());
         return this;
     }
 
     public BillTester totalDueAmount(String value) {
-        assertEquals("Total Due Amount", new BigDecimal(value), bill.totalDueAmount().getValue());
+        assertEquals("Total Due Amount", new BigDecimal(value), bill.invoice().totalDueAmount().getValue());
         return this;
     }
 
@@ -130,7 +131,7 @@ public class BillTester extends Tester {
             return null;
         }
         try {
-            return BillingTestUtils.getDate(date);
+            return FinancialTestsUtils.getDate(date);
         } catch (Exception e) {
             throw new Error("Failed to parse date " + date);
         }

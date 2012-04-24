@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing;
+package com.propertyvista.biz.financial;
 
 import junit.framework.AssertionFailedError;
 

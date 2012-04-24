@@ -4,20 +4,20 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="471"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
-	<field name="pastDueAmount" class="java.math.BigDecimal"/>
-	<field name="totalDueAmount" class="java.math.BigDecimal"/>
-	<field name="credits" class="java.math.BigDecimal"/>
-	<field name="currentAmount" class="java.math.BigDecimal"/>
-	<field name="taxes" class="java.math.BigDecimal"/>
-	<field name="previousBalanceAmount" class="java.math.BigDecimal"/>
-	<field name="paymentReceivedAmount" class="java.math.BigDecimal"/>
-	<field name="depositRefundAmount" class="java.math.BigDecimal"/>
-	<field name="immediateAdjustments" class="java.math.BigDecimal"/>
-	<field name="serviceCharge" class="java.math.BigDecimal"/>
-	<field name="recurringFeatureCharges" class="java.math.BigDecimal"/>
-	<field name="oneTimeFeatureCharges" class="java.math.BigDecimal"/>
-	<field name="depositAmount" class="java.math.BigDecimal"/>
-	<field name="totalAdjustments" class="java.math.BigDecimal"/>
+	<field name="invoice/pastDueAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/totalDueAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/credits" class="java.math.BigDecimal"/>
+	<field name="invoice/currentAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/taxes" class="java.math.BigDecimal"/>
+	<field name="invoice/previousBalanceAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/paymentReceivedAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/depositRefundAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/immediateAdjustments" class="java.math.BigDecimal"/>
+	<field name="invoice/serviceCharge" class="java.math.BigDecimal"/>
+	<field name="invoice/recurringFeatureCharges" class="java.math.BigDecimal"/>
+	<field name="invoice/oneTimeFeatureCharges" class="java.math.BigDecimal"/>
+	<field name="invoice/depositAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/totalAdjustments" class="java.math.BigDecimal"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun" class="com.propertyvista.domain.financial.billing.BillingRun"/>
@@ -52,7 +52,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{totalDueAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/totalDueAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="81" width="100" height="20"/>
@@ -95,28 +95,28 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{previousBalanceAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/previousBalanceAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="125" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{paymentReceivedAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/paymentReceivedAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="151" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{pastDueAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/pastDueAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="49" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{depositRefundAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/depositRefundAmount}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="49" width="194" height="20"/>
@@ -133,7 +133,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{immediateAdjustments}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/immediateAdjustments}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="320" y="147" width="60" height="1"/>
@@ -158,14 +158,14 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{paymentReceivedAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/paymentReceivedAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="87" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{paymentReceivedAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/paymentReceivedAmount}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="87" width="194" height="20"/>
@@ -221,42 +221,42 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{oneTimeFeatureCharges}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/oneTimeFeatureCharges}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="34" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{serviceCharge}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/serviceCharge}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="53" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{recurringFeatureCharges}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/recurringFeatureCharges}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="172" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{currentAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/currentAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="192" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{taxes}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/taxes}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="223" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{totalDueAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/totalDueAmount}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="248" width="380" height="1" forecolor="#AFAAAA"/>
@@ -271,7 +271,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalAdjustments}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/totalAdjustments}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="129" width="194" height="20"/>
@@ -283,7 +283,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{credits}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/credits}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="110" width="194" height="20"/>
@@ -295,7 +295,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{depositAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/depositAmount}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="320" y="168" width="60" height="1"/>

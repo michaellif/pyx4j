@@ -4,28 +4,28 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
-	<field name="pastDueAmount" class="java.math.BigDecimal"/>
-	<field name="totalDueAmount" class="java.math.BigDecimal"/>
-	<field name="currentAmount" class="java.math.BigDecimal"/>
-	<field name="taxes" class="java.math.BigDecimal"/>
-	<field name="previousBalanceAmount" class="java.math.BigDecimal"/>
-	<field name="paymentReceivedAmount" class="java.math.BigDecimal"/>
-	<field name="depositRefundAmount" class="java.math.BigDecimal"/>
-	<field name="immediateAdjustments" class="java.math.BigDecimal"/>
-	<field name="serviceCharge" class="java.math.BigDecimal"/>
-	<field name="recurringFeatureCharges" class="java.math.BigDecimal"/>
-	<field name="oneTimeFeatureCharges" class="java.math.BigDecimal"/>
-	<field name="depositAmount" class="java.math.BigDecimal"/>
-	<field name="totalAdjustments" class="java.math.BigDecimal"/>
+	<field name="invoice/pastDueAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/totalDueAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/currentAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/taxes" class="java.math.BigDecimal"/>
+	<field name="invoice/previousBalanceAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/paymentReceivedAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/depositRefundAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/immediateAdjustments" class="java.math.BigDecimal"/>
+	<field name="invoice/serviceCharge" class="java.math.BigDecimal"/>
+	<field name="invoice/recurringFeatureCharges" class="java.math.BigDecimal"/>
+	<field name="invoice/oneTimeFeatureCharges" class="java.math.BigDecimal"/>
+	<field name="invoice/depositAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/totalAdjustments" class="java.math.BigDecimal"/>
+	<field name="invoice/lineItems" class="com.pyx4j.entity.shared.IList"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
-	<field name="lineItems" class="com.pyx4j.entity.shared.IList"/>
 	<variable name="billPayments" class="java.util.List">
-		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getPayments($F{lineItems})]]></variableExpression>
+		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getPayments($F{invoice/lineItems})]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
 	<variable name="leaseAdjustments" class="java.util.List">
-		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getImmediateLeaseAdjustment($F{lineItems})]]></variableExpression>
+		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getImmediateLeaseAdjustment($F{invoice/lineItems})]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
 	<background>
@@ -55,7 +55,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{previousBalanceAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/previousBalanceAmount}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="30">
@@ -87,7 +87,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{depositRefundAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/depositRefundAmount}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="320" y="3" width="60" height="1"/>
@@ -118,7 +118,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{immediateAdjustments}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/immediateAdjustments}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="7" width="281" height="20"/>
@@ -159,7 +159,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{paymentReceivedAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/paymentReceivedAmount}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="8" width="281" height="20"/>
@@ -200,7 +200,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{paymentReceivedAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/paymentReceivedAmount}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="8" width="281" height="20"/>
@@ -241,7 +241,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{paymentReceivedAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/paymentReceivedAmount}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="8" width="281" height="20"/>
@@ -270,7 +270,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{pastDueAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/pastDueAmount}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

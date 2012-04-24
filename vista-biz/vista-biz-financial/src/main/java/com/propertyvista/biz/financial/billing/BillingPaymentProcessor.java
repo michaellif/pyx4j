@@ -30,9 +30,9 @@ public class BillingPaymentProcessor {
     }
 
     private void attachPayment(InvoicePayment payment) {
-        billing.getNextPeriodBill().lineItems().add(payment);
-        billing.getNextPeriodBill().paymentReceivedAmount()
-                .setValue(billing.getNextPeriodBill().paymentReceivedAmount().getValue().add(payment.amount().getValue()));
+        billing.getNextPeriodBill().invoice().lineItems().add(payment);
+        billing.getNextPeriodBill().invoice().paymentReceivedAmount()
+                .setValue(billing.getNextPeriodBill().invoice().paymentReceivedAmount().getValue().add(payment.amount().getValue()));
     }
 
 }

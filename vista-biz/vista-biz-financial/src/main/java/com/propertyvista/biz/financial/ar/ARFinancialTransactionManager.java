@@ -19,8 +19,9 @@ import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.TransactionLogDTO;
 
-public class ARInvoiceManager {
+public class ARFinancialTransactionManager {
 
     static void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
 
@@ -36,7 +37,7 @@ public class ARInvoiceManager {
 
     }
 
-    static List<InvoiceLineItem> getInvoiceLineItems(Lease lease) {
+    static TransactionLogDTO getTransactionLog(Lease lease) {
         //TODO
         return null;
     }

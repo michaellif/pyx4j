@@ -4,27 +4,27 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
-	<field name="pastDueAmount" class="java.math.BigDecimal"/>
-	<field name="totalDueAmount" class="java.math.BigDecimal"/>
-	<field name="currentAmount" class="java.math.BigDecimal"/>
-	<field name="taxes" class="java.math.BigDecimal"/>
-	<field name="previousBalanceAmount" class="java.math.BigDecimal"/>
-	<field name="paymentReceivedAmount" class="java.math.BigDecimal"/>
-	<field name="depositRefundAmount" class="java.math.BigDecimal"/>
-	<field name="immediateAdjustments" class="java.math.BigDecimal"/>
-	<field name="serviceCharge" class="java.math.BigDecimal"/>
-	<field name="recurringFeatureCharges" class="java.math.BigDecimal"/>
-	<field name="oneTimeFeatureCharges" class="java.math.BigDecimal"/>
-	<field name="depositAmount" class="java.math.BigDecimal"/>
-	<field name="totalAdjustments" class="java.math.BigDecimal"/>
+	<field name="invoice/pastDueAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/totalDueAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/currentAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/taxes" class="java.math.BigDecimal"/>
+	<field name="invoice/previousBalanceAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/paymentReceivedAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/depositRefundAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/immediateAdjustments" class="java.math.BigDecimal"/>
+	<field name="invoice/serviceCharge" class="java.math.BigDecimal"/>
+	<field name="invoice/recurringFeatureCharges" class="java.math.BigDecimal"/>
+	<field name="invoice/oneTimeFeatureCharges" class="java.math.BigDecimal"/>
+	<field name="invoice/depositAmount" class="java.math.BigDecimal"/>
+	<field name="invoice/totalAdjustments" class="java.math.BigDecimal"/>
+	<field name="invoice/lineItems" class="com.pyx4j.entity.shared.IList"/>
+	<field name="invoice/serviceChargeLineItems/lineItems" class="com.pyx4j.entity.shared.IList"/>
+	<field name="invoice/recurringFeatureChargeLineItems/lineItems" class="com.pyx4j.entity.shared.IList"/>
+	<field name="invoice/onetimeFeatureChargeLineItems/lineItems" class="com.pyx4j.entity.shared.IList"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
-	<field name="lineItems" class="com.pyx4j.entity.shared.IList"/>
-	<field name="serviceChargeLineItems/lineItems" class="com.pyx4j.entity.shared.IList"/>
-	<field name="recurringFeatureChargeLineItems/lineItems" class="com.pyx4j.entity.shared.IList"/>
-	<field name="onetimeFeatureChargeLineItems/lineItems" class="com.pyx4j.entity.shared.IList"/>
 	<variable name="leaseAdjustments" class="java.util.List">
-		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getPendingLeaseAdjustment($F{lineItems})]]></variableExpression>
+		<variableExpression><![CDATA[$P{REPORT_SCRIPTLET}.getPendingLeaseAdjustment($F{invoice/lineItems})]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
 	<background>
@@ -62,7 +62,7 @@
 		<band height="23">
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{serviceChargeLineItems/lineItems})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{invoice/serviceChargeLineItems/lineItems})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.financial.billing.print.ProductCharge")]]></subreportExpression>
 			</subreport>
 		</band>
@@ -72,7 +72,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{serviceCharge}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/serviceCharge}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="8" width="281" height="20"/>
@@ -89,7 +89,7 @@
 			</line>
 		</band>
 		<band height="30">
-			<printWhenExpression><![CDATA[$F{recurringFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{invoice/recurringFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
 			<staticText>
 				<reportElement x="0" y="5" width="380" height="20"/>
 				<textElement verticalAlignment="Middle">
@@ -99,21 +99,21 @@
 			</staticText>
 		</band>
 		<band height="23">
-			<printWhenExpression><![CDATA[$F{recurringFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{invoice/recurringFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{recurringFeatureChargeLineItems/lineItems})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{invoice/recurringFeatureChargeLineItems/lineItems})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.financial.billing.print.ProductCharge")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="33">
-			<printWhenExpression><![CDATA[$F{recurringFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{invoice/recurringFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
 			<textField>
 				<reportElement x="280" y="8" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{recurringFeatureCharges}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/recurringFeatureCharges}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="8" width="281" height="20"/>
@@ -130,7 +130,7 @@
 			</line>
 		</band>
 		<band height="30">
-			<printWhenExpression><![CDATA[$F{onetimeFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{invoice/onetimeFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
 			<staticText>
 				<reportElement x="0" y="5" width="380" height="20"/>
 				<textElement verticalAlignment="Middle">
@@ -140,21 +140,21 @@
 			</staticText>
 		</band>
 		<band height="23">
-			<printWhenExpression><![CDATA[$F{onetimeFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{invoice/onetimeFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
-				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{onetimeFeatureChargeLineItems/lineItems})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{invoice/onetimeFeatureChargeLineItems/lineItems})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.financial.billing.print.ProductCharge")]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="33">
-			<printWhenExpression><![CDATA[$F{onetimeFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{invoice/onetimeFeatureChargeLineItems/lineItems}.size()>0]]></printWhenExpression>
 			<textField>
 				<reportElement x="280" y="8" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{oneTimeFeatureCharges}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/oneTimeFeatureCharges}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="8" width="281" height="20"/>
@@ -199,7 +199,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{depositRefundAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/depositRefundAmount}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="320" y="3" width="60" height="1"/>
@@ -230,7 +230,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{immediateAdjustments}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/immediateAdjustments}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="9" width="281" height="20"/>
@@ -268,7 +268,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{immediateAdjustments}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/immediateAdjustments}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="9" width="281" height="20"/>
@@ -306,7 +306,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{immediateAdjustments}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/immediateAdjustments}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="9" width="281" height="20"/>
@@ -348,7 +348,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{taxes}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/taxes}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="317" y="4" width="60" height="1"/>
@@ -361,7 +361,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{totalDueAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{invoice/totalDueAmount}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="53" width="380" height="1" forecolor="#AFAAAA"/>
@@ -371,7 +371,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{currentAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{invoice/currentAmount}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

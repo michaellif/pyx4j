@@ -36,7 +36,6 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.financial.billing.BillingTestUtils;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.SysDateManager;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
@@ -147,7 +146,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected static void setSysDate(String dateStr) {
-        SysDateManager.setSysDate(BillingTestUtils.getDate(dateStr));
+        SysDateManager.setSysDate(FinancialTestsUtils.getDate(dateStr));
 
         if (dateStr == null) {
             Persistence.service().setTransactionSystemTime(new Date());
@@ -159,8 +158,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected void setLeaseConditions(String leaseDateFrom, String leaseDateTo, Integer billingPeriodStartDate) {
         Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
 
-        lease.leaseFrom().setValue(BillingTestUtils.getDate(leaseDateFrom));
-        lease.leaseTo().setValue(BillingTestUtils.getDate(leaseDateTo));
+        lease.leaseFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
+        lease.leaseTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
 
         lease.billingAccount().billingPeriodStartDate().setValue(billingPeriodStartDate);
 
@@ -216,8 +215,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         BillableItem billableItem = findBillableItem(billableItemId, lease);
 
-        billableItem.effectiveDate().setValue(BillingTestUtils.getDate(effectiveDate));
-        billableItem.expirationDate().setValue(BillingTestUtils.getDate(expirationDate));
+        billableItem.effectiveDate().setValue(FinancialTestsUtils.getDate(effectiveDate));
+        billableItem.expirationDate().setValue(FinancialTestsUtils.getDate(expirationDate));
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(lease);
@@ -230,7 +229,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private BillableItem addBillableItem(Feature.Type featureType, String effectiveDate, String expirationDate) {
-        return addBillableItem(featureType, BillingTestUtils.getDate(effectiveDate), BillingTestUtils.getDate(expirationDate));
+        return addBillableItem(featureType, FinancialTestsUtils.getDate(effectiveDate), FinancialTestsUtils.getDate(expirationDate));
     }
 
     private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
@@ -281,8 +280,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ExecutionType termType,
             String effectiveDate, String expirationDate) {
-        return addBillableItemAdjustment(billableItemId, value, adjustmentType, termType, BillingTestUtils.getDate(effectiveDate),
-                BillingTestUtils.getDate(expirationDate));
+        return addBillableItemAdjustment(billableItemId, value, adjustmentType, termType, FinancialTestsUtils.getDate(effectiveDate),
+                FinancialTestsUtils.getDate(expirationDate));
     }
 
     private BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ExecutionType executionType,
@@ -315,7 +314,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected LeaseAdjustment addGoodWillAdjustment(String amount, String effectiveDate, boolean immediate) {
         return addLeaseAdjustment(amount, leaseAdjustmentReasonDataModel.getReason(LeaseAdjustmentReasonDataModel.Reason.goodWill),
-                BillingTestUtils.getDate(effectiveDate), immediate);
+                FinancialTestsUtils.getDate(effectiveDate), immediate);
     }
 
     private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason, LogicalDate effectiveDate, boolean immediate) {
@@ -351,7 +350,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
-        paymentRecord.receivedDate().setValue(BillingTestUtils.getDate(receivedDate));
+        paymentRecord.receivedDate().setValue(FinancialTestsUtils.getDate(receivedDate));
         paymentRecord.amount().setValue(new BigDecimal(amount));
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
 

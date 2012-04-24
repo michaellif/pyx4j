@@ -67,27 +67,27 @@ public class BillEditorForm extends CrmEntityForm<BillDTO> {
         main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 15).build());
 
         main.setH1(++row, 0, 2, i18n.tr("Last Bill"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().previousBalanceAmount()), 10).build());
-        main.setWidget(++row, 0, inject(proto().paymentLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, inject(proto().immediateAdjustmentLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().invoice().previousBalanceAmount()), 10).build());
+        main.setWidget(++row, 0, inject(proto().invoice().paymentLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().invoice().depositRefundLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().invoice().immediateAdjustmentLineItems(), new InvoiceLineItemViewer()));
 
         main.setH1(++row, 0, 2, i18n.tr("Current Bill"));
-        main.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, inject(proto().pendingAdjustmentLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().invoice().serviceChargeLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().invoice().recurringFeatureChargeLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().invoice().onetimeFeatureChargeLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().invoice().pendingAdjustmentLineItems(), new InvoiceLineItemViewer()));
 
-        main.setWidget(++row, 0, inject(proto().depositLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credits()), 10).build());
+        main.setWidget(++row, 0, inject(proto().invoice().depositLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().invoice().credits()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().invoice().currentAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().invoice().taxes()), 10).build());
 
         // Dues: 
         main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount()), 10).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().pastDueAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().invoice().totalDueAmount()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().invoice().pastDueAmount()), 10).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

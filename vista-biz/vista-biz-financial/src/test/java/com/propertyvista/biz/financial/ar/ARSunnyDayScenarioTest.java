@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentTy
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
+public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
     private long startTime;
 
@@ -43,7 +43,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         super.tearDown();
     }
 
-    public void testSequentialBillingRun() {
+    public void testScenario() {
 
         setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1);
         addServiceAdjustment("-25", AdjustmentType.monetary, ExecutionType.inLease);
@@ -77,6 +77,8 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         receiveAndPostPayment("19-Mar-2011", "1067.01");
         receiveAndPostPayment("20-Mar-2011", "100.00");
+        
+        
 
         //==================== RUN 3 ======================//
 

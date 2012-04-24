@@ -44,7 +44,7 @@ public class ARPaymentProcessor extends AbstractProcessor {
 
         Persistence.service().persist(paymentRecord.billingAccount());
 
-        ARInvoiceManager.postInvoiceLineItem(payment);
+        ARFinancialTransactionManager.postInvoiceLineItem(payment);
 
     }
 

@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.financial.billing.Invoice;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 
 class Billing {
@@ -55,11 +56,11 @@ class Billing {
         this.nextPeriodBill = bill;
         if (!bill.previousBill().isNull()) {
             this.currentPeriodBill = bill.previousBill();
-            Persistence.service().retrieve(currentPeriodBill.lineItems());
+            Persistence.service().retrieve(currentPeriodBill.invoice().lineItems());
         }
         if (currentPeriodBill != null && !currentPeriodBill.previousBill().isNull()) {
             this.previousPeriodBill = currentPeriodBill.previousBill();
-            Persistence.service().retrieve(previousPeriodBill.lineItems());
+            Persistence.service().retrieve(previousPeriodBill.invoice().lineItems());
         }
 
         productChargeProcessor = new BillingProductChargeProcessor(this);
@@ -74,15 +75,16 @@ class Billing {
 
     private void run() {
 
+        Invoice invoice = nextPeriodBill.invoice();
         //Set accumulating fields to 0 value
-        nextPeriodBill.paymentReceivedAmount().setValue(new BigDecimal(0));
-        nextPeriodBill.recurringFeatureCharges().setValue(new BigDecimal(0));
-        nextPeriodBill.oneTimeFeatureCharges().setValue(new BigDecimal(0));
-        nextPeriodBill.totalAdjustments().setValue(new BigDecimal(0));
-        nextPeriodBill.immediateAdjustments().setValue(new BigDecimal(0));
-        nextPeriodBill.depositRefundAmount().setValue(new BigDecimal(0));
-        nextPeriodBill.taxes().setValue(new BigDecimal(0));
-        nextPeriodBill.depositAmount().setValue(new BigDecimal(0));
+        invoice.paymentReceivedAmount().setValue(new BigDecimal(0));
+        invoice.recurringFeatureCharges().setValue(new BigDecimal(0));
+        invoice.oneTimeFeatureCharges().setValue(new BigDecimal(0));
+        invoice.totalAdjustments().setValue(new BigDecimal(0));
+        invoice.immediateAdjustments().setValue(new BigDecimal(0));
+        invoice.depositRefundAmount().setValue(new BigDecimal(0));
+        invoice.taxes().setValue(new BigDecimal(0));
+        invoice.depositAmount().setValue(new BigDecimal(0));
 
         getPreviousTotals();
 
@@ -100,23 +102,23 @@ class Billing {
     private void getPreviousTotals() {
         Bill lastBill = BillingLifecycle.getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
         if (lastBill != null) {
-            nextPeriodBill.previousBalanceAmount().setValue(lastBill.totalDueAmount().getValue());
+            nextPeriodBill.invoice().previousBalanceAmount().setValue(lastBill.invoice().totalDueAmount().getValue());
         } else {
-            nextPeriodBill.previousBalanceAmount().setValue(new BigDecimal(0));
+            nextPeriodBill.invoice().previousBalanceAmount().setValue(new BigDecimal(0));
         }
     }
 
     private void calculateTotals() {
-        nextPeriodBill.pastDueAmount().setValue(
-                nextPeriodBill.previousBalanceAmount().getValue().subtract(nextPeriodBill.paymentReceivedAmount().getValue())
-                        .subtract(nextPeriodBill.immediateAdjustments().getValue()).subtract(nextPeriodBill.depositRefundAmount().getValue()));
+        Invoice invoice = nextPeriodBill.invoice();
+        invoice.pastDueAmount().setValue(
+                invoice.previousBalanceAmount().getValue().subtract(invoice.paymentReceivedAmount().getValue())
+                        .subtract(invoice.immediateAdjustments().getValue()).subtract(invoice.depositRefundAmount().getValue()));
 
-        nextPeriodBill.currentAmount().setValue(
-                nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.serviceCharge().getValue())
-                        .add(nextPeriodBill.recurringFeatureCharges().getValue()).add(nextPeriodBill.oneTimeFeatureCharges().getValue())
-                        .add(nextPeriodBill.totalAdjustments().getValue()).add(nextPeriodBill.depositAmount().getValue()));
+        invoice.currentAmount().setValue(
+                invoice.pastDueAmount().getValue().add(invoice.serviceCharge().getValue()).add(invoice.recurringFeatureCharges().getValue())
+                        .add(invoice.oneTimeFeatureCharges().getValue()).add(invoice.totalAdjustments().getValue()).add(invoice.depositAmount().getValue()));
 
-        nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue()));
+        invoice.totalDueAmount().setValue(invoice.currentAmount().getValue().add(invoice.taxes().getValue()));
     }
 
     public Bill getNextPeriodBill() {
