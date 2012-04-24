@@ -361,6 +361,10 @@ public class TableModelCollections {
             }
             while (rs.next()) {
                 Object value = member.getValueAdapter().retrieveValue(rs, member.sqlValueName());
+                if ((value == null) && (type != ObjectClassType.PrimitiveSet)) {
+                    log.error("Entity {} is null", member.getMember(entity).getPath());
+                    throw new Error("Collection data retrival error " + member.getMember(entity).getPath());
+                }
                 collectionMember.add(value);
             }
 
