@@ -50,7 +50,18 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public void createLease(Lease lease) {
-        lease.version().status().setValue(Lease.Status.Created);
+        // let client supply initial status value:
+        if (lease.version().status().isNull()) {
+            lease.version().status().setValue(Lease.Status.Created);
+        } else {
+            switch (lease.version().status().getValue()) {
+            case Created:
+            case ApplicationInProgress:
+                break; // ok, allowed values...
+            default:
+                lease.version().status().setValue(Lease.Status.Created);
+            }
+        }
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         // Create Application by default

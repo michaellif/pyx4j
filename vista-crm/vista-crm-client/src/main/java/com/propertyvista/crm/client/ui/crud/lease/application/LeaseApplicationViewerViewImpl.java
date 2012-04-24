@@ -260,7 +260,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
 
         // set buttons state:
         if (!value.unit().isNull()) {
-            onlineApplication.setVisible(status.isDraft() && status != Status.OnlineApplicationInProgress);
+            onlineApplication.setVisible(status == Status.Created);
             inviteAction.setVisible(status == Status.OnlineApplicationInProgress);
             checkAction.setVisible(status.isDraft());
             approveAction.setVisible(status.isDraft());

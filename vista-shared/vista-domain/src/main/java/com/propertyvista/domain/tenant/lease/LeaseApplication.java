@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import java.util.Collection;
 import java.util.EnumSet;
 
 import javax.xml.bind.annotation.XmlType;
@@ -57,15 +58,15 @@ public interface LeaseApplication extends IEntity {
 
         // state sets:
 
-        public static EnumSet<Status> draft() {
+        public static Collection<Status> draft() {
             return EnumSet.of(Created, OnlineApplicationInProgress, PendingDecision);
         }
 
-        public static EnumSet<Status> current() {
+        public static Collection<Status> current() {
             return EnumSet.of(Approved);
         }
 
-        public static EnumSet<Status> former() {
+        public static Collection<Status> former() {
             return EnumSet.of(Approved, Declined, Cancelled);
         }
 
