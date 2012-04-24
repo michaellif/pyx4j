@@ -46,7 +46,7 @@ public class ApplicationManager {
             application.status().setValue(OnlineApplication.Status.Submitted);
             Persistence.service().persist(application);
 
-            CustomerUser user = application.user();
+            CustomerUser user = application.customer().user();
             CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, user.getPrimaryKey());
             boolean isApplicant = false;
             boolean isCoApplicant = false;
@@ -131,7 +131,7 @@ public class ApplicationManager {
         OnlineApplication application = null;
         for (OnlineApplication app : ma.applications()) {
             Persistence.service().retrieve(app);
-            if (app.user().equals(user)) {
+            if (app.customer().user().equals(user)) {
                 application = app;
             }
         }
@@ -143,14 +143,14 @@ public class ApplicationManager {
             application.lease().set(ma.lease());
             //application.status().setValue(OnlineMasterApplication.Status.Created);
             //application.steps().addAll(ApplicationManager.createApplicationProgress(application, tenant, behaviour));
-            application.user().set(ensureProspectiveTenantUser(user, person, behaviour));
+            application.customer().user().set(ensureProspectiveTenantUser(user, person, behaviour));
 
             Persistence.service().persist(application);
             ma.applications().add(application);
             Persistence.service().persist(ma);
         }
-        if (application.user().isValueDetached()) {
-            Persistence.service().retrieve(application.user());
+        if (application.customer().user().isValueDetached()) {
+            Persistence.service().retrieve(application.customer().user());
         }
         if (application.lease().isValueDetached()) {
             Persistence.service().retrieve(application.lease());

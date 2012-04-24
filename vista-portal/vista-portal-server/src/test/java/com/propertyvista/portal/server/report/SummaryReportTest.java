@@ -74,7 +74,7 @@ public class SummaryReportTest extends ReportsTestBase {
         Assert.assertNotNull("devUser " + DemoData.UserType.PTENANT.getEmail(0), devUser);
 
         EntityQueryCriteria<OnlineApplication> applicationCriteria = EntityQueryCriteria.create(OnlineApplication.class);
-        applicationCriteria.add(PropertyCriterion.eq(applicationCriteria.proto().user(), devUser));
+        applicationCriteria.add(PropertyCriterion.eq(applicationCriteria.proto().customer().user(), devUser));
         OnlineApplication application = Persistence.service().retrieve(applicationCriteria);
         Assert.assertNotNull("devUser application", application);
 

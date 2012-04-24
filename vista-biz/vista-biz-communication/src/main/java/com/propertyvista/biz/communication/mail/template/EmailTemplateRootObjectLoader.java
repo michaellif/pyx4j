@@ -203,7 +203,7 @@ public class EmailTemplateRootObjectLoader {
             throw new Error("Context cannot be null");
         }
         EntityQueryCriteria<OnlineApplication> appSearch = EntityQueryCriteria.create(OnlineApplication.class);
-        appSearch.add(PropertyCriterion.eq(appSearch.proto().user(), user));
+        appSearch.add(PropertyCriterion.eq(appSearch.proto().customer().user(), user));
         appSearch.add(PropertyCriterion.eq(appSearch.proto().lease(), lease));
         OnlineApplication app = Persistence.service().retrieve(appSearch);
         if (app == null || app.isNull()) {

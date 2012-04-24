@@ -17,7 +17,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -29,7 +28,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -66,13 +64,6 @@ public interface OnlineApplication extends IEntity {
     @NotNull
     @ReadOnly
     Customer customer();
-
-    @NotNull
-    @ReadOnly
-    @Detached
-    @MemberColumn(name = "user_id")
-    @Deprecated
-    CustomerUser user();
 
     @Detached
     @Versioned
