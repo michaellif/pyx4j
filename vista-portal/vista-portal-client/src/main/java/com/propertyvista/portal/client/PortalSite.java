@@ -46,8 +46,6 @@ public class PortalSite extends VistaSite {
 
     public static final String RESIDENT_INSERTION_ID = "vista.resident";
 
-    public static final String RESIDENT_TEST_INSERTION_ID = "vista.resident.test";
-
     public PortalSite() {
         super("vista-portal", PortalSiteMap.class, new PortalSiteDispatcher());
     }
@@ -62,11 +60,8 @@ public class PortalSite extends VistaSite {
 
         if (RootPanel.get(RESIDENT_INSERTION_ID) != null) {
             RootPanel.get(RESIDENT_INSERTION_ID).add(new PortalScreen());
-        } else if (RootPanel.get(RESIDENT_TEST_INSERTION_ID) != null) {
-            RootPanel.get(RESIDENT_TEST_INSERTION_ID).add(new PortalScreen());
         } else {
             RootPanel.get().add(new PortalScreen());
-
         }
 
         hideLoadingIndicator();
