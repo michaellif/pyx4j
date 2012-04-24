@@ -105,7 +105,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     @Override
     @IgnoreSessionToken
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String sessionToken) {
-        if (!SecurityController.checkBehavior(getApplicationBehavior())) {
+        if (!isSessionValid()) {
             Lifecycle.endSession();
         }
         super.authenticate(callback, clientSystemInfo, sessionToken);
