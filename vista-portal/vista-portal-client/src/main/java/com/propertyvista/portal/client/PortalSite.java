@@ -23,6 +23,7 @@ import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
@@ -48,7 +49,7 @@ public class PortalSite extends VistaSite {
     public static final String RESIDENT_TEST_INSERTION_ID = "vista.resident.test";
 
     public PortalSite() {
-        super("vista-portal", PortalSiteMap.class);
+        super("vista-portal", PortalSiteMap.class, new PortalSiteDispatcher());
     }
 
     @Override
@@ -57,14 +58,13 @@ public class PortalSite extends VistaSite {
 
         UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
 
+        getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
+
         if (RootPanel.get(RESIDENT_INSERTION_ID) != null) {
-            getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Residents());
             RootPanel.get(RESIDENT_INSERTION_ID).add(new PortalScreen());
         } else if (RootPanel.get(RESIDENT_TEST_INSERTION_ID) != null) {
-            getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Landing());
             RootPanel.get(RESIDENT_TEST_INSERTION_ID).add(new PortalScreen());
         } else {
-            getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Landing());
             RootPanel.get().add(new PortalScreen());
 
         }
