@@ -27,6 +27,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -38,7 +39,6 @@ import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
-import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -61,8 +61,8 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
             dto.tenantFinancials().add(createTenantFinancialDTO(tr));
         }
 
-        Persistence.service().retrieve(dto.leaseApplication().onlineApplication());
-        dto.masterApplicationStatus().set(ApplicationManager.calculateStatus(dto.leaseApplication().onlineApplication()));
+        dto.masterApplicationStatus().set(
+                ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(dto.leaseApplication().onlineApplication()));
     }
 
     @Override

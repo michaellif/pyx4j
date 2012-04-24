@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -39,6 +40,8 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.dto.MasterOnlineApplicationOnlineStatusDTO;
+import com.propertyvista.dto.OnlineApplicationStatusDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
@@ -153,6 +156,69 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     }
 
+    @Override
+    public MasterOnlineApplicationOnlineStatusDTO calculateOnlineApplicationStatus(MasterOnlineApplication ma) {
+        if (ma == null) {
+            return null;
+        }
+
+        if (ma.isValueDetached()) {
+            Persistence.service().retrieve(ma);
+        }
+
+        MasterOnlineApplicationOnlineStatusDTO maStatus = EntityFactory.create(MasterOnlineApplicationOnlineStatusDTO.class);
+        double progressSum = 0.0;
+
+        for (OnlineApplication app : ma.applications()) {
+            if (app.isValueDetached()) {
+                Persistence.service().retrieve(app);
+            }
+
+            OnlineApplicationStatusDTO status = EntityFactory.create(OnlineApplicationStatusDTO.class);
+            status.status().setValue(app.status().getValue());
+
+            status.person().set(app.customer().person().name());
+
+//            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+//            criteria.add(PropertyCriterion.eq(criteria.proto().customer(), app.customer()));
+//            Tenant tenant = Persistence.service().retrieve(criteria);
+//            if (tenant != null) {
+//                status.role().setValue(Role.Tenant);
+//            } else if (app.customer().getInstanceValueClass().equals(Guarantor.class)) {
+//                status.role().setValue(Role.Tenant);
+//            } else {
+//                throw new Error("Incorrect customer type!");
+//            }
+
+            // calculate progress:
+            status.progress().setValue(0d);
+            if (!status.person().isEmpty()) {
+                int complete = 0;
+                for (int i = 0; i < app.steps().size(); ++i) {
+                    switch (app.steps().get(i).status().getValue()) {
+                    case complete:
+                        ++complete;
+                    case latest:
+                        if (i + 1 == app.steps().size()) {
+                            ++complete; // count last 'Completion' step...
+                        }
+                        break;
+                    }
+                }
+
+                status.progress().setValue(1.0 * complete / app.steps().size() * 100.0);
+                status.description().setValue(SimpleMessageFormat.format("{0} out of {1} steps completed", complete, app.steps().size()));
+
+                maStatus.individualApplications().add(status);
+            }
+
+            progressSum += status.progress().getValue();
+        }
+
+        maStatus.progress().setValue(progressSum / ma.applications().size());
+        return maStatus;
+    }
+
     // implementation internals
 
     private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {
@@ -219,5 +285,4 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     private static boolean isTenantInSplitCharge(Tenant tenant) {
         return !(tenant.percentage().isNull() || tenant.percentage().getValue() == 0);
     }
-
 }

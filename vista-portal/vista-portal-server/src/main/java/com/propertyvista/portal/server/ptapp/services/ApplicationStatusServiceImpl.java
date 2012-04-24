@@ -18,17 +18,18 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationStatusSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.steps.SummaryServiceImpl;
-import com.propertyvista.server.common.ptapp.ApplicationManager;
 
 public class ApplicationStatusServiceImpl extends ApplicationEntityServiceImpl implements ApplicationStatusService {
 
@@ -49,7 +50,7 @@ public class ApplicationStatusServiceImpl extends ApplicationEntityServiceImpl i
 
         // fill status data:
         ApplicationStatusSummaryDTO applicationStatusSummary = EntityFactory.create(ApplicationStatusSummaryDTO.class);
-        applicationStatusSummary.status().set(ApplicationManager.calculateStatus(ma));
+        applicationStatusSummary.status().set(ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(ma));
 
         // fill summary data:
         applicationStatusSummary.summary().set(new SummaryServiceImpl().retrieveData());

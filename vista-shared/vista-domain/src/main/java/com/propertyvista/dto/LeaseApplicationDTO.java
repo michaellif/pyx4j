@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 @ExtendsDBO(Lease.class)
 public interface LeaseApplicationDTO extends LeaseDTO {
 
-    OnlineMasterApplicationStatusDTO masterApplicationStatus();
+    MasterOnlineApplicationOnlineStatusDTO masterApplicationStatus();
 
     IList<TenantFinancialDTO> tenantFinancials();
 

@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface OnlineMasterApplicationStatusDTO extends IEntity {
+public interface MasterOnlineApplicationOnlineStatusDTO extends IEntity {
 
     IList<OnlineApplicationStatusDTO> individualApplications();
 

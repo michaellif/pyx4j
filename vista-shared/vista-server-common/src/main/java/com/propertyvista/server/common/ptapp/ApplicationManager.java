@@ -13,13 +13,10 @@
  */
 package com.propertyvista.server.common.ptapp;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
@@ -29,14 +26,10 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.dto.OnlineApplicationStatusDTO;
-import com.propertyvista.dto.OnlineApplicationStatusDTO.Role;
-import com.propertyvista.dto.OnlineMasterApplicationStatusDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
@@ -180,67 +173,6 @@ public class ApplicationManager {
         application.status().setValue(OnlineApplication.Status.Invited);
         Persistence.service().persist(application);
         return application;
-    }
-
-    public static OnlineMasterApplicationStatusDTO calculateStatus(MasterOnlineApplication ma) {
-        OnlineMasterApplicationStatusDTO maStatus = EntityFactory.create(OnlineMasterApplicationStatusDTO.class);
-
-        double progressSum = 0.0;
-
-        for (OnlineApplication app : ma.applications()) {
-            if (app.isValueDetached()) {
-                Persistence.service().retrieve(app);
-            }
-
-            OnlineApplicationStatusDTO status = EntityFactory.create(OnlineApplicationStatusDTO.class);
-            status.progress().setValue(0d);
-
-            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), app.user()));
-            Customer tenant = Persistence.service().retrieve(criteria);
-            if (tenant != null) {
-                status.person().set(tenant.person().name());
-                status.role().setValue(Role.Tenant);
-            } else {
-// TODO rethink!
-//                EntityQueryCriteria<PersonGuarantor> criteria1 = EntityQueryCriteria.create(PersonGuarantor.class);
-//                criteria1.add(PropertyCriterion.eq(criteria1.proto().guarantor().user(), app.user()));
-//                PersonGuarantor guarantor = Persistence.service().retrieve(criteria1);
-//                if (guarantor != null) {
-//                    status.person().set(guarantor.guarantor().customer().person().name());
-//                    status.role().setValue(Role.Guarantor);
-//                }
-            }
-
-            //status.status().setValue(app.status().getValue());
-            status.user().set(app.user());
-
-            // calculate progress:
-            if (!status.person().isEmpty()) {
-                int complete = 0;
-                for (int i = 0; i < app.steps().size(); ++i) {
-                    switch (app.steps().get(i).status().getValue()) {
-                    case complete:
-                        ++complete;
-                    case latest:
-                        if (i + 1 == app.steps().size()) {
-                            ++complete; // count last 'Completion' step...
-                        }
-                        break;
-                    }
-                }
-
-                status.progress().setValue(1.0 * complete / app.steps().size() * 100.0);
-                status.description().setValue(SimpleMessageFormat.format("{0} out of {1} steps completed", complete, app.steps().size()));
-
-                maStatus.individualApplications().add(status);
-            }
-
-            progressSum += status.progress().getValue();
-        }
-
-        maStatus.progress().setValue(progressSum / ma.applications().size());
-        return maStatus;
     }
 
     // internals:

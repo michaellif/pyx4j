@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication.Status;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication.Status;
 
 @Transient
 public interface OnlineApplicationStatusDTO extends IEntity {

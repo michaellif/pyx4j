@@ -34,6 +34,8 @@ import com.propertyvista.dto.TenantInfoDTO;
 
 public class LeaseApplicationEditorForm extends LeaseEditorFormBase<LeaseApplicationDTO> {
 
+    private Widget onlineStatusTab;
+
     public LeaseApplicationEditorForm() {
         this(false);
     }
@@ -55,11 +57,17 @@ public class LeaseApplicationEditorForm extends LeaseEditorFormBase<LeaseApplica
 // TODO: should be hidden until back end implementation:   
 //      tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
 //        tabPanel.setLastTabDisabled(true);
-        tabPanel.add(createAppStatustab(), i18n.tr("Online Status Details"));
+        tabPanel.add(onlineStatusTab = createOnlineStatusTab(), i18n.tr("Online Status Details"));
         tabPanel.setLastTabDisabled(isEditable());
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+        tabPanel.setTabDisabled(onlineStatusTab, getValue().leaseApplication().onlineApplication().isNull());
     }
 
     private Widget createInfoTab() {
@@ -126,7 +134,7 @@ public class LeaseApplicationEditorForm extends LeaseEditorFormBase<LeaseApplica
         return new CrmScrollPanel(main);
     }
 
-    private Widget createAppStatustab() {
+    private Widget createOnlineStatusTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;

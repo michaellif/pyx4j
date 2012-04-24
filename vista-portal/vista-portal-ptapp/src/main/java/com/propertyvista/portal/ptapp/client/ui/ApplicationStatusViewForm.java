@@ -19,12 +19,12 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.ApplicationStatusFolder;
-import com.propertyvista.dto.OnlineMasterApplicationStatusDTO;
+import com.propertyvista.dto.MasterOnlineApplicationOnlineStatusDTO;
 
-public class ApplicationStatusViewForm extends CEntityDecoratableEditor<OnlineMasterApplicationStatusDTO> {
+public class ApplicationStatusViewForm extends CEntityDecoratableEditor<MasterOnlineApplicationOnlineStatusDTO> {
 
     public ApplicationStatusViewForm() {
-        super(OnlineMasterApplicationStatusDTO.class);
+        super(MasterOnlineApplicationOnlineStatusDTO.class);
         setViewable(true);
     }
 
