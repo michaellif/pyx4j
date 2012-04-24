@@ -77,6 +77,13 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
     }
 
     @Override
+    public void activate(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        ServerSideFactory.create(LeaseFacade.class).activate(entityId);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
     public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users, EmailTemplateType emailType) {
         Lease lease = Persistence.service().retrieve(dboClass, entityId.asDraftKey());
         if ((lease == null) || (lease.isNull())) {

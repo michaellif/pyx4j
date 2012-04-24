@@ -166,6 +166,16 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
+    public void activate() {
+        ((LeaseCrudService) service).activate(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, entityId);
+    }
+
+    @Override
     public void sendMail(List<ApplicationUserDTO> users, EmailTemplateType emailType) {
         ((LeaseCrudService) service).sendMail(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
@@ -174,5 +184,4 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             }
         }, entityId, new Vector<ApplicationUserDTO>(users), emailType);
     }
-
 }

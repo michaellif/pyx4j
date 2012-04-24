@@ -74,6 +74,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     private final Button cancelEvict;
 
+    private final Button activate;
+
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
         enableVersioning(Lease.LeaseV.class, GWT.<LeaseVersionService> create(LeaseVersionService.class));
@@ -152,13 +154,20 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         addHeaderToolbarTwoItem(evict.asWidget());
 
         cancelEvict = new Button(i18n.tr("Cancel Evict"), new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
                 ((LeaseViewerView.Presenter) presenter).cancelEvict();
             }
         });
         addHeaderToolbarTwoItem(cancelEvict.asWidget());
+
+        activate = new Button(i18n.tr("Activate"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((LeaseViewerView.Presenter) presenter).activate();
+            }
+        });
+        addHeaderToolbarTwoItem(activate.asWidget());
     }
 
     @Override
@@ -169,6 +178,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         cancelNotice.setVisible(false);
         evict.setVisible(false);
         cancelEvict.setVisible(false);
+        activate.setVisible(false);
         super.reset();
     }
 
@@ -188,6 +198,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
             evict.setVisible(status == Status.Active && completion == null);
             cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
+            activate.setVisible(status == Status.Created);
         }
 
         // disable editing for completed/closed leases:

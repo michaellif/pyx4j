@@ -44,6 +44,8 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
         void cancelEvict();
 
+        void activate();
+
         void sendMail(List<ApplicationUserDTO> users, EmailTemplateType emailType);
 
     }
