@@ -84,10 +84,13 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
     }
 
     @Override
-    public void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users, EmailTemplateType emailType) {
+    public void sendMail(AsyncCallback<String> callback, Key entityId, Vector<ApplicationUserDTO> users, EmailTemplateType emailType) {
         Lease lease = Persistence.service().retrieve(dboClass, entityId.asDraftKey());
         if ((lease == null) || (lease.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
+        }
+        if (users.isEmpty()) {
+            throw new UserRuntimeException(i18n.tr("No customer was selected to send email"));
         }
 
         MasterOnlineApplication app = lease.leaseApplication().onlineApplication();
@@ -123,6 +126,9 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
         }
 
         Persistence.service().commit();
-        callback.onSuccess(null);
+
+        String message = users.size() > 1 ? i18n.tr("Emails were sent successfully") : i18n.tr("Email was sent successfully");
+
+        callback.onSuccess(message);
     }
 }

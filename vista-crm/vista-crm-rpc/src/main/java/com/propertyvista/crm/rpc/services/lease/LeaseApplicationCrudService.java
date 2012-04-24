@@ -28,7 +28,10 @@ public interface LeaseApplicationCrudService extends LeaseCrudServiceBase<LeaseA
 
     void startOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 
-    void inviteUsers(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users);
+    /**
+     * callback returns a message that should be passed to the users.
+     */
+    void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<ApplicationUserDTO> users);
 
     void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO);
 }

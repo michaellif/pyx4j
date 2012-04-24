@@ -37,7 +37,10 @@ public interface LeaseCrudService extends LeaseCrudServiceBase<LeaseDTO> {
 
     void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId);
 
-    void activate(AsyncCallback<VoidSerializable> callback, Key entityId);
+    /**
+     * <code>callback</code> returns a message that should be display to the users (i.e. e-mails were send successfully);
+     */
+    void sendMail(AsyncCallback<String> callback, Key entityId, Vector<ApplicationUserDTO> users, EmailTemplateType emailType);
 
-    void sendMail(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users, EmailTemplateType emailType);
+    void activate(AsyncCallback<VoidSerializable> callback, Key entityId);
 }

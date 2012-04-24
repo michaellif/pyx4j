@@ -96,8 +96,11 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
     }
 
     @Override
-    public void inviteUsers(AsyncCallback<VoidSerializable> callback, Key entityId, Vector<ApplicationUserDTO> users) {
+    public void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<ApplicationUserDTO> users) {
         CommunicationFacade commFacade = ServerSideFactory.create(CommunicationFacade.class);
+        if (users.isEmpty()) {
+            throw new UserRuntimeException(i18n.tr("No users to send invitation"));
+        }
 
         // check that we can send the e-mail before we actually try to send email
         for (ApplicationUserDTO user : users) {
@@ -132,7 +135,9 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
         }
 
         Persistence.service().commit();
-        callback.onSuccess(null);
+
+        String successMessage = users.size() > 1 ? i18n.tr("Invitations were sent successfully") : i18n.tr("Invitation was sent successfully");
+        callback.onSuccess(successMessage);
     }
 
     @Override

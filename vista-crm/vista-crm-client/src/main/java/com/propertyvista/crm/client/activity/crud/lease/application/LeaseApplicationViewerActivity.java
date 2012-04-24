@@ -23,6 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
@@ -56,10 +57,11 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     @Override
     public void inviteUsers(List<ApplicationUserDTO> users) {
-        ((LeaseApplicationCrudService) service).inviteUsers(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseApplicationCrudService) service).inviteUsers(new DefaultAsyncCallback<String>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
+            public void onSuccess(String message) {
                 populate();
+                MessageDialog.info(message);
             }
         }, entityId, new Vector<ApplicationUserDTO>(users));
     }
