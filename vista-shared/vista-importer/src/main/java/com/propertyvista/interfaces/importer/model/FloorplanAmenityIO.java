@@ -14,34 +14,14 @@
 package com.propertyvista.interfaces.importer.model;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
+
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface FloorplanIO extends IEntity {
+public interface FloorplanAmenityIO extends AmenityIO {
 
-    IPrimitive<String> name();
-
-    IPrimitive<String> marketingName();
-
-    IPrimitive<String> description();
-
-    IPrimitive<Integer> floorCount();
-
-    IPrimitive<Integer> bedrooms();
-
-    IPrimitive<Integer> dens();
-
-    IPrimitive<Integer> bathrooms();
-
-    IPrimitive<Integer> halfBath();
-
-    IList<FloorplanAmenityIO> amenities();
-
-    IList<MediaIO> medias();
-
-    IList<AptUnitIO> units();
+    IPrimitive<FloorplanAmenity.Type> type();
 }

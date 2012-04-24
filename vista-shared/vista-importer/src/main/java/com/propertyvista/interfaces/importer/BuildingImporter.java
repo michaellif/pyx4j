@@ -34,10 +34,10 @@ import com.propertyvista.interfaces.importer.converter.AptUnitConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanAmenityConverter;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.converter.MediaConverter;
-import com.propertyvista.interfaces.importer.model.AmenityIO;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.AptUnitOccupancyIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
+import com.propertyvista.interfaces.importer.model.FloorplanAmenityIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
@@ -163,7 +163,7 @@ public class BuildingImporter extends ImportPersister {
                 //FloorplanAmenity
                 {
                     List<FloorplanAmenity> items = new Vector<FloorplanAmenity>();
-                    for (AmenityIO iIO : floorplanIO.amenities()) {
+                    for (FloorplanAmenityIO iIO : floorplanIO.amenities()) {
                         FloorplanAmenity i = new FloorplanAmenityConverter().createDBO(iIO);
                         i.belongsTo().set(floorplan);
                         items.add(i);

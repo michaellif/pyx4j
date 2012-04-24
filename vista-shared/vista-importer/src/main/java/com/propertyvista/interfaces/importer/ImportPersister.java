@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -40,7 +40,7 @@ import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.converter.MediaConverter;
 import com.propertyvista.interfaces.importer.converter.ParkingConverter;
-import com.propertyvista.interfaces.importer.model.AmenityIO;
+import com.propertyvista.interfaces.importer.model.BuildingAmenityIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
@@ -121,7 +121,7 @@ class ImportPersister {
         //BuildingAmenity
         {
             List<BuildingAmenity> items = new Vector<BuildingAmenity>();
-            for (AmenityIO iIO : buildingIO.amenities()) {
+            for (BuildingAmenityIO iIO : buildingIO.amenities()) {
                 BuildingAmenity i = new BuildingAmenityConverter().createDBO(iIO);
                 i.belongsTo().set(building);
                 items.add(i);
