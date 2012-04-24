@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.ptapp;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
@@ -26,6 +28,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.tenant.Customer;
@@ -54,6 +57,23 @@ public interface OnlineApplication extends IEntity {
         }
     }
 
+    @I18n
+    @XmlType(name = "CustomerRole")
+    public static enum Role implements Serializable {
+
+        Applicant,
+
+        @Translate("Co-Applicant")
+        CoApplicant,
+
+        Guarantor;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
     @Owner
     @NotNull
     @ReadOnly
@@ -64,6 +84,10 @@ public interface OnlineApplication extends IEntity {
     @NotNull
     @ReadOnly
     Customer customer();
+
+    @NotNull
+    @ReadOnly
+    IPrimitive<Role> role();
 
     @Detached
     @Versioned

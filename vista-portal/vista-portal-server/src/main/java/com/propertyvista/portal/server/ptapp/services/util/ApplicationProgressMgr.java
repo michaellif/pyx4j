@@ -39,9 +39,8 @@ import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.server.common.ptapp.ApplicationManager;
 
-public class ApplicationProgressMgr extends ApplicationManager {
+public class ApplicationProgressMgr {
 
     private final static Logger log = LoggerFactory.getLogger(ApplicationProgressMgr.class);
 

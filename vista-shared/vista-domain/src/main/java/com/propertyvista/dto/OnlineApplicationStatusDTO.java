@@ -13,42 +13,20 @@
  */
 package com.propertyvista.dto;
 
-import java.io.Serializable;
-
-import javax.xml.bind.annotation.XmlType;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication.Role;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication.Status;
 
 @Transient
 public interface OnlineApplicationStatusDTO extends IEntity {
 
-    @I18n
-    @XmlType(name = "PersonRole")
-    public static enum Role implements Serializable {
-
-        Tenant,
-
-        Guarantor;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
     IPrimitive<Status> status();
-
-    CustomerUser user();
 
     /**
      * Tenant/Guarantor

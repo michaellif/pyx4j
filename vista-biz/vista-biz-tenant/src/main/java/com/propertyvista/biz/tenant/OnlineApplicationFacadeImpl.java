@@ -36,10 +36,12 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication.Role;
 import com.propertyvista.dto.MasterOnlineApplicationOnlineStatusDTO;
 import com.propertyvista.dto.OnlineApplicationStatusDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -61,25 +63,13 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 if (tenant.customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Primary applicant must have an e-mail to start Online Application."));
                 }
-                createOnlineApplication(masterOnlineApplication, tenant);
+                tenant.application().set(createOnlineApplication(masterOnlineApplication, tenant.customer(), Role.Applicant));
                 ServerSideFactory.create(CommunicationFacade.class).sendApplicantApplicationInvitation(tenant);
+                Persistence.service().persist(tenant);
                 return;
             }
         }
         throw new UserRuntimeException("Main applicant not found");
-    }
-
-    private void createOnlineApplication(MasterOnlineApplication masterOnlineApplication, Tenant tenant) {
-        OnlineApplication app = EntityFactory.create(OnlineApplication.class);
-        app.status().setValue(OnlineApplication.Status.Invited);
-        app.steps().addAll(createApplicantApplicationProgress());
-
-        app.masterOnlineApplication().set(masterOnlineApplication);
-        app.customer().set(tenant.customer());
-        Persistence.service().persist(app);
-
-        tenant.application().set(app);
-        Persistence.service().persist(tenant);
     }
 
     @Override
@@ -146,8 +136,73 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     @Override
     public void submitOnlineApplication(OnlineApplication application) {
-        // TODO Auto-generated method stub
+        if (!VistaTODO.enableWelcomeWizardDemoMode) {
+            application.status().setValue(OnlineApplication.Status.Submitted);
+            Persistence.service().persist(application);
 
+            // TODO: update behaviour somehow: 
+//            CustomerUser user = application.customer().user();
+//            CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, user.getPrimaryKey());
+//            boolean isApplicant = false;
+//            boolean isCoApplicant = false;
+//            boolean isGuarantor = false;
+//
+
+//        boolean isApplicant = credential.behaviors().contains(VistaCustomerBehavior.ProspectiveApplicant);
+//        boolean isCoApplicant = credential.behaviors().contains(VistaCustomerBehavior.ProspectiveCoApplicant);
+//        boolean isGuarantor = credential.behaviors().contains(VistaCustomerBehavior.Guarantor);
+//
+//        credential.behaviors().clear();
+//        credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmitted);
+//        if (isApplicant) {
+//            credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmittedApplicant);
+//        } else if (isGuarantor) {
+//            credential.behaviors().add(VistaCustomerBehavior.GuarantorSubmitted);
+//        } else if (isCoApplicant) {
+//            credential.behaviors().add(VistaCustomerBehavior.ProspectiveSubmittedCoApplicant);
+//        }
+
+//            Persistence.service().persist(credential);
+
+            // TODO call after call to submitOnlineApplication!...
+//            if (Context.isUserLoggedIn() && user.getPrimaryKey().equals(VistaContext.getCurrentUserPrimaryKey())) {
+//                Context.getVisit().setAclRevalidationRequired();
+//                Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
+//            }
+
+            MasterOnlineApplication ma = application.masterOnlineApplication();
+            Persistence.service().retrieve(ma);
+            Persistence.service().retrieve(ma.lease());
+
+            // Invite customers:
+            switch (application.role().getValue()) {
+            case Applicant:
+                inviteCoApplicants(ma.lease());
+                inviteGuarantors(ma.lease(), application.customer());
+                break;
+            case CoApplicant:
+                inviteGuarantors(ma.lease(), application.customer());
+                break;
+            case Guarantor:
+                break;
+            }
+
+            // check application completeness:
+            boolean allApplicationsSubmited = true;
+            Persistence.service().retrieve(ma.applications());
+            for (OnlineApplication app : ma.applications()) {
+                if (app.status().getValue() != OnlineApplication.Status.Submitted) {
+                    allApplicationsSubmited = false;
+                    break;
+                }
+            }
+            if (allApplicationsSubmited) {
+                ma.status().setValue(MasterOnlineApplication.Status.Submitted);
+                Persistence.service().persist(ma);
+                ma.leaseApplication().status().setValue(LeaseApplication.Status.PendingDecision);
+                Persistence.service().persist(ma.leaseApplication());
+            }
+        }
     }
 
     @Override
@@ -178,17 +233,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             status.status().setValue(app.status().getValue());
 
             status.person().set(app.customer().person().name());
-
-//            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-//            criteria.add(PropertyCriterion.eq(criteria.proto().customer(), app.customer()));
-//            Tenant tenant = Persistence.service().retrieve(criteria);
-//            if (tenant != null) {
-//                status.role().setValue(Role.Tenant);
-//            } else if (app.customer().getInstanceValueClass().equals(Guarantor.class)) {
-//                status.role().setValue(Role.Tenant);
-//            } else {
-//                throw new Error("Incorrect customer type!");
-//            }
+            status.role().set(app.role());
 
             // calculate progress:
             status.progress().setValue(0d);
@@ -221,6 +266,46 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     // implementation internals
 
+    private void inviteCoApplicants(Lease lease) {
+        Persistence.service().retrieve(lease.version().tenants());
+        for (Tenant tenant : lease.version().tenants()) {
+            if ((tenant.role().getValue() == Tenant.Role.CoApplicant && (!tenant.takeOwnership().isBooleanTrue()))) {
+                if (tenant.customer().user().isNull()) {
+                    throw new UserRuntimeException(i18n.tr("Co-Applicant must have an e-mail to start Online Application."));
+                }
+                tenant.application().set(createOnlineApplication(lease.leaseApplication().onlineApplication(), tenant.customer(), Role.CoApplicant));
+                ServerSideFactory.create(CommunicationFacade.class).sendCoApplicantApplicationInvitation(tenant);
+                Persistence.service().persist(tenant);
+            }
+        }
+    }
+
+    private void inviteGuarantors(Lease lease, Customer tenant) {
+        Persistence.service().retrieve(lease.version().tenants());
+        for (Guarantor guarantor : lease.version().guarantors()) {
+            if (guarantor.tenant().customer().equals(tenant)) {
+                if (guarantor.customer().user().isNull()) {
+                    throw new UserRuntimeException(i18n.tr("Guarantor must have an e-mail to start Online Application."));
+                }
+                guarantor.application().set(createOnlineApplication(lease.leaseApplication().onlineApplication(), guarantor.customer(), Role.Guarantor));
+                ServerSideFactory.create(CommunicationFacade.class).sendGuarantorApplicationInvitation(guarantor);
+                Persistence.service().persist(guarantor);
+            }
+        }
+    }
+
+    private OnlineApplication createOnlineApplication(MasterOnlineApplication masterOnlineApplication, Customer customer, Role role) {
+        OnlineApplication app = EntityFactory.create(OnlineApplication.class);
+        app.status().setValue(OnlineApplication.Status.Invited);
+        app.steps().addAll(createApplicantApplicationProgress(role));
+
+        app.masterOnlineApplication().set(masterOnlineApplication);
+        app.customer().set(customer);
+        app.role().setValue(role);
+        Persistence.service().persist(app);
+        return app;
+    }
+
     private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {
         ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
         ws.placeId().setValue(AppPlaceInfo.getPlaceId(place));
@@ -228,7 +313,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         return ws;
     }
 
-    private static List<ApplicationWizardStep> createApplicantApplicationProgress() {
+    private static List<ApplicationWizardStep> createApplicantApplicationProgress(Role role) {
         List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
         if (VistaTODO.enableWelcomeWizardDemoMode) {
             for (Class<? extends AppPlace> place : Arrays.<Class<? extends AppPlace>> asList(//@formatter:off

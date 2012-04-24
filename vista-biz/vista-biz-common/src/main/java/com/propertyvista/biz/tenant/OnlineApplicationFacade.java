@@ -24,9 +24,6 @@ import com.propertyvista.dto.MasterOnlineApplicationOnlineStatusDTO;
 
 public interface OnlineApplicationFacade {
 
-    /**
-     * Called by LeaseFacade
-     */
     void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication);
 
     List<OnlineApplication> getOnlineApplications(CustomerUser customerUser);
