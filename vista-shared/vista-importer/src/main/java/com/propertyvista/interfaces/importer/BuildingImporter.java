@@ -194,6 +194,8 @@ public class BuildingImporter extends ImportPersister {
                         AptUnit i = new AptUnitConverter().createDBO(aptUnitIO);
                         i.belongsTo().set(building);
                         i.floorplan().set(floorplan);
+                        i.info()._bathrooms().set(floorplan.bathrooms());
+                        i.info()._bedrooms().set(floorplan.bedrooms());
                         items.add(i);
 
                         for (AptUnitOccupancyIO occupancyIO : aptUnitIO.AptUnitOccupancySegment()) {
