@@ -1002,6 +1002,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> boolean retrieve(T entity, AttachLevel attachLevel) {
+        if (entity.getPrimaryKey() == null) {
+            Mappings.assertPersistableEntity(entity.getEntityMeta());
+            return false;
+        }
         startContext(ConnectionTarget.forRead);
         try {
             entity = entity.cast();
