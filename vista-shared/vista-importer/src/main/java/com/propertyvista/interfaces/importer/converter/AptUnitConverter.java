@@ -34,6 +34,7 @@ public class AptUnitConverter extends EntityDtoBinder<AptUnit, AptUnitIO> {
         bind(dtoProto.unitRent(), dboProto.financial()._unitRent());
         bind(dtoProto.marketRent(), dboProto.financial()._marketRent());
         bind(dtoProto.availableForRent(), dboProto._availableForRent());
+        bind(dtoProto.floor(), dboProto.info().floor());
     }
 
     @Override

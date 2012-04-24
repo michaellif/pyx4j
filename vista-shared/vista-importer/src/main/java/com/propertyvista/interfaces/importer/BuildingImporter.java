@@ -196,6 +196,7 @@ public class BuildingImporter extends ImportPersister {
                         i.floorplan().set(floorplan);
                         i.info()._bathrooms().set(floorplan.bathrooms());
                         i.info()._bedrooms().set(floorplan.bedrooms());
+                        i.info().floor().set(aptUnitIO.floor());
                         items.add(i);
 
                         for (AptUnitOccupancyIO occupancyIO : aptUnitIO.AptUnitOccupancySegment()) {

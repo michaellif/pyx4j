@@ -38,6 +38,8 @@ public interface AptUnitIO extends IEntity {
 
     IPrimitive<Double> area();
 
+    IPrimitive<Integer> floor();
+
     IPrimitive<AreaMeasurementUnit> areaUnits();
 
     @Format("#0.00")
