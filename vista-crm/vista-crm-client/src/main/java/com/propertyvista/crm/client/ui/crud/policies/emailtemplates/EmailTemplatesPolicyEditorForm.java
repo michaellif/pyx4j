@@ -144,7 +144,7 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
                     content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor)).build());
                     // create variable selection button
                     final PushButton pb = editor.getWidget().getEditor().getCustomButton();
-                    pb.setText("TVars");
+                    pb.setText(i18n.tr("MERGE"));
                     pb.getElement().getStyle().setColor("black");
                     pb.setVisible(true);
                     final TemplateVarSelector vm = new TemplateVarSelector();
