@@ -53,4 +53,6 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
     IListerView<BillDTO> getBillListerView();
 
     IListerView<PaymentRecord> getPaymentListerView();
+
+    void reportSendMailActionResult(String message);
 }

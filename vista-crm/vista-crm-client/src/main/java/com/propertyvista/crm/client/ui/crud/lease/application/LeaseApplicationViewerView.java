@@ -32,4 +32,8 @@ public interface LeaseApplicationViewerView extends IViewerView<LeaseApplication
 
         void applicationAction(LeaseApplicationActionDTO action);
     }
+
+    void reportStartOnlineApplicationSuccess();
+
+    void reportInviteUsersActionResult(String message);
 }

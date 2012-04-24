@@ -28,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -302,5 +303,15 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
             action.action().setValue(status);
             return action;
         }
+    }
+
+    @Override
+    public void reportStartOnlineApplicationSuccess() {
+        MessageDialog.info(i18n.tr("Started Online Application"));
+    }
+
+    @Override
+    public void reportInviteUsersActionResult(String message) {
+        MessageDialog.info(message);
     }
 }

@@ -32,7 +32,6 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
@@ -182,7 +181,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             @Override
             public void onSuccess(String message) {
                 populate();
-                MessageDialog.info(message);
+                ((LeaseViewerView) view).reportSendMailActionResult(message);
             }
         }, entityId, new Vector<ApplicationUserDTO>(users), emailType);
     }

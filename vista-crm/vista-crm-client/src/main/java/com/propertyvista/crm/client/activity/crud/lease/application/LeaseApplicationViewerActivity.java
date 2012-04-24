@@ -23,7 +23,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
@@ -50,7 +49,9 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
         ((LeaseApplicationCrudService) service).startOnlineApplication(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
+                ((LeaseApplicationViewerView) view).reportStartOnlineApplicationSuccess();
                 populate();
+
             }
         }, entityId);
     }
@@ -61,7 +62,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
             @Override
             public void onSuccess(String message) {
                 populate();
-                MessageDialog.info(message);
+                ((LeaseApplicationViewerView) view).reportInviteUsersActionResult(message);
             }
         }, entityId, new Vector<ApplicationUserDTO>(users));
     }
