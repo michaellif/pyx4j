@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
@@ -655,7 +656,21 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             assertEquals("final and draft data", 2, list.size());
 
             assertFalse("Has version data", list.get(0).version().isNull());
+            assertEquals("(0)name", itemA2.name().getValue(), list.get(0).name().getValue());
             assertFalse("Has version data", list.get(1).version().isNull());
+            assertEquals("(1)name", itemA3.name().getValue(), list.get(1).name().getValue());
+
+            final ICursorIterator<ItemA> iterator = srv.query(null, criteria, AttachLevel.Attached);
+            assertTrue("first", iterator.hasNext());
+            ItemA r0 = iterator.next();
+            assertEquals("(0)name", itemA2.name().getValue(), r0.name().getValue());
+            assertTrue("second", iterator.hasNext());
+
+            ItemA r1 = iterator.next();
+            assertEquals("(0)name", itemA3.name().getValue(), r1.name().getValue());
+
+            assertFalse("Only two items", iterator.hasNext());
+
         }
     }
 
