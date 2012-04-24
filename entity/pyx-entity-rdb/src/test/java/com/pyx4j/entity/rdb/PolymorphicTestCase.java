@@ -460,14 +460,27 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
         srvSave(ent, testCaseMethod);
 
-        SBase entr = srv.retrieve(SBase.class, ent.getPrimaryKey());
+        SBase entr1 = srv.retrieve(SBase.class, ent.getPrimaryKey());
 
-        Assert.assertEquals("Proper instance", SConcrete2.class, entr.getInstanceValueClass());
+        Assert.assertEquals("Proper instance", SConcrete2.class, entr1.getInstanceValueClass());
 
-        SConcrete2 ent2r = entr.cast();
+        SConcrete2 ent2r1 = entr1.cast();
 
-        Assert.assertEquals("Proper value", ent.nameB1().getValue(), ent2r.nameB1().getValue());
-        Assert.assertEquals("Proper value", ent.nameC2().getValue(), ent2r.nameC2().getValue());
+        Assert.assertEquals("Proper value", ent.nameB1().getValue(), ent2r1.nameB1().getValue());
+        Assert.assertEquals("Proper value", ent.nameC2().getValue(), ent2r1.nameC2().getValue());
+
+        // Test update
+        entr1.nameB1().setValue("b1u1:" + uniqueString());
+        srvSave(entr1, testCaseMethod);
+
+        SBase entr2 = srv.retrieve(SBase.class, ent.getPrimaryKey());
+
+        Assert.assertEquals("Proper instance", SConcrete2.class, entr2.getInstanceValueClass());
+
+        SConcrete2 ent2r2 = entr1.cast();
+
+        Assert.assertEquals("Proper value", entr1.nameB1().getValue(), ent2r2.nameB1().getValue());
+        Assert.assertEquals("Proper value", ent.nameC2().getValue(), ent2r2.nameC2().getValue());
     }
 
     public void testSingleTableMemeberPersist() {
@@ -491,15 +504,31 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
         srvSave(ent, testCaseMethod);
 
-        SReference entr = srv.retrieve(SReference.class, ent.getPrimaryKey());
+        SReference entr1 = srv.retrieve(SReference.class, ent.getPrimaryKey());
 
-        Assert.assertFalse("Value retrieved", entr.reference().isValueDetached());
+        Assert.assertFalse("Value retrieved", entr1.reference().isValueDetached());
 
-        Assert.assertEquals("Proper instance", SConcrete2.class, entr.reference().getInstanceValueClass());
+        Assert.assertEquals("Proper instance", SConcrete2.class, entr1.reference().getInstanceValueClass());
 
-        SConcrete2 ent2r = entr.reference().cast();
+        SConcrete2 ent2r1 = entr1.reference().cast();
 
-        Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r.nameB1().getValue());
-        Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r.nameC2().getValue());
+        Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r1.nameB1().getValue());
+        Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r1.nameC2().getValue());
+
+        // Test update
+        entr1.reference().nameB1().setValue("b1u1:" + uniqueString());
+        srvSave(entr1, testCaseMethod);
+
+        SReference entr2 = srv.retrieve(SReference.class, ent.getPrimaryKey());
+
+        Assert.assertFalse("Value retrieved", entr2.reference().isValueDetached());
+
+        Assert.assertEquals("Proper instance", SConcrete2.class, entr2.reference().getInstanceValueClass());
+
+        SConcrete2 ent2r2 = entr2.reference().cast();
+
+        Assert.assertEquals("Proper value", entr1.reference().nameB1().getValue(), ent2r2.nameB1().getValue());
+        Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r2.nameC2().getValue());
+
     }
 }

@@ -374,11 +374,6 @@ public class TableModel {
             sql.append(" SET ");
             boolean first = true;
 
-            if (classModel != ModelType.regular) {
-                sql.append(dialect.sqlDiscriminatorColumnName());
-                first = false;
-            }
-
             for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
                 for (String name : member.getValueAdapter().getColumnNames(member.sqlName())) {
                     if (first) {
@@ -395,6 +390,9 @@ public class TableModel {
             sql.append(" WHERE ").append(dialect.getNamingConvention().sqlIdColumnName()).append(" = ? ");
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ? ");
+            }
+            if (classModel != ModelType.regular) {
+                sql.append(" AND ").append(dialect.sqlDiscriminatorColumnName()).append(" = ? ");
             }
             sqlUpdate = sql.toString();
         }
@@ -509,6 +507,11 @@ public class TableModel {
             if (dialect.isMultitenantSharedSchema()) {
                 parameterIndex++;
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());
+            }
+            if (classModel != ModelType.regular) {
+                parameterIndex++;
+                DiscriminatorValue discriminator = entity.getValueClass().getAnnotation(DiscriminatorValue.class);
+                stmt.setString(parameterIndex, discriminator.value());
             }
             persistenceContext.setUncommittedChanges();
             boolean updated = (stmt.executeUpdate() == 1);
