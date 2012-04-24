@@ -99,12 +99,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     @Override
     protected void enhanceListRetrieved(Lease in, DTO dto) {
         enhanceRetrievedCommon(in, dto);
-
-        // TODO this should be part of EntityQueryCriteria.finalizedOrDraft
-//        if (in.version().isNull()) {
-//            Lease draft = Persistence.service().retrieve(entityClass, in.getPrimaryKey().asDraftKey());
-//            dto.version().set(draft.version());
-//        }
     }
 
     private void enhanceRetrievedCommon(Lease in, DTO dto) {
