@@ -292,7 +292,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         {
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), testId));
-            criteria.or(PropertyCriterion.isNull(criteria.proto().tasks()), PropertyCriterion.eq(criteria.proto().tasks().$().description(), searchBy));
+            criteria.or(PropertyCriterion.notExists(criteria.proto().tasks()), PropertyCriterion.eq(criteria.proto().tasks().$().description(), searchBy));
 
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 2, emps.size());
@@ -324,7 +324,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         {
             EntityQueryCriteria<BRefReadOwner> criteria = EntityQueryCriteria.create(BRefReadOwner.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.or(PropertyCriterion.isNull(criteria.proto().children()), PropertyCriterion.eq(criteria.proto().children().$().name(), searchBy));
+            criteria.or(PropertyCriterion.notExists(criteria.proto().children()), PropertyCriterion.eq(criteria.proto().children().$().name(), searchBy));
 
             List<BRefReadOwner> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 2, emps.size());
@@ -426,7 +426,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             //TODO OR implementation for joins
             //criteria.or(PropertyCriterion.eq(criteria.proto().child().name(), c1.name()), PropertyCriterion.isNull(criteria.proto().child()));
-            criteria.or(PropertyCriterion.isNull(criteria.proto().child()), PropertyCriterion.eq(criteria.proto().child().name(), c1.name()));
+            criteria.or(PropertyCriterion.notExists(criteria.proto().child()), PropertyCriterion.eq(criteria.proto().child().name(), c1.name()));
 
             List<OneToOneReadOwner> data = srv.query(criteria);
             Assert.assertEquals("Found using JoinTable", 2, data.size());

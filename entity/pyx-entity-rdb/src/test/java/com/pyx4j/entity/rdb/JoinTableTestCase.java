@@ -348,7 +348,7 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
         {
             EntityQueryCriteria<OneToOneReadOwner> criteria = EntityQueryCriteria.create(OneToOneReadOwner.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.isNull(criteria.proto().child()));
+            criteria.add(PropertyCriterion.notExists(criteria.proto().child()));
 
             List<OneToOneReadOwner> data = srv.query(criteria);
             Assert.assertEquals("Found using JoinTable", 1, data.size());

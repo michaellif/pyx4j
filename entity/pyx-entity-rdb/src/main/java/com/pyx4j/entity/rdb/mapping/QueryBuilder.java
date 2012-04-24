@@ -185,7 +185,7 @@ public class QueryBuilder<T extends IEntity> {
         } else {
             boolean leftJoin = false;
             // "LEFT JOIN / IS NULL" works as "NOT EXISTS", make the LEFT join
-            if ((bindHolder.bindValue == null) && (propertyCriterion.getRestriction() == Restriction.EQUAL)) {
+            if ((bindHolder.bindValue == null) && (propertyCriterion.getRestriction() == Restriction.NOT_EXISTS)) {
                 leftJoin = true;
             }
             QueryMember queryMember = queryJoin.buildQueryMember(propertyCriterion.getPropertyPath(), leftJoin, false);
@@ -210,6 +210,7 @@ public class QueryBuilder<T extends IEntity> {
 
         if (bindHolder.bindValue == null) {
             switch (propertyCriterion.getRestriction()) {
+            case NOT_EXISTS:
             case EQUAL:
                 sql.append(" IS NULL ");
                 break;

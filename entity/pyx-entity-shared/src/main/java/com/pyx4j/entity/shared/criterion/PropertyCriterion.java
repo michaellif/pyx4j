@@ -39,7 +39,7 @@ public class PropertyCriterion implements Criterion {
     public static enum Restriction {
         LESS_THAN, LESS_THAN_OR_EQUAL, GREATER_THAN, GREATER_THAN_OR_EQUAL, EQUAL, NOT_EQUAL, IN,
 
-        RDB_LIKE
+        RDB_LIKE, NOT_EXISTS
     }
 
     private String propertyPath;
@@ -94,11 +94,12 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
     }
 
-    /**
-     * In join operations for id value (@JoinTable) this maps to NOT EXISTS
-     */
     public static PropertyCriterion isNull(IObject<?> member) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, (Serializable) null);
+    }
+
+    public static PropertyCriterion notExists(IObject<?> member) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EXISTS, (Serializable) null);
     }
 
     public static PropertyCriterion isNotNull(IObject<?> member) {
