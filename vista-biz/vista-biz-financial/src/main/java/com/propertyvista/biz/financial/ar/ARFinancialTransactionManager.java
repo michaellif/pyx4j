@@ -15,6 +15,8 @@ package com.propertyvista.biz.financial.ar;
 
 import java.util.List;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -33,7 +35,7 @@ public class ARFinancialTransactionManager {
             ARCreditDebitLinkManager.coverDebit((InvoiceDebit) invoiceLineItem);
         }
 
-//        Persistence.service().persist(invoiceLineItem);
+        Persistence.service().persist(invoiceLineItem);
 
     }
 
