@@ -20,29 +20,11 @@
  */
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Table(prefix = "test")
-@AbstractEntity
-@Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
-public interface BidirectionalOneToManyPlmChild extends IEntity {
+@DiscriminatorValue(value = "BidirectionalOneToManyPlmChildB")
+public interface BidirectionalOneToManyPlmSTChildB extends BidirectionalOneToManyPlmSTChild {
 
-    @Owner
-    @JoinColumn
-    BidirectionalOneToManyPlmParent parent();
-
-    IPrimitive<String> testId();
-
-    IPrimitive<String> value();
-
-    @OrderColumn
-    IPrimitive<Integer> orderColumn();
+    IPrimitive<String> valueB();
 }

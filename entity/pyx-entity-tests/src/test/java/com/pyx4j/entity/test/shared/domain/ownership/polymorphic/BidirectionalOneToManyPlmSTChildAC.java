@@ -20,21 +20,12 @@
  */
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Table(prefix = "test")
-public interface BidirectionalOneToManyPlmParent extends IEntity {
+@DiscriminatorValue(value = "BidirectionalOneToManyPlmChildAC")
+public interface BidirectionalOneToManyPlmSTChildAC extends BidirectionalOneToManyPlmSTChildA {
 
-    IPrimitive<String> testId();
+    IPrimitive<String> valueAC();
 
-    IPrimitive<String> value();
-
-    @Owned
-    @Detached
-    IList<BidirectionalOneToManyPlmChild> children();
 }

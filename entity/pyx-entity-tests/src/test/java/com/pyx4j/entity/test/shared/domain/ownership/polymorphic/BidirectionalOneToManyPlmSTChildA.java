@@ -24,7 +24,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @DiscriminatorValue(value = "BidirectionalOneToManyPlmChildA")
-public interface BidirectionalOneToManyPlmChildA extends BidirectionalOneToManyPlmChild {
+public interface BidirectionalOneToManyPlmSTChildA extends BidirectionalOneToManyPlmSTChild {
 
     IPrimitive<String> valueA();
 
