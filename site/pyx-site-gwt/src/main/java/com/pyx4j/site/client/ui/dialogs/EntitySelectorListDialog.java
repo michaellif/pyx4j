@@ -71,8 +71,8 @@ public abstract class EntitySelectorListDialog<E extends IEntity> extends Abstra
         });
         this.formatter = formatter != null ? formatter : new Formatter<E>() {
             @Override
-            public String format(E enntity) {
-                return enntity.getStringView();
+            public String format(E entity) {
+                return entity.getStringView();
             }
         };
 
