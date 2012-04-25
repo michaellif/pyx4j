@@ -28,6 +28,7 @@ import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivi
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
+import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -68,10 +69,13 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     }
 
     @Override
-    public void applicationAction(LeaseApplicationActionDTO action) {
+    public void applicationAction(final LeaseApplicationActionDTO action) {
         ((LeaseApplicationCrudService) service).applicationAction(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
+                if (action.action().getValue() == Action.Approve) {
+                    entityId = entityId.asCurrentKey();
+                }
                 populate();
             }
         }, action);
