@@ -24,6 +24,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog.Formatter;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -56,7 +57,12 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                     @Override
                     public void onSuccess(List<AptUnit> result) {
                         int i = result.size();
-                        new EntitySelectorListDialog<AptUnit>(i18n.tr("Select Unit To Lease"), false, result) {
+                        new EntitySelectorListDialog<AptUnit>(i18n.tr("Select Unit To Lease"), false, result, new Formatter<AptUnit>() {
+                            @Override
+                            public String format(AptUnit entity) {
+                                return entity.belongsTo().getStringView() + ", " + i18n.tr("Unit") + " " + entity.getStringView();
+                            }
+                        }) {
                             @Override
                             public boolean onClickOk() {
                                 ((LeadViewerView.Presenter) presenter).convertToLease(getSelectedItems().get(0).getPrimaryKey());
@@ -65,7 +71,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
                             @Override
                             public String defineWidth() {
-                                return "200px";
+                                return "500px";
                             }
 
                             @Override

@@ -21,6 +21,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -76,6 +77,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
         for (Showing showing : Persistence.secureQuery(criteria)) {
             if (!showing.result().isNull() && showing.result().getValue() == Showing.Result.interested) {
                 if (!units.contains(showing.unit())) {
+                    Persistence.service().retrieve(showing.unit().belongsTo(), AttachLevel.ToStringMembers);
                     units.add((AptUnit) showing.unit().detach());
                 }
             }
