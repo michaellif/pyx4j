@@ -85,9 +85,12 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
 
     @Override
     public void sendMail(AsyncCallback<String> callback, Key entityId, Vector<ApplicationUserDTO> users, EmailTemplateType emailType) {
-        Lease lease = Persistence.service().retrieve(dboClass, entityId.asDraftKey());
+        Lease lease = Persistence.service().retrieve(dboClass, entityId.asCurrentKey());
         if ((lease == null) || (lease.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
+        }
+        if (!Lease.Status.current().contains(lease.version().status().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Can't send tenant email for inactive Lease"));
         }
         if (users.isEmpty()) {
             throw new UserRuntimeException(i18n.tr("No customer was selected to send email"));

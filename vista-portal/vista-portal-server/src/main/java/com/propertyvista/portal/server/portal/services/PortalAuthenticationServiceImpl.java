@@ -84,7 +84,7 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
 
         if (leases.size() == 0) {
             if (ApplicationMode.isDevelopment()) {
-                throw new Error("Application not found for user" + user.getDebugExceptionInfoString());
+                throw new Error("Lease not found for user" + user.getDebugExceptionInfoString());
             } else {
                 throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
             }
