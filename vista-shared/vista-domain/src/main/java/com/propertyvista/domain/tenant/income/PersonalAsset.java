@@ -16,10 +16,16 @@ package com.propertyvista.domain.tenant.income;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -27,7 +33,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.tenant.PersonScreening;
+
 @Caption(name = "Personal Asset(s)")
+@Table(prefix = "person_screening_")
 public interface PersonalAsset extends IEntity {
 
     public enum AssetType {
@@ -61,6 +70,16 @@ public interface PersonalAsset extends IEntity {
             return I18nEnum.toString(this);
         }
     }
+
+    @Owner
+    @NotNull
+    @ReadOnly
+    @Detached
+    @JoinColumn
+    PersonScreening owner();
+
+    @OrderColumn
+    IPrimitive<Integer> seq();
 
     @NotNull
     @ToString(index = 0)
