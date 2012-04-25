@@ -170,6 +170,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         ((LeaseCrudService) service).activate(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
+                entityId = entityId.asCurrentKey();
                 populate();
             }
         }, entityId);
