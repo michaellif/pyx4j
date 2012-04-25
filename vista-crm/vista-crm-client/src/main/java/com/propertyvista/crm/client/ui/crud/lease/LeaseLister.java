@@ -100,11 +100,10 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
 
     private class ExistingLeaseDataDialog extends SelectEnumDialog<Service.Type> implements OkCancelOption {
 
-        private final CMoneyField balance = new CMoneyField();
+        private CMoneyField balance;
 
         public ExistingLeaseDataDialog() {
             super(i18n.tr("Enter Lease Data"), EnumSet.allOf(Service.Type.class));
-//            getOkButton().setEnabled(false);
         }
 
         @Override
@@ -114,14 +113,14 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
             body.add(new HTML(i18n.tr("Lease Type:")));
             body.add(super.initBody(selectionModel, values, height));
 
-            HorizontalPanel balance = new HorizontalPanel();
-            balance.add(new HTML(i18n.tr("Initial balance:")));
-            balance.add(this.balance.asWidget());
-            balance.setCellWidth(this.balance.asWidget(), "100px");
-            balance.getElement().getStyle().setPaddingTop(6, Unit.PX);
-            balance.getElement().getStyle().setPaddingBottom(2, Unit.PX);
-            balance.setWidth("100%");
-            body.add(balance);
+            HorizontalPanel balancePanel = new HorizontalPanel();
+            balancePanel.add(new HTML(i18n.tr("Initial balance:")));
+            balancePanel.add((balance = new CMoneyField()).asWidget());
+            balancePanel.setCellWidth(balance.asWidget(), "100px");
+            balancePanel.getElement().getStyle().setPaddingTop(6, Unit.PX);
+            balancePanel.getElement().getStyle().setPaddingBottom(2, Unit.PX);
+            balancePanel.setWidth("100%");
+            body.add(balancePanel);
 
             body.setWidth("100%");
             return body;
