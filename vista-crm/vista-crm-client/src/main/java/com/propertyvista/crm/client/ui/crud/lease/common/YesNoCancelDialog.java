@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import com.google.gwt.user.client.ui.HTML;
+
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
 
@@ -20,6 +22,12 @@ public abstract class YesNoCancelDialog extends Dialog implements YesNoCancelOpt
 
     public YesNoCancelDialog(String caption) {
         super(caption);
+        setDialogOptions(this);
+    }
+
+    public YesNoCancelDialog(String caption, String bodyHtml) {
+        super(caption);
+        setBody(new HTML(bodyHtml));
         setDialogOptions(this);
     }
 

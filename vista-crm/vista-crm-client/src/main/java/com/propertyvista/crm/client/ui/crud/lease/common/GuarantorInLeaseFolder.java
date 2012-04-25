@@ -52,7 +52,7 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
 
     @Override
     protected void addItem() {
-        new YesNoCancelDialog(i18n.tr("Select Existing Guarantor?")) {
+        new YesNoCancelDialog(i18n.tr("Add New Guarantor"), i18n.tr("Do you want to select existing Guarantor?")) {
             @Override
             public boolean onClickYes() {
                 new CustomerSelectorDialog(retrieveExistingCustomers(getValue())) {

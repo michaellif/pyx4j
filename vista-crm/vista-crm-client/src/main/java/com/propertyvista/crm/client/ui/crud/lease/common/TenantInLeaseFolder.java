@@ -63,7 +63,7 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
 
     @Override
     protected void addItem() {
-        new YesNoCancelDialog(i18n.tr("Select Existing Tenant?")) {
+        new YesNoCancelDialog(i18n.tr("Add New Tenant"), i18n.tr("Do you want to select existing Tenant?")) {
             @Override
             public boolean onClickYes() {
                 new CustomerSelectorDialog(retrieveExistingCustomers(getValue())) {
