@@ -17,8 +17,6 @@ import java.math.BigDecimal;
 import java.util.EnumSet;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -102,23 +100,15 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
 
     private class ExistingLeaseDataDialog extends SelectEnumDialog<Service.Type> implements OkCancelOption {
 
-        private CMoneyField balance;
+        private final CMoneyField balance = new CMoneyField();
 
         public ExistingLeaseDataDialog() {
             super(i18n.tr("Enter Lease Data"), EnumSet.allOf(Service.Type.class));
-            getOkButton().setEnabled(false);
+//            getOkButton().setEnabled(false);
         }
 
         @Override
         protected <E extends Enum<E>> Widget initBody(SelectionModel<E> selectionModel, EnumSet<E> values, String height) {
-            this.balance = new CMoneyField();
-            this.balance.addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<BigDecimal> event) {
-                    getOkButton().setEnabled(event.getValue() != null);
-                }
-            });
-
             VerticalPanel body = new VerticalPanel();
 
             body.add(new HTML(i18n.tr("Lease Type:")));
@@ -139,8 +129,12 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
 
         @Override
         public boolean onClickOk() {
-            getPresenter().editNew(getItemOpenPlaceClass(), createNewLease(getSelectedType(), balance.getValue()));
-            return true;
+            if (balance.isValid()) {
+                getPresenter().editNew(getItemOpenPlaceClass(), createNewLease(getSelectedType(), balance.getValue()));
+                return true;
+            }
+            return false;
+
         }
 
         @Override
