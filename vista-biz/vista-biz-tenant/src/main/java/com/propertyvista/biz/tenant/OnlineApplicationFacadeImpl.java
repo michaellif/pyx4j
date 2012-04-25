@@ -164,12 +164,6 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
 //            Persistence.service().persist(credential);
 
-            // TODO call after call to submitOnlineApplication!...
-//            if (Context.isUserLoggedIn() && user.getPrimaryKey().equals(VistaContext.getCurrentUserPrimaryKey())) {
-//                Context.getVisit().setAclRevalidationRequired();
-//                Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
-//            }
-
             MasterOnlineApplication ma = application.masterOnlineApplication();
             Persistence.service().retrieve(ma);
             Persistence.service().retrieve(ma.lease());

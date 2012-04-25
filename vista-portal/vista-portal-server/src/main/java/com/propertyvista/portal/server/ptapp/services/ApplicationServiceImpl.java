@@ -22,7 +22,9 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.security.CustomerUser;
@@ -36,6 +38,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
+import com.propertyvista.server.common.security.VistaContext;
 
 public class ApplicationServiceImpl extends ApplicationEntityServiceImpl implements ApplicationService {
 
@@ -175,6 +178,11 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         boolean isEndOfTheWizard = (application.steps().indexOf(currentStep) + 1 == application.steps().size() - 1);
         if (isEndOfTheWizard) {
             ServerSideFactory.create(OnlineApplicationFacade.class).submitOnlineApplication(application);
+
+            if (Context.isUserLoggedIn() && application.customer().user().getPrimaryKey().equals(VistaContext.getCurrentUserPrimaryKey())) {
+                Context.getVisit().setAclRevalidationRequired();
+                Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
+            }
         }
     }
 
