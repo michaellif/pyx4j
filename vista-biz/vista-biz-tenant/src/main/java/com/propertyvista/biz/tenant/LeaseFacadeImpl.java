@@ -40,8 +40,6 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.VistaTODO;
 
 public class LeaseFacadeImpl implements LeaseFacade {
@@ -66,6 +64,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // Create Application by default
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
+        lease.leaseApplication().leaseOnApplication().set(lease);
 
         saveCustomers(lease);
 
@@ -137,18 +136,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private void updateApplicationReferencesToFinalVersionOfLase(Lease lease) {
-        // update reference to first version of Lease in MasterApplication and Applications
-        EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease.getPrimaryKey().asDraftKey()));
-        MasterOnlineApplication ma = Persistence.service().retrieve(criteria);
-        if (ma != null) {
-            ma.lease().set(lease);
-            Persistence.service().retrieve(ma.applications());
-            for (OnlineApplication app : ma.applications()) {
-                app.lease().set(lease);
-            }
-            Persistence.service().persist(ma);
-        }
+        lease.leaseApplication().leaseOnApplication().set(lease);
+        Persistence.service().persist(lease.leaseApplication());
     }
 
     @Override
@@ -256,11 +245,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void activate(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         // set lease status to active ONLY if first (latest till now) bill is confirmed: 
-        if (VistaTODO.removedForProduction
+        if (VistaTODO.removedForProduction || !lease.billingAccount().initialBalance().isNull()
                 || ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() == Bill.BillStatus.Confirmed) {
 
             lease.version().status().setValue(Status.Active);
-
             lease.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.secureSave(lease);
 
@@ -270,7 +258,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
             // update Lead state (if present)
             EntityQueryCriteria<Lead> criteria = new EntityQueryCriteria<Lead>(Lead.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseId));
-
             Lead lead = Persistence.service().retrieve(criteria);
             if (lead != null) {
                 lead.status().setValue(Lead.Status.rented);

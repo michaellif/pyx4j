@@ -113,7 +113,7 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
             PtAppContext.setCurrentUserApplication(selectedApplication);
             MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(MasterOnlineApplication.class,
                     selectedApplication.masterOnlineApplication().getPrimaryKey());
-            PtAppContext.setCurrentUserLease(masterOnlineApplication.leaseApplication().lease());
+            PtAppContext.setCurrentUserLease(masterOnlineApplication.leaseApplication().leaseOnApplication());
         }
 
         return sessionToken;

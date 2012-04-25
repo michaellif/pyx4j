@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -88,6 +89,10 @@ public interface LeaseApplication extends IEntity {
     @Owner
     @JoinColumn
     Lease lease();
+
+    @Detached
+    @Versioned
+    Lease leaseOnApplication();
 
     @Owned(cascade = {})
     @Detached
