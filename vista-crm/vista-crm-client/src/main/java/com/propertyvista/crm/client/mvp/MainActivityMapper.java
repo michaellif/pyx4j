@@ -826,6 +826,10 @@ public class MainActivityMapper implements AppActivityMapper {
                     } else if (place instanceof CrmSiteMap.Dashboard.Management) {
                         activity = new DashboardManagementActivity(place);
 
+                        // - Settings:
+                    } else if (place instanceof CrmSiteMap.Settings.ProductDictionary) {
+                        activity = new ProductDictionaryViewActivity(place);
+
                     } // CRUD APP PLACE IF ENDS HERE
 
                 } else if (place instanceof CrmSiteMap.Report) {
@@ -840,10 +844,6 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new AlertActivity(place);
                 } else if (place instanceof CrmSiteMap.Message) {
                     activity = new MessageActivity(place);
-
-// - Settings:
-                } else if (place instanceof CrmSiteMap.Settings.ProductDictionary) {
-                    activity = new ProductDictionaryViewActivity(place);
                 }
 
                 callback.onSuccess(activity);
