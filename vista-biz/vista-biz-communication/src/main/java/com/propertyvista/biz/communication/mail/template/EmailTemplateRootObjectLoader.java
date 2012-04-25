@@ -204,7 +204,7 @@ public class EmailTemplateRootObjectLoader {
         }
         EntityQueryCriteria<OnlineApplication> appSearch = EntityQueryCriteria.create(OnlineApplication.class);
         appSearch.add(PropertyCriterion.eq(appSearch.proto().customer().user(), user));
-        appSearch.add(PropertyCriterion.eq(appSearch.proto().lease(), lease));
+        appSearch.add(PropertyCriterion.eq(appSearch.proto().masterOnlineApplication().leaseApplication().leaseOnApplication(), lease));
         OnlineApplication app = Persistence.service().retrieve(appSearch);
         if (app == null || app.isNull()) {
             throw new Error("Invalid context. No Application found.");

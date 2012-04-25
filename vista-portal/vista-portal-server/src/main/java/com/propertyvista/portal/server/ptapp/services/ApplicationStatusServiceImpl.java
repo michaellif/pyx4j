@@ -41,7 +41,7 @@ public class ApplicationStatusServiceImpl extends ApplicationEntityServiceImpl i
 
         // find master application:
         EntityQueryCriteria<MasterOnlineApplication> criteria = new EntityQueryCriteria<MasterOnlineApplication>(MasterOnlineApplication.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), PtAppContext.getCurrentUserLeasePrimaryKey()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().leaseOnApplication(), PtAppContext.getCurrentUserLeasePrimaryKey()));
         MasterOnlineApplication ma = Persistence.service().retrieve(criteria);
         if ((ma == null) || (ma.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(MasterOnlineApplication.class).getCaption() + "' for lease "

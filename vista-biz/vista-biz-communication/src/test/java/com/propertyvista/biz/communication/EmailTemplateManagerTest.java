@@ -571,7 +571,6 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         Persistence.service().persist(mApp);
         mainApp = EntityFactory.create(OnlineApplication.class);
         mainApp.masterOnlineApplication().set(mApp);
-        mainApp.lease().set(lease);
         mainApp.customer().set(mainAplt.customer());
         Persistence.service().persist(mainApp);
         mainAplt.application().set(mainApp);
@@ -579,7 +578,6 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         coApp = EntityFactory.create(OnlineApplication.class);
         coApp.masterOnlineApplication().set(mApp);
-        coApp.lease().set(lease);
         coApp.customer().set(coAplt.customer());
         Persistence.service().persist(coApp);
         coAplt.application().set(coApp);

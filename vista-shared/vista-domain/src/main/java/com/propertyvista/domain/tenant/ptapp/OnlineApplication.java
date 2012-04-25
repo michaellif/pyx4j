@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -32,7 +31,6 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 /**
  * This is an application progress for tenant, secondary tenant and guarantors.
@@ -88,11 +86,6 @@ public interface OnlineApplication extends IEntity {
     @NotNull
     @ReadOnly
     IPrimitive<Role> role();
-
-    @Detached
-    @Versioned
-    @Deprecated
-    Lease lease();
 
     IPrimitive<OnlineApplication.Status> status();
 

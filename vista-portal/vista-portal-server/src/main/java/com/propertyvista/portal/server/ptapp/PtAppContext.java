@@ -85,7 +85,7 @@ public class PtAppContext extends VistaCustomerContext {
 
     @Deprecated
     public static Key getCurrentUserLeasePrimaryKey() {
-        return PtAppContext.retrieveCurrentUserApplication().lease().getPrimaryKey();
+        return PtAppContext.retrieveCurrentUserApplication().masterOnlineApplication().leaseApplication().leaseOnApplication().getPrimaryKey();
     }
 
     public static Lease retrieveCurrentUserLease() {
