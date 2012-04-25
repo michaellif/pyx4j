@@ -19,8 +19,6 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.policy.framework.LowestApplicableNode;
-import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 
@@ -28,7 +26,6 @@ import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
  * Type of service/feature, applicable taxes, revenue code, GL, accountability for late payment
  */
 @DiscriminatorValue("ProductTaxPolicy")
-@LowestApplicableNode(value = OrganizationPoliciesNode.class)
 public interface ProductTaxPolicy extends Policy {
 
     @Owned
