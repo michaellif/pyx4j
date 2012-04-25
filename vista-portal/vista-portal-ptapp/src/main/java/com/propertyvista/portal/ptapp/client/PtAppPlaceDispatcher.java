@@ -40,7 +40,8 @@ public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
         if (targetPlace instanceof PtSiteMap.PasswordChange) {
             callback.onSuccess(Boolean.TRUE);
         } else if (targetPlace instanceof PtSiteMap.ApplicationSelectionRequired) {
-            callback.onSuccess(Boolean.TRUE);
+            callback.onSuccess(SecurityController.checkAnyBehavior(VistaCustomerBehavior.ApplicationSelectionRequired,
+                    VistaCustomerBehavior.HasMultipleApplications));
         } else {
             PtAppSite.getWizardManager().isPlaceNavigable(targetPlace, callback);
         }

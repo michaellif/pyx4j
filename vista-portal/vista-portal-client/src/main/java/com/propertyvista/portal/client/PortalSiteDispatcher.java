@@ -43,7 +43,7 @@ public class PortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     @Override
     protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
         if (targetPlace instanceof PortalSiteMap.LeaseContextSelection) {
-            callback.onSuccess(Boolean.TRUE);
+            callback.onSuccess(SecurityController.checkAnyBehavior(VistaCustomerBehavior.LeaseSelectionRequired, VistaCustomerBehavior.HasMultipleLeases));
         } else {
             callback.onSuccess(Boolean.TRUE);
         }
