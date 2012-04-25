@@ -144,7 +144,7 @@ public class PersistenceContext {
             SQLUtils.closeQuietly(connection);
             connection = null;
             if (e.getMessage() != null && e.getMessage().contains("does not exist")) {
-                throw new NamespaceNotFoundException();
+                throw new NamespaceNotFoundException(namespace);
             } else {
                 throw new RuntimeException(e);
             }

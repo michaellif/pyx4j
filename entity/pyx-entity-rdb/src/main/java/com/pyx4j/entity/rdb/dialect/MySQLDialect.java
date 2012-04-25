@@ -21,6 +21,8 @@
 package com.pyx4j.entity.rdb.dialect;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
@@ -81,6 +83,15 @@ public class MySQLDialect extends Dialect {
     @Override
     public String sqlChangeConnectionNamespace(String namespace) {
         return "USE DTABASE " + namespace;
+    }
+
+    @Override
+    public boolean isUniqueConstraintException(SQLException e) {
+        if (e instanceof SQLIntegrityConstraintViolationException) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

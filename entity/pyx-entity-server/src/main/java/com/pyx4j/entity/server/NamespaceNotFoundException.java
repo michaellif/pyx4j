@@ -27,4 +27,8 @@ public class NamespaceNotFoundException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
+    public NamespaceNotFoundException(String message) {
+        super(message);
+    }
+
 }

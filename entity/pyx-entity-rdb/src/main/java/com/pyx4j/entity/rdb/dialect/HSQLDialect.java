@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.dialect;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
@@ -70,5 +71,10 @@ public class HSQLDialect extends Dialect {
     @Override
     public boolean limitCriteriaIsRelative() {
         return true;
+    }
+
+    @Override
+    public boolean isUniqueConstraintException(SQLException e) {
+        return false;
     }
 }

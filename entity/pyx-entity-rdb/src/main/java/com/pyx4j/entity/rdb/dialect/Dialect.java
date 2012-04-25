@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.dialect;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
@@ -244,5 +245,7 @@ public abstract class Dialect {
     public String sqlChangeConnectionNamespace(String namespace) {
         throw new Error("Dialect does not support SeparateSchemas Multitenancy");
     }
+
+    public abstract boolean isUniqueConstraintException(SQLException e);
 
 }

@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.dialect;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.sql.Types;
 
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
@@ -129,6 +130,16 @@ public class PostgreSQLDialect extends Dialect {
             return "SET search_path TO " + "public";
         } else {
             return "SET search_path TO " + namespace + ",public";
+        }
+    }
+
+    @Override
+    public boolean isUniqueConstraintException(SQLException e) {
+        String message = e.getMessage();
+        if (message == null) {
+            return false;
+        } else {
+            return message.contains("duplicate") || message.contains("unique");
         }
     }
 }

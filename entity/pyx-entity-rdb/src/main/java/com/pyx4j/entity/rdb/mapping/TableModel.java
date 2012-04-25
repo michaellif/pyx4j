@@ -38,6 +38,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Table.PrimaryKeyStrategy;
@@ -484,7 +485,12 @@ public class TableModel {
         } catch (SQLException e) {
             log.error("{} SQL {}", tableName, sql);
             log.error("{} SQL insert error", tableName, e);
-            throw new RuntimeException(e);
+            if (dialect.isUniqueConstraintException(e)) {
+                throw new UserRuntimeException(i18n.tr("Unable to create \"{0}\" record with duplicate \"{1}\"", entityMeta().getCaption(),
+                        getUniqueConstraintFieldName()));
+            } else {
+                throw new RuntimeException(e);
+            }
         } finally {
             SQLUtils.closeQuietly(stmt);
         }
@@ -522,10 +528,28 @@ public class TableModel {
         } catch (SQLException e) {
             log.error("{} SQL {}", tableName, sql);
             log.error("{} SQL update error", tableName, e);
-            throw new RuntimeException(e);
+            if (dialect.isUniqueConstraintException(e)) {
+                throw new UserRuntimeException(i18n.tr("Unable to create \"{0}\" record with duplicate \"{1}\"", entityMeta().getCaption(),
+                        getUniqueConstraintFieldName()));
+            } else {
+                throw new RuntimeException(e);
+            }
         } finally {
             SQLUtils.closeQuietly(stmt);
         }
+    }
+
+    private String getUniqueConstraintFieldName() {
+        StringBuilder b = new StringBuilder();
+        for (MemberOperationsMeta member : operationsMeta().getColumnMembers()) {
+            if (member.getMemberMeta().isIndexed() && member.getMemberMeta().getAnnotation(Indexed.class).uniqueConstraint()) {
+                if (b.length() > 0) {
+                    b.append(", ");
+                }
+                b.append(member.getMemberMeta().getCaption());
+            }
+        }
+        return b.toString();
     }
 
     static Object encodeValue(Class<?> valueClass, Object value) {

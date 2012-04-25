@@ -21,6 +21,8 @@
 package com.pyx4j.entity.rdb.dialect;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Types;
 
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
@@ -149,6 +151,15 @@ public class OracleDialect extends Dialect {
     @Override
     public String sqlChangeConnectionNamespace(String namespace) {
         return null;
+    }
+
+    @Override
+    public boolean isUniqueConstraintException(SQLException e) {
+        if (e instanceof SQLIntegrityConstraintViolationException) {
+            return (e.getErrorCode() == 1);
+        } else {
+            return true;
+        }
     }
 
 }
