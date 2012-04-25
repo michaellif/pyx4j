@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.domain.tenant.EmergencyContact;
 
 public class EmergencyContactEditor extends CEntityDecoratableEditor<EmergencyContact> {
 

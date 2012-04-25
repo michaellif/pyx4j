@@ -22,9 +22,9 @@ import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.EmergencyContact;
 
 public class CustomerGenerator {
 

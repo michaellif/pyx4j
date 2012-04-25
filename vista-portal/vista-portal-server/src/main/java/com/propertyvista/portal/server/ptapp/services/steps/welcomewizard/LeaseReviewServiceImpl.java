@@ -24,7 +24,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Concession.Term;
 import com.propertyvista.domain.financial.offering.ProductItemType;
@@ -32,6 +31,7 @@ import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
+import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;

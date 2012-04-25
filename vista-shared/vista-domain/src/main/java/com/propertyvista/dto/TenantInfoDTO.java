@@ -18,8 +18,8 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.PersonScreening;
 
 @Transient

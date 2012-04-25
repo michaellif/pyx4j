@@ -32,7 +32,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.CustomerUser;
 

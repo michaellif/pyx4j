@@ -11,15 +11,23 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.domain.tenant;
 
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.person.Person;
 
 public interface EmergencyContact extends Person {
 
-    @Owned
+    @NotNull
+    @ReadOnly
+    @Owner
+    Customer customer();
+
+    @EmbeddedEntity
     AddressStructured address();
 }

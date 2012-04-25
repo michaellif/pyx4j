@@ -43,9 +43,9 @@ import com.propertyvista.common.client.ui.components.folders.EmergencyContactFol
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
-import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
 
