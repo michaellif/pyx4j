@@ -192,6 +192,6 @@ public abstract class EntitySelectorListDialog<E extends IEntity> extends Abstra
     }
 
     public static interface Formatter<E> {
-        public String format(E enntity);
+        public String format(E entity);
     }
 }
