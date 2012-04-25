@@ -20,7 +20,7 @@ public interface VistaTODO {
      */
     public final static boolean enableWelcomeWizardDemoMode = false;
 
-    public static boolean removedForProduction = false;
+    public static boolean removedForProduction = true;
 
     public static boolean vladsLeaseMigration = true;
 

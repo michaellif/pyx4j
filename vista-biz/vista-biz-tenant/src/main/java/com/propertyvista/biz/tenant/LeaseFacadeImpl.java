@@ -180,7 +180,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
 
-        if (false && !VistaTODO.removedForProduction) {
+        if (!VistaTODO.removedForProduction) {
             ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         }
 
@@ -245,28 +245,27 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void activate(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         // set lease status to active ONLY if first (latest till now) bill is confirmed: 
-        if (VistaTODO.removedForProduction || !lease.billingAccount().initialBalance().isNull()
-                || ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() == Bill.BillStatus.Confirmed) {
-
-            lease.version().status().setValue(Status.Active);
-            lease.saveAction().setValue(SaveAction.saveAsFinal);
-            Persistence.secureSave(lease);
-
-            ServerSideFactory.create(UnitTurnoverAnalysisFacade.class).propagateLeaseActivationToTurnoverReport(lease);
-
-            //TODO move to LeadFacad
-            // update Lead state (if present)
-            EntityQueryCriteria<Lead> criteria = new EntityQueryCriteria<Lead>(Lead.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseId));
-            Lead lead = Persistence.service().retrieve(criteria);
-            if (lead != null) {
-                lead.status().setValue(Lead.Status.rented);
-                Persistence.service().persist(lead);
-            }
-        } else {
+        // TODO
+        if (!VistaTODO.removedForProduction && lease.billingAccount().initialBalance().isNull()
+                && ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() != Bill.BillStatus.Confirmed) {
             throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
         }
 
+        lease.version().status().setValue(Status.Active);
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.secureSave(lease);
+
+        ServerSideFactory.create(UnitTurnoverAnalysisFacade.class).propagateLeaseActivationToTurnoverReport(lease);
+
+        //TODO move to LeadFacad
+        // update Lead state (if present)
+        EntityQueryCriteria<Lead> criteria = new EntityQueryCriteria<Lead>(Lead.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseId));
+        Lead lead = Persistence.service().retrieve(criteria);
+        if (lead != null) {
+            lead.status().setValue(Lead.Status.rented);
+            Persistence.service().persist(lead);
+        }
     }
 
     @Override

@@ -132,8 +132,12 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                         new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants/Guarantors To Check"), true, result,
                                 new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
                                     @Override
-                                    public String format(ApplicationUserDTO enntity) {
-                                        return enntity.getStringView();
+                                    public String format(ApplicationUserDTO entity) {
+                                        return SimpleMessageFormat.format(//@formatter:off
+                                                "{0}, {1}",
+                                                entity.leaseParticipant().customer().person().name().getStringView(),
+                                                entity.userType().getStringView()
+                                        );//@formatter:on
                                     }
                                 }) {
 
@@ -185,8 +189,12 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                             new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result,
                                     new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
                                         @Override
-                                        public String format(ApplicationUserDTO enntity) {
-                                            return enntity.getStringView();
+                                        public String format(ApplicationUserDTO entity) {
+                                            return SimpleMessageFormat.format(//@formatter:off
+                                                    "{0}, {1}",
+                                                    entity.leaseParticipant().customer().person().name().getStringView(),
+                                                    entity.userType().getStringView()
+                                            );//@formatter:on
                                         }
                                     }) {
 
