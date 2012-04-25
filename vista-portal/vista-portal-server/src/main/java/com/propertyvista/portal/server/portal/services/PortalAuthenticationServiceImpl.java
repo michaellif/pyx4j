@@ -91,6 +91,9 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
         } else if (selectedLease != null) {
             actualBehaviors.add(ServerSideFactory.create(CustomerFacade.class).getLeaseBehavior(user, selectedLease));
             actualBehaviors.addAll(behaviors);
+            if (leases.size() > 1) {
+                actualBehaviors.add(VistaCustomerBehavior.HasMultipleLeases);
+            }
         } else {
             actualBehaviors.add(VistaCustomerBehavior.LeaseSelectionRequired);
         }

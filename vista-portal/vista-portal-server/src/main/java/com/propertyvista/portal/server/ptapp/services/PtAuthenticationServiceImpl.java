@@ -99,6 +99,9 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
             }
             actualBehaviors.add(behavior);
             actualBehaviors.addAll(behaviors);
+            if (applications.size() > 1) {
+                actualBehaviors.add(VistaCustomerBehavior.HasMultipleApplications);
+            }
         } else {
             actualBehaviors.add(VistaCustomerBehavior.ApplicationSelectionRequired);
         }

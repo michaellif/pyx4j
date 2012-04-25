@@ -79,7 +79,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
             grant(new IServiceExecutePermission(PtAuthenticationService.class));
 
             grant(VistaCustomerBehavior.LeaseSelectionRequired, new IServiceExecutePermission(LeaseContextSelectionService.class));
+            grant(VistaCustomerBehavior.HasMultipleLeases, new IServiceExecutePermission(LeaseContextSelectionService.class));
             grant(VistaCustomerBehavior.ApplicationSelectionRequired, new IServiceExecutePermission(ApplicationSelectionService.class));
+            grant(VistaCustomerBehavior.HasMultipleApplications, new IServiceExecutePermission(ApplicationSelectionService.class));
 
             // Old TODO remove
             grant(new ServiceExecutePermission(EntityServices.Query.class));

@@ -23,6 +23,8 @@ public enum VistaCustomerBehavior implements Behavior {
 
     ApplicationSelectionRequired,
 
+    HasMultipleApplications,
+
     Prospective,
 
     ProspectiveApplicant,
@@ -48,6 +50,8 @@ public enum VistaCustomerBehavior implements Behavior {
     // Application Approved - > Portal
 
     LeaseSelectionRequired,
+
+    HasMultipleLeases,
 
     @Translate(value = "Tenant")
     Tenant,
