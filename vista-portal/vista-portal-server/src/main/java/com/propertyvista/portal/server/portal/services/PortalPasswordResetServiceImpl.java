@@ -27,7 +27,7 @@ public class PortalPasswordResetServiceImpl extends VistaPasswordResetServiceImp
 
     @Override
     protected AuthenticationResponse authenticate(CustomerUserCredential credentials) {
-        return new PortalAuthenticationServiceImpl().authenticate(credentials);
+        return new PortalAuthenticationServiceImpl().authenticate(credentials, null);
     }
 
 }

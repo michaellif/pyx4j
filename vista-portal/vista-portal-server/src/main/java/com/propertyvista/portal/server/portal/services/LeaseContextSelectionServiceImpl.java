@@ -16,15 +16,13 @@ package com.propertyvista.portal.server.portal.services;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -57,9 +55,8 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
     }
 
     @Override
-    public void setLeaseContext(AsyncCallback<VoidSerializable> callback, Lease leaseStub) {
-        // TODO Auto-generated method stub
-        throw new NotImplementedException();
+    public void setLeaseContext(AsyncCallback<AuthenticationResponse> callback, Lease leaseStub) {
+        callback.onSuccess(new PortalAuthenticationServiceImpl().reAuthenticate(leaseStub));
     }
 
 }

@@ -27,7 +27,7 @@ public class PtPasswordResetServiceImpl extends VistaPasswordResetServiceImpl<Cu
 
     @Override
     protected AuthenticationResponse authenticate(CustomerUserCredential credentials) {
-        return new PtAuthenticationServiceImpl().authenticate(credentials);
+        return new PtAuthenticationServiceImpl().authenticate(credentials, null);
     }
 
 }

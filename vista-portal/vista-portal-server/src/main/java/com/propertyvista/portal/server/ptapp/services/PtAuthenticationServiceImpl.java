@@ -20,6 +20,7 @@ import java.util.Set;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.Behavior;
@@ -67,20 +68,27 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
     }
 
     @Override
-    public String beginSession(CustomerUser user, Set<Behavior> behaviors) {
+    public String beginSession(CustomerUser user, Set<Behavior> behaviors, IEntity additionalConditions) {
         Set<Behavior> actualBehaviors = new HashSet<Behavior>();
-        OnlineApplication selectedApplication = null;
 
         // See if active Application exists
         List<OnlineApplication> applications = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(user);
+
+        OnlineApplication selectedApplication = null;
+        // Get application set in ApplicationSelectionService
+        if ((additionalConditions instanceof OnlineApplication) && (applications.contains(additionalConditions))) {
+            selectedApplication = applications.get(applications.indexOf(additionalConditions));
+        } else if (applications.size() == 1) {
+            selectedApplication = applications.get(0);
+        }
+
         if (applications.size() == 0) {
             if (ApplicationMode.isDevelopment()) {
                 throw new Error("Application not found for user" + user.getStringView());
             } else {
                 throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
             }
-        } else if (applications.size() == 1) {
-            selectedApplication = applications.get(0);
+        } else if (selectedApplication != null) {
             VistaCustomerBehavior behavior = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationBehavior(selectedApplication);
             if (behavior == null) {
                 if (ApplicationMode.isDevelopment()) {
@@ -95,7 +103,7 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
             actualBehaviors.add(VistaCustomerBehavior.ApplicationSelectionRequired);
         }
 
-        String sessionToken = super.beginSession(user, actualBehaviors);
+        String sessionToken = super.beginSession(user, actualBehaviors, additionalConditions);
 
         // set application in context here:
         if (selectedApplication != null) {

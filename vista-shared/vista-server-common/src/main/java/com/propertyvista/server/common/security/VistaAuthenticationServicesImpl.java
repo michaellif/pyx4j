@@ -30,6 +30,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
@@ -236,7 +237,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.addAll(getBehaviors(cr));
             behaviors.add(getApplicationBehavior());
-            return beginSession(user, behaviors);
+            return beginSession(user, behaviors, null);
         }
     }
 
@@ -254,13 +255,13 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         }
     }
 
-    public final AuthenticationResponse authenticate(E credentials) {
+    public final AuthenticationResponse authenticate(E credentials, IEntity additionalConditions) {
         U user = Persistence.service().retrieve(userClass, credentials.getPrimaryKey());
         // Try to begin Session
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.addAll(getBehaviors(credentials));
         behaviors.add(getApplicationBehavior());
-        String sessionToken = beginSession(user, behaviors);
+        String sessionToken = beginSession(user, behaviors, additionalConditions);
         if (!isSessionValid()) {
             Lifecycle.endSession();
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
@@ -268,7 +269,12 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         return createAuthenticationResponse(sessionToken);
     }
 
-    protected String beginSession(U user, Set<Behavior> behaviors) {
+    public final AuthenticationResponse reAuthenticate(IEntity additionalConditions) {
+        E credentials = Persistence.service().retrieve(credentialClass, VistaContext.getCurrentUserPrimaryKey());
+        return authenticate(credentials, additionalConditions);
+    }
+
+    protected String beginSession(U user, Set<Behavior> behaviors, IEntity additionalConditions) {
         // Only default ApplicationBehavior assigned is error. User have no roles
         if (behaviors.isEmpty() || ((behaviors.size() == 1) && (behaviors.contains(getApplicationBehavior())))) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);

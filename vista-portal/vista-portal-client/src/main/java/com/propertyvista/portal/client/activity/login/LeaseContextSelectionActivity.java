@@ -21,7 +21,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.client.ui.LeaseContextSelectionView;
@@ -59,10 +62,11 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
 
     @Override
     public void setLeaseContext(Lease leaseStub) {
-        service.setLeaseContext(new DefaultAsyncCallback<VoidSerializable>() {
+        service.setLeaseContext(new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
-                // enjoy
+            public void onSuccess(AuthenticationResponse result) {
+                ClientContext.authenticated(result);
+                AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
             }
 
         }, leaseStub);

@@ -17,22 +17,17 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationDTO;
 
-/**
- * 
- * The extending of {@link AbstractListService} is just to support UI's {@link basic lister}
- */
 public interface ApplicationSelectionService extends IService {
 
     void getApplications(AsyncCallback<Vector<OnlineApplicationDTO>> callback);
 
     /** set the chosen application as a working context for the PtApp */
-    void setApplicationContext(AsyncCallback<VoidSerializable> callback, OnlineApplication applicationStub);
+    void setApplicationContext(AsyncCallback<AuthenticationResponse> callback, OnlineApplication applicationStub);
 
 }

@@ -28,7 +28,7 @@ public class CrmPasswordResetServiceImpl extends VistaPasswordResetServiceImpl<C
 
     @Override
     protected AuthenticationResponse authenticate(CrmUserCredential credentials) {
-        return new CrmAuthenticationServiceImpl().authenticate(credentials);
+        return new CrmAuthenticationServiceImpl().authenticate(credentials, null);
     }
 
 }

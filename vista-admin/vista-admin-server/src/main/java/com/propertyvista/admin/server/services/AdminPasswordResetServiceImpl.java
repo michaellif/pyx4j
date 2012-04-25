@@ -27,7 +27,7 @@ public class AdminPasswordResetServiceImpl extends VistaPasswordResetServiceImpl
 
     @Override
     protected AuthenticationResponse authenticate(AdminUserCredential credentials) {
-        return new AdminAuthenticationServiceImpl().authenticate(credentials);
+        return new AdminAuthenticationServiceImpl().authenticate(credentials, null);
     }
 
 }

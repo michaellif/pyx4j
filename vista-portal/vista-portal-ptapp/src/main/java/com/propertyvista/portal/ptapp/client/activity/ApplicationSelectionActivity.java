@@ -21,7 +21,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.ptapp.client.ui.ApplicationSelectionView;
@@ -63,10 +66,11 @@ public class ApplicationSelectionActivity extends AbstractActivity implements Ap
     @Override
     public void selectApplication(OnlineApplication onlineApplicationStub) {
 
-        service.setApplicationContext(new DefaultAsyncCallback<VoidSerializable>() {
+        service.setApplicationContext(new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
-                // TODO Auto-generated method stub                
+            public void onSuccess(AuthenticationResponse result) {
+                ClientContext.authenticated(result);
+                AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
             }
 
         }, onlineApplicationStub);

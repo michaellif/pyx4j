@@ -18,7 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.dto.LeaseContextChoiceDTO;
@@ -27,6 +27,6 @@ public interface LeaseContextSelectionService extends IService {
 
     void getLeaseContextChoices(AsyncCallback<Vector<LeaseContextChoiceDTO>> callback);
 
-    void setLeaseContext(AsyncCallback<VoidSerializable> callback, Lease leaseStub);
+    void setLeaseContext(AsyncCallback<AuthenticationResponse> callback, Lease leaseStub);
 
 }

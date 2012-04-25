@@ -20,6 +20,7 @@ import java.util.Set;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -69,27 +70,32 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
     }
 
     @Override
-    public String beginSession(CustomerUser user, Set<Behavior> behaviors) {
+    public String beginSession(CustomerUser user, Set<Behavior> behaviors, IEntity additionalConditions) {
         Set<Behavior> actualBehaviors = new HashSet<Behavior>();
-        Lease selectedLease = null;
 
         // See if active Lease exists
         List<Lease> leases = ServerSideFactory.create(CustomerFacade.class).getActiveLeases(user);
+        Lease selectedLease = null;
+        if ((additionalConditions instanceof Lease) && (leases.contains(additionalConditions))) {
+            selectedLease = leases.get(leases.indexOf(additionalConditions));
+        } else if (leases.size() == 1) {
+            selectedLease = leases.get(0);
+        }
+
         if (leases.size() == 0) {
             if (ApplicationMode.isDevelopment()) {
                 throw new Error("Application not found for user" + user.getDebugExceptionInfoString());
             } else {
                 throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
             }
-        } else if (leases.size() == 1) {
-            selectedLease = leases.get(0);
+        } else if (selectedLease != null) {
             actualBehaviors.add(ServerSideFactory.create(CustomerFacade.class).getLeaseBehavior(user, selectedLease));
             actualBehaviors.addAll(behaviors);
         } else {
             actualBehaviors.add(VistaCustomerBehavior.LeaseSelectionRequired);
         }
 
-        String sessionToken = super.beginSession(user, actualBehaviors);
+        String sessionToken = super.beginSession(user, actualBehaviors, additionalConditions);
 
         if (selectedLease != null) {
             VistaCustomerContext.setCurrentUserLease(selectedLease);

@@ -16,15 +16,13 @@ package com.propertyvista.portal.server.ptapp.services;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -37,9 +35,8 @@ import com.propertyvista.portal.server.ptapp.PtAppContext;
 public class ApplicationSelectionServiceImpl implements ApplicationSelectionService {
 
     @Override
-    public void setApplicationContext(AsyncCallback<VoidSerializable> callback, OnlineApplication applicationStub) {
-        // TODO implement setting contexts of current application
-        throw new NotImplementedException();
+    public void setApplicationContext(AsyncCallback<AuthenticationResponse> callback, OnlineApplication applicationStub) {
+        callback.onSuccess(new PtAuthenticationServiceImpl().reAuthenticate(applicationStub));
     }
 
     @Override
