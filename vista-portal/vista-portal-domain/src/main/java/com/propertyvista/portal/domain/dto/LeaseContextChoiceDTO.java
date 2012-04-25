@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.dto;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -27,6 +28,7 @@ public interface LeaseContextChoiceDTO extends IEntity {
     Lease leaseStub();
 
     /** just for passing unit number */
+    @Caption(name = "Unit")
     AptUnit unitView();
 
     /** address */

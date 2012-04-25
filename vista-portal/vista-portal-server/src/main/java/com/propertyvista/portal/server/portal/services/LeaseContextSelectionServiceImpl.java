@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -42,6 +43,10 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
         for (Lease lease : activeLeases) {
             LeaseContextChoiceDTO choice = EntityFactory.create(LeaseContextChoiceDTO.class);
             choice.leaseStub().set(lease.createIdentityStub());
+
+            Persistence.service().retrieve(lease.unit());
+            choice.unitView().set(lease.unit().duplicate());
+            choice.unitView().setAttachLevel(AttachLevel.ToStringMembers);
 
             Persistence.service().retrieve(lease.unit().belongsTo());
             choice.address().set(lease.unit().belongsTo().info().address().duplicate());

@@ -25,6 +25,8 @@ import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.common.client.ui.components.security.PasswordResetViewImpl;
 import com.propertyvista.portal.client.ui.CaptionView;
 import com.propertyvista.portal.client.ui.CaptionViewImpl;
+import com.propertyvista.portal.client.ui.LeaseContextSelectionView;
+import com.propertyvista.portal.client.ui.LeaseContextSelectionViewImpl;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.NavigViewImpl;
 import com.propertyvista.portal.client.ui.PotentialTenantView;
@@ -84,6 +86,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new LoginWithTokenViewImpl());
             } else if (PasswordChangeView.class.equals(type)) {
                 map.put(type, new PasswordChangeViewImpl());
+            } else if (LeaseContextSelectionView.class.equals(type)) {
+                map.put(type, new LeaseContextSelectionViewImpl());
             }
         }
 

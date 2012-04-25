@@ -102,6 +102,7 @@ public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView 
         public LeaseContextChoicesLister() {
             super(LeaseContextChoiceDTO.class, false, false);
             setSelectable(true);
+            getDataTablePanel().setFilteringEnabled(false);
             setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().unitView()).build(),
                     new MemberColumnDescriptor.Builder(proto().address().streetNumber()).build(),                    

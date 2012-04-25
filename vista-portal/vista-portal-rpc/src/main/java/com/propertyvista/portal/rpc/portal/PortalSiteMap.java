@@ -32,6 +32,7 @@ public class PortalSiteMap implements SiteMap {
     public static class LoginWithToken extends AppPlace {
     }
 
+    @PlaceProperties(caption = "Select Lease")
     public static class LeaseContextSelection extends AppPlace {
     }
 

@@ -13,20 +13,31 @@
  */
 package com.propertyvista.portal.client.activity.login;
 
+import java.util.Vector;
+
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.client.ui.LeaseContextSelectionView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.domain.dto.LeaseContextChoiceDTO;
+import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
 
 public class LeaseContextSelectionActivity extends AbstractActivity implements LeaseContextSelectionView.Presenter {
 
     private final LeaseContextSelectionView view;
 
+    private final LeaseContextSelectionService service;
+
     public LeaseContextSelectionActivity() {
         this.view = PortalViewFactory.instance(LeaseContextSelectionView.class);
+        this.service = GWT.<LeaseContextSelectionService> create(LeaseContextSelectionService.class);
     }
 
     @Override
@@ -37,12 +48,23 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
 
     @Override
     public void populate() {
-
+        service.getLeaseContextChoices(new DefaultAsyncCallback<Vector<LeaseContextChoiceDTO>>() {
+            @Override
+            public void onSuccess(Vector<LeaseContextChoiceDTO> result) {
+                view.populate(result);
+            }
+        });
     }
 
     @Override
     public void setLeaseContext(Lease leaseStub) {
+        service.setLeaseContext(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                // enjoy
+            }
 
+        }, leaseStub);
     }
 
 }
