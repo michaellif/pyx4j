@@ -94,7 +94,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 if (buildingElementClass != null) {
                     if (parent.isEditable()) {
                         CEntityComboBox<BuildingElement> combo = new CEntityComboBox(buildingElementClass);
-                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().building()));
+                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo().productCatalog(), parent.getValue().catalog()));
                         comp = inject(column.getObject(), combo);
                     } else {
                         comp = inject(column.getObject(), new CEntityCrudHyperlink<BuildingElement>(AppPlaceEntityMapper.resolvePlace(buildingElementClass)));
@@ -120,7 +120,6 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                                     MessageDialog.warn(i18n.tr("Note"), i18n.tr("The Selected Utility Type Is Included In The Price"));
                                 }
                             }
-
                         }
                     });
 
