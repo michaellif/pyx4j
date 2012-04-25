@@ -13,6 +13,11 @@
  */
 package com.propertyvista.domain.tenant.ptapp;
 
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -21,6 +26,15 @@ import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep.Status;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ApplicationWizardSubstep extends IEntity {
+
+    @NotNull
+    @ReadOnly
+    @Owner
+    @JoinColumn
+    ApplicationWizardStep step();
+
+    @OrderColumn
+    IPrimitive<Integer> substepOrder();
 
     IPrimitive<String> name();
 
