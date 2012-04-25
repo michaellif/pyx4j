@@ -22,6 +22,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface AgingBucketsDTO extends IEntity {
 
+    IPrimitive<String> label();
+
     IPrimitive<BigDecimal> current();
 
     IPrimitive<BigDecimal> bucket30();

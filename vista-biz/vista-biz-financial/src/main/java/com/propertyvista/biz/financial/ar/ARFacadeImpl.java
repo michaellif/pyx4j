@@ -21,7 +21,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.dto.TransactionLogDTO;
+import com.propertyvista.dto.InvoiceDTO;
 
 public class ARFacadeImpl implements ARFacade {
 
@@ -41,8 +41,8 @@ public class ARFacadeImpl implements ARFacade {
     }
 
     @Override
-    public TransactionLogDTO getTransactionLog(Lease lease) {
-        return ARFinancialTransactionManager.getTransactionLog(lease);
+    public InvoiceDTO getInvoice(Lease lease) {
+        return ARFinancialTransactionManager.getInvoice(lease);
     }
 
     @Override
