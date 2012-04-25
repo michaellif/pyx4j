@@ -64,6 +64,26 @@ public class VistaDBReset {
             log.info("Generating new Data...");
             long start = System.currentTimeMillis();
 
+            NamespaceManager.setNamespace(Pmc.adminNamespace);
+
+            if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                RDBUtils.ensureNamespace();
+                // TODO Hack for non implemented SeparateSchemas DML 
+                ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+                RDBUtils.dropAllEntityTables();
+            }
+
+            Pmc pmc = EntityFactory.create(Pmc.class);
+            pmc.name().setValue("Vista Demo");
+            pmc.dnsName().setValue(VistaNamespaceResolver.demoNamespace);
+            Persistence.service().persist(pmc);
+
+            new VistaAminDataPreloaders().preloadAll();
+
+            Persistence.service().commit();
+
+            NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
+            RDBUtils.ensureNamespace();
             DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
             if ((args != null) && (args.length > 0)) {
                 VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
@@ -82,24 +102,6 @@ public class VistaDBReset {
                 Mail.getMailService().setDisabled(false);
                 Lifecycle.endElevatedUserContext();
             }
-
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
-
-            if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                RDBUtils.ensureNamespace();
-                // TODO Hack for non implemented SeparateSchemas DML 
-                ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
-                RDBUtils.dropAllEntityTables();
-            }
-
-            Pmc pmc = EntityFactory.create(Pmc.class);
-            pmc.name().setValue("Vista Demo");
-            pmc.dnsName().setValue(VistaNamespaceResolver.demoNamespace);
-            Persistence.service().persist(pmc);
-
-            new VistaAminDataPreloaders().preloadAll();
-
-            Persistence.service().commit();
 
             log.info("Preload time: " + TimeUtils.secSince(start));
             log.info("Total time: " + TimeUtils.secSince(totalStart));
