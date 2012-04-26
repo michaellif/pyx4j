@@ -37,6 +37,8 @@ public interface GetUsageRequestIO extends RequestIO {
 
     }
 
+    IPrimitive<UsageType> usageType();
+
     IPrimitive<Date> from();
 
     IPrimitive<Date> to();
