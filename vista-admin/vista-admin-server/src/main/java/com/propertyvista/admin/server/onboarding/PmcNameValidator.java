@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 
 import com.propertyvista.server.domain.admin.Pmc;
+import com.propertyvista.server.domain.admin.ReservedPmcNames;
 
 public class PmcNameValidator {
 
@@ -70,7 +71,8 @@ public class PmcNameValidator {
     }
 
     public static boolean canCreatePmcName(String dnsName) {
-        return PmcNameValidator.isDnsNameValid(dnsName) && !PmcNameValidator.isDnsReserved(dnsName) && !PmcNameValidator.isDnsTaken(dnsName);
+        return PmcNameValidator.isDnsNameValid(dnsName) && !PmcNameValidator.isDnsReserved(dnsName) && !PmcNameValidator.isDnsReservedByCustomers(dnsName)
+                && !PmcNameValidator.isDnsTaken(dnsName);
     }
 
     public static boolean isDnsNameValid(String value) {
@@ -87,6 +89,12 @@ public class PmcNameValidator {
             }
         }
         return false;
+    }
+
+    public static boolean isDnsReservedByCustomers(String dnsName) {
+        EntityQueryCriteria<ReservedPmcNames> criteria = EntityQueryCriteria.create(ReservedPmcNames.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), dnsName));
+        return (Persistence.service().retrieve(criteria) != null);
     }
 
     public static boolean isDnsTaken(String dnsName) {
