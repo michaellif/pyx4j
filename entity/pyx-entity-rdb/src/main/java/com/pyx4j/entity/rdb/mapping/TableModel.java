@@ -486,7 +486,7 @@ public class TableModel {
             log.error("{} SQL {}", tableName, sql);
             log.error("{} SQL insert error", tableName, e);
             if (dialect.isUniqueConstraintException(e)) {
-                throw new UserRuntimeException(i18n.tr("Unable to create \"{0}\" record with duplicate \"{1}\"", entityMeta().getCaption(),
+                throw new UserRuntimeException(i18n.tr("Unable to create \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(),
                         getUniqueConstraintFieldName()));
             } else {
                 throw new RuntimeException(e);
@@ -529,7 +529,7 @@ public class TableModel {
             log.error("{} SQL {}", tableName, sql);
             log.error("{} SQL update error", tableName, e);
             if (dialect.isUniqueConstraintException(e)) {
-                throw new UserRuntimeException(i18n.tr("Unable to create \"{0}\" record with duplicate \"{1}\"", entityMeta().getCaption(),
+                throw new UserRuntimeException(i18n.tr("Unable to create \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(),
                         getUniqueConstraintFieldName()));
             } else {
                 throw new RuntimeException(e);
