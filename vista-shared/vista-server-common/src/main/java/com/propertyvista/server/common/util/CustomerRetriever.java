@@ -52,33 +52,46 @@ public class CustomerRetriever {
 
     public void retrieve(Key customerId) {
         retrieve(Persistence.service().retrieve(Customer.class, customerId));
+
+        EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customer));
+        List<PersonScreening> allScreenings = Persistence.service().query(criteria);
+        if (allScreenings != null && !allScreenings.isEmpty()) {
+            screening = allScreenings.get(allScreenings.size() - 1); // use last screening
+        } else {
+            screening = EntityFactory.create(PersonScreening.class);
+        }
+
+        if (!screening.isEmpty()) {
+            retrieve(screening);
+        } else {
+            // newly created - set owner:
+            screening.screene().set(customer);
+        }
     }
 
     protected void retrieve(Customer in) {
         customer = in;
         if (customer != null) {
-            EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customer));
-            List<PersonScreening> allScreenings = Persistence.service().query(criteria);
-            if (allScreenings != null && !allScreenings.isEmpty()) {
-                screening = allScreenings.get(allScreenings.size() - 1); // use last screening
-            } else {
-                screening = EntityFactory.create(PersonScreening.class);
+            if (customer.isValueDetached()) {
+                Persistence.service().retrieve(customer);
             }
-
-            if (!screening.isEmpty()) {
-                Persistence.service().retrieve(screening.documents());
-                if (retrieveFinancialData) {
-                    Persistence.service().retrieve(screening.incomes());
-                    Persistence.service().retrieve(screening.assets());
-                    Persistence.service().retrieve(screening.equifaxApproval());
-                }
-            } else {
-                // newly created - set owner:
-                screening.screene().set(customer);
-            }
-
             Persistence.service().retrieve(customer.emergencyContacts());
+        }
+    }
+
+    protected void retrieve(PersonScreening in) {
+        screening = in;
+        if (screening != null) {
+            if (screening.isValueDetached()) {
+                Persistence.service().retrieve(screening);
+            }
+            Persistence.service().retrieve(screening.documents());
+            if (retrieveFinancialData) {
+                Persistence.service().retrieve(screening.incomes());
+                Persistence.service().retrieve(screening.assets());
+                Persistence.service().retrieve(screening.equifaxApproval());
+            }
         }
     }
 
@@ -92,6 +105,7 @@ public class CustomerRetriever {
 
     public void saveCustomer() {
         Persistence.service().merge(customer);
+        saveScreening();
     }
 
     public PersonScreening getScreening() {
@@ -99,13 +113,15 @@ public class CustomerRetriever {
     }
 
     public void saveScreening() {
-        Persistence.service().merge(screening);
+        if (screening != null) {
+            Persistence.service().merge(screening);
 
-        // save detached entities:
-        Persistence.service().merge(screening.documents());
-        if (retrieveFinancialData) {
-            Persistence.service().merge(screening.incomes());
-            Persistence.service().merge(screening.assets());
+            // save detached entities:
+            Persistence.service().merge(screening.documents());
+            if (retrieveFinancialData) {
+                Persistence.service().merge(screening.incomes());
+                Persistence.service().merge(screening.assets());
+            }
         }
     }
 }

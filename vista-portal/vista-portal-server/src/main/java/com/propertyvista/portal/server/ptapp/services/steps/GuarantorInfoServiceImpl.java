@@ -46,7 +46,6 @@ public class GuarantorInfoServiceImpl implements GuarantorInfoService {
         new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(entity, tr.getScreening());
 
         tr.saveCustomer();
-        tr.saveScreening();
 
         entity = new TenantConverter.Guarantor2TenantInfo().createDTO(tr.getGuarantor());
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.getScreening(), entity);

@@ -46,7 +46,6 @@ public class TenantInfoServiceImpl implements TenantInfoService {
         new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(entity, tr.getScreening());
 
         tr.saveCustomer();
-        tr.saveScreening();
 
         entity = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.getScreening(), entity);

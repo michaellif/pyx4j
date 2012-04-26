@@ -34,6 +34,7 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -300,6 +301,12 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         case Guarantor:
             app.steps().addAll(createGuarantorApplicationProgress((Guarantor) participant));
             break;
+        }
+
+        // create empty new screening if null:
+        if (participant.screening().isNull()) {
+            participant.screening().set(EntityFactory.create(PersonScreening.class));
+            Persistence.service().persist(participant);
         }
 
         app.masterOnlineApplication().set(masterOnlineApplication);

@@ -48,5 +48,6 @@ public class TenantRetriever extends CustomerRetriever {
             throw new SecurityViolationException("Invalid data access");
         }
         super.retrieve(tenant.customer());
+        super.retrieve(tenant.screening());
     }
 }
