@@ -18,7 +18,6 @@ import java.util.EnumSet;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionModel;
@@ -27,7 +26,11 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
@@ -103,24 +106,27 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
         private CMoneyField balance;
 
         public ExistingLeaseDataDialog() {
-            super(i18n.tr("Enter Lease Data"), EnumSet.allOf(Service.Type.class));
+            super(i18n.tr("Lease Data"), EnumSet.allOf(Service.Type.class));
         }
 
         @Override
         protected <E extends Enum<E>> Widget initBody(SelectionModel<E> selectionModel, EnumSet<E> values, String height) {
             VerticalPanel body = new VerticalPanel();
 
-            body.add(new HTML(i18n.tr("Lease Type:")));
+            body.add(new HTML("<b>" + i18n.tr("Type") + ":</b>"));
             body.add(super.initBody(selectionModel, values, height));
 
-            HorizontalPanel balancePanel = new HorizontalPanel();
-            balancePanel.add(new HTML(i18n.tr("Initial balance:")));
-            balancePanel.add((balance = new CMoneyField()).asWidget());
-            balancePanel.setCellWidth(balance.asWidget(), "100px");
-            balancePanel.getElement().getStyle().setPaddingTop(6, Unit.PX);
-            balancePanel.getElement().getStyle().setPaddingBottom(2, Unit.PX);
-            balancePanel.setWidth("100%");
-            body.add(balancePanel);
+            balance = new CMoneyField();
+            balance.setTitle(i18n.tr("Initial balance"));
+            balance.addValueValidator(new EditableValueValidator<BigDecimal>() {
+                @Override
+                public ValidationFailure isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
+                    return (value == null ? new ValidationFailure(i18n.tr("Initial balance value shoud be entered!")) : null);
+                }
+            });
+            Widget w;
+            body.add(w = new WidgetDecorator.Builder(balance).componentWidth(7).build());
+            w.getElement().getStyle().setPaddingTop(6, Unit.PX);
 
             body.setWidth("100%");
             return body;
@@ -128,12 +134,12 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
 
         @Override
         public boolean onClickOk() {
+            balance.setVisited(true);
             if (balance.isValid()) {
                 getPresenter().editNew(getItemOpenPlaceClass(), createNewLease(getSelectedType(), balance.getValue()));
                 return true;
             }
             return false;
-
         }
 
         @Override
