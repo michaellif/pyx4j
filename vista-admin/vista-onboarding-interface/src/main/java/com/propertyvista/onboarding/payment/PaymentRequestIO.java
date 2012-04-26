@@ -15,6 +15,8 @@ package com.propertyvista.onboarding.payment;
 
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,7 +24,11 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.onboarding.RequestIO;
 
-
+/**
+ * Not used for now
+ */
+@XmlTransient
+@Deprecated
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PaymentRequestIO extends RequestIO {

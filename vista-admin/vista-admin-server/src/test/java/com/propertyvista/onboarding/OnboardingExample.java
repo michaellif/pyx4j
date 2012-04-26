@@ -95,8 +95,6 @@ public class OnboardingExample {
             r.name().setValue("Star Starlight");
             r.dnsNameAliases().add("www.rentstarlight.com");
             r.dnsNameAliases().add("www.rentstarlight.ca");
-            r.adminUserEmail().setValue("bob@rentstarlight.com");
-            r.adminUserpassword().setValue("secret");
             writeXML(createExampleRequest(r), cnt + "-request-Create.xml");
             writeXML(createExampleResponse(), cnt + "-response-Create.xml");
         }

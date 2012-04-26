@@ -14,15 +14,28 @@
  */
 package com.propertyvista.onboarding;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AccountInfoResponseIO extends ResponseIO {
 
+    /**
+     * Not used for now
+     */
     @NotNull
+    @XmlTransient
+    @Deprecated
     AccountInfoIO accountInfo();
 
+    IPrimitive<String> vistaCrmUrl();
+
+    IPrimitive<String> residentPortalUrl();
+
+    IPrimitive<String> prospectPortalUrl();
 }
