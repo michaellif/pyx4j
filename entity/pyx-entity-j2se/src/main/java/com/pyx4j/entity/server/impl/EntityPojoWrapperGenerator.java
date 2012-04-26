@@ -148,17 +148,24 @@ public class EntityPojoWrapperGenerator {
         try {
             CtClass implClass = pool.makeClass(pojoClassName);
             implClass.getClassFile().setVersionToJava5();
-            XmlRootElement xmlRootElement = entityMeta.getAnnotation(XmlRootElement.class);
-            if (xmlRootElement != null) {
-                String name = xmlRootElement.name();
-                if ((name == null) || ("##default".equals(name))) {
-                    name = getXMLName(entityMeta.getEntityClass());
+
+            if (entityMeta.getAnnotation(XmlTransient.class) != null) {
+                addAnnotationValue(implClass, XmlTransient.class, null, null);
+            } else {
+
+                XmlRootElement xmlRootElement = entityMeta.getAnnotation(XmlRootElement.class);
+                if (xmlRootElement != null) {
+                    String name = xmlRootElement.name();
+                    if ((name == null) || ("##default".equals(name))) {
+                        name = getXMLName(entityMeta.getEntityClass());
+                    }
+                    addAnnotationValue(implClass, XmlRootElement.class, "name", name);
                 }
-                addAnnotationValue(implClass, XmlRootElement.class, "name", name);
             }
+
             boolean abstractClass = false;
             if (entityMeta.getAnnotation(AbstractEntity.class) != null) {
-                Map<String, String> pojoNames = createAssignableFromPojo(entityMeta.getEntityClass());
+                Map<String, String> pojoNames = createXmlAssignableFromPojo(entityMeta.getEntityClass());
                 if (!pojoNames.isEmpty()) {
                     addAnnotationClassValues(implClass, XmlSeeAlso.class, "value", pojoNames.values());
                 }
@@ -190,12 +197,12 @@ public class EntityPojoWrapperGenerator {
                 switch (memberMeta.getObjectClassType()) {
                 case Entity:
                     ctValueClass = getPojoCtClass(EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
-                    assignablePojoNames = createAssignableFromPojo((Class<IEntity>) memberMeta.getValueClass());
+                    assignablePojoNames = createXmlAssignableFromPojo((Class<IEntity>) memberMeta.getValueClass());
                     break;
                 case EntitySet:
                 case EntityList:
                     ctValueClass = getPojoCtClass(EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
-                    assignablePojoNames = createAssignableFromPojo((Class<IEntity>) memberMeta.getValueClass());
+                    assignablePojoNames = createXmlAssignableFromPojo((Class<IEntity>) memberMeta.getValueClass());
                     ctValueClass = pool.get(ctValueClass.getName() + "[]");
                     break;
                 case Primitive:
@@ -270,13 +277,15 @@ public class EntityPojoWrapperGenerator {
         }
     }
 
-    private Map<String, String> createAssignableFromPojo(Class<? extends IEntity> valueClass) {
+    private Map<String, String> createXmlAssignableFromPojo(Class<? extends IEntity> valueClass) {
         Map<String, String> pojoNames = new HashMap<String, String>();
         if ((valueClass.getAnnotation(AbstractEntity.class) != null) || (valueClass.getAnnotation(Inheritance.class) != null)) {
             for (Class<? extends IEntity> classValue : ServerEntityFactory.getAllAssignableFrom(valueClass)) {
                 if (classValue.getAnnotation(AbstractEntity.class) == null) {
                     getPojoCtClass(EntityFactory.getEntityMeta(classValue));
-                    pojoNames.put(getXMLName(classValue), classValue.getName() + "Pojo");
+                    if (classValue.getAnnotation(XmlTransient.class) == null) {
+                        pojoNames.put(getXMLName(classValue), classValue.getName() + "Pojo");
+                    }
                     getXMLName(classValue);
                 }
             }
@@ -354,7 +363,9 @@ public class EntityPojoWrapperGenerator {
             attr = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
         }
         Annotation annotation = new Annotation(constPool, pool.get(annotationClass.getName()));
-        annotation.addMemberValue(name, new StringMemberValue(value, constPool));
+        if (name != null) {
+            annotation.addMemberValue(name, new StringMemberValue(value, constPool));
+        }
 
         // Set proper default values
         if (annotationClass == XmlType.class) {
@@ -448,7 +459,9 @@ public class EntityPojoWrapperGenerator {
             attr = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
         }
         Annotation annotation = new Annotation(constPool, pool.get(annotationClass.getName()));
-        annotation.addMemberValue(name, new ClassMemberValue(value.getName(), constPool));
+        if (name != null) {
+            annotation.addMemberValue(name, new ClassMemberValue(value.getName(), constPool));
+        }
 
         if (annotationClass == XmlJavaTypeAdapter.class) {
             annotation.addMemberValue("type", new ClassMemberValue(XmlJavaTypeAdapter.class.getName() + "$DEFAULT", constPool));
