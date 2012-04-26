@@ -180,7 +180,7 @@ public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntit
                     @Override
                     protected void setFilters(List<PropertyCriterion> filters) {
                         DTO currentValue = LeaseEditorFormBase.this.getValue();
-                        if (!currentValue.leaseFrom().isNull() && !currentValue.leaseTo().isNull() && filters != null) {
+                        if (!currentValue.leaseFrom().isNull() && filters != null) {
                             // filter out already leased units (null) and not available by date:
                             filters.add(PropertyCriterion.ne(proto()._availableForRent(), (Serializable) null));
                             filters.add(PropertyCriterion.le(proto()._availableForRent(), currentValue.leaseFrom().getValue()));
