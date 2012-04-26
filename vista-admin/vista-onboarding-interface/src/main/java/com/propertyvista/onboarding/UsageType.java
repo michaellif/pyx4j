@@ -17,6 +17,10 @@ public enum UsageType {
 
     Qquifax,
 
-    ActiveBankAccounts
+    BuildingUnitCount
+
+    //ActiveBankAccounts
+
+    // VistaMobleActiveBuildings
 
 }

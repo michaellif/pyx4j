@@ -30,5 +30,7 @@ public interface UsageRecordIO extends IEntity {
 
     IPrimitive<UsageType> usageType();
 
+    IPrimitive<String> text();
+
     IPrimitive<Integer> value();
 }
