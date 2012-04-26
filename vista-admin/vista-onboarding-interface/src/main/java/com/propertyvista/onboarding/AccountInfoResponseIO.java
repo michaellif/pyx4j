@@ -33,6 +33,9 @@ public interface AccountInfoResponseIO extends ResponseIO {
     @Deprecated
     AccountInfoIO accountInfo();
 
+    // TBD
+    IPrimitive<String> accountStatus_TBD();
+
     IPrimitive<String> vistaCrmUrl();
 
     IPrimitive<String> residentPortalUrl();
