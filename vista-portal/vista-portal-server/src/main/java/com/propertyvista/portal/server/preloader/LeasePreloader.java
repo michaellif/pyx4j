@@ -13,8 +13,12 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import com.propertvista.generator.LeaseGenerator;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
@@ -33,7 +37,13 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
     public String create() {
         int numCreated = 0;
         LeaseGenerator generator = new LeaseGenerator(config());
-        LeaseLifecycleSim leaseSim = new LeaseLifecycleSim();
+
+        // Start creating leases from 4 years ago
+        Calendar fourYearsAgo = Calendar.getInstance();
+        fourYearsAgo.setTime(new Date());
+        fourYearsAgo.add(Calendar.YEAR, -4);
+
+        LeaseLifecycleSim leaseSim = LeaseLifecycleSim.sim().start(new LogicalDate(fourYearsAgo.getTime())).create();
 
         AptUnitSource aptUnitSource = new AptUnitSource(1);
 
