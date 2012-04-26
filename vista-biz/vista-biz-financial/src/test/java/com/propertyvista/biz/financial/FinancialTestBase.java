@@ -287,7 +287,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     private BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, ExecutionType executionType,
             LogicalDate effectiveDate, LogicalDate expirationDate) {
 
-        Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         BillableItem actualBillableItem = findBillableItem(billableItemId, lease);
 
         BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
@@ -302,11 +302,9 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         adjustment.effectiveDate().setValue(effectiveDate);
         adjustment.expirationDate().setValue(expirationDate);
         adjustment.description().setValue(executionType.name());
+        adjustment.billableItem().set(actualBillableItem);
 
-        actualBillableItem.adjustments().add(adjustment);
-
-        lease.saveAction().setValue(SaveAction.saveAsFinal);
-        Persistence.service().persist(lease);
+        Persistence.service().persist(adjustment);
         Persistence.service().commit();
 
         return adjustment;
@@ -333,11 +331,9 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         adjustment.effectiveDate().setValue(effectiveDate);
         adjustment.description().setValue(reason.name().getValue());
         adjustment.reason().setValue(reason.getValue());
+        adjustment.billingAccount().set(lease.billingAccount());
 
-        lease.billingAccount().adjustments().add(adjustment);
-
-        lease.saveAction().setValue(SaveAction.saveAsFinal);
-        Persistence.service().persist(lease);
+        Persistence.service().persist(adjustment);
         Persistence.service().commit();
 
         if (immediate) {
