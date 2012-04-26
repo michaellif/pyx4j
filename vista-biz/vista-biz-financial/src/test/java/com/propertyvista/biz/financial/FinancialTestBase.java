@@ -162,7 +162,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         lease.leaseTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
 
         lease.billingAccount().billingPeriodStartDate().setValue(billingPeriodStartDate);
-
+        Persistence.service().persist(lease.billingAccount());
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(lease);
         Persistence.service().commit();
@@ -353,12 +353,9 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         paymentRecord.receivedDate().setValue(FinancialTestsUtils.getDate(receivedDate));
         paymentRecord.amount().setValue(new BigDecimal(amount));
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
+        paymentRecord.billingAccount().set(lease.billingAccount());
 
-        Persistence.service().retrieveMember(lease.billingAccount().payments());
-        lease.billingAccount().payments().add(paymentRecord);
-
-        lease.saveAction().setValue(SaveAction.saveAsFinal);
-        Persistence.service().persist(lease);
+        Persistence.service().persist(paymentRecord);
         Persistence.service().commit();
 
         return paymentRecord;
