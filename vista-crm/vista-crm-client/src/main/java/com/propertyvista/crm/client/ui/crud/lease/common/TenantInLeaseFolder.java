@@ -265,11 +265,11 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
     }
 
     private static List<Customer> retrieveExistingCustomers(List<Tenant> list) {
-        List<Customer> tenants = new ArrayList<Customer>(list.size());
+        List<Customer> customers = new ArrayList<Customer>(list.size());
         for (Tenant wrapper : list) {
-            tenants.add(wrapper.customer());
+            customers.add(wrapper.customer());
         }
-        return tenants;
+        return customers;
     }
 
 }

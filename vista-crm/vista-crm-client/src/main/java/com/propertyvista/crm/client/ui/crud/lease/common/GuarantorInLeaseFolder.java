@@ -24,6 +24,7 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -36,6 +37,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.LeaseDTO;
 
 public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
@@ -113,6 +115,16 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening()), 9).customLabel(i18n.tr("Use Screening From")).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CComboBox<Tenant>() {
+                @Override
+                public String getItemName(Tenant o) {
+                    if (o == null) {
+                        return getNoSelectionText();
+                    } else {
+                        return o.getStringView();
+                    }
+                }
+            }), 25).customLabel(i18n.tr("Referred by Tenant")).build());
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
@@ -143,14 +155,21 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
                 combo.resetCriteria();
                 combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().customer()));
             }
+
+            if (get(proto().tenant()) instanceof CComboBox<?>) {
+                @SuppressWarnings("unchecked")
+                CComboBox<Tenant> combo = (CComboBox<Tenant>) get(proto().tenant());
+                combo.setOptions(lease.getValue().version().tenants());
+                combo.getOptions();
+            }
         }
     }
 
     private static List<Customer> retrieveExistingCustomers(List<Guarantor> list) {
-        List<Customer> tenants = new ArrayList<Customer>(list.size());
+        List<Customer> customers = new ArrayList<Customer>(list.size());
         for (Guarantor wrapper : list) {
-            tenants.add(wrapper.customer());
+            customers.add(wrapper.customer());
         }
-        return tenants;
+        return customers;
     }
 }
