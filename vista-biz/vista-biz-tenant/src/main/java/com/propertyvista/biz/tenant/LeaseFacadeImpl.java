@@ -117,6 +117,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public void saveAsFinal(Lease lease) {
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
         persistLease(lease);
         // update unit rent price here:
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
