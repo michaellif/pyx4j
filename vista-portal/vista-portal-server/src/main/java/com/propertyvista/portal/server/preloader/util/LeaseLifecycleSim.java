@@ -148,7 +148,6 @@ public class LeaseLifecycleSim {
 
                 // TODO change that to Employee Agent Decision
                 queueEvent(rndBetween(now(), lease.leaseFrom().getValue()), approveApplication(lease));
-                queueEvent(lease.leaseFrom().getValue(), activate(lease));
             }
         };
     }

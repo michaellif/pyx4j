@@ -125,15 +125,16 @@ public class BillingLifecycle {
         }
     }
 
-    static void confirmBill(Bill bill) {
-        verifyBill(bill, BillStatus.Confirmed);
+    static void confirmBill(Bill billStub) {
+        verifyBill(billStub, BillStatus.Confirmed);
     }
 
-    static void rejectBill(Bill bill) {
-        verifyBill(bill, BillStatus.Rejected);
+    static void rejectBill(Bill billStub) {
+        verifyBill(billStub, BillStatus.Rejected);
     }
 
-    private static void verifyBill(Bill bill, BillStatus billStatus) {
+    private static void verifyBill(Bill billStub, BillStatus billStatus) {
+        Bill bill = Persistence.service().retrieve(Bill.class, billStub.getPrimaryKey());
         if (BillStatus.Finished.equals(bill.billStatus().getValue())) {
             bill.billStatus().setValue(billStatus);
             Persistence.service().persist(bill);
@@ -147,7 +148,6 @@ public class BillingLifecycle {
 
             Persistence.service().persist(bill.billingAccount());
 
-            Persistence.service().commit();
         } else {
             throw new BillingException("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
         }

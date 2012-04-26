@@ -201,7 +201,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     IPrimitive<PaymentFrequency> paymentFrequency();
 
     @JoinColumn
-    @Owned(forceCreation = true)
+    @Owned(forceCreation = true, cascade = {})
     BillingAccount billingAccount();
 
     @Detached

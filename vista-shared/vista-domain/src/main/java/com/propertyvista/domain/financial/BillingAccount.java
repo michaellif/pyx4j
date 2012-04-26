@@ -47,10 +47,10 @@ public interface BillingAccount extends IEntity {
     @Detached
     Lease lease();
 
-    @ReadOnly
+    @ReadOnly(allowOverrideNull = true)
     BillingCycle billingCycle();
 
-    IPrimitive<Integer> accountNumber();
+    IPrimitive<String> accountNumber();
 
     /**
      * Assign to BillingRun during billing extract.
@@ -58,7 +58,7 @@ public interface BillingAccount extends IEntity {
      */
     BillingRun currentBillingRun();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<Bill> bills();
 

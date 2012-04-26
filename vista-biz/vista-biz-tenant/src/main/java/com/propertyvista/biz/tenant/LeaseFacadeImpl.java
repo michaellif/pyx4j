@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.util.EnumSet;
+
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -69,6 +71,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         saveCustomers(lease);
 
         ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease);
+
+        // TODO use IdAssignmentFacade
+        lease.billingAccount().accountNumber().setValue(String.valueOf(System.currentTimeMillis()));
 
         Persistence.service().merge(lease);
 
@@ -250,6 +255,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (!VistaTODO.removedForProduction && lease.billingAccount().initialBalance().isNull()
                 && ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() != Bill.BillStatus.Confirmed) {
             throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
+        }
+        if (!EnumSet.of(Lease.Status.Created, Lease.Status.Approved).contains(lease.version().status().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Impossible to activate lease with status: {0}", lease.version().status().getStringView()));
         }
 
         lease.version().status().setValue(Status.Active);
