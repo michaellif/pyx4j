@@ -31,7 +31,7 @@ import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.util.TenantConverter;
-import com.propertyvista.server.common.util.TenantInLeaseRetriever;
+import com.propertyvista.server.common.util.TenantRetriever;
 
 public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {
 
@@ -40,7 +40,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     @Override
     public void retrieve(AsyncCallback<TenantFinancialDTO> callback, Key tenantId) {
         log.debug("Retrieving financial for tenant {}", tenantId);
-        callback.onSuccess(retrieveData(new TenantInLeaseRetriever(tenantId, true)));
+        callback.onSuccess(retrieveData(new TenantRetriever(tenantId, true)));
     }
 
     @Override
@@ -52,8 +52,8 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
         Lease lease = PtAppContext.retrieveCurrentUserLease();
         List<Guarantor> currentGuarantors = lease.version().guarantors();
 
-        TenantInLeaseRetriever tr = new TenantInLeaseRetriever(entity.getPrimaryKey(), true);
-        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.personScreening);
+        TenantRetriever tr = new TenantRetriever(entity.getPrimaryKey(), true);
+        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.getScreening());
 
         for (Guarantor pg : entity.guarantors()) {
             int idx = currentGuarantors.indexOf(pg);
@@ -61,7 +61,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
                 currentGuarantors.remove(idx);
             } else {
                 // new item - perform initialization:
-                pg.tenant().set(tr.tenantInLease);
+                pg.tenant().set(tr.getTenant());
                 pg.leaseV().set(lease.version());
                 Persistence.service().merge(pg);
             }
@@ -74,7 +74,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
 
         tr.saveScreening();
 
-        DigitalSignatureMgr.reset(tr.getTenant());
+        DigitalSignatureMgr.reset(tr.getCustomer());
         Persistence.service().commit();
 
         // we do not use return value, so return the same as input one:        
@@ -83,9 +83,9 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
 //        callback.onSuccess(retrieveData(tr));
     }
 
-    public TenantFinancialDTO retrieveData(TenantInLeaseRetriever tr) {
-        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.personScreening);
-        dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
+    public TenantFinancialDTO retrieveData(TenantRetriever tr) {
+        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.getScreening());
+        dto.setPrimaryKey(tr.getTenant().getPrimaryKey());
         dto.person().set(tr.getPerson());
 
 //        SharedData.init();

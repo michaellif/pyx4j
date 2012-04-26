@@ -17,36 +17,36 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityViolationException;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Guarantor;
 
-public class TenantRetriever extends CustomerRetriever {
+public class GuarantorRetriever extends CustomerRetriever {
 
-    private Tenant tenant;
+    private Guarantor guarantor;
 
-    public TenantRetriever() {
+    public GuarantorRetriever() {
         super();
     }
 
-    public TenantRetriever(Key tenantId) {
+    public GuarantorRetriever(Key guarantorId) {
         this();
-        retrieve(tenantId);
+        retrieve(guarantorId);
     }
 
-    public TenantRetriever(Key tenantId, boolean retrieveFinancialData) {
+    public GuarantorRetriever(Key guarantorId, boolean retrieveFinancialData) {
         super(retrieveFinancialData);
-        retrieve(tenantId);
+        retrieve(guarantorId);
     }
 
-    public Tenant getTenant() {
-        return tenant;
+    public Guarantor getGuarantor() {
+        return guarantor;
     }
 
     @Override
-    public void retrieve(Key tenantId) {
-        tenant = Persistence.service().retrieve(Tenant.class, tenantId);
-        if (tenant == null) {
+    public void retrieve(Key guarantorId) {
+        guarantor = Persistence.service().retrieve(Guarantor.class, guarantorId);
+        if (guarantor == null) {
             throw new SecurityViolationException("Invalid data access");
         }
-        super.retrieve(tenant.customer());
+        super.retrieve(guarantor.customer());
     }
 }

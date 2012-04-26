@@ -55,7 +55,7 @@ import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMg
 import com.propertyvista.portal.server.ptapp.services.util.LegalStuffUtils;
 import com.propertyvista.portal.server.report.SummaryReport;
 import com.propertyvista.server.common.util.TenantConverter;
-import com.propertyvista.server.common.util.TenantInLeaseRetriever;
+import com.propertyvista.server.common.util.TenantRetriever;
 
 public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements SummaryService {
 
@@ -113,7 +113,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         Persistence.service().retrieve(lease.version().tenants());
         for (Tenant tenantInLease : lease.version().tenants()) {
             Persistence.service().retrieve(tenantInLease);
-            TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
+            TenantRetriever tr = new TenantRetriever(tenantInLease.getPrimaryKey(), true);
 
             summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
 

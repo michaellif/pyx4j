@@ -25,7 +25,7 @@ import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.util.TenantConverter;
-import com.propertyvista.server.common.util.TenantInLeaseRetriever;
+import com.propertyvista.server.common.util.TenantRetriever;
 
 public class TenantInfoServiceImpl implements TenantInfoService {
 
@@ -34,25 +34,25 @@ public class TenantInfoServiceImpl implements TenantInfoService {
     @Override
     public void retrieve(AsyncCallback<TenantInfoDTO> callback, Key tenantId) {
         log.debug("Retrieving Info for tenant {}", tenantId);
-        callback.onSuccess(retrieveData(new TenantInLeaseRetriever(tenantId)));
+        callback.onSuccess(retrieveData(new TenantRetriever(tenantId)));
     }
 
     @Override
     public void save(AsyncCallback<TenantInfoDTO> callback, TenantInfoDTO entity) {
         log.debug("Saving Tenant Info {}", entity);
 
-        TenantInLeaseRetriever tr = new TenantInLeaseRetriever(entity.getPrimaryKey());
+        TenantRetriever tr = new TenantRetriever(entity.getPrimaryKey());
         new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(entity, tr.getTenant());
-        new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(entity, tr.personScreening);
+        new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(entity, tr.getScreening());
 
-        tr.saveTenant();
+        tr.saveCustomer();
         tr.saveScreening();
 
         entity = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.personScreening, entity);
-        entity.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.getScreening(), entity);
+        entity.setPrimaryKey(tr.getTenant().getPrimaryKey());
 
-        DigitalSignatureMgr.reset(tr.getTenant());
+        DigitalSignatureMgr.reset(tr.getCustomer());
         Persistence.service().commit();
 
         // we do not use return value, so return the same as input one:        
@@ -61,10 +61,10 @@ public class TenantInfoServiceImpl implements TenantInfoService {
 //        callback.onSuccess(retrieveData(tr));
     }
 
-    public TenantInfoDTO retrieveData(TenantInLeaseRetriever tr) {
+    public TenantInfoDTO retrieveData(TenantRetriever tr) {
         TenantInfoDTO dto = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.personScreening, dto);
-        dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.getScreening(), dto);
+        dto.setPrimaryKey(tr.getTenant().getPrimaryKey());
         return dto;
     }
 }

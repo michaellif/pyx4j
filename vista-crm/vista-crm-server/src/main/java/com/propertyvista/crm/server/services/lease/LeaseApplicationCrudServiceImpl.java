@@ -40,7 +40,7 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.util.TenantConverter;
-import com.propertyvista.server.common.util.TenantInLeaseRetriever;
+import com.propertyvista.server.common.util.TenantRetriever;
 
 public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseApplicationDTO> implements LeaseApplicationCrudService {
 
@@ -56,7 +56,7 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
         enhanceRetrievedCommon(in, dto);
 
         for (Tenant tenant : dto.version().tenants()) {
-            TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenant.getPrimaryKey(), true);
+            TenantRetriever tr = new TenantRetriever(tenant.getPrimaryKey(), true);
             dto.tenantInfo().add(createTenantInfoDTO(tr));
             dto.tenantFinancials().add(createTenantFinancialDTO(tr));
         }
@@ -165,14 +165,14 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
     }
 
     // internal helpers:
-    private TenantInfoDTO createTenantInfoDTO(TenantInLeaseRetriever tr) {
+    private TenantInfoDTO createTenantInfoDTO(TenantRetriever tr) {
         TenantInfoDTO tiDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.personScreening, tiDTO);
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.getScreening(), tiDTO);
         return tiDTO;
     }
 
-    private TenantFinancialDTO createTenantFinancialDTO(TenantInLeaseRetriever tr) {
-        TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.personScreening);
+    private TenantFinancialDTO createTenantFinancialDTO(TenantRetriever tr) {
+        TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.getScreening());
         tfDTO.person().set(tr.getPerson());
         return tfDTO;
     }

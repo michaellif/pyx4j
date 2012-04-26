@@ -31,7 +31,6 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
@@ -42,7 +41,7 @@ import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.util.LegalStuffUtils;
-import com.propertyvista.server.common.util.TenantRetriever;
+import com.propertyvista.server.common.util.CustomerRetriever;
 import com.propertyvista.server.domain.CampaignTrigger;
 
 public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements PaymentService {
@@ -108,7 +107,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        TenantRetriever r = new TenantRetriever(Customer.class, PtAppContext.retrieveCurrentUserCustomer().getPrimaryKey());
-        callback.onSuccess(r.personScreening.currentAddress().duplicate(AddressStructured.class));
+        CustomerRetriever r = new CustomerRetriever(PtAppContext.retrieveCurrentUserCustomer().getPrimaryKey());
+        callback.onSuccess(r.getScreening().currentAddress().duplicate(AddressStructured.class));
     }
 }
