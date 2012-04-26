@@ -71,6 +71,8 @@ public class EntityOperationsMeta {
 
     private final List<MemberOperationsMeta> cascadePersistMembersSecondPass = new Vector<MemberOperationsMeta>();
 
+    private final List<MemberOperationsMeta> ownedMembers = new Vector<MemberOperationsMeta>();
+
     private final List<MemberOperationsMeta> cascadeDeleteMembers = new Vector<MemberOperationsMeta>();
 
     private final List<MemberOperationsMeta> cascadeRetrieveMembers = new Vector<MemberOperationsMeta>();
@@ -270,7 +272,9 @@ public class EntityOperationsMeta {
                     } else if (memberMeta.getAnnotation(Reference.class) != null) {
                         cascadePersistMembers.add(member);
                     }
-
+                    if (memberMeta.isOwnedRelationships()) {
+                        ownedMembers.add(member);
+                    }
                     if (memberMeta.isCascadeDelete()) {
                         cascadeDeleteMembers.add(member);
                     }
@@ -429,6 +433,10 @@ public class EntityOperationsMeta {
             }
         }
         return null;
+    }
+
+    public List<MemberOperationsMeta> getOwnedMembers() {
+        return ownedMembers;
     }
 
     public List<MemberOperationsMeta> getCascadePersistMembers() {
