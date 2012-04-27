@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.criterion;
 
+import java.util.Collection;
 import java.util.Vector;
 
 /**
@@ -49,11 +50,27 @@ public class OrCriterion implements Criterion {
         return this;
     }
 
+    public OrCriterion addLeft(Collection<Criterion> filters) {
+        if (filtersLeft == null) {
+            filtersLeft = new Vector<Criterion>();
+        }
+        filtersLeft.addAll(filters);
+        return this;
+    }
+
     public OrCriterion right(Criterion criterion) {
         if (filtersRight == null) {
             filtersRight = new Vector<Criterion>();
         }
         filtersRight.add(criterion);
+        return this;
+    }
+
+    public OrCriterion addRight(Collection<Criterion> filters) {
+        if (filtersRight == null) {
+            filtersRight = new Vector<Criterion>();
+        }
+        filtersRight.addAll(filters);
         return this;
     }
 

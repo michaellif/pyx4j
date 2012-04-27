@@ -21,6 +21,7 @@
 package com.pyx4j.entity.shared.criterion;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
@@ -121,10 +122,18 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
     }
 
     public EntityQueryCriteria<E> add(Criterion criterion) {
-        if (filters == null) {
-            filters = new Vector<Criterion>();
+        if (this.filters == null) {
+            this.filters = new Vector<Criterion>();
         }
-        filters.add(criterion);
+        this.filters.add(criterion);
+        return this;
+    }
+
+    public EntityQueryCriteria<E> addAll(Collection<Criterion> filters) {
+        if (this.filters == null) {
+            this.filters = new Vector<Criterion>();
+        }
+        this.filters.addAll(filters);
         return this;
     }
 

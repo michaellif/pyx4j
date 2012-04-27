@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.server;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -33,6 +35,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.security.shared.SecurityController;
@@ -69,18 +72,31 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
         throw new Error("Unsupported query property path " + path);
     }
 
+    private Collection<Criterion> convertFilters(Collection<Criterion> dtoFilters) {
+        Collection<Criterion> dboFilters = new ArrayList<Criterion>();
+        for (Criterion cr : dtoFilters) {
+            if (cr instanceof PropertyCriterion) {
+                PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
+                Path path = getBoundDboMemberPath(new Path(propertyCriterion.getPropertyPath()));
+                if (path == null) {
+                    path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), dboProto, dtoProto);
+                }
+                dboFilters.add(new PropertyCriterion(path.toString(), propertyCriterion.getRestriction(), propertyCriterion.getValue()));
+            } else if (cr instanceof OrCriterion) {
+                OrCriterion criterion = new OrCriterion();
+                criterion.addRight(convertFilters(((OrCriterion) cr).getFiltersRight()));
+                criterion.addLeft(convertFilters(((OrCriterion) cr).getFiltersLeft()));
+                dboFilters.add(criterion);
+            } else {
+                throw new IllegalArgumentException("Can't convert " + cr.getClass() + " criteria");
+            }
+        }
+        return dboFilters;
+    }
+
     protected void enhanceListCriteria(EntityListCriteria<E> dbCriteria, EntityListCriteria<DTO> dtoCriteria) {
         if ((dtoCriteria.getFilters() != null) && (!dtoCriteria.getFilters().isEmpty())) {
-            for (Criterion cr : dtoCriteria.getFilters()) {
-                if (cr instanceof PropertyCriterion) {
-                    PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-                    Path path = getBoundDboMemberPath(new Path(propertyCriterion.getPropertyPath()));
-                    if (path == null) {
-                        path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), dbCriteria.proto(), dtoCriteria.proto());
-                    }
-                    dbCriteria.add(new PropertyCriterion(path.toString(), propertyCriterion.getRestriction(), propertyCriterion.getValue()));
-                }
-            }
+            dbCriteria.addAll(convertFilters(dtoCriteria.getFilters()));
         }
         if ((dtoCriteria.getSorts() != null) && (!dtoCriteria.getSorts().isEmpty())) {
             for (Sort s : dtoCriteria.getSorts()) {
