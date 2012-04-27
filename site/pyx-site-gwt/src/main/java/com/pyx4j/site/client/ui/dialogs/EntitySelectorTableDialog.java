@@ -35,6 +35,7 @@ import com.pyx4j.entity.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
@@ -121,8 +122,8 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         return EntityFactory.getEntityPrototype(entityClass);
     }
 
-    protected List<PropertyCriterion> createRestrictionFilterForAlreadySelected() {
-        List<PropertyCriterion> restrictAlreadySelected = new ArrayList<PropertyCriterion>(alreadySelected.size());
+    protected List<Criterion> createRestrictionFilterForAlreadySelected() {
+        List<Criterion> restrictAlreadySelected = new ArrayList<Criterion>(alreadySelected.size());
 
         E proto = EntityFactory.getEntityPrototype(entityClass);
 
@@ -141,11 +142,11 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         dataSource.setParentFiltering(parentID, parentClass);
     }
 
-    protected void addFilter(PropertyCriterion filter) {
+    protected void addFilter(Criterion filter) {
         dataSource.addPreDefinedFilter(filter);
     }
 
-    protected void addFilters(List<PropertyCriterion> filters) {
+    protected void addFilters(List<Criterion> filters) {
         dataSource.addPreDefinedFilters(filters);
     }
 
@@ -156,7 +157,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
      * 
      * @param filters
      */
-    protected void setFilters(List<PropertyCriterion> filters) {
+    protected void setFilters(List<Criterion> filters) {
         dataSource.setPreDefinedFilters(filters);
     }
 

@@ -26,6 +26,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -38,9 +39,9 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     private final AbstractListService<E> service;
 
-    private PropertyCriterion parentFiltering;
+    private Criterion parentFiltering;
 
-    private List<PropertyCriterion> preDefinedFilters = new LinkedList<PropertyCriterion>();;
+    private List<Criterion> preDefinedFilters = new LinkedList<Criterion>();;
 
     public ListerDataSource(Class<E> entityClass, AbstractListService<E> service) {
         this.entityClass = entityClass;
@@ -84,15 +85,15 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
         parentFiltering = null;
     }
 
-    public void setPreDefinedFilters(List<PropertyCriterion> preDefinedFilters) {
+    public void setPreDefinedFilters(List<Criterion> preDefinedFilters) {
         this.preDefinedFilters = preDefinedFilters;
     }
 
-    public void addPreDefinedFilters(List<PropertyCriterion> preDefinedFilters) {
+    public void addPreDefinedFilters(List<Criterion> preDefinedFilters) {
         preDefinedFilters.addAll(preDefinedFilters);
     }
 
-    public void addPreDefinedFilter(PropertyCriterion preDefinedFilter) {
+    public void addPreDefinedFilter(Criterion preDefinedFilter) {
         preDefinedFilters.add(preDefinedFilter);
     }
 
@@ -101,7 +102,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
     }
 
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
-        List<PropertyCriterion> currentFilters = new LinkedList<PropertyCriterion>();
+        List<Criterion> currentFilters = new LinkedList<Criterion>();
 
         // combine filters:
         if (parentFiltering != null) {
@@ -112,8 +113,12 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
         }
 
         // update search criteria:
-        for (PropertyCriterion fd : currentFilters) {
-            if (fd.isOK()) {
+        for (Criterion fd : currentFilters) {
+            if (fd instanceof PropertyCriterion) {
+                if (((PropertyCriterion) fd).isValid()) {
+                    criteria.add(fd);
+                }
+            } else {
                 criteria.add(fd);
             }
         }

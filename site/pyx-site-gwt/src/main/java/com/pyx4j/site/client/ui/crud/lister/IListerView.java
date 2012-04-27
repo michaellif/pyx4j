@@ -24,8 +24,8 @@ import java.util.List;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.ui.crud.IView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -45,11 +45,11 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         void setFilterByParent(boolean flag);
 
-        void setPreDefinedFilters(List<PropertyCriterion> filters);
+        void setPreDefinedFilters(List<Criterion> filters);
 
-        void addPreDefinedFilters(List<PropertyCriterion> filters);
+        void addPreDefinedFilters(List<Criterion> filters);
 
-        void addPreDefinedFilter(PropertyCriterion filter);
+        void addPreDefinedFilter(Criterion filter);
 
         void clearPreDefinedFilters();
 
@@ -86,9 +86,9 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
     void discard();
 
-    List<PropertyCriterion> getFilters();
+    List<Criterion> getFilters();
 
-    void setFilters(List<PropertyCriterion> filterData);
+    void setFilters(List<Criterion> filterData);
 
     List<Sort> getSorting();
 

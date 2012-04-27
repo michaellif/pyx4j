@@ -37,7 +37,7 @@ import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.IconButton;
@@ -56,7 +56,7 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
     private Command filterActionCommand;
 
-    private List<PropertyCriterion> filters;
+    private List<Criterion> filters;
 
     public DataTableFilterPanel(DataTablePanel<E> dataTablePanel) {
         this.dataTablePanel = dataTablePanel;
@@ -152,11 +152,11 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
         this.filterActionCommand = filterActionCommand;
     }
 
-    public List<PropertyCriterion> getFilters() {
+    public List<Criterion> getFilters() {
         return filters;
     }
 
-    public void setFilters(List<PropertyCriterion> filters) {
+    public void setFilters(List<Criterion> filters) {
         this.filters = filters;
         grid.setFilters(filters);
         setVisible(true);

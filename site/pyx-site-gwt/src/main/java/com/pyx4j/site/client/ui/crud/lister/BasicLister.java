@@ -38,6 +38,7 @@ import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -293,11 +294,11 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         return dataTablePanel.getPageNumber();
     }
 
-    public List<PropertyCriterion> getFilters() {
+    public List<Criterion> getFilters() {
         return dataTablePanel.getFilters();
     }
 
-    public void setFilters(List<PropertyCriterion> filters) {
+    public void setFilters(List<Criterion> filters) {
         dataTablePanel.setFilters(filters);
     }
 
@@ -352,12 +353,12 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
     @SuppressWarnings("unchecked")
     public void restoreState() {
         int pageNumber = 0;
-        List<PropertyCriterion> filters = null;
+        List<Criterion> filters = null;
         List<Sort> sorts = null;
 
         if (getMemento().mayRestore()) {
             pageNumber = getMemento().getInteger(MementoKeys.page.name());
-            filters = (List<PropertyCriterion>) getMemento().getObject(MementoKeys.filterData.name());
+            filters = (List<Criterion>) getMemento().getObject(MementoKeys.filterData.name());
             sorts = (List<Sort>) getMemento().getObject(MementoKeys.sortingData.name());
         }
 
@@ -377,8 +378,12 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
 
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
         if (getFilters() != null) {
-            for (PropertyCriterion fd : getFilters()) {
-                if (fd.isOK()) {
+            for (Criterion fd : getFilters()) {
+                if (fd instanceof PropertyCriterion) {
+                    if (((PropertyCriterion) fd).isValid()) {
+                        criteria.add(fd);
+                    }
+                } else {
                     criteria.add(fd);
                 }
             }

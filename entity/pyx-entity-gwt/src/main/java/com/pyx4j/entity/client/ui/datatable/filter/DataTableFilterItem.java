@@ -45,6 +45,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -212,7 +213,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         setWidth("100%");
     }
 
-    public DataTableFilterItem(final DataTableFilterGrid<E> parent, PropertyCriterion filterData) {
+    public DataTableFilterItem(final DataTableFilterGrid<E> parent, Criterion filterData) {
         this(parent);
         setFilterData(filterData);
     }
@@ -233,16 +234,21 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         return new PropertyCriterion(path, operand.getCriterion(), value);
     }
 
-    public void setFilterData(PropertyCriterion filterData) {
-        Collection<FieldData> fds = fieldsList.getOptions();
-        for (FieldData fd : fds) {
-            if (fd.getPath().compareTo(filterData.getPropertyPath()) == 0) {
-                fieldsList.setValue(fd);
-                setValueHolder(filterData.getPropertyPath(), filterData.getValue());
-                IObject<?> member = parent.getDataTablePanel().proto().getMember(new Path(filterData.getPropertyPath()));
-                operandsList.setValue(Operator.getOperator(filterData.getRestriction(), member));
-                break;
+    public void setFilterData(Criterion filterCriterion) {
+        if (filterCriterion instanceof PropertyCriterion) {
+            PropertyCriterion filterData = (PropertyCriterion) filterCriterion;
+            Collection<FieldData> fds = fieldsList.getOptions();
+            for (FieldData fd : fds) {
+                if (fd.getPath().compareTo(filterData.getPropertyPath()) == 0) {
+                    fieldsList.setValue(fd);
+                    setValueHolder(filterData.getPropertyPath(), filterData.getValue());
+                    IObject<?> member = parent.getDataTablePanel().proto().getMember(new Path(filterData.getPropertyPath()));
+                    operandsList.setValue(Operator.getOperator(filterData.getRestriction(), member));
+                    break;
+                }
             }
+        } else {
+            throw new Error("Incorrect Filter Criterion Type!");
         }
     }
 

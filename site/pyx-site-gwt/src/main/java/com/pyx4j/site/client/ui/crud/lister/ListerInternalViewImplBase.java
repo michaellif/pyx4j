@@ -27,8 +27,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
 public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel implements IListerView<E> {
@@ -81,12 +81,12 @@ public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel i
     }
 
     @Override
-    public List<PropertyCriterion> getFilters() {
+    public List<Criterion> getFilters() {
         return getLister().getFilters();
     }
 
     @Override
-    public void setFilters(List<PropertyCriterion> filterData) {
+    public void setFilters(List<Criterion> filterData) {
         getLister().setFilters(filterData);
     }
 

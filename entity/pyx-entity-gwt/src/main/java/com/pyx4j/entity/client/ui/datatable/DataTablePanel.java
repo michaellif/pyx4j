@@ -35,7 +35,7 @@ import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterItem;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterPanel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -225,11 +225,11 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         return images;
     }
 
-    public List<PropertyCriterion> getFilters() {
+    public List<Criterion> getFilters() {
         return filterPanel.getFilters();
     }
 
-    public void setFilters(List<PropertyCriterion> filters) {
+    public void setFilters(List<Criterion> filters) {
         filterPanel.setFilters(filters);
     }
 

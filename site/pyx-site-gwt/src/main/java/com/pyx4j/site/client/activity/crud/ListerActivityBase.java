@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -115,17 +115,17 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void setPreDefinedFilters(List<PropertyCriterion> filters) {
+    public void setPreDefinedFilters(List<Criterion> filters) {
         dataSource.setPreDefinedFilters(filters);
     }
 
     @Override
-    public void addPreDefinedFilters(List<PropertyCriterion> filters) {
+    public void addPreDefinedFilters(List<Criterion> filters) {
         dataSource.addPreDefinedFilters(filters);
     }
 
     @Override
-    public void addPreDefinedFilter(PropertyCriterion filter) {
+    public void addPreDefinedFilter(Criterion filter) {
         dataSource.addPreDefinedFilter(filter);
     }
 
