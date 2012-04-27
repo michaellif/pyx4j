@@ -329,7 +329,7 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                         ((CComponent<LogicalDate, ?>) cell).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(itemExpirationDateEditor));
                         itemExpirationDateEditor.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(cell));
                     } catch (Exception e) {
-                        int i = 1;
+                        throw new Error(e);
                     }
                 }
                 return cell;
