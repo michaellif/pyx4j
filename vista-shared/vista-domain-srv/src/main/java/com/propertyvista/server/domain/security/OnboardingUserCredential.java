@@ -13,8 +13,10 @@
  */
 package com.propertyvista.server.domain.security;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -29,5 +31,11 @@ public interface OnboardingUserCredential extends AbstractUserCredential<Onboard
 
     IPrimitive<VistaOnboardingBehavior> behavior();
 
+    @NotNull
     IPrimitive<String> onboardingAccountId();
+
+    IPrimitive<String> pmcDnsName();
+
+    IPrimitive<Key> crmUser();
+
 }
