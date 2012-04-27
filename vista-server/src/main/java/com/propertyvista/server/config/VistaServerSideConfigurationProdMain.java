@@ -35,7 +35,7 @@ public class VistaServerSideConfigurationProdMain extends VistaServerSideConfigu
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationMySQL() {
+        return new VistaConfigurationPostgreSQL() {
 
             @Override
             public String dbName() {
