@@ -129,8 +129,8 @@ public class GetSatisfaction {
         feedback_widget_options.limit = "3";
         feedback_widget_options.container.style = ("top", "0");
 
-        $wnd.GSFN.feedback_widget.prototype.local_base_url = "http://getsatisfaction.com/property_vista";
-        $wnd.GSFN.feedback_widget.prototype.local_ssl_base_url = "https://getsatisfaction.com/property_vista";
+        //$wnd.GSFN.feedback_widget.prototype.local_base_url = "http://getsatisfaction.com/property_vista";
+        //$wnd.GSFN.feedback_widget.prototype.local_ssl_base_url = "https://getsatisfaction.com/property_vista";
 
         var feedback_widget = new $wnd.GSFN.feedback_widget(
                 feedback_widget_options);
