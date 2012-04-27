@@ -46,7 +46,7 @@ public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUni
 
     @Override
     protected void enhanceListRetrieved(AptUnitOccupancySegment entity, AptUnitOccupancySegment dto) {
-        super.enhanceRetrieved(entity, dto);
+        this.enhanceRetrieved(entity, dto);
     }
 
     @Override
