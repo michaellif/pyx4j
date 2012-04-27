@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.GregorianCalendar;
 import java.util.PriorityQueue;
 import java.util.Random;
 
@@ -27,6 +28,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.misc.VistaTODO;
@@ -64,10 +66,10 @@ public class LeaseLifecycleSim {
 
     private LogicalDate simEnd;
 
-    private LeaseLifecycleSim() {
-        // use builder
-        this.events = new PriorityQueue<LeaseLifecycleSim.LeaseEventContainer>(10, new Comparator<LeaseEventContainer>() {
+    private boolean runBilling = false;
 
+    private LeaseLifecycleSim() {
+        this.events = new PriorityQueue<LeaseLifecycleSim.LeaseEventContainer>(10, new Comparator<LeaseEventContainer>() {
             @Override
             public int compare(LeaseEventContainer arg0, LeaseEventContainer arg1) {
                 int cmp = arg0.date().compareTo(arg1.date());
@@ -78,7 +80,6 @@ public class LeaseLifecycleSim {
                     return cmp;
                 }
             }
-
         });
     }
 
@@ -101,9 +102,9 @@ public class LeaseLifecycleSim {
         lease.leaseTo().setValue(leaseTo);
 
         clearEvents();
-        queueEvent(reservedOn, create(lease));
-        queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), notice(lease));
-        queueEvent(leaseTo, complete(lease));
+        queueEvent(reservedOn, new Create(lease));
+        queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
+        queueEvent(leaseTo, new Complete(lease));
 
         try {
             while (hasNextEvent()) {
@@ -134,146 +135,150 @@ public class LeaseLifecycleSim {
 
     // EVENTS
 
-    private LeaseEvent create(final Lease lease) {
-        return new LeaseEvent() {
+    private class Create extends AbstractLeaseEvent {
 
-            @Override
-            public Integer priority() {
-                return -1;
-            }
+        public Create(Lease lease) {
+            super(-1, lease);
+        }
 
-            @Override
-            public void exec() {
-                leaseFacade().createLease(lease);
+        @Override
+        public void exec() {
+            leaseFacade().createLease(lease);
 
-                // TODO change that to Employee Agent Decision
-                queueEvent(rndBetween(now(), lease.leaseFrom().getValue()), approveApplication(lease));
-            }
-        };
+            // TODO change that to Employee Agent Decision
+            queueEvent(rndBetween(now(), lease.leaseFrom().getValue()), new ApproveApplication(lease));
+        }
     }
 
-    private LeaseEvent approveApplication(final Lease lease) {
-        return new LeaseEvent() {
-            @Override
-            public Integer priority() {
-                return 0;
+    private class ApproveApplication extends AbstractLeaseEvent {
+
+        public ApproveApplication(Lease lease) {
+            super(0, lease);
+        }
+
+        @Override
+        public void exec() {
+            leaseFacade().approveApplication(lease, null, "simulation");
+
+            if (!VistaTODO.removedForProduction) {
+                BillingFacade billingFacade = ServerSideFactory.create(BillingFacade.class);
+                billingFacade.confirmBill(billingFacade.getLatestBill(lease));
             }
 
-            @Override
-            public void exec() {
-                leaseFacade().approveApplication(lease, null, "simulation");
-
-                queueEvent(rndBetween(now(), lease.leaseFrom().getValue()), issueBill(lease));
-                queueEvent(lease.leaseFrom().getValue(), activate(lease));
-            }
-        };
+            queueEvent(lease.leaseFrom().getValue(), new Activate(lease));
+        }
     }
 
-    private LeaseEvent activate(final Lease lease) {
-        return new LeaseEvent() {
+    private class Activate extends AbstractLeaseEvent {
 
-            @Override
-            public Integer priority() {
-                return 0;
+        public Activate(Lease lease) {
+            super(0, lease);
+        }
+
+        @Override
+        public void exec() {
+            leaseFacade().activate(lease.getPrimaryKey());
+
+            if (runBilling) {
+                queueReccurentBilling();
             }
+        }
 
-            @Override
-            public void exec() {
-                leaseFacade().activate(lease.getPrimaryKey());
+        private void queueReccurentBilling() {
+            // TODO the day must be fetched from the facade
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(now());
 
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(now());
-                LogicalDate firstBillingDay;
-                if (cal.get(Calendar.DAY_OF_MONTH) > 15) {
-                    cal.add(Calendar.MONTH, 1);
-                }
-                cal.set(Calendar.DAY_OF_MONTH, 15);
-                firstBillingDay = new LogicalDate(cal.getTime());
-                queueEvent(firstBillingDay, runBillingRecurrent(lease));
+            LogicalDate firstBillingDay;
+            if (cal.get(Calendar.DAY_OF_MONTH) > 15) {
+                cal.add(Calendar.MONTH, 1);
             }
-        };
+            cal.set(Calendar.DAY_OF_MONTH, 15);
+            firstBillingDay = new LogicalDate(cal.getTime());
+            queueEvent(firstBillingDay, new RunBillingRecurrent(lease));
+        }
     }
 
-    private LeaseEvent issueBill(final Lease lease) {
-        return new LeaseEvent() {
+    private class RunBillingRecurrent extends AbstractLeaseEvent {
 
-            @Override
-            public Integer priority() {
-                return -1;
-            }
+        public RunBillingRecurrent(Lease lease) {
+            super(1, lease);
+        }
 
-            @Override
-            public void exec() {
-                if (!VistaTODO.removedForProduction) {
-                    BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
-                    billing.runBilling(lease);
-                    Bill bill = billing.getLatestBill(lease);
-                    billing.confirmBill(bill);
-                }
+        @Override
+        public void exec() {
+            if (!VistaTODO.removedForProduction) {
+                if (now().before(lease.leaseTo().getValue()) & lease.version().status().getValue() != Lease.Status.Completed) {
 
-            }
-        };
-    }
+                    // TODO THIS is REALLY CREEPY part, talk to Michael about adding API to the facade that lets check when billing is allowed to run.
+                    // the following code is copies the calculations inside the billing facade privates 
+                    Persistence.service().retrieve(lease.billingAccount());
+                    Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
 
-    private LeaseEvent runBillingRecurrent(final Lease lease) {
-
-        return new LeaseEvent() {
-
-            @Override
-            public Integer priority() {
-                return 1;
-            }
-
-            @Override
-            public void exec() {
-                if (!VistaTODO.removedForProduction) {
-                    if (now().before(lease.leaseTo().getValue())) {
-                        if (now().getDate() == 15) {
-//                            BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
-//                            billing.runBilling(lease);
-//                            billing.confirmBill(billing.getLatestBill(lease));
-//
-//                            Calendar cal = Calendar.getInstance();
-//                            cal.setTime(now());
-//                            cal.add(Calendar.MONTH, 1);
-//                            LogicalDate nextRun = new LogicalDate(cal.getTime());
-//                            queueEvent(nextRun, runBillingRecurrent(lease));
-                        }
+                    Calendar billingPeriodStartDate = new GregorianCalendar();
+                    billingPeriodStartDate.setTime(lastBill.billingPeriodStartDate().getValue());
+                    billingPeriodStartDate.add(Calendar.MONTH, 1);
+                    if (billingPeriodStartDate.getTime().after(lease.leaseTo().getValue())) {
+                        // lease ended
+                        return;
                     }
+                    LogicalDate billingRunDay = calculateBillingRunTargetExecutionDate(lease.billingAccount().billingCycle(), new LogicalDate(
+                            billingPeriodStartDate.getTime()));
+                    // CREEPY PART ENDS HERE
+
+                    if (now().equals(billingRunDay)) {
+                        BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
+                        billing.runBilling(lease);
+                        billing.confirmBill(billing.getLatestBill(lease));
+
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(now());
+                        cal.add(Calendar.MONTH, 1);
+                        LogicalDate nextRun = new LogicalDate(cal.getTime());
+                        queueEvent(nextRun, new RunBillingRecurrent(lease));
+
+                    } else {
+                        queueEvent(billingRunDay, new RunBillingRecurrent(lease));
+                    }
+
                 }
             }
-        };
+        }
     }
 
-    private LeaseEvent notice(final Lease lease) {
-        return new LeaseEvent() {
-            @Override
-            public Integer priority() {
-                return 0;
-            }
+    private class Notice extends AbstractLeaseEvent {
 
-            @Override
-            public void exec() {
-                leaseFacade().createCompletionEvent(lease.getPrimaryKey(), CompletionType.Notice, now(), lease.leaseTo().getValue());
-            }
-        };
+        public Notice(Lease lease) {
+            super(0, lease);
+        }
+
+        @Override
+        public void exec() {
+            leaseFacade().createCompletionEvent(lease.getPrimaryKey(), CompletionType.Notice, now(), lease.leaseTo().getValue());
+        }
     }
 
-    private LeaseEvent complete(final Lease lease) {
-        return new LeaseEvent() {
-            @Override
-            public Integer priority() {
-                return 0;
-            }
+    private class Complete extends AbstractLeaseEvent {
 
-            @Override
-            public void exec() {
-                leaseFacade().complete(lease.getPrimaryKey());
-            }
-        };
+        public Complete(Lease lease) {
+            super(500, lease);
+        }
+
+        @Override
+        public void exec() {
+            leaseFacade().complete(lease.getPrimaryKey());
+        }
     }
 
     // UTILITY FUNCTIONS
+    // FIXME copied form BillingCycleManager, find some other better way to do it
+    private static LogicalDate calculateBillingRunTargetExecutionDate(BillingCycle cycle, LogicalDate billingRunStartDate) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(billingRunStartDate);
+        calendar.add(Calendar.DATE, -cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());
+        return new LogicalDate(calendar.getTime());
+    }
+
     private static LeaseFacade leaseFacade() {
         return ServerSideFactory.create(LeaseFacade.class);
     }
@@ -330,6 +335,24 @@ public class LeaseLifecycleSim {
         Integer priority();
     }
 
+    public abstract class AbstractLeaseEvent implements LeaseEvent {
+
+        private final int priority;
+
+        protected final Lease lease;
+
+        public AbstractLeaseEvent(int priority, Lease lease) {
+            this.priority = priority;
+            this.lease = lease;
+        }
+
+        @Override
+        public Integer priority() {
+            return priority;
+        }
+
+    }
+
     public static class LeaseEventContainer {
 
         private final LeaseEvent event;
@@ -360,18 +383,16 @@ public class LeaseLifecycleSim {
 
         public LeaseLifecycleSimBuilder() {
             this.leaseLifecycleSim = new LeaseLifecycleSim();
+            this.leaseLifecycleSim.runBilling = false;
         }
 
         public LeaseLifecycleSim create() {
-
             if (leaseLifecycleSim.simStart == null) {
                 throw new IllegalStateException("simulation start was not set");
             }
             if (leaseLifecycleSim.simEnd == null) {
                 leaseLifecycleSim.simEnd = new LogicalDate();
             }
-
-            // TODO add sanity check/ or default value
             return leaseLifecycleSim;
         }
 
@@ -384,7 +405,17 @@ public class LeaseLifecycleSim {
             return start(toDate(simStart));
         }
 
+        public LeaseLifecycleSimBuilder end(LogicalDate end) {
+            leaseLifecycleSim.simEnd = end;
+            return this;
+        }
+
         public LeaseLifecycleSimBuilder end(String simEnd) {
+            return end(toDate(simEnd));
+        }
+
+        public LeaseLifecycleSimBuilder runBilling() {
+            leaseLifecycleSim.runBilling = true;
             return this;
         }
 

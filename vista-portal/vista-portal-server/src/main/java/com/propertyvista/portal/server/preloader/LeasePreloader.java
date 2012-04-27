@@ -30,20 +30,23 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.server.preloader.util.AptUnitSource;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSim;
+import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSim.LeaseLifecycleSimBuilder;
 
 public class LeasePreloader extends BaseVistaDevDataPreloader {
+
+    private static final int MAX_NUM_OF_LEASES_WITH_SIM_BILLING = 3;
 
     @Override
     public String create() {
         int numCreated = 0;
+        int numCreatedWithBilling = 0;
+
         LeaseGenerator generator = new LeaseGenerator(config());
 
         // Start creating leases from 4 years ago
         Calendar fourYearsAgo = Calendar.getInstance();
         fourYearsAgo.setTime(new Date());
         fourYearsAgo.add(Calendar.YEAR, -4);
-
-        LeaseLifecycleSim leaseSim = LeaseLifecycleSim.sim().start(new LogicalDate(fourYearsAgo.getTime())).create();
 
         AptUnitSource aptUnitSource = new AptUnitSource(1);
 
@@ -76,7 +79,12 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 //TODO
                 // ServerSideFactory.create(LeaseFacade.class).activate(lease.getPrimaryKey());
             } else {
-                leaseSim.generateRandomLeaseLifeCycle(lease);
+                LeaseLifecycleSimBuilder simBuilder = LeaseLifecycleSim.sim().start(new LogicalDate(fourYearsAgo.getTime()));
+                if (numCreatedWithBilling < MAX_NUM_OF_LEASES_WITH_SIM_BILLING) {
+                    ++numCreatedWithBilling;
+                    simBuilder.runBilling();
+                }
+                simBuilder.create().generateRandomLeaseLifeCycle(lease);
             }
 
             numCreated++;
