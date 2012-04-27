@@ -93,7 +93,7 @@ public abstract class BidirectionalPersistenceTestCase extends DatastoreTestBase
         }
 
         if (saved) {
-            fail("Managed to save readonly property");
+            fail("Managed to save readonly property 'organization'");
         }
 
     }

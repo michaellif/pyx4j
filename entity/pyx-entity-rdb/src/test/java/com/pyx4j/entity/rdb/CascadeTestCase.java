@@ -88,7 +88,7 @@ public abstract class CascadeTestCase extends AssociationMappingTestCase {
             Assert.assertEquals("data did not changed", testId, parent.child().testId().getValue());
         }
 
-        if (false) {
+        {
             // See that modifications not firered
             BidirectionalOneToOneNCPParent o3 = o.duplicate();
             o3.child().testId().setValue(uniqueString());

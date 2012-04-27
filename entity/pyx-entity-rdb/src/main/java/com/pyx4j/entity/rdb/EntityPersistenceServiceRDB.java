@@ -735,9 +735,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             Object value;
             Object lastValue;
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                if (!memberMeta.isCascadePersist()) {
-                    //TODO continue;
-                }
                 value = ((IEntity) member.getMember(entity)).getPrimaryKey();
                 lastValue = ((IEntity) member.getMember(baseEntity)).getPrimaryKey();
                 // TODO // merge incomplete data
@@ -790,7 +787,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         }
                     }
                 }
-            } else if (memberMeta.isOwnedRelationships()) {
+            } else if (memberMeta.isOwnedRelationships() && memberMeta.isCascadePersist()) {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     // Special case for child collections update. Collection itself is the same and in the same order, since we compared it.
                     ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
