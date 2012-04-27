@@ -16,6 +16,7 @@ package com.propertyvista.server.domain.admin;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -32,6 +33,7 @@ public interface ReservedPmcNames extends IEntity {
 
     @Indexed(uniqueConstraint = true)
     @NotNull
+    @Length(63)
     IPrimitive<String> dnsName();
 
     @NotNull
