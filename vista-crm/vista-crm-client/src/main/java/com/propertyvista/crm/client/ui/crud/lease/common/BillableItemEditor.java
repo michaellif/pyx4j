@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,17 +23,17 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
@@ -45,7 +46,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.company.Employee;
+import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -71,6 +72,10 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
     private final IEditorView<? extends LeaseDTO> leaseEditorView;
 
     private boolean isService = false;
+
+    private CComponent<LogicalDate, ?> itemEffectiveDateEditor;
+
+    private CComponent<LogicalDate, ?> itemExpirationDateEditor;
 
     public BillableItemEditor(CEntityEditor<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView, boolean isService) {
         this(lease, leaseEditorView);
@@ -141,8 +146,8 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
         get(proto().item()).setViewable(!isService);
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expirationDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(itemEffectiveDateEditor = (CComponent<LogicalDate, ?>) inject(proto().effectiveDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(itemExpirationDateEditor = (CComponent<LogicalDate, ?>) inject(proto().expirationDate()), 9).build());
 
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -221,7 +226,7 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 editor.populate(extraData.cast());
                 extraDataPanel.setWidget(editor);
             }
-        } else {// tweak UI for empty ProductItem:  
+        } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
         }
 
@@ -272,18 +277,17 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            CComponent<?, ?> comp = super.create(member);
-            if (member instanceof Employee) {
-                comp.setViewable(true);
+            if (member instanceof BillableItemAdjustment) {
+                return new BillableItemAdjustmentEditor();
             }
-            return comp;
+            return super.create(member);
         }
 
         @Override
         protected void onPopulate() {
             super.onPopulate();
 
-            // memorize populated values: 
+            // memorize populated values:
             populatedValues.clear();
             populatedValues.addAll(getValue());
         }
@@ -308,27 +312,115 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             }
         }
 
-        @Override
-        protected CEntityFolderItem<BillableItemAdjustment> createItem(boolean first) {
-            final CEntityFolderItem<BillableItemAdjustment> item = super.createItem(first);
-            item.addPropertyChangeHandler(new PropertyChangeHandler() {
-                @Override
-                public void onPropertyChange(PropertyChangeEvent event) {
-                    if (event.getPropertyName() == PropertyName.repopulated) {
-                        if (isAddable() && !lease.getValue().approvalDate().isNull()) {
-                            LogicalDate value = item.getValue().expirationDate().getValue();
-                            if ((value != null) && !value.after(TimeUtils.today())) {
-                                item.setViewable(true);
-                                item.inheritViewable(false);
+        private class BillableItemAdjustmentEditor extends CEntityFolderRowEditor<BillableItemAdjustment> {
 
-                                item.setMovable(false);
-                                item.setRemovable(false);
-                            }
-                        }
+            public BillableItemAdjustmentEditor() {
+                super(BillableItemAdjustment.class, columns());
+                setViewable(false);
+            }
+
+            @Override
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                CComponent<?, ?> cell = super.createCell(column);
+                if (column.getObject() == proto().expirationDate()) {
+                    try {
+                        ((CComponent<LogicalDate, ?>) cell).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(itemEffectiveDateEditor));
+                        itemEffectiveDateEditor.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(cell));
+                        ((CComponent<LogicalDate, ?>) cell).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(itemExpirationDateEditor));
+                        itemExpirationDateEditor.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(cell));
+                    } catch (Exception e) {
+                        int i = 1;
                     }
                 }
-            });
-            return item;
+                return cell;
+            }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+
+                new StartEndDateValidation(get(proto().effectiveDate()), get(proto().expirationDate()));
+                get(proto().expirationDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().effectiveDate())));
+                get(proto().effectiveDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expirationDate())));
+
+                get(proto().expirationDate()).addValueValidator(new EditableValueValidator<Date>() {
+                    @Override
+                    public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                        if (!(value == null) && !(getValue().billableItem() == null) && !(getValue().billableItem().expirationDate().getValue() == null)
+                                && value.after(getValue().billableItem().expirationDate().getValue())) {
+                            return new ValidationFailure("The date should not exceed the item expiration date");
+                        }
+                        if (!(value == null) && (getValue().billableItem().expirationDate().getValue() == null)
+                                && value.after(lease.getValue().leaseTo().getValue())) {
+                            return new ValidationFailure("The date should not exceed the lease expiration date");
+                        }
+
+                        return null;
+                    }
+
+                });
+
+                get(proto().effectiveDate()).addValueValidator(new EditableValueValidator<Date>() {
+                    @Override
+                    public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                        if (!(value == null) && !(getValue().billableItem() == null) && !(getValue().billableItem().effectiveDate().getValue() == null)
+                                && value.before(getValue().billableItem().effectiveDate().getValue())) {
+                            return new ValidationFailure("The date should not precede the item effective date");
+                        }
+                        if (!(value == null) && (getValue().billableItem().effectiveDate().getValue() == null)
+                                && value.before(lease.getValue().leaseTo().getValue())) {
+                            return new ValidationFailure("The date should not precede the lease effective date");
+                        }
+
+                        return null;
+                    }
+
+                });
+
+            }
         }
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        new StartEndDateValidation(get(proto().effectiveDate()), get(proto().expirationDate()));
+        get(proto().expirationDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().effectiveDate())));
+        get(proto().effectiveDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expirationDate())));
+
+        get(proto().expirationDate()).addValueValidator(new EditableValueValidator<Date>() {
+            @Override
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (!(value == null) && value.after(lease.getValue().leaseTo().getValue())) {
+                    return new ValidationFailure("The date should not exceed the lease expiration date");
+                }
+                for (BillableItemAdjustment a : getValue().adjustments()) {
+                    if (!(value == null) && !(a.expirationDate().getValue() == null) && a.expirationDate().getValue().after(value)) {
+                        return new ValidationFailure("One or more adjustments for this item expire after the specificed date");
+                    }
+                }
+
+                return null;
+            }
+
+        });
+
+        get(proto().effectiveDate()).addValueValidator(new EditableValueValidator<Date>() {
+            @Override
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (!(value == null) && value.before(lease.getValue().leaseFrom().getValue())) {
+                    return new ValidationFailure("The date should not precede the lease start date");
+                }
+                for (BillableItemAdjustment a : getValue().adjustments()) {
+                    if (!(value == null) && !(a.effectiveDate().getValue() == null) && a.effectiveDate().getValue().before(value)) {
+                        return new ValidationFailure("One or more adjustments for this item start before the specificed date");
+                    }
+                }
+
+                return null;
+            }
+
+        });
     }
 }
