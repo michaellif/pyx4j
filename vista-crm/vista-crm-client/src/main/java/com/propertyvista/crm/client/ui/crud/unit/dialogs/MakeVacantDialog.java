@@ -49,7 +49,7 @@ public class MakeVacantDialog extends OkCancelDialog {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
-                content.setWidget(0, 0, new DecoratorBuilder(inject(proto().vacantStartDay())).build());
+                content.setWidget(0, 0, new DecoratorBuilder(inject(proto().vacantStartDay()), 9).build());
 
                 if (minMakeVacantStartDay.equals(maxMakeVacantStartDay)) {
                     get(proto().vacantStartDay()).setViewable(true);

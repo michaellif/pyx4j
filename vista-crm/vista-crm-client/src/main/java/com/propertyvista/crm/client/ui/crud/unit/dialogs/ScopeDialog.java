@@ -50,7 +50,7 @@ public class ScopeDialog extends OkCancelDialog {
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().scopingResult())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().scopingResult()), 10).build());
                 get(proto().scopingResult()).addValueChangeHandler(new ValueChangeHandler<ScopingResultDTO.ScopingResult>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<ScopingResult> event) {
@@ -72,7 +72,7 @@ public class ScopeDialog extends OkCancelDialog {
                 }
                 combo.setOptions(options);
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().renovationEndsOn())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().renovationEndsOn()), 9).build());
                 get(proto().renovationEndsOn()).setVisible(false);
                 get(proto().renovationEndsOn()).addValueValidator(new EditableValueValidator<Date>() {
                     @Override
@@ -84,7 +84,7 @@ public class ScopeDialog extends OkCancelDialog {
                         }
                     }
                 });
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offMarketType())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offMarketType()), 10).build());
                 get(proto().offMarketType()).setVisible(false);
 
                 return content;
