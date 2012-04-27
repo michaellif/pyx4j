@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.invoice;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -35,10 +36,13 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
 
     @Override
     public IsWidget createContent(TransactionHistoryDTO value) {
+
         FormFlexPanel content = new FormFlexPanel();
-
-        content.setWidget(0, 0, createLineItems(value.lineItems()));
-
+        int row = -1;
+        if (value != null) {
+            content.setH1(++row, 0, 1, i18n.tr("Transaction History"));
+            content.setWidget(++row, 0, createLineItems(value.lineItems()));
+        }
         return content;
     }
 
@@ -51,20 +55,25 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         lineItemsView.setWidget(row, 2, new HTML(i18n.tr("Credit")));
         lineItemsView.setWidget(row, 3, new HTML(i18n.tr("Balance")));
 
+        BigDecimal balance = new BigDecimal("0.0");
+
         for (InvoiceLineItem item : items) {
-            lineItemsView.setWidget(++row, 0, new HTML(new SafeHtmlBuilder().appendEscaped(item.description().getValue()).toSafeHtml()));
+            lineItemsView.setWidget(++row, 0, new HTML(new SafeHtmlBuilder().appendEscaped(item.description().getValue().toString()).toSafeHtml()));
 
             if (item.isInstanceOf(InvoiceDebit.class)) {
-                lineItemsView.setWidget(row, 1, new HTML(new SafeHtmlBuilder().appendEscaped(item.amount().toString()).toSafeHtml()));
+
+                lineItemsView.setWidget(row, 1, new HTML(new SafeHtmlBuilder().appendEscaped(item.amount().getValue().toString()).toSafeHtml()));
+                balance = balance.add(item.amount().getValue());
             } else if (item.isInstanceOf(InvoiceCredit.class)) {
-                lineItemsView.setWidget(row, 2, new HTML(new SafeHtmlBuilder().appendEscaped(item.amount().toString()).toSafeHtml()));
+                lineItemsView.setWidget(row, 2, new HTML(new SafeHtmlBuilder().appendEscaped("(" + item.amount().getValue().toString() + ")").toSafeHtml()));
+                balance = balance.subtract(item.amount().getValue());
             } else if (ApplicationMode.isDevelopment()) {
                 lineItemsView.setWidget(row, 1, new HTML("error"));
                 lineItemsView.setWidget(row, 2, new HTML("error"));
                 continue;
             }
             // TODO 
-            lineItemsView.setWidget(row, 3, new HTML("here comes balance"));
+            lineItemsView.setWidget(row, 3, new HTML(new SafeHtmlBuilder().appendEscaped(balance.toString()).toSafeHtml()));
         }
 
         return lineItemsView;

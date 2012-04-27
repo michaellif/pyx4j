@@ -16,7 +16,11 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorFormBase;
+import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -40,9 +44,17 @@ public class LeaseEditorForm extends LeaseEditorFormBase<LeaseDTO> {
             tabPanel.setLastTabDisabled(isEditable());
             tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
             tabPanel.setLastTabDisabled(isEditable());
+            tabPanel.add(isEditable() ? new HTML() : createFinancialTransactionHistoryTab(), i18n.tr("Financial Summary"));
+            tabPanel.setLastTabDisabled(isEditable());
         }
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
+    }
+
+    private IsWidget createFinancialTransactionHistoryTab() {
+        FormFlexPanel financialTransactionHistory = new FormFlexPanel();
+        financialTransactionHistory.setWidget(0, 0, inject(proto().transactionHistory(), new TransactionHistoryViewer()));
+        return new CrmScrollPanel(financialTransactionHistory);
     }
 }

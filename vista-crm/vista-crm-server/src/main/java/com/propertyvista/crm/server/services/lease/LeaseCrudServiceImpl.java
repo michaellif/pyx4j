@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.lease;
 
+import java.math.BigDecimal;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -31,6 +32,9 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -38,6 +42,8 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> implements LeaseCrudService {
 
@@ -45,6 +51,13 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
 
     public LeaseCrudServiceImpl() {
         super(LeaseDTO.class);
+    }
+
+    @Override
+    protected void enhanceRetrieved(Lease in, LeaseDTO dto) {
+        super.enhanceRetrieved(in, dto);
+
+        dto.transactionHistory().set(retrieveTransactions(dto));
     }
 
     @Override
@@ -134,4 +147,26 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
 
         callback.onSuccess(message);
     }
+
+    private TransactionHistoryDTO retrieveTransactions(LeaseDTO dto) {
+        TransactionHistoryDTO history = EntityFactory.create(TransactionHistoryDTO.class);
+        if (!VistaTODO.removedForProduction) {
+            // TODO DUMMY DATA FOR TESTING THE UI
+            for (int i = 0; i < 5; ++i) {
+                InvoiceLineItem transaction = null;
+                if (i % 2 == 0) {
+                    transaction = EntityFactory.create(InvoiceAccountCharge.class);
+                    transaction.description().setValue("debit #" + String.valueOf(i));
+                    transaction.amount().setValue(new BigDecimal("500.67"));
+                } else {
+                    transaction = EntityFactory.create(InvoicePayment.class);
+                    transaction.description().setValue("credit #" + String.valueOf(i));
+                    transaction.amount().setValue(new BigDecimal("500.33"));
+                }
+                history.lineItems().add(transaction);
+            }
+        }
+        return history;
+    }
+
 }

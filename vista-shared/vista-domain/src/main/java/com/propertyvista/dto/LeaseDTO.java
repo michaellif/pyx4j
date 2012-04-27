@@ -13,8 +13,8 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
@@ -30,6 +30,8 @@ public interface LeaseDTO extends Lease {
     @Detached
     Building selectedBuilding();
 
+    TransactionHistoryDTO transactionHistory();
+
     // -----------------------------------------------------
     // temporary runtime data:
 
@@ -40,4 +42,5 @@ public interface LeaseDTO extends Lease {
     IList<ProductItem> selectedUtilityItems();
 
     IList<Concession> selectedConcessions();
+
 }
