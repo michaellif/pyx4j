@@ -38,6 +38,7 @@ import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
@@ -275,6 +276,30 @@ public class RDBUtils implements Closeable {
                 continue;
             }
             if (!srv.allowNamespaceUse(entityClass)) {
+                continue;
+            }
+            srv.count(EntityQueryCriteria.create(entityClass));
+            countTotal++;
+        }
+        log.info("Total of {} tables created in {}", countTotal, TimeUtils.secSince(start));
+    }
+
+    public static void initNameSpaceSpecificEntityTables() {
+        int countTotal = 0;
+        long start = System.currentTimeMillis();
+        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
+        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
+        for (String className : allClasses) {
+            if (className.toLowerCase().contains(".gae")) {
+                continue;
+            }
+            Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
+            EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
+            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null || entityClass.getAnnotation(EmbeddedEntity.class) != null) {
+                continue;
+            }
+            Table table = entityClass.getAnnotation(Table.class);
+            if ((table == null) || !NamespaceManager.getNamespace().equals(table.namespace())) {
                 continue;
             }
             srv.count(EntityQueryCriteria.create(entityClass));
