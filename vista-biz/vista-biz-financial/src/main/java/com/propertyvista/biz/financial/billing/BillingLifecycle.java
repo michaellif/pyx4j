@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -81,7 +82,7 @@ public class BillingLifecycle {
 
     private static void runBilling(BillingRun billingRun, boolean manageTransactions) {
         billingRun.status().setValue(BillingRunStatus.Running);
-        billingRun.executionDate().setValue(new LogicalDate());
+        billingRun.executionDate().setValue(BillingLifecycle.getSysDate());
         Persistence.service().persist(billingRun);
 
         if (manageTransactions) {
@@ -164,22 +165,26 @@ public class BillingLifecycle {
         }
     }
 
-    /*
-     * Creates BillingAccount when needed
+    /**
+     * Makes sure <code>lease.billingAccount()</code> is filled with the most recent billing account. Creates BillingAccount when needed.
      */
     static BillingAccount ensureBillingAccount(Lease lease) {
         if (lease.leaseFrom().isNull()) {
             throw new BillingException("'Lease from' date is not set");
         }
-        BillingAccount billingAccount = lease.billingAccount();
-        if (billingAccount.isValueDetached()) {
-            Persistence.service().retrieve(billingAccount);
+
+        // fetch *BillingAccount* from the persistence to be sure we get the most recent version
+        // (i.e. fetching it from lease.billingAccount() might give use not the most recent one, if lease is not up to date for some oblivious reason)
+        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, lease.billingAccount().getPrimaryKey());
+        if (billingAccount == null) {
+            billingAccount = EntityFactory.create(BillingAccount.class);
         }
         if (billingAccount.billingCycle().isNull()) {
             billingAccount.billingCycle().set(BillingCycleManger.ensureBillingCycle(lease));
             billingAccount.billCounter().setValue(1);
             Persistence.service().persist(billingAccount);
         }
+        lease.billingAccount().set(billingAccount);
         return billingAccount;
 
     }
@@ -203,7 +208,7 @@ public class BillingLifecycle {
         if (sysDate != null) {
             return sysDate;
         } else {
-            return new LogicalDate();
+            return new LogicalDate(Persistence.service().getTransactionSystemTime());
         }
     }
 
