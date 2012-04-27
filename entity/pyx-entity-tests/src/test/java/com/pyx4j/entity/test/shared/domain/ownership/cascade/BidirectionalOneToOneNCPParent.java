@@ -21,6 +21,7 @@
 package com.pyx4j.entity.test.shared.domain.ownership.cascade;
 
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -31,6 +32,7 @@ public interface BidirectionalOneToOneNCPParent extends IEntity {
     @Owned(cascade = {})
     BidirectionalOneToOneNCPChild child();
 
+    @ReadOnly
     IPrimitive<String> testId();
 
     IPrimitive<String> name();

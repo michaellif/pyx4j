@@ -735,6 +735,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             Object value;
             Object lastValue;
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                if (!memberMeta.isCascadePersist()) {
+                    //TODO continue;
+                }
                 value = ((IEntity) member.getMember(entity)).getPrimaryKey();
                 lastValue = ((IEntity) member.getMember(baseEntity)).getPrimaryKey();
                 // TODO // merge incomplete data

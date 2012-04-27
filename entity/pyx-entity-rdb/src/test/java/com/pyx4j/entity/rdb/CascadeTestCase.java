@@ -79,11 +79,25 @@ public abstract class CascadeTestCase extends AssociationMappingTestCase {
         }
 
         // Try update child
-        o.child().name().setValue(uniqueString());
-        srvSave(o, testCaseMethod);
+        BidirectionalOneToOneNCPParent o2 = o.duplicate();
+        o2.child().name().setValue(uniqueString());
+        srvSave(o2, testCaseMethod);
         {
             BidirectionalOneToOneNCPParent parent = srv.retrieve(BidirectionalOneToOneNCPParent.class, o.getPrimaryKey());
             Assert.assertEquals("data did not changed", childName, parent.child().name().getValue());
+            Assert.assertEquals("data did not changed", testId, parent.child().testId().getValue());
+        }
+
+        if (false) {
+            // See that modifications not firered
+            BidirectionalOneToOneNCPParent o3 = o.duplicate();
+            o3.child().testId().setValue(uniqueString());
+            srvSave(o3, testCaseMethod);
+            {
+                BidirectionalOneToOneNCPParent parent = srv.retrieve(BidirectionalOneToOneNCPParent.class, o.getPrimaryKey());
+                Assert.assertEquals("data did not changed", childName, parent.child().name().getValue());
+                Assert.assertEquals("data did not changed", testId, parent.child().testId().getValue());
+            }
         }
 
     }
