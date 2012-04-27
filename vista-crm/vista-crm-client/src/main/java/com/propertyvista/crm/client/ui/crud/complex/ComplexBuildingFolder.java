@@ -24,6 +24,7 @@ import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
@@ -63,7 +64,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
     protected void addItem() {
         new BuildingSelectorDialog(true, getValue()) {
             @Override
-            protected void setFilters(List<PropertyCriterion> filters) {
+            protected void setFilters(List<Criterion> filters) {
                 super.setFilters(filters);
                 addFilter(PropertyCriterion.eq(ComplexBuildingFolder.this.proto().complex(), (Serializable) null));
             }

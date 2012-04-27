@@ -13,16 +13,21 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit.dialogs;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 
 public interface ScopingResultDTO extends IEntity {
 
+    @I18n(context = "Scoping Result")
+    @XmlType(name = "ScopingResult")
     public enum ScopingResult {
 
         available, renovation, offMarket;
@@ -31,7 +36,6 @@ public interface ScopingResultDTO extends IEntity {
         public String toString() {
             return I18nEnum.toString(this);
         };
-
     }
 
     @NotNull
@@ -42,5 +46,4 @@ public interface ScopingResultDTO extends IEntity {
 
     @NotNull
     IPrimitive<LogicalDate> renovationEndsOn();
-
 }

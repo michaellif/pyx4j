@@ -62,7 +62,6 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         public String debugId() {
             return this.name();
         }
-
     }
 
     public UnitViewerViewImpl() {
@@ -71,14 +70,14 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         unitItemsLister = new ListerInternalViewImplBase<AptUnitItem>(new UnitItemLister());
         OccupanciesLister = new ListerInternalViewImplBase<AptUnitOccupancySegment>(new UnitOccupancyLister());
 
+        // set main main form here:
+        setForm(new UnitEditorForm(true));
+
+        // init actions stuff:
         canScopeAvailable = false;
         canScopeOffMarket = false;
         minRenovationEndDate = null;
-
-        // set main main form here:
-        setForm(new UnitEditorForm(true));
         initOccupancyActions();
-
     }
 
     private void initOccupancyActions() {
@@ -90,10 +89,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             }
         });
         scopeAction.ensureDebugId(DebugIds.unitViewerViewScopeAction.debugId());
-
         addHeaderToolbarTwoItem(scopeAction);
-        makeVacantAction = new Button(i18n.tr("Make Vacant..."), new ClickHandler() {
 
+        makeVacantAction = new Button(i18n.tr("Make Vacant..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 new MakeVacantDialog((com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter) presenter, minMakeVacantStartDay,
@@ -101,8 +99,8 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
                 }.show();
             }
         });
+        makeVacantAction.ensureDebugId(DebugIds.unitViewerViewMakeVacantAction.debugId());
         addHeaderToolbarTwoItem(makeVacantAction);
-        scopeAction.ensureDebugId(DebugIds.unitViewerViewMakeVacantAction.debugId());
     }
 
     @Override

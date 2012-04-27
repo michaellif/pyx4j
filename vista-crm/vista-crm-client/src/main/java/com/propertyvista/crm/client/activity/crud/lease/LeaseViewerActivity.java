@@ -22,6 +22,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.client.DeferredProcessDialog;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
@@ -86,7 +87,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     protected void populateBills(LeaseDTO result) {
-        List<PropertyCriterion> preDefinedFilters = new ArrayList<PropertyCriterion>();
+        List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
         preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillDTO.class).billingAccount().id(), result.billingAccount()
                 .getPrimaryKey()));
         billLister.setPreDefinedFilters(preDefinedFilters);
@@ -94,7 +95,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     protected void populatePayments(LeaseDTO result) {
-        List<PropertyCriterion> preDefinedFilters = new ArrayList<PropertyCriterion>();
+        List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
         preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).billingAccount().id(), result.billingAccount()
                 .getPrimaryKey()));
         paymentLister.setPreDefinedFilters(preDefinedFilters);

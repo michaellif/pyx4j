@@ -23,6 +23,7 @@ import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -81,7 +82,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             }
             buildingElementSelectionBox = new UnitSelectorDialog(true, alreadySelected) {
                 @Override
-                protected void setFilters(List<PropertyCriterion> filters) {
+                protected void setFilters(List<Criterion> filters) {
                     super.setFilters(filters);
                     addFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(AptUnit.class).belongsTo().productCatalog(), parent.getValue().catalog()));
                 }

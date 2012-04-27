@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
-import java.io.Serializable;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -22,6 +21,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
@@ -178,12 +179,17 @@ public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntit
             protected EntitySelectorTableDialog<AptUnit> getSelectorDialog() {
                 return new UnitSelectorDialog() {
                     @Override
-                    protected void setFilters(List<PropertyCriterion> filters) {
+                    protected void setFilters(List<Criterion> filters) {
                         DTO currentValue = LeaseEditorFormBase.this.getValue();
                         if (!currentValue.leaseFrom().isNull() && filters != null) {
+                            OrCriterion or = new OrCriterion();
                             // filter out already leased units (null) and not available by date:
-                            filters.add(PropertyCriterion.ne(proto()._availableForRent(), (Serializable) null));
-                            filters.add(PropertyCriterion.le(proto()._availableForRent(), currentValue.leaseFrom().getValue()));
+                            or.right(PropertyCriterion.le(proto()._availableForRent(), currentValue.leaseFrom().getValue()));
+                            or.left(PropertyCriterion.notExists(proto()._AptUnitOccupancySegment()));
+
+                            filters.add(or);
+
+//                            filters.add(PropertyCriterion.le(proto()._availableForRent(), currentValue.leaseFrom().getValue()));
                         }
                         super.setFilters(filters);
                     };

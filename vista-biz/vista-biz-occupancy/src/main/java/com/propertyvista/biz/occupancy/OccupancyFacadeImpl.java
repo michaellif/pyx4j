@@ -45,16 +45,27 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public void setupNewUnit(AptUnit unit) {
-        // if the unit is new, create a new occupancy for it and
-        AptUnitOccupancySegment vacant = EntityFactory.create(AptUnitOccupancySegment.class);
-        vacant.unit().set(unit);
-        vacant.status().setValue(Status.vacant);
-        vacant.dateFrom().setValue(new LogicalDate());
-        vacant.dateTo().setValue(OccupancyFacade.MAX_DATE);
-        Persistence.service().persist(vacant);
 
-        //??
-        scopeAvailable(unit.getPrimaryKey());
+        /*
+         * current approach:
+         * Do not create any OccupancySegments for newly created unit at all!..
+         * This allows use this unit for creation of existing (post-dated) leases.
+         * User then should manually change the availability status of the unit...
+         */
+
+        updateUnitAvailableFrom(unit.getPrimaryKey(), null);
+
+        if (false) {
+            // if the unit is new, create a new occupancy for it and
+            AptUnitOccupancySegment vacant = EntityFactory.create(AptUnitOccupancySegment.class);
+            vacant.unit().set(unit);
+            vacant.status().setValue(Status.vacant);
+            vacant.dateFrom().setValue(new LogicalDate());
+            vacant.dateTo().setValue(OccupancyFacade.MAX_DATE);
+            Persistence.service().persist(vacant);
+            //??
+            scopeAvailable(unit.getPrimaryKey());
+        }
     }
 
     @Override
@@ -64,9 +75,21 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         Iterator<AptUnitOccupancySegment> i = occupancy.iterator();
         boolean isSucceeded = false;
 
+        if (occupancy.isEmpty()) {
+            AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
+            segment.status().setValue(Status.available);
+            segment.dateFrom().setValue(now);
+            segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+            segment.lease().setValue(null);
+            segment.unit().setPrimaryKey(unitPk);
+            updateUnitAvailableFrom(unitPk, segment.dateFrom().getValue());
+            Persistence.service().merge(segment);
+            return; // newly created unit case!..
+        }
+
         while (i.hasNext()) {
             AptUnitOccupancySegment segment = i.next();
-            if (segment.status().getValue() == AptUnitOccupancySegment.Status.vacant) {
+            if (segment.status().getValue() == Status.vacant) {
 
                 // if we got segment that starts in the past then split it
                 if (segment.dateFrom().getValue().before(now)) {
@@ -78,7 +101,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                     segment = newSegment;
                 }
 
-                segment.status().setValue(AptUnitOccupancySegment.Status.available);
+                segment.status().setValue(Status.available);
                 segment.lease().setValue(null);
                 updateUnitAvailableFrom(unitPk, segment.dateFrom().getValue());
 
@@ -90,7 +113,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         if (isSucceeded) {
             new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
         } else {
-            throw new IllegalStateException("" + AptUnitOccupancySegment.Status.vacant + " segment was not found 'scope available' operation is impossible!!!!");
+            throw new IllegalStateException("" + Status.vacant + " segment was not found 'scope available' operation is impossible!!!!");
         }
     }
 
@@ -98,6 +121,20 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public void scopeOffMarket(Key unitPk, final OffMarketType type) {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
         List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, now);
+
+        if (occupancy.isEmpty()) {
+            AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
+            segment.status().setValue(Status.offMarket);
+            segment.offMarket().setValue(type);
+            segment.dateFrom().setValue(now);
+            segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+            segment.lease().setValue(null);
+            segment.unit().setPrimaryKey(unitPk);
+            Persistence.service().merge(segment);
+            new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
+            return; // newly created unit case!..
+        }
+
         for (AptUnitOccupancySegment segment : occupancy) {
             if (segment.status().getValue() == Status.vacant) {
                 LogicalDate splitDay = segment.dateFrom().getValue().before(now) ? now : segment.dateFrom().getValue();
@@ -126,6 +163,18 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public void scopeRenovation(Key unitPk, LogicalDate renovationEndDate) {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, renovationEndDate);
+
+        if (occupancy.isEmpty()) {
+            AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
+            segment.status().setValue(Status.vacant);
+            segment.dateFrom().setValue(now);
+            segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+            segment.lease().setValue(null);
+            segment.unit().setPrimaryKey(unitPk);
+            Persistence.service().merge(segment);
+            occupancy = retrieveOccupancy(unitPk, renovationEndDate);
+        }
+
         for (AptUnitOccupancySegment seg : occupancy) {
             if (seg.status().getValue() == Status.vacant) {
                 LogicalDate renoStartDay = seg.dateFrom().getValue().before(now) ? now : seg.dateFrom().getValue();
@@ -329,8 +378,11 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     @Override
     public boolean isScopeOffMarketAvailable(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
-
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
+
+        if (occupancy.isEmpty()) {
+            return true; // newly created unit - can be scoped to any state!.. 
+        }
 
         for (AptUnitOccupancySegment segment : occupancy) {
             if (segment.status().getValue() == Status.vacant) {
@@ -346,6 +398,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
 
+        if (occupancy.isEmpty()) {
+            return start; // newly created unit - can be scoped to any state!.. 
+        }
+
         for (AptUnitOccupancySegment segment : occupancy) {
             if (segment.status().getValue() == Status.vacant) {
                 LogicalDate vacantStart = segment.dateFrom().getValue();
@@ -360,6 +416,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public boolean isScopeAvailableAvailable(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
+
+        if (occupancy.isEmpty()) {
+            return true; // newly created unit - can be scoped to any state!.. 
+        }
 
         for (AptUnitOccupancySegment segment : occupancy) {
             if (segment.status().getValue() == Status.vacant) {
@@ -420,6 +480,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
 
+        if (occupancy.isEmpty()) {
+            return start; // newly created unit - can be scoped to any state!.. 
+        }
+
         for (AptUnitOccupancySegment segment : occupancy) {
             if (segment.status().getValue() == Status.available) {
                 LogicalDate segmentStart = segment.dateFrom().getValue();
@@ -435,6 +499,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
 
+        if (occupancy.isEmpty()) {
+            return true; // newly created unit - can be scoped to any state!.. 
+        }
+
         for (AptUnitOccupancySegment segment : occupancy) {
             if (segment.status().getValue() == Status.reserved) {
                 return true;
@@ -448,6 +516,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public boolean isApproveLeaseAvaialble(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
+
+        if (occupancy.isEmpty()) {
+            return true; // newly created unit - can be scoped to any state!.. 
+        }
 
         for (AptUnitOccupancySegment segment : occupancy) {
             if (segment.status().getValue() == Status.reserved) {

@@ -34,7 +34,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface AptUnitOccupancySegment extends IEntity {
 
-    @I18n
+    @I18n(context = "AptUnitOccupancySegment Status")
     @XmlType(name = "AptUnitOccupancySegmentStatus")
     public enum Status {
 
@@ -71,7 +71,8 @@ public interface AptUnitOccupancySegment extends IEntity {
     /**
      * Based on MITS schemas.
      */
-    @I18n
+    @I18n(context = "OffMarket Type")
+    @XmlType(name = "OffMarketType")
     public enum OffMarketType {
 
         down,

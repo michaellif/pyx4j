@@ -97,7 +97,6 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
         }, entityId);
 
         occupancyManagerService.canScopeAvailable(new DefaultAsyncCallback<Boolean>() {
-
             @Override
             public void onSuccess(Boolean result) {
                 myView.setCanScopeAvailable(result);
@@ -105,7 +104,6 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
         }, entityId);
 
         occupancyManagerService.canScopeOffMarket(new DefaultAsyncCallback<Boolean>() {
-
             @Override
             public void onSuccess(Boolean result) {
                 myView.setCanScopeOffMarket(result);
@@ -118,7 +116,6 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
                 myView.setMinRenovationEndDate(result);
             }
         }, entityId);
-
     }
 
     @Override
