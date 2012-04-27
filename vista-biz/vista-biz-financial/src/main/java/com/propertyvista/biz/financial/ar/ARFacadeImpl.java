@@ -21,7 +21,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.dto.InvoiceDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARFacadeImpl implements ARFacade {
 
@@ -41,18 +41,18 @@ public class ARFacadeImpl implements ARFacade {
     }
 
     @Override
-    public InvoiceDTO getInvoice(Lease lease) {
-        return ARFinancialTransactionManager.getInvoice(lease);
+    public TransactionHistoryDTO getTransactionHistory(Lease lease) {
+        return ARTransactionHistoryManager.getTransactionHistory(lease);
     }
 
     @Override
     public List<InvoiceLineItem> getNotCoveredDebitInvoiceLineItems(Lease lease) {
-        return ARFinancialTransactionManager.getNotCoveredDebitInvoiceLineItems(lease);
+        return ARTransactionHistoryManager.getNotCoveredDebitInvoiceLineItems(lease);
     }
 
     @Override
     public List<InvoiceLineItem> getNotConsumedCreditInvoiceLineItems(Lease lease) {
-        return ARFinancialTransactionManager.getNotConsumedCreditInvoiceLineItems(lease);
+        return ARTransactionHistoryManager.getNotConsumedCreditInvoiceLineItems(lease);
     }
 
     public void consumeCredit(InvoiceCredit credit) {

@@ -62,7 +62,7 @@ public class BillingUtils {
     }
 
     public static <E extends InvoiceLineItem> List<E> getLineItemsForType(Bill bill, Class<E> type) {
-        return getLineItemsForType(bill.invoice().lineItems(), type);
+        return getLineItemsForType(bill.lineItems(), type);
     }
 
     @SuppressWarnings("unchecked")
@@ -77,7 +77,7 @@ public class BillingUtils {
     }
 
     public static BillDTO createBillDto(Bill bill) {
-        Persistence.service().retrieve(bill.invoice().lineItems());
+        Persistence.service().retrieve(bill.lineItems());
         Persistence.service().retrieve(bill.billingAccount());
         BillDTO billDTO = new BillConverter().createDTO(bill);
 
@@ -87,59 +87,59 @@ public class BillingUtils {
 
     public static void enhanceBillDto(Bill bill, BillDTO dto) {
         // set total values
-        dto.invoice().serviceChargeLineItems().total().set(bill.invoice().serviceCharge());
-        dto.invoice().recurringFeatureChargeLineItems().total().set(bill.invoice().recurringFeatureCharges());
-        dto.invoice().onetimeFeatureChargeLineItems().total().set(bill.invoice().oneTimeFeatureCharges());
-        dto.invoice().depositLineItems().total().set(bill.invoice().depositAmount());
-        dto.invoice().depositRefundLineItems().total().set(bill.invoice().depositRefundAmount());
-        dto.invoice().immediateAdjustmentLineItems().total().set(bill.invoice().immediateAdjustments());
-        dto.invoice().pendingAdjustmentLineItems().total().set(bill.invoice().totalAdjustments());
-//        dto.invoice().withdrawalLineItems().total().set(bill.invoice().withdrawalAmount());
-//        dto.invoice().rejectedPaymentLineItems().total().set(bill.invoice().paymentRejectedAmount());
-        dto.invoice().paymentLineItems().total().set(bill.invoice().paymentReceivedAmount());
+        dto.serviceChargeLineItems().total().set(bill.serviceCharge());
+        dto.recurringFeatureChargeLineItems().total().set(bill.recurringFeatureCharges());
+        dto.onetimeFeatureChargeLineItems().total().set(bill.oneTimeFeatureCharges());
+        dto.depositLineItems().total().set(bill.depositAmount());
+        dto.depositRefundLineItems().total().set(bill.depositRefundAmount());
+        dto.immediateAdjustmentLineItems().total().set(bill.immediateAdjustments());
+        dto.pendingAdjustmentLineItems().total().set(bill.totalAdjustments());
+//        dto.withdrawalLineItems().total().set(bill.withdrawalAmount());
+//        dto.rejectedPaymentLineItems().total().set(bill.paymentRejectedAmount());
+        dto.paymentLineItems().total().set(bill.paymentReceivedAmount());
         // set detail lists
-        for (InvoiceLineItem lineItem : bill.invoice().lineItems()) {
+        for (InvoiceLineItem lineItem : bill.lineItems()) {
             // *** Current Bill list values ***
             if (lineItem instanceof InvoiceProductCharge) {
                 InvoiceProductCharge charge = (InvoiceProductCharge) lineItem;
                 ProductType prodType = charge.productType().getValue();
                 if (ProductType.service.equals(prodType)) {
-                    dto.invoice().serviceChargeLineItems().lineItems().add(charge);
+                    dto.serviceChargeLineItems().lineItems().add(charge);
                 } else if (ProductType.recurringFeature.equals(prodType)) {
-                    dto.invoice().recurringFeatureChargeLineItems().lineItems().add(charge);
+                    dto.recurringFeatureChargeLineItems().lineItems().add(charge);
                 } else if (ProductType.oneTimeFeature.equals(prodType)) {
-                    dto.invoice().onetimeFeatureChargeLineItems().lineItems().add(charge);
+                    dto.onetimeFeatureChargeLineItems().lineItems().add(charge);
                 }
                 //} else if (lineItem instanceof InvoiceProductCredit) {
                 // Credit(s)
             } else if (lineItem instanceof InvoiceDeposit) {
-                dto.invoice().depositLineItems().lineItems().add(lineItem);
+                dto.depositLineItems().lineItems().add(lineItem);
             }
             // *** Last Bill list values
             else if (lineItem instanceof InvoiceDepositRefund) {
-                dto.invoice().depositRefundLineItems().lineItems().add(lineItem);
+                dto.depositRefundLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoiceAccountCharge) {
                 LeaseAdjustment adjusment = ((InvoiceAccountCharge) lineItem).adjustment();
                 if (LeaseAdjustment.ExecutionType.immediate.equals(adjusment.actionType())) {
-                    dto.invoice().immediateAdjustmentLineItems().lineItems().add(lineItem);
+                    dto.immediateAdjustmentLineItems().lineItems().add(lineItem);
                 } else if (LeaseAdjustment.ExecutionType.pending.equals(adjusment.actionType())) {
-                    dto.invoice().pendingAdjustmentLineItems().lineItems().add(lineItem);
+                    dto.pendingAdjustmentLineItems().lineItems().add(lineItem);
                 }
             } else if (lineItem instanceof InvoiceAccountCredit) {
                 LeaseAdjustment adjusment = ((InvoiceAccountCredit) lineItem).adjustment();
                 if (LeaseAdjustment.ExecutionType.immediate.equals(adjusment.actionType())) {
-                    dto.invoice().immediateAdjustmentLineItems().lineItems().add(lineItem);
+                    dto.immediateAdjustmentLineItems().lineItems().add(lineItem);
                 } else if (LeaseAdjustment.ExecutionType.pending.equals(adjusment.actionType())) {
-                    dto.invoice().pendingAdjustmentLineItems().lineItems().add(lineItem);
+                    dto.pendingAdjustmentLineItems().lineItems().add(lineItem);
                 }
             } else if (lineItem instanceof InvoiceWithdrawal) {
-                dto.invoice().withdrawalLineItems().lineItems().add(lineItem);
+                dto.withdrawalLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoicePayment) {
                 PaymentStatus status = ((InvoicePayment) lineItem).paymentRecord().paymentStatus().getValue();
                 if (PaymentStatus.Rejected.equals(status)) {
-                    dto.invoice().rejectedPaymentLineItems().lineItems().add(lineItem);
+                    dto.rejectedPaymentLineItems().lineItems().add(lineItem);
                 } else {
-                    dto.invoice().paymentLineItems().lineItems().add(lineItem);
+                    dto.paymentLineItems().lineItems().add(lineItem);
                 }
             }
         }

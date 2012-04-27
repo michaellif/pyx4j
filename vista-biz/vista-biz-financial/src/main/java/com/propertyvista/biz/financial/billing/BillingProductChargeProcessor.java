@@ -39,9 +39,9 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
     BillingProductChargeProcessor(Billing billing) {
         this.billing = billing;
 
-        billing.getNextPeriodBill().invoice().serviceCharge().setValue(new BigDecimal(0));
-        billing.getNextPeriodBill().invoice().recurringFeatureCharges().setValue(new BigDecimal(0));
-        billing.getNextPeriodBill().invoice().oneTimeFeatureCharges().setValue(new BigDecimal(0));
+        billing.getNextPeriodBill().serviceCharge().setValue(new BigDecimal(0));
+        billing.getNextPeriodBill().recurringFeatureCharges().setValue(new BigDecimal(0));
+        billing.getNextPeriodBill().oneTimeFeatureCharges().setValue(new BigDecimal(0));
 
     }
 
@@ -292,16 +292,16 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
             return;
         }
         if (BillingUtils.isService(charge.chargeSubLineItem().billableItem().item().product())) { //Service
-            billing.getNextPeriodBill().invoice().serviceCharge().setValue(charge.amount().getValue());
+            billing.getNextPeriodBill().serviceCharge().setValue(charge.amount().getValue());
         } else if (BillingUtils.isRecurringFeature(charge.chargeSubLineItem().billableItem().item().product())) { //Recurring Feature
-            billing.getNextPeriodBill().invoice().recurringFeatureCharges()
-                    .setValue(billing.getNextPeriodBill().invoice().recurringFeatureCharges().getValue().add(charge.amount().getValue()));
+            billing.getNextPeriodBill().recurringFeatureCharges()
+                    .setValue(billing.getNextPeriodBill().recurringFeatureCharges().getValue().add(charge.amount().getValue()));
         } else {
-            billing.getNextPeriodBill().invoice().oneTimeFeatureCharges()
-                    .setValue(billing.getNextPeriodBill().invoice().oneTimeFeatureCharges().getValue().add(charge.amount().getValue()));
+            billing.getNextPeriodBill().oneTimeFeatureCharges()
+                    .setValue(billing.getNextPeriodBill().oneTimeFeatureCharges().getValue().add(charge.amount().getValue()));
         }
-        billing.getNextPeriodBill().invoice().lineItems().add(charge);
-        billing.getNextPeriodBill().invoice().taxes().setValue(billing.getNextPeriodBill().invoice().taxes().getValue().add(charge.taxTotal().getValue()));
+        billing.getNextPeriodBill().lineItems().add(charge);
+        billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(charge.taxTotal().getValue()));
     }
 
 }

@@ -92,37 +92,37 @@ public class BillTester extends Tester {
     }
 
     public BillTester serviceCharge(String value) {
-        assertEquals("Service Charge", new BigDecimal(value), bill.invoice().serviceCharge().getValue());
+        assertEquals("Service Charge", new BigDecimal(value), bill.serviceCharge().getValue());
         return this;
     }
 
     public BillTester recurringFeatureCharges(String value) {
-        assertEquals("Recurring Feature Charges", new BigDecimal(value), bill.invoice().recurringFeatureCharges().getValue());
+        assertEquals("Recurring Feature Charges", new BigDecimal(value), bill.recurringFeatureCharges().getValue());
         return this;
     }
 
     public BillTester oneTimeFeatureCharges(String value) {
-        assertEquals("One Time Feature Charges", new BigDecimal(value), bill.invoice().oneTimeFeatureCharges().getValue());
+        assertEquals("One Time Feature Charges", new BigDecimal(value), bill.oneTimeFeatureCharges().getValue());
         return this;
     }
 
     public BillTester taxes(String value) {
-        assertEquals("Taxes", new BigDecimal(value), bill.invoice().taxes().getValue());
+        assertEquals("Taxes", new BigDecimal(value), bill.taxes().getValue());
         return this;
     }
 
     public BillTester paymentReceivedAmount(String value) {
-        assertEquals("Payment Received Amount", new BigDecimal(value), bill.invoice().paymentReceivedAmount().getValue());
+        assertEquals("Payment Received Amount", new BigDecimal(value), bill.paymentReceivedAmount().getValue());
         return this;
     }
 
     public BillTester depositAmount(String value) {
-        assertEquals("Deposit Amount", new BigDecimal(value), bill.invoice().depositAmount().getValue());
+        assertEquals("Deposit Amount", new BigDecimal(value), bill.depositAmount().getValue());
         return this;
     }
 
     public BillTester totalDueAmount(String value) {
-        assertEquals("Total Due Amount", new BigDecimal(value), bill.invoice().totalDueAmount().getValue());
+        assertEquals("Total Due Amount", new BigDecimal(value), bill.totalDueAmount().getValue());
         return this;
     }
 

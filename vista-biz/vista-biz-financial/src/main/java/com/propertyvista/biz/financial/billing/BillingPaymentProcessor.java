@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 
 public class BillingPaymentProcessor {
@@ -30,9 +31,9 @@ public class BillingPaymentProcessor {
     }
 
     private void attachPayment(InvoicePayment payment) {
-        billing.getNextPeriodBill().invoice().lineItems().add(payment);
-        billing.getNextPeriodBill().invoice().paymentReceivedAmount()
-                .setValue(billing.getNextPeriodBill().invoice().paymentReceivedAmount().getValue().add(payment.amount().getValue()));
+        Bill bill = billing.getNextPeriodBill();
+        bill.lineItems().add(payment);
+        bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue().add(payment.amount().getValue()));
     }
 
 }

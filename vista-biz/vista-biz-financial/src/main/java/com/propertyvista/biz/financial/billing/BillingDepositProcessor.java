@@ -19,7 +19,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.AbstractProcessor;
-import com.propertyvista.domain.financial.billing.Invoice;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
@@ -100,17 +99,16 @@ public class BillingDepositProcessor extends AbstractProcessor {
         if (deposit == null) {
             return;
         }
-        Invoice invoice = billing.getNextPeriodBill().invoice();
-        invoice.depositAmount().setValue(invoice.depositAmount().getValue().add(deposit.amount().getValue()));
-        invoice.lineItems().add(deposit);
+        billing.getNextPeriodBill().depositAmount().setValue(billing.getNextPeriodBill().depositAmount().getValue().add(deposit.amount().getValue()));
+        billing.getNextPeriodBill().lineItems().add(deposit);
         //TODO
         // billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(deposit.taxTotal().getValue()));
     }
 
     private void attachDepositRefund(InvoiceDepositRefund depositRefund) {
-        Invoice invoice = billing.getNextPeriodBill().invoice();
-        invoice.lineItems().add(depositRefund);
-        invoice.paymentReceivedAmount().setValue(invoice.depositRefundAmount().getValue().add(depositRefund.amount().getValue()));
+        billing.getNextPeriodBill().lineItems().add(depositRefund);
+        billing.getNextPeriodBill().paymentReceivedAmount()
+                .setValue(billing.getNextPeriodBill().depositRefundAmount().getValue().add(depositRefund.amount().getValue()));
     }
 
 }

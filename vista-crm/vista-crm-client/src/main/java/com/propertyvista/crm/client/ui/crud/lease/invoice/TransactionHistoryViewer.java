@@ -24,17 +24,17 @@ import com.pyx4j.entity.client.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.financial.billing.Invoice;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.dto.TransactionHistoryDTO;
 
-public class InvoiceViewer extends CEntityViewer<Invoice> {
+public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDTO> {
 
-    private final static I18n i18n = I18n.get(InvoiceViewer.class);
+    private final static I18n i18n = I18n.get(TransactionHistoryViewer.class);
 
     @Override
-    public IsWidget createContent(Invoice value) {
+    public IsWidget createContent(TransactionHistoryDTO value) {
         FormFlexPanel content = new FormFlexPanel();
 
         content.setWidget(0, 0, createLineItems(value.lineItems()));

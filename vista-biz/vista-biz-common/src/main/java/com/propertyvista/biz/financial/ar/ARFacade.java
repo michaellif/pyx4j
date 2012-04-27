@@ -19,7 +19,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.dto.InvoiceDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
 
 public interface ARFacade {
 
@@ -33,5 +33,5 @@ public interface ARFacade {
 
     List<InvoiceLineItem> getNotConsumedCreditInvoiceLineItems(Lease lease);
 
-    InvoiceDTO getInvoice(Lease lease);
+    TransactionHistoryDTO getTransactionHistory(Lease lease);
 }

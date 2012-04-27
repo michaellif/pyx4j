@@ -17,18 +17,18 @@ import java.math.BigDecimal;
 
 import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.InvoiceDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
 
-public class InvoiceTester extends Tester {
+public class TransactionHistoryTester extends Tester {
 
-    private final InvoiceDTO invoice;
+    private final TransactionHistoryDTO transactionHistory;
 
-    public InvoiceTester(Lease lease) {
-        invoice = ARFinancialTransactionManager.getInvoice(lease);
+    public TransactionHistoryTester(Lease lease) {
+        transactionHistory = ARTransactionHistoryManager.getTransactionHistory(lease);
     }
 
-    public InvoiceTester currentAmount(BigDecimal amount, int index) {
-        assertEquals("Total current amount", amount, invoice.agingBuckets().get(index).current().getValue());
+    public TransactionHistoryTester currentAmount(BigDecimal amount, int index) {
+        assertEquals("Total current amount", amount, transactionHistory.agingBuckets().get(index).current().getValue());
         return this;
     }
 

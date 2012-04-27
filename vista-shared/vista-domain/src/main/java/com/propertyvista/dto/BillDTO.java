@@ -13,15 +13,52 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 @ExtendsDBO
 public interface BillDTO extends Bill {
 
-    @Override
-    InvoiceDTO invoice();
+    Lease lease();
+
+    @Caption(name = "Service Charges")
+    InvoiceLineItemGroupDTO serviceChargeLineItems();
+
+    // Current Bill charges
+    @Caption(name = "Feature Charges")
+    InvoiceLineItemGroupDTO recurringFeatureChargeLineItems();
+
+    @Caption(name = "One-Time Feature Charges")
+    InvoiceLineItemGroupDTO onetimeFeatureChargeLineItems();
+
+//    IList<InvoiceProductCredit> productCreditLineItems();
+
+    @Caption(name = "Deposits")
+    InvoiceLineItemGroupDTO depositLineItems();
+
+    // Last Bill charges and payments
+    @Caption(name = "Deposit Refunds")
+    InvoiceLineItemGroupDTO depositRefundLineItems();
+
+    //Both Debit and Credit types of Lease Adjustments
+    @Caption(name = "Immediate Adjustments")
+    InvoiceLineItemGroupDTO immediateAdjustmentLineItems();
+
+    // Debit and credit combined
+    @Caption(name = "Pending Adjustments")
+    InvoiceLineItemGroupDTO pendingAdjustmentLineItems();
+
+    @Caption(name = "Withdrawals")
+    InvoiceLineItemGroupDTO withdrawalLineItems();
+
+    @Caption(name = "Rejected Payments")
+    InvoiceLineItemGroupDTO rejectedPaymentLineItems();
+
+    @Caption(name = "Payments Received")
+    InvoiceLineItemGroupDTO paymentLineItems();
 }

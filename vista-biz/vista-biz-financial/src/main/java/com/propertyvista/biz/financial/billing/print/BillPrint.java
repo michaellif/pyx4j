@@ -48,8 +48,8 @@ public class BillPrint {
 
     public static void printBill(BillDTO bill, OutputStream pdf) {
 
-        Persistence.service().retrieve(bill.invoice().lineItems());
-        for (InvoiceLineItem lineItem : bill.invoice().lineItems()) {
+        Persistence.service().retrieve(bill.lineItems());
+        for (InvoiceLineItem lineItem : bill.lineItems()) {
             if (InvoiceProductCharge.class.isAssignableFrom(lineItem.getClass())) {
                 Persistence.service().retrieve(((InvoiceProductCharge) lineItem).chargeSubLineItem());
                 Persistence.service().retrieve(((InvoiceProductCharge) lineItem).adjustmentSubLineItems());

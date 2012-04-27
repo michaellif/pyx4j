@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.domain.financial.billing;
 
 import java.math.BigDecimal;
 
@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface AgingBucketsDTO extends IEntity {
+public interface AgingBuckets extends IEntity {
 
     IPrimitive<String> label();
 

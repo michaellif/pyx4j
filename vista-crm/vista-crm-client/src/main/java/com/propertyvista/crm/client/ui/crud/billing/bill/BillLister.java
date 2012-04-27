@@ -30,24 +30,24 @@ public class BillLister extends ListerBase<BillDTO> {
             new MemberColumnDescriptor.Builder(proto().billingPeriodStartDate()).build(),
             new MemberColumnDescriptor.Builder(proto().billingPeriodEndDate()).build(),
             
-            new MemberColumnDescriptor.Builder(proto().invoice().currentAmount()).build(),
-            new MemberColumnDescriptor.Builder(proto().invoice().taxes()).build(),
-            new MemberColumnDescriptor.Builder(proto().invoice().totalDueAmount()).build(),
+            new MemberColumnDescriptor.Builder(proto().currentAmount()).build(),
+            new MemberColumnDescriptor.Builder(proto().taxes()).build(),
+            new MemberColumnDescriptor.Builder(proto().totalDueAmount()).build(),
             
             new MemberColumnDescriptor.Builder(proto().billStatus()).build(),
             
-            new MemberColumnDescriptor.Builder(proto().invoice().previousBalanceAmount(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().invoice().paymentReceivedAmount(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().invoice().depositRefundAmount(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().invoice().immediateAdjustments(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().balanceForwardAmount(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().paymentReceivedAmount(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().depositRefundAmount(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().immediateAdjustments(),false).build(),
             
-            new MemberColumnDescriptor.Builder(proto().invoice().totalAdjustments(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().invoice().depositAmount(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().totalAdjustments(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().depositAmount(),false).build(),
             
-            new MemberColumnDescriptor.Builder(proto().invoice().pastDueAmount(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().invoice().serviceCharge(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().invoice().recurringFeatureCharges(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().invoice().oneTimeFeatureCharges(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().pastDueAmount(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().serviceCharge(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().recurringFeatureCharges(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().oneTimeFeatureCharges(),false).build(),
             
             new MemberColumnDescriptor.Builder(proto().billingRun().executionDate()).build()
         );//@formatter:on
