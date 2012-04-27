@@ -177,6 +177,12 @@ public class AptUnitOccupancyManagerHelper {
         return occupancyTimeline;
     }
 
+    public static boolean isOccupancyListEmpty(Key unitPk) {
+        EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit().id(), unitPk));
+        return Persistence.secureQuery(criteria).isEmpty();
+    }
+
     /**
      * Retrieve occupancy segment for a <code>unit</code> that contains <code>contained</code> date.
      * 
