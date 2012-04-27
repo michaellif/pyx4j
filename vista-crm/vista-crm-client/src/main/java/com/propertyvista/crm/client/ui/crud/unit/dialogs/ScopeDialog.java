@@ -72,7 +72,7 @@ public class ScopeDialog extends OkCancelDialog {
                 }
                 combo.setOptions(options);
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().renovationEndsOn()), 9).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().renovationEndsOn()), 10).build());
                 get(proto().renovationEndsOn()).setVisible(false);
                 get(proto().renovationEndsOn()).addValueValidator(new EditableValueValidator<Date>() {
                     @Override
