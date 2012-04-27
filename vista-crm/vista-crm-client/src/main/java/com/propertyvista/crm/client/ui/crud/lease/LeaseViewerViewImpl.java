@@ -333,6 +333,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             emailType = new CComboBox<EmailTemplateType>();
             emailType.setOptions(Arrays.asList(EmailTemplateType.TenantInvitation));
             emailType.setValue(EmailTemplateType.TenantInvitation, false);
+            emailType.setMandatory(true);
             return emailType.asWidget();
         }
 
