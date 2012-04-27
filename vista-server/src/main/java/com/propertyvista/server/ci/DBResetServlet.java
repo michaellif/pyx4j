@@ -171,21 +171,19 @@ public class DBResetServlet extends HttpServlet {
                             if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
                                 SchedulerHelper.shutdown();
                                 RDBUtils.resetDatabase();
-                                SchedulerHelper.dbReset();
-                                Thread.sleep(150);
-                                SchedulerHelper.init();
-                                if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() != MultitenancyType.SeparateSchemas) {
-                                    RDBUtils.initAllEntityTables();
-                                }
-                                CacheService.resetAll();
-
+                                // Initialize Admin
                                 NamespaceManager.setNamespace(Pmc.adminNamespace);
-                                RDBUtils.ensureNamespace();
-                                // TODO Hack for non implemented SeparateSchemas DML 
-                                {
-                                    ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
-                                }
                                 try {
+                                    RDBUtils.ensureNamespace();
+                                    SchedulerHelper.dbReset();
+                                    Thread.sleep(150);
+                                    ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+                                    SchedulerHelper.init();
+                                    if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                                        RDBUtils.initNameSpaceSpecificEntityTables();
+                                    }
+                                    CacheService.resetAll();
+
                                     new VistaAminDataPreloaders().preloadAll();
                                     Persistence.service().commit();
                                 } finally {
