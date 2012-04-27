@@ -181,6 +181,8 @@ public class DBResetServlet extends HttpServlet {
                                     SchedulerHelper.init();
                                     if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                                         RDBUtils.initNameSpaceSpecificEntityTables();
+                                    } else {
+                                        RDBUtils.initAllEntityTables();
                                     }
                                     CacheService.resetAll();
 
