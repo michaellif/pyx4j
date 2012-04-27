@@ -509,7 +509,7 @@ public class BuildingsGenerator {
 
         AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
         occupancySegment.unit().set(unit);
-        occupancySegment.dateFrom().setValue(RandomUtil.randomLogicalDate());
+        occupancySegment.dateFrom().setValue(RandomUtil.randomLogicalDate(2010, 2012));
         occupancySegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
         occupancySegment.status().setValue(AptUnitOccupancySegment.Status.available);
         unit._availableForRent().setValue(occupancySegment.dateFrom().getValue());
@@ -536,15 +536,15 @@ public class BuildingsGenerator {
         item.conditionNotes().setValue(CommonsGenerator.lipsum());
 
         item.flooringType().setValue(RandomUtil.random(AptUnitItem.FlooringType.values()));
-        item.flooringInstallDate().setValue(RandomUtil.randomLogicalDate());
+        item.flooringInstallDate().setValue(RandomUtil.randomLogicalDate(1911, 2011));
         item.flooringValue().setValue(BigDecimal.valueOf(1800 + RandomUtil.randomInt(200)));
 
         item.counterTopType().setValue(RandomUtil.random(AptUnitItem.CounterTopType.values()));
-        item.counterTopInstallDate().setValue(RandomUtil.randomLogicalDate());
+        item.counterTopInstallDate().setValue(RandomUtil.randomLogicalDate(1911, 2011));
         item.counterTopValue().setValue(BigDecimal.valueOf(800 + RandomUtil.randomInt(200)));
 
         item.cabinetsType().setValue(RandomUtil.random(AptUnitItem.CabinetsType.values()));
-        item.cabinetsInstallDate().setValue(RandomUtil.randomLogicalDate());
+        item.cabinetsInstallDate().setValue(RandomUtil.randomLogicalDate(1911, 2011));
         item.cabinetsValue().setValue(BigDecimal.valueOf(1000 + RandomUtil.randomInt(200)));
 
         return item;

@@ -24,5 +24,4 @@ public interface MakeVacantDTO extends IEntity {
 
     @Caption(name = "Vacant Since")
     IPrimitive<LogicalDate> vacantStartDay();
-
 }
