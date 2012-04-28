@@ -47,10 +47,17 @@ public interface Pmc extends IEntity {
     @ReadOnly
     @Length(63)
     @Indexed(uniqueConstraint = true)
+    IPrimitive<String> namespace();
+
+    @NotNull
+    @Length(63)
+    @Indexed(uniqueConstraint = true)
     IPrimitive<String> dnsName();
 
     @Owned
     IList<PmcDnsName> dnsNameAliases();
+
+    IPrimitive<String> onboardingAccountId();
 
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
