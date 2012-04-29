@@ -60,7 +60,7 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
 
 //TODO rename to Property?!
-@ToStringFormat("{0}, {1}")
+@ToStringFormat("{0}{1,choice,null#|!null#, {1}}")
 @DiscriminatorValue("Disc_Building")
 public interface Building extends PolicyNode, NotesAndAttachmentsNode {
 

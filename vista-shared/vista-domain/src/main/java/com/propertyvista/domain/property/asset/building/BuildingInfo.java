@@ -34,7 +34,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.contact.AddressStructured;
 
 @EmbeddedEntity
-@ToStringFormat("{0}, {1}")
+@ToStringFormat("{0}{1,choice,null#|!null#, {1}}")
 public interface BuildingInfo extends IEntity {
 
     @I18n
