@@ -24,11 +24,13 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -57,6 +59,8 @@ public interface IVersionData<VERSIONED_ENTITY extends IVersionedEntity<?>> exte
 
     //TODO make Abstract user part of the framework
     @Transient
+    @ReadOnly
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<String> createdByUser();
 
 }
