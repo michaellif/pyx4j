@@ -22,6 +22,8 @@ public interface VistaTODO {
 
     public static boolean removedForProduction = true;
 
+    public static boolean operationDataRemovedForProduction = true;
+
     public static boolean vladsLeaseMigration = true;
 
     // e.g. person().name()

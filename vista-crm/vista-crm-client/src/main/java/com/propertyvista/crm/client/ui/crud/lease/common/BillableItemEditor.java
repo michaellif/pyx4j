@@ -58,6 +58,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
@@ -158,8 +159,10 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        adjustmentPanel.setH3(0, 0, 1, i18n.tr("Adjustments"));
-        adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
+        if (!VistaTODO.operationDataRemovedForProduction) {
+            adjustmentPanel.setH3(0, 0, 1, i18n.tr("Adjustments"));
+            adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
+        }
 
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);

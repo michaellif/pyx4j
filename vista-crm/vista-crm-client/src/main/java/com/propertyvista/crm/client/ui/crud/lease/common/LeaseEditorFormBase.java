@@ -54,6 +54,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntityForm<DTO> {
 
@@ -269,8 +270,10 @@ public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntit
         main.setH1(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
 
-        main.setH1(++row, 0, 2, proto().billingAccount().adjustments().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().billingAccount().adjustments(), new LeaseAdjustmentFolder(isEditable(), this)));
+        if (!VistaTODO.operationDataRemovedForProduction) {
+            main.setH1(++row, 0, 2, proto().billingAccount().adjustments().getMeta().getCaption());
+            main.setWidget(++row, 0, inject(proto().billingAccount().adjustments(), new LeaseAdjustmentFolder(isEditable(), this)));
+        }
 
         return new CrmScrollPanel(main);
     }
