@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -47,6 +48,8 @@ public interface Pmc extends IEntity {
     @ReadOnly
     @Length(63)
     @Indexed(uniqueConstraint = true)
+    //TODO Temporary until DB migration is finished
+    @Transient
     IPrimitive<String> namespace();
 
     @NotNull
@@ -57,6 +60,8 @@ public interface Pmc extends IEntity {
     @Owned
     IList<PmcDnsName> dnsNameAliases();
 
+    //TODO Temporary until DB migration is finished
+    @Transient
     IPrimitive<String> onboardingAccountId();
 
     @Timestamp(Timestamp.Update.Created)
