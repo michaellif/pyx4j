@@ -30,7 +30,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorPresenterBase;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
 import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.Concession.Status;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -176,11 +175,9 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
                 }
             }
 
-            // fill relevant concessions:
+            // fill concessions:
             for (Concession concession : selectedService.version().concessions()) {
-                if (concession.version().status().getValue() == Status.approved) {
-                    currentValue.selectedConcessions().add(concession);
-                }
+                currentValue.selectedConcessions().add(concession);
             }
         }
 

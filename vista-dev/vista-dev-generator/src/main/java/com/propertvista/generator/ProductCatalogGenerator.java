@@ -258,10 +258,6 @@ public class ProductCatalogGenerator {
 
         item.version().term().setValue(RandomUtil.random(Concession.Term.values()));
         item.version().condition().setValue(RandomUtil.random(Concession.Condition.values()));
-        item.version().status().setValue(RandomUtil.random(Concession.Status.values()));
-        if (item.version().status().getValue() == Concession.Status.approved) {
-            item.version().approvedBy().setValue("George W. Bush Jr.");
-        }
 
         item.version().effectiveDate().setValue(DataGenerator.randomDate(2));
         item.version().expirationDate().setValue(DataGenerator.randomDate(4));

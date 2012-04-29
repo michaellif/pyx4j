@@ -91,22 +91,6 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
         }
     }
 
-    @I18n(context = "Concession Status")
-    @XmlType(name = "ConcessionStatus")
-    public enum Status {
-
-        draft,
-
-        approved,
-
-        denied;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
 // ----------------------------------------------
 
     @Owner
@@ -163,13 +147,6 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
 
         @NotNull
         IPrimitive<Boolean> nonMixable();
-
-// ----------------------------------------------
-
-        @NotNull
-        IPrimitive<Status> status();
-
-        IPrimitive<String> approvedBy();
 
         @Format("MM/dd/yyyy")
         IPrimitive<LogicalDate> effectiveDate();

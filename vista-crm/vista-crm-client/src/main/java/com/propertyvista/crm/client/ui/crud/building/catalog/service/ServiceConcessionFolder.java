@@ -94,7 +94,6 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
                     new MemberColumnDescriptor.Builder(proto().version().term()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().value()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().condition()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().status()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build()
             );//@formatter:on

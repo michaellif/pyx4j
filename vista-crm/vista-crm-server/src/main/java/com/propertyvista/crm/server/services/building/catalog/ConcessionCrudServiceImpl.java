@@ -13,12 +13,11 @@
  */
 package com.propertyvista.crm.server.services.building.catalog;
 
-import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
-
 import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
+import com.propertyvista.crm.server.services.selections.version.AbstractVistaVersionedCrudServiceImpl;
 import com.propertyvista.domain.financial.offering.Concession;
 
-public class ConcessionCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Concession> implements ConcessionCrudService {
+public class ConcessionCrudServiceImpl extends AbstractVistaVersionedCrudServiceImpl<Concession> implements ConcessionCrudService {
 
     public ConcessionCrudServiceImpl() {
         super(Concession.class);
