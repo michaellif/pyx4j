@@ -198,6 +198,7 @@ public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntit
                         super.setFilters(filters);
                     };
 
+                    @SuppressWarnings("unchecked")
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItems().isEmpty()) {
