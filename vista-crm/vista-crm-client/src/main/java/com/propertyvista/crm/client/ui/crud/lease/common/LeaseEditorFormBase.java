@@ -53,6 +53,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -93,6 +94,8 @@ public abstract class LeaseEditorFormBase<DTO extends LeaseDTO> extends CrmEntit
     @Override
     protected void onPopulate() {
         super.onPopulate();
+
+        get(proto().version().completion()).setVisible(getValue().version().status().getValue() == Status.Completed);
 
         // disable some editing on signed lease:
         if (isEditable()) {
