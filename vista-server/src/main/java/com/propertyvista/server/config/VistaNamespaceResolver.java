@@ -56,7 +56,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                     .getServletPath().startsWith("/o/openid"))) {
                 return Pmc.adminNamespace;
             }
-            if (httprequest.getServletPath().startsWith("/public/schema")) {
+            if (httprequest.getServletPath().startsWith("/public/schema") || httprequest.getServletPath().startsWith("/public/o/status")) {
                 return "_";
             }
         }
