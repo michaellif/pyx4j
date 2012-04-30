@@ -21,6 +21,7 @@
 package com.pyx4j.entity.shared.criterion;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Vector;
@@ -78,8 +79,22 @@ public class PropertyCriterion implements Criterion {
         this(member.getPath().toString(), restriction, value);
     }
 
-    private PropertyCriterion(IObject<?> member, Restriction restriction, Collection<?> value) {
-        this(member.getPath().toString(), restriction, new Vector(value));
+    public PropertyCriterion(IObject<?> member, Restriction restriction, Collection<?> value) {
+        this(member.getPath().toString(), restriction, createSerializableCollection(value));
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private static Serializable createSerializableCollection(Collection<?> collection) {
+        Vector result = new Vector();
+        for (Object value : collection) {
+            if (value instanceof IEntity) {
+                value = ((IEntity) value).createIdentityStub();
+            } else if (value instanceof Class) {
+                value = EntityFactory.create((Class<IEntity>) value);
+            }
+            result.add(value);
+        }
+        return result;
     }
 
     public static PropertyCriterion eq(IObject<?> member, Class<? extends IEntity> value) {
@@ -128,7 +143,7 @@ public class PropertyCriterion implements Criterion {
     }
 
     public static PropertyCriterion in(IObject<?> member, Serializable... value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.IN, value);
+        return new PropertyCriterion(member, Restriction.IN, Arrays.asList(value));
     }
 
     public static PropertyCriterion gt(IObject<?> member, Serializable value) {

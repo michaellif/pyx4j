@@ -116,7 +116,7 @@ public class Mappings {
         }
         assertPersistableEntity(entityMeta);
         Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
-        if (entityMeta.getAnnotation(AbstractEntity.class) != null) {
+        if ((entityMeta.getAnnotation(AbstractEntity.class) != null) && (entityMeta.getPerstableSuperClass() == null)) {
             if ((inheritance == null) || (inheritance.strategy() == Inheritance.InheritanceStrategy.TABLE_PER_CLASS)) {
                 throw new Error("Can't operate on Abstract Entity " + entityMeta.getEntityClass().getName());
             }

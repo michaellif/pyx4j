@@ -101,7 +101,8 @@ public class EntityOperationsMeta {
         build(dialect, dialect.getNamingConvention(), entityMeta, path, null, null, entityMeta);
 
         Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
-        if ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE)) {
+        if ((entityMeta.getPerstableSuperClass() != null)
+                || ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE))) {
             impClasses = new HashMap<String, Class<? extends IEntity>>();
             for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(entityMeta.getEntityClass())) {
                 EntityMeta subclassMeta = EntityFactory.getEntityMeta(subclass);
@@ -122,6 +123,16 @@ public class EntityOperationsMeta {
                     throw new Error("Class " + subclass.getName() + " require @AbstractEntity or @DiscriminatorValue annotation");
                 }
             }
+
+            {
+                MemberMeta memberMeta = entityMeta.getMemberMeta(IEntity.CONCRETE_TYPE_DATA_ATTR);
+                ValueAdapter valueAdapter = new ValueAdapterEntityPolymorphic(dialect, entityMeta.getEntityClass());
+                MemberOperationsMeta member = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.CONCRETE_TYPE_DATA_ATTR), valueAdapter, dialect
+                        .getNamingConvention().sqlIdColumnName(), memberMeta, path + Path.PATH_SEPARATOR + IEntity.CONCRETE_TYPE_DATA_ATTR
+                        + Path.PATH_SEPARATOR);
+                membersByPath.put(member.getMemberPath(), member);
+            }
+
         } else {
             impClasses = null;
         }

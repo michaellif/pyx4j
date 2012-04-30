@@ -63,7 +63,7 @@ public class QueryBuilder<T extends IEntity> {
 
     private final StringBuilder sortsSql = new StringBuilder();
 
-    private final List<Object> bindParams = new Vector<Object>();
+    private final List<BindHolder> bindParams = new Vector<BindHolder>();
 
     private final String mainTableSqlAlias;
 
@@ -112,6 +112,12 @@ public class QueryBuilder<T extends IEntity> {
             default:
                 throw new Error("Unsupported VersionedCriteria " + criteria.getVersionedCriteria());
             }
+        }
+
+        if (operationsMeta.impClasses != null) {
+            appendPropertyCriterion(new PropertyCriterion(criteria.proto().instanceValueClass(), Restriction.IN, operationsMeta.impClasses.values()),
+                    firstCriteria, true);
+            firstCriteria = false;
         }
 
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
@@ -255,14 +261,18 @@ public class QueryBuilder<T extends IEntity> {
                     throw new RuntimeException("Unsupported Type for IN " + bindHolder.bindValue.getClass().getName());
                 }
                 boolean first = true;
-                for (Object i : items) {
+                for (Object item : items) {
                     if (first) {
                         first = false;
                     } else {
                         sql.append(",");
                     }
                     sql.append(" ? ");
-                    bindParams.add(i);
+
+                    BindHolder itemBindHolder = new BindHolder();
+                    itemBindHolder.adapter = bindHolder.adapter;
+                    itemBindHolder.bindValue = item;
+                    bindParams.add(itemBindHolder);
                 }
                 sql.append(")");
                 return;
@@ -399,16 +409,11 @@ public class QueryBuilder<T extends IEntity> {
             stmt.setString(parameterIndex, NamespaceManager.getNamespace());
             parameterIndex++;
         }
-        for (Object param : bindParams) {
-            if (param instanceof BindHolder) {
-                if (((BindHolder) param).adapter != null) {
-                    parameterIndex += ((BindHolder) param).adapter.bindValue(persistenceContext, stmt, parameterIndex, ((BindHolder) param).bindValue);
-                } else {
-                    stmt.setObject(parameterIndex, encodeValue(((BindHolder) param).bindValue));
-                    parameterIndex++;
-                }
+        for (BindHolder param : bindParams) {
+            if (param.adapter != null) {
+                parameterIndex += param.adapter.bindValue(persistenceContext, stmt, parameterIndex, param.bindValue);
             } else {
-                stmt.setObject(parameterIndex, encodeValue(param));
+                stmt.setObject(parameterIndex, encodeValue(param.bindValue));
                 parameterIndex++;
             }
         }

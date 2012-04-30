@@ -197,8 +197,14 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     @SuppressWarnings("unchecked")
-    public IPrimitive<Key> id() {
+    public final IPrimitive<Key> id() {
         return (IPrimitive<Key>) getMember(PRIMARY_KEY);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public final IPrimitive<Class<? extends IEntity>> instanceValueClass() {
+        return (IPrimitive<Class<? extends IEntity>>) getMember(CONCRETE_TYPE_DATA_ATTR);
     }
 
     @Override
@@ -573,6 +579,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         if (member == null) {
             if (PRIMARY_KEY.equals(memberName)) {
                 return lazyCreateMemberIPrimitive(PRIMARY_KEY, Key.class);
+            } else if (CONCRETE_TYPE_DATA_ATTR.equals(memberName)) {
+                return lazyCreateMemberIPrimitive(CONCRETE_TYPE_DATA_ATTR, Class.class);
             } else {
                 member = lazyCreateMember(memberName);
                 if (member == null) {

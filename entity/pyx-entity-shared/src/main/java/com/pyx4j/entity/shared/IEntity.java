@@ -55,6 +55,8 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     @Indexed
     public IPrimitive<Key> id();
 
+    public IPrimitive<Class<? extends IEntity>> instanceValueClass();
+
     /**
      * @return true if only PrimaryKey present and other properties are empty or null
      */

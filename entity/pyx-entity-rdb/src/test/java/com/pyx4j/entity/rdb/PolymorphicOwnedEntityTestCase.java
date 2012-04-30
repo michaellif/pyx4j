@@ -218,18 +218,22 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
         o1.value().setValue("papa1");
 
         BidirectionalOneToManyPlmSTChildA c1A1 = EntityFactory.create(BidirectionalOneToManyPlmSTChildA.class);
+        c1A1.testId().setValue(testId);
         c1A1.valueA().setValue("a1");
         c1A1.value().setValue("a");
 
         BidirectionalOneToManyPlmSTChildA c1A2 = EntityFactory.create(BidirectionalOneToManyPlmSTChildA.class);
+        c1A2.testId().setValue(testId);
         c1A2.valueA().setValue("a2");
         c1A2.value().setValue("x");
 
         BidirectionalOneToManyPlmSTChildB c1B1 = EntityFactory.create(BidirectionalOneToManyPlmSTChildB.class);
+        c1B1.testId().setValue(testId);
         c1B1.valueB().setValue("b1");
         c1B1.value().setValue("b");
 
         BidirectionalOneToManyPlmSTChildB c1B2 = EntityFactory.create(BidirectionalOneToManyPlmSTChildB.class);
+        c1B2.testId().setValue(testId);
         c1B2.valueB().setValue("b2");
         c1B2.value().setValue("x");
 
@@ -245,6 +249,7 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
         o2.value().setValue("papa2");
 
         BidirectionalOneToManyPlmSTChildA c2A1 = EntityFactory.create(BidirectionalOneToManyPlmSTChildA.class);
+        c2A1.testId().setValue(testId);
         c2A1.valueA().setValue("a1");
         c2A1.value().setValue("b");
 
@@ -319,13 +324,13 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
         srv.persist(o3);
 
         BidirectionalOneToManyPlmSTChildAC c3AC1 = EntityFactory.create(BidirectionalOneToManyPlmSTChildAC.class);
+        c3AC1.testId().setValue(testId);
         c3AC1.valueA().setValue("ac1");
         c3AC1.value().setValue("ac");
         c3AC1.parent().set(o3);
         srv.persist(c3AC1);
 
-        //TODO
-        if (false) {
+        {
             // test search by Classes
             EntityQueryCriteria<BidirectionalOneToManyPlmSTParent> criteria = EntityQueryCriteria.create(BidirectionalOneToManyPlmSTParent.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
@@ -334,6 +339,16 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
             assertNotNull(papas);
             assertEquals(3, papas.size());
+        }
+
+        // Query children by itself use multiple inheritance
+        {
+            EntityQueryCriteria<BidirectionalOneToManyPlmSTChildA> criteria = EntityQueryCriteria.create(BidirectionalOneToManyPlmSTChildA.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+
+            List<BidirectionalOneToManyPlmSTChildA> children = srv.query(criteria);
+
+            assertEquals(4, children.size());
         }
 
     }

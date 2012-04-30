@@ -33,6 +33,7 @@ import java.util.Vector;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
@@ -93,7 +94,7 @@ public class EntityMetaImpl implements EntityMeta {
 
         Class<? extends IEntity> persistableClass = null;
         DiscriminatorValue discriminator = clazz.getAnnotation(DiscriminatorValue.class);
-        if (discriminator != null) {
+        if ((discriminator != null) || (clazz.getAnnotation(AbstractEntity.class) != null)) {
             persistableClass = findSingeTableInheritance(entityClass);
         }
         if (persistableClass == null) {
@@ -240,7 +241,11 @@ public class EntityMetaImpl implements EntityMeta {
         MemberMeta memberMeta = membersMeta.get(memberName);
         if (memberMeta == null) {
             try {
-                memberMeta = new MemberMetaImpl(entityClass, entityClass.getMethod(memberName, (Class[]) null));
+                String methodName = memberName;
+                if (methodName.equals(IEntity.CONCRETE_TYPE_DATA_ATTR)) {
+                    methodName = "instanceValueClass";
+                }
+                memberMeta = new MemberMetaImpl(entityClass, entityClass.getMethod(methodName, (Class[]) null));
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException("Unknown member '" + memberName + "' of '" + persistenceName + "'");
             }

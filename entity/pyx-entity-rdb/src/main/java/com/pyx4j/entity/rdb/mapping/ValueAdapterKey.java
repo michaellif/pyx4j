@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.shared.IEntity;
 
 class ValueAdapterKey extends ValueAdapterPrimitive {
 
@@ -38,8 +39,12 @@ class ValueAdapterKey extends ValueAdapterPrimitive {
     public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);
-        } else {
+        } else if (value instanceof Key) {
             stmt.setLong(parameterIndex, ((Key) value).asLong());
+        } else if (value instanceof IEntity) {
+            stmt.setLong(parameterIndex, ((IEntity) value).getPrimaryKey().asLong());
+        } else {
+            throw new IllegalArgumentException(value.getClass().getName());
         }
         return 1;
     }

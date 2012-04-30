@@ -23,6 +23,7 @@ package com.pyx4j.entity.rdb.mapping;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,30 +130,44 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         }
     }
 
+    private class DiscriminatorValueBindAdapter implements ValueBindAdapter {
+
+        @Override
+        public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+            IEntity childEntity = (IEntity) value;
+            assert impClasses.containsValue(childEntity.getInstanceValueClass()) : "Unexpected class " + childEntity.getInstanceValueClass() + "\n"
+                    + impClasses.values() + "\n" + value;
+            DiscriminatorValue discriminator = childEntity.getInstanceValueClass().getAnnotation(DiscriminatorValue.class);
+            stmt.setString(parameterIndex, discriminator.value());
+            return 1;
+        }
+
+        @Override
+        public List<String> getColumnNames(String memberSqlName) {
+            List<String> columnNames = new Vector<String>();
+            columnNames.add(memberSqlName + discriminatorColumnNameSufix);
+            return columnNames;
+        }
+    }
+
     @Override
     public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
-        assert ((value == null) || (value instanceof IEntity)) : "Can't query by polymorphic member using value of class " + value.getClass();
+        assert ((value == null) || (value instanceof Collection) || (value instanceof IEntity)) : "Can't query by polymorphic member using value of class "
+                + value.getClass();
 
-        if ((value != null) && (((IEntity) value).getPrimaryKey() == null)) {
-            return new ValueBindAdapter() {
-
-                @Override
-                public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
-                    IEntity childEntity = (IEntity) value;
-                    assert impClasses.containsValue(childEntity.getInstanceValueClass()) : "Unexpected class " + childEntity.getInstanceValueClass() + "\n"
-                            + impClasses.values() + "\n" + value;
-                    DiscriminatorValue discriminator = childEntity.getInstanceValueClass().getAnnotation(DiscriminatorValue.class);
-                    stmt.setString(parameterIndex, discriminator.value());
-                    return 1;
+        if ((value instanceof IEntity) && (((IEntity) value).getPrimaryKey() == null)) {
+            return new DiscriminatorValueBindAdapter();
+        } else if (value instanceof Collection) {
+            if (((Collection<?>) value).isEmpty()) {
+                return this;
+            } else {
+                Object fistValue = ((Collection<?>) value).iterator().next();
+                if ((fistValue instanceof IEntity) && (((IEntity) fistValue).getPrimaryKey() == null)) {
+                    return new DiscriminatorValueBindAdapter();
+                } else {
+                    return this;
                 }
-
-                @Override
-                public List<String> getColumnNames(String memberSqlName) {
-                    List<String> columnNames = new Vector<String>();
-                    columnNames.add(memberSqlName + discriminatorColumnNameSufix);
-                    return columnNames;
-                }
-            };
+            }
         } else {
             return this;
         }

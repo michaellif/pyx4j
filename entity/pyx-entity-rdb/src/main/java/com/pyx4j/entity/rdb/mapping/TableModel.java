@@ -111,7 +111,11 @@ public class TableModel {
         if ((inheritance != null) && (inheritance.strategy() != Inheritance.InheritanceStrategy.TABLE_PER_CLASS)) {
             classModel = ModelType.superclass;
         } else if (entityMeta.getPerstableSuperClass() != null) {
-            classModel = ModelType.subclass;
+            if (entityMeta.getEntityClass().getAnnotation(AbstractEntity.class) != null) {
+                classModel = ModelType.superclass;
+            } else {
+                classModel = ModelType.subclass;
+            }
         } else {
             classModel = ModelType.regular;
         }
