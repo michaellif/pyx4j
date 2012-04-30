@@ -35,6 +35,8 @@ import com.pyx4j.entity.shared.Path;
 
 public class JRIEntityCollectionDataSource<E extends IEntity> implements JRRewindableDataSource {
 
+    public static final String CURRENT_IENTITY_MAPPING = "_THIS";
+
     protected static final PropertyNameProvider FIELD_NAME_PROPERTY_NAME_PROVIDER = new PropertyNameProvider() {
         @Override
         public String getPropertyName(JRField field) {
@@ -144,7 +146,9 @@ public class JRIEntityCollectionDataSource<E extends IEntity> implements JRRewin
     protected static Object getEntityProperty(IEntity entity, String propertyName) throws JRException {
         Object value = null;
 
-        if (entity != null) {
+        if (isCurrentEntityMapping(propertyName)) {
+            value = entity;
+        } else if (entity != null) {
 
             IObject<?> member = entity.getMember(new Path(entity.getObjectClass().getSimpleName() + "/" + propertyName + "/"));
             if (member instanceof IPrimitive) {
@@ -156,6 +160,10 @@ public class JRIEntityCollectionDataSource<E extends IEntity> implements JRRewin
         }
 
         return value;
+    }
+
+    private static boolean isCurrentEntityMapping(String propertyName) {
+        return CURRENT_IENTITY_MAPPING.equals(propertyName);
     }
 
     protected String getPropertyName(JRField field) {
