@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.tenant.LeadFacade;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -102,11 +101,17 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
 
     @Override
     protected void persist(Lead dbo, Lead in) {
-        // TODO ids move to created
-        if (dbo.id().isNull()) {
-            ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
-        }
-
-        super.persist(dbo, in);
+        throw new Error("Facade should be used");
     }
+
+    @Override
+    protected void create(Lead entity, Lead dto) {
+        ServerSideFactory.create(LeadFacade.class).createLead(entity);
+    }
+
+    @Override
+    protected void save(Lead dbo, Lead in) {
+        ServerSideFactory.create(LeadFacade.class).persistLead(dbo);
+    }
+
 }

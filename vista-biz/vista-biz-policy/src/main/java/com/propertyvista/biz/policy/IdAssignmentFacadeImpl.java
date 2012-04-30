@@ -47,8 +47,9 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
 
     @Override
     public void assignId(Lead lead) {
-        // TODO Auto-generated method stub
-
+        if (needsGeneratedId(IdTarget.lead)) {
+            lead.leadId().setValue(getId(IdTarget.lead));
+        }
     }
 
     @Override

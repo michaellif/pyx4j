@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
@@ -36,14 +37,13 @@ public class LeadFacadeImpl implements LeadFacade {
 
     @Override
     public void createLead(Lead lead) {
-        // TODO Auto-generated method stub
-
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(lead);
+        Persistence.service().merge(lead);
     }
 
     @Override
     public void persistLead(Lead lead) {
-        // TODO Auto-generated method stub
-
+        Persistence.service().merge(lead);
     }
 
     @Override

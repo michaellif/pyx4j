@@ -37,11 +37,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.tenant.LeadFacade;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -89,7 +91,7 @@ public class InquiryPanel extends Panel {
                     lead.floorplan().id().setValue(new Key(fpId));
                 }
                 lead.createDate().setValue(new LogicalDate());
-                Persistence.service().persist(lead);
+                ServerSideFactory.create(LeadFacade.class).createLead(lead);
                 Persistence.service().commit();
                 PageParameters params = new PageParameters();
                 if (fp != null) {
