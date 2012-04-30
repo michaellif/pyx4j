@@ -18,6 +18,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.financial.AbstractLeaseAdjustmentProcessor;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class ARLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProcessor {
 
@@ -27,9 +28,9 @@ public class ARLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProcessor
             throw new ARException("Not an immediate adjustment");
         } else {
             InvoiceLineItem lineItem = null;
-            if (LeaseAdjustment.ActionType.charge.equals(adjustment.actionType().getValue())) {
+            if (LeaseAdjustmentReason.ActionType.charge.equals(adjustment.reason().actionType().getValue())) {
                 lineItem = createCharge(adjustment);
-            } else if (LeaseAdjustment.ActionType.credit.equals(adjustment.actionType().getValue())) {
+            } else if (LeaseAdjustmentReason.ActionType.credit.equals(adjustment.reason().actionType().getValue())) {
                 lineItem = createCredit(adjustment);
             } else {
                 throw new ARException("ActionType is unknown");

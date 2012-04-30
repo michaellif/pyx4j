@@ -20,6 +20,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProcessor {
 
@@ -39,7 +40,7 @@ public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProc
                 if (overlap != null) {
                     //Check if that adjustment is already presented in previous bill
                     boolean attachedToPreviousBill = false;
-                    if (LeaseAdjustment.ActionType.charge.equals(adjustment.actionType().getValue())) {
+                    if (LeaseAdjustmentReason.ActionType.charge.equals(adjustment.reason().actionType().getValue())) {
                         for (InvoiceAccountCharge charge : BillingUtils.getLineItemsForType(billing.getCurrentPeriodBill(), InvoiceAccountCharge.class)) {
                             if (charge.adjustment().uid().equals(adjustment.uid())) {
                                 attachedToPreviousBill = true;
@@ -48,7 +49,7 @@ public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProc
                         if (!attachedToPreviousBill) {
                             createPendingCharge(adjustment);
                         }
-                    } else if (LeaseAdjustment.ActionType.credit.equals(adjustment.actionType().getValue())) {
+                    } else if (LeaseAdjustmentReason.ActionType.credit.equals(adjustment.reason().actionType().getValue())) {
                         for (InvoiceAccountCredit credit : BillingUtils.getLineItemsForType(billing.getCurrentPeriodBill(), InvoiceAccountCredit.class)) {
                             if (credit.adjustment().uid().equals(adjustment.uid())) {
                                 attachedToPreviousBill = true;

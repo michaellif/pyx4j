@@ -120,16 +120,16 @@ public class BillingUtils {
                 dto.depositRefundLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoiceAccountCharge) {
                 LeaseAdjustment adjusment = ((InvoiceAccountCharge) lineItem).adjustment();
-                if (LeaseAdjustment.ExecutionType.immediate.equals(adjusment.actionType())) {
+                if (LeaseAdjustment.ExecutionType.immediate.equals(adjusment.reason().actionType())) {
                     dto.immediateAdjustmentLineItems().lineItems().add(lineItem);
-                } else if (LeaseAdjustment.ExecutionType.pending.equals(adjusment.actionType())) {
+                } else if (LeaseAdjustment.ExecutionType.pending.equals(adjusment.reason().actionType())) {
                     dto.pendingAdjustmentLineItems().lineItems().add(lineItem);
                 }
             } else if (lineItem instanceof InvoiceAccountCredit) {
                 LeaseAdjustment adjusment = ((InvoiceAccountCredit) lineItem).adjustment();
-                if (LeaseAdjustment.ExecutionType.immediate.equals(adjusment.actionType())) {
+                if (LeaseAdjustment.ExecutionType.immediate.equals(adjusment.reason().actionType())) {
                     dto.immediateAdjustmentLineItems().lineItems().add(lineItem);
-                } else if (LeaseAdjustment.ExecutionType.pending.equals(adjusment.actionType())) {
+                } else if (LeaseAdjustment.ExecutionType.pending.equals(adjusment.reason().actionType())) {
                     dto.pendingAdjustmentLineItems().lineItems().add(lineItem);
                 }
             } else if (lineItem instanceof InvoiceWithdrawal) {

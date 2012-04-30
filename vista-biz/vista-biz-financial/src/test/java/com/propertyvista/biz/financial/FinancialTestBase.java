@@ -330,9 +330,9 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         adjustment.amount().setValue(new BigDecimal(amount));
         adjustment.executionType().setValue(immediate ? LeaseAdjustment.ExecutionType.immediate : LeaseAdjustment.ExecutionType.pending);
         if (adjustment.amount().getValue().compareTo(new BigDecimal("0")) > 0) {
-            adjustment.actionType().setValue(LeaseAdjustment.ActionType.credit);
+            adjustment.reason().actionType().setValue(LeaseAdjustmentReason.ActionType.credit);
         } else if (adjustment.amount().getValue().compareTo(new BigDecimal("0")) < 0) {
-            adjustment.actionType().setValue(LeaseAdjustment.ActionType.charge);
+            adjustment.reason().actionType().setValue(LeaseAdjustmentReason.ActionType.charge);
         }
         adjustment.targetDate().setValue(targetDate);
         adjustment.description().setValue(reason.name().getValue());

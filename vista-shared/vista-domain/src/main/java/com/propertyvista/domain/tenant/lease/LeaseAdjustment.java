@@ -15,8 +15,6 @@ package com.propertyvista.domain.tenant.lease;
 
 import java.math.BigDecimal;
 
-import javax.xml.bind.annotation.XmlType;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ColumnId;
@@ -47,17 +45,6 @@ import com.propertyvista.domain.financial.BillingAccount;
 public interface LeaseAdjustment extends IEntity {
 
     @I18n
-    @XmlType(name = "LeaseAdjustmentActionType")
-    enum ActionType {
-        charge, credit;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    @I18n
     enum ExecutionType {
         pending, immediate;
 
@@ -75,9 +62,6 @@ public interface LeaseAdjustment extends IEntity {
     @Detached
     @JoinColumn
     BillingAccount billingAccount();
-
-    @NotNull
-    IPrimitive<ActionType> actionType();
 
     @NotNull
     IPrimitive<ExecutionType> executionType();

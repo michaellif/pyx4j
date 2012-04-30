@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
@@ -20,6 +22,8 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.tax.Tax;
@@ -32,8 +36,22 @@ import com.propertyvista.domain.financial.tax.Tax;
 @ToStringFormat("{0}, GL Code: {1}")
 public interface LeaseAdjustmentReason extends IEntity {
 
+    @I18n
+    @XmlType(name = "LeaseAdjustmentActionType")
+    enum ActionType {
+        charge, credit;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
     @ToString(index = 0)
     IPrimitive<String> name();
+
+    @NotNull
+    IPrimitive<ActionType> actionType();
 
     IPrimitive<Boolean> precalculatedTax();
 
