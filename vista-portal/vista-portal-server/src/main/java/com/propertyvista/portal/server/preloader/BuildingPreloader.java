@@ -114,6 +114,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 //        }
 
         Persistence.service().persist(complexes);
+        List<Complex> complexesWithBuildings = new Vector<Complex>();
 
         // create some management companies:
         List<PropertyManager> managements = new Vector<PropertyManager>();
@@ -146,8 +147,10 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             if (DataGenerator.randomBoolean()) {
-                building.complex().set(DataGenerator.random(complexes));
-                building.complexPrimary().setValue(building.complex().isEmpty());
+                Complex complex = DataGenerator.random(complexes);
+                building.complex().set(complex);
+                building.complexPrimary().setValue(!complexesWithBuildings.contains(complex));
+                complexesWithBuildings.add(complex);
             }
 
             // TODO Need to be saving PropertyProfile, PetCharge
