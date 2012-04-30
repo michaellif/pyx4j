@@ -63,7 +63,7 @@ public class ExportDownloadServlet extends HttpServlet {
 
         long pmcId = Long.valueOf(request.getParameter("pmc"));
         Pmc pmc = Persistence.service().retrieve(Pmc.class, new Key(pmcId));
-        NamespaceManager.setNamespace(pmc.dnsName().getValue());
+        NamespaceManager.setNamespace(pmc.namespace().getValue());
 
         log.debug("download export for {}", pmc);
 

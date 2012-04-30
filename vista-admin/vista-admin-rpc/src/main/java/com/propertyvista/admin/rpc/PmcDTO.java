@@ -33,9 +33,15 @@ import com.propertyvista.domain.person.Person;
 @Caption(name = "Property Management Company (PMC)")
 public interface PmcDTO extends IEntity {
 
+    IPrimitive<Boolean> enabled();
+
     @NotNull
     @Caption(name = "Company name")
     IPrimitive<String> name();
+
+    @ReadOnly
+    @Editor(type = Editor.EditorType.label)
+    IPrimitive<String> namespace();
 
     @NotNull
     @Caption(name = "DNS name")

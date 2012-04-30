@@ -99,7 +99,7 @@ public class PmcNameValidator {
 
     public static boolean isDnsTaken(String dnsName) {
         EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), dnsName));
+        criteria.or(PropertyCriterion.eq(criteria.proto().dnsName(), dnsName), PropertyCriterion.eq(criteria.proto().namespace(), dnsName));
         return (Persistence.service().retrieve(criteria) != null);
     }
 

@@ -60,7 +60,7 @@ public class PmcDataBuildingsReportDeferredProcess extends SearchReportDeferredP
     @Override
     protected void reportEntity(Pmc entity) {
         try {
-            NamespaceManager.setNamespace(entity.dnsName().getValue());
+            NamespaceManager.setNamespace(entity.namespace().getValue());
             exportPmcBuildings(entity);
         } finally {
             NamespaceManager.setNamespace(Pmc.adminNamespace);

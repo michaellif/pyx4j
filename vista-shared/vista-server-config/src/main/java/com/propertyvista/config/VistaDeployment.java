@@ -41,7 +41,7 @@ public class VistaDeployment {
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
             EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), namespace));
+            criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), namespace));
             return Persistence.service().retrieve(criteria);
         } finally {
             NamespaceManager.setNamespace(namespace);

@@ -104,7 +104,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
             if (pmc == null) {
                 throw new Error("PMC Not found");
             }
-            NamespaceManager.setNamespace(pmc.dnsName().getValue());
+            NamespaceManager.setNamespace(pmc.namespace().getValue());
 
             MediaConfig mediaConfig = new MediaConfig();
             mediaConfig.baseFolder = "data/export/images/" + NamespaceManager.getNamespace();

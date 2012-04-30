@@ -223,7 +223,7 @@ public class DBResetServlet extends HttpServlet {
                                 RDBUtils.deleteFromAllEntityTables();
                                 NamespaceManager.setNamespace(Pmc.adminNamespace);
                                 EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                                criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), pmc));
+                                criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), pmc));
                                 Persistence.service().delete(criteria);
                                 Persistence.service().commit();
                             }
@@ -290,7 +290,9 @@ public class DBResetServlet extends HttpServlet {
 
         Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.name().setValue(pmcName + " Demo");
+        pmc.enabled().setValue(Boolean.TRUE);
         pmc.dnsName().setValue(pmcName);
+        pmc.namespace().setValue(pmcName);
 
         Persistence.service().persist(pmc);
         Persistence.service().commit();

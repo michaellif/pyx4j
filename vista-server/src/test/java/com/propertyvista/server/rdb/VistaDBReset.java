@@ -74,8 +74,10 @@ public class VistaDBReset {
             }
 
             Pmc pmc = EntityFactory.create(Pmc.class);
+            pmc.enabled().setValue(Boolean.TRUE);
             pmc.name().setValue("Vista Demo");
             pmc.dnsName().setValue(VistaNamespaceResolver.demoNamespace);
+            pmc.namespace().setValue(VistaNamespaceResolver.demoNamespace);
             Persistence.service().persist(pmc);
 
             new VistaAminDataPreloaders().preloadAll();

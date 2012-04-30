@@ -41,8 +41,10 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
     @Override
     protected void bind() {
+        bind(dtoProto.enabled(), dboProto.enabled());
         bind(dtoProto.name(), dboProto.name());
         bind(dtoProto.dnsName(), dboProto.dnsName());
+        bind(dtoProto.namespace(), dboProto.namespace());
         bind(dtoProto.dnsNameAliases(), dboProto.dnsNameAliases());
         bind(dtoProto.created(), dboProto.created());
     }
@@ -55,6 +57,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     @Override
     protected void persist(Pmc entity, PmcDTO dto) {
         entity.dnsName().setValue(entity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
+        entity.namespace().setValue(entity.namespace().getValue().toLowerCase(Locale.ENGLISH));
         for (PmcDnsName alias : entity.dnsNameAliases()) {
             alias.dnsName().setValue(alias.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         }
@@ -65,6 +68,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     @Override
     public void create(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
         editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
+        editableEntity.namespace().setValue(editableEntity.dnsName().getValue());
         if (!PmcNameValidator.canCreatePmcName(editableEntity.dnsName().getValue())) {
             throw new UserRuntimeException("PMC DNS name is reserved of forbidden");
         }
@@ -85,7 +89,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     public void resetCache(AsyncCallback<VoidSerializable> callback, Key entityId) {
         final String namespace = NamespaceManager.getNamespace();
         Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
-        NamespaceManager.setNamespace(pmc.dnsName().getValue());
+        NamespaceManager.setNamespace(pmc.namespace().getValue());
         try {
             CacheService.reset();
         } finally {

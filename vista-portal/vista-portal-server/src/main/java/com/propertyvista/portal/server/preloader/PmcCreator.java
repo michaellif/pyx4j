@@ -35,7 +35,7 @@ public class PmcCreator {
 
     public static void preloadPmc(PmcDTO pmc) {
         final String namespace = NamespaceManager.getNamespace();
-        NamespaceManager.setNamespace(pmc.dnsName().getValue());
+        NamespaceManager.setNamespace(pmc.namespace().getValue());
         try {
             RDBUtils.ensureNamespace();
 
