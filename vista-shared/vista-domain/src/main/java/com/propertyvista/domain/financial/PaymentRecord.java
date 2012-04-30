@@ -70,7 +70,9 @@ public interface PaymentRecord extends IEntity {
 
         Posted,
 
-        Rejected;
+        Rejected,
+
+        Canceled;
 
         @Override
         public String toString() {
