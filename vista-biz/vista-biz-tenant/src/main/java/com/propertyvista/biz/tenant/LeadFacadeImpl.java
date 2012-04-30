@@ -21,6 +21,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
@@ -34,6 +35,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class LeadFacadeImpl implements LeadFacade {
+
+    private static final I18n i18n = I18n.get(LeadFacadeImpl.class);
 
     @Override
     public void createLead(Lead lead) {
@@ -50,7 +53,10 @@ public class LeadFacadeImpl implements LeadFacade {
     public void convertToApplication(Key leadId, AptUnit unitId) {
         Lead lead = Persistence.service().retrieve(Lead.class, leadId);
         if (!lead.lease().isNull()) {
-            throw new UserRuntimeException("The Lead is converted to Lease already!");
+            throw new UserRuntimeException(i18n.tr("The Lead is converted to Lease already!"));
+        }
+        if (lead.leaseType().isNull()) {
+            throw new UserRuntimeException(i18n.tr("The {0} should be selected", lead.leaseType().getMeta().getCaption()));
         }
 
         Date leaseEnd = null;

@@ -152,10 +152,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // Verify the status
         if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
-            throw new UserRuntimeException("Invalid Lease State");
+            throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
         }
         if (LeaseApplication.Status.Created != lease.leaseApplication().status().getValue()) {
-            throw new UserRuntimeException("Invalid Application State");
+            throw new UserRuntimeException(i18n.tr("Invalid Application State"));
         }
 
         ServerSideFactory.create(OnlineApplicationFacade.class).createMasterOnlineApplication(lease.leaseApplication().onlineApplication());
