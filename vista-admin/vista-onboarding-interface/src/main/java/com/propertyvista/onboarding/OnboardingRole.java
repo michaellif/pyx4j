@@ -7,15 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 5, 2011
+ * Created on 2012-04-30
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.security;
+package com.propertyvista.onboarding;
 
-import com.pyx4j.security.shared.Behavior;
-
-public enum VistaOnboardingBehavior implements Behavior {
+public enum OnboardingRole {
 
     OnboardingAdministrator,
 
@@ -26,5 +24,4 @@ public enum VistaOnboardingBehavior implements Behavior {
     ProspectiveClient,
 
     Client
-
 }

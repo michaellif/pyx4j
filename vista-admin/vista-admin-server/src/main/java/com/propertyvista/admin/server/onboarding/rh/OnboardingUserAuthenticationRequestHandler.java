@@ -30,6 +30,8 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.onboarding.OnboardingRole;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
 import com.propertyvista.onboarding.ResponseIO;
@@ -97,9 +99,30 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
             return response;
         } else {
+            response.role().setValue(convertRole(cr.behavior().getValue()));
             response.onboardingAccountId().set(cr.onboardingAccountId());
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
             return response;
+        }
+    }
+
+    private OnboardingRole convertRole(VistaOnboardingBehavior behavior) {
+        if (behavior == null) {
+            return null;
+        }
+        switch (behavior) {
+        case OnboardingAdministrator:
+            return OnboardingRole.OnboardingAdministrator;
+        case Caledon:
+            return OnboardingRole.Caledon;
+        case Equifax:
+            return OnboardingRole.Equifax;
+        case Client:
+            return OnboardingRole.Client;
+        case ProspectiveClient:
+            return OnboardingRole.ProspectiveClient;
+        default:
+            throw new IllegalArgumentException();
         }
     }
 }

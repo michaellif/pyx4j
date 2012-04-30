@@ -18,12 +18,13 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 class OnboardingUserPreloader extends AbstractDataPreloader {
 
-    public static OnboardingUser createOnboardingUser(String name, String email) {
+    public static OnboardingUser createOnboardingUser(String name, String email, VistaOnboardingBehavior role) {
         OnboardingUser user = EntityFactory.create(OnboardingUser.class);
         user.name().setValue(name);
         user.email().setValue(email);
@@ -33,6 +34,7 @@ class OnboardingUserPreloader extends AbstractDataPreloader {
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
+        credential.behavior().setValue(role);
         credential.credential().setValue(PasswordEncryptor.encryptPassword(email));
         credential.enabled().setValue(Boolean.TRUE);
 
@@ -43,7 +45,7 @@ class OnboardingUserPreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {
-        createOnboardingUser("Roman Spakovych", "romans@rossul.com");
+        createOnboardingUser("Roman Spakovych", "romans@rossul.com", VistaOnboardingBehavior.OnboardingAdministrator);
         return "Created " + 1 + " OnboardingUser";
     }
 

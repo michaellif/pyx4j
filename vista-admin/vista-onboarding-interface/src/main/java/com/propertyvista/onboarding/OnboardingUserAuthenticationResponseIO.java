@@ -42,6 +42,8 @@ public interface OnboardingUserAuthenticationResponseIO extends ResponseIO {
     @NotNull
     IPrimitive<AuthenticationStatusCode> status();
 
+    IPrimitive<OnboardingRole> role();
+
     IPrimitive<String> onboardingAccountId();
 
     /**
