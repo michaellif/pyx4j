@@ -33,7 +33,7 @@ public class GuarantorListerActivity extends ListerActivityBase<GuarantorDTO> {
     }
 
     @Override
-    public boolean canEditNew() {
+    public boolean canCreateNewItem() {
         return false; // disable creation of the new stand-alone Guarantor - just from within the Lease!.. 
     }
 }

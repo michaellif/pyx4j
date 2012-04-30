@@ -43,7 +43,7 @@ public class FutureTenantListerActivity extends ListerActivityBase<TenantDTO> {
     }
 
     @Override
-    public boolean canEditNew() {
+    public boolean canCreateNewItem() {
 //        return SecurityController.checkBehavior(VistaCrmBehavior.Tenants);
         return false; // disable creation of the new stand-alone Tenant - just from within the Lease!..
     }

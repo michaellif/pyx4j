@@ -29,7 +29,7 @@ public class ListerActivityFactory {
             final VistaCrmBehavior... whoCanAdd) {
         return new ListerActivityBase<E>(place, view, service, entityClass) {
             @Override
-            public boolean canEditNew() {
+            public boolean canCreateNewItem() {
                 return SecurityController.checkAnyBehavior(whoCanAdd);
             }
         };
