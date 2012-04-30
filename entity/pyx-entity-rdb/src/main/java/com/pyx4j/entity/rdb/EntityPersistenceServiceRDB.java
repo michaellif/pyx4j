@@ -1124,7 +1124,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
         TableModel tm = tableModel(entity.getEntityMeta());
         if (tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), entity)) {
-            entity = cascadeRetrieveMembers(tm, entity, attachLevel);
+            entity = cascadeRetrieveMembers(entity, attachLevel);
             entity.setAttachLevel(attachLevel);
             if (attachLevel == AttachLevel.Attached) {
                 CacheService.entityCache().put(entity);
@@ -1135,7 +1135,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
-    private <T extends IEntity> T cascadeRetrieveMembers(TableModel tm, T entity, AttachLevel attachLevel) {
+    private <T extends IEntity> T cascadeRetrieveMembers(T entity, AttachLevel attachLevel) {
+        entity = entity.cast();
+        TableModel tm = tableModel(entity.getEntityMeta());
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadeRetrieveMembers()) {
             if ((attachLevel == AttachLevel.ToStringMembers) && (!member.getMemberMeta().isToStringMember())) {
                 continue;
@@ -1209,7 +1211,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if (rs.isEmpty()) {
                 return null;
             } else {
-                return cascadeRetrieveMembers(tm, rs.get(0), attachLevel);
+                return cascadeRetrieveMembers(rs.get(0), attachLevel);
             }
         } finally {
             endContext();
@@ -1304,7 +1306,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
             List<T> l = tm.query(getPersistenceContext(), criteria, -1);
             for (T entity : l) {
-                cascadeRetrieveMembers(tm, entity, attachLevel);
+                cascadeRetrieveMembers(entity, attachLevel);
             }
             return l;
         } finally {
@@ -1332,7 +1334,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
                 @Override
                 public T next() {
-                    return cascadeRetrieveMembers(tm, iterable.next(), attachLevel);
+                    return cascadeRetrieveMembers(iterable.next(), attachLevel);
                 }
 
                 @Override
@@ -1494,7 +1496,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             TableModel tm = tableModel(entityMeta);
             IEntity cascadedeleteDataEntity = EntityFactory.create(entityMeta.getEntityClass());
             if (tm.retrieve(getPersistenceContext(), primaryKey, cascadedeleteDataEntity)) {
-                cascadeRetrieveMembers(tm, cascadedeleteDataEntity, AttachLevel.IdOnly);
+                cascadeRetrieveMembers(cascadedeleteDataEntity, AttachLevel.IdOnly);
             } else {
                 throw new RuntimeException("Entity '" + entityMeta.getCaption() + "' " + primaryKey + " NotFound");
             }

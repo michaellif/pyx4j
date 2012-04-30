@@ -570,6 +570,24 @@ public class TableModel {
         }
     }
 
+    private TableModel retrieveDiscriminator(PersistenceContext persistenceContext, ResultSet rs, IEntity entity) throws SQLException {
+        if (classModel != ModelType.regular) {
+            String discriminator = rs.getString(dialect.sqlDiscriminatorColumnName());
+            if (classModel == ModelType.superclass) {
+                Class<? extends IEntity> subclass = entityOperationsMeta.impClasses.get(discriminator);
+                TableModel subclassModel = mappings.getTableModel(persistenceContext, subclass);
+
+                IEntity subclassValue = EntityFactory.create(subclass);
+                subclassValue.setPrimaryKey(entity.getPrimaryKey());
+                entity.set(subclassValue);
+                return subclassModel;
+            } else {
+                //TODO assert discriminator value
+            }
+        }
+        return this;
+    }
+
     private void retrieveValues(ResultSet rs, IEntity entity) throws SQLException {
         entity.setValuePopulated();
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
@@ -669,26 +687,9 @@ public class TableModel {
                 }
                 // Preserve version when retrieving key
                 entity.setPrimaryKey(primaryKey);
-
-                if (classModel != ModelType.regular) {
-                    String discriminator = rs.getString(dialect.sqlDiscriminatorColumnName());
-                    if (classModel == ModelType.superclass) {
-                        Class<? extends IEntity> subclass = entityOperationsMeta.impClasses.get(discriminator);
-                        TableModel subclassModel = mappings.getTableModel(persistenceContext, subclass);
-
-                        IEntity subclassValue = EntityFactory.create(subclass);
-                        subclassValue.setPrimaryKey(primaryKey);
-                        entity.set(subclassValue);
-
-                        subclassModel.retrieveValues(rs, subclassValue);
-                        subclassModel.retrieveExternal(persistenceContext, subclassValue);
-                        return true;
-                    } else {
-                        //TODO assert discriminator value
-                    }
-                }
-                retrieveValues(rs, entity);
-                retrieveExternal(persistenceContext, entity);
+                TableModel subclassModel = retrieveDiscriminator(persistenceContext, rs, entity);
+                subclassModel.retrieveValues(rs, entity.cast());
+                subclassModel.retrieveExternal(persistenceContext, entity.cast());
                 return true;
             }
         } catch (SQLException e) {
@@ -758,8 +759,9 @@ public class TableModel {
                         && !rs.getString(dialect.getNamingConvention().sqlNameSpaceColumnName()).equals(NamespaceManager.getNamespace())) {
                     throw new RuntimeException("namespace access error");
                 }
-                retrieveValues(rs, entity);
-                retrieveExternal(persistenceContext, entity);
+                TableModel subclassModel = retrieveDiscriminator(persistenceContext, rs, entity);
+                subclassModel.retrieveValues(rs, entity.cast());
+                subclassModel.retrieveExternal(persistenceContext, entity.cast());
 
                 rc.add(entity);
             }
@@ -827,17 +829,19 @@ public class TableModel {
             protected T retrieve() {
                 @SuppressWarnings("unchecked")
                 T entity = (T) EntityFactory.create(entityMeta.getEntityClass());
+                TableModel subclassModel;
                 try {
                     entity.setPrimaryKey(new Key(rs.getLong(dialect.getNamingConvention().sqlIdColumnName())));
                     if (criteria.getVersionedCriteria() == VersionedCriteria.onlyDraft) {
                         entity.setPrimaryKey(entity.getPrimaryKey().asDraftKey());
                     }
-                    retrieveValues(rs, entity);
+                    subclassModel = retrieveDiscriminator(persistenceContext, rs, entity);
+                    subclassModel.retrieveValues(rs, entity.cast());
                 } catch (SQLException e) {
                     log.error("{} SQL select error", tableName, e);
                     throw new RuntimeException(e);
                 }
-                retrieveExternal(persistenceContext, entity);
+                subclassModel.retrieveExternal(persistenceContext, entity.cast());
                 return entity;
             }
         };
@@ -1284,17 +1288,11 @@ public class TableModel {
                 }
                 T entity = entities.get(key);
                 entity.setPrimaryKey(key);
-                retrieveValues(rs, entity);
+                TableModel subclassModel = retrieveDiscriminator(persistenceContext, rs, entity);
+                subclassModel.retrieveValues(rs, entity.cast());
+                subclassModel.retrieveExternal(persistenceContext, entity.cast());
             }
-
-            /*
-             * for (MemberOperationsMeta member :
-             * entityOperationsMeta.getCollectionMembers()) {
-             * CollectionsTableModel.retrieve(connection, entities, member); }
-             */
-
             return true;
-
         } catch (SQLException e) {
             log.error("{} SQL select error", tableName, e);
             throw new RuntimeException(e);
