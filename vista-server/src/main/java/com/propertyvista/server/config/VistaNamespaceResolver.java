@@ -56,7 +56,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                     .getServletPath().startsWith("/o/openid"))) {
                 return Pmc.adminNamespace;
             }
-            if (httprequest.getServletPath().startsWith("/public/schema") || httprequest.getServletPath().startsWith("/public/o/status")) {
+            if (httprequest.getServletPath().startsWith("/public/schema") || httprequest.getServletPath().startsWith("/public/status")) {
                 return "_";
             }
         }
@@ -121,6 +121,12 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         }
 
         if (pmcNamespace == null) {
+
+            if (httprequest.getServletPath() != null) {
+                if (httprequest.getServletPath().startsWith("/o/db-reset")) {
+                    return demoNamespace;
+                }
+            }
             throw new UserRuntimeException(i18n.tr("This property management site was not set-up yet"));
         }
 
