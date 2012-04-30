@@ -39,4 +39,7 @@ public interface LeaseBillingPolicy extends Policy {
 
     @Owned
     LateFeeItem lateFee();
+
+    @Owned
+    NsfItem nsfFee();
 }
