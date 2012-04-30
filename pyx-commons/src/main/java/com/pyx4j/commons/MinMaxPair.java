@@ -42,4 +42,12 @@ public class MinMaxPair<E extends Serializable> extends Pair<E, E> {
     public E getMax() {
         return super.getB();
     }
+
+    public void setMax(E max) {
+        super.setA(max);
+    }
+
+    public void setMin(E min) {
+        super.setB(min);
+    }
 }
