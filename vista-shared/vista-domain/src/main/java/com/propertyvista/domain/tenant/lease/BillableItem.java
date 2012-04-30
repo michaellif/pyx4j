@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -51,6 +52,7 @@ public interface BillableItem extends IEntity {
     @Owned
     BillableItemExtraData extraData();
 
+    @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> effectiveDate();
 
