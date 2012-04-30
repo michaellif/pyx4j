@@ -26,6 +26,8 @@ import com.pyx4j.entity.client.CEntityViewer;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.theme.BillingTheme;
+import com.propertyvista.domain.financial.billing.InvoiceCredit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceSubLineItem;
@@ -75,18 +77,24 @@ public class InvoiceLineItemViewer extends CEntityViewer<InvoiceLineItemGroupDTO
                 details.getColumnFormatter().setWidth(2, "20%");
                 int row = 0;
                 for (InvoiceLineItem item : value.lineItems()) {
-                    if (item instanceof InvoiceProductCharge) {
-                        InvoiceProductCharge productCharge = (InvoiceProductCharge) item;
-                        InvoiceSubLineItem charge = productCharge.chargeSubLineItem();
-                        addDetailRecord(row++, item.fromDate().getStringView(), charge.description().getValue(), charge.amount().getStringView());
-                        for (InvoiceSubLineItem adjustment : productCharge.adjustmentSubLineItems()) {
-                            addDetailRecord(row++, "", adjustment.description().getValue(), adjustment.amount().getStringView());
+                    if (item instanceof InvoiceDebit) {
+                        if (item instanceof InvoiceProductCharge) {
+                            InvoiceProductCharge productCharge = (InvoiceProductCharge) item;
+                            InvoiceSubLineItem charge = productCharge.chargeSubLineItem();
+                            addDetailRecord(row++, ((InvoiceProductCharge) item).dueDate().getStringView(), charge.description().getValue(), charge.amount()
+                                    .getStringView());
+                            for (InvoiceSubLineItem adjustment : productCharge.adjustmentSubLineItems()) {
+                                addDetailRecord(row++, "", adjustment.description().getValue(), adjustment.amount().getStringView());
+                            }
+                            for (InvoiceSubLineItem concession : productCharge.adjustmentSubLineItems()) {
+                                addDetailRecord(row++, "", concession.description().getValue(), concession.amount().getStringView());
+                            }
+                        } else {
+                            addDetailRecord(row++, ((InvoiceDebit) item).dueDate().getStringView(), item.description().getValue(), item.amount()
+                                    .getStringView());
                         }
-                        for (InvoiceSubLineItem concession : productCharge.adjustmentSubLineItems()) {
-                            addDetailRecord(row++, "", concession.description().getValue(), concession.amount().getStringView());
-                        }
-                    } else {
-                        addDetailRecord(row++, item.fromDate().getStringView(), item.description().getValue(), item.amount().getStringView());
+                    } else if (item instanceof InvoiceCredit) {
+                        addDetailRecord(row++, ((InvoiceCredit) item).postDate().getStringView(), item.description().getValue(), item.amount().getStringView());
                     }
                 }
                 addTotalRecord(row++, value.getMeta().getCaption(), value.total().getStringView());

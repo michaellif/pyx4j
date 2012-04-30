@@ -29,9 +29,9 @@ public interface TransactionHistoryDTO extends IEntity {
 
     IPrimitive<LogicalDate> fromDate();
 
-    IList<InvoiceLineItem> lineItems();
-
     IPrimitive<BigDecimal> balanceForwardAmount();
+
+    IList<InvoiceLineItem> lineItems();
 
     IList<AgingBuckets> agingBuckets();
 }

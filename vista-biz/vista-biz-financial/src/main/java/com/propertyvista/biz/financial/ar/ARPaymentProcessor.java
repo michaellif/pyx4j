@@ -36,7 +36,6 @@ public class ARPaymentProcessor extends AbstractProcessor {
         payment.billingAccount().set(paymentRecord.billingAccount());
 
         payment.description().setValue(i18n.tr("Payment Received - Thank You"));
-        payment.fromDate().setValue(paymentRecord.receivedDate().getValue());
 
         Persistence.service().persist(payment);
 

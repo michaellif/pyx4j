@@ -156,7 +156,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void setLeaseConditions(String leaseDateFrom, String leaseDateTo, Integer billingPeriodStartDate) {
-        Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
+        Lease lease = retrieveLease();
 
         lease.leaseFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
         lease.leaseTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
@@ -170,7 +170,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void setLeaseStatus(Lease.Status status) {
-        Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
+        Lease lease = retrieveLease();
 
         lease.version().status().setValue(status);
 
@@ -178,6 +178,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().persist(lease);
         Persistence.service().commit();
 
+    }
+
+    protected Lease retrieveLease() {
+        // TODO with VladS
+        //return Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
+        return Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
     }
 
     protected BillableItem addParking(String effectiveDate, String expirationDate) {
@@ -211,7 +217,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void changeBillableItem(String billableItemId, String effectiveDate, String expirationDate) {
-        Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
+        Lease lease = retrieveLease();
 
         BillableItem billableItem = findBillableItem(billableItemId, lease);
 
@@ -233,7 +239,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
-        Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
+        Lease lease = retrieveLease();
 
         ProductItem serviceItem = leaseDataModel.getServiceItem();
         Service.ServiceV service = serviceItem.product().cast();
@@ -256,7 +262,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void setDeposit(String billableItemId, String value, ValueType valueType, RepaymentMode repaymentMode) {
-        Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
+        Lease lease = retrieveLease();
         BillableItem billableItem = findBillableItem(billableItemId, lease);
         billableItem.deposit().depositAmount().setValue(new BigDecimal(value));
         billableItem.deposit().valueType().setValue(valueType);
@@ -315,12 +321,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 FinancialTestsUtils.getDate(effectiveDate), immediate);
     }
 
-    private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason, LogicalDate effectiveDate, boolean immediate) {
+    private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason, LogicalDate targetDate, boolean immediate) {
 
-        Lease lease = Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
+        Lease lease = retrieveLease();
 
         LeaseAdjustment adjustment = EntityFactory.create(LeaseAdjustment.class);
-        adjustment.effectiveDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));
+        adjustment.targetDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));
         adjustment.amount().setValue(new BigDecimal(amount));
         adjustment.executionType().setValue(immediate ? LeaseAdjustment.ExecutionType.immediate : LeaseAdjustment.ExecutionType.pending);
         if (adjustment.amount().getValue().compareTo(new BigDecimal("0")) > 0) {
@@ -328,7 +334,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         } else if (adjustment.amount().getValue().compareTo(new BigDecimal("0")) < 0) {
             adjustment.actionType().setValue(LeaseAdjustment.ActionType.charge);
         }
-        adjustment.effectiveDate().setValue(effectiveDate);
+        adjustment.targetDate().setValue(targetDate);
         adjustment.description().setValue(reason.name().getValue());
         adjustment.reason().setValue(reason.getValue());
         adjustment.billingAccount().set(lease.billingAccount());

@@ -32,7 +32,7 @@ public class AbstractLeaseAdjustmentProcessor extends AbstractProcessor {
         charge.billingAccount().set(adjustment.billingAccount());
         charge.amount().setValue(adjustment.amount().getValue().negate());
         charge.adjustment().set(adjustment);
-        charge.fromDate().setValue(adjustment.effectiveDate().getValue());
+        charge.targetDate().setValue(adjustment.targetDate().getValue());
         charge.description().setValue(adjustment.reason().name().getValue());
 
         calculateTax(charge, adjustment.billingAccount().lease().unit().belongsTo());
@@ -47,7 +47,7 @@ public class AbstractLeaseAdjustmentProcessor extends AbstractProcessor {
         credit.billingAccount().set(adjustment.billingAccount());
         credit.amount().setValue(adjustment.amount().getValue().negate());
         credit.adjustment().set(adjustment);
-        credit.fromDate().setValue(adjustment.effectiveDate().getValue());
+        credit.targetDate().setValue(adjustment.targetDate().getValue());
         credit.description().setValue(adjustment.reason().name().getValue());
 
         return credit;

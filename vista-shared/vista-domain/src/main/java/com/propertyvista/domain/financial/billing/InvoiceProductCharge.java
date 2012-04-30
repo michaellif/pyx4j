@@ -14,8 +14,10 @@ package com.propertyvista.domain.financial.billing;
  * @version $Id$
  */
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
@@ -39,6 +41,12 @@ public interface InvoiceProductCharge extends InvoiceCharge {
     IPrimitive<Period> period();
 
     IPrimitive<ProductType> productType();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> fromDate();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> toDate();
 
     @Owned
     InvoiceChargeSubLineItem chargeSubLineItem();

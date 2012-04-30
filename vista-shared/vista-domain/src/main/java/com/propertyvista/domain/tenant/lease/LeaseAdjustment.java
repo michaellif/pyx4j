@@ -100,12 +100,9 @@ public interface LeaseAdjustment extends IEntity {
     @Editor(type = EditorType.textarea)
     IPrimitive<String> description();
 
-    @NotNull
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> effectiveDate();
+    IPrimitive<LogicalDate> receivedDate();
 
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> expirationDate();
+    IPrimitive<LogicalDate> targetDate();
 
     @Caption(name = "Last Updated")
     @Timestamp

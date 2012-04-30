@@ -31,4 +31,5 @@ public interface InvoiceCredit extends InvoiceLineItem {
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> outstandingCredit();
+
 }

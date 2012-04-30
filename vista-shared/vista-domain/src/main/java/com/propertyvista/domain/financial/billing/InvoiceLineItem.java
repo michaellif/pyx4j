@@ -51,17 +51,12 @@ public interface InvoiceLineItem extends IEntity {
 
     IPrimitive<String> description();
 
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> fromDate();
-
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> toDate();
-
-    IPrimitive<Boolean> posted();
-
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> postDate();
 
     interface OrderId extends ColumnId {
 

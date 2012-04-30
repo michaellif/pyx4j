@@ -68,7 +68,7 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
     @Override
     protected void addItem(LeaseAdjustment newEntity) {
         if (newEntity.isEmpty()) {
-            newEntity.effectiveDate().setValue(new LogicalDate());
+            newEntity.targetDate().setValue(new LogicalDate());
         }
         super.addItem(newEntity);
     }
@@ -76,7 +76,6 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
     @Override
     protected void removeItem(CEntityFolderItem<LeaseAdjustment> item) {
         if (!lease.getValue().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
-            item.getValue().expirationDate().setValue(new LogicalDate());
             item.setValue(item.getValue(), false);
             item.setEditable(false);
             ValueChangeEvent.fire(this, getValue());
@@ -101,7 +100,7 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName() == PropertyName.repopulated) {
                     if (isAddable() && !lease.getValue().approvalDate().isNull()) {
-                        LogicalDate value = item.getValue().expirationDate().getValue();
+                        LogicalDate value = item.getValue().targetDate().getValue();
                         if ((value != null) && !value.after(TimeUtils.today())) {
                             item.setViewable(true);
                             item.inheritViewable(false);
@@ -130,8 +129,7 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reason()), 35).build());
 
             HorizontalPanel dates = new HorizontalPanel();
-            dates.add(new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());
-            dates.add(new DecoratorBuilder(inject(proto().expirationDate()), 9).build());
+            dates.add(new DecoratorBuilder(inject(proto().targetDate()), 9).build());
             main.setWidget(++row, 0, dates);
 
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 9).build());

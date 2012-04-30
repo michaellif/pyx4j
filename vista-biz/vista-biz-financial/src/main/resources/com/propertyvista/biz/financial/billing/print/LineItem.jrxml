@@ -3,10 +3,9 @@
 	<property name="ireport.zoom" value="1.2100000000000029"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="fromDate" class="com.pyx4j.commons.LogicalDate"/>
-	<field name="toDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="amount" class="java.math.BigDecimal"/>
 	<field name="description" class="java.lang.String"/>
+	<field name="_THIS" class="com.propertyvista.domain.financial.billing.InvoiceLineItem"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -24,7 +23,7 @@
 				<textElement verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDays($F{fromDate}, $F{toDate})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDays($F{_THIS})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="111" y="0" width="163" height="20"/>

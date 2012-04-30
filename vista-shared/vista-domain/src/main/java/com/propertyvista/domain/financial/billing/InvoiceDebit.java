@@ -16,6 +16,7 @@ package com.propertyvista.domain.financial.billing;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -33,6 +34,9 @@ public interface InvoiceDebit extends InvoiceLineItem {
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> outstandingDebit();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> dueDate();
 
     @Owned
     IList<InvoiceChargeTax> taxes();

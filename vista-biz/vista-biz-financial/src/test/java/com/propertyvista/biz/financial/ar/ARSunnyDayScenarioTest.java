@@ -68,6 +68,13 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         runBilling(true, false);
         receiveAndPostPayment("19-Mar-2011", "1463.04");
 
+        // @formatter:off
+        new TransactionHistoryTester(retrieveLease()).
+        lineItemSize(0).
+        notCoveredDebitLineItemSize(0).
+        notConsumedCreditInvoiceItemSize(0);
+        // @formatter:on
+
         //==================== RUN 2 ======================//
 
         setSysDate("18-Mar-2011");
@@ -77,8 +84,6 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         receiveAndPostPayment("19-Mar-2011", "1067.01");
         receiveAndPostPayment("20-Mar-2011", "100.00");
-        
-        
 
         //==================== RUN 3 ======================//
 

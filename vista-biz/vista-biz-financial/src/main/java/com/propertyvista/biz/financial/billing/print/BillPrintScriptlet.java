@@ -28,6 +28,7 @@ import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class BillPrintScriptlet extends JRDefaultScriptlet {
@@ -35,6 +36,18 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
     public String formatDate(LogicalDate date) throws JRScriptletException {
         SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
         return formatter.format(date);
+    }
+
+    public String formatDays(InvoiceLineItem lineItem) throws JRScriptletException {
+        if (lineItem instanceof InvoiceProductCharge) {
+            return formatDays(((InvoiceProductCharge) lineItem).fromDate().getValue(), ((InvoiceProductCharge) lineItem).toDate().getValue());
+        } else if (lineItem instanceof InvoiceAccountCredit) {
+            return formatDays(((InvoiceAccountCredit) lineItem).targetDate().getValue(), null);
+        } else if (lineItem instanceof InvoiceAccountCharge) {
+            return formatDays(((InvoiceAccountCharge) lineItem).targetDate().getValue(), null);
+        } else {
+            return formatDays(lineItem.postDate().getValue(), null);
+        }
     }
 
     public String formatDays(LogicalDate fromDate, LogicalDate toDate) throws JRScriptletException {

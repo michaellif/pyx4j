@@ -15,7 +15,11 @@ package com.propertyvista.biz.financial.ar;
 
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
@@ -26,8 +30,6 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 public class ARTransactionHistoryManager {
 
     static void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
-
-        invoiceLineItem.posted().setValue(true);
 
         if (invoiceLineItem.isAssignableFrom(InvoiceCredit.class)) {
             ARCreditDebitLinkManager.consumeCredit((InvoiceCredit) invoiceLineItem);
@@ -40,17 +42,36 @@ public class ARTransactionHistoryManager {
     }
 
     static TransactionHistoryDTO getTransactionHistory(Lease lease) {
-        //TODO
+        return getTransactionHistory(lease, null);
+    }
+
+    static TransactionHistoryDTO getTransactionHistory(Lease lease, LogicalDate fromDate) {
+        TransactionHistoryDTO th = EntityFactory.create(TransactionHistoryDTO.class);
+        EntityQueryCriteria<InvoiceLineItem> criteria = EntityQueryCriteria.create(InvoiceLineItem.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), lease.billingAccount()));
+        if (fromDate != null) {
+            criteria.add(PropertyCriterion.ge(criteria.proto().postDate(), fromDate));
+        }
+//        List<InvoiceLineItem> lineItems = Persistence.service().query(criteria);
+//        th.lineItems().addAll(lineItems);
+        return th;
+    }
+
+    static List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(Lease lease) {
+        EntityQueryCriteria<InvoiceDebit> criteria = EntityQueryCriteria.create(InvoiceDebit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), lease.billingAccount()));
+        criteria.add(PropertyCriterion.ne(criteria.proto().outstandingDebit(), 0));
+//        List<InvoiceDebit> lineItems = Persistence.service().query(criteria);
+//        return lineItems;
         return null;
     }
 
-    static List<InvoiceLineItem> getNotCoveredDebitInvoiceLineItems(Lease lease) {
-        //TODO
-        return null;
-    }
-
-    static List<InvoiceLineItem> getNotConsumedCreditInvoiceLineItems(Lease lease) {
-        //TODO
+    static List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(Lease lease) {
+        EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), lease.billingAccount()));
+        criteria.add(PropertyCriterion.ne(criteria.proto().outstandingCredit(), 0));
+//        List<InvoiceCredit> lineItems = Persistence.service().query(criteria);
+//        return lineItems;
         return null;
     }
 

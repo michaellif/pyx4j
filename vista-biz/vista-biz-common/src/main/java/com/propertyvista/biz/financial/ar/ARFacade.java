@@ -16,7 +16,8 @@ package com.propertyvista.biz.financial.ar;
 import java.util.List;
 
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoiceCredit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
@@ -29,9 +30,9 @@ public interface ARFacade {
 
     void postImmediateAdjustment(LeaseAdjustment adjustment);
 
-    List<InvoiceLineItem> getNotCoveredDebitInvoiceLineItems(Lease lease);
+    List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(Lease lease);
 
-    List<InvoiceLineItem> getNotConsumedCreditInvoiceLineItems(Lease lease);
+    List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(Lease lease);
 
     TransactionHistoryDTO getTransactionHistory(Lease lease);
 }

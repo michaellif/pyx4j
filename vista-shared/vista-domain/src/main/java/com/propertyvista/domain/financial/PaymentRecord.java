@@ -36,7 +36,6 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-
 /**
  * 
  * Actual payment record. {@link com.propertyvista.domain.financial.billing.InvoicePayment} captures payment portion for particular charge (in future version)
@@ -96,8 +95,6 @@ public interface PaymentRecord extends IEntity {
      * Do not post before that date
      */
     IPrimitive<LogicalDate> targetDate();
-
-    IPrimitive<LogicalDate> postedDate();
 
     IPrimitive<LogicalDate> depositDate();
 
