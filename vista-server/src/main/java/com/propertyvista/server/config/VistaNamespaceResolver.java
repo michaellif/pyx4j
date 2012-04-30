@@ -51,10 +51,14 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
     @Override
     public String getNamespace(HttpServletRequest httprequest) {
-        if (httprequest.getServletPath() != null
-                && (httprequest.getServletPath().startsWith("/" + DeploymentConsts.ADMIN_URL) || httprequest.getServletPath().startsWith("/onboarding") || httprequest
-                        .getServletPath().startsWith("/o/openid"))) {
-            return Pmc.adminNamespace;
+        if (httprequest.getServletPath() != null) {
+            if ((httprequest.getServletPath().startsWith("/" + DeploymentConsts.ADMIN_URL) || httprequest.getServletPath().startsWith("/public/onboarding") || httprequest
+                    .getServletPath().startsWith("/o/openid"))) {
+                return Pmc.adminNamespace;
+            }
+            if (httprequest.getServletPath().startsWith("/public/schema")) {
+                return "_";
+            }
         }
 
         // Dev: Get the 4th part of URL.
