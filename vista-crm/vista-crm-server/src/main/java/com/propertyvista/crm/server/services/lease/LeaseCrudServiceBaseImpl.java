@@ -153,7 +153,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             }
             // correct adjustment expiration date:
             if (ExecutionType.oneTime == adj.executionType().getValue()) {
-                adj.expirationDate().setValue(item.expirationDate().getValue());
+                adj.expirationDate().setValue(null);
             }
         }
     }
