@@ -34,8 +34,8 @@ public interface LeaseApplicationDTO extends LeaseDTO {
 
     IPrimitive<Integer> numberOfOccupants();
 
-    @Caption(name = "Number Of Co-Applicants")
-    IPrimitive<Integer> numberOfCoApplicants();
+    @Caption(name = "Number Of Applicants")
+    IPrimitive<Integer> numberOfApplicants();
 
     IPrimitive<Integer> numberOfGuarantors();
 

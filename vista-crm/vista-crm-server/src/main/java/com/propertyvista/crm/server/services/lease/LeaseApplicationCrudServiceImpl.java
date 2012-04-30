@@ -81,7 +81,7 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
     private void enhanceRetrievedCommon(Lease in, LeaseApplicationDTO dto) {
         dto.numberOfOccupants().setValue(dto.version().tenants().size());
         dto.numberOfGuarantors().setValue(dto.version().guarantors().size());
-        dto.numberOfCoApplicants().setValue(0);
+        dto.numberOfApplicants().setValue(0);
 
         for (Tenant tenant : dto.version().tenants()) {
             Persistence.service().retrieve(tenant);
@@ -89,8 +89,9 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
 
             if (tenant.role().getValue() == Role.Applicant) {
                 dto.mainApplicant().set(tenant.customer());
+                dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
             } else if (tenant.role().getValue() == Role.CoApplicant) {
-                dto.numberOfCoApplicants().setValue(dto.numberOfCoApplicants().getValue() + 1);
+                dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
             }
         }
     }
