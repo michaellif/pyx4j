@@ -29,6 +29,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import templates.TemplateResources;
 
+import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
@@ -98,36 +99,22 @@ public class AptDetailsPage extends BasePage {
                 item.add(new Label("name", floorPlan.marketingName().getValue()));
                 item.add(new Label("beds", String.valueOf(floorPlan.bedrooms().getValue())));
                 item.add(new Label("bath", String.valueOf(floorPlan.bathrooms().getValue())));
+
                 // get price and area range
-                BigDecimal minPrice = null, maxPrice = null;
-                Integer minArea = null, maxArea = null;
                 AreaMeasurementUnit areaUnits = AreaMeasurementUnit.sqFeet;
-                for (AptUnit u : fpUnits.get(floorPlan)) {
-                    //price
-                    BigDecimal _prc = u.financial()._marketRent().getValue();
-                    if (minPrice == null || minPrice.compareTo(_prc) > 0) {
-                        minPrice = _prc;
-                    }
-                    if (maxPrice == null || minPrice.compareTo(_prc) < 0) {
-                        maxPrice = _prc;
-                    }
+                MinMaxPair<BigDecimal> minMaxMarketRent = PropertyFinder.getMinMaxMarketRent(fpUnits.get(floorPlan));
+                MinMaxPair<Integer> minMaxArea = PropertyFinder.getMinMaxAreaInSqFeet(fpUnits.get(floorPlan));
 
-                    // (minPrice == null) || (minPrice.compareTo(_prc) > 0)
-
-                    //area
-                    minArea = DomainUtil.min(minArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
-                    maxArea = DomainUtil.max(maxArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
-                }
                 // price
                 String price = NAString;
-                if (minPrice != null && maxPrice != null) {
-                    price = "$" + DomainUtil.roundMoney(minPrice) + " - $" + DomainUtil.roundMoney(maxPrice);
+                if (minMaxMarketRent.getMin() != null) {
+                    price = "$" + DomainUtil.roundMoney(minMaxMarketRent.getMin()) + " - $" + DomainUtil.roundMoney(minMaxMarketRent.getMax());
                 }
                 item.add(new Label("price", price));
                 // area
                 String area = NAString;
-                if (minArea != null && maxArea != null) {
-                    area = minArea + " - " + maxArea + " " + areaUnits;
+                if (minMaxArea.getMin() != null) {
+                    area = minMaxArea.getMin() + " - " + minMaxArea.getMax() + " " + areaUnits;
                 }
                 item.add(new Label("area", area));
                 // UnitDetails link

@@ -26,13 +26,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import templates.TemplateResources;
 
+import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
@@ -74,17 +74,12 @@ public class UnitDetailsPage extends BasePage {
         add(new FloorplanInfoPanel("floorplanInfoPanel", fp));
 
         // right side - floorplan details
-        Integer minArea = null, maxArea = null;
         AreaMeasurementUnit areaUnits = AreaMeasurementUnit.sqFeet;
-        for (AptUnit u : fpUnits) {
-            minArea = DomainUtil.min(minArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
-            maxArea = DomainUtil.max(maxArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
-        }
-
+        MinMaxPair<Integer> minMaxArea = PropertyFinder.getMinMaxAreaInSqFeet(fpUnits);
         add(new Label("backButton", i18n.tr("Back")).add(AttributeModifier.replace("onClick", "history.back()")));
         add(new Label("name", fp.marketingName().getValue()));
         add(new Label("rooms", "bedrooms: " + fp.bedrooms().getValue() + ", bathrooms: " + fp.bathrooms().getValue()
-                + ((minArea != null) ? (", " + minArea + " - " + maxArea + " " + areaUnits) : "")));
+                + ((minMaxArea.getMin() != null) ? (", " + minMaxArea.getMin() + " - " + minMaxArea.getMax() + " " + areaUnits) : "")));
         add(new Label("description", fp.description().getValue()));
         add(new ListView<FloorplanAmenity>("amenities", amenities) {
             private static final long serialVersionUID = 1L;

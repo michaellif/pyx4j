@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import templates.TemplateResources;
 
+import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.commons.SimpleMessageFormat;
 
 import com.propertyvista.domain.contact.AddressStructured;
@@ -71,22 +72,14 @@ public class BuildingInfoPanel extends Panel {
         }
         add(new Label("address", addrFmt));
         // get price range
-        BigDecimal minPrice = null, maxPrice = null;
+        MinMaxPair<BigDecimal> minMaxMarketRent = new MinMaxPair<BigDecimal>();
         final Map<Floorplan, List<AptUnit>> fpUnits = PropertyFinder.getBuildingFloorplans(bld);
         for (Floorplan fp : fpUnits.keySet()) {
-            for (AptUnit u : fpUnits.get(fp)) {
-                BigDecimal _prc = u.financial()._marketRent().getValue();
-                if (minPrice == null || minPrice.compareTo(_prc) > 0) {
-                    minPrice = _prc;
-                }
-                if (maxPrice == null || maxPrice.compareTo(_prc) < 0) {
-                    maxPrice = _prc;
-                }
-            }
+            minMaxMarketRent = DomainUtil.minMaxPair(minMaxMarketRent, PropertyFinder.getMinMaxMarketRent(fpUnits.get(fp)));
         }
         String priceFmt = "Not available";
-        if (minPrice != null && maxPrice != null) {
-            priceFmt = "$" + DomainUtil.roundMoney(minPrice) + " - $" + DomainUtil.roundMoney(maxPrice);
+        if (minMaxMarketRent.getMin() != null && minMaxMarketRent.getMax() != null) {
+            priceFmt = "$" + DomainUtil.roundMoney(minMaxMarketRent.getMin()) + " - $" + DomainUtil.roundMoney(minMaxMarketRent.getMax());
         }
         add(new Label("priceRange", priceFmt));
         // phone

@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.portal;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.Map;
 import org.apache.commons.lang.mutable.MutableInt;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -39,6 +41,7 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.BathroomChoice;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.BedroomChoice;
@@ -259,6 +262,31 @@ public class PropertyFinder {
         criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), bld));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
         return Persistence.service().query(criteria);
+    }
+
+    public static MinMaxPair<BigDecimal> getMinMaxMarketRent(Collection<AptUnit> aptUnits) {
+        BigDecimal minPrice = null, maxPrice = null;
+        for (AptUnit u : aptUnits) {
+            if (u._availableForRent().isNull()) {
+                continue;
+            }
+            BigDecimal price = u.financial()._marketRent().getValue();
+            minPrice = DomainUtil.min(minPrice, price);
+            maxPrice = DomainUtil.max(maxPrice, price);
+        }
+        return new MinMaxPair<BigDecimal>(minPrice, maxPrice);
+    }
+
+    public static MinMaxPair<Integer> getMinMaxAreaInSqFeet(Collection<AptUnit> aptUnits) {
+        Integer minArea = null, maxArea = null;
+        for (AptUnit u : aptUnits) {
+            if (u._availableForRent().isNull()) {
+                continue;
+            }
+            minArea = DomainUtil.min(minArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
+            maxArea = DomainUtil.max(maxArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
+        }
+        return new MinMaxPair<Integer>(minArea, maxArea);
     }
 
     public static List<BuildingAmenity> getBuildingAmenities(Building bld) {

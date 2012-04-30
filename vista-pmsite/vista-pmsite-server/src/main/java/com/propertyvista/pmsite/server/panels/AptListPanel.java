@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.rpc.SystemState;
@@ -113,18 +114,9 @@ public class AptListPanel extends Panel {
 
                         String info = i18n.tr("No information found");
                         if (!fp.bathrooms().isNull() && !fp.bathrooms().isNull()) {
-                            BigDecimal minPrice = null;
-                            for (AptUnit u : fpUnits.get(fp)) {
-                                BigDecimal _prc = u.financial()._marketRent().getValue();
-                                if (_prc == null) {
-                                    continue;
-                                }
-                                if (minPrice == null || minPrice.compareTo(_prc) > 0) {
-                                    minPrice = _prc;
-                                }
-                            }
+                            MinMaxPair<BigDecimal> minMaxMarketRent = PropertyFinder.getMinMaxMarketRent(fpUnits.get(fp));
                             info = SimpleMessageFormat.format(i18n.tr("{0} Bed, {1} Bath, {2,choice,null#price not available|!null#from $ {2}}"), fp.bedrooms()
-                                    .getValue(), fp.bathrooms().getValue(), minPrice);
+                                    .getValue(), fp.bathrooms().getValue(), minMaxMarketRent.getMin());
                         }
                         item.add(new Label("typeInfo", info));
                     }

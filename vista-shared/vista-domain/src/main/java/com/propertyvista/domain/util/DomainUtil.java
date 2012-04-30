@@ -16,6 +16,7 @@ package com.propertyvista.domain.util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -156,6 +157,16 @@ public class DomainUtil {
         } else {
             return a.max(b);
         }
+    }
+
+    /**
+     * Create min max Pair from Two pairs of the same type
+     */
+    public static MinMaxPair<BigDecimal> minMaxPair(MinMaxPair<BigDecimal> pairOne, MinMaxPair<BigDecimal> pairTwo) {
+        MinMaxPair<BigDecimal> result = new MinMaxPair<BigDecimal>();
+        result.setMin(min(pairOne.getMin(), pairTwo.getMin()));
+        result.setMax(max(pairOne.getMax(), pairTwo.getMax()));
+        return result;
     }
 
     public static Integer min(Integer a, Integer b) {

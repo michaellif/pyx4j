@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import templates.TemplateResources;
 
+import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.commons.SimpleMessageFormat;
 
 import com.propertyvista.domain.contact.AddressStructured;
@@ -76,19 +77,10 @@ public class FloorplanInfoPanel extends Panel {
         }
         add(new Label("address", addrFmt));
         // get price range
-        BigDecimal minPrice = null, maxPrice = null;
-        for (AptUnit u : fpUnits) {
-            BigDecimal _prc = u.financial()._marketRent().getValue();
-            if (minPrice == null || minPrice.compareTo(_prc) > 0) {
-                minPrice = _prc;
-            }
-            if (maxPrice == null || maxPrice.compareTo(_prc) < 0) {
-                maxPrice = _prc;
-            }
-        }
+        MinMaxPair<BigDecimal> minMaxMarketRent = PropertyFinder.getMinMaxMarketRent(fpUnits);
         String priceFmt = "Not available";
-        if (minPrice != null && maxPrice != null) {
-            priceFmt = "$" + minPrice.setScale(2) + " - $" + maxPrice.setScale(2);
+        if (minMaxMarketRent.getMin() != null && minMaxMarketRent.getMax() != null) {
+            priceFmt = "$" + minMaxMarketRent.getMin().setScale(2) + " - $" + minMaxMarketRent.getMax().setScale(2);
         }
         add(new Label("priceRange", priceFmt));
         // phone

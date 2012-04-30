@@ -35,6 +35,7 @@ import templates.TemplateResources;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.pojo.IPojo;
@@ -44,7 +45,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.pmsite.server.PMSiteApplication;
@@ -139,15 +139,10 @@ public class InquiryPanel extends Panel {
         }
         SimpleRadioGroup<Long> radioGroup = new SimpleRadioGroup<Long>("floorPlanList", new Model<Long>(curFp));
         for (Floorplan p : PropertyFinder.getBuildingFloorplans(bld).keySet()) {
-            BigDecimal minPrice = null;
-            for (AptUnit u : PropertyFinder.getBuildingAptUnits(p.building(), p)) {
-                BigDecimal _prc = u.financial()._marketRent().getValue();
-                if ((minPrice == null) || (minPrice.compareTo(_prc) > 0)) {
-                    minPrice = _prc;
-                }
-            }
+
+            MinMaxPair<BigDecimal> minMaxMarketRent = PropertyFinder.getMinMaxMarketRent(PropertyFinder.getBuildingAptUnits(p.building(), p));
             String fpEntry = SimpleMessageFormat.format(i18n.tr("<b>{0}</b> - {1} Bed, {2} Bath, {3,choice,null#price not available|!null#from ${3}}"), p
-                    .marketingName().getValue(), p.bedrooms().getValue(), p.bathrooms().getValue(), minPrice);
+                    .marketingName().getValue(), p.bedrooms().getValue(), p.bathrooms().getValue(), minMaxMarketRent.getMin());
             radioGroup.addChoice(p.id().getValue().asLong(), fpEntry);
         }
         form.add(radioGroup.setEscapeModelStrings(false));
