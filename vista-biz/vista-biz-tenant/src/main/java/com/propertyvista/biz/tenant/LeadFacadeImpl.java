@@ -84,7 +84,7 @@ public class LeadFacadeImpl implements LeadFacade {
         lease.leaseFrom().setValue(lead.moveInDate().getValue());
         lease.leaseTo().setValue(new LogicalDate(leaseEnd));
 
-        lease.version().status().setValue(Lease.Status.Created);
+        lease.version().status().setValue(Lease.Status.ApplicationInProgress);
 
         lease.version().expectedMoveIn().setValue(lead.moveInDate().getValue());
 
