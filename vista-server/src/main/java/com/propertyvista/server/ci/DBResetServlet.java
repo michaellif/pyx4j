@@ -292,7 +292,7 @@ public class DBResetServlet extends HttpServlet {
         pmc.name().setValue(pmcName + " Demo");
         pmc.enabled().setValue(Boolean.TRUE);
         pmc.dnsName().setValue(pmcName);
-        pmc.namespace().setValue(pmcName);
+        pmc.namespace().setValue(pmcName.replace('-', '_'));
 
         Persistence.service().persist(pmc);
         Persistence.service().commit();

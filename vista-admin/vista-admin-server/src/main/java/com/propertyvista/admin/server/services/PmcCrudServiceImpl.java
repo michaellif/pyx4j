@@ -68,7 +68,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     @Override
     public void create(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
         editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
-        editableEntity.namespace().setValue(editableEntity.dnsName().getValue());
+        editableEntity.namespace().setValue(editableEntity.dnsName().getValue().replace('-', '_'));
         if (!PmcNameValidator.canCreatePmcName(editableEntity.dnsName().getValue())) {
             throw new UserRuntimeException("PMC DNS name is reserved of forbidden");
         }
