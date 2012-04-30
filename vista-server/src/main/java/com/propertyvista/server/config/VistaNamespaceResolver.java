@@ -71,7 +71,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         String host = ServletUtils.getForwardedHost(httprequest);
         if (host == null) {
             host = httprequest.getServerName();
-            if (httprequest.getLocalAddr().equals(host)) {
+            if ("localhost".equals(host) || httprequest.getLocalAddr().equals(host)) {
                 return demoNamespace;
             }
         }
