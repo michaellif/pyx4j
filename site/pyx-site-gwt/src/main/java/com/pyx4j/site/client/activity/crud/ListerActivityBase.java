@@ -174,7 +174,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void editNew(Class<? extends CrudAppPlace> openPlaceClass) {
-        if (canEditNew()) {
+        if (canCreateNewItem()) {
             if (parentClass != null) {
                 AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID, parentClass));
             } else {
@@ -185,7 +185,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void editNew(Class<? extends CrudAppPlace> openPlaceClass, E newItem) {
-        if (canEditNew()) {
+        if (canCreateNewItem()) {
             AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(newItem));
         }
     }
@@ -194,7 +194,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
      * Empty methods, implementations don't need to call it.
      */
     @Override
-    public boolean canEditNew() {
+    public boolean canCreateNewItem() {
         return true;
     }
 

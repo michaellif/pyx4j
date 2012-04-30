@@ -66,7 +66,7 @@ public interface IListerView<E extends IEntity> extends IView<E> {
         /**
          * Should be called after populate, return value is security feature
          */
-        boolean canEditNew();
+        boolean canCreateNewItem();
 
         void delete(Key itemID);
 

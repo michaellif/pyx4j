@@ -72,7 +72,7 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
     @Override
     protected void onObtainSuccess() {
         if (getDataTablePanel().getAddButton() != null) {
-            getDataTablePanel().getAddButton().setEnabled(getPresenter().canEditNew());
+            getDataTablePanel().getAddButton().setEnabled(getPresenter().canCreateNewItem());
         }
     }
 
