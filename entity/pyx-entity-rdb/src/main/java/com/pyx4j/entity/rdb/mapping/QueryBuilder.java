@@ -96,17 +96,17 @@ public class QueryBuilder<T extends IEntity> {
             IVersionedEntity<?> versionedProto = (IVersionedEntity<?>) criteria.proto();
             switch (criteria.getVersionedCriteria()) {
             case onlyFinalized:
-                appendPropertyCriterion(PropertyCriterion.isNotNull(versionedProto.version().fromDate()), firstCriteria);
+                appendPropertyCriterion(PropertyCriterion.isNotNull(versionedProto.version().fromDate()), firstCriteria, true);
                 firstCriteria = false;
-                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().toDate()), firstCriteria);
+                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().toDate()), firstCriteria, true);
                 break;
             case onlyDraft:
-                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().fromDate()), firstCriteria);
+                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().fromDate()), firstCriteria, true);
                 firstCriteria = false;
-                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().toDate()), firstCriteria);
+                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().toDate()), firstCriteria, true);
                 break;
             case finalizedAsOfNow:
-                appendPropertyCriterion(PropertyCriterion.isNotNull(versionedProto.version()), firstCriteria);
+                appendPropertyCriterion(PropertyCriterion.isNotNull(versionedProto.version()), firstCriteria, true);
                 firstCriteria = false;
                 break;
             default:
@@ -115,7 +115,7 @@ public class QueryBuilder<T extends IEntity> {
         }
 
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
-            appendFilters(criteria.getFilters(), firstCriteria);
+            appendFilters(criteria.getFilters(), firstCriteria, true);
         }
         if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
             log.debug("sort by {}", criteria.getSorts());
@@ -144,7 +144,7 @@ public class QueryBuilder<T extends IEntity> {
         return value.contains("*");
     }
 
-    private void appendFilters(List<Criterion> filters, boolean firstInSentence) {
+    private void appendFilters(List<Criterion> filters, boolean firstInSentence, boolean required) {
         for (Criterion cr : filters) {
             if (firstInSentence) {
                 firstInSentence = false;
@@ -152,12 +152,12 @@ public class QueryBuilder<T extends IEntity> {
                 sql.append(" AND ");
             }
             if (cr instanceof PropertyCriterion) {
-                appendPropertyCriterion((PropertyCriterion) cr);
+                appendPropertyCriterion((PropertyCriterion) cr, required);
             } else if (cr instanceof OrCriterion) {
                 sql.append(" (( ");
-                appendFilters(((OrCriterion) cr).getFiltersLeft(), true);
+                appendFilters(((OrCriterion) cr).getFiltersLeft(), true, false);
                 sql.append(" ) OR ( ");
-                appendFilters(((OrCriterion) cr).getFiltersRight(), true);
+                appendFilters(((OrCriterion) cr).getFiltersRight(), true, false);
                 sql.append(" )) ");
             } else {
                 throw new RuntimeException("Unsupported Operator " + cr.getClass());
@@ -165,16 +165,16 @@ public class QueryBuilder<T extends IEntity> {
         }
     }
 
-    private void appendPropertyCriterion(PropertyCriterion propertyCriterion, boolean firstInSentence) {
+    private void appendPropertyCriterion(PropertyCriterion propertyCriterion, boolean firstInSentence, boolean required) {
         if (firstInSentence) {
             firstInSentence = false;
         } else {
             sql.append(" AND ");
         }
-        appendPropertyCriterion(propertyCriterion);
+        appendPropertyCriterion(propertyCriterion, required);
     }
 
-    private void appendPropertyCriterion(PropertyCriterion propertyCriterion) {
+    private void appendPropertyCriterion(PropertyCriterion propertyCriterion, boolean required) {
         BindHolder bindHolder = new BindHolder();
         bindHolder.bindValue = propertyCriterion.getValue();
 
@@ -184,6 +184,9 @@ public class QueryBuilder<T extends IEntity> {
             sql.append(mainTableSqlAlias).append('.').append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath()));
         } else {
             boolean leftJoin = false;
+            if (!required) {
+                leftJoin = true;
+            }
             // "LEFT JOIN / IS NULL" works as "NOT EXISTS", make the LEFT join
             if ((bindHolder.bindValue == null) && (propertyCriterion.getRestriction() == Restriction.NOT_EXISTS)) {
                 leftJoin = true;
