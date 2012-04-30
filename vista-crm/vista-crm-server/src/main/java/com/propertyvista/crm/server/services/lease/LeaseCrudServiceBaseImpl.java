@@ -151,9 +151,9 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             if (adj.createdWhen().isNull()) {
                 adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
             }
-            // set adjustment expiration date:
+            // correct adjustment expiration date:
             if (ExecutionType.oneTime == adj.executionType().getValue()) {
-                adj.expirationDate().setValue(item.effectiveDate().getValue());
+                adj.expirationDate().setValue(item.expirationDate().getValue());
             }
         }
     }

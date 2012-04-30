@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -54,6 +55,7 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
@@ -274,7 +276,6 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
             columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
             columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
             columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "9em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().createdBy(), "15em"));
             return columns;
         }
 
@@ -322,9 +323,22 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 setViewable(false);
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                 CComponent<?, ?> cell = super.createCell(column);
+
+                if (column.getObject() == proto().executionType()) {
+                    ((CComponent<ExecutionType, ?>) cell).addValueChangeHandler(new ValueChangeHandler<BillableItemAdjustment.ExecutionType>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<ExecutionType> event) {
+                            get(proto().expirationDate()).setEnabled(event.getValue() != ExecutionType.oneTime);
+                            if (event.getValue() == ExecutionType.oneTime) {
+                                get(proto().expirationDate()).setValue(null);
+                            }
+                        }
+                    });
+                }
                 if (column.getObject() == proto().expirationDate()) {
                     try {
                         ((CComponent<LogicalDate, ?>) cell).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(itemEffectiveDateEditor));
@@ -335,6 +349,7 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                         throw new Error(e);
                     }
                 }
+
                 return cell;
             }
 
