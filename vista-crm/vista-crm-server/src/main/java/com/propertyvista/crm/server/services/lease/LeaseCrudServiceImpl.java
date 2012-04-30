@@ -124,7 +124,8 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
             // check that selected users can be used for this template
             for (ApplicationUserDTO user : users) {
                 if (user.leaseParticipant().isInstanceOf(Guarantor.class)) {
-                    throw new UserRuntimeException(i18n.tr("''Send Mail'' operation failed: can''t send \"{0}\" for Guarantor",
+                    throw new UserRuntimeException(i18n.tr(
+                            "''Send Mail'' operation failed: can''t send \"{0}\" for Guarantor. Please re-send e-mail for all valid recipients.",
                             EmailTemplateType.TenantInvitation));
                 }
             }
