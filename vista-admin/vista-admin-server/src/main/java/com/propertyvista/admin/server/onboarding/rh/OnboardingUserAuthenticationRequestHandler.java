@@ -75,7 +75,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             throw new UserRuntimeException("Invalid User Account. Please Contact Support");
         }
         if (!cr.enabled().isBooleanTrue()) {
-            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
             return response;
         }
         if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
