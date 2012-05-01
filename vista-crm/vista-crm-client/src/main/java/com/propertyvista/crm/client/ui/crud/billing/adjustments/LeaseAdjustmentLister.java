@@ -29,7 +29,6 @@ public class LeaseAdjustmentLister extends ListerBase<LeaseAdjustment> {
             new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
             new MemberColumnDescriptor.Builder(proto().targetDate()).build(),
             new MemberColumnDescriptor.Builder(proto().amount()).build(),
-            new MemberColumnDescriptor.Builder(proto().reason().taxes()).build(),
             new MemberColumnDescriptor.Builder(proto().description()).build(),
             new MemberColumnDescriptor.Builder(proto().executionType(), false).build(),
             new MemberColumnDescriptor.Builder(proto().tax(), false).build(),
