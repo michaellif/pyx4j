@@ -17,10 +17,14 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -38,9 +42,13 @@ public interface NsfFeeItem extends IEntity {
     LeaseBillingPolicy policy();
 
     @NotNull
+    @ToString(index = 0)
     IPrimitive<PaymentRecord.Type> paymentType();
 
     @NotNull
+    @ToString(index = 1)
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> fee();
 
     // internals:
