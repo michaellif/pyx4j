@@ -48,7 +48,6 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             EntityQueryCriteria<MockupArrearsState> criteria = new EntityQueryCriteria<MockupArrearsState>(MockupArrearsState.class);
             // adjust the order of results in order to select the most recent statuses
             ArrayList<Sort> sortingCriteria = new ArrayList<Sort>();
-            sortingCriteria.add(new Sort(criteria.proto().belongsTo().getPath().toString(), false));
             sortingCriteria.add(new Sort(criteria.proto().statusTimestamp().getPath().toString(), true));
             sortingCriteria.addAll(sorting);
             criteria.setSorts(sortingCriteria);
@@ -72,11 +71,11 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             // choose only the most recent statuses (we asked the query to sort the results, hence the most recent ones must come first)
             Key previousTenantPk = null;
             for (MockupArrearsState arrear : allArrears) {
-                Key thisTenantPk = arrear.belongsTo().getPrimaryKey();
-                if (!thisTenantPk.equals(previousTenantPk)) {
-                    preliminaryResults.add(arrear);
-                    previousTenantPk = thisTenantPk;
-                }
+//                Key thisTenantPk = arrear.belongsTo().getPrimaryKey();
+//                if (!thisTenantPk.equals(previousTenantPk)) {
+//                    preliminaryResults.add(arrear);
+//                    previousTenantPk = thisTenantPk;
+//                }
             }
 
             SORTING_FACTORY.sortDto(preliminaryResults, sorting);

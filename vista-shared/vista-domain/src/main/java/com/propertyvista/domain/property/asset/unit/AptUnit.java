@@ -32,7 +32,6 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.domain.dashboard.gadgets.arrears.MockupTenant;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.BuildingElement;
@@ -79,10 +78,6 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<AptUnitOccupancySegment> _AptUnitOccupancySegment();
-
-    @Owned
-    @Detached(level = AttachLevel.Detached)
-    ISet<MockupTenant> _MockupTenant();
 
     // ----------------------------------------------------
     // internals:
