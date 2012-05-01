@@ -28,6 +28,7 @@ import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
@@ -47,7 +48,6 @@ public class OnboardingUserTokenAuthenticationRequestHandler extends AbstractReq
 
     @Override
     public ResponseIO execute(OnboardingUserTokenAuthenticationRequestIO request) {
-
         OnboardingUserAuthenticationResponseIO response = EntityFactory.create(OnboardingUserAuthenticationResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 
@@ -83,25 +83,22 @@ public class OnboardingUserTokenAuthenticationRequestHandler extends AbstractReq
         if (!token.accessKey.equals(cr.accessKey().getValue())) {
             AbstractAntiBot.authenticationFailed(token.email);
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
-
             return response;
         }
 
         if ((new Date().after(cr.accessKeyExpire().getValue()))) {
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
-
             return response;
         }
 
         if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
-
+            response.success().setValue(Boolean.TRUE);
             return response;
         } else {
-            response.role().setValue(convertRole(cr.behavior().getValue()));
+            response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
             response.onboardingAccountId().set(cr.onboardingAccountId());
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
-
             return response;
         }
     }

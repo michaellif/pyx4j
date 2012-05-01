@@ -13,8 +13,6 @@
  */
 package com.propertyvista.admin.server.onboarding.rhf;
 
-import com.propertyvista.domain.security.VistaOnboardingBehavior;
-import com.propertyvista.onboarding.OnboardingRole;
 import com.propertyvista.onboarding.RequestIO;
 
 public abstract class AbstractRequestHandler<E extends RequestIO> implements RequestHandler<E> {
@@ -30,23 +28,4 @@ public abstract class AbstractRequestHandler<E extends RequestIO> implements Req
         return requestClass;
     }
 
-    protected OnboardingRole convertRole(VistaOnboardingBehavior behavior) {
-        if (behavior == null) {
-            return null;
-        }
-        switch (behavior) {
-        case OnboardingAdministrator:
-            return OnboardingRole.OnboardingAdministrator;
-        case Caledon:
-            return OnboardingRole.Caledon;
-        case Equifax:
-            return OnboardingRole.Equifax;
-        case Client:
-            return OnboardingRole.Client;
-        case ProspectiveClient:
-            return OnboardingRole.ProspectiveClient;
-        default:
-            throw new IllegalArgumentException();
-        }
-    }
 }

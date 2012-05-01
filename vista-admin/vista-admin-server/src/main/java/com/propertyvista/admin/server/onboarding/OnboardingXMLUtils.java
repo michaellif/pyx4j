@@ -26,6 +26,9 @@ import org.xml.sax.SAXException;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.xml.XMLEntityParser;
 
+import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.onboarding.OnboardingRole;
+
 public class OnboardingXMLUtils {
 
     public static <T extends IEntity> T parse(Class<T> entityClass, InputSource input) {
@@ -50,6 +53,26 @@ public class OnboardingXMLUtils {
             throw new Error(e);
         } catch (IOException e) {
             throw new Error(e);
+        }
+    }
+
+    public static OnboardingRole convertRole(VistaOnboardingBehavior behavior) {
+        if (behavior == null) {
+            return null;
+        }
+        switch (behavior) {
+        case OnboardingAdministrator:
+            return OnboardingRole.OnboardingAdministrator;
+        case Caledon:
+            return OnboardingRole.Caledon;
+        case Equifax:
+            return OnboardingRole.Equifax;
+        case Client:
+            return OnboardingRole.Client;
+        case ProspectiveClient:
+            return OnboardingRole.ProspectiveClient;
+        default:
+            throw new IllegalArgumentException();
         }
     }
 }

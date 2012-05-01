@@ -28,6 +28,7 @@ import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
@@ -97,7 +98,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
             return response;
         } else {
-            response.role().setValue(convertRole(cr.behavior().getValue()));
+            response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
             response.onboardingAccountId().set(cr.onboardingAccountId());
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
             return response;
