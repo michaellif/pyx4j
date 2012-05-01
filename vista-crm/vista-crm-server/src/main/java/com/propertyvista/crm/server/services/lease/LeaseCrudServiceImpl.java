@@ -167,7 +167,7 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
                     transaction.description().setValue("credit #" + String.valueOf(i));
                     transaction.amount().setValue(new BigDecimal("500.33"));
                 }
-                transaction.fromDate().setValue(new LogicalDate());
+                transaction.postDate().setValue(new LogicalDate());
                 history.lineItems().add(transaction);
             }
 

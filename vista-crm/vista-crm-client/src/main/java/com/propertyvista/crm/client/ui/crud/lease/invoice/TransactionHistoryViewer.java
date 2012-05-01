@@ -100,7 +100,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
             }
             String balanceRespresentation = balance.toString();
 
-            lineItemsView.setHTML(row, COL_DATE, toSafeHtml(DateTimeFormat.getFormat(CDatePicker.defaultDateFormat).format(item.fromDate().getValue())));
+            lineItemsView.setHTML(row, COL_DATE, toSafeHtml(DateTimeFormat.getFormat(CDatePicker.defaultDateFormat).format(item.postDate().getValue())));
             lineItemsView.setHTML(row, COL_ITEM, toSafeHtml(item.description().getValue()));
             lineItemsView.setHTML(row, colAmount, toSafeHtml(amountRepresentation));
             lineItemsView.setHTML(row, COL_BALANCE, toSafeHtml(balanceRespresentation));
