@@ -146,7 +146,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendOnboardingPasswordRetrievalToken(OnboardingUser user) {
+    public void sendOnboardingPasswordRetrievalToken(OnboardingUser user, String onboardingSystemBaseUrl) {
         String token = AccessKey.createAccessToken(user, OnboardingUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);

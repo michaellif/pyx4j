@@ -25,24 +25,26 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.onboarding.OnboardingUserPasswordResetRequestIO;
+import com.propertyvista.onboarding.OnboardingUserSendPasswordResetTokenRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
-public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHandler<OnboardingUserPasswordResetRequestIO> {
+public class OnboardingUserSendPasswordResetTokenRequestHandler extends AbstractRequestHandler<OnboardingUserSendPasswordResetTokenRequestIO> {
 
-    private final static Logger log = LoggerFactory.getLogger(OnboardingUserPasswordResetRequestHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(OnboardingUserSendPasswordResetTokenRequestHandler.class);
 
-    public OnboardingUserPasswordResetRequestHandler() {
-        super(OnboardingUserPasswordResetRequestIO.class);
+    public OnboardingUserSendPasswordResetTokenRequestHandler() {
+        super(OnboardingUserSendPasswordResetTokenRequestIO.class);
     }
 
     @Override
-    public ResponseIO execute(OnboardingUserPasswordResetRequestIO request) {
+    public ResponseIO execute(OnboardingUserSendPasswordResetTokenRequestIO request) {
 
         ResponseIO response = EntityFactory.create(ResponseIO.class);
         response.success().setValue(Boolean.TRUE);
@@ -61,9 +63,18 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
                 return response;
             }
         }
-
         OnboardingUser user = users.get(0);
-        ServerSideFactory.create(CommunicationFacade.class).sendOnboardingPasswordRetrievalToken(user);
+
+        OnboardingUserCredential cr = Persistence.service().retrieve(OnboardingUserCredential.class, user.getPrimaryKey());
+        if (cr == null) {
+            throw new UserRuntimeException("Invalid User Account. Please Contact Support");
+        }
+        if (!cr.enabled().isBooleanTrue()) {
+            response.success().setValue(Boolean.FALSE);
+            return response;
+        }
+
+        ServerSideFactory.create(CommunicationFacade.class).sendOnboardingPasswordRetrievalToken(user, request.onboardingSystemBaseUrl().getValue());
         log.debug("pwd change token is sent to {}", user.email().getValue());
 
         return response;

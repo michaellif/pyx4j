@@ -24,32 +24,30 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.onboarding.OnboardingUserPasswordChangeRequestIO;
-import com.propertyvista.onboarding.OnboardingUserTokenAuthenticationRequestIO;
+import com.propertyvista.onboarding.OnboardingUserTokenValidationRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
+import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
-public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestHandler<OnboardingUserPasswordChangeRequestIO> {
+public class OnboardingUserTokenValidationRequestHandler extends AbstractRequestHandler<OnboardingUserTokenValidationRequestIO> {
 
-    private final static Logger log = LoggerFactory.getLogger(OnboardingUserTokenAuthenticationRequestIO.class);
+    private final static Logger log = LoggerFactory.getLogger(OnboardingUserTokenValidationRequestHandler.class);
 
-    private static final I18n i18n = I18n.get(OnboardingUserTokenAuthenticationRequestHandler.class);
-
-    public OnboardingUserPasswordChangeRequestHandler() {
-        super(OnboardingUserPasswordChangeRequestIO.class);
+    public OnboardingUserTokenValidationRequestHandler() {
+        super(OnboardingUserTokenValidationRequestIO.class);
     }
 
     @Override
-    public ResponseIO execute(OnboardingUserPasswordChangeRequestIO request) {
+    public ResponseIO execute(OnboardingUserTokenValidationRequestIO request) {
         ResponseIO response = EntityFactory.create(ResponseIO.class);
 
-        String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
+        AccessKey.TokenParser token = new AccessKey.TokenParser(request.token().getValue());
+        String email = PasswordEncryptor.normalizeEmailAddress(token.email);
         AbstractAntiBot.assertLogin(email, null);
 
         EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);
@@ -57,9 +55,9 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
         List<OnboardingUser> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
-            AbstractAntiBot.authenticationFailed(email);
             response.success().setValue(Boolean.FALSE);
             return response;
+
         }
         OnboardingUser user = users.get(0);
 
@@ -72,26 +70,19 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
             return response;
         }
 
-        if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), cr.credential().getValue())) {
-            AbstractAntiBot.authenticationFailed(email);
-            log.info("Invalid password for user {}", email);
+        if (!token.accessKey.equals(cr.accessKey().getValue())) {
+            AbstractAntiBot.authenticationFailed(token.email);
             response.success().setValue(Boolean.FALSE);
+            return response;
         }
 
-        if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), cr.credential().getValue())) {
-            log.info("Invalid new password for user {}", email);
-            response.errorMessage().setValue(i18n.tr("Your password cannot repeat your previous password"));
+        if ((new Date().after(cr.accessKeyExpire().getValue()))) {
             response.success().setValue(Boolean.FALSE);
+            return response;
         }
-
-        cr.accessKey().setValue(null);
-        cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
-        cr.credentialUpdated().setValue(new Date());
-        cr.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
-        Persistence.service().persist(cr);
-        Persistence.service().commit();
 
         response.success().setValue(Boolean.TRUE);
         return response;
+
     }
 }

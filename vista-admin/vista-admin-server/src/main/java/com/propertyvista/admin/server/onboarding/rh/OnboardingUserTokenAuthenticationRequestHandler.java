@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
@@ -42,6 +43,8 @@ public class OnboardingUserTokenAuthenticationRequestHandler extends AbstractReq
 
     private final static Logger log = LoggerFactory.getLogger(OnboardingUserTokenAuthenticationRequestHandler.class);
 
+    private static final I18n i18n = I18n.get(OnboardingUserTokenAuthenticationRequestHandler.class);
+
     public OnboardingUserTokenAuthenticationRequestHandler() {
         super(OnboardingUserTokenAuthenticationRequestIO.class);
     }
@@ -53,7 +56,7 @@ public class OnboardingUserTokenAuthenticationRequestHandler extends AbstractReq
 
         AccessKey.TokenParser token = new AccessKey.TokenParser(request.token().getValue());
         String email = PasswordEncryptor.normalizeEmailAddress(token.email);
-        //AbstractAntiBot.assertLogin(email, new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response().getValue()));
+        AbstractAntiBot.assertLogin(email, null);
 
         EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -82,24 +85,29 @@ public class OnboardingUserTokenAuthenticationRequestHandler extends AbstractReq
 
         if (!token.accessKey.equals(cr.accessKey().getValue())) {
             AbstractAntiBot.authenticationFailed(token.email);
-            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.TokenExpired);
             return response;
         }
 
         if ((new Date().after(cr.accessKeyExpire().getValue()))) {
-            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.TokenExpired);
             return response;
         }
 
-        if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
-            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
-            response.success().setValue(Boolean.TRUE);
-            return response;
-        } else {
-            response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
-            response.onboardingAccountId().set(cr.onboardingAccountId());
-            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
-            return response;
+        if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), cr.credential().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
         }
+
+        cr.accessKey().setValue(null);
+        cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+        cr.credentialUpdated().setValue(new Date());
+        cr.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
+        Persistence.service().persist(cr);
+        Persistence.service().commit();
+
+        response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
+        response.onboardingAccountId().set(cr.onboardingAccountId());
+        response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
+        return response;
     }
 }

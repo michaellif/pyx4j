@@ -29,7 +29,7 @@ public interface CommunicationFacade {
 
     void sendAdminPasswordRetrievalToken(AdminUser user);
 
-    void sendOnboardingPasswordRetrievalToken(OnboardingUser user);
+    void sendOnboardingPasswordRetrievalToken(OnboardingUser user, String onboardingSystemBaseUrl);
 
     void sendCrmPasswordRetrievalToken(CrmUser user);
 

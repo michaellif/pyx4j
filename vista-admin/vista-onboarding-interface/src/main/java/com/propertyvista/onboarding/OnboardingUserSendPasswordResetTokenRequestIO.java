@@ -25,7 +25,10 @@ import com.pyx4j.i18n.annotations.I18n;
  */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface OnboardingUserPasswordResetRequestIO extends RequestIO {
+public interface OnboardingUserSendPasswordResetTokenRequestIO extends RequestIO {
+
+    @NotNull
+    IPrimitive<String> onboardingSystemBaseUrl();
 
     /**
      * Text from image for human verification.
