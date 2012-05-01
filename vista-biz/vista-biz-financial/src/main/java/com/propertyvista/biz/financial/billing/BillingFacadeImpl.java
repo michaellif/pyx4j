@@ -36,13 +36,13 @@ public class BillingFacadeImpl implements BillingFacade {
     }
 
     @Override
-    public void confirmBill(Bill bill) {
-        BillingLifecycle.confirmBill(bill);
+    public Bill confirmBill(Bill bill) {
+        return BillingLifecycle.confirmBill(bill);
     }
 
     @Override
-    public void rejectBill(Bill bill) {
-        BillingLifecycle.rejectBill(bill);
+    public Bill rejectBill(Bill bill) {
+        return BillingLifecycle.rejectBill(bill);
     }
 
 }

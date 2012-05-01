@@ -91,6 +91,8 @@ public class BillingDepositProcessor extends AbstractProcessor {
                 //throw new Error("Unsupported ValueType");
             }
 
+            deposit.taxTotal().setValue(new BigDecimal("0.00"));
+
             Persistence.service().persist(deposit);
 
             addDeposit(deposit);

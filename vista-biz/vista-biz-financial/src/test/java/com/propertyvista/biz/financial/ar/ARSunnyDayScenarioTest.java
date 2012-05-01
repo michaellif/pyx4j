@@ -67,12 +67,20 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         setLeaseStatus(Lease.Status.Approved);
 
         runBilling(true, false);
-        receiveAndPostPayment("19-Mar-2011", "1463.04");
 
         // @formatter:off
-        new TransactionHistoryTester(retrieveLease()).
-        lineItemSize(0).
-        notCoveredDebitLineItemSize(0).
+        new TransactionHistoryTester(retrieveLease().billingAccount()).
+        lineItemSize(8).
+        notCoveredDebitLineItemSize(5).
+        notConsumedCreditInvoiceItemSize(0);
+        // @formatter:on
+
+        receiveAndPostPayment("19-Mar-2011", "1000.00");
+
+        // @formatter:off
+        new TransactionHistoryTester(retrieveLease().billingAccount()).
+        lineItemSize(9).
+        notCoveredDebitLineItemSize(2).
         notConsumedCreditInvoiceItemSize(0);
         // @formatter:on
 

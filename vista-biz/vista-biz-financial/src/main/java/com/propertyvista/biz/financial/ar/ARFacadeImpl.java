@@ -15,16 +15,17 @@ package com.propertyvista.biz.financial.ar;
 
 import java.util.List;
 
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARFacadeImpl implements ARFacade {
 
+    @Override
     public void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
         ARTransactionManager.postInvoiceLineItem(invoiceLineItem);
     }
@@ -45,34 +46,18 @@ public class ARFacadeImpl implements ARFacade {
     }
 
     @Override
-    public TransactionHistoryDTO getTransactionHistory(Lease lease) {
-        return ARTransactionManager.getTransactionHistory(lease);
+    public TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
+        return ARTransactionManager.getTransactionHistory(billingAccount);
     }
 
     @Override
-    public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(Lease lease) {
-        return ARTransactionManager.getNotCoveredDebitInvoiceLineItems(lease);
+    public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
+        return ARTransactionManager.getNotCoveredDebitInvoiceLineItems(billingAccount);
     }
 
     @Override
-    public List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(Lease lease) {
-        return ARTransactionManager.getNotConsumedCreditInvoiceLineItems(lease);
-    }
-
-    public void consumeCredit(InvoiceCredit credit) {
-        ARCreditDebitLinkManager.consumeCredit(credit);
-    }
-
-    public void consumeCredit(InvoiceCredit credit, List<InvoiceDebit> debits) {
-        ARCreditDebitLinkManager.consumeCredit(credit, debits);
-    }
-
-    public void coverDebit(InvoiceDebit debit) {
-        ARCreditDebitLinkManager.coverDebit(debit);
-    }
-
-    public void coverDebit(InvoiceDebit debit, List<InvoiceCredit> credits) {
-        ARCreditDebitLinkManager.coverDebit(debit, credits);
+    public List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
+        return ARTransactionManager.getNotConsumedCreditInvoiceLineItems(billingAccount);
     }
 
 }

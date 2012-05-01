@@ -13,10 +13,15 @@
  */
 package com.propertyvista.biz.financial.ar;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceCharge;
@@ -24,14 +29,13 @@ import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
+import com.propertyvista.domain.financial.billing.InvoiceInitialCredit;
 import com.propertyvista.domain.financial.billing.InvoiceInitialDebit;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
 import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
-import com.propertyvista.domain.payment.CreditCardInfo;
 
 /**
  * Default DebitCredit link rule:
@@ -67,9 +71,42 @@ import com.propertyvista.domain.payment.CreditCardInfo;
  */
 public class ARCreditDebitLinkManager {
 
-    static void consumeCredit(InvoiceCredit credit) {
-        // TODO Auto-generated method stub
+    static InvoiceCredit consumeCredit(InvoiceCredit credit) {
+        List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(credit.billingAccount());
+        for (InvoiceDebit debit : debits) {
 
+            DebitCreditLink link = EntityFactory.create(DebitCreditLink.class);
+
+            if (debit.outstandingDebit().getValue().compareTo(credit.outstandingCredit().getValue()) > 0) {
+                link.amount().setValue(credit.outstandingCredit().getValue());
+
+                debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().subtract(credit.outstandingCredit().getValue()));
+
+                credit.outstandingCredit().setValue(new BigDecimal("0.00"));
+            } else {
+                link.amount().setValue(debit.outstandingDebit().getValue());
+
+                credit.outstandingCredit().setValue(credit.outstandingCredit().getValue().subtract(debit.outstandingDebit().getValue()));
+
+                debit.outstandingDebit().setValue(new BigDecimal("0.00"));
+
+            }
+
+            Persistence.service().persist(link);
+
+            debit.creditLinks().add(link);
+            credit.debitLinks().add(link);
+
+            Persistence.service().persist(debit);
+
+            if (credit.outstandingCredit().getValue().compareTo(new BigDecimal("0.00")) == 0) {
+                break;
+            }
+        }
+
+        Persistence.service().persist(credit);
+
+        return credit;
     }
 
     static void consumeCredit(InvoiceCredit credit, List<InvoiceDebit> debits) {
@@ -77,9 +114,42 @@ public class ARCreditDebitLinkManager {
 
     }
 
-    static void coverDebit(InvoiceDebit debit) {
-        // TODO Auto-generated method stub
+    static InvoiceDebit coverDebit(InvoiceDebit debit) {
+        List<InvoiceCredit> credits = ARTransactionManager.getNotConsumedCreditInvoiceLineItems(debit.billingAccount());
+        for (InvoiceCredit credit : credits) {
 
+            DebitCreditLink link = EntityFactory.create(DebitCreditLink.class);
+
+            if (credit.outstandingCredit().getValue().compareTo(debit.outstandingDebit().getValue()) > 0) {
+                link.amount().setValue(debit.outstandingDebit().getValue());
+
+                credit.outstandingCredit().setValue(credit.outstandingCredit().getValue().subtract(debit.outstandingDebit().getValue()));
+
+                debit.outstandingDebit().setValue(new BigDecimal("0.00"));
+            } else {
+                link.amount().setValue(credit.outstandingCredit().getValue());
+
+                debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().subtract(credit.outstandingCredit().getValue()));
+
+                credit.outstandingCredit().setValue(new BigDecimal("0.00"));
+
+            }
+
+            Persistence.service().persist(link);
+
+            debit.creditLinks().add(link);
+            credit.debitLinks().add(link);
+
+            Persistence.service().persist(credit);
+
+            if (debit.outstandingDebit().getValue().compareTo(new BigDecimal("0.00")) == 0) {
+                break;
+            }
+        }
+
+        Persistence.service().persist(debit);
+
+        return debit;
     }
 
     static void coverDebit(InvoiceDebit debit, List<InvoiceCredit> credits) {

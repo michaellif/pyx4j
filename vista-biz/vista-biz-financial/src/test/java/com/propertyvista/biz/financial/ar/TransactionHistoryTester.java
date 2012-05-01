@@ -19,9 +19,9 @@ import java.util.List;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.financial.Tester;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class TransactionHistoryTester extends Tester {
@@ -32,10 +32,10 @@ public class TransactionHistoryTester extends Tester {
 
     private final List<InvoiceCredit> notConsumedCreditInvoiceLineItems;
 
-    public TransactionHistoryTester(Lease lease) {
-        transactionHistory = ARTransactionManager.getTransactionHistory(lease);
-        notCoveredDebitInvoiceLineItems = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(lease);
-        notConsumedCreditInvoiceLineItems = ARTransactionManager.getNotConsumedCreditInvoiceLineItems(lease);
+    public TransactionHistoryTester(BillingAccount billingAccount) {
+        transactionHistory = ARTransactionManager.getTransactionHistory(billingAccount);
+        notCoveredDebitInvoiceLineItems = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(billingAccount);
+        notConsumedCreditInvoiceLineItems = ARTransactionManager.getNotConsumedCreditInvoiceLineItems(billingAccount);
     }
 
     public TransactionHistoryTester lineItemSize(int size) {
@@ -44,12 +44,12 @@ public class TransactionHistoryTester extends Tester {
     }
 
     public TransactionHistoryTester notCoveredDebitLineItemSize(int size) {
-//        assertEquals("Line item size", size, notCoveredDebitInvoiceLineItems.size());
+        assertEquals("Line item size", size, notCoveredDebitInvoiceLineItems.size());
         return this;
     }
 
     public TransactionHistoryTester notConsumedCreditInvoiceItemSize(int size) {
-//        assertEquals("Line item size", size, notConsumedCreditInvoiceLineItems.size());
+        assertEquals("Line item size", size, notConsumedCreditInvoiceLineItems.size());
         return this;
     }
 

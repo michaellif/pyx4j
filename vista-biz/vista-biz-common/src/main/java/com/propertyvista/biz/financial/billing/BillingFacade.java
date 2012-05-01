@@ -25,7 +25,7 @@ public interface BillingFacade {
 
     Bill getLatestBill(Lease lease);
 
-    void confirmBill(Bill billStub);
+    Bill confirmBill(Bill billStub);
 
-    void rejectBill(Bill billStub);
+    Bill rejectBill(Bill billStub);
 }
