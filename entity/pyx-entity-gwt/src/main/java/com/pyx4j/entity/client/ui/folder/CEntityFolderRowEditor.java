@@ -48,6 +48,9 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityEditor<E> 
         HorizontalPanel main = new HorizontalPanel();
         for (EntityFolderColumnDescriptor column : columns) {
             CComponent<?, ?> component = createCell(column);
+            if (column.isReadOnly()) {
+                component.setViewable(true);
+            }
             component.setWidth("100%");
             main.add(createCellDecorator(column, component, column.getWidth()));
         }
@@ -66,7 +69,7 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityEditor<E> 
     protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
         CComponent<?, ?> comp = inject(column.getObject());
 
-        //Special TableFolder customisation
+        // Special TableFolder customization
         if (comp instanceof CCheckBox) {
             ((CCheckBox) comp).setAlignmet(CCheckBox.Alignment.center);
         }
