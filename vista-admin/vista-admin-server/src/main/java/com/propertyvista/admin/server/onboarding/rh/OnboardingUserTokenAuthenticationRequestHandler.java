@@ -13,12 +13,12 @@
  */
 package com.propertyvista.admin.server.onboarding.rh;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -30,28 +30,30 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
+import com.propertyvista.onboarding.OnboardingUserTokenAuthenticationRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
+import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
-public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestHandler<OnboardingUserAuthenticationRequestIO> {
+public class OnboardingUserTokenAuthenticationRequestHandler extends AbstractRequestHandler<OnboardingUserTokenAuthenticationRequestIO> {
 
-    private final static Logger log = LoggerFactory.getLogger(OnboardingUserAuthenticationRequestHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(OnboardingUserTokenAuthenticationRequestHandler.class);
 
-    public OnboardingUserAuthenticationRequestHandler() {
-        super(OnboardingUserAuthenticationRequestIO.class);
+    public OnboardingUserTokenAuthenticationRequestHandler() {
+        super(OnboardingUserTokenAuthenticationRequestIO.class);
     }
 
     @Override
-    public ResponseIO execute(OnboardingUserAuthenticationRequestIO request) {
+    public ResponseIO execute(OnboardingUserTokenAuthenticationRequestIO request) {
 
         OnboardingUserAuthenticationResponseIO response = EntityFactory.create(OnboardingUserAuthenticationResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 
-        String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
-        AbstractAntiBot.assertLogin(email, new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response().getValue()));
+        AccessKey.TokenParser token = new AccessKey.TokenParser(request.token().getValue());
+        String email = PasswordEncryptor.normalizeEmailAddress(token.email);
+        //AbstractAntiBot.assertLogin(email, new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response().getValue()));
 
         EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -74,32 +76,32 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             throw new UserRuntimeException("Invalid User Account. Please Contact Support");
         }
         if (!cr.enabled().isBooleanTrue()) {
-            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
             return response;
         }
-        if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
-            log.info("Invalid password for user {}", email);
-            if (AbstractAntiBot.authenticationFailed(email)) {
-                response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
-                response.reCaptchaPublicKey().setValue(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
-                return response;
-            } else {
-                response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
-                return response;
-            }
+
+        if (!token.accessKey.equals(cr.accessKey().getValue())) {
+            AbstractAntiBot.authenticationFailed(token.email);
+            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+
+            return response;
         }
-        if (!cr.accessKey().isNull()) {
-            cr.accessKey().setValue(null);
-            Persistence.service().persist(cr);
-            Persistence.service().commit();
+
+        if ((new Date().after(cr.accessKeyExpire().getValue()))) {
+            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+
+            return response;
         }
+
         if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
+
             return response;
         } else {
             response.role().setValue(convertRole(cr.behavior().getValue()));
             response.onboardingAccountId().set(cr.onboardingAccountId());
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
+
             return response;
         }
     }

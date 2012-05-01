@@ -32,6 +32,8 @@ public interface OnboardingUserAuthenticationResponseIO extends ResponseIO {
 
         AuthenticationFailed,
 
+        TokenExpired,
+
         ChallengeVerificationRequired;
 
     }

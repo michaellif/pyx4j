@@ -24,10 +24,12 @@ import com.propertyvista.onboarding.CheckAvailabilityRequestIO;
 import com.propertyvista.onboarding.CreateOnboardingUserRequestIO;
 import com.propertyvista.onboarding.CreatePMCRequestIO;
 import com.propertyvista.onboarding.GetAccountInfoRequestIO;
+import com.propertyvista.onboarding.GetReCaptchaPublicKeyRequestIO;
 import com.propertyvista.onboarding.GetUsageRequestIO;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 import com.propertyvista.onboarding.OnboardingUserPasswordChangeRequestIO;
-import com.propertyvista.onboarding.OnboardingUserPasswordReminderRequestIO;
+import com.propertyvista.onboarding.OnboardingUserPasswordResetRequestIO;
+import com.propertyvista.onboarding.OnboardingUserTokenAuthenticationRequestIO;
 import com.propertyvista.onboarding.ProvisionPMCRequestIO;
 import com.propertyvista.onboarding.RequestIO;
 import com.propertyvista.onboarding.RequestMessageIO;
@@ -50,12 +52,14 @@ public class OnboardingRequestXMLEntityFactory extends XMLEntityFactoryStrict {
         bind(CaptchaIO.class);
         bind(OnboardingUserAuthenticationRequestIO.class);
         bind(OnboardingUserPasswordChangeRequestIO.class);
-        bind(OnboardingUserPasswordReminderRequestIO.class);
+        bind(OnboardingUserPasswordResetRequestIO.class);
         bind(GetAccountInfoRequestIO.class);
         bind(GetUsageRequestIO.class);
         bind(ProvisionPMCRequestIO.class);
         bind(RequestIO.class);
         bind(RequestMessageIO.class);
         bind(UpdateAccountInfoRequestIO.class);
+        bind(GetReCaptchaPublicKeyRequestIO.class);
+        bind(OnboardingUserTokenAuthenticationRequestIO.class);
     }
 }

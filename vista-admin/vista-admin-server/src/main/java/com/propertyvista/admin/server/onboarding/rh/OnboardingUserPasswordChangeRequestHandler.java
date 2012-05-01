@@ -13,12 +13,12 @@
  */
 package com.propertyvista.admin.server.onboarding.rh;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -30,28 +30,28 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
+import com.propertyvista.onboarding.OnboardingUserPasswordChangeRequestIO;
+import com.propertyvista.onboarding.OnboardingUserTokenAuthenticationRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
-public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestHandler<OnboardingUserAuthenticationRequestIO> {
+public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestHandler<OnboardingUserPasswordChangeRequestIO> {
 
-    private final static Logger log = LoggerFactory.getLogger(OnboardingUserAuthenticationRequestHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(OnboardingUserTokenAuthenticationRequestIO.class);
 
-    public OnboardingUserAuthenticationRequestHandler() {
-        super(OnboardingUserAuthenticationRequestIO.class);
+    public OnboardingUserPasswordChangeRequestHandler() {
+        super(OnboardingUserPasswordChangeRequestIO.class);
     }
 
     @Override
-    public ResponseIO execute(OnboardingUserAuthenticationRequestIO request) {
-
+    public ResponseIO execute(OnboardingUserPasswordChangeRequestIO request) {
         OnboardingUserAuthenticationResponseIO response = EntityFactory.create(OnboardingUserAuthenticationResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 
         String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
-        AbstractAntiBot.assertLogin(email, new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response().getValue()));
+        //AbstractAntiBot.assertLogin(email, new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response().getValue()));
 
         EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -77,7 +77,9 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
             return response;
         }
-        if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
+
+        if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), cr.credential().getValue())
+                || !PasswordEncryptor.checkPassword(request.newPassword().getValue(), cr.credential().getValue())) {
             log.info("Invalid password for user {}", email);
             if (AbstractAntiBot.authenticationFailed(email)) {
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
@@ -88,19 +90,18 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                 return response;
             }
         }
-        if (!cr.accessKey().isNull()) {
-            cr.accessKey().setValue(null);
-            Persistence.service().persist(cr);
-            Persistence.service().commit();
-        }
-        if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
-            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
-            return response;
-        } else {
-            response.role().setValue(convertRole(cr.behavior().getValue()));
-            response.onboardingAccountId().set(cr.onboardingAccountId());
-            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
-            return response;
-        }
+
+        cr.accessKey().setValue(null);
+        cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+        cr.credentialUpdated().setValue(new Date());
+        cr.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
+        Persistence.service().persist(cr);
+        Persistence.service().commit();
+
+        response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
+        response.role().setValue(convertRole(cr.behavior().getValue()));
+        response.onboardingAccountId().set(cr.onboardingAccountId());
+
+        return response;
     }
 }

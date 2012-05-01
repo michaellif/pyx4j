@@ -24,6 +24,7 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -32,6 +33,7 @@ import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.AdminUserCredential;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
+import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 public class CommunicationFacadeImpl implements CommunicationFacade {
 
@@ -134,6 +136,18 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     @Override
     public void sendAdminPasswordRetrievalToken(AdminUser user) {
         String token = AccessKey.createAccessToken(user, AdminUserCredential.class, 1);
+        if (token == null) {
+            throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
+        }
+        MailMessage m = MessageTemplates.createAdminPasswordResetEmail(user, token);
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
+    }
+
+    @Override
+    public void sendOnboardingPasswordRetrievalToken(OnboardingUser user) {
+        String token = AccessKey.createAccessToken(user, OnboardingUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
