@@ -32,6 +32,7 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
@@ -153,6 +154,8 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
         TransactionHistoryDTO history = EntityFactory.create(TransactionHistoryDTO.class);
         if (!VistaTODO.removedForProduction) {
             // TODO DUMMY DATA FOR TESTING THE UI
+
+            // some mockup transactions
             for (int i = 0; i < 5; ++i) {
                 InvoiceLineItem transaction = null;
                 if (i % 2 == 0) {
@@ -164,9 +167,41 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
                     transaction.description().setValue("credit #" + String.valueOf(i));
                     transaction.amount().setValue(new BigDecimal("500.33"));
                 }
+                transaction.fromDate().setValue(new LogicalDate());
                 history.lineItems().add(transaction);
             }
+
+            // some mockup arrears
+            {
+                AgingBuckets arrears = history.agingBuckets().$();
+                arrears.label().setValue("Eggs");
+                arrears.current().setValue(new BigDecimal("100.0"));
+                arrears.bucket30().setValue(new BigDecimal("11"));
+                arrears.bucket60().setValue(new BigDecimal("0"));
+                arrears.bucket90().setValue(new BigDecimal("15"));
+                history.agingBuckets().add(arrears);
+            }
+            {
+                AgingBuckets arrears = history.agingBuckets().$();
+                arrears.label().setValue("Bacon");
+                arrears.current().setValue(new BigDecimal("0"));
+                arrears.bucket30().setValue(new BigDecimal("99"));
+                arrears.bucket60().setValue(new BigDecimal("999"));
+                arrears.bucket90().setValue(new BigDecimal("9999"));
+                history.agingBuckets().add(arrears);
+            }
+            {
+                AgingBuckets arrears = history.agingBuckets().$();
+                arrears.label().setValue("Spam, Spam, Spam");
+                arrears.current().setValue(new BigDecimal("1"));
+                arrears.bucket30().setValue(new BigDecimal("2"));
+                arrears.bucket60().setValue(new BigDecimal("3"));
+                arrears.bucket90().setValue(new BigDecimal("4"));
+                history.agingBuckets().add(arrears);
+            }
+
         }
+
         return history;
     }
 
