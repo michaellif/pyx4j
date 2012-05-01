@@ -58,10 +58,4 @@ public interface LeaseAdjustmentReason extends IEntity {
     @NotNull
     @ToString(index = 1)
     GlCode glCode();
-
-    /**
-     * Fill in Service from @link AdjustmentTaxPolicy
-     */
-    @Transient
-    IList<Tax> taxes();
 }
