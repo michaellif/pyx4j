@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -29,8 +28,6 @@ import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class LeaseAdjustmentReasonEditorForm extends CrmEntityForm<LeaseAdjustmentReason> {
-
-    private Widget glCodeSelector;
 
     public LeaseAdjustmentReasonEditorForm() {
         this(false);
