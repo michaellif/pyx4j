@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -22,12 +23,16 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 
@@ -97,15 +102,7 @@ public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
     private Widget createNsfFeesPanel() {
         FormFlexPanel panel = new FormFlexPanel();
 
-        panel.setWidget(0, 0, inject(proto().nsfFees(), new VistaTableFolder<NsfFeeItem>(NsfFeeItem.class, isEditable()) {
-            @Override
-            public List<EntityFolderColumnDescriptor> columns() {
-                return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().paymentType(), "10em"),
-                    new EntityFolderColumnDescriptor(proto().fee(), "6em")
-                );//@formatter:on
-            }
-        }));
+        panel.setWidget(0, 0, inject(proto().nsfFees(), new NsfFeeItemFolder(isEditable())));
 
         return panel;
     }
@@ -115,5 +112,61 @@ public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
         super.onPopulate();
 
         get(proto().billingPeriodStartDay()).setEnabled(getValue().useBillingPeriodSartDay().getValue());
+    }
+
+    private class NsfFeeItemFolder extends VistaTableFolder<NsfFeeItem> {
+
+        NsfFeeItemFolder(boolean modifyable) {
+            super(NsfFeeItem.class, modifyable);
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(//@formatter:off
+                new EntityFolderColumnDescriptor(proto().paymentType(), "10em", true),
+                new EntityFolderColumnDescriptor(proto().fee(), "6em")
+            );//@formatter:on
+        }
+
+        @Override
+        protected void addItem() {
+            EnumSet<PaymentRecord.Type> values = EnumSet.allOf(PaymentRecord.Type.class);
+            for (NsfFeeItem item : getValue()) {
+                if (values.contains(item.paymentType().getValue())) {
+                    values.remove(item.paymentType().getValue());
+                }
+            }
+            new SelectNsfFeeTypeDialog(values) {
+                @Override
+                public boolean onClickOk() {
+                    NsfFeeItem item = EntityFactory.create(NsfFeeItem.class);
+                    item.paymentType().setValue(getSelectedType());
+                    addItem(item);
+                    return true;
+                }
+            }.show();
+        }
+
+        private abstract class SelectNsfFeeTypeDialog extends SelectEnumDialog<PaymentRecord.Type> implements OkCancelOption {
+
+            public SelectNsfFeeTypeDialog(EnumSet<PaymentRecord.Type> values) {
+                super(i18n.tr("Select Payment Type"), values);
+            }
+
+            @Override
+            public boolean onClickCancel() {
+                return true;
+            };
+
+            @Override
+            public String defineHeight() {
+                return "100px";
+            };
+
+            @Override
+            public String defineWidth() {
+                return "300px";
+            }
+        }
     }
 }
