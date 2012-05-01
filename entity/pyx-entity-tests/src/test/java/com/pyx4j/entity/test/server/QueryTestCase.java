@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
@@ -72,7 +73,15 @@ public abstract class QueryTestCase extends DatastoreTestBase {
         execTestQuery(member, value, false);
     }
 
+    protected void execTestQuery(IObject<?> member, Serializable value, Restriction restriction, Serializable queryValue) {
+        execTestQuery(member, value, restriction, queryValue, true);
+    }
+
     protected void execTestQuery(IObject<?> member, Serializable value, boolean addAndName) {
+        execTestQuery(member, value, Restriction.EQUAL, value, addAndName);
+    }
+
+    protected void execTestQuery(IObject<?> member, Serializable value, Restriction restriction, Serializable queryValue, boolean addAndName) {
         Employee emp = EntityFactory.create(Employee.class);
         String empName = "Bob " + uniqueString();
         emp.firstName().setValue(empName);
@@ -85,7 +94,7 @@ public abstract class QueryTestCase extends DatastoreTestBase {
         Assert.assertNotNull("retrieved  by PK", srv.retrieve(Employee.class, emp.getPrimaryKey()));
 
         EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
-        criteria1.add(PropertyCriterion.eq(member, value));
+        criteria1.add(new PropertyCriterion(member, restriction, queryValue));
         if (addAndName) {
             criteria1.add(PropertyCriterion.eq(criteria1.proto().firstName(), empName));
         }
@@ -125,8 +134,17 @@ public abstract class QueryTestCase extends DatastoreTestBase {
 
     //TODO Make it work on GAE
     public void testQueryByBigDecimal() {
-        BigDecimal d = new BigDecimal(new Date().getTime());
-        execTestQuery(metaEmp.salary(), d);
+        {
+            BigDecimal d = new BigDecimal(new Date().getTime());
+            execTestQuery(metaEmp.salary(), d);
+        }
+
+        {
+            execTestQuery(metaEmp.salary(), new BigDecimal("10.00"), Restriction.EQUAL, new BigDecimal("10.000"));
+            execTestQuery(metaEmp.salary(), new BigDecimal("10.00"), Restriction.NOT_EQUAL, new BigDecimal("0.00"));
+            execTestQuery(metaEmp.salary(), new BigDecimal("10.00"), Restriction.GREATER_THAN, new BigDecimal("5.0"));
+            execTestQuery(metaEmp.salary(), new BigDecimal("10.00"), Restriction.LESS_THAN, new BigDecimal("15.0"));
+        }
     }
 
     //TODO Make it work on GAE
