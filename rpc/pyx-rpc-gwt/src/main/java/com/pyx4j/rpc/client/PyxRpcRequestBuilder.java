@@ -29,6 +29,7 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.rpc.RpcRequestBuilder;
 
 import com.pyx4j.commons.IHaveServiceCallMarker;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.rpc.shared.RemoteService;
 
 public class PyxRpcRequestBuilder extends RpcRequestBuilder {
@@ -89,6 +90,10 @@ public class PyxRpcRequestBuilder extends RpcRequestBuilder {
         }
         if (sessionAclTimeStamp != null) {
             rb.setHeader(RemoteService.SESSION_ACL_TIMESTAMP_HEADER, sessionAclTimeStamp);
+        }
+        // Hack to solve HTTP Status 12152
+        if (BrowserType.isIE()) {
+            rb.setHeader("Connection", "close");
         }
         return rb;
     }
