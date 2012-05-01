@@ -14,15 +14,17 @@
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
-import com.propertyvista.domain.policy.policies.domain.NsfItem;
+import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("LeaseBillingPolicy")
@@ -42,5 +44,6 @@ public interface LeaseBillingPolicy extends Policy {
     LateFeeItem lateFee();
 
     @Owned
-    NsfItem nsfFee();
+    @OrderBy(NsfFeeItem.OrderId.class)
+    IList<NsfFeeItem> nsfFees();
 }

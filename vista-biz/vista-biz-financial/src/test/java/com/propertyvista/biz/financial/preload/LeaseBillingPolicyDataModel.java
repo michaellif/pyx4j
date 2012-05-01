@@ -19,9 +19,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.BillingAccount.ProrationMethod;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
+import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 
 public class LeaseBillingPolicyDataModel {
     private final BuildingDataModel buildingDataModel;
@@ -40,14 +42,22 @@ public class LeaseBillingPolicyDataModel {
         policy.useBillingPeriodSartDay().setValue(false);
         policy.prorationMethod().setValue(ProrationMethod.Standard);
 
-        LateFeeItem item = EntityFactory.create(LateFeeItem.class);
+        LateFeeItem lateFee = EntityFactory.create(LateFeeItem.class);
+        lateFee.baseFee().setValue(new BigDecimal(50.00));
+        lateFee.baseFeeType().setValue(BaseFeeType.FlatAmount);
+        lateFee.maxTotalFee().setValue(new BigDecimal(1000.00));
+        lateFee.maxTotalFeeType().setValue(LateFeeItem.MaxTotalFeeType.FlatAmount);
+        policy.lateFee().set(lateFee);
 
-        item.baseFee().setValue(new BigDecimal(50.00));
-        item.baseFeeType().setValue(BaseFeeType.FlatAmount);
-        item.maxTotalFee().setValue(new BigDecimal(1000.00));
-        item.maxTotalFeeType().setValue(LateFeeItem.MaxTotalFeeType.FlatAmount);
+        NsfFeeItem nsfItem = EntityFactory.create(NsfFeeItem.class);
+        nsfItem.paymentType().setValue(PaymentRecord.Type.Cash);
+        nsfItem.fee().setValue(new BigDecimal(100.00));
+        policy.nsfFees().add(nsfItem);
 
-        policy.lateFee().set(item);
+        nsfItem = EntityFactory.create(NsfFeeItem.class);
+        nsfItem.paymentType().setValue(PaymentRecord.Type.Check);
+        nsfItem.fee().setValue(new BigDecimal(30.00));
+        policy.nsfFees().add(nsfItem);
 
         policy.node().set(buildingDataModel.getBuilding());
 

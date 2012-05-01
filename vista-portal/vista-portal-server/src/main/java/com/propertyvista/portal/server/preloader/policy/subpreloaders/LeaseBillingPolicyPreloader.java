@@ -19,9 +19,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.BillingAccount.ProrationMethod;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
+import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class LeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBillingPolicy> {
@@ -40,10 +42,22 @@ public class LeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBi
         policy.useBillingPeriodSartDay().setValue(false);
         policy.prorationMethod().setValue(ProrationMethod.Standard);
 
-        policy.lateFee().baseFee().setValue(new BigDecimal(50.00));
-        policy.lateFee().baseFeeType().setValue(BaseFeeType.FlatAmount);
-        policy.lateFee().maxTotalFee().setValue(new BigDecimal(1000.00));
-        policy.lateFee().maxTotalFeeType().setValue(LateFeeItem.MaxTotalFeeType.FlatAmount);
+        LateFeeItem lateFee = EntityFactory.create(LateFeeItem.class);
+        lateFee.baseFee().setValue(new BigDecimal(50.00));
+        lateFee.baseFeeType().setValue(BaseFeeType.FlatAmount);
+        lateFee.maxTotalFee().setValue(new BigDecimal(1000.00));
+        lateFee.maxTotalFeeType().setValue(LateFeeItem.MaxTotalFeeType.FlatAmount);
+        policy.lateFee().set(lateFee);
+
+        NsfFeeItem nsfItem = EntityFactory.create(NsfFeeItem.class);
+        nsfItem.paymentType().setValue(PaymentRecord.Type.Cash);
+        nsfItem.fee().setValue(new BigDecimal(100.00));
+        policy.nsfFees().add(nsfItem);
+
+        nsfItem = EntityFactory.create(NsfFeeItem.class);
+        nsfItem.paymentType().setValue(PaymentRecord.Type.Check);
+        nsfItem.fee().setValue(new BigDecimal(30.00));
+        policy.nsfFees().add(nsfItem);
 
         return policy;
     }

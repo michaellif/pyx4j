@@ -55,6 +55,18 @@ public interface PaymentRecord extends IEntity {
         @Translate("Cheque")
         Check,
 
+        @Translate("eCheque")
+        Echeck,
+
+        Visa,
+
+        @Translate("MasterCard")
+        MasterCard,
+
+        Discover,
+
+        Interac,
+
         Other;
 
         @Override

@@ -21,13 +21,15 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
+import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 
 public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<LeaseBillingPolicyDTO> {
 
@@ -42,10 +44,11 @@ public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
     }
 
     @Override
-    protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm.TabDescriptor> createCustomTabPanels() {
+    protected List<TabDescriptor> createCustomTabPanels() {
         return Arrays.asList(//@formatter:off
                 new TabDescriptor(createBillingPanel(), i18n.tr("Billing")),
-                new TabDescriptor(createLateFeesPanel(), i18n.tr("Late Fee"))
+                new TabDescriptor(createLateFeesPanel(), i18n.tr("Late Fee")),
+                new TabDescriptor(createNsfFeesPanel(), i18n.tr("NSF Fee"))
         );//@formatter:on
     }
 
@@ -53,10 +56,9 @@ public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
         FormFlexPanel panel = new FormFlexPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prorationMethod())).build());
-        CCheckBox checkBox = new CCheckBox();
-        checkBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prorationMethod()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useBillingPeriodSartDay())).build());
+        get(proto().useBillingPeriodSartDay()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().billingPeriodStartDay()).setEnabled(event.getValue());
@@ -64,16 +66,13 @@ public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
             }
         });
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useBillingPeriodSartDay(), checkBox)).build());
-
         ArrayList<Integer> options = new ArrayList<Integer>();
         for (int i = 1; i < 29; i++) {
             options.add(i);
         }
-
         CComboBox<Integer> comboBox = new CComboBox<Integer>();
         comboBox.setOptions(options);
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriodStartDay(), comboBox), 20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriodStartDay(), comboBox), 5).build());
 
         return panel;
     }
@@ -82,15 +81,31 @@ public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
         FormFlexPanel panel = new FormFlexPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lateFee().baseFeeType())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lateFee().baseFee())).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lateFee().baseFeeType()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lateFee().baseFee()), 6).build());
 
         row = -1;
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lateFee().maxTotalFeeType())).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lateFee().maxTotalFee())).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lateFee().maxTotalFeeType()), 10).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lateFee().maxTotalFee()), 6).build());
 
         panel.getColumnFormatter().setWidth(0, "50%");
         panel.getColumnFormatter().setWidth(1, "50%");
+
+        return panel;
+    }
+
+    private Widget createNsfFeesPanel() {
+        FormFlexPanel panel = new FormFlexPanel();
+
+        panel.setWidget(0, 0, inject(proto().nsfFees(), new VistaTableFolder<NsfFeeItem>(NsfFeeItem.class, isEditable()) {
+            @Override
+            public List<EntityFolderColumnDescriptor> columns() {
+                return Arrays.asList(//@formatter:off
+                    new EntityFolderColumnDescriptor(proto().paymentType(), "10em"),
+                    new EntityFolderColumnDescriptor(proto().fee(), "6em")
+                );//@formatter:on
+            }
+        }));
 
         return panel;
     }
