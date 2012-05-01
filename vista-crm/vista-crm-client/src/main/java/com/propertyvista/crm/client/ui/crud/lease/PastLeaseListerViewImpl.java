@@ -21,6 +21,6 @@ public class PastLeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> imp
 
     public PastLeaseListerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
-        setLister(new LeaseLister());
+        setLister(new PastLeaseLister());
     }
 }
