@@ -17,6 +17,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.Applicatio
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.DepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.IdAssignmentPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseAdjustmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseTermsPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MiscPolicyPreloader;
@@ -36,6 +37,7 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
 
         if (!isProduction) {
             add(new ProductTaxPolicyPreloader());
+            add(new LeaseAdjustmentPolicyPreloader());
         }
     }
 }
