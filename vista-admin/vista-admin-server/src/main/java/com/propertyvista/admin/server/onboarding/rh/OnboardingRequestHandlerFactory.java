@@ -27,6 +27,6 @@ public class OnboardingRequestHandlerFactory extends RequestHandlerFactory {
 
         bind(OnboardingUserSendPasswordResetTokenRequestHandler.class);
         bind(OnboardingUserTokenValidationRequestHandler.class);
-        bind(OnboardingUserTokenAuthenticationRequestHandler.class);
+        bind(OnboardingUserPasswordResetRequestHandler.class);
     }
 }

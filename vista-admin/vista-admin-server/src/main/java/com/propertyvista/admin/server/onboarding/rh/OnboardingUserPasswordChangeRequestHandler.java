@@ -30,16 +30,16 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.onboarding.OnboardingUserPasswordChangeRequestIO;
-import com.propertyvista.onboarding.OnboardingUserTokenAuthenticationRequestIO;
+import com.propertyvista.onboarding.OnboardingUserPasswordResetRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestHandler<OnboardingUserPasswordChangeRequestIO> {
 
-    private final static Logger log = LoggerFactory.getLogger(OnboardingUserTokenAuthenticationRequestIO.class);
+    private final static Logger log = LoggerFactory.getLogger(OnboardingUserPasswordResetRequestIO.class);
 
-    private static final I18n i18n = I18n.get(OnboardingUserTokenAuthenticationRequestHandler.class);
+    private static final I18n i18n = I18n.get(OnboardingUserPasswordResetRequestHandler.class);
 
     public OnboardingUserPasswordChangeRequestHandler() {
         super(OnboardingUserPasswordChangeRequestIO.class);

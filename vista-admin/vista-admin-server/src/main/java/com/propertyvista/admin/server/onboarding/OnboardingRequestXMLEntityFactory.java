@@ -29,7 +29,7 @@ import com.propertyvista.onboarding.GetUsageRequestIO;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 import com.propertyvista.onboarding.OnboardingUserPasswordChangeRequestIO;
 import com.propertyvista.onboarding.OnboardingUserSendPasswordResetTokenRequestIO;
-import com.propertyvista.onboarding.OnboardingUserTokenAuthenticationRequestIO;
+import com.propertyvista.onboarding.OnboardingUserPasswordResetRequestIO;
 import com.propertyvista.onboarding.ProvisionPMCRequestIO;
 import com.propertyvista.onboarding.RequestIO;
 import com.propertyvista.onboarding.RequestMessageIO;
@@ -60,6 +60,6 @@ public class OnboardingRequestXMLEntityFactory extends XMLEntityFactoryStrict {
         bind(RequestMessageIO.class);
         bind(UpdateAccountInfoRequestIO.class);
         bind(GetReCaptchaPublicKeyRequestIO.class);
-        bind(OnboardingUserTokenAuthenticationRequestIO.class);
+        bind(OnboardingUserPasswordResetRequestIO.class);
     }
 }

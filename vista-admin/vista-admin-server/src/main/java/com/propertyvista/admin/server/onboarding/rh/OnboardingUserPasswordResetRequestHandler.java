@@ -33,24 +33,24 @@ import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
-import com.propertyvista.onboarding.OnboardingUserTokenAuthenticationRequestIO;
+import com.propertyvista.onboarding.OnboardingUserPasswordResetRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
-public class OnboardingUserTokenAuthenticationRequestHandler extends AbstractRequestHandler<OnboardingUserTokenAuthenticationRequestIO> {
+public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHandler<OnboardingUserPasswordResetRequestIO> {
 
-    private final static Logger log = LoggerFactory.getLogger(OnboardingUserTokenAuthenticationRequestHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(OnboardingUserPasswordResetRequestHandler.class);
 
-    private static final I18n i18n = I18n.get(OnboardingUserTokenAuthenticationRequestHandler.class);
+    private static final I18n i18n = I18n.get(OnboardingUserPasswordResetRequestHandler.class);
 
-    public OnboardingUserTokenAuthenticationRequestHandler() {
-        super(OnboardingUserTokenAuthenticationRequestIO.class);
+    public OnboardingUserPasswordResetRequestHandler() {
+        super(OnboardingUserPasswordResetRequestIO.class);
     }
 
     @Override
-    public ResponseIO execute(OnboardingUserTokenAuthenticationRequestIO request) {
+    public ResponseIO execute(OnboardingUserPasswordResetRequestIO request) {
         OnboardingUserAuthenticationResponseIO response = EntityFactory.create(OnboardingUserAuthenticationResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 

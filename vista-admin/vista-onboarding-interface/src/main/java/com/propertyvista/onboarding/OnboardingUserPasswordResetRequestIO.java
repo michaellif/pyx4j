@@ -27,7 +27,7 @@ import com.pyx4j.i18n.annotations.I18n;
  */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface OnboardingUserTokenAuthenticationRequestIO extends RequestIO {
+public interface OnboardingUserPasswordResetRequestIO extends RequestIO {
 
     @NotNull
     IPrimitive<String> token();
