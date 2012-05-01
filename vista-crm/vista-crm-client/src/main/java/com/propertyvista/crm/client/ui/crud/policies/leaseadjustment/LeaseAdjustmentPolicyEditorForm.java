@@ -147,6 +147,7 @@ public class LeaseAdjustmentPolicyEditorForm extends PolicyDTOTabPanelBasedEdito
             protected List<ColumnDescriptor> defineColumnDescriptors() {
                 return Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().actionType()).build(),
                     new MemberColumnDescriptor.Builder(proto().glCode()).build()
                 );//@formatter:on
             }

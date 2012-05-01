@@ -28,4 +28,16 @@ public class LeaseAdjustmentReasonCrudServiceImpl extends AbstractCrudServiceImp
     protected void bind() {
         bindCompleateDBO();
     }
+
+    @Override
+    protected void enhanceRetrieved(LeaseAdjustmentReason entity, LeaseAdjustmentReason dto) {
+        super.enhanceRetrieved(entity, dto);
+
+        // TODO fill taxes from policy here, but which policy scope to use? 
+    }
+
+    @Override
+    protected void enhanceListRetrieved(LeaseAdjustmentReason entity, LeaseAdjustmentReason dto) {
+        super.enhanceListRetrieved(entity, dto);
+    }
 }

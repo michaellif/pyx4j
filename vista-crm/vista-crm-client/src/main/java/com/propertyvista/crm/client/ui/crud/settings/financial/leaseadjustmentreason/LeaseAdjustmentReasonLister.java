@@ -44,8 +44,7 @@ public class LeaseAdjustmentReasonLister extends ListerBase<LeaseAdjustmentReaso
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().actionType()).build(),
-            new MemberColumnDescriptor.Builder(proto().glCode()).build(),
-            new MemberColumnDescriptor.Builder(proto().taxes()).build()
+            new MemberColumnDescriptor.Builder(proto().glCode()).build()
         );//@formatter:on
     }
 }
