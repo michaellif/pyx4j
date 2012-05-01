@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingRun;
@@ -179,7 +180,7 @@ class Billing {
             } else {
                 bill.billType().setValue(Bill.BillType.Regular);
 
-                if (BillingLifecycle.getSysDate().compareTo(billingRun.executionTargetDate().getValue()) < 0) {
+                if (SysDateManager.getSysDate().compareTo(billingRun.executionTargetDate().getValue()) < 0) {
                     throw new BillingException("Regular billing can't run before target execution date");
                 }
 

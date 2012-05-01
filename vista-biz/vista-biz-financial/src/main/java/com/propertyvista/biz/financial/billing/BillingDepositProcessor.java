@@ -22,6 +22,7 @@ import com.propertyvista.biz.financial.AbstractProcessor;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 
@@ -77,6 +78,7 @@ public class BillingDepositProcessor extends AbstractProcessor {
             InvoiceDeposit deposit = EntityFactory.create(InvoiceDeposit.class);
             deposit.billingAccount().set(billing.getNextPeriodBill().billingAccount());
             deposit.bill().set(billing.getNextPeriodBill());
+            deposit.debitType().setValue(DebitType.deposit);
 
             if (ValueType.amount == billableItem.deposit().valueType().getValue()) {
                 deposit.amount().setValue(billableItem.deposit().depositAmount().getValue());

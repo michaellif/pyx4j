@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
-import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -32,12 +31,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.essentials.server.dev.DataDump;
-import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
-import com.propertyvista.biz.financial.billing.SysDateManager;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
 import com.propertyvista.biz.financial.preload.BuildingDataModel;
 import com.propertyvista.biz.financial.preload.LeaseAdjustmentReasonDataModel;
@@ -74,7 +71,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         Persistence.service().startBackgroundProcessTransaction();
-        setSysDate("01-Jan-2000");
+        SysDateManager.setSysDate("01-Jan-2000");
     }
 
     @Override
@@ -143,16 +140,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         }
 
         return bill;
-    }
-
-    protected static void setSysDate(String dateStr) {
-        SysDateManager.setSysDate(FinancialTestsUtils.getDate(dateStr));
-
-        if (dateStr == null) {
-            Persistence.service().setTransactionSystemTime(new Date());
-        } else {
-            Persistence.service().setTransactionSystemTime(DateUtils.detectDateformat(dateStr));
-        }
     }
 
     protected void setLeaseConditions(String leaseDateFrom, String leaseDateTo, Integer billingPeriodStartDate) {
@@ -329,11 +316,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         adjustment.targetDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));
         adjustment.amount().setValue(new BigDecimal(amount));
         adjustment.executionType().setValue(immediate ? LeaseAdjustment.ExecutionType.immediate : LeaseAdjustment.ExecutionType.pending);
-        if (adjustment.amount().getValue().compareTo(new BigDecimal("0")) > 0) {
-            adjustment.reason().actionType().setValue(LeaseAdjustmentReason.ActionType.credit);
-        } else if (adjustment.amount().getValue().compareTo(new BigDecimal("0")) < 0) {
-            adjustment.reason().actionType().setValue(LeaseAdjustmentReason.ActionType.charge);
-        }
         adjustment.targetDate().setValue(targetDate);
         adjustment.description().setValue(reason.name().getValue());
         adjustment.reason().setValue(reason.getValue());

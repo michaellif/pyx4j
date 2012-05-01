@@ -29,7 +29,13 @@ import com.pyx4j.entity.shared.ISet;
 @AbstractEntity
 public interface InvoiceDebit extends InvoiceLineItem {
 
+    public enum DebitType {
+        lease, parking, pet, addOn, utility, locker, booking, deposit, accountCharge, other
+    }
+
     ISet<DebitCreditLink> creditLinks();
+
+    IPrimitive<DebitType> debitType();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)

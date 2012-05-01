@@ -33,9 +33,9 @@ public class TransactionHistoryTester extends Tester {
     private final List<InvoiceCredit> notConsumedCreditInvoiceLineItems;
 
     public TransactionHistoryTester(Lease lease) {
-        transactionHistory = ARTransactionHistoryManager.getTransactionHistory(lease);
-        notCoveredDebitInvoiceLineItems = ARTransactionHistoryManager.getNotCoveredDebitInvoiceLineItems(lease);
-        notConsumedCreditInvoiceLineItems = ARTransactionHistoryManager.getNotConsumedCreditInvoiceLineItems(lease);
+        transactionHistory = ARTransactionManager.getTransactionHistory(lease);
+        notCoveredDebitInvoiceLineItems = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(lease);
+        notConsumedCreditInvoiceLineItems = ARTransactionManager.getNotConsumedCreditInvoiceLineItems(lease);
     }
 
     public TransactionHistoryTester lineItemSize(int size) {

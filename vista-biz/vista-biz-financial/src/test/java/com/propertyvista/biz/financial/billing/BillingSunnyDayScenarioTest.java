@@ -21,6 +21,7 @@
 package com.propertyvista.biz.financial.billing;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
@@ -63,7 +64,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        setSysDate("18-Mar-2011");
+        SysDateManager.setSysDate("18-Mar-2011");
         setLeaseStatus(Lease.Status.Approved);
 
         Bill bill = runBilling(true, true);
@@ -89,7 +90,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        setSysDate("18-Mar-2011");
+        SysDateManager.setSysDate("18-Mar-2011");
         setLeaseStatus(Lease.Status.Active);
 
         bill = runBilling(true, true);
@@ -115,7 +116,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 3 ======================//
 
-        setSysDate("18-Apr-2011");
+        SysDateManager.setSysDate("18-Apr-2011");
 
         addBooking("25-Apr-2011");
         addBooking("5-May-2011");
@@ -144,7 +145,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         addBooking("28-Apr-2011");
 
-        setSysDate("18-May-2011");
+        SysDateManager.setSysDate("18-May-2011");
 
         addGoodWillAdjustment("120.00", "18-May-2011", false);
         addGoodWillAdjustment("130.00", "18-May-2011", true);
@@ -171,7 +172,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 5 ======================//
 
-        setSysDate("18-Jun-2011");
+        SysDateManager.setSysDate("18-Jun-2011");
 
         addGoodWillAdjustment("30.00", "1-Jul-2011", false);
         addGoodWillAdjustment("40.00", "1-Jul-2011", true);
@@ -198,7 +199,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 6 ======================//
 
-        setSysDate("18-Jul-2011");
+        SysDateManager.setSysDate("18-Jul-2011");
 
         bill = runBilling(true, true);
 
@@ -222,7 +223,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN final ======================//
 
-        setSysDate("05-Aug-2011");
+        SysDateManager.setSysDate("05-Aug-2011");
 
         setLeaseStatus(Lease.Status.Completed);
 

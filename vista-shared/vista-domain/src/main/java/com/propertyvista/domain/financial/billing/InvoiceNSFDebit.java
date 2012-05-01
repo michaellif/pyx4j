@@ -1,5 +1,3 @@
-package com.propertyvista.domain.financial.billing;
-
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
@@ -9,18 +7,15 @@ package com.propertyvista.domain.financial.billing;
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 20, 2012
+ * Created on Apr 30, 2012
  * @author michaellif
  * @version $Id$
  */
+package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-import com.propertyvista.domain.tenant.lease.Deposit;
-
-@DiscriminatorValue("Deposit")
-public interface InvoiceDeposit extends InvoiceDebit {
-
-    Deposit deposit();
+@DiscriminatorValue("NSFDebit")
+public interface InvoiceNSFDebit extends InvoiceDebit {
 
 }

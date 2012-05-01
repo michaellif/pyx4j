@@ -21,6 +21,7 @@ import com.propertyvista.biz.financial.billing.TaxUtils;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
@@ -34,6 +35,7 @@ public class AbstractLeaseAdjustmentProcessor extends AbstractProcessor {
         charge.adjustment().set(adjustment);
         charge.targetDate().setValue(adjustment.targetDate().getValue());
         charge.description().setValue(adjustment.reason().name().getValue());
+        charge.debitType().setValue(DebitType.accountCharge);
 
         calculateTax(charge, adjustment.billingAccount().lease().unit().belongsTo());
 

@@ -22,6 +22,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
+import com.propertyvista.domain.policy.policies.domain.NsfItem;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("LeaseBillingPolicy")

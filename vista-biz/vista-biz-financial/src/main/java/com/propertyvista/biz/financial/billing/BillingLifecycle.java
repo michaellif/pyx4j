@@ -26,16 +26,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.ar.ARTransactionManager;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.BillingRun.BillingRunStatus;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -43,8 +48,6 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 public class BillingLifecycle {
 
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycle.class);
-
-    private static LogicalDate sysDate;
 
     static BillingRun runBilling(Lease lease) {
         BillingAccount billingAccount = ensureBillingAccount(lease);
@@ -82,7 +85,7 @@ public class BillingLifecycle {
 
     private static void runBilling(BillingRun billingRun, boolean manageTransactions) {
         billingRun.status().setValue(BillingRunStatus.Running);
-        billingRun.executionDate().setValue(BillingLifecycle.getSysDate());
+        billingRun.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
         Persistence.service().persist(billingRun);
 
         if (manageTransactions) {
@@ -138,6 +141,11 @@ public class BillingLifecycle {
         Bill bill = Persistence.service().retrieve(Bill.class, billStub.getPrimaryKey());
         if (BillStatus.Finished.equals(bill.billStatus().getValue())) {
             bill.billStatus().setValue(billStatus);
+
+            if (BillStatus.Confirmed == billStatus) {
+                postBillLineItems(bill);
+            }
+
             Persistence.service().persist(bill);
 
             Persistence.service().retrieve(bill.billingAccount());
@@ -151,6 +159,14 @@ public class BillingLifecycle {
 
         } else {
             throw new BillingException("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
+        }
+    }
+
+    private static void postBillLineItems(Bill bill) {
+        Persistence.service().retrieve(bill.lineItems());
+        List<InvoiceLineItem> lineItems = bill.lineItems();
+        for (InvoiceLineItem invoiceLineItem : lineItems) {
+            ServerSideFactory.create(ARFacade.class).postInvoiceLineItem(invoiceLineItem);
         }
     }
 
@@ -204,15 +220,4 @@ public class BillingLifecycle {
         return Persistence.service().retrieve(criteria);
     }
 
-    static LogicalDate getSysDate() {
-        if (sysDate != null) {
-            return sysDate;
-        } else {
-            return new LogicalDate(Persistence.service().getTransactionSystemTime());
-        }
-    }
-
-    static void setSysDate(LogicalDate date) {
-        sysDate = date;
-    }
 }

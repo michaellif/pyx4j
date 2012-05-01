@@ -25,6 +25,10 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARFacadeImpl implements ARFacade {
 
+    public void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
+        ARTransactionManager.postInvoiceLineItem(invoiceLineItem);
+    }
+
     @Override
     public void postPayment(PaymentRecord paymentRecord) {
         new ARPaymentProcessor().postPayment(paymentRecord);
@@ -42,17 +46,17 @@ public class ARFacadeImpl implements ARFacade {
 
     @Override
     public TransactionHistoryDTO getTransactionHistory(Lease lease) {
-        return ARTransactionHistoryManager.getTransactionHistory(lease);
+        return ARTransactionManager.getTransactionHistory(lease);
     }
 
     @Override
     public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(Lease lease) {
-        return ARTransactionHistoryManager.getNotCoveredDebitInvoiceLineItems(lease);
+        return ARTransactionManager.getNotCoveredDebitInvoiceLineItems(lease);
     }
 
     @Override
     public List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(Lease lease) {
-        return ARTransactionHistoryManager.getNotConsumedCreditInvoiceLineItems(lease);
+        return ARTransactionManager.getNotConsumedCreditInvoiceLineItems(lease);
     }
 
     public void consumeCredit(InvoiceCredit credit) {

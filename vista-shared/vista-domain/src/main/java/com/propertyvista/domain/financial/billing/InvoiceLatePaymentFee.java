@@ -7,17 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 21, 2012
+ * Created on Apr 30, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing;
+package com.propertyvista.domain.financial.billing;
 
-import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-public class SysDateManager {
+@DiscriminatorValue("LatePaymentFee")
+public interface InvoiceLatePaymentFee extends InvoiceDebit {
 
-    public static void setSysDate(LogicalDate date) {
-        BillingLifecycle.setSysDate(date);
-    }
 }

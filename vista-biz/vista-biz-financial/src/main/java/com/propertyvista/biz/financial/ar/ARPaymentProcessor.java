@@ -19,7 +19,9 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.AbstractProcessor;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.InvoiceNSFDebit;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
+import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 
 public class ARPaymentProcessor extends AbstractProcessor {
 
@@ -43,12 +45,15 @@ public class ARPaymentProcessor extends AbstractProcessor {
 
         Persistence.service().persist(paymentRecord.billingAccount());
 
-        ARTransactionHistoryManager.postInvoiceLineItem(payment);
+        ARTransactionManager.postInvoiceLineItem(payment);
 
     }
 
     void rejectPayment(PaymentRecord payment) {
         payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
+
+        //TODO Add InvoicePaymentBackOut creation and InvoiceNSFDebit
+
         Persistence.service().persist(payment);
     }
 

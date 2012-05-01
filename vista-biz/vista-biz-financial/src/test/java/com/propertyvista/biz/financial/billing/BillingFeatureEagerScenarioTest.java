@@ -21,6 +21,7 @@
 package com.propertyvista.biz.financial.billing;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
@@ -47,7 +48,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        setSysDate("18-Mar-2011");
+        SysDateManager.setSysDate("18-Mar-2011");
 
         setLeaseStatus(Lease.Status.Approved);
 
@@ -68,7 +69,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        setSysDate("18-Mar-2011");
+        SysDateManager.setSysDate("18-Mar-2011");
         setLeaseStatus(Lease.Status.Active);
 
         bill = runBilling(true, true);
@@ -88,7 +89,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 3 ======================//
 
-        setSysDate("18-Apr-2011");
+        SysDateManager.setSysDate("18-Apr-2011");
         addPet("10-Apr-2011", null);
         changeBillableItem(parking1.uid().getValue(), null, "20-May-2011");
 
@@ -109,7 +110,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 4 ======================//
 
-        setSysDate("18-May-2011");
+        SysDateManager.setSysDate("18-May-2011");
         //TODO calculate arrears
         changeBillableItem(parking1.uid().getValue(), null, "10-May-2011");
 
@@ -130,7 +131,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 5 ======================//
 
-        setSysDate("18-Jun-2011");
+        SysDateManager.setSysDate("18-Jun-2011");
 
         bill = runBilling(true, true);
 
@@ -149,7 +150,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 6 ======================//
 
-        setSysDate("18-Jul-2011");
+        SysDateManager.setSysDate("18-Jul-2011");
 
         bill = runBilling(true, true);
 
@@ -169,7 +170,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN final ======================//
 
-        setSysDate("05-Aug-2011");
+        SysDateManager.setSysDate("05-Aug-2011");
 
         setLeaseStatus(Lease.Status.Completed);
 

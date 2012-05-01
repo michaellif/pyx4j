@@ -23,16 +23,23 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 public class LeaseAdjustmentReasonDataModel {
 
     public enum Reason {
-        goodWill("Good Will");
+        goodWill("Good Will", LeaseAdjustmentReason.ActionType.credit), maintenance("Maintenance Fees", LeaseAdjustmentReason.ActionType.charge);
 
         private String description;
 
-        private Reason(String description) {
+        private LeaseAdjustmentReason.ActionType actionType;
+
+        private Reason(String description, LeaseAdjustmentReason.ActionType actionType) {
             this.description = description;
+            this.actionType = actionType;
         }
 
         public String getDescription() {
             return description;
+        }
+
+        public LeaseAdjustmentReason.ActionType getActionType() {
+            return actionType;
         }
 
     }
@@ -58,6 +65,7 @@ public class LeaseAdjustmentReasonDataModel {
         LeaseAdjustmentReason adjustmentReason = EntityFactory.create(LeaseAdjustmentReason.class);
         adjustmentReason.name().setValue(reason.getDescription());
         adjustmentReason.precalculatedTax().setValue(true);
+        adjustmentReason.actionType().setValue(reason.getActionType());
         reasons.put(reason, adjustmentReason);
     }
 

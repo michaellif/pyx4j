@@ -19,7 +19,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.propertyvista.domain.tenant.lease.Deposit;
 
 @DiscriminatorValue("DepositRefund")
-public interface InvoiceDepositRefund extends InvoiceDebit {
+public interface InvoiceDepositRefund extends InvoiceCredit {
 
     Deposit deposit();
 
