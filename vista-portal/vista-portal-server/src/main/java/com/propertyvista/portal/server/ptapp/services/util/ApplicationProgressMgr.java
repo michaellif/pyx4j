@@ -37,6 +37,7 @@ import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.TenantInLeaseDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
@@ -158,13 +159,15 @@ public class ApplicationProgressMgr {
     }
 
     public static void invalidateSummaryStep(OnlineApplication application) {
-        ApplicationWizardStep summaryStep = findWizardStep(application, PtSiteMap.Summary.class);
-        switch (summaryStep.status().getValue()) {
-        case latest:
-        case complete:
-            summaryStep.status().setValue(ApplicationWizardStep.Status.invalid);
-            Persistence.service().merge(summaryStep);
-            break;
+        if (!VistaTODO.enableWelcomeWizardDemoMode) {
+            ApplicationWizardStep summaryStep = findWizardStep(application, PtSiteMap.Summary.class);
+            switch (summaryStep.status().getValue()) {
+            case latest:
+            case complete:
+                summaryStep.status().setValue(ApplicationWizardStep.Status.invalid);
+                Persistence.service().merge(summaryStep);
+                break;
+            }
         }
     }
 

@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -27,13 +28,14 @@ import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
 @Transient
 public interface PurchaseInsuranceDTO extends IEntity {
 
-    enum FormOfCoverage {
+    @I18n(context = "Form of Coverage")
+    public enum FormOfCoverage {
 
-        basicCoverage;
+        basicCoverage, enhancedCoverage, extendedWaterCoverage;
 
         @Override
         public String toString() {
-            return I18nEnum.toString(basicCoverage);
+            return I18nEnum.toString(this);
         };
     }
 
@@ -88,6 +90,13 @@ public interface PurchaseInsuranceDTO extends IEntity {
 
     @Caption(name = "How many claims have you or any other resident of your household made against a previous Tenants, Condo, or Homeowners Policy in the past 5 years?")
     IPrimitive<Integer> numOfPrevClaims();
+
+    // Section:  Quote Total (floating box with that containse the following values)
+    IPrimitive<String> monthlyInsurancePremium();
+
+    IPrimitive<String> totalCoverage();
+
+    IPrimitive<String> totalPersonalLiability();
 
     // Personal Disclaimer
     IList<LegalTermsDescriptorDTO> personalDisclaimerTerms();
