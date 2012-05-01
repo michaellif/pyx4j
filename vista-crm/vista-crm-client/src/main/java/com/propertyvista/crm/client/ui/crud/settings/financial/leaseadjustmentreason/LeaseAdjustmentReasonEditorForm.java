@@ -13,17 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
+import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.boxes.GlCodeSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -48,38 +46,28 @@ public class LeaseAdjustmentReasonEditorForm extends CrmEntityForm<LeaseAdjustme
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().actionType()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().precalculatedTax())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return AppPlaceEntityMapper.resolvePlace(GlCode.class, getValue().glCodeCategory().getPrimaryKey());
+            }
 
-        HorizontalPanel glCodePanel = new HorizontalPanel();
-        glCodePanel.add(new DecoratorBuilder(inject(proto().glCode(), new CEntityLabel<GlCode>()), 25).build());
-        if (isEditable()) {
-            glCodePanel.add(glCodeSelector = new AnchorButton("Select...", new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    new GlCodeSelectorDialog() {
-                        @Override
-                        public boolean onClickOk() {
-                            if (!getSelectedItems().isEmpty()) {
-                                get(LeaseAdjustmentReasonEditorForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
-                            }
-                            return !getSelectedItems().isEmpty();
+            @Override
+            protected AbstractEntitySelectorDialog<GlCode> getSelectorDialog() {
+                return new GlCodeSelectorDialog() {
+                    @Override
+                    public boolean onClickOk() {
+                        if (!getSelectedItems().isEmpty()) {
+                            get(LeaseAdjustmentReasonEditorForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
                         }
-                    }.show();
-                }
-            }));
-            glCodeSelector.getElement().getStyle().setMarginLeft(4, Unit.EM);
-        }
-
-        main.setWidget(++row, 0, glCodePanel);
+                        return !getSelectedItems().isEmpty();
+                    }
+                };
+            }
+        }), 25).build());
 
         return new CrmScrollPanel(main);
-    }
-
-    @Override
-    protected void onPopulate() {
-        super.onPopulate();
-
-        if (glCodeSelector != null) {
-            glCodeSelector.setVisible(isEditable());
-        }
     }
 }
