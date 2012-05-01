@@ -42,6 +42,13 @@ public abstract class AbstractAntiBot {
 
     protected abstract boolean onAuthenticationFailed(String email);
 
+    /**
+     * Verify if there are may login attempts with this email
+     * 
+     * @param email
+     * @param challengeResponse
+     *            is optional
+     */
     public static void assertLogin(String email, Pair<String, String> challengeResponse) {
         AbstractAntiBot ab = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getAntiBot();
         if (ab == null) {
